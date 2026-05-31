@@ -1592,6 +1592,7 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
+      <button class="theme-toggle" id="langToggle" aria-label="한국어로 전환" title="한국어로 보기" type="button">한</button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
         <span class="theme-icon" id="themeIcon">N</span>
       </button>
@@ -1683,6 +1684,15 @@
       var params = new URLSearchParams(window.location.search);
       var lessonPath = params.get('path');
 
+      // Repo that serves the raw lesson markdown (this fork ships ko.md
+      // alongside every en.md). Both languages are fetched from here.
+      var CONTENT_REPO = 'speculatingwook/ai-engineering-from-scratch';
+      // Persisted UI language: 'en' (default) or 'ko'. ?lang= overrides once.
+      var lessonLang = (params.get('lang') === 'ko' || params.get('lang') === 'en')
+        ? params.get('lang')
+        : (localStorage.getItem('lessonLang') || 'en');
+      localStorage.setItem('lessonLang', lessonLang);
+
       if (!lessonPath) {
         showError('No lesson path specified', 'Add ?path=phases/01-math-foundations/01-linear-algebra-intuition to the URL.');
         return;
@@ -1734,6 +1744,7 @@
       buildSidebar();
       initSidebarToggle();
       initScrollProgress();
+      initLangToggle();
       fetchLesson(lessonPath);
 
       function extractPhaseSlug(phase, index) {
@@ -1835,34 +1846,80 @@
       }
 
       function fetchLesson(path) {
-        var rawUrl = 'https://raw.githubusercontent.com/rohitg00/ai-engineering-from-scratch/main/' + path + '/docs/en.md';
-        var quizUrl = 'https://raw.githubusercontent.com/rohitg00/ai-engineering-from-scratch/main/' + path + '/quiz.json';
+        var base = 'https://raw.githubusercontent.com/' + CONTENT_REPO + '/main/' + path + '/';
+        var quizUrl = base + 'quiz.json';
 
-        fetch(rawUrl)
-          .then(function (res) {
+        function loadQuiz() {
+          fetch(quizUrl)
+            .then(function (res) { return res.ok ? res.json() : null; })
+            .catch(function () { return null; })
+            .then(function (data) {
+              if (!data) return;
+              try { renderQuiz(data); }
+              catch (err) { console.error('renderQuiz failed', err); }
+            });
+        }
+
+        function render(md) {
+          try {
+            renderLesson(md);
+          } catch (err) {
+            console.error('renderLesson failed', err);
+            showError('Render error', 'Loaded the lesson markdown but failed to render it. Details in the browser console.');
+            return;
+          }
+          loadQuiz();
+        }
+
+        function fetchDoc(file) {
+          return fetch(base + file).then(function (res) {
             if (!res.ok) throw new Error('fetch-failed');
             return res.text();
-          })
-          .then(function (md) {
-            try {
-              renderLesson(md);
-            } catch (err) {
-              console.error('renderLesson failed', err);
-              showError('Render error', 'Loaded the lesson markdown but failed to render it. Details in the browser console.');
+          });
+        }
+
+        var primary = lessonLang === 'ko' ? 'docs/ko.md' : 'docs/en.md';
+        fetchDoc(primary)
+          .then(render)
+          .catch(function () {
+            // No Korean translation yet → fall back to English.
+            if (lessonLang === 'ko') {
+              fetchDoc('docs/en.md')
+                .then(render)
+                .catch(function () {
+                  showError('Lesson not found', 'Could not fetch the lesson at <code>' + escapeHtml(path) + '</code>. It may not have been written yet.');
+                });
               return;
             }
-            fetch(quizUrl)
-              .then(function (res) { return res.ok ? res.json() : null; })
-              .catch(function () { return null; })
-              .then(function (data) {
-                if (!data) return;
-                try { renderQuiz(data); }
-                catch (err) { console.error('renderQuiz failed', err); }
-              });
-          })
-          .catch(function () {
             showError('Lesson not found', 'Could not fetch the lesson at <code>' + escapeHtml(path) + '</code>. It may not have been written yet.');
           });
+      }
+
+      function updateLangToggleLabel() {
+        var lt = document.getElementById('langToggle');
+        if (!lt) return;
+        // The button shows the language you'll switch TO.
+        lt.textContent = lessonLang === 'ko' ? 'EN' : '한';
+        var label = lessonLang === 'ko' ? 'Switch to English' : '한국어로 보기';
+        lt.setAttribute('aria-label', label);
+        lt.title = label;
+      }
+
+      function initLangToggle() {
+        updateLangToggleLabel();
+        var lt = document.getElementById('langToggle');
+        if (!lt) return;
+        lt.addEventListener('click', function () {
+          lessonLang = lessonLang === 'ko' ? 'en' : 'ko';
+          localStorage.setItem('lessonLang', lessonLang);
+          updateLangToggleLabel();
+          var contentEl = document.getElementById('lessonContent');
+          if (contentEl) {
+            contentEl.innerHTML = '<div class="lesson-loading"><div class="spinner"></div><div class="lesson-loading-text">Loading lesson...</div></div>';
+          }
+          window.scrollTo(0, 0);
+          fetchLesson(lessonPath);
+        });
       }
 
       function showError(title, msg) {
