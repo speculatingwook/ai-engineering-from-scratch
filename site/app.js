@@ -1,4 +1,11 @@
 (function () {
+  // Language-aware field picker. Falls back to English when i18n is absent
+  // or the Korean field is missing.
+  function pick(obj, field) {
+    if (window.AIFSi18n && window.AIFSi18n.pick) return window.AIFSi18n.pick(obj, field);
+    return (obj && obj[field] != null) ? obj[field] : '';
+  }
+
   var root = document.documentElement;
   var stored = localStorage.getItem('theme');
   if (stored) {
@@ -20,6 +27,17 @@
     initSmoothScroll();
     initFadeObserver();
     initScrollExplode();
+  });
+
+  // Re-render data-driven sections when the site language changes.
+  window.addEventListener('aifs:langchange', function () {
+    populateStats();
+    renderPhases();
+    initStaggerIndex();
+    if (currentPhaseIdx >= 0) {
+      var overlay = document.getElementById('modalOverlay');
+      if (overlay && overlay.classList.contains('open')) openModal(currentPhaseIdx);
+    }
   });
 
   function updateThemeIcon() {
@@ -126,7 +144,7 @@
       var num = String(p.id).padStart(2, '0');
       html += '<div class="toc-row" data-phase="' + i + '">';
       html += '<span class="toc-num">' + roman + '.</span>';
-      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(p.name) + '</span></div>';
+      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(pick(p, 'name')) + '</span></div>';
       html += '<span class="toc-meta">' + done + ' / ' + total + '</span>';
       html += '<span class="toc-meta">' + num + '</span>';
       html += '</div>';
@@ -210,8 +228,8 @@
     currentPhaseIdx = idx;
 
     document.getElementById('modalPhaseNum').textContent = 'PHASE ' + String(p.id).padStart(2, '0');
-    document.getElementById('modalTitle').textContent = p.name;
-    document.getElementById('modalDesc').textContent = p.desc;
+    document.getElementById('modalTitle').textContent = pick(p, 'name');
+    document.getElementById('modalDesc').textContent = pick(p, 'desc');
 
     renderModalLessons(p);
 
@@ -240,9 +258,9 @@
       html += '<div class="modal-lesson' + (userComplete ? ' user-done' : '') + '">';
       html += '<span class="modal-lesson-status ' + statusClass + '"' + (userComplete ? ' title="You completed this lesson"' : '') + '></span>';
       if (l.url) {
-        html += '<a href="' + l.url + '" target="_blank" rel="noopener">' + escapeHtml(l.name) + '</a>';
+        html += '<a href="' + l.url + '" target="_blank" rel="noopener">' + escapeHtml(pick(l, 'name')) + '</a>';
       } else {
-        html += '<a>' + escapeHtml(l.name) + '</a>';
+        html += '<a>' + escapeHtml(pick(l, 'name')) + '</a>';
       }
       html += '<span class="modal-lesson-type" data-type="' + escapeHtml(l.type) + '"' + (l.combines ? ' title="Combines: ' + escapeHtml(l.combines) + '"' : '') + '>' + escapeHtml(l.type) + '</span>';
       html += '<span class="modal-lesson-lang">' + escapeHtml(l.lang) + '</span>';
