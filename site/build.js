@@ -237,27 +237,41 @@ function parseReadme(content, roadmapStatuses) {
  * matching content — expected for planned lessons with no docs yet.
  */
 function extractLessonMeta(relPath) {
-  const docPath = path.join(REPO_ROOT, relPath, 'docs', 'en.md');
-  const result = { summary: '', keywords: '' };
+  const result = { summary: '', keywords: '', summaryKo: '', keywordsKo: '', nameKo: '' };
+  readDocMeta(path.join(REPO_ROOT, relPath, 'docs', 'en.md'), result, '');
+  readDocMeta(path.join(REPO_ROOT, relPath, 'docs', 'ko.md'), result, 'Ko');
+  return result;
+}
+
+/**
+ * Fill result.summary<suffix> / keywords<suffix> from a single doc.
+ * For the Korean doc (suffix 'Ko') also capture nameKo from the H1 title.
+ * Missing file → leaves fields empty (expected for planned lessons).
+ */
+function readDocMeta(docPath, result, suffix) {
   try {
     const lines = fs.readFileSync(docPath, 'utf8').split(/\r?\n/);
     const h3s = [];
+    let gotSummary = false;
     for (const raw of lines) {
       const line = raw.trim();
-      if (!result.summary && line.startsWith('> ') && line.length > 3) {
+      if (suffix === 'Ko' && !result.nameKo && line.startsWith('# ')) {
+        result.nameKo = line.slice(2).trim();
+      }
+      if (!gotSummary && line.startsWith('> ') && line.length > 3) {
         const s = line.slice(2).trim();
-        result.summary = s.length > 180 ? s.slice(0, 177) + '…' : s;
+        result['summary' + suffix] = s.length > 180 ? s.slice(0, 177) + '…' : s;
+        gotSummary = true;
       }
       if (line.startsWith('### ')) {
         const heading = line.slice(4).trim();
         if (heading) h3s.push(heading);
       }
     }
-    if (h3s.length) result.keywords = h3s.join(' · ');
+    if (h3s.length) result['keywords' + suffix] = h3s.join(' · ');
   } catch (_) {
     // File absent or unreadable — expected for planned lessons.
   }
-  return result;
 }
 
 // ─── Parse glossary/terms.md ──────────────────────────────────────────
@@ -416,8 +430,11 @@ function build() {
       if (lesson.url) {
         const relPath = lesson.url.replace(GITHUB_BASE, '').replace(/\/+$/, '');
         const meta = extractLessonMeta(relPath);
-        if (meta.summary)  { lesson.summary  = meta.summary;  summarized++;   }
-        if (meta.keywords) { lesson.keywords = meta.keywords; withKeywords++; }
+        if (meta.summary)    { lesson.summary    = meta.summary;    summarized++;   }
+        if (meta.keywords)   { lesson.keywords   = meta.keywords;   withKeywords++; }
+        if (meta.nameKo)     { lesson.nameKo     = meta.nameKo;     }
+        if (meta.summaryKo)  { lesson.summaryKo  = meta.summaryKo;  }
+        if (meta.keywordsKo) { lesson.keywordsKo = meta.keywordsKo; }
       }
     }
   }
