@@ -67,7 +67,13 @@
       'prereqs.prerequisites': 'Prerequisites', 'prereqs.unlocks': 'Unlocks',
       'prereqs.read': 'Read', 'prereqs.github': 'View on GitHub',
       'prereqs.lessonsComplete': 'lessons complete',
-      'prereqs.prereqPhases': 'prerequisite phases', 'prereqs.phasesUnlocked': 'phases unlocked'
+      'prereqs.prereqPhases': 'prerequisite phases', 'prereqs.phasesUnlocked': 'phases unlocked',
+      // glossary
+      'glossary.title': 'AI Glossary',
+      'glossary.subtitleHtml': 'What people <em>say</em> vs what things actually <em>mean</em>',
+      'glossary.search': 'Search terms...',
+      'glossary.says': 'What people say', 'glossary.means': 'What it actually means',
+      'glossary.terms': 'terms', 'glossary.empty': 'No terms match your search.'
     },
     ko: {
       'lang.toggle': 'EN', 'lang.toggleTitle': 'View in English', 'lang.toggleAria': '영어로 전환',
@@ -120,7 +126,13 @@
       'prereqs.prerequisites': '선행 조건', 'prereqs.unlocks': '여는 것',
       'prereqs.read': '읽기', 'prereqs.github': 'GitHub에서 보기',
       'prereqs.lessonsComplete': '레슨 완료',
-      'prereqs.prereqPhases': '선행 페이즈', 'prereqs.phasesUnlocked': '페이즈 해금'
+      'prereqs.prereqPhases': '선행 페이즈', 'prereqs.phasesUnlocked': '페이즈 해금',
+      // glossary
+      'glossary.title': 'AI 용어집',
+      'glossary.subtitleHtml': '사람들이 <em>말하는</em> 것 vs 실제로 <em>의미하는</em> 것',
+      'glossary.search': '용어 검색...',
+      'glossary.says': '사람들이 말하는 것', 'glossary.means': '실제 의미',
+      'glossary.terms': '용어', 'glossary.empty': '검색에 맞는 용어가 없습니다.'
     }
   };
 
