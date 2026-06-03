@@ -1627,6 +1627,7 @@
   </div>
 
   <script src="data.js?v=20260525a"></script>
+  <script src="i18n.js?v=20260603a"></script>
   <script src="progress.js?v=20260525a"></script>
   <script src="header.js?v=20260525a" defer></script>
   <script src="cmdpalette.js?v=20260525a" defer></script>
@@ -1687,11 +1688,22 @@
       // Repo that serves the raw lesson markdown (this fork ships ko.md
       // alongside every en.md). Both languages are fetched from here.
       var CONTENT_REPO = 'speculatingwook/ai-engineering-from-scratch';
-      // Persisted UI language: 'en' (default) or 'ko'. ?lang= overrides once.
-      var lessonLang = (params.get('lang') === 'ko' || params.get('lang') === 'en')
-        ? params.get('lang')
-        : (localStorage.getItem('lessonLang') || 'en');
-      localStorage.setItem('lessonLang', lessonLang);
+      // Persisted UI language: 'en' (default) or 'ko'. Shared site-wide via
+      // AIFSi18n (localStorage 'siteLang'); falls back to the old per-page key.
+      var lessonLang = window.AIFSi18n
+        ? window.AIFSi18n.getLang()
+        : ((params.get('lang') === 'ko' || params.get('lang') === 'en')
+            ? params.get('lang')
+            : (localStorage.getItem('lessonLang') || 'en'));
+      if (!window.AIFSi18n) localStorage.setItem('lessonLang', lessonLang);
+
+      // Language-aware helpers (English fallback when i18n/Korean absent).
+      function i18nPick(obj, field) {
+        return window.AIFSi18n ? window.AIFSi18n.pick(obj, field) : (obj && obj[field] != null ? obj[field] : '');
+      }
+      function i18nT(key, fallback) {
+        return window.AIFSi18n ? window.AIFSi18n.t(key) : fallback;
+      }
 
       if (!lessonPath) {
         showError('No lesson path specified', 'Add ?path=phases/01-math-foundations/01-linear-algebra-intuition to the URL.');
@@ -1782,20 +1794,20 @@
             var pp = PHASES[prevPhaseIdx];
             var ppSlug = extractPhaseSlug(pp, prevPhaseIdx);
             var ppFirstLesson = pp.lessons[0] ? extractLessonSlug(pp.lessons[0], 0) : '';
-            html += '<a href="lesson.html?path=phases/' + ppSlug + '/' + ppFirstLesson + '">&larr; Phase ' + String(pp.id).padStart(2, '0') + ': ' + escapeHtml(pp.name) + '</a>';
+            html += '<a href="lesson.html?path=phases/' + ppSlug + '/' + ppFirstLesson + '">&larr; ' + i18nT('phase', 'Phase') + ' ' + String(pp.id).padStart(2, '0') + ': ' + escapeHtml(i18nPick(pp, 'name')) + '</a>';
           }
           if (nextPhaseIdx >= 0) {
             var np = PHASES[nextPhaseIdx];
             var npSlug = extractPhaseSlug(np, nextPhaseIdx);
             var npFirstLesson = np.lessons[0] ? extractLessonSlug(np.lessons[0], 0) : '';
-            html += '<a href="lesson.html?path=phases/' + npSlug + '/' + npFirstLesson + '">Phase ' + String(np.id).padStart(2, '0') + ': ' + escapeHtml(np.name) + ' &rarr;</a>';
+            html += '<a href="lesson.html?path=phases/' + npSlug + '/' + npFirstLesson + '">' + i18nT('phase', 'Phase') + ' ' + String(np.id).padStart(2, '0') + ': ' + escapeHtml(i18nPick(np, 'name')) + ' &rarr;</a>';
           }
           html += '</div>';
         }
 
         if (currentPhaseIndex >= 0) {
           var phase = PHASES[currentPhaseIndex];
-          html += '<div class="sidebar-phase-header">Phase ' + String(phase.id).padStart(2, '0') + ' · ' + escapeHtml(phase.name) + '</div>';
+          html += '<div class="sidebar-phase-header">' + i18nT('phase', 'Phase') + ' ' + String(phase.id).padStart(2, '0') + ' · ' + escapeHtml(i18nPick(phase, 'name')) + '</div>';
           for (var k = 0; k < phase.lessons.length; k++) {
             var les = phase.lessons[k];
             var lesSlug = extractLessonSlug(les, k);
@@ -1808,7 +1820,7 @@
               html += '<span class="sidebar-lesson-link disabled">';
             }
             html += '<span class="sidebar-lesson-dot ' + les.status + '"></span>';
-            html += escapeHtml(les.name);
+            html += escapeHtml(i18nPick(les, 'name'));
             html += lesReadable ? '</a>' : '</span>';
           }
         }
@@ -1905,20 +1917,37 @@
         lt.title = label;
       }
 
+      function applyLanguageChange() {
+        updateLangToggleLabel();
+        buildSidebar();
+        var contentEl = document.getElementById('lessonContent');
+        if (contentEl) {
+          contentEl.innerHTML = '<div class="lesson-loading"><div class="spinner"></div><div class="lesson-loading-text">' + i18nT('loading', 'Loading lesson...') + '</div></div>';
+        }
+        window.scrollTo(0, 0);
+        fetchLesson(lessonPath);
+      }
+
       function initLangToggle() {
         updateLangToggleLabel();
         var lt = document.getElementById('langToggle');
-        if (!lt) return;
-        lt.addEventListener('click', function () {
-          lessonLang = lessonLang === 'ko' ? 'en' : 'ko';
-          localStorage.setItem('lessonLang', lessonLang);
-          updateLangToggleLabel();
-          var contentEl = document.getElementById('lessonContent');
-          if (contentEl) {
-            contentEl.innerHTML = '<div class="lesson-loading"><div class="spinner"></div><div class="lesson-loading-text">Loading lesson...</div></div>';
-          }
-          window.scrollTo(0, 0);
-          fetchLesson(lessonPath);
+        if (lt) {
+          lt.addEventListener('click', function () {
+            var next = (window.AIFSi18n ? window.AIFSi18n.getLang() : lessonLang) === 'ko' ? 'en' : 'ko';
+            if (window.AIFSi18n) {
+              window.AIFSi18n.setLang(next); // fires aifs:langchange → applyLanguageChange
+            } else {
+              lessonLang = next;
+              localStorage.setItem('lessonLang', lessonLang);
+              applyLanguageChange();
+            }
+          });
+        }
+        // Cross-page language changes (and our own setLang) land here.
+        window.addEventListener('aifs:langchange', function (e) {
+          lessonLang = (e && e.detail && e.detail.lang) ? e.detail.lang
+            : (window.AIFSi18n ? window.AIFSi18n.getLang() : lessonLang);
+          applyLanguageChange();
         });
       }
 
@@ -2324,7 +2353,7 @@
                   break;
                 }
               }
-              out += '<div class="learning-objectives"><div class="learning-objectives-title">&#127919; Learning Objectives</div><ul>';
+              out += '<div class="learning-objectives"><div class="learning-objectives-title">&#127919; ' + i18nT('learningObjectives', 'Learning Objectives') + '</div><ul>';
               for (var oi = 0; oi < objItems.length; oi++) {
                 out += '<li>' + inlineFormat(objItems[oi]) + '</li>';
               }
@@ -2696,12 +2725,12 @@
         var buildH2 = article.querySelector('#build-it, #build');
         var keyTermsH2 = article.querySelector('#key-terms');
 
-        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', 'Pre-Lesson Check');
-        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', 'Mid-Lesson Check');
-        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', 'Post-Lesson Quiz');
+        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', i18nT('quiz.pre', 'Pre-Lesson Check'));
+        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', i18nT('quiz.mid', 'Mid-Lesson Check'));
+        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', i18nT('quiz.post', 'Post-Lesson Quiz'));
 
         if (!preQuizHtml && !checkQuizHtml && !postQuizHtml) {
-          var allHtml = buildQuizHtml(questions, 'all', 'Quiz');
+          var allHtml = buildQuizHtml(questions, 'all', i18nT('quiz.all', 'Quiz'));
           if (allHtml && keyTermsH2) {
             keyTermsH2.insertAdjacentHTML('beforebegin', allHtml);
           } else if (allHtml) {
