@@ -1,6 +1,6 @@
 # 추론 플랫폼 경제학(Inference Platform Economics) — Fireworks, Together, Baseten, Modal, Replicate, Anyscale
 
-> 2026년 추론(inference) 시장은 더 이상 GPU 시간 임대가 아니다. 그것은 커스텀 실리콘(custom silicon)(Groq, Cerebras, SambaNova), GPU 플랫폼(Baseten, Together, Fireworks, Modal), 그리고 API 우선 마켓플레이스(Replicate, DeepInfra)로 분기한다. Fireworks는 2026년 5월 1일 GPU당 시간당 1달러 가격을 인상했고, 하루 10조 토큰(token) 이상에서 40억 달러 가치 평가는 볼륨 주도 모델이 작동함을 알려준다. Baseten은 2026년 1월 50억 달러 가치로 3억 달러 시리즈 E를 마감했다. 경쟁 포지셔닝 규칙은 단순하다: Fireworks는 지연 시간(latency)을 최적화하고, Together는 카탈로그 폭을 최적화하고, Baseten은 엔터프라이즈 완성도를 최적화하고, Modal은 Python 네이티브 DX를 최적화하고, Replicate는 멀티모달(multimodal) 도달 범위를 최적화하고, Anyscale은 분산 Python을 최적화한다. 이 레슨은 창업자에게 건넬 수 있는 매트릭스를 준다.
+> 2026년 추론(inference) 시장은 더 이상 GPU 시간 임대가 아니다. 시장은 커스텀 실리콘(custom silicon)(Groq, Cerebras, SambaNova), GPU 플랫폼(Baseten, Together, Fireworks, Modal), API 우선 마켓플레이스(Replicate, DeepInfra)로 갈라진다. Fireworks는 2026년 5월 1일 GPU당 시간당 1달러 가격을 인상했고, 하루 10조 토큰(token) 이상에서 40억 달러 가치 평가가 나온다는 사실은 볼륨 주도 모델이 작동한다는 뜻이다. Baseten은 2026년 1월 50억 달러 가치로 3억 달러 시리즈 E를 마감했다. 경쟁 포지셔닝 규칙은 단순하다: Fireworks는 지연 시간(latency)을 최적화하고, Together는 카탈로그 폭을 최적화하고, Baseten은 엔터프라이즈 완성도를 최적화하고, Modal은 Python 네이티브 DX를 최적화하고, Replicate는 멀티모달(multimodal) 도달 범위를 최적화하고, Anyscale은 분산 Python을 최적화한다. 이 레슨은 창업자에게 건넬 수 있는 매트릭스를 준다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy per-call economics comparator)
@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-당신은 매니지드 하이퍼스케일러(hyperscaler) 플랫폼들을 평가했다. 더 좁고 빠른 공급자가 필요하다고 결정했다 — 지연 시간을 위한 Fireworks, 폭을 위한 Together, 파인튜닝된 커스텀 모델을 위한 Baseten. 이제 여섯 개의 실제 선택지가 있는데 가격 페이지가 서로 맞아떨어지지 않는다. Fireworks는 100만 토큰당 달러를 보여주고, Baseten은 분당 달러를, Modal은 초당 달러를, Replicate는 예측(prediction)당 달러를 보여준다. 워크로드를 모델링하지 않고는 그것들을 정면으로 비교할 수 없다.
+매니지드 하이퍼스케일러(hyperscaler) 플랫폼들을 평가한 뒤 더 좁고 빠른 공급자가 필요하다고 결정했다고 하자. 지연 시간에는 Fireworks, 폭에는 Together, 파인튜닝된 커스텀 모델에는 Baseten이다. 이제 여섯 개의 실제 선택지가 있는데 가격 페이지가 서로 맞아떨어지지 않는다. Fireworks는 100만 토큰당 달러를 보여주고, Baseten은 분당 달러를, Modal은 초당 달러를, Replicate는 예측(prediction)당 달러를 보여준다. 워크로드를 모델링하지 않고는 이것들을 정면으로 비교할 수 없다.
 
-더 나쁜 것은, 각 가격 페이지 뒤의 비즈니스 모델이 다르다는 점이다. Fireworks는 공유 GPU에서 자체 커스텀 엔진(FireAttention)을 돌린다. 토큰당 요금은 그들의 사용률 곡선을 반영한다. Baseten은 Truss + 전용 GPU를 준다. 분당 요금은 배타성을 반영한다. Modal은 진정한 Python 서버리스(serverless)다 — 1초 미만 콜드 스타트(cold start)와 함께 초당 청구. 같은 출력(LLM 응답), 세 가지 다른 비용 함수.
+더 까다로운 점은 각 가격 페이지 뒤의 비즈니스 모델이 다르다는 것이다. Fireworks는 공유 GPU에서 자체 커스텀 엔진(FireAttention)을 돌린다. 토큰당 요금은 그들의 사용률 곡선을 반영한다. Baseten은 Truss + 전용 GPU를 준다. 분당 요금은 배타성을 반영한다. Modal은 진정한 Python 서버리스(serverless)다 — 1초 미만 콜드 스타트(cold start)와 함께 초당 청구. 같은 출력(LLM 응답), 세 가지 다른 비용 함수.
 
 이 레슨은 여섯 개를 모델링하고 각각이 언제 이기는지 알려준다.
 
@@ -36,7 +36,7 @@
 
 - FireAttention 엔진(커스텀). 동등 구성에서 vLLM보다 지연 시간 4배 낮음으로 마케팅된다.
 - 비대화형 워크로드를 위한 서버리스 요율의 약 50% 배치(batch) 등급.
-- 파인튜닝된 모델을 기본 모델과 같은 요율로 서빙 — 당신의 LoRA에 프리미엄을 부과하는 공급자 대비 진짜 차별화 요소.
+- 파인튜닝된 모델을 기본 모델과 같은 요율로 서빙 — LoRA에 프리미엄을 부과하는 공급자 대비 진짜 차별화 요소.
 - 2026년 중반: 2026년 5월 1일부터 온디맨드(on-demand) GPU 임대를 시간당 1달러 인상. 규모에서 볼륨 가격은 협상 가능.
 - 재무 신호: 40억 달러 가치 평가, 하루 10조 토큰 이상 처리.
 
@@ -101,8 +101,8 @@ vLLM과 SGLang 위의 모든 플랫폼은 커스텀 엔진을 주장한다. Fire
 ## 연습 문제 (Exercises)
 
 1. `code/main.py`를 실행하라. 하나의 H100에서 70B 모델에 대해 어느 지속 사용률에서 Baseten(분당)이 Fireworks(토큰당)를 이기는가? 교차점을 직접 유도하고 경험칙과 비교하라.
-2. 당신의 제품은 이미지 생성, 채팅, 음성-텍스트(speech-to-text)를 서빙한다. 각 모달리티에 대해 플랫폼을 고르고 그것들을 통합하는 게이트웨이(gateway) 패턴을 명명하라.
-3. Fireworks가 당신의 주 모델에서 시간당 1달러 가격을 올린다. 트래픽의 40%가 배치 등급(50% 할인)으로 이동할 경우 혼합 비용 영향을 모델링하라.
+2. 어떤 제품이 이미지 생성, 채팅, 음성-텍스트(speech-to-text)를 서빙한다고 하자. 모달리티마다 플랫폼을 고르고 이들을 통합하는 게이트웨이(gateway) 패턴을 명명하라.
+3. Fireworks가 주 모델에서 시간당 1달러 가격을 올린다. 트래픽의 40%가 배치 등급(50% 할인)으로 이동할 경우 혼합 비용 영향을 모델링하라.
 4. 규제 대상 고객이 SOC 2 Type II + HIPAA + 전용 GPU를 요구한다. 어느 세 플랫폼이 유효하며 어느 것이 FinOps에서 이기는가?
 5. Fireworks 서버리스, Together 온디맨드, Baseten 전용, Replicate API에서 Llama 3.1 70B에 대한 1,000 예측당 비용을 비교하라. 하루 10 예측에서 어느 것이 가장 저렴한가? 10,000에서는?
 

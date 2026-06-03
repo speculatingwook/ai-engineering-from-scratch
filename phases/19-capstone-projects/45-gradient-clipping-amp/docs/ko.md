@@ -1,6 +1,6 @@
 # 그래디언트 클리핑과 혼합 정밀도(Gradient Clipping and Mixed Precision)
 
-> 이전 레슨의 옵티마이저(optimizer)와 스케줄은 그래디언트(gradient)가 멀쩡하다고 가정한다. 보통은 그렇지 않다. 단 하나의 나쁜 배치(batch)가 그래디언트 노름(gradient norm)을 세 자릿수만큼 치솟게 할 수 있다. 혼합 정밀도(mixed-precision) 학습은 손실 쪽에서 FP16 오버플로(overflow)를 도입해 이를 증폭한다. 이 레슨은 프로덕션 학습이 없이는 출시할 수 없는 두 가지 안전벨트를 만든다. 설정된 전역 L2 노름으로의 그래디언트 클리핑(gradient clipping), 그리고 NaN과 Inf를 탐지하고, 스텝을 깔끔하게 건너뛰며, 사후 분석을 위해 스케일링 인자(scaling factor)를 로깅하는 autocast와 GradScaler가 있는 혼합 정밀도 루프다.
+> 이전 레슨의 옵티마이저(optimizer)와 스케줄은 그래디언트(gradient)가 멀쩡하다고 가정한다. 보통은 그렇지 않다. 단 하나의 나쁜 배치(batch)만으로 그래디언트 노름(gradient norm)이 세 자릿수만큼 치솟는다. 혼합 정밀도(mixed-precision) 학습은 손실 쪽에서 FP16 오버플로(overflow)를 끌어들여 이를 더 키운다. 이 레슨은 프로덕션 학습에 없어서는 안 될 두 가지 안전벨트를 만든다. 하나는 설정된 전역 L2 노름으로 그래디언트를 자르는 클리핑(gradient clipping)이고, 다른 하나는 NaN과 Inf를 탐지해 스텝을 깔끔하게 건너뛰고 사후 분석용으로 스케일링 인자(scaling factor)를 로깅하는, autocast와 GradScaler를 갖춘 혼합 정밀도 루프다.
 
 **Type:** Build
 **Languages:** Python
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-어제 깔끔하게 돌았던 학습 실행이 스텝 8,217에서 수직으로 치솟는 손실 곡선을 만든다. 범인은 그래디언트 노름이 4,200인 단 하나의 배치로, 이전 정점의 스무 배다. 클리핑 없이 옵티마이저는 모델이 이전 한 시간 동안 했던 모든 학습을 리셋하는 스텝을 적용한다. 노름 1.0에서의 전역 L2 클립으로, 같은 배치는 단위 노름 업데이트에 기여한다. 손실은 추세선 위에 머물고, 실행은 살아남는다.
+어제 깔끔하게 돌았던 학습 실행이 스텝 8,217에서 손실 곡선을 수직으로 치솟게 한다. 범인은 그래디언트 노름이 4,200인 단 하나의 배치인데, 이전 정점의 스무 배다. 클리핑이 없으면 옵티마이저는 모델이 이전 한 시간 동안 쌓은 학습을 모두 리셋하는 스텝을 적용한다. 노름 1.0으로 전역 L2 클립을 걸면 같은 배치도 단위 노름 업데이트만큼만 기여한다. 손실은 추세선 위에 머물고, 실행은 살아남는다.
 
-혼합 정밀도 학습은 순방향 패스와 역방향 패스 대부분을 FP16으로 계산해 처리량(throughput)을 2-3배 높인다. 그 대가는 FP16이 좁은 지수 범위(exponent range)를 가진다는 것이다. FP16에서 오버플로하는 전형적인 그래디언트는 Inf로 평가되고, 이는 후속 층(layer)을 거쳐 NaN으로 전파되며, 다음 옵티마이저 스텝에서 모든 가중치(weight)를 NaN으로 만든다. PyTorch의 GradScaler는 역방향 패스 전에 손실에 큰 스케일링 인자를 곱하고 옵티마이저 스텝 전에 그래디언트를 같은 인자로 나누어 이를 해결한다. 언스케일(unscale) 시점에 어떤 그래디언트라도 Inf나 NaN이면 스케일러는 스텝을 건너뛰고 스케일링 인자를 반으로 줄인다. 이전 N개 스텝이 깔끔했다면 스케일러는 인자를 두 배로 늘린다. 학습이 진행되는 동안 인자는 FP16 범위가 허용하는 가장 높은 값을 찾는다.
+혼합 정밀도 학습은 순방향 패스와 역방향 패스 대부분을 FP16으로 계산해 처리량(throughput)을 2-3배 높인다. 그 대가로 FP16은 지수 범위(exponent range)가 좁다. FP16에서 오버플로하는 전형적인 그래디언트는 Inf로 평가되고, 후속 층(layer)을 거쳐 NaN으로 전파되며, 다음 옵티마이저 스텝에서 모든 가중치(weight)를 NaN으로 만든다. PyTorch의 GradScaler는 역방향 패스 전에 손실에 큰 스케일링 인자를 곱하고 옵티마이저 스텝 전에 그래디언트를 같은 인자로 나누어 이를 해결한다. 언스케일(unscale) 시점에 어떤 그래디언트라도 Inf나 NaN이면 스케일러는 스텝을 건너뛰고 스케일링 인자를 반으로 줄인다. 이전 N개 스텝이 깔끔했다면 스케일러는 인자를 두 배로 늘린다. 학습이 진행되는 동안 인자는 FP16 범위가 허용하는 가장 높은 값을 찾는다.
 
-만들기 문제는 둘을 올바르게 연결하는 것이다. 언스케일 전에 클립하면 임계값이 스케일된 그래디언트에 적용되고, 언스케일 후에 클립하면 GradScaler에 대한 연산 순서가 중요해진다. 올바른 순서는 `scaler.scale(loss).backward()`, 그다음 `scaler.unscale_(optimizer)`, 그다음 `clip_grad_norm_`, 그다음 `scaler.step(optimizer)`, 그다음 `scaler.update()`이다. 다른 어떤 순서도 조용히 망가진 루프를 만든다.
+만들기 문제는 둘을 올바르게 연결하는 것이다. 언스케일 전에 클립하면 임계값이 스케일된 그래디언트에 적용되고, 언스케일 후에 클립하면 GradScaler에 대한 연산 순서가 중요해진다. 올바른 순서는 `scaler.scale(loss).backward()`, 그다음 `scaler.unscale_(optimizer)`, 그다음 `clip_grad_norm_`, 그다음 `scaler.step(optimizer)`, 그다음 `scaler.update()`이다. 다른 어떤 순서를 써도 루프는 티 없이 망가진다.
 
 ## 개념 (The Concept)
 
@@ -48,7 +48,7 @@ flowchart TD
 
 `torch.amp.autocast(device_type)`는 적격 연산(대부분의 matmul 부류 연산)을 선택적으로 FP16으로 실행하는 컨텍스트 매니저(context manager)다. `torch.amp.GradScaler(device_type)`는 역방향 전에 손실을 스케일하고 옵티마이저 스텝 전에 그래디언트를 역스케일하는 헬퍼다. 둘은 함께 설계되었다. 하나를 다른 하나 없이 쓰는 것은 테스트가 잡아내야 할 설정 오류다.
 
-레슨은 CPU autocast를 사용하는데 그것이 CI에서 돌아가는 것이기 때문이다. 같은 패턴은 `device_type="cpu"`를 `device_type="cuda"`로 바꾸면 그대로 CUDA로 옮겨진다. CPU에서 GradScaler는 스텁(stub)이다(CPU autocast는 이미 기본적으로 BF16에서 동작하며 손실 스케일링이 필요 없다). 하지만 레슨은 호출 지점(call site)을 포함해 연결이 GPU 루프와 동일하게 한다.
+레슨이 CPU autocast를 쓰는 이유는 그것이 CI에서 돌아가기 때문이다. 같은 패턴은 `device_type="cpu"`를 `device_type="cuda"`로 바꾸기만 하면 그대로 CUDA로 옮겨진다. CPU에서 GradScaler는 스텁(stub)이다(CPU autocast는 이미 기본적으로 BF16에서 동작하며 손실 스케일링이 필요 없다). 그래도 레슨은 호출 지점(call site)까지 포함해 연결 방식을 GPU 루프와 똑같이 맞춘다.
 
 ### NaN과 Inf 탐지
 
@@ -86,13 +86,13 @@ python3 code/main.py
 
 **노름 로그는 스케줄과 함께 CSV로 간다.** CSV 열은 `step, lr, grad_l2_pre_clip, grad_l2_post_clip, loss, skipped, skip_reason, scaler_scale`이다. 파일을 여는 리뷰어는 한 행에서 스케줄, 그래디언트 이야기, 스케일링 인자, (이유와 함께) 건너뜀 결과를 본다. 열을 여러 파일에 쪼개는 것은 어긋난 분석의 지름길이다.
 
-**`scaler.update()`는 건너뜀에서도 매 스텝 실행된다.** 깔끔한 스텝에서 스케일러는 no-inf 카운터를 읽고, 증가시키며, 어쩌면 인자를 두 배로 늘린다. 건너뛴 스텝에서 스케일러는 인자를 반으로 줄이고 카운터를 리셋한다. 건너뜀 경로에서 `update()`를 잊는 것이 "스케일링 인자가 결코 바뀌지 않았다"를 만드는 버그다.
+**`scaler.update()`는 건너뜀에서도 매 스텝 실행된다.** 깔끔한 스텝에서 스케일러는 no-inf 카운터를 읽고, 증가시키며, 어쩌면 인자를 두 배로 늘린다. 건너뛴 스텝에서 스케일러는 인자를 반으로 줄이고 카운터를 리셋한다. 건너뜀 경로에서 `update()`를 빠뜨리면 "스케일링 인자가 끝내 바뀌지 않았다"는 버그가 생긴다.
 
 ## 라이브러리로 써보기 (Use It)
 
 프로덕션 패턴:
 
-- **autocast 디바이스는 옵티마이저 디바이스와 일치한다.** GPU 학습에는 `torch.amp.autocast(device_type="cuda")`, CPU 학습에는 `torch.amp.autocast(device_type="cpu")`. 디바이스를 섞으면 조용한 타입 오류가 발생하는데, 이는 멀쩡해 보이는 손실 곡선과 학습하지 않는 모델로 드러난다.
+- **autocast 디바이스는 옵티마이저 디바이스와 일치한다.** GPU 학습에는 `torch.amp.autocast(device_type="cuda")`, CPU 학습에는 `torch.amp.autocast(device_type="cpu")`. 디바이스를 섞으면 조용한 타입 오류가 발생하는데, 멀쩡해 보이는 손실 곡선과 학습하지 않는 모델로 드러난다.
 - **역방향 전 손실 검사.** `torch.isfinite(loss).all()`은 텐서(tensor) 리덕션 하나다. 비용은 무시할 만하고 NaN 손실에서의 절약은 학습 스텝 하나 전체다. 항상 실행하라.
 - **`zero_grad`에서 `set_to_none=True`.** 그래디언트를 0이 아니라 `None`으로 설정해, 옵티마이저가 영향받지 않은 파라미터 그룹의 계산을 건너뛸 수 있게 한다. 이 설정은 공짜 처리량 향상이자 약간의 버그 표면 감소다.
 

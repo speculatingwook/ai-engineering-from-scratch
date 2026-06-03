@@ -1,6 +1,6 @@
 # 캡스톤 — 완전한 툴 생태계 구축하기
 
-> Phase 13은 모든 조각을 가르쳤다. 이 캡스톤(capstone)은 그것들을 하나의 프로덕션 형태 시스템으로 연결한다: 툴 + 리소스 + 프롬프트 + 태스크 + UI를 갖춘 MCP 서버, 엣지에서의 OAuth 2.1, RBAC 게이트웨이, 멀티 서버 클라이언트, A2A 하위 에이전트 호출, 컬렉터로 들어가는 OTel 추적, CI에서의 툴 포이즈닝(tool-poisoning) 탐지, 그리고 AGENTS.md + SKILL.md 번들. 끝에 이르면 당신은 모든 아키텍처 선택을 방어할 수 있다.
+> Phase 13은 모든 조각을 가르쳤다. 이 캡스톤(capstone)은 이를 하나의 프로덕션 형태 시스템으로 연결한다: 툴 + 리소스 + 프롬프트 + 태스크 + UI를 갖춘 MCP 서버, 엣지에서의 OAuth 2.1, RBAC 게이트웨이, 멀티 서버 클라이언트, A2A 하위 에이전트 호출, 컬렉터로 들어가는 OTel 추적, CI에서의 툴 포이즈닝(tool-poisoning) 탐지, 그리고 AGENTS.md + SKILL.md 번들. 끝까지 따라오면 모든 아키텍처 선택을 방어할 수 있다.
 
 **Type:** Build
 **Languages:** Python (stdlib, end-to-end ecosystem harness)
@@ -20,9 +20,9 @@
 "리서치 및 보고" 시스템을 출하하라:
 
 - 사용자가 묻는다: "에이전트 프로토콜에 관한 2026년 arXiv 논문 중 가장 많이 인용된 세 편을 요약하라."
-- 시스템: MCP를 통해 arXiv를 검색하고; A2A를 통해 논문 요약을 전문 작성 에이전트에 위임하고; 결과를 집계하고; 인터랙티브 보고서를 MCP Apps `ui://` 리소스로 렌더링하고; 모든 단계를 OTel에 로깅한다.
+- 시스템: MCP로 arXiv를 검색하고; A2A로 논문 요약을 전문 작성 에이전트에 위임하고; 결과를 집계하고; 인터랙티브 보고서를 MCP Apps `ui://` 리소스로 렌더링하고; 모든 단계를 OTel에 로깅한다.
 
-Phase 13의 모든 프리미티브가 등장한다. 이것은 장난감이 아니다 — 2026년 Anthropic(Claude Research 제품), OpenAI(Apps SDK를 갖춘 GPTs), 그리고 서드파티가 출하한 프로덕션 리서치 어시스턴트 시스템이 정확히 이 형태다.
+Phase 13의 모든 프리미티브가 등장한다. 이것은 장난감이 아니다. 2026년 Anthropic(Claude Research 제품), OpenAI(Apps SDK를 갖춘 GPTs), 그리고 서드파티가 출하한 프로덕션 리서치 어시스턴트 시스템이 정확히 이 형태다.
 
 ## 개념 (The Concept)
 
@@ -62,14 +62,14 @@ agent.invoke_agent
 ### 보안 태세
 
 - 오디언스를 게이트웨이에 고정하는 리소스 인디케이터(resource indicator)와 함께하는 OAuth 2.1 + PKCE.
-- 게이트웨이가 업스트림 자격 증명을 보유한다; 사용자는 그것들을 결코 보지 못한다.
+- 게이트웨이가 업스트림 자격 증명을 보유한다; 사용자는 이를 결코 보지 못한다.
 - RBAC: `alice`는 `research:read`, `research:write`를 가지며, 모든 툴을 호출할 수 있다. `bob`은 `research:read`를 가지며, `generate_report`를 호출할 수 없다.
 - 고정된 설명 매니페스트: 툴 해시가 바뀐 서버는 모두 떨어뜨렸다.
 - 둘의 규칙(Rule of Two) 감사: 어떤 툴도 신뢰되지 않은 입력, 민감 데이터, 결과를 낳는 액션을 결합하지 않는다.
 
 ### 렌더링
 
-최종 `generate_report` 태스크는 콘텐츠 블록과 `ui://report/current` 리소스를 반환한다. 클라이언트의 호스트(Claude Desktop 등)가 샌드박스 iframe에서 인터랙티브 대시보드를 렌더링한다. 대시보드는 정렬된 논문 목록, 인용 수, 그리고 사용자가 클릭한 어떤 논문에 대해서든 `host.callTool('summarize_paper', {arxiv_id})`를 호출하는 버튼을 담는다.
+최종 `generate_report` 태스크는 콘텐츠 블록과 `ui://report/current` 리소스를 반환한다. 클라이언트의 호스트(Claude Desktop 등)가 샌드박스 iframe에서 인터랙티브 대시보드를 렌더링한다. 대시보드는 정렬된 논문 목록, 인용 수, 그리고 사용자가 클릭한 논문이라면 어느 것이든 `host.callTool('summarize_paper', {arxiv_id})`를 호출하는 버튼을 담는다.
 
 ### 패키징
 
@@ -116,7 +116,7 @@ research-system/
 - 게이트웨이 정책이 두 번째 사용자의 쓰기를 차단한다.
 - 태스크 수명 주기가 working → completed로 가고 텍스트와 ui:// 콘텐츠를 둘 다 반환한다.
 - A2A 호출의 내부 상태가 오케스트레이터(orchestrator)에 불투명하다.
-- AGENTS.md와 SKILL.md는 다른 에이전트가 워크플로를 재현하기 위해 필요한 유일한 파일이다.
+- AGENTS.md와 SKILL.md는 다른 에이전트가 워크플로를 재현하는 데 필요한 유일한 파일이다.
 
 ## 산출물 (Ship It)
 

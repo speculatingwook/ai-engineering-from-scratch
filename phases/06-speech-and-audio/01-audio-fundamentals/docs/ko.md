@@ -1,6 +1,6 @@
 # 오디오 기초 — 파형, 샘플링, 푸리에 변환
 
-> 파형(waveform)은 원시 신호다. 스펙트로그램(spectrogram)은 그 표현이다. 멜 특성(mel feature)은 머신러닝에 친화적인 형태다. 현대의 모든 ASR과 TTS 파이프라인(pipeline)은 이 사다리를 오르며, 그 첫 단은 샘플링(sampling)과 푸리에(Fourier)를 이해하는 것이다.
+> 파형(waveform)은 원시 신호다. 스펙트로그램(spectrogram)은 그 표현이다. 멜 특성(mel feature)은 머신러닝에 친화적인 형태다. 현대의 모든 ASR과 TTS 파이프라인(pipeline)은 이 사다리를 오르며, 그 첫 단은 샘플링(sampling)과 푸리에(Fourier)를 이해하는 일이다.
 
 **Type:** Learn
 **Languages:** Python
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-마이크는 압력 대 시간(pressure-vs-time) 신호를 만들어낸다. 당신의 신경망(neural network)은 텐서(tensor)를 소비한다. 그 사이에는 일련의 관례(convention)가 쌓여 있는데, 이를 위반하면 조용한 버그가 발생한다. 모델은 잘 학습되는데 WER이 두 배가 되거나, TTS가 잡음(hiss)을 내보내거나, 음성 복제(voice cloning) 시스템이 화자(speaker) 대신 마이크를 암기해 버린다.
+마이크는 압력 대 시간(pressure-vs-time) 신호를 만들어낸다. 신경망(neural network)은 텐서(tensor)를 소비한다. 그 사이에는 일련의 관례(convention)가 쌓여 있는데, 이를 위반하면 조용한 버그가 생긴다. 모델은 잘 학습되는데 WER이 두 배가 되거나, TTS가 잡음(hiss)을 내보내거나, 음성 복제(voice cloning) 시스템이 화자(speaker) 대신 마이크를 암기해 버린다.
 
 음성 시스템의 모든 버그는 세 가지 질문 중 하나로 거슬러 올라간다.
 
@@ -36,7 +36,7 @@
 | 44.1 kHz | CD 오디오, 음악. |
 | 48 kHz | 영화, 프로 오디오, 고충실도(high-fidelity) TTS (VALL-E 2, NaturalSpeech 3). |
 
-**나이퀴스트-섀넌(Nyquist-Shannon).** 샘플 레이트 `sr`은 `sr/2`까지의 주파수를 명확하게 표현할 수 있다. `sr/2` 경계가 *나이퀴스트 주파수(Nyquist frequency)*다. 나이퀴스트 위의 에너지는 *에일리어싱(aliasing)*된다 — 더 낮은 주파수로 접혀 내려가 — 신호를 손상시킨다. 다운샘플링(downsampling) 전에는 항상 저역 통과 필터(low-pass filter)를 적용하라.
+**나이퀴스트-섀넌(Nyquist-Shannon).** 샘플 레이트 `sr`은 `sr/2`까지의 주파수를 명확하게 표현할 수 있다. `sr/2` 경계가 *나이퀴스트 주파수(Nyquist frequency)*다. 나이퀴스트 위의 에너지는 *에일리어싱(aliasing)*된다. 더 낮은 주파수로 접혀 내려가 신호를 손상시킨다. 다운샘플링(downsampling) 전에는 항상 저역 통과 필터(low-pass filter)를 적용하라.
 
 **비트 심도(Bit depth).** 16비트 PCM(부호 있는 int16, 범위 ±32,767)은 보편적인 교환 형식이다. 음악에는 24비트, 내부 DSP에는 32비트 float를 쓴다. `soundfile` 같은 라이브러리는 int16을 읽지만 `[-1, 1]` 범위의 float32 배열로 노출한다.
 
@@ -94,7 +94,7 @@ def dft(x):
 
 ## 라이브러리로 써보기 (Use It)
 
-2026년에 당신이 실제로 출시하게 될 스택:
+2026년에 실제로 출시에 쓰게 될 스택:
 
 | 작업 | 라이브러리 | 이유 |
 |------|---------|-----|
@@ -104,7 +104,7 @@ def dft(x):
 | 실시간 스트리밍 | `sounddevice` 또는 `pyaudio` | 크로스 플랫폼 PortAudio 바인딩. |
 | 파일 검사 | `ffprobe` 또는 `soxi` | CLI, 빠름, sr/채널/코덱을 보고한다. |
 
-결정 규칙: **다른 무엇을 맞추기 전에 샘플 레이트부터 맞춰라**. Whisper는 16 kHz 모노 float32를 기대한다. 44.1 kHz 스테레오를 넘기면 모델 버그처럼 보이는 쓰레기를 얻게 된다.
+결정 규칙: **다른 무엇을 맞추기 전에 샘플 레이트부터 맞춰라**. Whisper는 16 kHz 모노 float32를 기대한다. 44.1 kHz 스테레오를 넘기면 모델 버그처럼 보이는 쓰레기가 나온다.
 
 ## 산출물 (Ship It)
 
@@ -113,7 +113,7 @@ def dft(x):
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** 16 kHz에서 220 Hz + 440 Hz + 880 Hz를 섞은 1초짜리를 합성하라. DFT를 실행하라. 기대되는 빈에서 세 개의 피크를 확인하라.
-2. **중간.** 48 kHz로 당신의 목소리를 3초짜리 WAV로 녹음하라. `torchaudio.transforms.Resample`(안티에일리어싱 포함)을 사용해 16 kHz로 다운샘플하고, 그다음 순진한 데시메이션(decimation, 세 번째 샘플마다 취함)으로 16 kHz로 다운샘플하라. 둘 다 FFT하라. 에일리어싱이 어디에 나타나는가?
+2. **중간.** 48 kHz로 자기 목소리를 3초짜리 WAV로 녹음하라. `torchaudio.transforms.Resample`(안티에일리어싱 포함)을 사용해 16 kHz로 다운샘플하고, 그다음 순진한 데시메이션(decimation, 세 번째 샘플마다 취함)으로 16 kHz로 다운샘플하라. 둘 다 FFT하라. 에일리어싱이 어디에 나타나는가?
 3. **어려움.** `math`와 단계 3의 DFT만 사용해 STFT를 밑바닥부터 만들어라. 프레임 크기 400, 홉 160, Hann 윈도우. `matplotlib.pyplot.imshow`로 크기를 그려라. 이것이 Lesson 02의 스펙트로그램이다.
 
 ## 핵심 용어 (Key Terms)

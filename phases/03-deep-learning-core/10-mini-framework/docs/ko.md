@@ -1,6 +1,6 @@
 # 나만의 미니 프레임워크 만들기 (Build Your Own Mini Framework)
 
-> 당신은 뉴런(neuron), 층(layer), 신경망(network), 역전파(backprop), 활성화(activation), 손실 함수(loss function), 옵티마이저(optimizer), 정규화(regularization), 초기화(initialization), LR 스케줄을 만들었다. 모두 별개의 조각으로. 이제 그것들을 하나의 프레임워크로 엮는다. PyTorch가 아니다. TensorFlow가 아니다. 당신의 것이다.
+> 우리는 뉴런(neuron), 층(layer), 신경망(network), 역전파(backprop), 활성화(activation), 손실 함수(loss function), 옵티마이저(optimizer), 정규화(regularization), 초기화(initialization), LR 스케줄을 만들었다. 모두 별개의 조각으로 말이다. 이제 이것들을 하나의 프레임워크로 엮는다. PyTorch가 아니다. TensorFlow가 아니다. 우리가 직접 만든 것이다.
 
 **Type:** Build
 **Languages:** Python
@@ -16,13 +16,13 @@
 
 ## 문제 (The Problem)
 
-당신에게는 별개의 파일에 흩어진 열 개 레슨 분량의 빌딩 블록이 있다. 여기 `Value` 클래스, 저기 학습 루프, 또 다른 파일에 가중치 초기화, 또 다른 곳에 학습률(learning rate) 스케줄. 신경망을 학습시키려면, 다섯 개의 서로 다른 레슨에서 복사-붙여넣기 하여 손으로 엮어야 한다.
+별개의 파일에 흩어진 열 개 레슨 분량의 빌딩 블록이 있다. 여기 `Value` 클래스, 저기 학습 루프, 또 다른 파일에 가중치 초기화, 또 다른 곳에 학습률(learning rate) 스케줄. 신경망을 학습시키려면 다섯 개의 서로 다른 레슨에서 복사-붙여넣기 해 손으로 엮어야 한다.
 
-그것이 프레임워크가 해결하는 것이다. PyTorch는 `nn.Module`, `nn.Sequential`, `optim.Adam`, `DataLoader`, 그리고 그것들을 함께 묶는 학습 루프 패턴을 준다. TensorFlow는 `keras.Layer`, `keras.Sequential`, `keras.optimizers.Adam`을 준다. 이것들은 마법이 아니다. 매번 배관을 새로 발명하지 않고도 신경망을 정의하고, 학습시키고, 평가할 수 있게 해 주는 조직화 패턴이다.
+이것이 바로 프레임워크가 해결하는 문제다. PyTorch는 `nn.Module`, `nn.Sequential`, `optim.Adam`, `DataLoader`, 그리고 이것들을 함께 묶는 학습 루프 패턴을 준다. TensorFlow는 `keras.Layer`, `keras.Sequential`, `keras.optimizers.Adam`을 준다. 이것들은 마법이 아니다. 매번 배관을 새로 발명하지 않고도 신경망을 정의하고 학습시키고 평가하게 해 주는 조직화 패턴이다.
 
-당신은 같은 것을 ~500줄의 Python으로 만들 것이다. numpy 없음. 외부 의존성 없음. 어떤 피드포워드 신경망이든 정의하고, SGD나 Adam으로 학습시키고, 데이터를 배치(batch)로 묶고, 드롭아웃(dropout)과 배치 정규화(batch normalization)를 적용하고, 어떤 활성화든 쓰고, 학습률을 스케줄링할 수 있는 프레임워크다.
+여기서는 같은 것을 ~500줄의 Python으로 만든다. numpy 없음. 외부 의존성 없음. 어떤 피드포워드 신경망이든 정의하고, SGD나 Adam으로 학습시키고, 데이터를 배치(batch)로 묶고, 드롭아웃(dropout)과 배치 정규화(batch normalization)를 적용하고, 어떤 활성화든 쓰고, 학습률을 스케줄링하는 프레임워크다.
 
-끝마치면, PyTorch에서 `model = nn.Sequential(...)`을 쓸 때 정확히 무슨 일이 일어나는지 이해하게 된다. 왜 `model.train()`과 `model.eval()`이 존재하는지 이해하게 된다. 왜 `optimizer.zero_grad()`가 별도의 호출인지 이해하게 된다. 그 모두를 이해하게 되는데, 그 모두를 당신이 만들었기 때문이다.
+끝마치면 PyTorch에서 `model = nn.Sequential(...)`을 쓸 때 정확히 무슨 일이 일어나는지 알게 된다. 왜 `model.train()`과 `model.eval()`이 존재하는지, 왜 `optimizer.zero_grad()`가 별도의 호출인지 알게 된다. 그 모두를 직접 만들었기 때문에 그 모두를 이해하게 된다.
 
 ## 개념 (The Concept)
 
@@ -46,7 +46,7 @@ Linear 층은 Module이다. ReLU 활성화는 Module이다. 드롭아웃 층은 
 
 ### 옵티마이저
 
-옵티마이저는 그래디언트를 써서 파라미터(parameter)를 갱신한다. SGD: `param -= lr * grad`. Adam: 모멘텀(momentum)과 분산 추정치를 유지한 뒤 갱신한다. 옵티마이저는 신경망 아키텍처를 알지 못한다 -- 그저 파라미터와 그 그래디언트의 평평한 리스트만 본다.
+옵티마이저는 그래디언트를 써서 파라미터(parameter)를 갱신한다. SGD: `param -= lr * grad`. Adam: 모멘텀(momentum)과 분산 추정치를 유지한 뒤 갱신한다. 옵티마이저는 신경망 아키텍처를 모른다 -- 그저 파라미터와 그 그래디언트의 평평한 리스트만 본다.
 
 ### DataLoader
 
@@ -664,9 +664,9 @@ for epoch in range(100):
         test_predictions = model(test_inputs)
 ```
 
-구조가 동일하다. `Sequential`, `Linear`, `ReLU`, `Sigmoid`, `BCELoss`, `Adam`, `zero_grad`, `backward`, `step`, `train`, `eval`. 모든 개념이 일대일로 매핑된다. 차이는 PyTorch가 자동 미분을 자동으로 처리하고(각 모듈에서 backward()를 구현할 필요 없음), GPU에서 돌고, 수년간 최적화되었다는 것이다. 하지만 뼈대는 같다.
+구조가 동일하다. `Sequential`, `Linear`, `ReLU`, `Sigmoid`, `BCELoss`, `Adam`, `zero_grad`, `backward`, `step`, `train`, `eval`. 모든 개념이 일대일로 매핑된다. 차이라면 PyTorch가 자동 미분을 알아서 처리하고(각 모듈에서 backward()를 구현할 필요 없음), GPU에서 돌고, 수년간 최적화되었다는 점이다. 하지만 뼈대는 같다.
 
-이제 PyTorch 코드를 보면, 모든 줄에서 무슨 일이 일어나는지 정확히 안다. 그 이해가 바로 전부의 핵심이다.
+이제 PyTorch 코드를 보면 모든 줄에서 무슨 일이 일어나는지 정확히 안다. 바로 그 이해가 이 모든 작업의 핵심이다.
 
 ## 산출물 (Ship It)
 

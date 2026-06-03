@@ -13,13 +13,13 @@
 
 이는 단어 가방(bag-of-words) 모델에서는 버그가 아니다. 언어, 코드, 오디오, 비디오 — 순서가 의미를 담는 모든 것 — 에서는 치명적이다.
 
-해법은 어떻게든 위치를 임베딩(embedding)에 주입하는 것이다. 답의 세 시대:
+해법은 어떻게든 위치를 임베딩(embedding)에 주입하는 데 있다. 답의 세 시대:
 
 1. **절대 사인파(Absolute sinusoidal)** (Vaswani 2017). 위치의 `sin/cos`를 임베딩에 더한다. 단순하고, 학습이 필요 없고, 학습된 길이를 넘어서면 외삽이 형편없다.
 2. **RoPE — Rotary Position Embeddings** (Su 2021). Q와 K 벡터(vector)를 위치에 비례하는 각도로 회전한다. *상대적* 위치를 내적(dot product)에 직접 인코딩한다. 2026년에 지배적이다.
 3. **ALiBi — Attention with Linear Biases** (Press 2022). 임베딩을 완전히 건너뛴다. 거리에 기반한 헤드별 선형 패널티를 어텐션 점수에 더한다. 길이 외삽이 탁월하다.
 
-2026년 기준, 본질적으로 모든 프런티어 오픈 모델이 RoPE를 쓴다. Llama 2/3/4, Qwen 2/3, Mistral, Mixtral, DeepSeek-V3, Kimi. 소수의 장기 컨텍스트 모델이 ALiBi나 그 현대적 변형을 쓴다. 절대 사인파는 역사적인 것이다.
+2026년 기준 사실상 모든 프런티어 오픈 모델이 RoPE를 쓴다. Llama 2/3/4, Qwen 2/3, Mistral, Mixtral, DeepSeek-V3, Kimi. 소수의 장기 컨텍스트 모델은 ALiBi나 그 현대적 변형을 쓴다. 절대 사인파는 이제 역사 속 방식이다.
 
 ## 개념 (The Concept)
 

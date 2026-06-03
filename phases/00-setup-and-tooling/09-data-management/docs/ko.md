@@ -1,6 +1,6 @@
 # 데이터 관리 (Data Management)
 
-> 데이터는 연료다. 그것을 어떻게 관리하느냐가 얼마나 빨리 나아가는지를 결정한다.
+> 데이터는 연료다. 데이터를 어떻게 관리하느냐가 얼마나 빨리 나아가는지를 결정한다.
 
 **Type:** Build
 **Language:** Python
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-모든 AI 프로젝트는 데이터에서 시작한다. 데이터셋을 찾고, 다운로드하고, 형식 간에 변환하고, 학습(training)과 평가를 위해 분할하고, 실험이 재현 가능하도록 버전 관리해야 한다. 매번 이걸 수동으로 하는 것은 느리고 오류가 나기 쉽다. 반복 가능한 워크플로가 필요하다.
+모든 AI 프로젝트는 데이터에서 시작한다. 데이터셋을 찾고, 다운로드하고, 형식 간에 변환하고, 학습(training)과 평가를 위해 분할하고, 실험이 재현 가능하도록 버전 관리해야 한다. 매번 이걸 수동으로 하면 느리고 오류가 나기 쉽다. 그래서 반복 가능한 워크플로가 필요하다.
 
 ## 개념 (The Concept)
 
@@ -50,7 +50,7 @@ print(dataset)
 print(dataset["train"][0])
 ```
 
-이것은 IMDB 영화 리뷰 데이터셋을 다운로드한다. 첫 다운로드 이후에는 `~/.cache/huggingface/datasets/`의 캐시에서 로드한다.
+이 코드는 IMDB 영화 리뷰 데이터셋을 다운로드한다. 첫 다운로드 이후에는 `~/.cache/huggingface/datasets/`의 캐시에서 로드한다.
 
 ### 3단계: 대용량 데이터셋 스트리밍하기
 
@@ -65,7 +65,7 @@ for i, example in enumerate(dataset):
         break
 ```
 
-스트리밍은 `IterableDataset`을 준다. 행이 도착하는 대로 처리한다. 데이터셋 크기와 무관하게 메모리 사용량이 일정하게 유지된다.
+스트리밍은 `IterableDataset`을 준다. 행이 도착하는 대로 처리하므로, 데이터셋 크기와 무관하게 메모리 사용량이 일정하게 유지된다.
 
 ### 4단계: 데이터셋 형식
 
@@ -88,7 +88,7 @@ dataset.to_parquet("imdb_train.parquet")
 | Parquet | 작음 | 빠름 | 분석, 컬럼 기반 쿼리 |
 | Arrow | 작음 | 가장 빠름 | 인메모리 처리(`datasets`가 내부적으로 사용하는 것) |
 
-AI 작업에서는 Parquet이 최고의 저장 형식이다. Arrow는 메모리에서 다루는 것이다. CSV와 JSON은 교환용이다.
+AI 작업에서는 Parquet이 최고의 저장 형식이다. Arrow는 메모리에서 다루는 형식이고, CSV와 JSON은 교환용이다.
 
 ### 5단계: 데이터 분할
 
@@ -132,7 +132,7 @@ model_dir = snapshot_download("sentence-transformers/all-MiniLM-L6-v2")
 print(f"Full model at: {model_dir}")
 ```
 
-모델은 `~/.cache/huggingface/hub/`에 캐시된다. 일단 다운로드하면 이후 실행에서 즉시 로드된다.
+모델은 `~/.cache/huggingface/hub/`에 캐시된다. 한 번 다운로드하면 이후 실행에서 즉시 로드된다.
 
 ### 7단계: 대용량 파일 다루기
 
@@ -159,7 +159,7 @@ git lfs track "*.safetensors"
 git add .gitattributes
 ```
 
-Git LFS는 저장소에 포인터를 저장하고 실제 파일은 별도의 서버에 저장한다. GitHub은 1GB를 무료로 준다.
+Git LFS는 저장소에 포인터를 저장하고 실제 파일은 별도의 서버에 저장한다. GitHub은 1GB를 무료로 제공한다.
 
 **옵션 C: DVC (data version control)**
 
@@ -203,7 +203,7 @@ dvc remote add -d myremote s3://my-bucket/dvc-store
 dvc push
 ```
 
-이 강의에서는 로컬 저장소로 충분하다. 원격 GPU 인스턴스에서 파인튜닝(fine-tuning)할 때 클라우드 저장소가 관련성을 띤다.
+이 강의에서는 로컬 저장소로 충분하다. 원격 GPU 인스턴스에서 파인튜닝(fine-tuning)할 때 비로소 클라우드 저장소가 필요해진다.
 
 ## 이 강의에서 사용하는 데이터셋 (Datasets Used in This Course)
 
@@ -226,7 +226,7 @@ dvc push
 python code/data_utils.py
 ```
 
-이것은 작은 데이터셋을 다운로드하고, 변환하고, 분할하고, 요약을 출력한다.
+이 스크립트는 작은 데이터셋을 다운로드하고, 변환하고, 분할한 뒤 요약을 출력한다.
 
 ## 산출물 (Ship It)
 

@@ -1,6 +1,6 @@
 # 병렬 도구 호출과 도구를 사용한 스트리밍
 
-> 세 개의 독립적인 날씨 조회를 직렬화하면 세 번의 왕복(round trip)이다. 그것들을 병렬로 돌리면 총 시간은 가장 느린 단일 호출로 붕괴한다. 이제 모든 프런티어 제공자(frontier provider)는 한 턴(turn)에 여러 도구 호출을 내보낸다. 보상은 실재한다. 배관 작업(plumbing)은 미묘하다. 이 레슨은 양쪽 절반을 모두 다룬다. 병렬 팬아웃(fan-out)과 스트리밍된 인자 재조립, 그리고 id 상관(correlation) 함정에 중점을 둔다.
+> 세 개의 독립적인 날씨 조회를 직렬화하면 세 번의 왕복(round trip)이 든다. 이것들을 병렬로 돌리면 총 시간은 가장 느린 단일 호출 하나로 수렴한다. 이제 모든 프런티어 제공자(frontier provider)는 한 턴(turn)에 여러 도구 호출을 내보낸다. 보상은 분명하지만 배관 작업(plumbing)은 까다롭다. 이 레슨은 양쪽 절반을 모두 다루며, 병렬 팬아웃(fan-out)과 스트리밍된 인자 재조립, 그리고 id 상관(correlation) 함정에 중점을 둔다.
 
 **Type:** Build
 **Languages:** Python (stdlib, thread pool + streaming harness)
@@ -9,14 +9,14 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- `parallel_tool_calls: true`가 존재하는 이유와 그것을 비활성화할 시점을 설명하기.
+- `parallel_tool_calls: true`가 존재하는 이유와 이를 비활성화할 시점을 설명하기.
 - 병렬 팬아웃 동안 스트리밍된 인자 청크(chunk)를 올바른 도구 호출 id에 상관시키기.
 - 부분 `arguments` 문자열을 일찍 파싱하지 않고 완전한 JSON으로 재조립하기.
 - 직렬 대 병렬 지연 시간(latency)을 보여주는 세 도시 날씨 벤치마크를 돌리기.
 
 ## 문제 (The Problem)
 
-병렬 호출 없이, "벵갈루루, 도쿄, 취리히의 날씨는?"에 답하는 에이전트는 이렇게 한다.
+병렬 호출이 없으면 "벵갈루루, 도쿄, 취리히의 날씨는?"에 답하는 에이전트는 이렇게 한다.
 
 ```
 user -> LLM
@@ -29,7 +29,7 @@ host -> run executor, reply with result
 LLM -> final text answer
 ```
 
-세 번의 LLM 왕복, 각각이 실행기(executor) 지연 시간도 치른다. 대략 이상적인 벽시계 시간(wall-clock time)의 4배다.
+세 번의 LLM 왕복이 일어나고, 각각이 실행기(executor) 지연 시간도 치른다. 대략 이상적인 벽시계 시간(wall-clock time)의 4배다.
 
 병렬 호출로:
 
@@ -40,9 +40,9 @@ host -> run all three executors concurrently, reply with three results
 LLM -> final text answer
 ```
 
-한 번의 LLM 왕복. 실행기 시간은 셋의 합이 아니라 최댓값이다. OpenAI, Anthropic, Gemini의 프로덕션 벤치마크는 팬아웃 워크로드에서 벽시계 60~70퍼센트 감소를 보여준다.
+한 번의 LLM 왕복으로 끝난다. 실행기 시간은 셋의 합이 아니라 최댓값이다. OpenAI, Anthropic, Gemini의 프로덕션 벤치마크는 팬아웃 워크로드에서 벽시계 60~70퍼센트 감소를 보여준다.
 
-대가는 상관 복잡성이다. 세 호출이 순서가 뒤바뀐 채 완료되면, 결과는 모델이 정렬할 수 있도록 일치하는 `tool_call_id`를 운반해야 한다. 결과가 스트리밍될 때, 실행 전에 부분 인자 조각을 완전한 JSON으로 조립해야 한다. Gemini 3가 고유 id를 추가한 데에는, 같은 도구에 대한 두 병렬 호출이 구별 불가능했던 실세계 문제를 해결하려는 목적이 일부 있었다.
+대가는 상관 복잡성이다. 세 호출이 순서가 뒤바뀐 채 완료되면, 결과는 모델이 정렬할 수 있도록 일치하는 `tool_call_id`를 운반해야 한다. 결과가 스트리밍될 때는 실행 전에 부분 인자 조각을 완전한 JSON으로 조립해야 한다. Gemini 3가 고유 id를 추가한 데에는, 같은 도구를 향한 두 병렬 호출이 구별 불가능했던 실세계 문제를 풀려는 목적이 일부 있었다.
 
 ## 개념 (The Concept)
 
@@ -56,7 +56,7 @@ LLM -> final text answer
 
 ### Id 상관
 
-모델이 내보내는 모든 호출은 `id`를 가진다. 호스트가 반환하는 모든 결과는 동일한 id를 포함해야 한다. 이것 없이는 결과가 모호하다.
+모델이 내보내는 모든 호출은 `id`를 가진다. 호스트가 반환하는 모든 결과는 동일한 id를 포함해야 한다. 이것 없이는 결과가 모호해진다.
 
 - **OpenAI.** 각 tool-역할 메시지의 `tool_call_id`.
 - **Anthropic.** 각 `tool_result` 블록의 `tool_use_id`.
@@ -64,13 +64,13 @@ LLM -> final text answer
 
 ### 호출을 동시에 실행하기
 
-호스트는 각 호출의 실행기를 자신의 스레드, 코루틴(coroutine), 또는 원격 워커(worker)에서 돌린다. 가장 간단한 하니스(harness)는 스레드 풀(thread pool)을 사용하고, 프로덕션은 `asyncio.gather`나 구조화된 동시성(structured concurrency)을 가진 asyncio를 사용한다. 완료 순서는 예측 불가능하다 — id가 식별자다.
+호스트는 각 호출의 실행기를 자신의 스레드, 코루틴(coroutine), 또는 원격 워커(worker)에서 돌린다. 가장 간단한 하니스(harness)는 스레드 풀(thread pool)을 쓰고, 프로덕션은 `asyncio.gather`나 구조화된 동시성(structured concurrency)을 가진 asyncio를 쓴다. 완료 순서는 예측 불가능하다 — id가 식별자다.
 
-흔한 버그 하나. 완료 순서가 아니라 호출 목록 순서로 결과를 답하는 것. 모델은 `tool_call_id`만 신경 쓰므로 이는 보통 동작하지만, 결과가 누락되거나 중복되면 순서가 뒤바뀐 제출이 디버깅을 더 어렵게 만든다. 명시적인 id와 함께 완료 순서로 답하는 것을 선호하라.
+흔한 버그가 하나 있다. 완료 순서가 아니라 호출 목록 순서로 결과를 답하는 것이다. 모델은 `tool_call_id`만 신경 쓰므로 보통은 동작하지만, 결과가 누락되거나 중복되면 순서가 뒤바뀐 제출이 디버깅을 더 어렵게 만든다. 명시적인 id와 함께 완료 순서로 답하기를 권한다.
 
 ### 도구 호출 스트리밍
 
-모델이 스트리밍할 때, `arguments`는 조각으로 도착한다. 세 병렬 호출에 대한 세 개의 별개 청크 스트림이 와이어(wire)에서 인터리브(interleave)된다. id당 하나의 누적기(accumulator)가 필요하다.
+모델이 스트리밍할 때 `arguments`는 조각으로 도착한다. 세 병렬 호출에 대한 세 개의 별개 청크 스트림이 와이어(wire)에서 인터리브(interleave)된다. id당 하나의 누적기(accumulator)가 필요하다.
 
 제공자별 형태:
 
@@ -80,7 +80,7 @@ LLM -> final text answer
 
 ### 부분 JSON과 일찍-파싱 함정
 
-`arguments`가 완전해지기 전에는 파싱할 수 없다. `{"city": "Beng` 같은 부분 JSON은 유효하지 않으며 예외를 일으킨다. 올바른 게이트는 제공자의 호출 종료 신호다. OpenAI의 `finish_reason = "tool_calls"`, Anthropic의 `content_block_stop`, 또는 Gemini의 스트림 종료 이벤트. 그제서야 `json.loads`를 시도한다. 더 견고한 접근법은 구조가 완성될 때 이벤트를 산출하는 증분 JSON 파서(incremental JSON parser)를 사용하는 것이다. OpenAI의 스트리밍 가이드는 라이브 "생각 중" 표시기를 보여주는 UX를 위해 이를 권장한다. 중괄호 세기(brace-counting)는 완전성 테스트로서 신뢰할 수 없으며(따옴표로 묶인 문자열이나 이스케이프된 콘텐츠 안의 중괄호가 거짓 양성을 일으킨다), 비공식적인 디버그 휴리스틱으로만 사용해야 한다.
+`arguments`가 완전해지기 전에는 파싱할 수 없다. `{"city": "Beng` 같은 부분 JSON은 유효하지 않으며 예외를 일으킨다. 올바른 게이트는 제공자의 호출 종료 신호다. OpenAI의 `finish_reason = "tool_calls"`, Anthropic의 `content_block_stop`, 또는 Gemini의 스트림 종료 이벤트. 그제서야 `json.loads`를 시도한다. 더 견고한 접근법은 구조가 완성될 때 이벤트를 산출하는 증분 JSON 파서(incremental JSON parser)를 쓰는 것이다. OpenAI의 스트리밍 가이드는 라이브 "생각 중" 표시기를 보여주는 UX를 위해 이를 권장한다. 중괄호 세기(brace-counting)는 완전성 테스트로 신뢰할 수 없으며(따옴표로 묶인 문자열이나 이스케이프된 콘텐츠 안의 중괄호가 거짓 양성을 일으킨다), 비공식적인 디버그 휴리스틱으로만 써야 한다.
 
 ### 순서가 뒤바뀐 완료
 
@@ -104,7 +104,7 @@ call_C: median API, returns third
 
 `code/main.py`의 하니스는 400, 600, 800ms 지연 시간을 가진 세 실행기를 시뮬레이션한다. 직렬은 총 1800ms에 돌린다. 병렬은 max(400, 600, 800) = 800ms에 돌린다. 차이는 비례적이 아니라 일정하므로, 절감은 도구 개수와 함께 커진다.
 
-실세계 주의 사항: 병렬 호출은 다운스트림 API에 부담을 준다. 속도 제한된 서비스로의 10방향 팬아웃은 실패할 것이다. Phase 13 · 17은 게이트웨이 수준의 배압(backpressure)을 다룬다. 재시도 의미론은 미래 phase로 계획되어 있다.
+실세계 주의 사항: 병렬 호출은 다운스트림 API에 부담을 준다. 속도 제한된 서비스로의 10방향 팬아웃은 실패한다. Phase 13 · 17은 게이트웨이 수준의 배압(backpressure)을 다룬다. 재시도 의미론은 미래 phase로 계획되어 있다.
 
 ### 스트리밍 팬아웃 벽시계
 
@@ -112,7 +112,7 @@ call_C: median API, returns third
 
 ## 라이브러리로 써보기 (Use It)
 
-`code/main.py`는 두 절반을 가진다. 첫 번째는 `concurrent.futures.ThreadPoolExecutor`를 사용해 세 시뮬레이션된 날씨 호출을 직렬과 병렬로 돌리고 벽시계 시간을 출력한다. 두 번째 절반은 가짜 스트리밍 응답 — 한 스트림에 인터리브된 세 병렬 호출의 `arguments` 청크 — 을 재생하고 `StreamAccumulator`로 id별로 재조립한다. LLM 없음, 네트워크 없음, 오직 재조립 로직만.
+`code/main.py`는 두 절반을 가진다. 첫 번째는 `concurrent.futures.ThreadPoolExecutor`를 써서 세 시뮬레이션된 날씨 호출을 직렬과 병렬로 돌리고 벽시계 시간을 출력한다. 두 번째 절반은 가짜 스트리밍 응답 — 한 스트림에 인터리브된 세 병렬 호출의 `arguments` 청크 — 을 재생하고 `StreamAccumulator`로 id별로 재조립한다. LLM 없음, 네트워크 없음, 오직 재조립 로직만.
 
 볼 것:
 

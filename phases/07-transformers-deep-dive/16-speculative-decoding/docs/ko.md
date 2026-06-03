@@ -11,7 +11,7 @@
 
 70B LLM이 토큰 하나를 샘플링(sampling)하는 데 H100에서 ~30 ms가 걸린다. 3B 드래프트 모델은 ~3 ms가 걸린다. 3B가 5개 토큰을 앞서 드래프트하게 한 뒤, 70B를 *한 번* 돌려 5개 모두를 검증하면, 최대 5개의 받아들여진 토큰에 대해 총 `5×3 + 30 = 45 ms`다 — 직선 생성의 `5×30 = 150 ms` 대비. 이것이 추측 디코딩의 완전한 홍보 문구다: 약간의 추가 GPU 메모리(드래프트 모델)를 2~4배 낮은 디코딩 지연 시간(latency)과 맞바꾼다.
 
-이 트릭은 분포(distribution)를 보존해야 한다. Leviathan et al. (2023)이 도입하고 Chen et al.이 동시에 도입한 추측 샘플링(speculative sampling)은 출력 시퀀스(sequence)가 큰 모델이 혼자 생성했을 것과 **동일하게 분포(identically distributed)**됨을 보장한다. 품질 트레이드오프(trade-off)가 없다. 그저 더 빠를 뿐이다.
+이 트릭은 분포(distribution)를 보존해야 한다. Leviathan et al. (2023)이 처음 제시하고 Chen et al.이 동시에 내놓은 추측 샘플링(speculative sampling)은 출력 시퀀스(sequence)가 큰 모델이 혼자 생성했을 것과 **동일하게 분포(identically distributed)**됨을 보장한다. 품질 트레이드오프(trade-off)가 없다. 그저 더 빠를 뿐이다.
 
 네 가지 부류의 드래프트-검증기(verifier) 쌍이 2026년 추론(inference)을 지배한다:
 
@@ -78,7 +78,7 @@ EAGLE-3(2025)은 후보 연속에 대한 트리 탐색(tree search)을 추가했
 
 검증은 `N`개의 드래프트 토큰을 검증기에 한 번의 순방향 패스로 넣는다. 이는 검증기의 KV 캐시를 `N`개 항목만큼 늘린다. 일부 드래프트가 거부되면, 캐시를 수용된 접두사 길이로 롤백(roll back)해야 한다.
 
-프로덕션 구현(vLLM의 `--speculative-model`, TensorRT-LLM의 LookaheadDecoder)은 스크래치(scratch) KV 버퍼로 이를 처리한다. 먼저 쓰고, 수용 시 커밋(commit)한다. 개념적으로 어렵지는 않지만, 까다롭다.
+프로덕션 구현(vLLM의 `--speculative-model`, TensorRT-LLM의 LookaheadDecoder)은 스크래치(scratch) KV 버퍼로 이를 처리한다. 먼저 쓰고, 수용 시 커밋(commit)한다. 개념적으로 어렵지는 않지만 까다롭다.
 
 ## 직접 만들기 (Build It)
 
@@ -166,7 +166,7 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
     --num-speculative-tokens 5
 ```
 
-2026년 중반 기준 TensorRT-LLM이 가장 빠른 Medusa 경로를 가지고 있다. `faster-whisper`는 작은 드래프트로 Whisper-large에 추측 디코딩을 감싼다.
+2026년 중반 기준 TensorRT-LLM의 Medusa 경로가 가장 빠르다. `faster-whisper`는 작은 드래프트로 Whisper-large에 추측 디코딩을 감싼다.
 
 **드래프트 고르기:**
 

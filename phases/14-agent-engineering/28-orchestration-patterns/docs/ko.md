@@ -28,7 +28,7 @@
 
 프레임워크: LangGraph `create_supervisor`, Anthropic orchestrator-workers, CrewAI Hierarchical Process.
 
-**2026년 LangChain 권장 사항:** `create_supervisor`보다는 직접 도구 호출을 통해 슈퍼비전을 수행하라. 더 세밀한 컨텍스트 엔지니어링(context engineering) 제어를 제공한다 — 각 전문가가 정확히 무엇을 보는지 당신이 결정한다.
+**2026년 LangChain 권장 사항:** `create_supervisor`보다는 직접 도구 호출을 통해 슈퍼비전을 수행하라. 더 세밀한 컨텍스트 엔지니어링(context engineering) 제어를 제공한다 — 각 전문가가 정확히 무엇을 보는지 직접 결정하기 때문이다.
 
 ### 스웜/피어 투 피어(Swarm / peer-to-peer)
 
@@ -115,7 +115,7 @@ python3 code/main.py
 2. 스웜에 홉 카운터를 추가하라: 핸드오프 3회 이후에는 거부하라. A->B->A 튀는 현상을 잡아내는가?
 3. 12명의 전문가 도메인을 위한 2단계 계층형 시스템을 만들어라. 중첩 없이는 어디서 컨텍스트 예산이 실패하는가?
 4. 프로덕션 형태의 워크로드에서 네 가지 패턴을 프로파일링하라. 어느 지표(지연 시간, 비용, 정확도, 디버깅 용이성)에서 어느 것이 이기는가?
-5. Anthropic의 "Building Effective Agents" 글을 읽어라. 당신의 프로덕션 흐름 각각을 네 가지 중 하나에 매핑하라. 깔끔하게 매핑되지 않는 것이 있는가?
+5. Anthropic의 "Building Effective Agents" 글을 읽어라. 자신의 프로덕션 흐름 각각을 네 가지 중 하나에 매핑하라. 깔끔하게 매핑되지 않는 것이 있는가?
 
 ## 핵심 용어 (Key Terms)
 

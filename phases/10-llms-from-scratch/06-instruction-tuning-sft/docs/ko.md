@@ -1,6 +1,6 @@
 # 인스트럭션 튜닝 (SFT)
 
-> 베이스 모델은 다음 토큰을 예측한다. 그게 전부다. 지시를 따르지도, 질문에 답하지도, 유해한 요청을 거부하지도 않는다. SFT는 토큰 예측기와 유용한 어시스턴트 사이의 다리다. 당신이 대화해 본 모든 모델 -- Claude, GPT, Llama Chat -- 은 이 단계를 거쳤다.
+> 베이스 모델은 다음 토큰을 예측한다. 그게 전부다. 지시를 따르지도, 질문에 답하지도, 유해한 요청을 거부하지도 않는다. SFT는 토큰 예측기와 유용한 어시스턴트 사이의 다리다. 우리가 대화해 본 모든 모델 -- Claude, GPT, Llama Chat -- 은 이 단계를 거쳤다.
 
 **Type:** Build
 **Languages:** Python (with numpy)
@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-당신은 Lesson 04에서 모델을 학습시켰다. 그것은 시퀀스가 주어지면 다음 토큰을 예측할 수 있다. "The transformer architecture"를 입력하면 "has revolutionized natural language processing."으로 이어갈 수 있다. 다음 토큰 예측기치고는 인상적이다.
+Lesson 04에서 모델을 학습시켰다. 그 모델은 시퀀스가 주어지면 다음 토큰을 예측한다. "The transformer architecture"를 입력하면 "has revolutionized natural language processing."으로 이어갈 수 있다. 다음 토큰 예측기치고는 인상적이다.
 
-이제 이걸 시도해 보라: "What is the capital of France?"를 입력하라. 베이스 모델은 "Paris."라고 답하지 않는다. 패턴을 이어간다. 질문 목록을 담은 문서에서 학습했기 때문에 "What is the capital of Germany? What is the capital of Spain?"을 만들 수 있다. 또는 그것이 그럴듯한 다음 토큰 이어감이기 때문에 "is a question that many people ask"를 만들 수도 있다. 모델은 *답하기*라는 개념이 없다. *이어가기*만 안다.
+이제 이걸 시도해 보라: "What is the capital of France?"를 입력하라. 베이스 모델은 "Paris."라고 답하지 않는다. 패턴을 이어간다. 질문 목록을 담은 문서에서 학습했기 때문에 "What is the capital of Germany? What is the capital of Spain?"을 만들 수 있다. 또는 그게 그럴듯한 다음 토큰 이어감이라서 "is a question that many people ask"를 만들 수도 있다. 모델은 *답하기*라는 개념이 없다. *이어가기*만 안다.
 
 이것이 (베이스 모델, 2020년 6월 출시인) GPT-3와 (인스트럭션 튜닝된, 2022년 11월 출시인) ChatGPT 사이의 간극이다. 같은 아키텍처. 같은 사전 학습(pre-training). 차이는 모델에게 대화 패턴을 따르도록 가르친 2만에서 10만 개의 정성껏 만든 (지시, 응답) 쌍이다.
 
@@ -97,7 +97,7 @@ The capital of France is Paris.<|im_end|>
 
 SFT는 이 잠재된 능력을 집중시킨다. 모델이 질문에 답해야 할지 문서를 이어가야 할지 맥락에서 알아내야 하는 대신, SFT는 대화 패턴을 명시적으로 학습한다. 몇천 개의 예시 후, 모델은 학습한다: 어시스턴트 역할 마커를 보면, 도움이 되는 응답을 만들어라.
 
-이것이 27,000개의 예시면 충분한 이유다. 당신은 모델에게 영어를 가르치는 게 아니다. 세상에 대한 사실을 가르치는 게 아니다. 한 가지 단순한 행동을 가르친다: 지시에 응답하라. 지식은 이미 거기 있었다.
+이것이 27,000개의 예시면 충분한 이유다. 모델에게 영어를 가르치는 게 아니다. 세상에 대한 사실을 가르치는 게 아니다. 한 가지 단순한 행동을 가르친다: 지시에 응답하라. 지식은 이미 거기 있었다.
 
 ### 마스킹된 손실 (The Masked Loss)
 
@@ -470,7 +470,7 @@ def measure_forgetting(model, test_text, seq_len=64):
     return total_loss / max(num_windows, 1)
 ```
 
-실제 파인튜닝에서는 학습 내내 이 지표를 추적할 것이다. 원시 텍스트 손실이 10~15% 넘게 증가하면, 당신의 SFT는 너무 공격적이다. 학습률을 낮추거나 에폭 수를 줄여라.
+실제 파인튜닝에서는 학습 내내 이 지표를 추적할 것이다. 원시 텍스트 손실이 10~15% 넘게 증가하면, SFT가 너무 공격적인 것이다. 학습률을 낮추거나 에폭 수를 줄여라.
 
 ## 라이브러리로 써보기 (Use It)
 

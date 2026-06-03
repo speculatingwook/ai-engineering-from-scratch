@@ -1,6 +1,6 @@
 # 오픈 보캐뷸러리 비전 — CLIP (Open-Vocabulary Vision)
 
-> 이미지 인코더와 텍스트 인코더를 함께 학습시켜, 일치하는 (이미지, 캡션) 쌍이 공유 공간에서 같은 지점에 떨어지게 하라. 그것이 비결 전부다.
+> 이미지 인코더와 텍스트 인코더를 함께 학습시켜 일치하는 (이미지, 캡션) 쌍이 공유 공간에서 같은 지점에 모이게 하라. 비결은 이것뿐이다.
 
 **Type:** Build + Use
 **Languages:** Python
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-전통적인 분류기(classifier)는 닫힌 보캐뷸러리(closed-vocabulary)다: 1000클래스 ImageNet 모델은 1000개의 레이블(label)만 예측할 수 있다. 모든 새 범주는 레이블된 데이터와 재학습된 헤드를 요구한다.
+전통적인 분류기(classifier)는 닫힌 보캐뷸러리(closed-vocabulary)다. 1000클래스 ImageNet 모델은 1000개의 레이블(label)만 예측한다. 새 범주를 추가하려면 그때마다 레이블된 데이터와 새로 학습한 헤드가 필요하다.
 
-CLIP(Radford et al., OpenAI 2021)은 웹에서 긁어모은 4억 개의 (이미지, 캡션) 쌍에 학습하면, 순수하게 자연어로 기술된 임의의 범주 집합으로 추론(inference) 시점에 분류할 수 있는 모델이 만들어짐을 보여줬다. 문장을 하나 씀으로써 새 클래스를 준다.
+CLIP(Radford et al., OpenAI 2021)은 웹에서 긁어모은 4억 개의 (이미지, 캡션) 쌍으로 학습하면 추론(inference) 시점에 자연어로만 기술한 임의의 범주 집합으로 분류하는 모델이 나온다는 것을 보여줬다. 문장 하나로 새 클래스를 정의하는 셈이다.
 
-그 능력 — 제로샷 전이(zero-shot transfer) — 이 모든 현대 비전 시스템이 CLIP 계열 체크포인트(checkpoint)로 시작하는 이유다. 검출(Grounding DINO, OWL-ViT), 분할(CLIPSeg, SAM), 검색, 콘텐츠 모더레이션, VLM, 텍스트-투-이미지(text-to-image) 생성 모두 CLIP 스타일의 결합 임베딩(joint embedding) 위에 세워진다.
+바로 이 능력, 즉 제로샷 전이(zero-shot transfer) 때문에 오늘날의 모든 비전 시스템이 CLIP 계열 체크포인트(checkpoint)에서 출발한다. 검출(Grounding DINO, OWL-ViT), 분할(CLIPSeg, SAM), 검색, 콘텐츠 모더레이션, VLM, 텍스트-투-이미지(text-to-image) 생성 모두 CLIP 스타일의 결합 임베딩(joint embedding) 위에 세워진다.
 
 ## 개념 (The Concept)
 
@@ -38,11 +38,11 @@ flowchart LR
     style SIM fill:#dcfce7,stroke:#16a34a
 ```
 
-두 인코더 모두 같은 임베딩 차원으로의 선형 투영(linear projection)으로 끝난다(CLIP-B/32는 512, CLIP-L/14는 1024). L2 정규화(normalise)하고 코사인 유사도를 계산한다.
+두 인코더 모두 같은 임베딩 차원으로 가는 선형 투영(linear projection)으로 끝난다(CLIP-B/32는 512, CLIP-L/14는 1024). L2로 정규화(normalise)한 뒤 코사인 유사도를 계산한다.
 
 ### 목적
 
-N개의 (이미지, 캡션) 쌍으로 된 배치(batch)가 주어지면, NxN 유사도 행렬(matrix)을 만든다. 대각선(일치하는 쌍)이 높은 유사도를, 비대각선(일치하지 않는 쌍)이 낮은 유사도를 갖도록 두 인코더를 학습시킨다.
+N개의 (이미지, 캡션) 쌍으로 된 배치(batch)가 주어지면 NxN 유사도 행렬(matrix)을 만든다. 대각선(일치하는 쌍)은 유사도가 높고 비대각선(일치하지 않는 쌍)은 유사도가 낮도록 두 인코더를 학습시킨다.
 
 ```
 sim_matrix = image_embeddings @ text_embeddings.T / tau
@@ -52,7 +52,7 @@ loss_t2i = cross_entropy(sim_matrix.T,     targets=arange(N))
 loss = (loss_i2t + loss_t2i) / 2
 ```
 
-이미지-투-텍스트와 텍스트-투-이미지 검색이 모두 작동해야 하므로 대칭적(symmetric)이다. `tau`(온도(temperature))는 보통 스칼라 파라미터(parameter)로 학습되며, 0.07로 초기화된다.
+이미지-투-텍스트와 텍스트-투-이미지 검색이 모두 작동해야 하므로 대칭적(symmetric)이다. `tau`(온도(temperature))는 보통 스칼라 파라미터(parameter)로 학습하며 0.07로 초기화한다.
 
 ### SigLIP: 더 나은 손실
 
@@ -63,7 +63,7 @@ loss = mean over pairs of log(1 + exp(-y_ij * sim_ij))
 y_ij = +1 if matching, -1 otherwise
 ```
 
-쌍별 손실은 CLIP이 요구하는 배치 수준 정규화(batch-level normalisation)를 제거한다. SigLIP은 작은 배치 크기에서 더 잘 학습되고, 동등한 데이터에서 CLIP과 맞먹거나 능가한다.
+쌍별 손실은 CLIP에 필요한 배치 수준 정규화(batch-level normalisation)를 없앤다. SigLIP은 작은 배치 크기에서 더 잘 학습되고 같은 양의 데이터에서 CLIP과 맞먹거나 능가한다.
 
 ### 제로샷 분류
 
@@ -75,7 +75,7 @@ y_ij = +1 if matching, -1 otherwise
 4. 유사도 = `I @ T.T` 형태 (1, C).
 5. Argmax -> 예측된 클래스.
 
-프롬프트 엔지니어링이 중요하다. OpenAI는 ImageNet에 대해 80개의 프롬프트 템플릿("a photo of a {}", "a blurry photo of a {}", "a sketch of a {}", ...)을 공개했다. 추가 1~3% top-1 정확도를 위해 클래스당 모든 템플릿의 임베딩을 평균하라.
+프롬프트 엔지니어링이 중요하다. OpenAI는 ImageNet용으로 80개의 프롬프트 템플릿("a photo of a {}", "a blurry photo of a {}", "a sketch of a {}", ...)을 공개했다. 클래스마다 모든 템플릿의 임베딩을 평균하면 top-1 정확도가 1~3% 더 오른다.
 
 ### 2026년에 CLIP 스타일 모델이 쓰이는 곳
 
@@ -86,13 +86,13 @@ y_ij = +1 if matching, -1 otherwise
 - **VLM** — LLaVA, Qwen-VL, InternVL이 CLIP 계열 비전 인코더를 LLM에 연결한다.
 - **텍스트-투-이미지 생성** — Stable Diffusion, DALL-E 3이 CLIP 텍스트 임베딩에 조건화한다.
 
-공유 임베딩 공간을 갖게 되면, 모든 비전+언어 작업이 거리 계산이 된다.
+공유 임베딩 공간이 갖춰지면 모든 비전+언어 작업이 거리 계산으로 귀결된다.
 
 ## 직접 만들기 (Build It)
 
 ### Step 1: 작은 두 타워 모델
 
-실제 CLIP은 ViT + 트랜스포머(transformer)다. 이 레슨에서는 학습 신호가 CPU에서 보이도록 타워가 미리 추출된 특성에 대한 작은 MLP다.
+실제 CLIP은 ViT + 트랜스포머(transformer)다. 이 레슨에서는 학습 신호가 CPU에서도 보이도록 타워를 미리 추출한 특성에 얹은 작은 MLP로 둔다.
 
 ```python
 import torch
@@ -127,7 +127,7 @@ def clip_loss(image_emb, text_emb, logit_scale):
     return (l_i + l_t) / 2
 ```
 
-대칭적이다. logit_scale이 높을수록 = 더 날카로운 소프트맥스 = 더 확신하지만 불안정성의 위험.
+대칭적이다. logit_scale이 높을수록 소프트맥스가 더 날카로워져 확신은 커지지만 불안정해질 위험도 커진다.
 
 ### Step 3: 제로샷 분류기
 
@@ -145,7 +145,7 @@ def zero_shot_classify(model, image_feats, class_text_feats, class_names):
     return [class_names[p] for p in pred.tolist()]
 ```
 
-단계당 한 줄. 이것이 프로덕션(production) CLIP 체크포인트와 함께 쓰는 정확한 제로샷 절차다.
+단계마다 한 줄이다. 프로덕션(production) CLIP 체크포인트로 제로샷을 돌릴 때 쓰는 절차가 정확히 이것이다.
 
 ### Step 4: 정상 동작 확인
 
@@ -160,7 +160,7 @@ loss = clip_loss(i, t, scale)
 print(f"batch size: {i.size(0)}   loss: {loss.item():.3f}")
 ```
 
-무작위로 초기화된 모델에 대해 손실은 `log(N) = log(8) = 2.08`에 가까워야 한다 — 아직 아무 구조도 학습되지 않았을 때의 대칭 교차 엔트로피(cross-entropy) 타깃이다.
+무작위로 초기화한 모델이라면 손실은 `log(N) = log(8) = 2.08`에 가까워야 한다. 아직 아무 구조도 학습하지 못했을 때의 대칭 교차 엔트로피(cross-entropy) 타깃이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -187,7 +187,7 @@ with torch.no_grad():
 print(probs)
 ```
 
-SigLIP은 더 새롭고, 작은 규모에서 더 잘 학습되며, 새 작업에 선호된다: `google/siglip-base-patch16-224`. Hugging Face가 둘 다 제공한다.
+SigLIP은 더 새롭고 작은 규모에서 더 잘 학습되어 새 작업에서 선호된다(`google/siglip-base-patch16-224`). Hugging Face에서 둘 다 받을 수 있다.
 
 ## 산출물 (Ship It)
 

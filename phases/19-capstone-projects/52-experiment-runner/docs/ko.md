@@ -16,9 +16,9 @@
 
 ## 왜 서브프로세스인가 (Why a subprocess)
 
-연구 루프는 신뢰할 수 없는 코드를 실행한다. 가설(hypothesis)은 샘플러(sampler)에서 왔고, 실험 스크립트는 같은 경로에서 왔다. 둘 중 하나를 프로세스 내(in-process)에서 안전하다고 취급하는 것은 오케스트레이터(orchestrator)를 무너뜨리는 크래시를 자초하는 것이다. 서브프로세스는 언어가 출시하는 가장 단순한 격리(isolation)다. 별도 프로세스, 독립적인 주소 공간, 부모 쪽의 시그널 핸들(signal handle)이다.
+연구 루프는 신뢰할 수 없는 코드를 실행한다. 가설(hypothesis)은 샘플러(sampler)에서 왔고, 실험 스크립트는 같은 경로에서 왔다. 둘 중 하나를 프로세스 내(in-process)에서 안전하다고 취급하면 오케스트레이터(orchestrator)를 무너뜨리는 크래시를 자초한다. 서브프로세스는 언어가 출시하는 가장 단순한 격리(isolation)다. 별도 프로세스, 독립적인 주소 공간, 부모 쪽의 시그널 핸들(signal handle)이다.
 
-여기 러너는 완전한 샌드박싱을 구현하지 않는다. cgroup도, seccomp 필터도, 네임스페이스 재매핑도 없다. 가진 것은 월클록 타임아웃, 메모리 증가에 대한 폴링(polling) 루프, 그리고 어느 한계에서든 프로세스를 종료하는 kill 경로다. 그것이 더 정교한 모든 샌드박스가 확장하는 런타임 계약이다. 레슨은 계약을 한자리에서 읽을 만큼 작게 유지한다.
+여기 러너는 완전한 샌드박싱을 구현하지 않는다. cgroup도, seccomp 필터도, 네임스페이스 재매핑도 없다. 가진 것은 월클록 타임아웃, 메모리 증가를 폴링(polling)하는 루프, 어느 한계에서든 프로세스를 종료하는 kill 경로다. 그것이 더 정교한 모든 샌드박스가 확장하는 런타임 계약이다. 레슨은 계약을 한자리에서 읽을 만큼 작게 유지한다.
 
 ## ExperimentSpec 형태 (The ExperimentSpec shape)
 
@@ -34,7 +34,7 @@ ExperimentSpec
   metric_keys    : list[str]      (which fields the evaluator will read)
 ```
 
-스크립트는 디스크에 산다. 러너는 스크립트가 읽는 임시 파일 경로에 설정(config)을 쓴다. 스크립트는 키가 `metric_keys`의 상위 집합(superset)인 단일 json 줄을 stdout에 출력할 것으로 기대된다. stdout의 다른 모든 것은 포착되지만 지표 파서에 의해 무시된다.
+스크립트는 디스크에 산다. 러너는 스크립트가 읽는 임시 파일 경로에 설정(config)을 쓴다. 스크립트는 키가 `metric_keys`의 상위 집합(superset)인 단일 json 줄을 stdout에 출력할 것으로 기대된다. stdout의 다른 모든 것은 포착되지만 지표 파서가 무시한다.
 
 ## 아키텍처 (Architecture)
 
@@ -63,7 +63,7 @@ flowchart TD
 
 ## stdout과 stderr 포착 (Capturing stdout and stderr)
 
-러너는 완료 시 비워진 두 파이프를 모두 읽는다. stdout은 줄 단위로 스캔된다. 필요한 모든 `metric_keys`를 가진 json으로 파싱되는 마지막 줄이 지표 덩어리로 취해진다. 이전의 json 줄들은 `intermediate_metrics`로 결과에 보관된다. 평가기는 이것들을 학습 곡선(learning curve)에 사용할 수 있다.
+러너는 완료 시 비워진 두 파이프를 모두 읽는다. stdout은 줄 단위로 스캔된다. 필요한 모든 `metric_keys`를 가진 json으로 파싱되는 마지막 줄을 지표 덩어리로 취한다. 이전의 json 줄들은 `intermediate_metrics`로 결과에 보관된다. 평가기는 이것들을 학습 곡선(learning curve)에 사용할 수 있다.
 
 stderr는 결과에 그대로 포착된다. 러너는 0이 아닌 종료 코드(exit code)에서 결코 예외를 일으키지 않는다. 대신 결과에 코드를 기록한다. 스크립트가 지표를 출력했더라도 0이 아닌 모든 종료는 `"crash"`로 레이블링되어, 평가기가 부분 실행을 기본적으로 실패로 취급하게 한다.
 

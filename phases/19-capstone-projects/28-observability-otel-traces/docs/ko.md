@@ -19,13 +19,13 @@
 
 프로덕션(production)의 코딩 에이전트(coding agent)는 매 턴마다 세 가지 부류의 산출물을 만든다. 모델 호출(model call), 도구 실행(tool execution), 검증 게이트(verification gate) 결정. 이들 중 어느 것도 구조화된 텔레메트리(telemetry) 없이는 쓸모가 없다.
 
-첫 번째 실패 모드는 누락된 트레이스(trace)다. 화요일에 무언가 잘못되었지만 유일한 기록은 500줄짜리 채팅 로그다. 어떤 도구가 실행되었는지, 얼마나 걸렸는지, 프롬프트에 몇 개의 토큰(token)이 들어갔는지, 게이트가 무언가를 거부했는지에 대한 기록이 없다. 에이전트 작성자는 추측할 수밖에 없다.
+첫 번째 실패 모드는 누락된 트레이스(trace)다. 화요일에 무언가 잘못되었지만 유일한 기록은 500줄짜리 채팅 로그다. 어떤 도구가 실행되었는지, 얼마나 걸렸는지, 프롬프트에 몇 개의 토큰(token)이 들어갔는지, 게이트가 무언가를 거부했는지가 기록에 없다. 에이전트 작성자는 추측할 수밖에 없다.
 
-두 번째 실패 모드는 파싱할 수 없는 트레이스다. 하니스가 스팬을 기록했지만 자체적인 임의의 필드 이름을 썼다. Grafana, Honeycomb, Jaeger, 로컬 CLI 어느 것도 그것을 읽을 수 없다. 스팬이 비표준이기 때문에 팀의 스택에 존재하는 어떤 도구든 낭비된다.
+두 번째 실패 모드는 파싱할 수 없는 트레이스다. 하니스가 스팬을 기록했지만 자체적인 임의의 필드 이름을 썼다. Grafana, Honeycomb, Jaeger, 로컬 CLI 어느 것도 이 스팬을 읽지 못한다. 스팬이 비표준이기 때문에 팀의 스택에 존재하는 어떤 도구든 무용지물이 된다.
 
 세 번째 실패 모드는 집계되지 않은 지표(metric)다. 트레이스에서 느린 도구 호출 하나는 볼 수 있지만, 지표가 없고 트레이스만 있기 때문에 "지난 한 시간 동안 read_file 호출의 p95 지연 시간은 무엇인가?"에는 답할 수 없다.
 
-OpenTelemetry GenAI 시맨틱 컨벤션은 바로 이것을 위해 존재한다. LLM 프레임워크 전반에 걸친 스팬 방출기들이 공유하는 표준 속성(attribute)의 작은 집합을 정의한다. 하니스가 그 속성들을 기록하면, 모든 OTel 호환 백엔드(backend)가 그것을 읽을 수 있다.
+OpenTelemetry GenAI 시맨틱 컨벤션이 바로 이 문제를 풀려고 존재한다. LLM 프레임워크 전반에 걸친 스팬 방출기들이 공유하는 표준 속성(attribute)의 작은 집합을 정의한다. 하니스가 그 속성들을 기록하면, 모든 OTel 호환 백엔드(backend)가 이를 읽는다.
 
 ## 개념 (The Concept)
 
@@ -43,7 +43,7 @@ flowchart TD
 
 GenAI 컨벤션은 다음 속성 키들을 표준화한다. `gen_ai.system`(어느 제공자인가, 예: `anthropic`, `openai`), `gen_ai.request.model`(모델 id), `gen_ai.request.max_tokens`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`, `gen_ai.response.model`, `gen_ai.response.id`, `gen_ai.operation.name`, 그리고 도구별 키 `gen_ai.tool.name`과 `gen_ai.tool.call.id`.
 
-익스포터는 JSONL을 기록한다. 한 줄에 JSON 객체 하나. 이것은 하위 도구가 스트림(stream)하고, grep하고, 임포트(import)할 수 있는 가장 단순한 형식이다. 실제 OTel 익스포터라면 OTLP gRPC를 구사할 것이다. 레슨의 JSONL 익스포터는 그것의 오프라인 등가물이며 모든 워크스테이션에서 0으로 종료한다.
+익스포터는 JSONL을 기록한다. 한 줄에 JSON 객체 하나. 하위 도구가 스트림(stream)하고, grep하고, 임포트(import)하기에 가장 단순한 형식이다. 실제 OTel 익스포터라면 OTLP gRPC를 구사한다. 레슨의 JSONL 익스포터는 그 오프라인 등가물이며 모든 워크스테이션에서 0으로 종료한다.
 
 지표는 트레이스 옆에 산다. 카운터는 각 도구 호출마다 증가한다. `tools_called_total{tool="read_file"}`. 히스토그램은 관측된 지연 시간을 기록한다. `tool_latency_ms{tool="read_file"}`. 둘 다 풀 기반(pull-based) 지표의 사실상 표준인 Prometheus 텍스트 노출 형식으로 직렬화(serialise)된다.
 
@@ -57,7 +57,7 @@ flowchart LR
   Metrics --> Prom[Prometheus text<br/>exposition]
 ```
 
-스팬 빌더는 컨텍스트 매니저를 반환하는 `span(name, attrs)` 메서드를 가진 작은 클래스다. 컨텍스트 매니저는 진입(enter) 시 시작 시각을 기록하고, 종료(exit) 시 종료 시각을 기록하며, 예외가 발생했다면 그것을 첨부하고, 완성된 스팬을 익스포터로 밀어 넣는다.
+스팬 빌더는 컨텍스트 매니저를 반환하는 `span(name, attrs)` 메서드를 가진 작은 클래스다. 컨텍스트 매니저는 진입(enter) 시 시작 시각을 기록하고, 종료(exit) 시 종료 시각을 기록하며, 예외가 발생했다면 이를 첨부하고, 완성된 스팬을 익스포터로 밀어 넣는다.
 
 지표 레지스트리(registry)는 두 개의 딕셔너리다. 카운터는 `{(name, frozen_labels): int}`다. 히스토그램은 원시 샘플을 리스트에 유지하고 노출 시점에 Prometheus 히스토그램 버킷(bucket)으로 직렬화한다.
 
@@ -73,13 +73,13 @@ flowchart LR
 6. 스팬을 방출하고 지표를 갱신하는 `wrap_tool_call(name)` 데코레이터(decorator).
 7. 데모: 완전한 에이전트 호출(도구 스팬을 감싼 gen_ai.chat 스팬)을 합성하고, traces.jsonl을 기록하며, Prometheus 노출을 출력하고, 0으로 종료한다.
 
-스팬 id와 트레이스 id는 `os.urandom`에서 생성된 16바이트 16진수 문자열이다. 이것은 OTel의 W3C trace context와 일치한다. 익스포터는 절대 예외를 던지지 않는다. IO 오류는 표면화되지만 하니스는 계속 실행된다.
+스팬 id와 트레이스 id는 `os.urandom`에서 생성된 16바이트 16진수 문자열이다. 이는 OTel의 W3C trace context와 일치한다. 익스포터는 절대 예외를 던지지 않는다. IO 오류는 표면화되지만 하니스는 계속 실행된다.
 
 히스토그램에는 고정된 버킷 집합(밀리초 단위 지연 시간에 대한 OTel 기본값: 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, +Inf)이 있다. 샘플은 리스트로 저장되며, 노출은 요청 시 버킷별 횟수를 계산한다.
 
 ## 왜 opentelemetry-sdk 대신 손수 만드는가 (Why hand-rolled instead of opentelemetry-sdk)
 
-OTel 파이썬 SDK는 실제 의존성(dependency)이다. 그것은 또한 수천 줄의 코드, OTLP 익스포터를 위한 여러 프로세스, 그리고 레슨 예산을 압도하는 런타임 비용이기도 하다. 손수 만든 버전은 와이어 형식(wire format)을 가르친다. 프로덕션에서는 같은 속성들을 실제 SDK에 연결하고 OTLP 익스포터, 배칭(batching), 리소스 감지(resource detection)를 공짜로 얻는다.
+OTel 파이썬 SDK는 실제 의존성(dependency)이다. 동시에 수천 줄의 코드이자, OTLP 익스포터를 돌리는 여러 프로세스이고, 레슨 예산을 압도하는 런타임 비용이기도 하다. 손수 만든 버전은 와이어 형식(wire format)을 가르친다. 프로덕션에서는 같은 속성들을 실제 SDK에 연결하고 OTLP 익스포터, 배칭(batching), 리소스 감지(resource detection)를 공짜로 얻는다.
 
 컨벤션은 안정적이다. 레슨이 방출하는 와이어 형식은 2030년에도 계속 파싱될 것인데, OTel은 GenAI 속성 이름을 절대 깨뜨리지 않고 새로운 것만 추가하기 때문이다.
 

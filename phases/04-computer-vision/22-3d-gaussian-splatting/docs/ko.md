@@ -18,9 +18,9 @@
 
 NeRF는 장면을 MLP의 가중치(weight)로 저장한다. 렌더링되는 모든 픽셀은 광선(ray)을 따라 수백 번의 MLP 질의(query)다. 학습(training)에 몇 시간, 렌더링에 몇 초가 걸리고, 가중치는 편집할 수 없다 — 장면 안에서 의자를 옮기고 싶다면 다시 학습해야 한다.
 
-3D 가우시안 스플래팅(Kerbl, Kopanas, Leimkühler, Drettakis, SIGGRAPH 2023)이 그 모든 것을 대체했다. 장면은 3D 가우시안의 명시적(explicit) 집합이다. 렌더링은 100+ fps의 GPU 래스터화다. 학습은 몇 분이면 된다. 편집은 직접적이다. 가우시안의 부분집합을 평행이동하면 의자를 옮긴 것이다. 2026년까지 크로노스 그룹(Khronos Group)이 가우시안 스플랫용 glTF 확장을 비준했고, OpenUSD 26.03이 가우시안 스플랫 스키마를 제공하며, Zillow와 Apartments.com이 그것으로 부동산을 렌더링하고, 3D 재구성에 관한 대부분의 새 연구 논문이 핵심 3DGS 아이디어의 변형이다.
+3D 가우시안 스플래팅(Kerbl, Kopanas, Leimkühler, Drettakis, SIGGRAPH 2023)이 그 모든 것을 대체했다. 장면은 3D 가우시안의 명시적(explicit) 집합이다. 렌더링은 100+ fps의 GPU 래스터화다. 학습은 몇 분이면 된다. 편집은 직접적이다. 가우시안의 부분집합을 평행이동하면 의자를 옮긴 것이다. 2026년까지 크로노스 그룹(Khronos Group)이 가우시안 스플랫용 glTF 확장을 비준했고, OpenUSD 26.03이 가우시안 스플랫 스키마를 제공하며, Zillow와 Apartments.com이 이 방식으로 부동산을 렌더링하고, 3D 재구성에 관한 대부분의 새 연구 논문이 핵심 3DGS 아이디어의 변형이다.
 
-심성 모형(mental model)은 단순하지만, 수학에는 움직이는 부품이 충분히 많아서 대부분의 입문서가 래스터화에서 시작하고 투영과 구면 조화 함수는 건너뛴다. 이 레슨은 전체를 만든다 — 먼저 2D 버전, 그다음 3D 확장.
+심성 모형(mental model)은 단순하지만 수학에는 움직이는 부품이 충분히 많아서, 대부분의 입문서는 래스터화에서 시작하고 투영과 구면 조화 함수는 건너뛴다. 이 레슨은 전체를 만든다 — 먼저 2D 버전, 그다음 3D 확장.
 
 ## 개념 (The Concept)
 
@@ -73,7 +73,7 @@ J = Jacobian of the perspective projection at mu'
 
 ### 알파 합성 규칙
 
-한 픽셀에 대해, 그것을 덮는 가우시안들은 뒤에서 앞으로(back-to-front) 정렬된다(또는 동등하게, 공식을 반전해 앞에서 뒤로). 색은 1980년대 이래 모든 반투명 래스터라이저와 같은 방정식으로 합성된다:
+한 픽셀을 덮는 가우시안들은 뒤에서 앞으로(back-to-front) 정렬된다(또는 동등하게, 공식을 반전해 앞에서 뒤로). 색은 1980년대 이래 모든 반투명 래스터라이저와 같은 방정식으로 합성된다:
 
 ```
 C_pixel = sum_i alpha_i * T_i * c_i
@@ -87,7 +87,7 @@ c_i = eval_SH(SH_i, view_direction)    view-dependent colour
 
 ### 이것이 미분 가능한 이유
 
-모든 단계 — 투영, 타일 할당, 알파 합성, SH 평가 — 는 가우시안 파라미터에 대해 미분 가능하다. 정답(ground-truth) 이미지가 주어지면, 렌더링된 픽셀 손실(loss)을 계산하고, 래스터라이저를 통해 역전파하며, 경사 하강법(gradient descent)으로 모든 `(mu, q, s, alpha, c_lm)`를 갱신한다. 약 30,000번의 반복(iteration)에 걸쳐 가우시안들은 자신의 올바른 위치, 스케일, 색을 찾는다.
+모든 단계 — 투영, 타일 할당, 알파 합성, SH 평가 — 는 가우시안 파라미터에 대해 미분 가능하다. 정답(ground-truth) 이미지가 주어지면 렌더링된 픽셀 손실(loss)을 계산하고 래스터라이저로 역전파해서, 경사 하강법(gradient descent)으로 모든 `(mu, q, s, alpha, c_lm)`를 갱신한다. 약 30,000번의 반복(iteration)에 걸쳐 가우시안들은 자신의 올바른 위치, 스케일, 색을 찾는다.
 
 ### 조밀화와 가지치기
 
@@ -153,7 +153,7 @@ def eval_2d_gaussian(means, covs, points):
 
 ### 2단계: 2D 스플래팅 래스터라이저
 
-앞에서 뒤로 알파 합성한다. 2D에서 깊이는 의미가 없으므로, 순서를 위해 학습된 가우시안별 스칼라를 사용한다.
+앞에서 뒤로 알파 합성한다. 2D에서는 깊이가 의미가 없으므로, 순서는 학습된 가우시안별 스칼라로 정한다.
 
 ```python
 def rasterise_2d(means, covs, colours, opacities, depths, image_size):
@@ -306,7 +306,7 @@ def eval_sh_degree_3(sh_coeffs, dirs):
     return result
 ```
 
-학습된 `sh_coeffs`는 그 가우시안에 대한 "모든 방향에서의 색"을 저장한다. 렌더링 시 현재 시점 방향에 대해 평가하면 3-벡터 RGB를 얻는다.
+학습된 `sh_coeffs`는 그 가우시안의 "모든 방향에서의 색"을 저장한다. 렌더링 시 현재 시점 방향에서 평가하면 3-벡터 RGB를 얻는다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -340,7 +340,7 @@ ns-train splatfacto --data path/to/data
 
 1. **(쉬움)** 위의 2D 스플랫 트레이너를 다른 합성 이미지에서 실행하라. `num_splats`를 `[16, 64, 256]`로 바꾸며 각각에 대해 MSE 대 스텝을 그려라. 수익 체감(diminishing returns) 지점을 찾아라.
 2. **(중간)** 2D 래스터라이저를 확장하여, 차수 2 조화 함수를 통해 스칼라 "시점 각도"에 의존하는 가우시안별 RGB 색을 지원하라. 한 쌍의 타깃 이미지에 학습하고 모델이 둘 다 재구성하는지 검증하라.
-3. **(어려움)** `nerfstudio`를 클론하고, 당신이 가진 임의의 장면(책상, 식물, 얼굴, 방)의 20장 캡처로 `splatfacto`를 학습하라. glTF `KHR_gaussian_splatting`로 내보내고 뷰어(Three.js `GaussianSplats3D`, SuperSplat, Babylon.js V9)에서 열어라. 학습 시간, 가우시안 개수, 렌더링 fps를 보고하라.
+3. **(어려움)** `nerfstudio`를 클론하고, 직접 고른 임의의 장면(책상, 식물, 얼굴, 방)을 20장 캡처해 `splatfacto`를 학습하라. glTF `KHR_gaussian_splatting`로 내보내고 뷰어(Three.js `GaussianSplats3D`, SuperSplat, Babylon.js V9)에서 열어라. 학습 시간, 가우시안 개수, 렌더링 fps를 보고하라.
 
 ## 핵심 용어 (Key Terms)
 

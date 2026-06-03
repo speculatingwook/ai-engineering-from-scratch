@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-당신은 Lesson 07에서 RLHF를, Lesson 08에서 DPO를 만들었다. 둘 다 같은 비싼 입력에 의존한다. 바로 사람의 선호 쌍(human preference pair)이다. Anthropic의 InstructGPT 시대 파이프라인(pipeline)은 약 33,000개의 비교를 사용했다. Llama 2 Chat은 150만 개 이상을 사용했다. Claude 3은 더 많이 썼다. 이 데이터는 느리고, 비싸며, 평가하던 그날 어노테이터(annotator)가 마침 믿고 있던 것에 편향(biased)된다.
+Lesson 07에서 RLHF를, Lesson 08에서 DPO를 만들었다. 둘 다 같은 비싼 입력에 의존한다. 바로 사람의 선호 쌍(human preference pair)이다. Anthropic의 InstructGPT 시대 파이프라인(pipeline)은 약 33,000개의 비교를 사용했다. Llama 2 Chat은 150만 개 이상을 사용했다. Claude 3은 더 많이 썼다. 이 데이터는 느리고 비싸며, 평가하던 그날 어노테이터(annotator)가 마침 믿고 있던 것에 편향(biased)된다.
 
 2022년 헌법적 AI 논문은 단순한 질문을 던졌다. 모델이 선호 레이블(label)을 스스로 생성하게 하면 어떨까? 작성된 원칙 목록 — "헌법(constitution)" — 을 주고, 모델이 자신의 응답을 비평하게 하라. 그 비평이 학습 신호가 된다.
 

@@ -265,13 +265,13 @@ def build_sn_discriminator(img_channels=3, feat=64):
     )
 ```
 
-`Discriminator`를 `build_sn_discriminator()`로 바꾸면 TTUR 트릭이 필요 없는 경우가 많다. 스펙트럴 정규화는 적용할 수 있는 가장 쉬운 단일 견고성 업그레이드다.
+`Discriminator`를 `build_sn_discriminator()`로 바꾸면 TTUR 트릭이 필요 없는 경우가 많다. 스펙트럴 정규화는 적용하기 가장 쉬운 단일 견고성 업그레이드다.
 
 ## 라이브러리로 써보기 (Use It)
 
 진지한 생성에는 사전 학습(pretraining) 가중치(weight)를 쓰거나 확산으로 전환하라. 두 표준 라이브러리:
 
-- `torch_fidelity`는 커스텀 평가 코드를 작성하지 않고 당신의 생성자에 대해 FID / IS를 계산한다.
+- `torch_fidelity`는 커스텀 평가 코드를 작성하지 않고도 생성자에 대해 FID / IS를 계산한다.
 - `pytorch-gan-zoo`(레거시)와 `StudioGAN`은 DCGAN, WGAN-GP, SN-GAN, StyleGAN, BigGAN의 검증된 구현을 출고한다.
 
 2026년에도 GAN은 다음에 여전히 최선의 선택이다: 실시간 이미지 생성(지연 시간 <10 ms), 스타일 전이, 정밀한 제어를 동반한 이미지-대-이미지 변환(Pix2Pix, CycleGAN). 확산은 사실적 묘사와 텍스트 조건화에서 이긴다.

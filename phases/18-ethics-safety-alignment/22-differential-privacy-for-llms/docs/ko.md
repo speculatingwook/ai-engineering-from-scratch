@@ -1,6 +1,6 @@
 # LLM을 위한 차등 프라이버시
 
-> DP-SGD는 여전히 표준이다 — 노이즈를 주입한 그래디언트(gradient) 갱신이 형식적인 (epsilon, delta) 보장을 제공한다. 계산, 메모리, 효용(utility) 면에서의 오버헤드는 상당하다. 파라미터 효율적(parameter-efficient) DP 파인튜닝(fine-tuning)(LoRA + DP-SGD)이 2025년의 일반적인 구성이다(ACM 2025). 긴장 관계에 있는 두 가지 증거 묶음이 있다. 카나리(canary) 기반 멤버십 추론(membership inference)(Duan et al., 2024)은 언어 모델에 대해 제한적인 성공만을 보고한다. 학습 데이터 추출(training-data extraction)(Carlini et al., 2021; Nasr et al., 2025)은 상당한 양의 축자적(verbatim) 암기를 복원한다. 해소(arXiv:2503.06808, 2025년 3월): 그 간극은 무엇을 측정하는가에 있다 — 삽입된 카나리 대 "가장 추출 가능한" 데이터. 새로운 카나리 설계는 섀도 모델(shadow model) 없이 손실 기반(loss-based) MIA를 가능하게 하며, 현실적인 DP 보장을 가진 실제 데이터로 학습된 LLM에 대한 최초의 비자명한 DP 감사(audit)를 산출한다. 대안들: PMixED(arXiv:2403.15638) — 다음 토큰(next-token) 분포에 대한 전문가 혼합(mixture of experts)을 통한 추론 시점(inference time)의 사적 예측(private prediction). DP 합성 데이터(synthetic data) 생성(Google Research 2024). 새로 떠오르는 공격: LLM 피드백을 통한 차등 프라이버시 역전(Differential Privacy Reversal via LLM Feedback) — 신뢰도 점수(confidence score) 누출.
+> DP-SGD는 여전히 표준이다 — 노이즈를 주입한 그래디언트(gradient) 갱신이 형식적인 (epsilon, delta) 보장을 제공한다. 계산, 메모리, 효용(utility) 측면의 오버헤드는 상당하다. 파라미터 효율적(parameter-efficient) DP 파인튜닝(fine-tuning)(LoRA + DP-SGD)이 2025년의 일반적인 구성이다(ACM 2025). 긴장 관계에 있는 두 가지 증거 묶음이 있다. 카나리(canary) 기반 멤버십 추론(membership inference)(Duan et al., 2024)은 언어 모델에 대해 제한적인 성공만을 보고한다. 학습 데이터 추출(training-data extraction)(Carlini et al., 2021; Nasr et al., 2025)은 상당한 양의 축자적(verbatim) 암기를 복원한다. 해소(arXiv:2503.06808, 2025년 3월): 그 간극은 무엇을 측정하는가에 있다 — 삽입된 카나리 대 "가장 추출 가능한" 데이터. 새로운 카나리 설계는 섀도 모델(shadow model) 없이 손실 기반(loss-based) MIA를 가능하게 하며, 현실적인 DP 보장을 가진 실제 데이터로 학습된 LLM에 대한 최초의 비자명한 DP 감사(audit)를 산출한다. 대안들: PMixED(arXiv:2403.15638) — 다음 토큰(next-token) 분포에 대한 전문가 혼합(mixture of experts)을 통한 추론 시점(inference time)의 사적 예측(private prediction). DP 합성 데이터(synthetic data) 생성(Google Research 2024). 새로 떠오르는 공격: LLM 피드백을 통한 차등 프라이버시 역전(Differential Privacy Reversal via LLM Feedback) — 신뢰도 점수(confidence score) 누출.
 
 **Type:** Build
 **Languages:** Python (stdlib, DP-SGD noise-injection and ε-δ accountant demonstration)
@@ -46,8 +46,8 @@ Abadi et al. 2016. 표준 레시피:
 
 두 갈래의 증거:
 
-- **카나리 MIA(Duan et al. 2024).** 고유한 카나리를 학습 데이터에 삽입하고, 멤버십 추론 공격자가 그것들을 식별할 수 있는지 측정한다. 언어 모델에 대해 제한적인 성공을 보고한다. MIA가 어렵다는 것을 시사한다.
-- **학습 데이터 추출(Carlini 2021, Nasr et al. 2025).** 모델에 접두사(prefix)를 프롬프트로 주고, 학습으로부터 축자적 텍스트를 복원하는지 측정한다. 상당한 암기를 보고한다. 관련된 의미에서 MIA가 쉽다는 것을 시사한다.
+- **카나리 MIA(Duan et al. 2024).** 고유한 카나리를 학습 데이터에 삽입하고, 멤버십 추론 공격자가 그것들을 식별할 수 있는지 측정한다. 언어 모델에 대해 제한적인 성공을 보고한다. MIA가 어렵다는 뜻이다.
+- **학습 데이터 추출(Carlini 2021, Nasr et al. 2025).** 모델에 접두사(prefix)를 프롬프트로 주고, 학습으로부터 축자적 텍스트를 복원하는지 측정한다. 상당한 암기를 보고한다. 관련된 의미에서 MIA가 쉽다는 뜻이다.
 
 2025년 3월의 해소(arXiv:2503.06808): 두 가지는 서로 다른 것을 측정한다. MIA는 삽입된 카나리에 대해 "예제 e가 D에 있는가?"를 묻는다. 추출은 "내가 D로부터 무엇을 복원할 수 있는가?"를 묻는다. 프라이버시에 중요한 것은 "가장 추출 가능한" 예제이며, 카나리는 추출 가능하도록 최적화되지 않았기 때문에 이를 과소 보고한다.
 
@@ -58,7 +58,7 @@ Abadi et al. 2016. 표준 레시피:
 - **PMixED(arXiv:2403.15638).** 추론 시점의 사적 예측. 다음 토큰 분포에 대한 전문가 혼합. 각 전문가는 학습 데이터의 한 조각(shard)을 본다. 집계(aggregation)는 DP를 위해 노이즈를 더한다. DP 학습을 완전히 피한다.
 - **DP 합성 데이터 생성(Google Research 2024).** DP-SGD로 LoRA 파인튜닝하고, 합성 데이터를 샘플링하며, 그 합성 데이터로 다운스트림(downstream) 분류기를 학습시킨다.
 
-둘 다 다른 위협 모델을 대가로, 완전한 DP 학습의 효용 비용을 우회한다.
+둘 다 다른 위협 모델을 대가로 완전한 DP 학습의 효용 비용을 우회한다.
 
 ### LLM 피드백을 통한 차등 프라이버시 역전
 

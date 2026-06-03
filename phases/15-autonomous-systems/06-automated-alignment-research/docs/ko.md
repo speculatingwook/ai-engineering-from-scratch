@@ -1,6 +1,6 @@
 # 자동화된 정렬 연구 (Anthropic AAR)
 
-> Anthropic은 Claude Opus 4.6 자율 정렬 연구자(Autonomous Alignment Researcher) 팀들을 독립적인 샌드박스(sandbox)에서 병렬로 실행했으며, 이들은 어떤 샌드박스 바깥에 로그가 존재하는 공유 포럼(forum)을 통해 협력한다(따라서 에이전트는 자기 자신의 기록을 삭제할 수 없다). 약-대-강(weak-to-strong) 학습 문제에서, AAR은 인간 연구자를 능가했다. Anthropic 자신의 요약은 규정된 워크플로(prescribed workflow)가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다는 점을 표시한다. 정렬 연구를 자동화하는 것은, 타임라인을 RSP가 탐지하려는 바로 그 오정렬(misalignment) 위험으로 압축하는 압축 단계다.
+> Anthropic은 Claude Opus 4.6 자율 정렬 연구자(Autonomous Alignment Researcher) 팀들을 독립적인 샌드박스(sandbox)에서 병렬로 실행했으며, 이들은 어떤 샌드박스 바깥에 로그가 존재하는 공유 포럼(forum)을 통해 협력한다(따라서 에이전트는 자기 자신의 기록을 삭제할 수 없다). 약-대-강(weak-to-strong) 학습 문제에서, AAR은 인간 연구자를 능가했다. Anthropic 자신의 요약은 규정된 워크플로(prescribed workflow)가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다는 점을 표시한다. 정렬 연구를 자동화하는 것은, 타임라인을 RSP가 탐지하려는 바로 그 오정렬(misalignment) 위험 쪽으로 압축하는 단계다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, parallel-research-forum simulator)
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-정렬 연구(alignment research)는 인간 연구자의 시간 측면에서 비싸다. 확장 가능한 감독(scalable oversight), 보상 명세(reward specification), 또는 약-대-강 학습 같은 문제는 반복(iteration)당 수 주가 걸리는 실험을 요구한다. 프런티어 능력이 발전하면서, 정렬 작업량은 자격 있는 연구자의 공급보다 빠르게 늘어난다.
+정렬 연구(alignment research)는 인간 연구자의 시간을 많이 잡아먹는다. 확장 가능한 감독(scalable oversight), 보상 명세(reward specification), 또는 약-대-강 학습 같은 문제는 반복(iteration)당 수 주가 걸리는 실험을 요구한다. 프런티어 능력이 발전하면서, 정렬 작업량은 자격 있는 연구자의 공급보다 빠르게 늘어난다.
 
 자동화된 정렬 연구(Automated Alignment Research, AAR)는, 능력이 정렬을 앞지르고 있는 바로 그 프런티어 모델이 그 간극을 좁히는 데 기여할 수 있는지 묻는다. AAR이 수행한 약-대-강 학습 연구에 대한 Anthropic의 2026년 보고서(alignment.anthropic.com/2026/automated-w2s-researcher/)는 이 부류의 배포된 시스템에서 나온 최초의 공개 결과 중 하나다.
 
@@ -26,13 +26,13 @@
 
 ### 샌드박스 바깥 로그가 중요한 이유
 
-로그 무결성(log-integrity) 속성은 통제된 실험과 잠재적으로 훼손된 실험을 가르는 차이다. AAR이 자기 자신의 로그를 편집할 수 있다면, 실패했거나 미심쩍은 실험을 은폐할 수 있다. Anthropic은 이를 직접 표시한다. 그 속성은 연구 산출물을 신뢰하기 위한 필요조건이며, 검증하기가 자명하지 않다.
+로그 무결성(log-integrity) 속성은 통제된 실험과 잠재적으로 훼손된 실험을 가르는 차이다. AAR이 자기 자신의 로그를 편집할 수 있다면, 실패했거나 미심쩍은 실험을 은폐할 수 있다. Anthropic은 이를 직접 표시한다. 그 속성은 연구 산출물을 신뢰하기 위한 필요조건이며, 검증하기가 간단치 않다.
 
 인프라 용어로의 대응물은, 외부 저장소(예: S3 object-lock, 불변 Datadog 로그)로의 라이트스루(write-through)를 동반한 추가 전용(append-only) 로그다. 에이전트는 과거 기록을 수정할 자격 증명(credential)이 없다. 이는 2026년 기업 보안 팀이 랜섬웨어 저항성 감사 추적(audit trail)을 만드는 데 사용하는 것과 같은 패턴이다.
 
 ### 규정된 워크플로 트레이드오프
 
-Anthropic의 보고서는 규정된 워크플로가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다고 언급한다. 다시 말해, 인간 설계자가 연구 계획을 단계별로 작성하면, AAR은 고수준 목표와 분해의 자유를 받았을 때보다 더 못한다. 이는 에이전트형 연구 전반의 결과(LangGraph, Microsoft의 Agent Framework)와 일관된다 — 과도하게 명세된 스캐폴드는 유능한 에이전트를 해친다.
+Anthropic의 보고서는 규정된 워크플로가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다고 언급한다. 다시 말해, 인간 설계자가 연구 계획을 단계별로 작성하면, AAR은 고수준 목표와 분해의 자유를 받았을 때보다 성능이 떨어진다. 이는 에이전트형 연구 전반의 결과(LangGraph, Microsoft의 Agent Framework)와 일관된다 — 과도하게 명세된 스캐폴드는 유능한 에이전트를 해친다.
 
 안전 함의는 미묘하다. AAR 성능을 향상시키는 그 유연성이, 또한 승인되지 않은 분해, 새로운 도구 사용, 목표 드리프트(goal-drift)를 허용하는 유연성이기도 하다. 이 트레이드오프는 설계 공간의 결정이다. 얼마만큼의 유연성이, 에이전트에게 목표를 분포 밖(off-distribution)으로 일반화할 여지를 주지 않으면서, 인간을 이길 만큼 충분한 능력을 사 오는가?
 

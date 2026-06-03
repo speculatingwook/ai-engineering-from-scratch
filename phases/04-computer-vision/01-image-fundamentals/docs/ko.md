@@ -1,6 +1,6 @@
 # 이미지의 기초 — 픽셀, 채널, 색 공간
 
-> 이미지는 빛 샘플들의 텐서(tensor)다. 당신이 앞으로 사용할 모든 비전 모델은 이 한 가지 사실에서 출발한다.
+> 이미지는 빛 샘플들의 텐서(tensor)다. 앞으로 쓰게 될 모든 비전 모델은 이 한 가지 사실에서 출발한다.
 
 **Type:** Build
 **Languages:** Python
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-당신이 읽을 모든 논문, 다운로드할 모든 사전 학습(pretraining) 가중치(weight), 호출할 모든 비전 API는 입력에 대한 특정 인코딩을 가정한다. 모델이 `float32`를 원하는데 `uint8` 이미지를 넘기면, 그래도 실행은 되지만 조용히 쓰레기 같은 결과를 낸다. RGB로 학습된 신경망(neural network)에 BGR을 넣으면 정확도가 10점 폭락한다. 채널 우선(channels-first)을 기대하는 모델에 채널 후순(channels-last) 입력을 건네면 첫 합성곱(convolution) 층(layer)은 높이를 특성 채널로 취급한다. 이 중 어느 것도 에러를 던지지 않는다. 그저 당신의 지표를 망가뜨릴 뿐이며, 당신은 파일을 어떻게 로드했는지에 숨어 있는 버그를 일주일 동안 찾아 헤매게 된다.
+읽게 될 모든 논문, 다운로드할 모든 사전 학습(pretraining) 가중치(weight), 호출할 모든 비전 API는 입력에 특정 인코딩을 가정한다. 모델이 `float32`를 원하는데 `uint8` 이미지를 넘기면, 그래도 실행은 되지만 조용히 쓰레기 같은 결과를 낸다. RGB로 학습된 신경망(neural network)에 BGR을 넣으면 정확도가 10점 폭락한다. 채널 우선(channels-first)을 기대하는 모델에 채널 후순(channels-last) 입력을 건네면 첫 합성곱(convolution) 층(layer)은 높이를 특성 채널로 취급한다. 이 중 어느 것도 에러를 던지지 않는다. 그저 지표만 망가뜨리고, 파일을 어떻게 로드했는지에 숨어 있는 버그를 일주일 동안 찾아 헤매게 만든다.
 
 합성곱은 무엇 위를 미끄러져 가는지만 알면 복잡하지 않다. 어려운 부분은 "이미지"라는 것이 카메라, JPEG 디코더(decoder), PIL, OpenCV, torchvision, CUDA 커널에게 각기 다른 의미를 지닌다는 점이다. 각 스택은 자신만의 축 순서, 바이트 범위, 채널 규약을 갖는다. 이를 제대로 구분하지 못하는 비전 엔지니어는 망가진 파이프라인(pipeline)을 출고한다.
 
-이 레슨은 이 토대를 바로잡아 이 단계의 나머지가 그 위에 쌓일 수 있게 한다. 끝마칠 무렵이면 픽셀이 무엇인지, 왜 픽셀당 숫자가 하나가 아니라 셋인지, "ImageNet 통계로 정규화한다"는 것이 실제로 무엇을 하는지, 그리고 이 단계의 다른 모든 레슨이 가정할 두세 가지 레이아웃 사이를 어떻게 오가는지 알게 된다.
+이 레슨은 이 토대를 바로잡아 이 단계의 나머지가 그 위에 쌓이게 한다. 끝마칠 무렵이면 픽셀이 무엇인지, 왜 픽셀당 숫자가 하나가 아니라 셋인지, "ImageNet 통계로 정규화한다"는 것이 실제로 무엇을 하는지, 그리고 이 단계의 다른 모든 레슨이 가정할 두세 가지 레이아웃 사이를 어떻게 오가는지 알게 된다.
 
 ## 개념 (The Concept)
 
@@ -68,7 +68,7 @@ Continuous scene                 Sensor grid                     Digital image
 - **공간 샘플링(spatial sampling)**은 장면의 각도당 검출기 수를 결정한다. 너무 적으면 가장자리가 톱니처럼 거칠어진다(앨리어싱, aliasing). 너무 많으면 저장과 연산이 폭발한다.
 - **강도 양자화(intensity quantization)**는 전압을 얼마나 잘게 버킷으로 나눌지 결정한다. 8비트는 256단계를 주며 디스플레이의 표준이다. 10, 12, 16비트는 더 매끄러운 그래디언트(gradient)를 주고 의료 영상, HDR, 원본 센서 파이프라인에서 중요하다.
 
-픽셀은 면적을 가진 색칠된 네모가 아니다. 단 하나의 측정값이다. 리사이즈하거나 회전할 때, 당신은 그 측정 격자를 재샘플링하는 것이다.
+픽셀은 면적을 가진 색칠된 네모가 아니다. 단 하나의 측정값이다. 리사이즈하거나 회전할 때 하는 일은 그 측정 격자를 재샘플링하는 것이다.
 
 ### 왜 채널이 셋인가
 
@@ -109,7 +109,7 @@ v |R G B|R G B|R G B|                   v |G G G G G G|
 
 CHW가 존재하는 이유는 합성곱 커널이 H와 W를 가로질러 미끄러지기 때문이다. 채널 축을 맨 앞에 두면 각 커널은 채널마다 연속된 2D 평면을 보게 되고, 이는 깔끔하게 벡터화된다. 디스크 포맷은 HWC를 유지하는데, 이것이 스캔라인이 센서에서 나오는 방식과 일치하기 때문이다.
 
-당신이 천 번은 타이핑하게 될 한 줄짜리 변환:
+앞으로 천 번은 타이핑하게 될 한 줄짜리 변환:
 
 ```
 img_chw = img_hwc.transpose(2, 0, 1)      # NumPy
@@ -179,7 +179,7 @@ Y = 0.299 R + 0.587 G + 0.114 B       (ITU-R BT.601, the classic weights)
 
 ### 종횡비, 리사이즈, 보간
 
-모든 모델은 고정된 입력 크기를 갖는다(대부분의 ImageNet 분류기는 224x224, 현대적 검출기는 384x384 또는 512x512). 당신의 이미지는 거의 들어맞지 않는다. 중요한 세 가지 리사이즈 선택은 다음과 같다.
+모든 모델은 고정된 입력 크기를 갖는다(대부분의 ImageNet 분류기는 224x224, 현대적 검출기는 384x384 또는 512x512). 손에 든 이미지가 그 크기에 들어맞는 경우는 거의 없다. 중요한 세 가지 리사이즈 선택은 다음과 같다.
 
 - **짧은 변을 리사이즈한 뒤 중앙 크롭** — 표준 ImageNet 레시피. 종횡비를 보존하고 가장자리 픽셀 한 줄을 버린다.
 - **리사이즈 후 패딩** — 종횡비와 모든 픽셀을 보존하고 검은 띠를 추가한다. 검출과 OCR의 표준이다.
@@ -227,7 +227,7 @@ print(f"max:    {arr.max()}")
 print(f"pixel at (0, 0): {arr[0, 0]}")
 ```
 
-기대 출력: `shape: (H, W, 3)`, `dtype: uint8`, 범위 `[0, 255]`. 바이트가 카메라, JPEG 디코더, 합성 생성기 어디서 왔든 그것이 정규 표준 디스크 표현이다.
+기대 출력: `shape: (H, W, 3)`, `dtype: uint8`, 범위 `[0, 255]`. 바이트가 카메라, JPEG 디코더, 합성 생성기 어디서 왔든 이것이 정규 표준 디스크 표현이다.
 
 ### 2단계: 채널 분리하고 레이아웃 재정렬하기
 
@@ -287,7 +287,7 @@ print(f"sat range: [{hsv[..., 1].min():.2f}, {hsv[..., 1].max():.2f}]")
 print(f"val range: [{hsv[..., 2].min():.2f}, {hsv[..., 2].max():.2f}]")
 ```
 
-색조(hue)는 도(degree) 단위로, 채도(saturation)와 명도(value)는 [0, 1]로 나온다. 그것은 OpenCV `hsv_full` 규약과 일치한다.
+색조(hue)는 도(degree) 단위로, 채도(saturation)와 명도(value)는 [0, 1]로 나온다. 이는 OpenCV `hsv_full` 규약과 일치한다.
 
 ### 4단계: 정규화, 표준화, 그리고 되돌리기
 
@@ -385,8 +385,8 @@ print(f"\nbatched shape: {tuple(batch.shape)}   # (N, C, H, W) — ready for a m
 ## 연습 문제 (Exercises)
 
 1. **(쉬움)** JPEG를 OpenCV(`cv2.imread`)와 Pillow로 각각 로드하라. 두 형태와 `(0, 0)`의 픽셀을 출력하라. 채널 순서 차이를 설명한 뒤, OpenCV 배열을 Pillow 배열과 동일하게 만드는 한 줄짜리 변환을 작성하라.
-2. **(중간)** 임의의 uint8 이미지에서 함께 `roundtrip_max_diff <= 1` 테스트를 통과하는 `standardize(img, mean, std)`와 그 역함수를 작성하라. 당신의 함수는 동일한 호출로 HWC의 단일 이미지와 NCHW의 배치 모두에서 동작해야 한다.
-3. **(어려움)** 3채널 ImageNet 표준화 텐서를 가져와, RGB를 단일 그레이스케일 채널로 섞는 가중 혼합을 학습하는 1x1 합성곱에 통과시켜라. 가중치를 `[0.299, 0.587, 0.114]`로 초기화하고, 고정(freeze)한 뒤, 출력이 당신의 수동 `rgb_to_grayscale`과 부동소수점 오차 이내로 일치하는지 검증하라. 또 어떤 고전적 색 공간 변환을 1x1 합성곱으로 쓸 수 있는가?
+2. **(중간)** 임의의 uint8 이미지에서 함께 `roundtrip_max_diff <= 1` 테스트를 통과하는 `standardize(img, mean, std)`와 그 역함수를 작성하라. 이 함수는 동일한 호출로 HWC의 단일 이미지와 NCHW의 배치 모두에서 동작해야 한다.
+3. **(어려움)** 3채널 ImageNet 표준화 텐서를 가져와, RGB를 단일 그레이스케일 채널로 섞는 가중 혼합을 학습하는 1x1 합성곱에 통과시켜라. 가중치를 `[0.299, 0.587, 0.114]`로 초기화하고, 고정(freeze)한 뒤, 출력이 앞서 손으로 짠 `rgb_to_grayscale`과 부동소수점 오차 이내로 일치하는지 검증하라. 또 어떤 고전적 색 공간 변환을 1x1 합성곱으로 쓸 수 있는가?
 
 ## 핵심 용어 (Key Terms)
 
@@ -404,6 +404,6 @@ print(f"\nbatched shape: {tuple(batch.shape)}   # (N, C, H, W) — ready for a m
 ## 더 읽을거리 (Further Reading)
 
 - [Charles Poynton — A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf) — 왜 그렇게 많은 색 공간이 있고 각각이 언제 중요한지에 대한 가장 명료한 기술적 해설
-- [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html) — 당신이 프로덕션에서 실제로 조립하게 될 변환들의 전체 파이프라인
+- [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html) — 프로덕션에서 실제로 조립하게 될 변환들의 전체 파이프라인
 - [How JPEG Works (Colt McAnlis)](https://www.youtube.com/watch?v=F1kYBnY6mwg) — 크로마 서브샘플링, DCT, 그리고 JPEG가 왜 RGB가 아니라 YCbCr을 인코딩하는지에 대한 날카로운 시각적 투어
 - [ImageNet Preprocessing Conventions (torchvision models)](https://pytorch.org/vision/stable/models.html) — `mean=[0.485, 0.456, 0.406]`의 출처이자 동물원의 모든 모델이 왜 그것을 기대하는지에 대한 진실의 원천

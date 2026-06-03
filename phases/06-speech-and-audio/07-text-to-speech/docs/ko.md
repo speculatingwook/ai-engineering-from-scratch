@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-문자열이 있다: "Please remind me to water the plants at 6 pm." 당신은 자연스럽게 들리고, 올바른 운율(prosody, 멈춤, 강세)을 가지며, "plants"를 올바른 모음으로 발음하고, 라이브 음성 비서를 위해 CPU에서 300 ms 이내에 돌아가는 3초짜리 오디오 클립이 필요하다. 또한 목소리를 바꾸고, 코드 스위칭(code-switched) 입력("remind me at 6 pm, daijoubu?")을 처리하고, 이름에서 망신당하지 않아야 한다.
+문자열이 있다: "Please remind me to water the plants at 6 pm." 자연스럽게 들리고, 올바른 운율(prosody, 멈춤, 강세)을 갖추고, "plants"를 올바른 모음으로 발음하며, 라이브 음성 비서를 위해 CPU에서 300 ms 이내에 돌아가는 3초짜리 오디오 클립이 필요하다. 게다가 목소리를 바꾸고, 코드 스위칭(code-switched) 입력("remind me at 6 pm, daijoubu?")을 처리하고, 이름에서 망신당하지 않아야 한다.
 
 현대 TTS 파이프라인은 다음과 같다:
 
@@ -76,7 +76,7 @@ ph = phonemize("Hello world", language="en-us", backend="espeak")
 # 'həloʊ wɜːld'
 ```
 
-음소는 보편적인 다리다. VITS 수준 미만 품질의 어떤 것에도 원시 텍스트를 먹이는 것을 피하라.
+음소는 보편적인 다리다. VITS 수준에 못 미치는 모델에는 원시 텍스트를 그대로 넣지 마라.
 
 ### 단계 2: Kokoro 실행(2026 CPU 기본)
 
@@ -142,14 +142,14 @@ soundfile.write("out.wav", wav, 24000)
 | 저자원 언어 | 5–20시간 타깃 언어 데이터로 VITS 학습 |
 | 표현적 / 감정 태그 | ElevenLabs v2.5 또는 StyleTTS 2 파인튜닝 |
 
-2026년 기준 오픈소스 선두: **품질은 F5-TTS, 효율은 Kokoro**. 당신이 역사가가 아니라면 Tacotron에 손대지 마라.
+2026년 기준 오픈소스 선두: **품질은 F5-TTS, 효율은 Kokoro**. 역사가가 아니라면 Tacotron에 손대지 마라.
 
 ## 함정들 (Pitfalls)
 
 - **텍스트 정규화기 없음.** "Dr. Smith"가 "Doctor"로 읽히는가 "Drive"로 읽히는가? "2026"이 "twenty twenty six"인가 "two zero two six"인가? 음소화기(phonemizer) 전에 정규화하라.
 - **OOV 고유명사.** "Ghumare" → "ghyu-mair"? 알려지지 않은 토큰을 위한 폴백 자소-음소 변환(grapheme-to-phoneme) 모델을 출하하라.
 - **클리핑(Clipping).** 보코더 출력은 거의 클리핑되지 않지만, 추론 시 멜 스케일링 불일치가 ±1.0을 초과할 수 있다. 항상 `np.clip(wav, -1, 1)`.
-- **샘플 레이트 불일치.** Kokoro는 24 kHz를 출력한다; 당신의 다운스트림 파이프라인이 16 kHz를 기대하면 → 리샘플하거나 에일리어싱(aliasing)을 얻는다.
+- **샘플 레이트 불일치.** Kokoro는 24 kHz를 출력한다; 다운스트림 파이프라인이 16 kHz를 기대하면 → 리샘플하거나 에일리어싱(aliasing)이 생긴다.
 
 ## 산출물 (Ship It)
 
@@ -159,7 +159,7 @@ soundfile.write("out.wav", wav, 24000)
 
 1. **쉬움.** `code/main.py`를 실행하라. 장난감 어휘로부터 음소 사전을 만들고, 음소당 길이를 추정하고, 가짜 "멜" 일정을 출력한다.
 2. **중간.** Kokoro를 설치하고, 같은 문장을 `af_bella`와 `am_adam` 목소리로 합성하라. 오디오 길이와 주관적 품질을 비교하라.
-3. **어려움.** 당신 자신의 5초짜리 참조 클립을 녹음하라. F5-TTS를 사용해 그것을 복제하라. 참조와 복제 출력 사이의 SECS를 보고하라.
+3. **어려움.** 자기 목소리로 5초짜리 참조 클립을 녹음하라. F5-TTS로 그 목소리를 복제하라. 참조와 복제 출력 사이의 SECS를 보고하라.
 
 ## 핵심 용어 (Key Terms)
 

@@ -1,6 +1,6 @@
 # Reflexion: 언어적 강화 학습(Verbal Reinforcement Learning)
 
-> 그래디언트 기반 강화 학습(reinforcement learning)은 하나의 실패 양상을 고치기 위해 수천 번의 시행과 GPU 클러스터를 필요로 한다. Reflexion(Shinn et al., NeurIPS 2023)은 이를 자연어로 한다: 각 실패한 시행 이후, 에이전트는 성찰(reflection)을 쓰고, 그것을 일화적 메모리(episodic memory)에 저장하며, 다음 시행을 그 메모리에 조건화한다. 이것이 Letta의 수면 시간 연산(sleep-time compute), Claude Code의 CLAUDE.md 학습 내용, pro-workflow의 learn-rule 뒤에 있는 패턴이다.
+> 그래디언트 기반 강화 학습(reinforcement learning)은 하나의 실패 양상을 고치는 데 수천 번의 시행과 GPU 클러스터가 필요하다. Reflexion(Shinn et al., NeurIPS 2023)은 이를 자연어로 한다: 각 실패한 시행 이후, 에이전트는 성찰(reflection)을 쓰고, 그것을 일화적 메모리(episodic memory)에 저장하며, 다음 시행을 그 메모리에 조건화한다. 이것이 Letta의 수면 시간 연산(sleep-time compute), Claude Code의 CLAUDE.md 학습 내용, pro-workflow의 learn-rule 뒤에 있는 패턴이다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-에이전트가 작업에 실패한다. 표준 강화 학습에서는 수천 번의 시행을 더 돌리고, 그래디언트(gradient)를 계산하고, 가중치(weight)를 갱신할 것이다. 비싸고 느리며, 대부분의 프로덕션(production) 에이전트는 모든 실패마다 학습 예산이 있지 않다.
+에이전트가 작업에 실패한다. 표준 강화 학습에서는 수천 번의 시행을 더 돌리고, 그래디언트(gradient)를 계산하고, 가중치(weight)를 갱신할 것이다. 비싸고 느리며 대부분의 프로덕션(production) 에이전트는 모든 실패마다 학습 예산이 있지 않다.
 
 Reflexion(Shinn et al., arXiv:2303.11366)은 다른 질문을 던진다: 에이전트가 그저 왜 실패했는지 생각해보고 그 생각을 프롬프트(prompt)에 담아 다시 시도하면 어떨까? 가중치 갱신 없음. 그래디언트 없음. 시행 사이에 저장된 자연어뿐.
 
@@ -73,7 +73,7 @@ Reflexion이 도움이 안 될 때:
 - 실패가 외부적일 때(네트워크 다운, 도구 고장) — "네트워크가 다운됐다"에 대한 성찰은 미래 실행에 도움이 안 된다.
 - 성찰이 미신으로 변할 때 — 일회성의 불안정한 실행에 대한 서사를 저장하는 것.
 
-2026년 함정: 메모리 부패(memory rot). 성찰이 쌓이고, 일부는 낡거나 틀렸으며, 일화적 버퍼가 커지면서 재실행이 느려진다. 완화책: 주기적 압축(compaction)(Lesson 06), 성찰에 대한 TTL, 또는 별도의 수면 시간 정리 에이전트(Letta).
+2026년 함정: 메모리 부패(memory rot). 성찰이 쌓이고 일부는 낡거나 틀렸으며 일화적 버퍼가 커지면서 재실행이 느려진다. 완화책: 주기적 압축(compaction)(Lesson 06), 성찰에 대한 TTL, 또는 별도의 수면 시간 정리 에이전트(Letta).
 
 ## 직접 만들기 (Build It)
 

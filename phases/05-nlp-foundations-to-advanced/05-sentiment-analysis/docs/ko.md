@@ -11,9 +11,9 @@
 
 "The food was not great." 긍정인가 부정인가?
 
-감성(sentiment)은 단순하게 들린다. 리뷰어가 무언가를 좋아했거나 좋아하지 않았다고 말했다. 그 문장에 레이블(label)을 붙여라. 이것이 대표적인 NLP 과제가 된 이유는, 쉬워 보이는 모든 사례가 어려운 사례를 하나씩 숨기고 있기 때문이다. 부정(negation)은 의미를 뒤집는다. 풍자는 의미를 반전시킨다. "Not bad at all"은 부정으로 코딩된 두 단어가 있음에도 긍정이다. 이모지는 주변 텍스트보다 더 많은 신호를 담는다. 도메인 어휘가 중요하다(음악 리뷰의 `tight` 대 패션 리뷰의 `tight`).
+감성(sentiment)은 단순하게 들린다. 리뷰어가 무언가를 좋아했거나 좋아하지 않았다고 말했으니, 그 문장에 레이블(label)을 붙이면 된다. 이것이 대표적인 NLP 과제가 된 이유는 쉬워 보이는 사례마다 어려운 사례를 하나씩 숨기고 있기 때문이다. 부정(negation)은 의미를 뒤집는다. 풍자는 의미를 반전시킨다. "Not bad at all"은 부정으로 코딩된 두 단어가 있음에도 긍정이다. 이모지는 주변 텍스트보다 더 많은 신호를 담는다. 도메인 어휘가 중요하다(음악 리뷰의 `tight` 대 패션 리뷰의 `tight`).
 
-감성은 고전 NLP의 살아 있는 실험실이다. 모든 순진한 베이스라인(baseline)이 왜 특정한 실패 양상을 갖는지 이해하면, 왜 더 풍부한 모든 모델이 발명되었는지 이해하게 된다. 이 레슨은 나이브 베이즈(Naive Bayes) 베이스라인을 밑바닥부터 만들고, 로지스틱 회귀(logistic regression)를 더하고, 프로덕션(production) 감성을 규정 준수 등급의 문제로 만드는 함정들을 짚는다.
+감성은 고전 NLP의 살아 있는 실험실이다. 순진한 베이스라인(baseline)이 저마다 특정한 실패 양상을 왜 갖는지 이해하면, 더 풍부한 모델들이 왜 나왔는지도 이해하게 된다. 이 레슨은 나이브 베이즈(Naive Bayes) 베이스라인을 밑바닥부터 만들고, 로지스틱 회귀(logistic regression)를 더하고, 프로덕션(production) 감성을 규정 준수 등급의 문제로 만드는 함정들을 짚는다.
 
 ## 개념 (The Concept)
 
@@ -22,7 +22,7 @@
 1. **표현(Represent).** 텍스트를 특성(feature) 벡터(vector)로 바꾼다. BoW, TF-IDF, 또는 n-그램.
 2. **분류(Classify).** 레이블된 예시로 선형 모델(나이브 베이즈, 로지스틱 회귀, SVM)을 적합시킨다.
 
-나이브 베이즈는 동작하는 것 중 가장 멍청한 모델이다. 레이블이 주어졌을 때 모든 특성이 독립이라고 가정한다. 카운트로부터 `P(word | positive)`와 `P(word | negative)`를 추정한다. 추론(inference) 시점에 확률들을 곱한다. "나이브"한 독립 가정은 우스울 정도로 틀렸지만, 그 결과는 충격적으로 강력하다. 이유: 희소한 텍스트 특성과 적당한 데이터에서, 분류기는 각 단어가 얼마나 기우는지보다 어느 쪽으로 기우는지에 관심을 둔다.
+나이브 베이즈는 동작하는 것 중 가장 멍청한 모델이다. 레이블이 주어졌을 때 모든 특성이 독립이라고 가정한다. 카운트로부터 `P(word | positive)`와 `P(word | negative)`를 추정한다. 추론(inference) 시점에 확률들을 곱한다. "나이브"한 독립 가정은 우스울 정도로 틀렸지만 결과는 놀랄 만큼 잘 나온다. 이유는 이렇다. 희소한 텍스트 특성과 적당한 데이터에서 분류기는 각 단어가 얼마나 기우는지보다 어느 쪽으로 기우는지에 관심을 둔다.
 
 로지스틱 회귀는 독립 가정을 고친다. 음의 가중치(weight)를 포함해 특성마다 가중치를 학습한다. `not good`을 바이그램(bigram) 특성으로 보면 음의 가중치를 받는다. 나이브 베이즈는 한 번도 레이블링하지 않은 바이그램에 대해서는 그렇게 할 수 없다.
 
@@ -121,7 +121,7 @@ def predict_lr(X, w, b):
 
 ### 4단계: 부정 처리하기 (실패 양상)
 
-"not good"과 "not bad"를 보라. BoW 분류기는 `{not, good}`과 `{not, bad}`를 보고 학습에서 더 많이 나타난 쪽으로부터 학습한다. 바이그램 분류기는 `not_good`과 `not_bad`를 보고 이들을 별개의 특성으로 학습한다. 보통은 그것으로 충분하다.
+"not good"과 "not bad"를 보라. BoW 분류기는 `{not, good}`과 `{not, bad}`를 보고, 학습 데이터에서 더 자주 나타난 쪽을 따라 학습한다. 바이그램 분류기는 `not_good`과 `not_bad`를 보고 이들을 별개의 특성으로 학습한다. 보통은 그것으로 충분하다.
 
 바이그램이 없을 때 동작하는 더 거친 해결책: **부정 범위 지정(negation scoping)**. 부정 단어 뒤에 오는 토큰(token)에 다음 구두점까지 `NOT_`을 접두로 붙인다.
 
@@ -163,7 +163,7 @@ def apply_negation(tokens):
 - **혼동 행렬(confusion matrix).** 가공되지 않은 카운트. 어떤 스칼라 지표든 믿기 전에 항상 들여다보라. 모델이 어떤 클래스 쌍을 혼동하는지 드러낸다.
 - **클래스별 오류 샘플.** 클래스당 잘못된 예측 5개를 뽑아라. 읽어라. 실제 오류를 읽는 것을 대체할 것은 없다.
 
-심하게 불균형한 데이터(> 95-5 비율)에서는 정확도 대신 **AUROC**와 **AUPRC**를 보고하라. AUPRC는 소수 클래스에 더 민감한데, 그것이 보통 당신이 신경 쓰는 것(스팸, 사기, 희귀 감성)이다.
+심하게 불균형한 데이터(> 95-5 비율)에서는 정확도 대신 **AUROC**와 **AUPRC**를 보고하라. AUPRC는 소수 클래스에 더 민감한데, 보통 신경 쓰는 대상이 바로 그 소수 클래스(스팸, 사기, 희귀 감성)다.
 
 **피해야 할 흔한 버그.** 불균형 데이터에서 매크로-F1 대신 마이크로-F1을 보고하면 다수 클래스에 지배되어 높아 보이는 숫자가 나온다. 매크로-F1은 소수 클래스 성능을 강제로 보게 만든다.
 
@@ -196,7 +196,7 @@ pipe.fit(X_train, y_train)
 print(pipe.score(X_test, y_test))
 ```
 
-주목할 세 가지. `stop_words=None`은 부정어를 유지한다. `ngram_range=(1, 2)`는 바이그램을 더해 `not_good`이 특성이 되게 한다. `sublinear_tf=True`는 반복된 단어를 누그러뜨린다. 이 세 플래그가 SST-2에서 정확도 75% 베이스라인과 85% 베이스라인의 차이다.
+주목할 세 가지. `stop_words=None`은 부정어를 유지한다. `ngram_range=(1, 2)`는 바이그램을 더해 `not_good`이 특성이 되게 한다. `sublinear_tf=True`는 반복된 단어를 누그러뜨린다. 이 세 플래그가 SST-2에서 정확도 75% 베이스라인과 85% 베이스라인을 가른다.
 
 ### 트랜스포머로 손을 뻗을 때
 
@@ -205,11 +205,11 @@ print(pipe.score(X_test, y_test))
 - 애스펙트 기반 감성. "Camera was great but battery was terrible." 감성을 애스펙트(aspect)에 귀속시켜야 한다. 트랜스포머나 구조화 출력 모델만 가능하다.
 - 비영어, 저자원 언어. 다국어 BERT는 제로샷 베이스라인을 공짜로 준다.
 
-위의 어느 것이라도 필요하다면 Phase 7(트랜스포머 심화)로 건너뛰어라. 그렇지 않다면, TF-IDF에 바이그램과 부정 처리를 더한 나이브 베이즈나 로지스틱 회귀가 당신의 2026년 프로덕션 베이스라인이다.
+위의 어느 것이라도 필요하다면 Phase 7(트랜스포머 심화)로 건너뛰어라. 그렇지 않다면, TF-IDF에 바이그램과 부정 처리를 더한 나이브 베이즈나 로지스틱 회귀가 2026년의 프로덕션 베이스라인이다.
 
 ### 재현성의 함정 (다시)
 
-감성 모델의 재학습은 일상이다. 재평가는 그렇지 않다. 논문에 보고된 정확도 수치는 특정 분할, 특정 전처리, 특정 토크나이저(tokenizer)를 쓴다. 동일한 파이프라인(pipeline)을 쓰지 않고 새 모델을 베이스라인과 비교하면 오해를 부르는 차이값을 얻는다. 논문의 숫자가 아니라, 당신의 파이프라인에서 베이스라인을 항상 다시 생성하라.
+감성 모델의 재학습은 일상이다. 재평가는 그렇지 않다. 논문에 보고된 정확도 수치는 특정 분할, 특정 전처리, 특정 토크나이저(tokenizer)를 쓴다. 동일한 파이프라인(pipeline)을 쓰지 않고 새 모델을 베이스라인과 비교하면 오해를 부르는 차이값이 나온다. 논문의 숫자가 아니라, 같은 파이프라인에서 베이스라인을 항상 다시 생성하라.
 
 ## 산출물 (Ship It)
 
@@ -253,4 +253,4 @@ Refuse to recommend dropping stopwords for sentiment tasks. Refuse to report acc
 
 - [Pang and Lee (2008). Opinion Mining and Sentiment Analysis](https://www.cs.cornell.edu/home/llee/opinion-mining-sentiment-analysis-survey.html) — 기초가 되는 서베이. 길지만, 처음 네 절이 모든 고전적 내용을 다룬다.
 - [Wang and Manning (2012). Baselines and Bigrams: Simple, Good Sentiment and Topic Classification](https://aclanthology.org/P12-2018/) — 짧은 텍스트에서 바이그램 + 나이브 베이즈를 이기기 어렵다는 것을 보여 준 논문.
-- [scikit-learn text feature extraction docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction) — `CountVectorizer`, `TfidfVectorizer`, 그리고 당신이 튜닝할 모든 손잡이에 대한 레퍼런스.
+- [scikit-learn text feature extraction docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction) — `CountVectorizer`, `TfidfVectorizer`, 그리고 튜닝할 모든 손잡이를 다루는 레퍼런스.

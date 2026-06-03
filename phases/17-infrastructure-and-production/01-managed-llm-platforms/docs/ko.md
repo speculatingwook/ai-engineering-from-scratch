@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-당신은 제품을 위해 Claude 3.7 Sonnet을 골랐다. 이제 그것을 서빙해야 한다. Anthropic API를 직접 호출하거나, AWS Bedrock을 통해 호출하거나, 게이트웨이(gateway)를 거칠 수 있다. 직접 API가 가장 단순하다. Bedrock은 BAA, VPC 엔드포인트, IAM, CloudWatch 귀속을 추가한다. 게이트웨이는 페일오버(failover), 통합 청구(billing), 그리고 공급자 전반의 속도 제한(rate limit)을 추가한다.
+제품에 쓸 모델로 Claude 3.7 Sonnet을 골랐다고 하자. 이제 이 모델을 서빙해야 한다. Anthropic API를 직접 호출하거나, AWS Bedrock으로 호출하거나, 게이트웨이(gateway)를 거치면 된다. 직접 API가 가장 단순하다. Bedrock은 BAA, VPC 엔드포인트, IAM, CloudWatch 귀속을 추가한다. 게이트웨이는 페일오버(failover), 통합 청구(billing), 그리고 공급자 전반의 속도 제한(rate limit)을 추가한다.
 
-더 깊은 질문은 카탈로그다. Claude와 Llama와 Gemini가 같은 제품에 필요하다면, 한 곳이 Bedrock + Vertex + Azure OpenAI를 동시에 의미하지 않는 한 그것들을 한 곳에서 모두 살 수는 없다. 하이퍼스케일러들은 서로 교체 가능하지 않다 — 각자 누가 모델 계층(model layer)을 소유하는가에 대해 서로 다른 베팅을 했다.
+더 깊은 질문은 카탈로그다. Claude와 Llama와 Gemini가 한 제품에 모두 필요하다면, 한 곳이 Bedrock과 Vertex와 Azure OpenAI를 동시에 끼고 있지 않은 한 이를 한곳에서 다 살 수는 없다. 하이퍼스케일러는 서로 갈아 끼울 수 없다. 모델 계층(model layer)을 누가 소유하느냐를 두고 각자 다른 베팅을 했기 때문이다.
 
 이 레슨은 그 세 가지 베팅, 지연 시간 격차, FinOps 격차, 그리고 종속 위험을 지도화한다.
 
@@ -34,9 +34,9 @@
 
 ### 규모에서의 지연 시간 격차
 
-Artificial Analysis는 지속적인 벤치마크(benchmark)를 돌린다. 동급 Llama 3.1 405B 배포(공유 온디맨드)에서 Azure OpenAI의 첫 토큰 지연 시간(first-token latency) 중앙값은 약 50ms다. Bedrock은 약 75ms다. 이 격차는 AWS의 실패가 아니다 — 용량 모델(capacity model)의 차이다. Azure는 당신의 테넌트(tenant)를 위해 GPU 용량을 예약하는 PTU(Provisioned Throughput Units)를 판매한다. Bedrock의 동등 상품(Provisioned Throughput)도 존재하지만 단위당 시간당 약 21달러부터 시작하며, 대부분의 고객은 공유 온디맨드에 머문다.
+Artificial Analysis는 지속적인 벤치마크(benchmark)를 돌린다. 동급 Llama 3.1 405B 배포(공유 온디맨드)에서 Azure OpenAI의 첫 토큰 지연 시간(first-token latency) 중앙값은 약 50ms다. Bedrock은 약 75ms다. 이 격차는 AWS의 실패가 아니라 용량 모델(capacity model)의 차이다. Azure는 한 테넌트(tenant)를 위해 GPU 용량을 예약해 주는 PTU(Provisioned Throughput Units)를 판매한다. Bedrock의 동등 상품(Provisioned Throughput)도 존재하지만 단위당 시간당 약 21달러부터 시작하며, 대부분의 고객은 공유 온디맨드에 머문다.
 
-온디맨드 공유 용량은 다른 모든 고객의 트래픽과 경쟁한다. 전용 용량은 그렇지 않다. 당신의 제품 SLA가 P99에서 TTFT < 100ms라면, Azure에서 PTU를 사거나, Bedrock Provisioned Throughput을 사거나, 기본 변동성을 받아들이거나 셋 중 하나다.
+온디맨드 공유 용량은 다른 모든 고객의 트래픽과 경쟁하지만, 전용 용량은 그렇지 않다. 제품 SLA가 P99에서 TTFT < 100ms라면, Azure에서 PTU를 사거나, Bedrock Provisioned Throughput을 사거나, 기본 변동성을 받아들이거나 셋 중 하나다.
 
 ### Provisioned Throughput 경제학
 
@@ -48,7 +48,7 @@ Vertex 프로비저닝 용량은 Gemini SKU별로 판매된다. 가격은 모델
 
 ### FinOps 표면 — 진짜 차별화 요소
 
-**Bedrock Application Inference Profiles**는 마켓플레이스에서 가장 깔끔한 귀속이다. 프로필에 `team`, `product`, `feature` 태그를 달고, 모든 모델 호출을 그것을 통해 라우팅하면, CloudWatch가 후처리 없이 프로필별 비용을 분해해 준다. 2025년에 추가되었으며, 여전히 가장 세분화된 하이퍼스케일러 네이티브 기능이다.
+**Bedrock Application Inference Profiles**는 마켓플레이스에서 가장 깔끔한 귀속이다. 프로필에 `team`, `product`, `feature` 태그를 달고 모든 모델 호출을 이 프로필로 라우팅하면, CloudWatch가 후처리 없이 프로필별 비용을 분해해 준다. 2025년에 추가된 기능으로, 여전히 가장 세분화된 하이퍼스케일러 네이티브 기능이다.
 
 **Vertex** 귀속은 팀별 프로젝트(project-per-team)에 모든 곳의 레이블(label)을 더한 것이다. 각 팀을 GCP 프로젝트로 모델링하고, 모든 리소스에 레이블을 붙이고, 집계를 위해 BigQuery Billing Export + DataStudio를 사용한다. 작업량은 더 많지만, BigQuery는 비용 데이터에 대해 임의의 SQL을 가능하게 한다.
 
@@ -58,9 +58,9 @@ Vertex 프로비저닝 용량은 Gemini SKU별로 판매된다. 가격은 모델
 
 ### 종속은 2026년의 위험
 
-단일 하이퍼스케일러 약정은 하나의 모델이 지배하던 시절에는 괜찮았다. 2026년에는 프런티어가 매달 움직인다 — 한 분기는 Claude 3.7, 다음은 Gemini 2.5, 그다음은 GPT-5. 한 플랫폼에 잠기는 것은 프런티어의 3분의 2에서 당신을 잠가 버린다.
+단일 하이퍼스케일러 약정은 하나의 모델이 지배하던 시절에는 괜찮았다. 2026년에는 프런티어가 매달 움직인다. 한 분기는 Claude 3.7, 다음은 Gemini 2.5, 그다음은 GPT-5다. 한 플랫폼에 묶이면 프런티어의 3분의 2에서 발이 묶인다.
 
-일 잘하는 팀들이 채택하는 패턴: 제품에 중요한 모든 LLM 호출에 대해 최소 2개 공급자. Bedrock + Azure OpenAI가 흔한 조합이다 — 한쪽에서 Claude, 다른 쪽에서 GPT, 둘 사이의 페일오버, 같은 게이트웨이. 게이트웨이가 최적으로 라우팅하므로 비용 상승은 미미하다. 장애(2025년 1월 Azure OpenAI 사건, AWS us-east-1 중단 같은) 시의 가용성 상승은 결정적이다.
+일 잘하는 팀들이 채택하는 패턴은 이렇다. 제품에 중요한 모든 LLM 호출에 최소 2개 공급자를 둔다. Bedrock + Azure OpenAI가 흔한 조합으로, 한쪽에서 Claude, 다른 쪽에서 GPT를 쓰고 둘 사이에 페일오버를 두며 게이트웨이는 하나로 묶는다. 게이트웨이가 최적으로 라우팅하므로 비용 상승은 미미하다. 장애(2025년 1월 Azure OpenAI 사건, AWS us-east-1 중단 같은) 시의 가용성 상승은 결정적이다.
 
 ### 데이터 거주성, BAA, 그리고 규제 산업
 
@@ -68,7 +68,7 @@ Bedrock: 대부분 리전에서 BAA. VPC 엔드포인트. 가드레일(guardrail
 Azure OpenAI: HIPAA, SOC 2, ISO 27001. EU 데이터 거주성. 엔터프라이즈 규제 기본값.
 Vertex: HIPAA, GDPR, 리전별 데이터 거주성. Google Cloud의 컴플라이언스(compliance) 스택.
 
-세 곳 모두 기본 체크박스를 충족한다. 차이는 데이터 보존 정책, 로그를 어떻게 다루는지, 그리고 남용 모니터링(abuse-monitoring)이 당신의 트래픽을 읽는지(대부분 기본 옵트인. 엔터프라이즈에는 옵트아웃 가능)에 있다.
+세 곳 모두 기본 체크박스를 충족한다. 차이는 데이터 보존 정책, 로그를 다루는 방식, 그리고 남용 모니터링(abuse-monitoring)이 트래픽을 읽는지 여부(대부분 기본 옵트인이며, 엔터프라이즈에는 옵트아웃 가능)에 있다.
 
 ### 기억해야 할 숫자
 
@@ -80,7 +80,7 @@ Vertex: HIPAA, GDPR, 리전별 데이터 거주성. Google Cloud의 컴플라이
 
 ## 라이브러리로 써보기 (Use It)
 
-`code/main.py`는 합성 워크로드에서 세 플랫폼을 비교한다 — 온디맨드 vs PTU 경제학, TTFT 변동성, 비용 귀속 충실도(fidelity)를 모델링한다. 실행하여 PTU가 어디서 이득을 보는지, 그리고 어디서 마켓플레이스의 모델 폭이 TTFT 격차를 능가하는지 확인하라.
+`code/main.py`는 합성 워크로드에서 세 플랫폼을 비교하면서 온디맨드 vs PTU 경제학, TTFT 변동성, 비용 귀속 충실도(fidelity)를 모델링한다. 실행하여 PTU가 어디서 이득을 보는지, 그리고 어디서 마켓플레이스의 모델 폭이 TTFT 격차를 능가하는지 확인하라.
 
 ## 산출물 (Ship It)
 
@@ -89,9 +89,9 @@ Vertex: HIPAA, GDPR, 리전별 데이터 거주성. Google Cloud의 컴플라이
 ## 연습 문제 (Exercises)
 
 1. `code/main.py`를 실행하라. 70B급 모델에서 어느 지속 사용률에서 Azure PTU가 온디맨드를 이기는가? 손익분기점을 계산하고 광고된 40~60% 구간과 비교하라.
-2. 당신의 제품은 Claude 3.7 Sonnet과 GPT-4o가 필요하다. 두 공급자 배포를 설계하라 — 어느 것이 어느 하이퍼스케일러로 가는가, 앞단에 어떤 게이트웨이가 놓이는가, 페일오버 정책은 무엇인가?
+2. 제품에 Claude 3.7 Sonnet과 GPT-4o가 모두 필요하다고 하자. 두 공급자 배포를 설계하라. 어느 모델이 어느 하이퍼스케일러로 가는가, 앞단에 어떤 게이트웨이가 놓이는가, 페일오버 정책은 무엇인가?
 3. 규제 대상 헬스케어 고객이 BAA, US-East 데이터 거주성, 그리고 100ms 미만 P99 TTFT를 요구한다. 플랫폼을 고르고 세 가지 구체적 기능으로 정당화하라.
-4. Bedrock 청구액이 트래픽 변화 없이 이번 달 4배로 늘었다는 것을 발견했다. Application Inference Profiles 없이는 어떻게 범인을 찾겠는가? 프로필이 있으면 얼마나 걸리는가?
+4. 트래픽은 그대로인데 Bedrock 청구액이 이번 달 4배로 늘었다고 하자. Application Inference Profiles 없이는 어떻게 범인을 찾겠는가? 프로필이 있으면 얼마나 걸리는가?
 5. Azure OpenAI와 Bedrock 가격 페이지를 읽어라. 월 1억 토큰 Claude 워크로드에 대해 어느 것이 더 저렴한가 — Anthropic API 직접, Bedrock 온디맨드, 또는 Bedrock Provisioned Throughput?
 
 ## 핵심 용어 (Key Terms)

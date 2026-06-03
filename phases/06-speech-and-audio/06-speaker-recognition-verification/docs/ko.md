@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-사용자가 암호문구(passphrase)를 말한다. 당신은 알고 싶다: 이것이 그들이 주장하는 그 사람인가(*검증(verification)*, 1:1), 아니면 등록(enrollment) 뱅크의 첫 번째 사람인가(*식별(identification)*, 1:N)? 아니면 둘 다 아닌 — 이것이 알려지지 않은 화자인가(*오픈셋(open-set)*)?
+사용자가 암호문구(passphrase)를 말한다. 이때 알아내야 할 것은 이렇다. 본인이 주장하는 그 사람이 맞는가(*검증(verification)*, 1:1), 아니면 등록(enrollment) 뱅크의 첫 번째 사람인가(*식별(identification)*, 1:N)? 아니면 둘 다 아니라, 등록되지 않은 화자인가(*오픈셋(open-set)*)?
 
 2018년 이전: GMM-UBM + i-vector. 합리적인 EER이지만 채널 시프트(channel shift)(전화 대 노트북)와 감정에 취약하다. 2018–2022: x-vector(각 마진(angular margin)으로 학습된 TDNN 백본). 2022년 이후: ECAPA-TDNN과 WavLM-large 임베딩. 2026년 기준 이 분야는 세 개의 모델과 하나의 지표가 지배한다.
 
@@ -19,7 +19,7 @@
 
 ![임베딩 + 코사인 + EER을 갖춘 등록 + 검증 파이프라인](../assets/speaker-verification.svg)
 
-**파이프라인.** 등록: 타깃 화자의 5–30초를 녹음하고; 고정 차원 임베딩을 계산한다(ECAPA-TDNN은 192차원, WavLM-large는 256차원). 검증: 테스트 발화 임베딩을 얻고; 코사인 유사도를 계산하고; 임계값과 비교한다.
+**파이프라인.** 등록 단계에서는 타깃 화자의 음성 5–30초를 녹음한 뒤 고정 차원 임베딩을 계산한다(ECAPA-TDNN은 192차원, WavLM-large는 256차원). 검증 단계에서는 테스트 발화의 임베딩을 얻어 코사인 유사도를 구하고 임계값과 비교한다.
 
 **ECAPA-TDNN(2020, 2026년에도 여전히 지배적).** Emphasized Channel Attention, Propagation and Aggregation - Time-Delay Neural Network. 스퀴즈-여기(squeeze-excitation)를 갖춘 1D 컨볼루션 블록, 멀티헤드 어텐션 풀링(multi-head attention pooling), 그 뒤를 잇는 192차원으로의 선형 층. VoxCeleb 1+2(2,700명 화자, 110만 발화)에서 Additive Angular Margin 손실(AAM-softmax)로 학습되었다.
 

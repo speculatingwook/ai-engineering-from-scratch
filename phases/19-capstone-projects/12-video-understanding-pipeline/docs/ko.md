@@ -1,6 +1,6 @@
 # Capstone 12 — 영상 이해 파이프라인 (Video Understanding Pipeline: Scene, QA, Search)
 
-> Twelve Labs는 Marengo + Pegasus를 제품화했다. VideoDB는 영상용 CRUD API를 출시했다. AI2의 Molmo 2는 오픈 VLM 체크포인트를 공개했다. Gemini 롱 컨텍스트(long-context)는 수 시간 분량의 영상을 네이티브로 처리한다. TimeLens-100K는 대규모 시간적 그라운딩(temporal grounding)을 정의했다. 2026 파이프라인은 정착되었다: 장면 분할(scene segmentation), 장면별 캡션 + 임베딩(embedding), 트랜스크립트(transcript) 정렬, 다중 벡터(multi-vector) 인덱스, 그리고 (시작, 끝) 타임스탬프와 프레임 미리보기로 답하는 질의. 이 캡스톤(capstone)은 100시간을 수집하고, 공개 벤치마크(benchmark)를 달성하며, 세기(counting)와 동작(action) 질문에서의 환각(hallucination)을 측정하는 것이다.
+> Twelve Labs는 Marengo + Pegasus를 제품화했다. VideoDB는 영상용 CRUD API를 출시했다. AI2의 Molmo 2는 오픈 VLM 체크포인트를 공개했다. Gemini 롱 컨텍스트(long-context)는 수 시간 분량의 영상을 네이티브로 처리한다. TimeLens-100K는 대규모 시간적 그라운딩(temporal grounding)을 정의했다. 2026 파이프라인은 정착되었다: 장면 분할(scene segmentation), 장면별 캡션 + 임베딩(embedding), 트랜스크립트(transcript) 정렬, 다중 벡터(multi-vector) 인덱스, 그리고 (시작, 끝) 타임스탬프와 프레임 미리보기로 답하는 질의. 이 캡스톤(capstone)은 100시간을 수집하고 공개 벤치마크(benchmark)를 달성하며, 세기(counting)와 동작(action) 질문에서의 환각(hallucination)을 측정한다.
 
 **Type:** Capstone
 **Languages:** Python (pipeline), TypeScript (UI)
@@ -12,15 +12,15 @@
 
 장편 영상 QA는 2026년 규모에서 가장 대역폭을 많이 잡아먹는 멀티모달(multimodal) 문제다. Gemini 2.5 Pro는 2시간짜리 영상을 네이티브로 읽을 수 있지만, 100시간 분량의 영상을 질의 가능한 코퍼스(corpus)로 수집(ingest)하려면 여전히 장면 수준 인덱스가 필요하다. 프로덕션(production)의 형태는 장면 분할(TransNetV2 또는 PySceneDetect), VLM을 사용한 장면별 캡셔닝(Gemini 2.5, Qwen3-VL-Max, 또는 Molmo 2), 트랜스크립트 정렬(단어 타임스탬프를 갖는 Whisper-v3-turbo), 그리고 캡션·프레임 임베딩·트랜스크립트를 나란히 저장하는 다중 벡터 인덱스를 결합한다. 질의 파이프라인은 (시작, 끝) 타임스탬프와 프레임 미리보기로 답한다.
 
-벤치마크는 공개되어 있다(ActivityNet-QA, NeXT-GQA) — 여기에 직접 만든 100개 질의 커스텀 세트를 더한다. 세기와 동작 유형 질문에서의 환각은 알려진 난해한 실패 부류이며, 이 캡스톤은 그것을 명시적으로 측정한다.
+벤치마크는 공개되어 있다(ActivityNet-QA, NeXT-GQA) — 여기에 직접 만든 100개 질의 커스텀 세트를 더한다. 세기와 동작 유형 질문에서 나타나는 환각은 알려진 난해한 실패 부류이며, 이 캡스톤은 이를 명시적으로 측정한다.
 
 ## 개념 (Concept)
 
 수집 시 세 개의 파이프라인이 병렬로 실행된다. **장면 분할**은 영상을 여러 장면으로 자른다. **VLM 캡셔닝**은 장면마다 캡션 하나와 키프레임(keyframe)에서 프레임 임베딩 하나를 생성한다. **ASR 정렬**은 단어 수준 타임스탬프를 만든다. 세 스트림은 (scene_id, 시간 범위)로 결합된다. 각 장면은 다중 벡터 인덱스(Qdrant)에서 세 가지 벡터 타입을 갖는다: 캡션 임베딩, 키프레임 임베딩, 트랜스크립트 임베딩.
 
-질의 시, 자연어 질문이 세 벡터 모두에 대해 발사된다. 결과는 RRF로 병합되고, 시간적 그라운딩 어댑터(TimeLens 스타일)가 상위 장면 내에서 (시작, 끝) 윈도우를 정교화한다. VLM 합성기(Gemini 2.5 Pro 또는 Qwen3-VL-Max)가 질의 + 상위 장면 + 크롭된 프레임을 받아 인용된 타임스탬프와 프레임 미리보기로 답한다.
+질의 시 자연어 질문이 세 벡터 모두에 발사된다. 결과는 RRF로 병합되고, 시간적 그라운딩 어댑터(TimeLens 스타일)가 상위 장면 내에서 (시작, 끝) 윈도우를 정교화한다. VLM 합성기(Gemini 2.5 Pro 또는 Qwen3-VL-Max)가 질의 + 상위 장면 + 크롭된 프레임을 받아 인용된 타임스탬프와 프레임 미리보기로 답한다.
 
-환각 측정이 중요하다. 세기("방에 몇 명이 들어오는가?")와 동작 유형("셰프가 젓기 전에 붓는가?") 질문은 악명 높게 신뢰할 수 없다. 정확도를 서술형 질문과 분리해 보고한다.
+환각 측정이 중요하다. 세기("방에 몇 명이 들어오는가?")와 동작 유형("셰프가 젓기 전에 붓는가?") 질문은 악명 높을 만큼 신뢰하기 어렵다. 정확도를 서술형 질문과 분리해 보고한다.
 
 ## 아키텍처 (Architecture)
 

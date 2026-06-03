@@ -38,7 +38,7 @@ flowchart LR
     G --> H["(B, T, D) input to attention"]
 ```
 
-합성은 연결(concatenation)이 아니라 합(sum)이다. 더하면 신경망 전체에서 `D`가 일정하게 유지되며, 모델이 각 층에서 특성(feature)별로 토큰 의미가 우세할지 위치가 우세할지를 결정하게 한다.
+합성은 연결(concatenation)이 아니라 합(sum)이다. 더하면 신경망 전체에서 `D`가 일정하게 유지되며 모델이 각 층에서 특성(feature)별로 토큰 의미가 우세할지 위치가 우세할지를 결정하게 한다.
 
 ## 토큰 임베딩 행렬 (The token embedding matrix)
 
@@ -46,7 +46,7 @@ flowchart LR
 
 순방향 패스는 단일 인덱싱 연산이다. PyTorch는 행을 모음(gather)으로써 `(B, T)` int64 id를 `(B, T, D)` 실수(float)로 매핑한다. 역방향 패스(backward pass)는 순방향 패스에서 건드린 행들에만 그래디언트(gradient)를 누적한다. 배치에 한 번도 나타나지 않은 두 행은 그 스텝에 그래디언트 0을 받는다.
 
-미묘한 세부사항. 토큰 임베딩과 모델 끝의 출력 투영(output projection)은 흔히 가중치(weight)를 공유한다(가중치 묶기, weight tying). 그렇게 되면 모든 역방향 패스가 출력 쪽을 통해 임베딩의 모든 행을 건드린다. 여기 레슨은 둘 다 별개의 모듈로 노출하지만, 완전한 모델에서는 같은 행렬이 두 역할을 모두 할 수 있다.
+미묘한 세부사항. 토큰 임베딩과 모델 끝의 출력 투영(output projection)은 흔히 가중치(weight)를 공유한다(가중치 묶기, weight tying). 그렇게 되면 모든 역방향 패스가 출력 쪽에서 임베딩의 모든 행을 건드린다. 여기 레슨은 둘 다 별개의 모듈로 노출하지만, 완전한 모델에서는 같은 행렬이 두 역할을 모두 할 수 있다.
 
 ## 학습형 위치 임베딩 (The learned positional embedding)
 
@@ -99,7 +99,7 @@ sequenceDiagram
 
 ## 이 레슨이 하지 않는 것 (What this lesson does not do)
 
-회전 위치 인코딩(rotary positional encoding, RoPE)이나 AliBi를 만들지 않는다. 그것들은 프로덕션 트랜스포머의 현대적 선택이다. 둘 다 여기 임베딩과 같은 형태 계약(형태 `(B, T, D)`의 벡터에 위치 의존적 변환을 적용)을 따르지만, 입력이 아니라 어텐션 투영(attention-projection) 단계에서 적용된다. 다음 레슨은 어텐션 블록을 만들며, 선택적 확장 중 하나는 거기서 회전(rotary)을 쿼리-키(query-key) 투영에 접어 넣는 것이다.
+회전 위치 인코딩(rotary positional encoding, RoPE)이나 AliBi를 만들지 않는다. 그것들은 프로덕션 트랜스포머의 현대적 선택이다. 둘 다 여기 임베딩과 같은 형태 계약(형태 `(B, T, D)`의 벡터에 위치 의존적 변환을 적용)을 따르지만 입력이 아니라 어텐션 투영(attention-projection) 단계에서 적용된다. 다음 레슨은 어텐션 블록을 만들며, 선택적 확장 중 하나는 거기서 회전(rotary)을 쿼리-키(query-key) 투영에 접어 넣는 것이다.
 
 임베딩을 학습시키지 않는다. 학습에는 손실(loss)이 필요하고, 손실에는 모델 출력이 필요하며, 모델 출력에는 어텐션과 LM 헤드(head)가 필요하다. 그것은 다음 레슨과 그 다음 레슨이다.
 

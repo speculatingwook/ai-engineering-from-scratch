@@ -1,6 +1,6 @@
 # LLM API 부하 테스트 — k6와 Locust가 거짓말하는 이유
 
-> 전통적인 부하 테스터(load tester)는 스트리밍 응답, 가변 출력 길이, 토큰(token) 수준 지표, GPU 포화(saturation)를 위해 설계되지 않았다. 두 가지 함정이 대부분의 팀을 문다. GIL 함정: Locust의 토큰 수준 측정은 Python GIL 아래에서 토큰화(tokenization)를 실행하는데, 이는 높은 동시성 하에서 요청 생성과 경쟁한다. 그러면 토큰화 백로그(backlog)가 보고되는 토큰 간 지연 시간(inter-token latency)을 부풀린다 — 병목은 서버가 아니라 당신의 클라이언트다. 프롬프트 균일성 함정: 루프 안의 동일한 프롬프트는 토큰 분포의 한 점만 테스트한다. 실제 트래픽은 가변 길이와 다양한 접두사 일치(prefix match)를 가진다. LLMPerf는 `--mean-input-tokens` + `--stddev-input-tokens`로 이를 해결한다. 2026년 도구 매핑: LLM 특화(GenAI-Perf, LLMPerf, LLM-Locust, guidellm)는 토큰 수준 정확도용. **k6 v2026.1.0** + **k6 Operator 1.0 GA(2025년 9월)** — 스트리밍 인지(streaming-aware), TestRun/PrivateLoadZone CRD를 통한 Kubernetes 네이티브 분산, CI/CD 게이트(gate)에 최적. Vegeta는 Go 기반 고정 속도(constant-rate) 포화용. Locust 2.43.3은 스트리밍을 위해서는 LLM-Locust 확장과 함께만 쓴다. 부하 패턴: 정상 상태(steady-state), 램프(ramp), 스파이크(spike)(오토스케일링 테스트), 소크(soak)(메모리 누수).
+> 전통적인 부하 테스터(load tester)는 스트리밍 응답, 가변 출력 길이, 토큰(token) 수준 지표, GPU 포화(saturation)를 위해 설계되지 않았다. 함정 두 가지가 대부분의 팀을 무너뜨린다. GIL 함정: Locust의 토큰 수준 측정은 Python GIL 아래에서 토큰화(tokenization)를 실행하는데, 이는 높은 동시성에서 요청 생성과 경쟁한다. 그러면 토큰화 백로그(backlog)가 보고되는 토큰 간 지연 시간(inter-token latency)을 부풀린다 — 병목은 서버가 아니라 클라이언트 쪽이다. 프롬프트 균일성 함정: 루프 안의 동일한 프롬프트는 토큰 분포의 한 점만 테스트한다. 실제 트래픽은 가변 길이와 다양한 접두사 일치(prefix match)를 가진다. LLMPerf는 `--mean-input-tokens` + `--stddev-input-tokens`로 이를 해결한다. 2026년 도구 매핑: LLM 특화(GenAI-Perf, LLMPerf, LLM-Locust, guidellm)는 토큰 수준 정확도용. **k6 v2026.1.0** + **k6 Operator 1.0 GA(2025년 9월)** — 스트리밍 인지(streaming-aware), TestRun/PrivateLoadZone CRD를 통한 Kubernetes 네이티브 분산, CI/CD 게이트(gate)에 최적. Vegeta는 Go 기반 고정 속도(constant-rate) 포화용. Locust 2.43.3은 스트리밍을 위해서는 LLM-Locust 확장과 함께만 쓴다. 부하 패턴: 정상 상태(steady-state), 램프(ramp), 스파이크(spike)(오토스케일링 테스트), 소크(soak)(메모리 누수).
 
 **Type:** Build
 **Languages:** Python (stdlib, toy realistic-prompt generator + latency collector)
@@ -18,7 +18,7 @@
 
 LLM 엔드포인트를 동시 사용자 500명으로 k6 테스트했다. 버텼다. 배포했다. 프로덕션에서 실제 사용자 200명에 서비스가 무너졌다 — P99 TTFT가 폭발하고, GPU가 고정되었다.
 
-두 가지 일이 일어났다. 첫째, k6는 동일한 프롬프트 500개를 보냈다 — 요청 병합(request-coalescing)과 접두사 캐싱(prefix caching) 덕분에 실제로는 하나를 처리하면서도 500개의 동시 디코드(decode)를 처리하는 것처럼 보였다. 둘째, k6는 눈이 경험하는 방식으로 스트리밍 응답의 토큰 간 지연 시간을 추적하지 않는다. 다양한 간격으로 도착하는 500개의 토큰이 아니라 하나의 HTTP 연결을 본다.
+두 가지 일이 일어났다. 첫째, k6는 동일한 프롬프트 500개를 보냈다 — 요청 병합(request-coalescing)과 접두사 캐싱(prefix caching) 덕분에 실제로는 하나를 처리하면서도 500개의 동시 디코드(decode)를 처리하는 것처럼 보였다. 둘째, k6는 사용자 눈에 보이는 방식으로 스트리밍 응답의 토큰 간 지연 시간을 추적하지 않는다. 다양한 간격으로 도착하는 토큰 500개가 아니라 하나의 HTTP 연결을 볼 뿐이다.
 
 LLM의 부하 테스트는 그 자체로 하나의 분야다.
 
@@ -26,7 +26,7 @@ LLM의 부하 테스트는 그 자체로 하나의 분야다.
 
 ### GIL 함정 (Locust)
 
-Locust는 Python을 사용하며 GIL 아래에서 클라이언트 측 토큰화를 실행한다. 높은 동시성에서 토크나이저(tokenizer)는 요청 생성 뒤에 줄을 선다. 보고되는 토큰 간 지연 시간은 클라이언트 측 토큰화 백로그를 포함한다. 서버가 느리다고 생각하지만, 사실은 테스트 하네스(harness)다.
+Locust는 Python을 사용하며 GIL 아래에서 클라이언트 측 토큰화를 실행한다. 높은 동시성에서 토크나이저(tokenizer)는 요청 생성 뒤에 줄을 선다. 보고되는 토큰 간 지연 시간에는 클라이언트 측 토큰화 백로그가 섞여 들어간다. 서버가 느리다고 생각하지만 사실 느린 것은 테스트 하네스(harness)다.
 
 해결: LLM-Locust 확장은 토큰화를 별도 프로세스로 옮긴다. 또는 컴파일 언어 하네스(k6, tokenizers.rs를 쓰는 LLMPerf)를 쓴다.
 

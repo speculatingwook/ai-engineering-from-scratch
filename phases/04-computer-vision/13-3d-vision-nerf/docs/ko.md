@@ -1,6 +1,6 @@
 # 3D 비전 — 포인트 클라우드와 NeRF (Point Clouds & NeRFs)
 
-> 3D 비전은 두 가지 형태로 온다. 포인트 클라우드(point cloud)는 센서의 원시 출력이다. NeRF는 학습된 체적 필드(volumetric field)다. 둘 다 "공간의 어디에 무엇이 있는가"에 답한다.
+> 3D 비전에는 두 가지 형태가 있다. 포인트 클라우드(point cloud)는 센서의 원시 출력이다. NeRF는 학습된 체적 필드(volumetric field)다. 둘 다 "공간의 어디에 무엇이 있는가"에 답한다.
 
 **Type:** Learn + Build
 **Languages:** Python
@@ -18,9 +18,9 @@
 
 카메라는 2D 이미지를 만든다. LIDAR는 정렬이 없는 3D 점들의 집합을 만든다. SfM(structure-from-motion) 파이프라인(pipeline)은 3D 키포인트(keypoint)의 희소한 클라우드를 만든다. NeRF는 소수의 포즈 이미지로부터 전체 3D 장면을 재구성한다. 이 모든 것이 "비전"이지만, 어느 것도 CNN이 원하는 밀집 텐서(tensor)처럼 보이지 않는다.
 
-3D 비전이 중요한 이유는 거의 모든 고부가가치 로봇 작업이 3D에서 돌아가기 때문이다: 파지(grasping), 장애물 회피, 내비게이션, AR 가림(occlusion), 3D 콘텐츠 캡처. 2D 이미지만 이해하는 비전 엔지니어는 이 분야에서 가장 빠르게 성장하는 부분(AR/VR 콘텐츠, 로보틱스, 자율 주행 스택, 부동산이나 건설을 위한 NeRF 기반 3D 재구성)에서 차단된다.
+3D 비전이 중요한 이유는 거의 모든 고부가가치 로봇 작업이 3D에서 돌아가기 때문이다: 파지(grasping), 장애물 회피, 내비게이션, AR 가림(occlusion), 3D 콘텐츠 캡처. 2D 이미지만 이해하는 비전 엔지니어는 이 분야에서 가장 빠르게 성장하는 영역(AR/VR 콘텐츠, 로보틱스, 자율 주행 스택, 부동산이나 건설을 위한 NeRF 기반 3D 재구성)에 손을 댈 수 없다.
 
-두 표현은 서로 다른 이유로 지배적이다. 포인트 클라우드는 센서가 공짜로 주는 것이다. NeRF와 그 후계자들(3D 가우시안 스플래팅(Gaussian splatting), 신경 SDF)은 신경망에게 장면을 학습하라고 요청했을 때 얻는 것이다.
+두 표현이 지배적인 이유는 서로 다르다. 포인트 클라우드는 센서가 공짜로 내놓는다. NeRF와 그 후계자들(3D 가우시안 스플래팅(Gaussian splatting), 신경 SDF)은 신경망에게 장면을 학습하라고 요청했을 때 얻는다.
 
 ## 개념 (The Concept)
 
@@ -70,7 +70,7 @@ flowchart LR
 
 ### 신경 복사장 (Neural Radiance Fields, NeRFs)
 
-NeRF(Mildenhall et al., 2020)는 "N장의 사진으로 3D 장면을 재구성할 수 있는가?"라는 질문을 가져와, 장면 그 자체인 신경망으로 답했다. 신경망은 `(x, y, z, viewing_direction)`을 `(density, colour)`로 매핑한다. 새로운 뷰를 렌더링하는 것은 이 신경망에 대한 광선 투사 루프다.
+NeRF(Mildenhall et al., 2020)는 "N장의 사진으로 3D 장면을 재구성할 수 있는가?"라는 질문에 장면 그 자체인 신경망으로 답했다. 신경망은 `(x, y, z, viewing_direction)`을 `(density, colour)`로 매핑한다. 새로운 뷰의 렌더링은 이 신경망을 도는 광선 투사 루프다.
 
 ```
 NeRF MLP:  (x, y, z, theta, phi) -> (sigma, r, g, b)

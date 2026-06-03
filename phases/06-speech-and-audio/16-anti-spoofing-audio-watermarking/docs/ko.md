@@ -15,7 +15,7 @@
 2. **오디오 워터마킹(Audio watermarking).** 생성된 오디오에 탐지기가 나중에 추출할 수 있는, 지각되지 않는 신호를 심는다. AudioSeal(Meta)과 WavMark이 오픈 옵션이다.
 3. **인증된 출처(Authenticated provenance).** 오디오 파일 + 메타데이터의 암호학적 서명. C2PA / Content Authenticity Initiative.
 
-탐지는 협조하지 않는 적을 다룬다. 워터마킹은 컴플라이언스를 다룬다 — AI 생성 오디오는 그렇다고 식별 가능해야 한다. 2026년에는 둘 다 필요하다.
+탐지는 협조하지 않는 적을 다룬다. 워터마킹은 컴플라이언스를 다룬다. AI 생성 오디오는 그렇다고 식별 가능해야 한다. 2026년에는 둘 다 필요하다.
 
 ## 개념 (The Concept)
 
@@ -60,11 +60,11 @@ AudioSeal 이전의 오픈 베이스라인. 가역 신경망(invertible neural n
 
 ### WaveVerify (2025년 7월)
 
-AudioSeal의 약점 — 특히 시간적 조작(역재생, 속도) — 을 다룬다. FiLM 기반 생성기 + 전문가 혼합(Mixture-of-Experts) 탐지기를 쓴다. 표준 공격에서 AudioSeal과 경쟁력 있고, 시간적 편집을 다룬다.
+AudioSeal의 약점, 특히 시간적 조작(역재생, 속도)을 다룬다. FiLM 기반 생성기 + 전문가 혼합(Mixture-of-Experts) 탐지기를 쓴다. 표준 공격에서 AudioSeal과 경쟁력 있고, 시간적 편집을 다룬다.
 
 ### 적이 악용하는 빈틈
 
-AudioMarkBench에서: "피치 시프트 하에서 모든 워터마크가 비트 복구 정확도(Bit Recovery Accuracy) 0.6 미만을 보이며, 이는 거의 완전한 제거를 가리킨다." **피치 시프트가 보편적 공격이다.** 2026년의 어떤 워터마크도 공격적인 피치 변조에 완전히 강인하지 않다. 이것이 워터마킹과 함께 탐지(AASIST)가 필요한 이유다.
+AudioMarkBench에서: "피치 시프트 하에서 모든 워터마크가 비트 복구 정확도(Bit Recovery Accuracy) 0.6 미만을 보이며, 이는 거의 완전한 제거를 가리킨다." **피치 시프트가 보편적 공격이다.** 2026년의 어떤 워터마크도 공격적인 피치 변조에 완전히 강인하지 않다. 그래서 워터마킹에는 탐지(AASIST)가 함께 필요하다.
 
 ### C2PA / Content Authenticity Initiative
 

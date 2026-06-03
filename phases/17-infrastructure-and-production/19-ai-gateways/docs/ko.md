@@ -1,6 +1,6 @@
 # AI 게이트웨이(AI Gateways) — LiteLLM, Portkey, Kong AI Gateway, Bifrost
 
-> 게이트웨이(gateway)는 당신의 앱과 모델 프로바이더 사이에 위치한다. 핵심 기능은 프로바이더 라우팅, 폴백(fallback), 재시도, 속도 제한(rate limiting), 시크릿 참조, 관측성(observability), 가드레일(guardrails)이다. 2026년 시장 분할: **LiteLLM**은 100+ 프로바이더, OpenAI 호환의 MIT OSS이지만 ~2000 RPS 부근에서 무너진다(8 GB 메모리, 발표된 벤치마크에서 연쇄 장애). Python, <500 RPS, 개발/프로토타이핑에 최적. **Portkey**는 컨트롤 플레인(control-plane)으로 포지셔닝되어 있고(가드레일, PII 마스킹, 탈옥(jailbreak) 탐지, 감사 추적), 2026년 3월 Apache 2.0 오픈소스가 되었으며, 20-40ms 지연 시간(latency) 오버헤드, 월 $49 프로덕션 티어. **Kong AI Gateway**는 Kong Gateway 위에 구축됨 — Kong 자체 벤치마크에서 같은 12 CPU 기준: Portkey보다 228% 빠르고, LiteLLM보다 859% 빠름. 모델당 월 $100 가격(Plus 티어에서 최대 5개). 이미 Kong을 쓴다면 엔터프라이즈 적합. **Bifrost**(Maxim AI) — 설정 가능한 백오프(backoff)가 있는 자동 재시도, OpenAI 429에서 Anthropic으로 폴백. **Cloudflare / Vercel AI Gateways** — 관리형, 제로 운영(zero-ops), 기본 재시도. 데이터 거주성이 셀프 호스트 결정을 견인한다. Portkey와 Kong은 OSS + 선택적 관리형으로 중간에 위치한다.
+> 게이트웨이(gateway)는 앱과 모델 프로바이더 사이에 위치한다. 핵심 기능은 프로바이더 라우팅, 폴백(fallback), 재시도, 속도 제한(rate limiting), 시크릿 참조, 관측성(observability), 가드레일(guardrails)이다. 2026년 시장 분할: **LiteLLM**은 100+ 프로바이더, OpenAI 호환의 MIT OSS이지만 ~2000 RPS 부근에서 무너진다(8 GB 메모리, 발표된 벤치마크에서 연쇄 장애). Python, <500 RPS, 개발/프로토타이핑에 최적. **Portkey**는 컨트롤 플레인(control-plane)으로 포지셔닝되어 있고(가드레일, PII 마스킹, 탈옥(jailbreak) 탐지, 감사 추적), 2026년 3월 Apache 2.0 오픈소스가 되었으며, 20-40ms 지연 시간(latency) 오버헤드, 월 $49 프로덕션 티어. **Kong AI Gateway**는 Kong Gateway 위에 구축됨 — Kong 자체 벤치마크에서 같은 12 CPU 기준: Portkey보다 228% 빠르고, LiteLLM보다 859% 빠름. 모델당 월 $100 가격(Plus 티어에서 최대 5개). 이미 Kong을 쓴다면 엔터프라이즈 적합. **Bifrost**(Maxim AI) — 설정 가능한 백오프(backoff)가 있는 자동 재시도, OpenAI 429에서 Anthropic으로 폴백. **Cloudflare / Vercel AI Gateways** — 관리형, 제로 운영(zero-ops), 기본 재시도. 셀프 호스트 여부는 데이터 거주성이 좌우한다. Portkey와 Kong은 OSS + 선택적 관리형으로 중간에 위치한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy gateway-routing simulator)
@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-당신의 제품은 OpenAI, Anthropic, 그리고 셀프 호스트 Llama를 호출한다. 각 프로바이더는 다른 SDK, 오류 모델, 속도 제한, 인증 스킴을 갖는다. 당신은 페일오버(OpenAI가 429를 내면 Anthropic 시도), 단일 자격 증명 저장소, 통합 관측성, 테넌트별 속도 제한을 원한다.
+제품이 OpenAI, Anthropic, 셀프 호스트 Llama를 호출한다고 하자. 프로바이더마다 SDK, 오류 모델, 속도 제한, 인증 스킴이 제각각이다. 여기서 필요한 것은 페일오버(OpenAI가 429를 내면 Anthropic 시도), 단일 자격 증명 저장소, 통합 관측성, 테넌트별 속도 제한이다.
 
-이것을 앱 계층에서 재발명하면 모든 서비스가 모든 프로바이더에 결합된다. 게이트웨이 계층은 이를, 프로바이더로 팬아웃(fan out)하는 하나의 API(보통 OpenAI 호환)를 가진 하나의 프로세스로 통합한다.
+이것을 앱 계층에서 재발명하면 모든 서비스가 모든 프로바이더에 결합된다. 게이트웨이 계층은 프로바이더로 팬아웃(fan out)하는 하나의 API(보통 OpenAI 호환)를 갖춘 단일 프로세스로 이를 통합한다.
 
 ## 개념 (The Concept)
 
@@ -105,7 +105,7 @@ Phase 17 · 13(관측성) + 16(모델 라우팅) + 19(게이트웨이)는 프로
 ## 연습 문제 (Exercises)
 
 1. `code/main.py`를 실행하라. OpenAI→Anthropic→셀프 호스트로 폴백을 설정하라. 5% 프로바이더 오류율에서 예상 적중률은 무엇인가?
-2. 당신의 SLA는 300ms 베이스라인에서 TTFT P99 < 200ms다. 어느 게이트웨이가 예산 안에 머무는가?
+2. SLA가 300ms 베이스라인에서 TTFT P99 < 200ms라고 하자. 어느 게이트웨이가 예산 안에 머무는가?
 3. 한 헬스케어 고객이 셀프 호스트 + PII 마스킹 + 감사를 요구한다. Portkey OSS 또는 Kong을 고르라.
 4. LiteLLM 대 Kong을 비교하라: 어느 RPS 상한에서 팀이 마이그레이션해야 하는가?
 5. 멀티 테넌트 SaaS를 위한 속도 제한 정책을 설계하라: 무료 티어, 트라이얼 티어, 유료 티어. 토큰 버킷인가 슬라이딩 윈도우인가?

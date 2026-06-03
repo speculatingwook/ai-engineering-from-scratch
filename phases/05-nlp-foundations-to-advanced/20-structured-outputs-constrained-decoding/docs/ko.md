@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-분류기(classifier)가 LLM에 프롬프트(prompt)한다: "Return one of {positive, negative, neutral}." 모델은 "The sentiment is positive — this review is overwhelmingly favorable because the customer explicitly states that they ..."를 반환한다. 당신의 파서(parser)가 충돌한다. 분류기의 F1이 0.0이다.
+분류기(classifier)가 LLM에 프롬프트(prompt)한다: "Return one of {positive, negative, neutral}." 모델은 "The sentiment is positive — this review is overwhelmingly favorable because the customer explicitly states that they ..."를 반환한다. 파서(parser)가 충돌한다. 분류기의 F1이 0.0이다.
 
 자유 형식 생성은 계약이 아니다. 제안이다. 프로덕션 시스템은 계약이 필요하다.
 
@@ -25,7 +25,7 @@
 
 ![Constrained decoding masking invalid tokens at each step](../assets/constrained-decoding.svg)
 
-**제약 디코딩이 작동하는 방식.** 각 생성 단계에서 LLM은 전체 어휘(~100k 토큰)에 대한 로짓 벡터(vector)를 만든다. *로짓 프로세서(logit processor)*가 모델과 샘플러(sampler) 사이에 자리한다. 그것은 대상 문법(JSON Schema, 정규식, 문맥 자유 문법) 내 현재 위치에서 어떤 토큰이 유효한지 계산하고, 유효하지 않은 모든 토큰의 로짓을 음의 무한대로 설정한다. 남은 로짓에 대한 소프트맥스(softmax)는 유효한 연속(continuation)에만 확률 질량을 둔다.
+**제약 디코딩이 작동하는 방식.** 각 생성 단계에서 LLM은 전체 어휘(~100k 토큰)에 대한 로짓 벡터(vector)를 만든다. *로짓 프로세서(logit processor)*가 모델과 샘플러(sampler) 사이에 자리한다. 로짓 프로세서는 대상 문법(JSON Schema, 정규식, 문맥 자유 문법) 내 현재 위치에서 어떤 토큰이 유효한지 계산하고, 유효하지 않은 모든 토큰의 로짓을 음의 무한대로 설정한다. 남은 로짓에 대한 소프트맥스(softmax)는 유효한 연속(continuation)에만 확률 질량을 둔다.
 
 2026년의 구현:
 
@@ -36,11 +36,11 @@
 
 ### 직관에 반하는 결과
 
-제약 디코딩은 종종 제약 없는 생성보다 *더 빠르다*. 두 가지 이유. 첫째, 다음 토큰 탐색 공간을 줄인다. 둘째, 영리한 구현은 강제된 토큰에 대해서는 토큰 생성을 완전히 건너뛴다(`{"name": "` 같은 골격(scaffolding) — 모든 바이트가 결정되어 있다).
+제약 디코딩은 종종 제약 없는 생성보다 *더 빠르다*. 두 가지 이유. 첫째, 다음 토큰 탐색 공간을 줄인다. 둘째, 영리한 구현은 강제된 토큰의 경우 토큰 생성을 완전히 건너뛴다(`{"name": "` 같은 골격(scaffolding) — 모든 바이트가 결정되어 있다).
 
 ### 당신에게 비용을 치르게 하는 함정
 
-필드 순서가 중요하다. `answer`를 `reasoning` 앞에 두면, 모델은 생각하기 전에 답에 전념한다. JSON은 유효하다. 답은 틀리다. 어떤 검증도 그것을 잡지 못한다.
+필드 순서가 중요하다. `answer`를 `reasoning` 앞에 두면, 모델은 생각하기 전에 답에 전념한다. JSON은 유효하다. 답은 틀리다. 어떤 검증도 이를 잡지 못한다.
 
 ```json
 // BAD
@@ -153,9 +153,9 @@ print(response.output_parsed)
 
 - **재귀 스키마(Recursive schemas).** Outlines는 재귀를 고정 깊이로 평탄화한다. 트리 구조 출력(중첩 댓글, AST)에는 XGrammar나 llguidance(CFG 기반)가 필요하다.
 - **거대한 enum.** 10,000개 옵션 enum은 느리게 컴파일되거나 타임아웃된다. 검색기로 전환하라: 먼저 상위 k개 후보를 예측하고, 그것들로 제약하라.
-- **너무 엄격한 문법.** `date: "YYYY-MM-DD"` 정규식을 강제하면 모델이 누락된 날짜에 대해 `"unknown"`을 출력할 수 없다. 모델은 날짜를 지어내어 보상한다. `null`이나 센티넬(sentinel)을 허용하라.
+- **너무 엄격한 문법.** `date: "YYYY-MM-DD"` 정규식을 강제하면 모델이 누락된 날짜에 대해 `"unknown"`을 출력할 수 없다. 그러면 모델은 날짜를 지어내어 보상한다. `null`이나 센티넬(sentinel)을 허용하라.
 - **성급한 전념(Premature commitment).** 위의 필드 순서 함정을 보라. 항상 추론을 먼저 두라.
-- **스키마 없는 벤더 JSON 모드.** 순수 JSON 모드는 유효한 JSON만 보장하지, *당신의 사용 사례에 유효함*을 보장하지 않는다. 항상 전체 스키마를 제공하라.
+- **스키마 없는 벤더 JSON 모드.** 순수 JSON 모드는 유효한 JSON만 보장하지, *사용 사례에 유효함*을 보장하지 않는다. 항상 전체 스키마를 제공하라.
 
 ## 라이브러리로 써보기 (Use It)
 

@@ -1,6 +1,6 @@
 # 프로덕션에서의 MCP 인증 — iii 프리미티브 위에서 DCR, JWKS 회전, 오디언스 고정 토큰
 
-> 레슨 16은 OAuth 2.1 상태 머신(state machine)을 메모리에 세웠다. 2026년에는 실제 조직에 출하하는 모든 MCP 서버가 프로덕션(production) 인증 뒤에 자리한다: 동적 클라이언트 등록(dynamic client registration)(RFC 7591), 인가 서버 메타데이터 디스커버리(RFC 8414), 새벽 3시의 토큰 검증을 깨뜨리지 않는 JWKS 회전, 그리고 혼동된 대리자(confused-deputy) 재사용을 거부하는 오디언스 고정(audience-pinned) 토큰. 이 레슨은 이 모든 것을 iii 프리미티브를 통해 연결한다 — HTTP와 cron을 위한 `iii.registerTrigger`, 인증 로직을 위한 `iii.registerFunction`, 캐시된 키를 위한 `state::set/get` — 그래서 인증 표면이 엔진의 다른 모든 워크로드처럼 관찰 가능하고, 재시작 가능하고, 재생 가능하다.
+> 레슨 16은 OAuth 2.1 상태 머신(state machine)을 메모리에 세웠다. 2026년에는 실제 조직에 출하하는 모든 MCP 서버가 프로덕션(production) 인증 뒤에 자리한다. 동적 클라이언트 등록(dynamic client registration)(RFC 7591), 인가 서버 메타데이터 디스커버리(RFC 8414), 새벽 3시의 토큰 검증을 깨뜨리지 않는 JWKS 회전, 혼동된 대리자(confused-deputy) 재사용을 거부하는 오디언스 고정(audience-pinned) 토큰이 그것이다. 이 레슨은 이 모든 것을 iii 프리미티브로 연결한다. HTTP와 cron을 위한 `iii.registerTrigger`, 인증 로직을 위한 `iii.registerFunction`, 캐시된 키를 위한 `state::set/get`을 엮어, 인증 표면이 엔진의 다른 모든 워크로드처럼 관찰 가능하고 재시작 가능하며 재생 가능하도록 만든다.
 
 **Type:** Build
 **Languages:** Python (stdlib, iii primitives mocked for the lesson environment)
@@ -9,10 +9,10 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- RFC 8414 메타데이터를 통해 인가 서버를 디스커버리하고 계약(contract)을 검증하기.
+- RFC 8414 메타데이터로 인가 서버를 디스커버리하고 계약(contract)을 검증하기.
 - MCP 클라이언트가 관리자 개입 없이 등록되도록 RFC 7591 동적 클라이언트 등록 구현하기.
-- 서명 검증이 키 롤오버(roll-over)에서 살아남도록 cron 트리거를 사용해 JWKS 키를 캐싱하고 회전하기.
-- RFC 8707 리소스 인디케이터(resource indicator)를 사용해 토큰을 단일 MCP 리소스에 고정하고 혼동된 대리자 재사용을 거부하기.
+- 서명 검증이 키 롤오버(roll-over)에서 살아남도록 cron 트리거로 JWKS 키를 캐싱하고 회전하기.
+- RFC 8707 리소스 인디케이터(resource indicator)로 토큰을 단일 MCP 리소스에 고정하고 혼동된 대리자 재사용을 거부하기.
 - 모든 엔드포인트와 백그라운드 작업을 iii 프리미티브로 연결하기 — HTTP 트리거, cron 트리거, 명명된 함수, `state::*` 읽기 — 그래서 단 한 번의 재시작이 인증 표면을 재구축한다.
 - IdP 역량 매트릭스를 읽고, IdP가 MCP의 인증 프로파일(profile)을 만족하지 못할 때 배포를 거부하기.
 
@@ -20,13 +20,13 @@
 
 레슨 16의 시뮬레이터는 OAuth 2.1을 메모리에서 실행한다. 프로덕션에는 메모리 전용 시뮬레이터가 보지 못하는 세 가지 운영상의 빈틈이 있다.
 
-첫 번째 빈틈은 등록(enrollment)이다. 실제 조직은 수백 개의 MCP 서버와 수천 개의 MCP 클라이언트를 운영한다. 운영자는 모든 Cursor 사용자를 OAuth 클라이언트로 일일이 손으로 등록하지 않는다. RFC 7591 동적 클라이언트 등록은 클라이언트가 인가 서버에 대해 `POST /register`를 하고 그 자리에서 `client_id`(그리고 선택적으로 `client_secret`)를 받게 해준다. 서버는 RFC 8414 메타데이터에 `registration_endpoint`를 게시하고; 클라이언트는 대역 외(out-of-band) 구성 없이 그것을 디스커버리한다.
+첫 번째 빈틈은 등록(enrollment)이다. 실제 조직은 수백 개의 MCP 서버와 수천 개의 MCP 클라이언트를 운영한다. 운영자는 모든 Cursor 사용자를 OAuth 클라이언트로 일일이 손으로 등록하지 않는다. RFC 7591 동적 클라이언트 등록은 클라이언트가 인가 서버에 대해 `POST /register`를 하고 그 자리에서 `client_id`(그리고 선택적으로 `client_secret`)를 받게 해준다. 서버는 RFC 8414 메타데이터에 `registration_endpoint`를 게시하고, 클라이언트는 대역 외(out-of-band) 구성 없이 그것을 디스커버리한다.
 
-두 번째 빈틈은 키 회전이다. JWT 검증은 인가 서버의 서명 키에 의존하며, 이는 JSON Web Key Set(JWKS)으로 게시된다. 인가 서버는 이를 일정에 따라 회전한다(종종 매시간, 사고 대응 중에는 더 빠르게). 부팅 시 JWKS를 한 번만 가져오는 MCP 서버는 회전 윈도우 전까지는 잘 검증하다가 — 그 이후로는 재시작할 때까지 모든 요청이 실패한다. 프로덕션은 JWKS를 캐시된 값으로 연결하고, 이전 키가 만료되기 전에 캐시를 덮어쓰는 갱신 작업을 두며, 캐시보다 새로운 키로 서명된 토큰이 도착하는 경우를 위해 캐시 미스(cache miss) 시 폴백(fall-back) 가져오기를 추가한다.
+두 번째 빈틈은 키 회전이다. JWT 검증은 인가 서버의 서명 키에 의존하며, 이 키는 JSON Web Key Set(JWKS)으로 게시된다. 인가 서버는 이를 일정에 따라 회전한다(종종 매시간, 사고 대응 중에는 더 빠르게). 부팅 시 JWKS를 한 번만 가져오는 MCP 서버는 회전 윈도우 전까지는 잘 검증하다가, 그 이후로는 재시작할 때까지 모든 요청이 실패한다. 프로덕션은 JWKS를 캐시된 값으로 연결하고, 이전 키가 만료되기 전에 캐시를 덮어쓰는 갱신 작업을 두며, 캐시보다 새로운 키로 서명된 토큰이 도착하는 경우를 위해 캐시 미스(cache miss) 시 폴백(fall-back) 가져오기를 추가한다.
 
-세 번째 빈틈은 오디언스 바인딩(audience binding)이다. 레슨 16은 RFC 8707 리소스 인디케이터를 소개했다. 프로덕션에서는 그 인디케이터가 모든 요청에 대한 강력한 클레임(claim) 검사가 된다. MCP 서버는 `token.aud`를 자신의 표준(canonical) 리소스 URL과 비교하고 불일치를 HTTP 401로 거부한다. 이것은 동일한 신뢰 메시(trust mesh) 내에서 한 서버용으로 발급된 토큰을 다른 서버에 대해 재생하는 업스트림 MCP 서버(또는 한 서버용 토큰을 쥔 악성 클라이언트)에 대한 유일한 방어다.
+세 번째 빈틈은 오디언스 바인딩(audience binding)이다. 레슨 16은 RFC 8707 리소스 인디케이터를 소개했다. 프로덕션에서는 그 인디케이터가 모든 요청에 대한 강력한 클레임(claim) 검사가 된다. MCP 서버는 `token.aud`를 자신의 표준(canonical) 리소스 URL과 비교하고 불일치를 HTTP 401로 거부한다. 이것은 동일한 신뢰 메시(trust mesh) 안에서 한 서버용으로 발급된 토큰을 다른 서버에 대해 재생하는 업스트림 MCP 서버(또는 한 서버용 토큰을 쥔 악성 클라이언트)에 대한 유일한 방어다.
 
-이 레슨은 그 빈틈 하나하나를 iii 프리미티브로 다룬다. 메타데이터 문서는 어떤 함수의 출력을 반환하는 HTTP 트리거다. JWKS 회전은 `auth::rotate-jwks`를 호출하는 cron 트리거이며, 이는 `state::set("auth/jwks/<issuer>", ...)`에 기록한다. JWT 검증은 다른 곳에서 `iii.trigger("auth::validate-jwt", token)`로 호출하는 함수다. MCP 서버 자체는 디스패치(dispatch) 전에 검증을 호출하는 또 하나의 HTTP 트리거일 뿐이다. 엔진을 재시작하라: 트리거 레지스트리가 재구축되고; 상태가 살아남으며; 인증 표면은 수동 조정 없이 작동한다.
+이 레슨은 그 빈틈 하나하나를 iii 프리미티브로 다룬다. 메타데이터 문서는 어떤 함수의 출력을 반환하는 HTTP 트리거다. JWKS 회전은 `auth::rotate-jwks`를 호출하는 cron 트리거이며, 이는 `state::set("auth/jwks/<issuer>", ...)`에 기록한다. JWT 검증은 다른 곳에서 `iii.trigger("auth::validate-jwt", token)`로 호출하는 함수다. MCP 서버 자체는 디스패치(dispatch) 전에 검증을 호출하는 또 하나의 HTTP 트리거일 뿐이다. 엔진을 재시작하면 트리거 레지스트리가 재구축되고, 상태가 살아남으며, 인증 표면은 수동 조정 없이 작동한다.
 
 ## 개념 (The Concept)
 
@@ -49,7 +49,7 @@
 }
 ```
 
-MCP 리소스 URL을 받은 클라이언트는 디스커버리를 연쇄한다: RFC 9728의 `oauth-protected-resource`(리소스 서버의 문서)가 발급자(issuer)를 명명하고, 그다음 `oauth-authorization-server`(이 RFC)가 모든 엔드포인트를 명명한다. 클라이언트는 인가 URL을 결코 하드코딩하지 않는다.
+MCP 리소스 URL을 받은 클라이언트는 디스커버리를 연쇄한다. RFC 9728의 `oauth-protected-resource`(리소스 서버의 문서)가 발급자(issuer)를 명명하고, 그다음 `oauth-authorization-server`(이 RFC)가 모든 엔드포인트를 명명한다. 클라이언트는 인가 URL을 결코 하드코딩하지 않는다.
 
 MCP를 위해 IdP를 신뢰하기 전에 검증하는 계약:
 
@@ -62,7 +62,7 @@ MCP를 위해 IdP를 신뢰하기 전에 검증하는 계약:
 
 ### RFC 9728 (복습) — 보호된 리소스 메타데이터
 
-레슨 16이 RFC 9728을 다뤘다. 프로덕션에서의 차이: 이 문서는 클라이언트가 *이* MCP 서버가 신뢰하는 인가 서버를 찾기 위해 보는 유일한 곳이다. 단일 MCP 서버가 여러 IdP의 토큰을 받아들일 수 있다(직원용 하나, 파트너용 하나). RFC 9728은 그 집합을 선언하고; RFC 8414는 각 IdP가 무엇을 지원하는지 문서화한다.
+레슨 16이 RFC 9728을 다뤘다. 프로덕션에서의 차이: 이 문서는 클라이언트가 *이* MCP 서버가 신뢰하는 인가 서버를 찾기 위해 보는 유일한 곳이다. 단일 MCP 서버가 여러 IdP의 토큰을 받아들일 수 있다(직원용 하나, 파트너용 하나). RFC 9728은 그 집합을 선언하고, RFC 8414는 각 IdP가 무엇을 지원하는지 문서화한다.
 
 ```json
 {
@@ -107,17 +107,17 @@ Content-Type: application/json
 }
 ```
 
-`token_endpoint_auth_method: none`은 사용자의 기기에서 실행되는 MCP 클라이언트에 올바른 기본값이다. 그들은 `client_id`만 받는다 — 유출될 `client_secret`이 없다. PKCE가 퍼블릭 클라이언트(public client)에 필요한 소유 증명(proof-of-possession)을 제공한다.
+`token_endpoint_auth_method: none`은 사용자의 기기에서 실행되는 MCP 클라이언트에 올바른 기본값이다. 이들은 `client_id`만 받으며, 유출될 `client_secret`이 없다. PKCE가 퍼블릭 클라이언트(public client)에 필요한 소유 증명(proof-of-possession)을 제공한다.
 
 세 가지 프로덕션 함정:
 
-- 등록 엔드포인트는 출처 IP별로 속도 제한을 해야 한다. 그렇지 않으면 적대적 행위자가 수백만 개의 가짜 등록을 스크립트로 만들어 `client_id` 네임스페이스를 고갈시킨다. iii는 이를 간단하게 만든다: 등록 HTTP 트리거가 등록기(registrar)로 디스패치하기 전에 `auth::rate-limit` 함수를 호출한다.
-- `software_statement`(클라이언트를 보증하는 서명된 JWT)는 일부 엔터프라이즈 IdP에서 요구된다. 레슨의 목(mock)은 이를 건너뛰고; 프로덕션은 localhost 리다이렉트 URI가 아닌 곳에서 온 서명되지 않은 등록을 거부하는 검증 단계를 연결한다.
-- `registration_access_token`은 평문이 아니라 해시로 저장해야 한다. 이 토큰의 도난은 공격자가 클라이언트의 리다이렉트 URI를 다시 쓸 수 있음을 뜻한다.
+- 등록 엔드포인트는 출처 IP별로 속도 제한을 해야 한다. 그렇지 않으면 적대적 행위자가 수백만 개의 가짜 등록을 스크립트로 만들어 `client_id` 네임스페이스를 고갈시킨다. iii는 이를 간단하게 만든다. 등록 HTTP 트리거가 등록기(registrar)로 디스패치하기 전에 `auth::rate-limit` 함수를 호출한다.
+- `software_statement`(클라이언트를 보증하는 서명된 JWT)는 일부 엔터프라이즈 IdP에서 요구된다. 레슨의 목(mock)은 이를 건너뛰고, 프로덕션은 localhost 리다이렉트 URI가 아닌 곳에서 온 서명되지 않은 등록을 거부하는 검증 단계를 연결한다.
+- `registration_access_token`은 평문이 아니라 해시로 저장해야 한다. 이 토큰을 도난당하면 공격자가 클라이언트의 리다이렉트 URI를 다시 쓸 수 있다.
 
 ### RFC 8707 (복습) — 리소스 인디케이터
 
-레슨 16이 형태를 확립했다. 프로덕션 규칙: 모든 토큰 요청이 `resource=<canonical-mcp-url>`을 포함하고, MCP 서버는 모든 호출에서 `token.aud`가 자신의 리소스 URL과 일치하는지 검증한다. MCP 서버가 `https://notes.example.com/mcp`에서 도달 가능하다면, 표준 URL은 `https://notes.example.com`이다 — 경로 컴포넌트는 제외되어 단일 서버가 하나의 오디언스 아래 여러 경로를 호스팅한다.
+레슨 16이 형태를 확립했다. 프로덕션 규칙: 모든 토큰 요청이 `resource=<canonical-mcp-url>`을 포함하고, MCP 서버는 모든 호출에서 `token.aud`가 자신의 리소스 URL과 일치하는지 검증한다. MCP 서버가 `https://notes.example.com/mcp`에서 도달 가능하다면, 표준 URL은 `https://notes.example.com`이다. 경로 컴포넌트는 제외되어 단일 서버가 하나의 오디언스 아래 여러 경로를 호스팅한다.
 
 ### RFC 7636 (복습) — PKCE
 
@@ -134,7 +134,7 @@ MCP 스펙(2025-11-25)은 MCP 서버의 인가 계층이 무엇을 해야 하는
 - `aud`가 표준 리소스와 일치하지 않는 토큰을 거부한다.
 - `iss`가 보호된 리소스 메타데이터의 `authorization_servers` 목록에 없는 토큰을 거부한다.
 
-OAuth 2.1 초안이 기반(substrate)이고; RFC 8414/7591/8707/9728 + RFC 7636이 표면(surface)이며; MCP 스펙이 프로파일이다.
+OAuth 2.1 초안이 기반(substrate)이고, RFC 8414/7591/8707/9728 + RFC 7636이 표면(surface)이며, MCP 스펙이 프로파일이다.
 
 ### IdP 역량 매트릭스
 
@@ -162,7 +162,7 @@ iii.registerTrigger(
 )
 ```
 
-6시간마다 cron 트리거가 `auth::rotate-jwks`를 호출하고, 이는 `<issuer>/.well-known/jwks.json`을 가져와 `state::set("auth/jwks/<issuer>", {keys, fetched_at})`에 기록한다. 검증자는 `state::get`에서 읽는다. `kid`가 캐시에서 누락된 토큰은 폴백으로 동기적 `auth::rotate-jwks` 호출을 촉발한다. 이는 두 경우를 한 번에 처리한다: 예약된 회전(cron)과 키 중첩 윈도우(동기 폴백).
+6시간마다 cron 트리거가 `auth::rotate-jwks`를 호출하고, 이는 `<issuer>/.well-known/jwks.json`을 가져와 `state::set("auth/jwks/<issuer>", {keys, fetched_at})`에 기록한다. 검증자는 `state::get`에서 읽는다. `kid`가 캐시에서 누락된 토큰은 폴백으로 동기적 `auth::rotate-jwks` 호출을 촉발한다. 이렇게 예약된 회전(cron)과 키 중첩 윈도우(동기 폴백)라는 두 경우를 한 번에 처리한다.
 
 상태 형태:
 
@@ -178,7 +178,7 @@ iii.registerTrigger(
 }
 ```
 
-한 번에 두 개의 키가 정상 상태(steady state)다. 인가 서버는 이전 키(`k_2026_03`)를 폐기하기 전에 다음 키(`k_2026_04`)를 도입하는 방식으로 회전하므로, 옛 키로 발급된 토큰은 만료될 때까지 유효하게 유지된다. 캐시는 합집합을 보유하고; 검증자는 `kid`로 선택한다.
+한 번에 두 개의 키가 정상 상태(steady state)다. 인가 서버는 이전 키(`k_2026_03`)를 폐기하기 전에 다음 키(`k_2026_04`)를 도입하는 방식으로 회전하므로, 옛 키로 발급된 토큰은 만료될 때까지 유효하게 유지된다. 캐시는 합집합을 보유하고, 검증자는 `kid`로 선택한다.
 
 ### iii 프리미티브 연결 (이 레슨이 실제로 다루는 부분)
 
@@ -235,14 +235,14 @@ if not result["valid"]:
 3. `aud == "https://tasks.example.com"`을 확인한다. (실패 — 토큰의 `aud`는 `https://notes.example.com`이다.)
 4. `WWW-Authenticate: Bearer error="invalid_token", error_description="audience mismatch"`와 함께 401을 반환한다.
 
-오디언스 클레임은 프로토콜 계층에서 이 공격에 대한 유일한 방어다. 성능을 위해 이를 건너뛰는 것이 가장 흔한 프로덕션 실수다; 검증자는 세션 시작 시점뿐 아니라 모든 요청에서 실행되어야 한다.
+오디언스 클레임은 프로토콜 계층에서 이 공격에 대한 유일한 방어다. 성능을 위해 이를 건너뛰는 것이 가장 흔한 프로덕션 실수다. 검증자는 세션 시작 시점뿐 아니라 모든 요청에서 실행되어야 한다.
 
 ### 실패 모드
 
 - **오래된 JWKS.** 검증자가 키 회전 후 유효한 토큰을 거부한다. 해결책은 위의 cron+폴백 패턴이다. 갱신 작업 없이 JWKS를 절대 캐시하지 말라.
 - **누락된 `aud` 클레임.** 일부 IdP는 토큰 요청에 `resource`가 없으면 기본적으로 `aud`를 생략한다. 검증자는 `aud`가 누락된 토큰을 거부해야 하며, 부재를 와일드카드로 취급해서는 안 된다.
 - **스코프 업그레이드 레이스.** 동일 사용자에 대한 두 개의 동시 스텝업(step-up) 흐름이 둘 다 성공해 서로 다른 스코프를 가진 두 개의 액세스 토큰을 만들 수 있다. 검증자는 "사용자의 현재 스코프"를 조회하지 말고 요청에 제시된 토큰을 사용해야 한다 — 전자는 TOCTOU 윈도우를 만든다.
-- **등록 토큰 도난.** 유출된 `registration_access_token`은 공격자가 리다이렉트 URI를 다시 쓰게 한다. 저장 시 해시하고; 모든 업데이트에서 클라이언트가 평문을 제시하도록 요구하고; 의심 시 회전하라.
+- **등록 토큰 도난.** 유출된 `registration_access_token`은 공격자가 리다이렉트 URI를 다시 쓰게 한다. 저장 시 해시하고, 모든 업데이트에서 클라이언트가 평문을 제시하도록 요구하고, 의심 시 회전하라.
 - **`iss` 미고정.** 임의의 `iss`를 받아들이는 검증자는 공격자가 자신의 인가 서버를 세우고, 대상 오디언스용 클라이언트를 등록하고, 토큰을 발급하게 한다. 보호된 리소스 메타데이터의 `authorization_servers` 목록이 허용 목록(allow-list)이다; 이를 강제하라.
 
 ## 라이브러리로 써보기 (Use It)
@@ -259,7 +259,7 @@ if not result["valid"]:
 8. 다음 호출이 재시작 없이 새 키로 검증한다.
 9. 다른 MCP 리소스에 대한 혼동된 대리자 시도가 오디언스 불일치로 401을 받는다.
 
-여기 목 JWT는 공유 비밀(shared secret)과 함께 HS256을 사용한다(그래서 레슨이 stdlib만으로 실행된다). 프로덕션은 위의 JWKS 패턴과 함께 RS256 또는 EdDSA를 사용한다; 그 외 검증 로직은 동일하다.
+여기 목 JWT는 공유 비밀(shared secret)과 함께 HS256을 사용한다(그래서 레슨이 stdlib만으로 실행된다). 프로덕션은 위의 JWKS 패턴과 함께 RS256 또는 EdDSA를 사용하며, 그 외 검증 로직은 동일하다.
 
 ## 산출물 (Ship It)
 

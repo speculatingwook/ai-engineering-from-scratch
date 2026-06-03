@@ -414,7 +414,7 @@ print(f"Softmax: {probs}")
 print(f"Log-softmax: {log_probs}")
 ```
 
-당신은 이것들을 밑바닥부터 만들었다. 이제 라이브러리 호출이 무엇을 하는지 안다.
+이것들을 밑바닥부터 직접 만들어 봤다. 이제 라이브러리 호출이 무엇을 하는지 안다.
 
 ## 연습 문제 (Exercises)
 

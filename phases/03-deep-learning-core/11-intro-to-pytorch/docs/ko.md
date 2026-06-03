@@ -1,6 +1,6 @@
 # PyTorch 입문 (Introduction to PyTorch)
 
-> 당신은 피스톤과 크랭크축으로 엔진을 만들었다. 이제 모두가 실제로 운전하는 그것을 배워라.
+> 피스톤과 크랭크축으로 엔진을 직접 만들어 봤다. 이제 세상 모두가 실제로 모는 차를 배울 차례다.
 
 **Type:** Build
 **Languages:** Python
@@ -16,15 +16,15 @@
 
 ## 문제 (The Problem)
 
-당신에게는 작동하는 미니 프레임워크가 있다. Linear 층(layer), ReLU, 드롭아웃(dropout), 배치 정규화(batch norm), Adam, DataLoader, 학습 루프. 그것은 원 분류(circle classification) 문제에 4층 신경망을 순수 Python으로 학습시킨다.
+이제 작동하는 미니 프레임워크가 손에 있다. Linear 층(layer), ReLU, 드롭아웃(dropout), 배치 정규화(batch norm), Adam, DataLoader, 학습 루프. 이 프레임워크는 원 분류(circle classification) 문제에 4층 신경망을 순수 Python으로 학습시킨다.
 
-그것은 또한 같은 문제에서 PyTorch보다 500배 느리다.
+그런데 같은 문제에서 PyTorch보다 500배 느리다.
 
-당신의 미니 프레임워크는 중첩된 Python 루프로 한 번에 한 샘플씩 처리한다. PyTorch는 같은 연산을 GPU에서 돌아가는 최적화된 C++/CUDA 커널에 디스패치한다. 단일 NVIDIA A100에서, PyTorch는 ImageNet(128만 장의 이미지)에 ResNet-50(2,560만 파라미터(parameter))을 약 6시간에 학습시킨다. 당신의 프레임워크는 같은 과제에 대략 3,000시간이 걸릴 것이다 -- 메모리가 먼저 동나지 않는다면.
+미니 프레임워크는 중첩된 Python 루프로 한 번에 한 샘플씩 처리한다. PyTorch는 같은 연산을 GPU에서 돌아가는 최적화된 C++/CUDA 커널에 디스패치한다. 단일 NVIDIA A100에서 PyTorch는 ImageNet(128만 장의 이미지)에 ResNet-50(2,560만 파라미터(parameter))을 약 6시간에 학습시킨다. 같은 과제를 미니 프레임워크로 돌리면 대략 3,000시간이 걸린다. 메모리가 먼저 동나지 않는다면 말이다.
 
-속도가 유일한 격차는 아니다. 당신의 프레임워크에는 GPU 지원이 없다. 자동 미분이 없다 -- 모든 모듈에 대해 backward()를 손으로 작성했다. 직렬화가 없다. 분산 학습이 없다. 혼합 정밀도(mixed precision)가 없다. print 문 없이 그래디언트(gradient) 흐름을 디버깅할 방법이 없다.
+속도가 유일한 격차는 아니다. 미니 프레임워크에는 GPU 지원이 없다. 자동 미분도 없어서 모든 모듈에 대해 backward()를 손으로 작성했다. 직렬화가 없다. 분산 학습이 없다. 혼합 정밀도(mixed precision)가 없다. print 문 없이 그래디언트(gradient) 흐름을 디버깅할 방법이 없다.
 
-PyTorch는 이 모든 격차를 메운다. 그리고 당신이 이미 만든 바로 그 멘탈 모델을 유지하면서 그렇게 한다: Module, forward(), parameters(), backward(), optimizer.step(). 개념이 일대일로 전이된다. 문법이 거의 동일하다. 차이는 PyTorch가 당신이 밑바닥부터 설계한 같은 인터페이스 뒤에 10년의 시스템 엔지니어링을 감싸 놓았다는 것이다.
+PyTorch는 이 모든 격차를 메운다. 그것도 이미 익힌 바로 그 멘탈 모델을 그대로 유지한 채로 메운다: Module, forward(), parameters(), backward(), optimizer.step(). 개념이 일대일로 전이된다. 문법이 거의 동일하다. 차이라면, PyTorch가 밑바닥부터 직접 설계한 그 인터페이스 뒤에 10년의 시스템 엔지니어링을 감싸 놓았다는 것이다.
 
 ## 개념 (The Concept)
 
@@ -32,11 +32,11 @@ PyTorch는 이 모든 격차를 메운다. 그리고 당신이 이미 만든 바
 
 2015년, TensorFlow는 무언가를 실행하기 전에 정적 계산 그래프(static computation graph)를 정의하도록 요구했다. 그래프를 만들고, 컴파일하고, 그다음 데이터를 흘려보냈다. 디버깅은 그래프 시각화를 노려보는 것이었다. 아키텍처를 바꾸는 것은 그래프를 밑바닥부터 다시 만드는 것이었다.
 
-PyTorch는 2017년에 다른 철학으로 출범했다: 즉시 실행(eager execution). 당신은 Python을 쓴다. 그것은 즉시 돌아간다. `y = model(x)`는 "나중에 y를 계산할 노드를 그래프에 추가"하는 게 아니라 지금 당장 y를 실제로 계산한다. 이는 표준 Python 디버깅 도구가 작동한다는 뜻이었다. print()가 작동했다. pdb가 작동했다. 순방향 패스(forward pass)의 if/else가 작동했다.
+PyTorch는 2017년에 다른 철학으로 출범했다: 즉시 실행(eager execution). Python을 쓰면 그대로 즉시 돌아간다. `y = model(x)`는 "나중에 y를 계산할 노드를 그래프에 추가"하는 게 아니라 지금 당장 y를 실제로 계산한다. 표준 Python 디버깅 도구가 작동한다는 뜻이었다. print()가 작동했다. pdb가 작동했다. 순방향 패스(forward pass)의 if/else가 작동했다.
 
-2020년에 이르러, 시장이 답했다. ML 연구 논문에서 PyTorch의 점유율은 7%(2017)에서 75% 이상(2022)으로 갔다. Meta, Google DeepMind, OpenAI, Anthropic, Hugging Face 모두 PyTorch를 주력 프레임워크로 쓴다. TensorFlow 2.x는 이에 대응해 즉시 실행을 채택했다 -- PyTorch의 설계가 옳았다는 암묵적 인정이다.
+2020년에 이르러 시장이 답했다. ML 연구 논문에서 PyTorch의 점유율은 7%(2017)에서 75% 이상(2022)으로 올라갔다. Meta, Google DeepMind, OpenAI, Anthropic, Hugging Face 모두 PyTorch를 주력 프레임워크로 쓴다. TensorFlow 2.x는 이에 대응해 즉시 실행을 채택했는데, PyTorch의 설계가 옳았다는 암묵적 인정이다.
 
-교훈은: 개발자 경험은 복리로 쌓인다는 것이다. 10% 더 느리지만 디버깅이 50% 더 빠른 프레임워크가 매번 이긴다.
+교훈은 이렇다. 개발자 경험은 복리로 쌓인다. 10% 더 느리지만 디버깅이 50% 더 빠른 프레임워크가 매번 이긴다.
 
 ### 텐서 (Tensors)
 
@@ -70,9 +70,9 @@ x = x.to("cuda")
 x = x.cpu()
 ```
 
-모든 연산은 모든 텐서가 같은 디바이스에 있기를 요구한다. 이것은 초보자가 부딪히는 1순위 PyTorch 오류다: `RuntimeError: Expected all tensors to be on the same device`. 계산 전에 모든 것을 같은 디바이스로 옮겨 고친다.
+모든 연산은 모든 텐서가 같은 디바이스에 있기를 요구한다. 초보자가 부딪히는 1순위 PyTorch 오류가 여기서 나온다: `RuntimeError: Expected all tensors to be on the same device`. 계산 전에 모든 것을 같은 디바이스로 옮기면 고쳐진다.
 
-**리셰이핑(reshaping)**은 상수 시간이다 -- 데이터가 아니라 메타데이터를 바꾼다.
+**리셰이핑(reshaping)**은 상수 시간이다. 데이터가 아니라 메타데이터를 바꾸기 때문이다.
 
 ```python
 x = torch.randn(2, 3, 4)
@@ -85,7 +85,7 @@ x.squeeze()        # remove size-1 dimensions
 
 ### 자동 미분 (Autograd)
 
-당신의 미니 프레임워크는 모든 모듈에 대해 backward()를 구현하도록 요구했다. PyTorch는 그렇지 않다. 텐서에 대한 모든 연산을 방향성 비순환 그래프(directed acyclic graph, 계산 그래프(computational graph))에 기록한 뒤, 그 그래프를 역방향으로 순회하여 그래디언트를 자동으로 계산한다.
+미니 프레임워크는 모든 모듈에 대해 backward()를 구현하도록 요구했다. PyTorch는 그렇지 않다. 텐서에 대한 모든 연산을 방향성 비순환 그래프(directed acyclic graph, 계산 그래프(computational graph))에 기록한 뒤, 그 그래프를 역방향으로 순회하여 그래디언트를 자동으로 계산한다.
 
 ```mermaid
 graph LR
@@ -100,7 +100,7 @@ graph LR
     mul --> |"grad"| w
 ```
 
-당신의 프레임워크와의 핵심 차이: PyTorch는 테이프 기반 자동 미분(tape-based autodiff)을 쓴다. 모든 연산이 순방향 패스 동안 "테이프"에 덧붙는다. `.backward()`를 호출하면 테이프를 역방향으로 재생한다.
+미니 프레임워크와의 핵심 차이는 이렇다. PyTorch는 테이프 기반 자동 미분(tape-based autodiff)을 쓴다. 모든 연산이 순방향 패스 동안 "테이프"에 덧붙는다. `.backward()`를 호출하면 테이프를 역방향으로 재생한다.
 
 ```python
 x = torch.randn(3, requires_grad=True)
@@ -113,12 +113,12 @@ print(x.grad)  # dz/dx = 2x + 3
 자동 미분의 세 가지 규칙:
 
 1. `requires_grad=True`인 리프(leaf) 텐서만 그래디언트를 누적한다
-2. 그래디언트는 기본적으로 누적된다 -- 매 역방향 패스 전에 `optimizer.zero_grad()`를 호출하라
+2. 그래디언트는 기본적으로 누적되므로, 매 역방향 패스 전에 `optimizer.zero_grad()`를 호출하라
 3. `torch.no_grad()`는 그래디언트 추적을 끈다(평가 중에 사용)
 
 ### nn.Module
 
-`nn.Module`은 PyTorch의 모든 신경망 컴포넌트의 베이스 클래스다. 당신은 이미 Lesson 10에서 이 추상화를 만들었다. PyTorch의 버전은 자동 파라미터 등록, 재귀적 모듈 발견, 디바이스 관리, state dict 직렬화를 추가한다.
+`nn.Module`은 PyTorch의 모든 신경망 컴포넌트의 베이스 클래스다. 이 추상화는 이미 Lesson 10에서 직접 만들어 봤다. PyTorch의 버전은 여기에 자동 파라미터 등록, 재귀적 모듈 발견, 디바이스 관리, state dict 직렬화를 더한다.
 
 ```python
 import torch.nn as nn
@@ -137,7 +137,7 @@ class MLP(nn.Module):
         return x
 ```
 
-`__init__`에서 `nn.Module`이나 `nn.Parameter`를 속성으로 할당하면, PyTorch가 자동으로 등록한다. `model.parameters()`는 등록된 모든 파라미터를 재귀적으로 모은다. 이것이 당신이 미니 프레임워크에서처럼 가중치(weight)를 수동으로 모을 필요가 절대 없는 이유다.
+`__init__`에서 `nn.Module`이나 `nn.Parameter`를 속성으로 할당하면 PyTorch가 자동으로 등록한다. `model.parameters()`는 등록된 모든 파라미터를 재귀적으로 모은다. 미니 프레임워크에서처럼 가중치(weight)를 수동으로 모을 필요가 전혀 없는 이유가 여기에 있다.
 
 핵심 빌딩 블록:
 
@@ -154,7 +154,7 @@ class MLP(nn.Module):
 
 ### 손실 함수와 옵티마이저
 
-PyTorch는 당신이 만든 모든 것의 프로덕션(production)용 버전을 제공한다.
+앞서 직접 만든 모든 것의 프로덕션(production)용 버전을 PyTorch가 그대로 제공한다.
 
 **손실 함수(loss function)** (`torch.nn`에서):
 
@@ -179,7 +179,7 @@ PyTorch는 당신이 만든 모든 것의 프로덕션(production)용 버전을 
 
 ### 학습 루프
 
-모든 PyTorch 학습 루프는 같은 5단계 패턴을 따른다. 당신은 이미 Lesson 10에서 이것을 안다.
+모든 PyTorch 학습 루프는 같은 5단계 패턴을 따른다. 이미 Lesson 10에서 익힌 패턴이다.
 
 ```mermaid
 sequenceDiagram
@@ -284,7 +284,7 @@ for inputs, targets in loader:
 
 ## 직접 만들기 (Build It)
 
-오직 PyTorch 기본 요소만 써서 MNIST에 학습시킨 3층 MLP다. 고수준 래퍼 없음. `torchvision.datasets` 없음. 원시 데이터를 우리 손으로 내려받고 파싱한다.
+오직 PyTorch 기본 요소만 써서 MNIST에 학습시킨 3층 MLP다. 고수준 래퍼 없음. `torchvision.datasets` 없음. 원시 데이터를 직접 내려받고 파싱한다.
 
 ### 1단계: 원시 파일에서 MNIST 로드하기
 
@@ -350,7 +350,7 @@ class MNISTModel(nn.Module):
         return self.net(x)
 ```
 
-출력층은 10개의 원시 로짓(숫자마다 하나)을 만든다. 소프트맥스 없음 -- `CrossEntropyLoss`가 내부적으로 처리한다.
+출력층은 10개의 원시 로짓(숫자마다 하나)을 만든다. 소프트맥스는 없다. `CrossEntropyLoss`가 내부적으로 처리하기 때문이다.
 
 파라미터 수: 784*256 + 256 + 256*128 + 128 + 128*10 + 10 = 235,146. 현대 기준으로 아주 작다. GPT-2 small은 1억 2,400만 개를 가진다. 이것은 몇 초 만에 학습된다.
 
@@ -395,7 +395,7 @@ def evaluate(model, loader, criterion, device):
     return total_loss / total, correct / total
 ```
 
-평가 중의 `torch.no_grad()`를 주목하라. 이것은 자동 미분을 꺼서, 메모리 사용량을 줄이고 추론(inference)을 빠르게 한다. 그것이 없으면, PyTorch는 당신이 절대 쓰지 않는 계산 그래프를 만든다.
+평가 중에 쓰는 `torch.no_grad()`를 눈여겨보라. 자동 미분을 꺼서 메모리 사용량을 줄이고 추론(inference)을 빠르게 한다. 이것이 없으면 PyTorch는 끝내 쓰지도 않을 계산 그래프를 만든다.
 
 ### 4단계: 모든 것을 함께 엮기
 
@@ -447,7 +447,7 @@ def main():
     print(f"Final test accuracy: {test_acc:.4f}")
 ```
 
-10 에폭(epoch) 후 예상 출력: ~97.8% 테스트 정확도. CPU에서의 학습 시간: ~30초. GPU에서: ~5초. 같은 아키텍처의 당신 미니 프레임워크에서: ~45분.
+10 에폭(epoch) 후 예상 출력: ~97.8% 테스트 정확도. CPU에서의 학습 시간: ~30초. GPU에서: ~5초. 같은 아키텍처를 미니 프레임워크로 돌리면: ~45분.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -463,7 +463,7 @@ def main():
 | GPU 없음 | `model.to("cuda")` |
 | 모든 모듈에 대해 수동 backward | Autograd가 모든 것을 처리함 |
 
-인터페이스가 거의 동일하다. 차이는 후드 아래의 모든 것이다.
+인터페이스는 거의 동일하다. 차이는 그 안쪽, 즉 내부 동작 전체에 있다.
 
 ### 모델 저장과 로드
 
@@ -505,7 +505,7 @@ PyTorch는 15개 이상의 스케줄러를 제공한다: StepLR, ExponentialLR, 
 
 3. **혼합 정밀도로 GPU에 이식하기.** 학습 루프에 `torch.amp.autocast`와 `GradScaler`를 추가하라. GPU에서 혼합 정밀도가 있을 때와 없을 때의 처리량(초당 샘플)을 측정하라. A100에서는 ~2배 속도 향상을 예상하라.
 
-4. **커스텀 Dataset 만들기.** Fashion-MNIST(MNIST와 같은 형식이지만 의류 항목)를 내려받아라. `__getitem__`과 `__len__`을 가진 `FashionMNISTDataset(Dataset)` 클래스를 구현하라. 같은 MLP를 학습시키고 정확도를 비교하라. Fashion-MNIST는 더 어렵다 -- ~98% 대 ~88%를 예상하라.
+4. **커스텀 Dataset 만들기.** Fashion-MNIST(MNIST와 같은 형식이지만 의류 항목)를 내려받아라. `__getitem__`과 `__len__`을 가진 `FashionMNISTDataset(Dataset)` 클래스를 구현하라. 같은 MLP를 학습시키고 정확도를 비교하라. Fashion-MNIST는 더 어렵다. ~98% 대 ~88% 정도를 예상하라.
 
 5. **Adam을 SGD + 모멘텀으로 바꾸기.** `SGD(params, lr=0.01, momentum=0.9)`로 학습하라. 수렴(convergence) 곡선을 비교하라. 그다음 `CosineAnnealingLR` 스케줄러를 추가하고 SGD가 에폭 10까지 Adam을 따라잡는지 보라.
 

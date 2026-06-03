@@ -1,6 +1,6 @@
 # 밑바닥부터 만드는 트랜스포머 블록(Transformer Block)
 
-> 하나의 블록(block)은 모든 현대 디코더(decoder) LLM의 단위다. 레이어 정규화(layer norm), 멀티헤드 어텐션(multi head attention), 잔차(residual), MLP, 잔차. pre-LN 변형은 워밍업(warmup) 없이 안정적으로 학습한다. post-LN 변형은 원 논문이 출시한 것이다. 이 레슨은 둘을 나란히 만들고, 일반적인 학습률(learning rate)에서 어느 쪽이 12층 스택(stack)을 살아남는지 보여 준다.
+> 하나의 블록(block)은 모든 현대 디코더(decoder) LLM의 단위다. 레이어 정규화(layer norm), 멀티헤드 어텐션(multi head attention), 잔차(residual), MLP, 잔차. pre-LN 변형은 워밍업(warmup) 없이 안정적으로 학습한다. post-LN 변형은 원 논문이 출시한 것이다. 이 레슨은 둘을 나란히 만들고, 일반적인 학습률(learning rate)에서 어느 쪽이 12층 스택(stack)에서 살아남는지 보여 준다.
 
 **Type:** Build
 **Languages:** Python
@@ -12,12 +12,12 @@
 - 네 가지 움직이는 부품으로 PyTorch에서 트랜스포머 블록을 만든다: LayerNorm, 멀티헤드 인과(causal) 어텐션, 잔차 연결(residual connection), 위치별(position wise) MLP.
 - LayerNorm을 두 가지 구성(pre-LN과 post-LN)으로 배치하고 어느 쪽이 워밍업 없이 안정적으로 학습하는지 설명한다.
 - 토큰 `i`가 토큰 `j > i`를 볼 수 없도록 멀티헤드 어텐션 안에 인과 마스킹(causal masking)을 구현한다.
-- 12층 스택에서 두 변형을 통과하는 그래디언트 흐름(gradient flow)을 추적하고 손짓 없이(without hand waving) 결과를 읽는다.
+- 12층 스택에서 두 변형을 통과하는 그래디언트 흐름(gradient flow)을 추적하고 얼버무리지 않고 결과를 읽는다.
 - 다음 레슨이 1억 2400만 파라미터(parameter) GPT를 조립할 때 그 블록을 드롭인(drop-in) 단위로 재사용한다.
 
 ## 문제 (The Problem)
 
-트랜스포머는 하나의 블록을 반복한 것이다. 블록을 한 번 잘못 만들고, 그것을 열두 번 반복하면, 첫 에폭(epoch)에 발산(diverge)하거나 그 이후 내내 워밍업 핵(hack)이 필요한 모델을 출시하게 된다. 이 레슨에서 보게 될 두 가지 실패 모드는 이국적인 것이 아니다. 학습자가 블록을 순진하게 쌓는 첫 순간에 나타난다. 하나는 미래에 어텐드(attend)하는 어텐션 층이다. 다른 하나는 깊이(depth)에서 잔차 신호를 길들일 수 없는 곳에 놓인 LayerNorm이다.
+트랜스포머는 하나의 블록을 반복한 것이다. 블록을 한 번 잘못 만든 뒤 열두 번 반복하면, 첫 에폭(epoch)에 발산(diverge)하거나 그 이후 내내 워밍업 핵(hack)이 필요한 모델을 출시하게 된다. 이 레슨에서 보게 될 두 가지 실패 모드는 이국적인 것이 아니다. 학습자가 블록을 순진하게 쌓는 첫 순간에 나타난다. 하나는 미래에 어텐드(attend)하는 어텐션 층이다. 다른 하나는 깊이(depth)에서 잔차 신호를 길들일 수 없는 곳에 놓인 LayerNorm이다.
 
 수정은 일단 보고 나면 기계적이다. 블록에는 정확히 두 개의 잔차 경로(residual path)와 정확히 두 개의 정규화 위치(normalization position)가 있다. 위치를 올바르게 선택하면 스택의 나머지는 그저 장부 기록(bookkeeping)이다.
 
@@ -55,7 +55,7 @@ flowchart TB
   N2 --> Y[Output]
 ```
 
-형태는 동일하다. 학습 동작은 아니다. post-LN에서는 잔차 경로를 통해 거꾸로 흐르는 그래디언트가 LayerNorm을 통과해야 한다. 깊이 12와 학습률 `3e-4`에서, 그 그래디언트는 워밍업 스케줄(schedule)이 필요할 만큼 빠르게 줄어든다. pre-LN은 잔차 경로를 정규화하지 않은 채 두므로, 그래디언트가 임베딩(embedding) 층까지 깨끗하게 전파된다. pre-LN은 그 이유로 GPT-2 이후가 출시하는 구성이다.
+형태는 동일하다. 학습 동작은 아니다. post-LN에서는 잔차 경로로 거꾸로 흐르는 그래디언트가 LayerNorm을 통과해야 한다. 깊이 12와 학습률 `3e-4`에서, 그 그래디언트는 워밍업 스케줄(schedule)이 필요할 만큼 빠르게 줄어든다. pre-LN은 잔차 경로를 정규화하지 않은 채 두므로, 그래디언트가 임베딩(embedding) 층까지 깨끗하게 전파된다. pre-LN은 그 이유로 GPT-2 이후가 출시하는 구성이다.
 
 ### 인과 멀티헤드 어텐션 (Causal multi head attention)
 

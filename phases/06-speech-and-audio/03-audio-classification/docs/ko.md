@@ -9,9 +9,9 @@
 
 ## 문제 (The Problem)
 
-10초짜리 클립을 받는다. 당신은 알고 싶다: "이것은 무엇인가?" 도시 소리(사이렌, 드릴, 개), 음성 명령(yes/no/stop), 언어 식별(en/es/ar), 화자 감정(angry/neutral), 또는 환경음(실내/실외, 웅성거림). 이 모두가 *오디오 분류*이며, 2026년에는 베이스라인(baseline) 아키텍처가 성숙했다: 로그 멜(log-mel) → CNN 또는 트랜스포머(Transformer) → softmax.
+10초짜리 클립을 받았다고 하자. 묻고 싶은 건 하나다. "이것은 무엇인가?" 도시 소리(사이렌, 드릴, 개), 음성 명령(yes/no/stop), 언어 식별(en/es/ar), 화자 감정(angry/neutral), 환경음(실내/실외, 웅성거림). 이 모두가 *오디오 분류*이며, 2026년에는 베이스라인(baseline) 아키텍처가 성숙했다. 로그 멜(log-mel) → CNN 또는 트랜스포머(Transformer) → softmax 흐름이다.
 
-핵심 어려움은 신경망이 아니다. 데이터다. 오디오 데이터셋(dataset)은 잔혹한 클래스 불균형(class imbalance), 강한 도메인 시프트(domain shift)(깨끗함 대 잡음), 레이블 노이즈(label noise)(누가 "도시 웅성거림" 대 "식당 소음"을 결정했는가?)를 가진다. 문제의 80%는 CNN을 트랜스포머로 바꾸는 것이 아니라 큐레이션(curation), 증강(augmentation), 평가에 있다.
+핵심 어려움은 신경망이 아니다. 데이터다. 오디오 데이터셋(dataset)에는 잔혹한 클래스 불균형(class imbalance), 강한 도메인 시프트(domain shift)(깨끗함 대 잡음), 레이블 노이즈(label noise)(누가 "도시 웅성거림" 대 "식당 소음"을 결정했는가?)가 따라붙는다. 문제의 80%는 CNN을 트랜스포머로 바꾸는 것이 아니라 큐레이션(curation), 증강(augmentation), 평가에 있다.
 
 ## 개념 (The Concept)
 
@@ -23,13 +23,13 @@
 
 **오디오 스펙트로그램 트랜스포머(Audio Spectrogram Transformer, AST)(2021-2024).** 로그 멜을 패치화(patchify)하고(예: 16×16 패치), 위치 임베딩(position embedding)을 더하고, ViT에 넣는다. 지도 학습(supervised learning)에서 AudioSet 기준 최첨단(mAP 0.485).
 
-**BEATs와 WavLM-base(2024-2026).** 수백만 시간에 대한 자기 지도 사전 학습(self-supervised pretraining). 필요했을 지도 데이터의 1-10%로 당신의 과제에 파인튜닝(fine-tuning)한다. 2026년에는 비음성(non-speech) 오디오에서 이것이 기본 출발점이다. BEATs-iter3는 1/4의 연산량을 쓰면서 AudioSet에서 AST를 1-2 mAP 앞선다.
+**BEATs와 WavLM-base(2024-2026).** 수백만 시간에 대한 자기 지도 사전 학습(self-supervised pretraining). 원래 필요했을 지도 데이터의 1-10%만으로 과제에 맞게 파인튜닝(fine-tuning)한다. 2026년에는 비음성(non-speech) 오디오에서 이것이 기본 출발점이다. BEATs-iter3는 1/4의 연산량을 쓰면서 AudioSet에서 AST를 1-2 mAP 앞선다.
 
 **고정 백본으로서의 Whisper 인코더(2024).** Whisper의 인코더(encoder)를 취하고, 디코더(decoder)를 버리고, 선형 분류기를 붙인다. 오디오 증강 없이도 언어 식별과 단순 이벤트 분류에서 거의 SOTA에 근접한다. "공짜 점심" 베이스라인.
 
 ### 클래스 불균형이 진짜 난제다
 
-ESC-50: 50개 클래스, 각 40개 클립 — 균형 잡혀 있고 쉽다. UrbanSound8K: 10개 클래스, 10:1로 불균형. AudioSet: 100,000:1의 롱테일(long tail)을 가진 632개 클래스. 효과 있는 기법:
+ESC-50: 50개 클래스, 각 40개 클립 — 균형 잡혀 있고 쉽다. UrbanSound8K: 10개 클래스, 10:1로 불균형. AudioSet: 632개 클래스에 100,000:1의 롱테일(long tail)이 펼쳐진다. 효과 있는 기법:
 
 - 학습 중 균형 샘플링(평가에서는 아님).
 - Mixup: 두 클립(과 그 레이블)을 선형 보간하는 증강.

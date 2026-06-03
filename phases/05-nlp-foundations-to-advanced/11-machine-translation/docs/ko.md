@@ -11,15 +11,15 @@
 
 모델이 한 언어로 된 문장을 읽고 다른 언어로 된 문장을 만들어낸다. 길이가 달라진다. 어순이 달라진다. 어떤 원문 단어는 여러 개의 목표 단어에 대응하고, 그 반대도 마찬가지다. 관용구는 일대일 대응을 거부한다. "I miss you"는 프랑스어로 "tu me manques"인데, 직역하면 "당신이 나에게 부족하다"이다. 어떤 단어 수준 정렬(alignment)도 이를 견뎌내지 못한다.
 
-기계 번역(machine translation)은 NLP가 인코더-디코더(encoder-decoder), 어텐션(attention), 트랜스포머(transformer), 그리고 결국 LLM 패러다임 전체를 발명하도록 강제한 작업이다. 모든 전진은 번역 품질이 측정 가능했고 사람과 기계 사이의 격차가 끈질겼기 때문에 이루어졌다.
+기계 번역(machine translation)은 NLP가 인코더-디코더(encoder-decoder), 어텐션(attention), 트랜스포머(transformer), 그리고 결국 LLM 패러다임 전체를 발명하도록 강제한 작업이다. 모든 전진은 번역 품질을 측정할 수 있었고 사람과 기계 사이의 격차가 끈질겼기 때문에 이루어졌다.
 
-이 레슨은 역사 강의를 건너뛰고 2026년의 실전 파이프라인(pipeline)을 가르친다. 사전 학습(pretraining)된 다국어 인코더-디코더(NLLB-200 또는 mBART), 서브워드 토큰화(subword tokenization), 빔 서치(beam search), BLEU 및 chrF 평가, 그리고 여전히 발견되지 않은 채 프로덕션(production)에 배포되는 몇 가지 실패 양상이 그것이다.
+이 레슨은 역사 강의를 건너뛰고 2026년의 실전 파이프라인(pipeline)을 가르친다. 사전 학습(pretraining)된 다국어 인코더-디코더(NLLB-200 또는 mBART), 서브워드 토큰화(subword tokenization), 빔 서치(beam search), BLEU 및 chrF 평가, 그리고 발견되지 않은 채 프로덕션(production)에 배포되곤 하는 몇 가지 실패 양상이 그것이다.
 
 ## 개념 (The Concept)
 
 ![MT pipeline: tokenize → encode → decode with attention → detokenize](../assets/mt-pipeline.svg)
 
-현대 MT는 병렬 텍스트(parallel text)로 학습된 트랜스포머 인코더-디코더다. 인코더(encoder)는 원문을 해당 언어의 토큰화 방식으로 읽는다. 디코더(decoder)는 인코더의 출력을 크로스 어텐션(cross-attention, 레슨 10)을 통해 사용하면서 목표 언어를 한 번에 서브워드 하나씩 생성한다. 디코딩은 그리디 디코딩(greedy-decoding)의 함정을 피하기 위해 빔 서치를 사용한다. 출력은 디토큰화(detokenize)되고, 트루케이싱(truecasing)이 해제되며, 참조(reference)와 비교해 채점된다.
+현대 MT는 병렬 텍스트(parallel text)로 학습된 트랜스포머 인코더-디코더다. 인코더(encoder)는 원문을 해당 언어의 토큰화 방식으로 읽는다. 디코더(decoder)는 인코더의 출력을 크로스 어텐션(cross-attention, 레슨 10)으로 사용하면서 목표 언어를 한 번에 서브워드 하나씩 생성한다. 디코딩은 그리디 디코딩(greedy-decoding)의 함정을 피하려고 빔 서치를 쓴다. 출력은 디토큰화(detokenize)되고, 트루케이싱(truecasing)이 해제되며, 참조(reference)와 비교해 채점된다.
 
 세 가지 운영상의 선택이 실제 MT 품질을 좌우한다.
 
@@ -59,7 +59,7 @@ Les chats courent.
 
 ### Step 2: BLEU와 chrF
 
-BLEU는 출력과 참조 사이의 n-gram 중복을 측정한다. 네 가지 참조 n-gram 크기(1-4), 정밀도(precision)의 기하 평균, 너무 짧은 출력에 대한 간결성 페널티(brevity penalty)로 구성된다. 점수는 [0, 100] 범위다. 흔히 사용된다. 해석하기는 짜증스럽다. BLEU 30은 "쓸 만한" 수준, 40은 "좋은" 수준, 50은 "탁월한" 수준이며, 1 BLEU 미만의 차이는 잡음(noise)이다.
+BLEU는 출력과 참조 사이의 n-gram 중복을 측정한다. 네 가지 참조 n-gram 크기(1-4), 정밀도(precision)의 기하 평균, 너무 짧은 출력에 대한 간결성 페널티(brevity penalty)로 구성된다. 점수는 [0, 100] 범위다. 흔히 쓰인다. 해석하기는 짜증스럽다. BLEU 30은 "쓸 만한" 수준, 40은 "좋은" 수준, 50은 "탁월한" 수준이며, 1 BLEU 미만의 차이는 잡음(noise)이다.
 
 chrF는 문자 수준 F-점수(F-score)를 측정한다. BLEU가 일치를 과소 계산하는 형태론적으로 풍부한 언어에 더 민감하다. 종종 BLEU와 나란히 보고된다.
 
@@ -84,7 +84,7 @@ print(f"BLEU: {bleu.score:.1f}  chrF: {chrf.score:.1f}")
 - **학습 기반(Learned)** (COMET, BLEURT, BERTScore). 사람의 판단으로 학습된 신경망 모델이다. 번역을 원문 및 참조와 의미적 유사성으로 비교한다. COMET은 2023년 이후 MT 연구와 가장 높은 연관성을 가지며, 품질이 중요한 경우 2026년 프로덕션 기본값이다.
 - **LLM-as-judge** (참조 없음). 대형 모델에게 유창성, 충실성, 어조, 문화적 적절성을 기준으로 번역을 채점하도록 프롬프트(prompt)한다. 평가 기준(rubric)이 잘 설계되면 GPT-4-as-judge는 사람과의 일치율이 약 80%에 이른다. 참조가 존재하지 않는 개방형 콘텐츠에 사용하라.
 
-2026년 실전 스택: BLEU와 chrF에는 `sacrebleu`, COMET에는 `unbabel-comet`, 그리고 사람을 향한 최종 신호에는 프롬프트된 LLM을 사용한다. 프로덕션 데이터에서 신뢰하기 전에 모든 지표를 사람이 레이블링한 50-100개 예시에 대해 보정(calibrate)하라.
+2026년 실전 스택: BLEU와 chrF에는 `sacrebleu`, COMET에는 `unbabel-comet`, 그리고 사람을 향한 최종 신호에는 프롬프트된 LLM을 사용한다. 프로덕션 데이터에서 신뢰하기 전에 모든 지표를 사람이 레이블링한 50-100개 예시로 보정(calibrate)하라.
 
 참조 없는 지표(COMET-QE, BLEURT-QE, LLM-as-judge)는 참조 없이 번역을 평가할 수 있게 해주는데, 이는 참조 번역이 존재하지 않는 롱테일(long-tail) 언어쌍에서 중요하다.
 

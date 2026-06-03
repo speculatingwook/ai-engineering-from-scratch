@@ -16,15 +16,15 @@
 
 ## 문제 (The Problem)
 
-도구 30개를 가진 에이전트를 상상하라. 모든 사용자 쿼리가 도구 선택을 촉발한다. 모델은 모든 설명을 읽고 하나를 고른다. 두 가지 형태의 실패가 나타난다.
+도구 30개짜리 에이전트를 상상하라. 모든 사용자 쿼리가 도구 선택을 촉발한다. 모델은 모든 설명을 읽고 하나를 고른다. 실패는 두 가지 형태로 나타난다.
 
-**잘못된 도구를 고름.** 모델이 `get_customer_details`를 골랐어야 할 때 `search_contacts`를 고른다. 원인: 두 설명 모두 "look up people"이라고 말한다. 모델은 구별할 방법이 없다.
+**잘못된 도구를 고름.** 모델이 `get_customer_details`를 골랐어야 할 때 `search_contacts`를 고른다. 원인은 두 설명 모두 "look up people"이라고 말하기 때문이다. 모델은 구별할 방법이 없다.
 
-**맞는 도구가 있는데도 고르지 않음.** 사용자가 주가를 묻는데, 모델이 그럴듯하지만 환각된 숫자로 답한다. 원인: 설명이 "retrieve financial data"라고 말하지만 모델이 "stock price"를 그것에 매핑하지 못했다.
+**맞는 도구가 있는데도 고르지 않음.** 사용자가 주가를 묻는데, 모델이 그럴듯하지만 환각된 숫자로 답한다. 원인은 설명이 "retrieve financial data"라고만 말해서 모델이 "stock price"를 그것에 매핑하지 못한 것이다.
 
-Composio의 2025년 현장 가이드는 순전히 이름 변경과 설명 재작성만으로 내부 벤치마크에서 10~20퍼센트포인트 정확도 변동을 측정했다. Anthropic의 Agent SDK 문서도 비슷하게 주장한다. Databricks의 에이전트 패턴 문서는 더 나아간다. 모호한 설명을 가진 50개 도구 레지스트리에서 선택 정확도가 62퍼센트로 떨어졌고, 설명 재작성 후 같은 레지스트리가 89퍼센트에 도달했다.
+Composio의 2025년 현장 가이드는 순전히 이름 변경과 설명 재작성만으로 내부 벤치마크에서 10~20퍼센트포인트의 정확도 변동을 측정했다. Anthropic의 Agent SDK 문서도 비슷하게 말한다. Databricks의 에이전트 패턴 문서는 한발 더 나아간다. 모호한 설명을 가진 50개 도구 레지스트리에서 선택 정확도가 62퍼센트로 떨어졌고, 설명을 재작성하자 같은 레지스트리가 89퍼센트에 도달했다.
 
-설명과 이름의 품질은 당신이 가진 가장 저렴한 지렛대다.
+설명과 이름의 품질은 손에 쥔 가장 저렴한 지렛대다.
 
 ## 개념 (The Concept)
 
@@ -52,11 +52,11 @@ Use when the user asks about current conditions for a specific city.
 Do not use for historical weather or multi-day forecasts.
 ```
 
-"Do not use for" 줄이 레지스트리에서 가까운 경쟁 도구에 대해 모호성을 해소하는 것이다.
+레지스트리에서 가까운 경쟁 도구에 대해 모호성을 해소하는 것은 "Do not use for" 줄이다.
 
 1024자 미만으로 유지하라. OpenAI는 엄격 모드에서 더 긴 설명을 잘라낸다.
 
-형식 힌트를 포함하라. "Accepts city names in English. Returns temperature in Celsius unless `units` says otherwise." 모델은 이것을 사용해 파라미터를 올바르게 채운다.
+형식 힌트를 포함하라. "Accepts city names in English. Returns temperature in Celsius unless `units` says otherwise." 모델은 이것을 보고 파라미터를 올바르게 채운다.
 
 ### 원자적 대 모놀리식
 
@@ -84,9 +84,9 @@ notes_search(query)
 ### 파라미터 설계
 
 - **모든 닫힌 집합을 enum으로.** `units: string`이 아니라 `units: "celsius" | "fahrenheit"`. enum은 모델에게 허용 가능한 값의 세계를 알려준다.
-- **Required 대 optional.** 최소한 필요한 것만 표시하라. 그 외 모든 것은 optional. OpenAI 엄격 모드는 모든 필드를 `required`에 요구한다. 당신의 코드에 `is_default: true` 관례를 추가하고 모델이 그것을 생략하게 하라.
-- **타입 지정 ID.** `note_id: string`도 괜찮지만, 환각된 id를 잡기 위해 `pattern`(`^note-[0-9]{8}$`)을 추가하라.
-- **지나치게 유연한 타입 없음.** `type: any`를 피하라. 모델이 형태를 환각할 것이다.
+- **Required 대 optional.** 최소한 필요한 것만 표시하라. 그 외 모든 것은 optional. OpenAI 엄격 모드는 모든 필드를 `required`에 요구한다. 코드에 `is_default: true` 관례를 추가하고 모델이 그것을 생략하게 하라.
+- **타입 지정 ID.** `note_id: string`도 괜찮지만, 환각된 id를 잡으려면 `pattern`(`^note-[0-9]{8}$`)을 추가하라.
+- **지나치게 유연한 타입 없음.** `type: any`를 피하라. 모델이 형태를 환각한다.
 - **필드를 설명하라.** `{"type": "string", "description": "ISO 8601 date in UTC, e.g. 2026-04-22"}`. 설명은 모델 프롬프트의 일부다.
 
 ### 가르치는 신호로서의 오류 메시지
@@ -98,7 +98,7 @@ BAD  : TypeError: object of type 'NoneType' has no attribute 'lower'
 GOOD : Invalid input: 'city' is required. Example: {"city": "Bengaluru"}.
 ```
 
-좋은 오류는 모델에게 다음에 무엇을 할지 가르친다. 벤치마크는 타입 지정 오류 메시지가 약한 모델에서 재시도 횟수를 절반으로 줄임을 보여준다.
+좋은 오류는 모델에게 다음에 무엇을 할지 가르친다. 벤치마크에 따르면 타입 지정 오류 메시지는 약한 모델에서 재시도 횟수를 절반으로 줄인다.
 
 ### 버전 관리
 
@@ -123,7 +123,7 @@ GOOD : Invalid input: 'city' is required. Example: {"city": "Bengaluru"}.
 
 ## 라이브러리로 써보기 (Use It)
 
-`code/main.py`는 위의 규칙에 대해 레지스트리를 감사하는 도구 스키마 린터를 제공한다. 그것은 다음을 표시한다.
+`code/main.py`는 위의 규칙에 대해 레지스트리를 감사하는 도구 스키마 린터를 제공한다. 린터는 다음을 표시한다.
 
 - `snake_case`를 위반하거나 인자를 담은 이름.
 - 40자 미만, 1024자 초과, 또는 "Do not use for" 문장이 빠진 설명.

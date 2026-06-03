@@ -1,6 +1,6 @@
 # Capstone 17 — 개인 AI 튜터 (Personal AI Tutor: Adaptive, Multimodal, with Memory)
 
-> Khanmigo(Khan Academy), Duolingo Max, Google LearnLM / Gemini for Education, Quizlet Q-Chat, 그리고 Synthesis Tutor는 모두 2026년에 적응형(adaptive) 멀티모달(multimodal) 튜터링을 대규모로 출하했다. 공통 형태는 소크라테스식(Socratic) 정책(절대 답을 그냥 던지지 않음), 모든 상호작용 후 갱신되는 학습자 모델(learner model)(베이지안 지식 추적(Bayesian knowledge tracing) 스타일), 음성 + 텍스트 + 사진 수학(photo-math) 입력, 커리큘럼 그래프(curriculum graph) 검색, 간격 반복(spaced-repetition) 스케줄링, 그리고 연령 적합 콘텐츠를 위한 강한 안전 필터다. 이 캡스톤(capstone)은 과목 특화 튜터(K-12 대수 또는 입문 Python)를 출하하고, 학습자 10명과 2주간의 효능 연구(efficacy study)를 실행하며, 콘텐츠 안전 감사(content-safety audit)를 통과하는 것이다.
+> Khanmigo(Khan Academy), Duolingo Max, Google LearnLM / Gemini for Education, Quizlet Q-Chat, 그리고 Synthesis Tutor는 모두 2026년에 적응형(adaptive) 멀티모달(multimodal) 튜터링을 대규모로 출하했다. 공통 형태는 소크라테스식(Socratic) 정책(절대 답을 그냥 던지지 않음), 모든 상호작용 후 갱신되는 학습자 모델(learner model)(베이지안 지식 추적(Bayesian knowledge tracing) 스타일), 음성 + 텍스트 + 사진 수학(photo-math) 입력, 커리큘럼 그래프(curriculum graph) 검색, 간격 반복(spaced-repetition) 스케줄링, 연령 적합 콘텐츠를 위한 강한 안전 필터다. 이 캡스톤(capstone)은 과목 특화 튜터(K-12 대수 또는 입문 Python)를 출하하고, 학습자 10명과 2주간의 효능 연구(efficacy study)를 실행하며, 콘텐츠 안전 감사(content-safety audit)를 통과하는 것이다.
 
 **Type:** Capstone
 **Languages:** Python (backend, learner model), TypeScript (web app), SQL (curriculum graph via Postgres + Neo4j)
@@ -10,15 +10,15 @@
 
 ## 문제 (Problem)
 
-적응형 튜터링은 한때 에듀테크 연구의 틈새였다. 2026년에는 소비자 제품이다. Khanmigo는 대부분의 미국 학군에 배포되어 있다. Duolingo Max는 수천만 MAU에 도달했다. Google의 LearnLM / Gemini for Education은 Google Classroom에서 튜터링을 구동한다. Quizlet Q-Chat은 플래시카드 옆에 자리한다. Synthesis Tutor는 호기심 많은 아이들을 위한 튜터로 바이럴이 되었다. 공통 요소는 멀티모달 입력(타이핑, 말하기, 방정식 촬영), 소크라테스식 교수법(먼저 묻고 나중에 설명), 각 상호작용 후 갱신되는 학습자 모델, 그리고 엄격한 연령 적합 안전성이다.
+적응형 튜터링은 한때 에듀테크 연구의 틈새였다. 2026년에는 소비자 제품이다. Khanmigo는 대부분의 미국 학군에 배포되어 있다. Duolingo Max는 수천만 MAU에 도달했다. Google의 LearnLM / Gemini for Education은 Google Classroom에서 튜터링을 구동한다. Quizlet Q-Chat은 플래시카드 옆에 자리한다. Synthesis Tutor는 호기심 많은 아이들을 위한 튜터로 바이럴이 되었다. 공통 요소는 멀티모달 입력(타이핑, 말하기, 방정식 촬영), 소크라테스식 교수법(먼저 묻고 나중에 설명), 각 상호작용 후 갱신되는 학습자 모델, 엄격한 연령 적합 안전성이다.
 
-당신은 특정 코호트(cohort)를 위해 이것 중 하나를 만들게 된다. 측정 기준은 실제 효능 연구다: 학습자 10명과 함께 2주에 걸친 사전 시험과 사후 시험 점수. 음성 루프(voice loop)는 자연스럽게 느껴져야 한다(캡스톤 03 서브 스택). 메모리(memory)는 프라이버시를 존중해야 한다. 안전 필터는 K-12를 위한 COPPA 인지(COPPA-aware) 레드팀을 통과해야 한다.
+이번에는 특정 코호트(cohort)를 위해 이런 튜터 하나를 직접 만든다. 측정 기준은 실제 효능 연구다: 학습자 10명과 함께 2주에 걸친 사전 시험과 사후 시험 점수. 음성 루프(voice loop)는 자연스럽게 느껴져야 한다(캡스톤 03 서브 스택). 메모리(memory)는 프라이버시를 존중해야 한다. 안전 필터는 K-12를 위한 COPPA 인지(COPPA-aware) 레드팀을 통과해야 한다.
 
 ## 개념 (Concept)
 
 네 가지 구성 요소. **튜터 정책(Tutor policy)**은 소크라테스식 루프다: 학습자가 답을 요청하면, 정책은 유도 질문을 던진다. 학습자가 맞히면, 다음 개념으로 넘어간다. 막히면, 비계화된(scaffolded) 힌트를 제공한다. **학습자 모델(Learner model)**은 각 상호작용 후 커리큘럼 노드별 숙달(mastery) 확률을 갱신하는 베이지안 지식 추적(또는 간단한 변형)이다. **커리큘럼 그래프(Curriculum graph)**는 선수(prerequisite) 간선을 갖는 개념의 Neo4j다. 정책은 그래프를 순회하여 다음 개념을 고른다. **메모리(Memory)**는 과거 상호작용, 실수, 선호를 담는 에피소드(episodic) + 시맨틱(semantic) 저장소(agentmemory 스타일)다.
 
-UX는 멀티모달이다. 타이핑된 답변을 위한 텍스트 입력. LiveKit + Whisper를 통한 음성 입력(캡스톤 03 재사용). dots.ocr 또는 PaliGemma 2를 통한 수학 문제용 사진 입력. Cartesia Sonic-2를 통한 음성 출력. 안전성은 Llama Guard 4에 더해 연령 적합 필터(성인 콘텐츠, 폭력, 자해 차단)와 COPPA 인지 메모리 보존 정책을 사용한다.
+UX는 멀티모달이다. 타이핑한 답변은 텍스트로 입력한다. 음성 입력은 LiveKit + Whisper로 받는다(캡스톤 03 재사용). 수학 문제 사진은 dots.ocr 또는 PaliGemma 2로 처리한다. 음성 출력은 Cartesia Sonic-2가 맡는다. 안전성은 Llama Guard 4에 더해 연령 적합 필터(성인 콘텐츠, 폭력, 자해 차단)와 COPPA 인지 메모리 보존 정책을 사용한다.
 
 효능 연구가 결과물이다. 학습자 10명, 사전 시험과 사후 시험, 2주. 학습 향상 차이와 신뢰 구간(confidence interval)을 보고한다. 비적응형 베이스라인(튜터 정책 없이 동일 콘텐츠를 선형으로 전달)과 비교한다.
 
@@ -82,7 +82,7 @@ learner device
 
 4. **메모리.** 모든 상호작용이 에피소드 저장소에 기록된다. 실수와 선호는 시맨틱 메모리로 승격된다. COPPA 인지 보존 정책: 1년 후 자동 삭제, 부모 접근 가능.
 
-5. **음성 경로.** 튜터 정책에 부착된 LiveKit Agents 워커. Whisper-v3-turbo를 통한 ASR. Cartesia Sonic-2를 통한 TTS. 바지인(barge-in) 지원(캡스톤 03 메커니즘 재사용).
+5. **음성 경로.** 튜터 정책에 부착된 LiveKit Agents 워커. ASR은 Whisper-v3-turbo, TTS는 Cartesia Sonic-2로 처리한다. 바지인(barge-in) 지원(캡스톤 03 메커니즘 재사용).
 
 6. **사진 수학 경로.** 이미지를 업로드하거나 촬영한다. dots.ocr 또는 PaliGemma 2를 실행해 방정식을 인식한다. 구조화된 입력으로 튜터에 공급한다.
 
@@ -108,7 +108,7 @@ learner: "6"
 
 ## 산출물 (Ship It)
 
-`outputs/skill-ai-tutor.md`가 결과물이다. 멀티모달 입력, 학습자 모델, 메모리, 안전성, 그리고 측정된 효능을 갖춘 과목 특화 적응형 튜터.
+`outputs/skill-ai-tutor.md`가 결과물이다. 멀티모달 입력, 학습자 모델, 메모리, 안전성, 측정된 효능까지 갖춘 과목 특화 적응형 튜터.
 
 | Weight | Criterion | How it is measured |
 |:-:|---|---|

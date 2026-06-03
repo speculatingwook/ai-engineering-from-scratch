@@ -1,6 +1,6 @@
 # 비전-언어 모델 — ViT-MLP-LLM 패턴 (Vision-Language Models — The ViT-MLP-LLM Pattern)
 
-> 비전 인코더(vision encoder)는 이미지를 토큰(token)으로 변환한다. MLP 프로젝터(projector)는 그 토큰들을 LLM의 임베딩(embedding) 공간으로 매핑한다. 언어 모델(language model)이 나머지를 한다. 그 패턴 — ViT-MLP-LLM — 이 2026년의 모든 프로덕션(production) VLM이다.
+> 비전 인코더(vision encoder)는 이미지를 토큰(token)으로 변환한다. MLP 프로젝터(projector)는 그 토큰들을 LLM의 임베딩(embedding) 공간으로 매핑한다. 나머지는 언어 모델(language model)이 맡는다. 이 패턴 — ViT-MLP-LLM — 이 2026년의 모든 프로덕션(production) VLM이다.
 
 **Type:** Learn + Use
 **Languages:** Python
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-CLIP(Phase 4 Lesson 18)은 이미지와 텍스트에 대한 공유 임베딩 공간을 주며, 이는 제로샷(zero-shot) 분류(classification)와 검색(retrieval)에는 충분하다. 하지만 CLIP은 텍스트를 생성하지 않기 때문에 "이 이미지에 빨간 차가 몇 대 있나?"에는 답할 수 없다 — 유사도를 점수 매길 뿐이다.
+CLIP(Phase 4 Lesson 18)은 이미지와 텍스트에 대한 공유 임베딩 공간을 주며, 이는 제로샷(zero-shot) 분류(classification)와 검색(retrieval)에는 충분하다. 하지만 CLIP은 텍스트를 생성하지 않으므로 "이 이미지에 빨간 차가 몇 대 있나?"에는 답하지 못한다. 유사도를 점수로 매길 뿐이다.
 
-비전-언어 모델(Vision-Language Models, VLMs) — Qwen3-VL, InternVL3.5, LLaVA-Next, GLM-4.6V — 은 CLIP 계열 이미지 인코더(encoder)를 완전한 언어 모델에 볼트로 결합한다. 모델(model)은 이미지와 질문을 보고 답을 생성한다. 2026년 오픈소스 VLM은 멀티모달(multimodal) 벤치마크(MMMU, MMBench, DocVQA, ChartQA, MathVista, OSWorld)에서 GPT-5와 Gemini-2.5-Pro와 맞먹거나 능가한다.
+비전-언어 모델(Vision-Language Models, VLMs) — Qwen3-VL, InternVL3.5, LLaVA-Next, GLM-4.6V — 은 CLIP 계열 이미지 인코더(encoder)를 완전한 언어 모델에 붙여 결합한다. 모델(model)은 이미지와 질문을 보고 답을 생성한다. 2026년 오픈소스 VLM은 멀티모달(multimodal) 벤치마크(MMMU, MMBench, DocVQA, ChartQA, MathVista, OSWorld)에서 GPT-5와 Gemini-2.5-Pro와 맞먹거나 능가한다.
 
-세 조각의 삼인조(ViT, 프로젝터, LLM)가 표준이다. 모델 간의 차이는 어느 ViT, 어느 프로젝터, 어느 LLM, 학습 데이터, 정렬 레시피에 있다. 일단 패턴을 이해하면, 어느 구성요소든 교체하는 것은 기계적이다.
+세 조각(ViT, 프로젝터, LLM)이 표준이다. 모델 간 차이는 어느 ViT, 어느 프로젝터, 어느 LLM, 학습 데이터, 정렬 레시피를 쓰느냐에 있다. 일단 패턴을 이해하면 어느 구성요소든 갈아 끼우는 일은 기계적이다.
 
 ## 개념 (The Concept)
 
@@ -48,11 +48,11 @@ flowchart LR
 2. **프로젝터(Projector)** — 비전 토큰을 LLM의 임베딩 차원으로 매핑하는 작은 모듈(2-4층 MLP, 또는 Q-former). 대부분의 파인튜닝이 여기서 일어난다.
 3. **LLM** — 디코더 전용(decoder-only) 언어 모델(Qwen3, Llama, Mistral, GLM, InternLM). 비전 + 텍스트 토큰을 순서대로 읽고 텍스트를 생성한다.
 
-세 조각 모두 원칙적으로 학습 가능하다. 실제로는, 프로젝터가 학습하는 동안 비전 인코더와 LLM은 대부분 동결된(frozen) 채로 둔다 — 적은 비용으로 수십억 파라미터의 신호를 얻는다.
+세 조각 모두 원칙적으로 학습 가능하다. 실제로는 프로젝터가 학습하는 동안 비전 인코더와 LLM은 대부분 동결한(frozen) 채로 둔다. 적은 비용으로 수십억 파라미터의 신호를 얻는 방식이다.
 
 ### DeepStack
 
-평범한 투영(projection)은 마지막 ViT 층만 쓴다. DeepStack(Qwen3-VL)은 여러 ViT 깊이에서 특성을 샘플링하여 쌓는다. 더 깊은 층은 고수준 의미론(semantics)을 운반하고; 더 얕은 층은 세밀한 공간적·질감적 정보를 운반한다. 둘 다 LLM에 공급하면 "이미지에 무엇이 들어 있는가"(의미론)와 "정확히 어디에"(공간 그라운딩(grounding)) 사이의 간격을 메운다.
+평범한 투영(projection)은 마지막 ViT 층만 쓴다. DeepStack(Qwen3-VL)은 여러 ViT 깊이에서 특성을 샘플링하여 쌓는다. 더 깊은 층은 고수준 의미론(semantics)을 담고, 더 얕은 층은 세밀한 공간적·질감적 정보를 담는다. 둘 다 LLM에 공급하면 "이미지에 무엇이 들어 있는가"(의미론)와 "정확히 어디에"(공간 그라운딩(grounding)) 사이의 간격을 메운다.
 
 ### 세 가지 학습 단계
 
@@ -60,7 +60,7 @@ flowchart LR
 
 1. **정렬(Alignment)** — ViT와 LLM을 동결한다. 이미지-캡션 쌍에 대해 프로젝터만 학습한다. 프로젝터가 비전 공간을 언어 공간으로 매핑하도록 가르친다.
 2. **사전 학습(Pre-training)** — 모든 것을 동결 해제한다. 대규모 교차(interleaved) 이미지-텍스트 데이터(5억+ 쌍)에 대해 학습한다. 모델의 시각 지식을 쌓는다.
-3. **명령어 튜닝(Instruction tuning)** — 큐레이션된 (이미지, 질문, 답) 세 쌍에 파인튜닝한다. 대화 행동과 과제 형식을 가르친다. 이것이 "비전 인식 LM"을 쓸 만한 어시스턴트로 바꾼다.
+3. **명령어 튜닝(Instruction tuning)** — 큐레이션된 (이미지, 질문, 답) 세 쌍에 파인튜닝한다. 대화 행동과 과제 형식을 가르친다. 이 단계가 "비전 인식 LM"을 쓸 만한 어시스턴트로 바꾼다.
 
 대부분의 LoRA 파인튜닝은 작은 라벨된 데이터셋(dataset)으로 3단계를 겨냥한다.
 
@@ -79,15 +79,15 @@ flowchart LR
 
 ### 시각 에이전트
 
-Qwen3-VL-235B는 GUI(데스크톱, 모바일, 웹)를 작동시키는 **시각 에이전트(visual agent)** 벤치마크인 OSWorld에서 세계 최고 성능에 도달한다. 모델은 스크린샷을 보고, UI를 이해하고, 동작(클릭, 입력, 스크롤)을 방출한다. 도구(tool)와 결합하면 흔한 데스크톱 작업에서 루프를 닫는다. 이것이 대부분의 2026년 "AI PC" 데모가 내부에서 돌리는 것이다.
+Qwen3-VL-235B는 GUI(데스크톱, 모바일, 웹)를 작동시키는 **시각 에이전트(visual agent)** 벤치마크인 OSWorld에서 세계 최고 성능에 도달한다. 모델은 스크린샷을 보고, UI를 이해하고, 동작(클릭, 입력, 스크롤)을 방출한다. 도구(tool)와 결합하면 흔한 데스크톱 작업의 루프를 끝까지 돌린다. 2026년 "AI PC" 데모 대부분이 내부에서 돌리는 것이 바로 이것이다.
 
 ### 에이전트 역량 + RoPE 변형
 
-VLM은 프레임이 비디오에서 **언제**인지 알아야 한다. Qwen3-VL은 T-RoPE(시간적 회전 위치 임베딩(temporal rotary position embeddings))에서 **텍스트 기반 시간 정렬(text-based time alignment)** 로 진화했다 — 비디오 프레임과 교차된 명시적 타임스탬프 텍스트 토큰. 모델은 "`<timestamp 00:32>` frame, prompt"를 보고 시간적 관계에 대해 추론할 수 있다.
+VLM은 프레임이 비디오에서 **언제**인지 알아야 한다. Qwen3-VL은 T-RoPE(시간적 회전 위치 임베딩(temporal rotary position embeddings))에서 **텍스트 기반 시간 정렬(text-based time alignment)** 로 진화했다 — 비디오 프레임과 교차된 명시적 타임스탬프 텍스트 토큰. 모델은 "`<timestamp 00:32>` frame, prompt"를 보고 시간적 관계를 추론할 수 있다.
 
 ### 정렬 문제
 
-크롤링된 데이터셋의 이미지-텍스트 쌍 중 12%는 이미지에 완전히 그라운딩되지 않은 설명을 담는다. 이것으로 학습된 VLM은 조용히 환각하는 법을 배운다 — 객체를 날조하고, 숫자를 잘못 읽고, 관계를 발명한다. 프로덕션에서 이것이 지배적인 실패 양상이다.
+크롤링된 데이터셋의 이미지-텍스트 쌍 중 12%는 이미지에 완전히 그라운딩되지 않은 설명을 담는다. 이것으로 학습된 VLM은 조용히 환각하는 법을 배운다 — 객체를 날조하고, 숫자를 잘못 읽고, 관계를 지어낸다. 프로덕션에서 이것이 지배적인 실패 양상이다.
 
 Skywork.ai는 이를 추적하기 위해 **교차 모달 오차율(Cross-Modal Error Rate, CMER)** 을 도입했다:
 
@@ -95,15 +95,15 @@ Skywork.ai는 이를 추적하기 위해 **교차 모달 오차율(Cross-Modal E
 CMER = fraction of outputs where the text confidence is high but the image-text similarity (via a CLIP-family checker) is low
 ```
 
-높은 CMER은 모델이 이미지에 그라운딩되지 않은 것을 자신 있게 말하고 있다는 뜻이다. CMER을 모니터링하고 그것을 프로덕션 KPI로 다루면 그들의 배포(deployment)에서 환각률이 약 35% 줄었다. 비결은 "모델을 고치는 것"이 아니라 "높은 CMER 출력을 사람 검토로 라우팅하는 것"이다.
+CMER이 높다는 것은 모델이 이미지에 그라운딩되지 않은 것을 자신 있게 말하고 있다는 뜻이다. CMER을 모니터링하고 이를 프로덕션 KPI로 다루자 그들의 배포(deployment)에서 환각률이 약 35% 줄었다. 비결은 "모델을 고치는 것"이 아니라 "높은 CMER 출력을 사람 검토로 라우팅하는 것"이다.
 
 ### LoRA / QLoRA로 파인튜닝
 
-70B VLM의 전체 파인튜닝은 대부분의 팀에게 닿지 않는다. 어텐션(attention) + 프로젝터 층에 LoRA(랭크 16-64), 또는 4비트 베이스 가중치(weight)를 쓰는 QLoRA는 단일 A100 / H100에 맞는다. 비용: 5,000-50,000개 예시, 컴퓨팅 $100-$5,000, 학습 2-10시간.
+70B VLM의 전체 파인튜닝은 대부분의 팀에게 무리다. 어텐션(attention) + 프로젝터 층에 LoRA(랭크 16-64), 또는 4비트 베이스 가중치(weight)를 쓰는 QLoRA는 단일 A100 / H100에 맞는다. 비용: 5,000-50,000개 예시, 컴퓨팅 $100-$5,000, 학습 2-10시간.
 
 ### 공간 추론은 여전히 약하다
 
-현재 VLM은 공간 추론 벤치마크(위-아래, 왼쪽-오른쪽, 세기, 거리)에서 50-60%를 기록한다. 사용 사례가 "어느 객체가 어느 것 위에 있나"에 의존한다면 강하게 검증하라 — 일반 VLM 성능은 사람 이하다. 순수 공간 작업에 대한 VLM보다 나은 대안: 전문 키포인트(keypoint) / 포즈 추정기, 깊이(depth) 모델, 또는 박스 기하를 후처리한 검출 모델.
+현재 VLM은 공간 추론 벤치마크(위-아래, 왼쪽-오른쪽, 세기, 거리)에서 50-60%를 기록한다. 사용 사례가 "어느 객체가 어느 것 위에 있나"에 의존한다면 강하게 검증하라. 일반 VLM 성능은 사람 이하다. 순수 공간 작업에서 VLM보다 나은 대안은 전문 키포인트(keypoint) / 포즈 추정기, 깊이(depth) 모델, 또는 박스 기하를 후처리한 검출 모델이다.
 
 ## 직접 만들기 (Build It)
 

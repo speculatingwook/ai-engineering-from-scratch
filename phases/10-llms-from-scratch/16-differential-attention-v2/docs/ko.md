@@ -1,6 +1,6 @@
 # 차분 어텐션 (V2) (Differential Attention (V2))
 
-> 소프트맥스 어텐션(softmax attention)은 일치하지 않는 모든 토큰(token)에 소량의 확률을 퍼뜨린다. 10만 토큰에 걸쳐 그 노이즈(noise)는 쌓여서 신호를 익사시킨다. Differential Transformer (Ye et al., ICLR 2025)는 어텐션을 두 소프트맥스의 차분(difference)으로 계산하여, 공유된 노이즈 바닥(noise floor)을 빼서 이를 고친다. DIFF V2 (Microsoft, 2026년 1월)는 프로덕션 스택(production-stack) 재작성이다. 디코드 지연 시간(decode latency)을 베이스라인(baseline) Transformer에 맞추고, 커스텀 커널(custom kernel)이 없으며, FlashAttention 호환이다. 이 레슨은 V1에서 V2까지의 엔드투엔드이며, stdlib Python에서 실행할 수 있는 차분 연산의 작동하는 장난감 구현을 곁들인다.
+> 소프트맥스 어텐션(softmax attention)은 일치하지 않는 모든 토큰(token)에 소량의 확률을 퍼뜨린다. 10만 토큰에 걸쳐 그 노이즈(noise)가 쌓이면 신호가 파묻힌다. Differential Transformer (Ye et al., ICLR 2025)는 어텐션을 두 소프트맥스의 차분(difference)으로 계산하여, 공유된 노이즈 바닥(noise floor)을 빼서 이를 고친다. DIFF V2 (Microsoft, 2026년 1월)는 프로덕션 스택(production-stack) 재작성이다. 디코드 지연 시간(decode latency)을 베이스라인(baseline) Transformer에 맞추고, 커스텀 커널(custom kernel)이 없으며, FlashAttention 호환이다. 이 레슨은 V1에서 V2까지의 엔드투엔드이며, stdlib Python에서 실행할 수 있는 차분 연산의 작동하는 장난감 구현을 곁들인다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-표준 소프트맥스 어텐션은 규모에서 운영상의 골칫거리로 변하는 수학적 속성을 가진다. 쿼리 `q`에 대해, 어텐션 가중치(attention weight)는 `softmax(qK^T / sqrt(d))`다. 소프트맥스는 결코 정확한 0을 생산할 수 없다 — 일치하지 않는 모든 토큰이 어느 정도의 양의 질량(positive mass)을 받는다. 그 잔여 질량은 노이즈이며, 컨텍스트 길이에 따라 커진다. 128k 토큰에서, 일치하지 않는 각 토큰이 확률의 0.001%만 받더라도, 그중 127,999개가 합쳐지면 전체의 약 12%를 기여한다. 모델은 컨텍스트에 따라 커지는 노이즈 바닥을 우회하는 법을 배워야 한다.
+표준 소프트맥스 어텐션에는 규모가 커지면 운영상의 골칫거리로 변하는 수학적 속성이 있다. 쿼리 `q`에 대해, 어텐션 가중치(attention weight)는 `softmax(qK^T / sqrt(d))`다. 소프트맥스는 결코 정확한 0을 생산할 수 없다 — 일치하지 않는 모든 토큰이 어느 정도의 양의 질량(positive mass)을 받는다. 그 잔여 질량은 노이즈이며, 컨텍스트 길이에 따라 커진다. 128k 토큰에서, 일치하지 않는 각 토큰이 확률의 0.001%만 받더라도, 그중 127,999개가 합쳐지면 전체의 약 12%를 기여한다. 모델은 컨텍스트에 따라 커지는 노이즈 바닥을 우회하는 법을 배워야 한다.
 
 경험적으로 이것은 어텐션 헤드(attention head) 간섭으로 나타난다. 긴 컨텍스트 RAG에서의 환각된 인용(hallucinated citation), 100k 토큰 검색 작업에서의 중간 분실(lost-in-the-middle) 실패, 그리고 32k를 넘는 건초 더미 속 바늘(needle-in-haystack) 벤치마크(benchmark)에서의 미묘한 정확도 저하. Differential Transformer 논문(arXiv:2410.05258, ICLR 2025)은 그 격차를 측정했다. DIFF Transformer는 같은 크기의 베이스라인보다 더 낮은 퍼플렉시티(perplexity), 더 높은 긴 컨텍스트 정확도, 더 적은 환각에 도달했다.
 
-DIFF V1은 그것을 프런티어 사전 학습 파이프라인(pipeline)에서 배제한 세 가지 문제를 가졌다. 값 캐시(value cache)를 디코드 스텝당 두 번 적재해야 했고, FlashAttention 호환성을 깨는 커스텀 CUDA 커널을 필요로 했으며, 헤드별 RMSNorm이 70B 이상 규모에서 장기 학습을 불안정하게 만들었다. DIFF V2 (Microsoft unilm 블로그, 2026년 1월 20일)는 세 가지 모두를 고쳤다. 이 레슨은 두 버전을 모두 따라가고, 차분 연산자를 만들고, 장난감 쿼리에서 노이즈 상쇄를 벤치마크한다.
+DIFF V1에는 그것을 프런티어 사전 학습 파이프라인(pipeline)에서 배제한 세 가지 문제가 있었다. 값 캐시(value cache)를 디코드 스텝당 두 번 적재해야 했고, FlashAttention 호환성을 깨는 커스텀 CUDA 커널을 필요로 했으며, 헤드별 RMSNorm이 70B 이상 규모에서 장기 학습을 불안정하게 만들었다. DIFF V2 (Microsoft unilm 블로그, 2026년 1월 20일)는 세 가지 모두를 고쳤다. 이 레슨은 두 버전을 모두 따라가고, 차분 연산자를 만들고, 장난감 쿼리에서 노이즈 상쇄를 벤치마크한다.
 
 ## 개념 (The Concept)
 
@@ -61,7 +61,7 @@ DiffAttn = (A_1 - lambda * A_2) V
 
 ### V1 vs V2: 그 diff (V1 vs V2: the diff)
 
-V1은 파라미터(parameter) 수를 베이스라인 Transformer와 같게 유지했다. 헤드당 두 개의 쿼리를 얻기 위해 헤드 차원(head dimension)을 절반으로 줄였다. 그것은 헤드 표현력을 희생했고 — 더 고통스럽게는 — 헤드당 값 캐시를 절반으로 줄였다. 디코드는 스텝당 값 캐시를 두 번 적재해야 했다(소프트맥스 분기당 한 번). 결과: 파라미터 수가 일치함에도 디코드가 베이스라인보다 느렸다.
+V1은 파라미터(parameter) 수를 베이스라인 Transformer와 같게 유지했다. 헤드당 두 개의 쿼리를 얻기 위해 헤드 차원(head dimension)을 절반으로 줄였다. 그것은 헤드 표현력을 희생했고, 더 뼈아프게는 헤드당 값 캐시를 절반으로 줄였다. 디코드는 스텝당 값 캐시를 두 번 적재해야 했다(소프트맥스 분기당 한 번). 결과: 파라미터 수가 일치함에도 디코드가 베이스라인보다 느렸다.
 
 V2는 쿼리 헤드 수를 두 배로 하고 KV 헤드는 같게 유지한다(상향 투영, up-projection에서 파라미터를 빌림). 헤드 차원은 베이스라인과 같게 유지된다. 뺄셈 후, 여분의 차원은 베이스라인 Transformer의 O_W 투영에 맞추기 위해 다시 아래로 투영된다. 세 가지가 동시에 일어난다:
 
@@ -81,7 +81,7 @@ V2는 또한 V1이 뺄셈을 안정화하는 데 쓴 헤드별 RMSNorm을 제거
 | 8k에서의 코드 완성 | 미미함, 아키텍처 변경의 가치 없음 |
 | 짧은 채팅 (< 4k) | 본질적으로 베이스라인과 구별 불가 |
 
-가치는 컨텍스트 길이에 따라 커진다. 4k 토큰에서는 노이즈 바닥이 충분히 작아 표준 어텐션으로 괜찮다. 128k에서는 그것이 당신을 해치고 있다.
+가치는 컨텍스트 길이에 따라 커진다. 4k 토큰에서는 노이즈 바닥이 충분히 작아 표준 어텐션으로 괜찮다. 128k에서는 그 노이즈가 성능을 해친다.
 
 ### 다른 2026년 손잡이와 어떻게 쌓이는가 (How it stacks with other 2026 knobs)
 

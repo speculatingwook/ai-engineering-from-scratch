@@ -1,6 +1,6 @@
 # 자기 지도 비전 — SimCLR, DINO, MAE (Self-Supervised Vision)
 
-> 레이블(label)은 지도 비전(supervised vision)의 병목이다. 자기 지도 사전 학습(self-supervised pretraining)은 그것을 제거한다: 레이블 없는 1억 장의 이미지에서 시각적 특성을 학습하고, 레이블된 1만 장에 파인튜닝(fine-tune)한다.
+> 레이블(label)은 지도 비전(supervised vision)의 병목이다. 자기 지도 사전 학습(self-supervised pretraining)은 그 병목을 없앤다. 레이블 없는 1억 장의 이미지에서 시각적 특성을 학습한 뒤, 레이블된 1만 장에 파인튜닝(fine-tune)한다.
 
 **Type:** Learn + Build
 **Languages:** Python
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-지도 ImageNet은 130만 장의 레이블된 이미지를 가지며, 이는 주석을 다는 데 약 1,000만 달러가 든 것으로 추정된다. 의료 및 산업 데이터셋(dataset)은 더 작고 레이블링(label)이 훨씬 더 비싸다. 모든 비전 팀이 묻는다: 값싼 레이블 없는 데이터 — YouTube 프레임, 웹 크롤, 웹캠 영상, 위성 스윕 — 에 사전 학습한 뒤 작은 레이블된 집합에 파인튜닝할 수 있는가?
+지도 ImageNet은 130만 장의 레이블된 이미지를 가지며, 주석을 다는 데 약 1,000만 달러가 든 것으로 추정된다. 의료 및 산업 데이터셋(dataset)은 더 작고 레이블링(label)이 훨씬 더 비싸다. 그래서 모든 비전 팀이 묻는다. 값싼 레이블 없는 데이터 — YouTube 프레임, 웹 크롤, 웹캠 영상, 위성 스윕 — 에 사전 학습한 뒤 작은 레이블된 집합에 파인튜닝할 수 있는가?
 
-자기 지도 학습(self-supervised learning)이 그 답이다. LAION이나 JFT에 학습된 현대의 자기 지도 ViT는 파인튜닝되었을 때 지도 ImageNet 정확도에 도달하거나 능가한다. 또한 하류 작업(검출, 분할, 깊이)에 지도 사전 학습보다 더 잘 전이된다. DINOv2(Meta, 2023)와 MAE(Meta, 2022)는 전이 가능한 비전 특성에 대한 현재의 프로덕션(production) 기본값이다.
+자기 지도 학습(self-supervised learning)이 그 답이다. LAION이나 JFT에 학습된 현대의 자기 지도 ViT는 파인튜닝되었을 때 지도 ImageNet 정확도에 도달하거나 능가한다. 또한 하류 작업(검출, 분할, 깊이)에 지도 사전 학습보다 더 잘 전이된다. DINOv2(Meta, 2023)와 MAE(Meta, 2022)는 전이 가능한 비전 특성을 다룰 때 현재의 프로덕션(production) 기본값이다.
 
-개념적 전환은, 프리텍스트 작업(pretext task) — 모델이 하도록 학습되는 것 — 이 하류 작업일 필요가 없다는 것이다. 중요한 것은 그것이 모델로 하여금 유용한 특성을 학습하도록 강제한다는 점이다. 흑백 이미지의 색을 예측하기, 이미지를 회전시키고 모델에게 회전을 분류하라고 하기, 패치(patch)를 마스킹하고 복원하기 — 모두 효과가 있었다. 규모로 확장되는 세 접근법은 대조 학습(contrastive learning), 교사-학생 증류(distillation), 마스킹된 복원이다.
+개념적 전환은 이렇다. 프리텍스트 작업(pretext task) — 모델이 학습하도록 시키는 것 — 이 꼭 하류 작업일 필요는 없다. 중요한 것은 그 작업이 모델에게 유용한 특성을 학습하도록 강제한다는 점이다. 흑백 이미지의 색을 예측하기, 이미지를 회전시키고 모델에게 회전을 분류하라고 하기, 패치(patch)를 마스킹하고 복원하기 — 모두 효과가 있었다. 규모로 확장되는 세 접근법은 대조 학습(contrastive learning), 교사-학생 증류(distillation), 마스킹된 복원이다.
 
 ## 개념 (The Concept)
 
@@ -39,7 +39,7 @@ flowchart LR
 
 ### 대조 학습 (Contrastive learning, SimCLR)
 
-한 이미지를 가져와, 두 개의 무작위 증강(augmentation)을 적용해, 두 개의 뷰를 얻는다. 둘 다 같은 인코더(encoder)와 투영 헤드(projection head)를 통과시킨다. "이 두 임베딩(embedding)은 가까워야 한다"와 "이 임베딩은 배치 안의 다른 모든 이미지의 임베딩에서 멀어야 한다"고 말하는 손실을 최소화한다.
+한 이미지를 가져와 두 개의 무작위 증강(augmentation)을 적용하면 두 개의 뷰가 나온다. 둘 다 같은 인코더(encoder)와 투영 헤드(projection head)를 통과시킨다. "이 두 임베딩(embedding)은 가까워야 한다"와 "이 임베딩은 배치 안의 다른 모든 이미지의 임베딩에서 멀어야 한다"고 말하는 손실을 최소화한다.
 
 ```
 Loss for positive pair (z_i, z_j) among 2N views per batch:
@@ -50,11 +50,11 @@ sim = cosine similarity
 tau = temperature (0.1 standard)
 ```
 
-이것이 InfoNCE 손실이다. 양성(positive)당 많은 음성(negative)이 필요하므로 배치 크기가 중요하다 — SimCLR은 512~8192가 필요하다. MoCo는 음성 개수를 배치 크기와 분리하기 위해 과거 배치들의 모멘텀 큐(momentum queue)를 도입했다.
+이것이 InfoNCE 손실이다. 양성(positive)당 많은 음성(negative)이 필요하므로 배치 크기가 중요하다 — SimCLR은 512~8192가 필요하다. MoCo는 음성 개수를 배치 크기와 분리하려고 과거 배치들의 모멘텀 큐(momentum queue)를 도입했다.
 
 ### 교사-학생 (Teacher-student, DINO)
 
-같은 아키텍처를 가진 두 신경망(neural network): 학생(student)과 교사(teacher). 교사는 학생 가중치(weight)의 지수 이동 평균(exponential moving average, EMA)이다. 둘 다 이미지의 증강된 뷰를 본다. 학생의 출력은 교사의 출력과 일치하도록 학습된다 — 명시적 음성이 없다.
+같은 아키텍처를 가진 두 신경망(neural network), 곧 학생(student)과 교사(teacher)가 있다. 교사는 학생 가중치(weight)의 지수 이동 평균(exponential moving average, EMA)이다. 둘 다 이미지의 증강된 뷰를 본다. 학생의 출력은 교사의 출력과 일치하도록 학습된다. 명시적 음성은 없다.
 
 ```
 loss = CE( student_output(view_1),  teacher_output(view_2) )
@@ -63,9 +63,9 @@ loss = CE( student_output(view_1),  teacher_output(view_2) )
 teacher_weights = m * teacher_weights + (1 - m) * student_weights   (m ≈ 0.996)
 ```
 
-왜 "상수를 예측한다"로 붕괴하지 않는가: 교사의 출력은 중심화되고(per-dimension 평균을 뺌) 날카롭게 된다(작은 온도(temperature)로 나눔). 중심화(centering)는 한 차원이 지배하는 것을 막고, 날카롭게 하기(sharpening)는 출력이 균일(uniform)로 붕괴하는 것을 막는다.
+왜 "상수를 예측한다"로 붕괴하지 않는가. 교사의 출력은 중심화되고(per-dimension 평균을 뺌) 날카롭게 된다(작은 온도(temperature)로 나눔). 중심화(centering)는 한 차원이 지배하는 것을 막고, 날카롭게 하기(sharpening)는 출력이 균일(uniform)로 붕괴하는 것을 막는다.
 
-DINO는 DINOv2가 1억 4,200만 장의 선별된 이미지에 대해 규모를 키운 것이다. 그 결과 특성은 제로샷 시각 검색과 밀집 예측(dense prediction)에 대한 현재의 SOTA다.
+DINO는 DINOv2가 1억 4,200만 장의 선별된 이미지에 대해 규모를 키운 것이다. 그 결과 특성은 제로샷 시각 검색과 밀집 예측(dense prediction)에서 현재의 SOTA다.
 
 ### 마스킹된 복원 (Masked reconstruction, MAE)
 
@@ -79,24 +79,24 @@ Loss:     MSE between reconstructed and original pixels on masked patches only
 
 MAE를 작동하게 하는 핵심 설계 선택:
 
-- **75% 마스크 비율** — 높다. 인코더로 하여금 의미론적 특성을 학습하도록 강제한다. 25%를 복원하는 것은 거의 자명할 것이다(인접 픽셀이 너무 상관되어 있어 CNN이 정확히 맞힐 수 있다).
+- **75% 마스크 비율** — 높다. 인코더가 의미론적 특성을 학습하도록 강제한다. 25%를 복원하는 것은 거의 자명할 것이다(인접 픽셀이 너무 상관되어 있어 CNN이 정확히 맞힐 수 있다).
 - **비대칭 인코더/디코더(Asymmetric encoder/decoder)** — 큰 ViT 인코더는 보이는 패치만 본다. 작은 디코더(8층, 512차원)가 복원을 처리한다. 순진한 BEiT보다 3배 빠른 사전 학습.
 - **픽셀 공간 복원 타깃(Pixel-space reconstruction target)** — BEiT의 토큰화된 타깃보다 단순하고 ViT에서 더 잘 작동한다.
 
-사전 학습 후, 디코더를 버린다. 인코더가 특성 추출기다.
+사전 학습 후에는 디코더를 버린다. 인코더가 특성 추출기다.
 
 ### 왜 15%가 아니라 75%인가
 
 BERT는 토큰(token)의 15%를 마스킹한다. MAE는 75%를 마스킹한다. 차이는 정보 밀도다.
 
 - 자연어는 토큰당 엔트로피가 높다. 토큰의 15%를 예측하는 것도 여전히 어렵다. 각 마스킹된 위치에 그럴듯한 완성이 여럿 있기 때문이다.
-- 이미지 패치는 엔트로피가 낮다 — 마스킹되지 않은 이웃이 종종 마스킹된 패치의 픽셀을 거의 정확히 결정한다. 예측이 의미론적 이해를 요구하게 만들려면, 공격적으로 마스킹해야 한다.
+- 이미지 패치는 엔트로피가 낮다 — 마스킹되지 않은 이웃이 종종 마스킹된 패치의 픽셀을 거의 정확히 결정한다. 예측에 의미론적 이해가 필요하게 만들려면 공격적으로 마스킹해야 한다.
 
 75%는 단순한 공간적 외삽(spatial extrapolation)으로 작업을 풀 수 없을 만큼 높다. 인코더는 이미지 콘텐츠를 표현해야 한다.
 
 ### 선형 프로브 평가 (Linear-probe evaluation)
 
-자기 지도 사전 학습 후, 표준 평가는 **선형 프로브(linear probe)**다: 인코더를 동결하고, 그 위에 ImageNet 레이블로 단일 선형 분류기(classifier)를 학습시킨다. top-1 정확도를 보고한다.
+자기 지도 사전 학습 후, 표준 평가는 **선형 프로브(linear probe)**다. 인코더를 동결하고, 그 위에 ImageNet 레이블로 단일 선형 분류기(classifier)를 학습시킨 뒤 top-1 정확도를 보고한다.
 
 - SimCLR ResNet-50: 약 71% (2020)
 - DINO ViT-S/16: 약 77% (2021)
@@ -159,7 +159,7 @@ def info_nce(z1, z2, tau=0.1):
     return F.cross_entropy(sim, targets)
 ```
 
-호출 전에 임베딩을 L2 정규화(normalise)하라. `tau=0.1`이 SimCLR 기본값이다. 더 낮으면 손실이 더 날카로워지고 더 많은 음성을 필요로 한다.
+호출 전에 임베딩을 L2 정규화(normalise)하라. `tau=0.1`이 SimCLR 기본값이다. 더 낮으면 손실이 더 날카로워지고 더 많은 음성이 필요해진다.
 
 ### Step 3: InfoNCE 정상 동작 확인
 
@@ -214,7 +214,7 @@ with torch.no_grad():
     embedding = outputs.last_hidden_state[:, 0]  # CLS token
 ```
 
-그 결과 768차원 임베딩이 현대 이미지 검색, 밀집 대응(dense correspondence), 제로샷 전이 파이프라인의 백본(backbone)이다. 하류 작업에 대한 파인튜닝은 선형 헤드 이상을 거의 필요로 하지 않는다.
+그 결과 768차원 임베딩이 현대 이미지 검색, 밀집 대응(dense correspondence), 제로샷 전이 파이프라인의 백본(backbone)이다. 하류 작업 파인튜닝에는 선형 헤드 이상이 거의 필요하지 않다.
 
 이미지-텍스트 임베딩에는 SigLIP이나 OpenCLIP이 동등물이다. MAE 스타일 파인튜닝에는 `timm` 레포가 모든 MAE 체크포인트를 제공한다.
 

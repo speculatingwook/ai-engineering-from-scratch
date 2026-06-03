@@ -1,6 +1,6 @@
 # 비평 루프(Critic Loop)
 
-> 처음부터 "괜찮아 보임"을 반환하는 비평가(critic)는 망가졌다. 항상 "손볼 게 있음"을 반환하는 비평가도 망가졌다. 흥미로운 비평가는 수렴(converge)하는 것이며, 당신은 수렴을 설계(engineer)해야 한다.
+> 처음부터 "괜찮아 보임"을 반환하는 비평가(critic)는 망가졌다. 항상 "손볼 게 있음"을 반환하는 비평가도 망가졌다. 흥미로운 비평가는 수렴(converge)하며, 그 수렴은 설계(engineer)해야 한다.
 
 **Type:** Build
 **Languages:** Python
@@ -17,7 +17,7 @@
 
 ## 왜 다섯 가지 고정 차원인가 (Why five fixed dimensions)
 
-자유 형식 비평가는 제안 한 문단을 반환하는 모델이다. 다음 라운드의 수정은 그 문단을 주변 컨텍스트(ambient context)로 취급한다. 재작성이 비평을 다루는지는 검증 불가능한데, 비평이 결코 구조를 가진 적이 없기 때문이다.
+자유 형식 비평가는 제안 한 문단을 반환하는 모델이다. 다음 라운드의 수정은 그 문단을 주변 컨텍스트(ambient context)로 취급한다. 재작성이 비평을 다루는지는 검증할 수 없는데, 비평에 애초에 구조가 없었기 때문이다.
 
 다섯 차원은 하니스(harness)에 계약을 준다.
 
@@ -33,7 +33,7 @@ flowchart LR
     Scores --> Revs[revision suggestions]
 ```
 
-점수는 벡터(vector)다. 하니스는 라운드에 걸쳐 각 차원을 지켜본다. 명료성을 올리지만 증거를 떨어뜨리는 수정은 증거에서의 회귀(regression)이며, 수렴 검사가 그것을 본다. 모델만의 비평가는 그 보장을 제공할 수 없다.
+점수는 벡터(vector)다. 하니스는 라운드에 걸쳐 각 차원을 지켜본다. 명료성을 올리지만 증거를 떨어뜨리는 수정은 증거에서의 회귀(regression)이며, 수렴 검사가 그것을 본다. 모델만의 비평가는 그 보장을 해주지 못한다.
 
 ## Critique 형태 (The Critique shape)
 
@@ -63,9 +63,9 @@ flowchart TB
     C -- no --> Next[Run round n plus 1]
 ```
 
-목표(target)는 가장 엄격한 경우다. 다섯 차원(clarity, novelty, evidence, methodology, related_work) 각각이 루프가 성공을 반환하기 전에 `>= target_score`(기본값 `8.0`)에 도달해야 한다. 한 약한 차원을 가진 높은 평균으로는 충분하지 않다. 정체 탐지는 현재 라운드의 평균을 이전 라운드의 평균과 비교한다. 개선이 두 연속 라운드 동안 `plateau_epsilon`(기본값 `0.1`) 아래면 루프는 `plateau`로 종료한다. 예산(budget)은 라운드에 대한 단단한 상한(기본값 `5`)이며 `budget`으로 종료한다.
+목표(target)는 가장 엄격한 경우다. 다섯 차원(clarity, novelty, evidence, methodology, related_work) 각각이 루프가 성공을 반환하기 전에 `>= target_score`(기본값 `8.0`)에 도달해야 한다. 약한 차원이 하나라도 있으면 평균이 높아도 충분하지 않다. 정체 탐지는 현재 라운드의 평균을 이전 라운드의 평균과 비교한다. 개선이 두 연속 라운드 동안 `plateau_epsilon`(기본값 `0.1`) 아래면 루프는 `plateau`로 종료한다. 예산(budget)은 라운드에 대한 단단한 상한(기본값 `5`)이며 `budget`으로 종료한다.
 
-순서가 중요하다. 목표가 정체를 이기고 정체가 예산을 이긴다. 라운드 3이 정체도 트리거할 같은 반복에서 목표에 도달하면 결과는 `plateau`가 아니라 `target`이다.
+순서가 중요하다. 목표가 정체를 이기고 정체가 예산을 이긴다. 라운드 3이 정체를 트리거하는 바로 그 반복에서 목표에 도달하면 결과는 `plateau`가 아니라 `target`이다.
 
 ## 왜 정체 탐지가 두 라운드에 걸쳐 실행되는가 (Why plateau detection runs over two rounds)
 

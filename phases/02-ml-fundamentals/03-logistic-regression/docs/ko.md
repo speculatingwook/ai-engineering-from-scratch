@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-당신은 종양이 크기가 주어졌을 때 악성인지 양성인지 예측하고 싶다. 선형 회귀(linear regression)를 시도한다. 그것은 0.3이나 1.7이나 -0.5 같은 숫자를 출력한다. 이것들은 무엇을 의미하는가? 1.7은 "매우 악성"인가? -0.5는 "매우 양성"인가? 선형 회귀는 범위가 정해지지 않은 숫자를 출력한다. 분류(classification)는 0과 1 사이의 범위가 정해진 확률과, 명확한 결정(예 또는 아니오)이 필요하다.
+종양 크기가 주어졌을 때 악성인지 양성인지 예측하고 싶다고 하자. 선형 회귀(linear regression)를 시도한다. 그러면 0.3이나 1.7이나 -0.5 같은 숫자가 나온다. 이 숫자들은 무엇을 의미하는가? 1.7은 "매우 악성"인가? -0.5는 "매우 양성"인가? 선형 회귀는 범위가 정해지지 않은 숫자를 출력한다. 분류(classification)는 0과 1 사이의 범위가 정해진 확률과, 명확한 결정(예 또는 아니오)이 필요하다.
 
 로지스틱 회귀(logistic regression)는 이를 해결한다. 같은 선형 결합(wx + b)을 취해, 어떤 숫자든 (0, 1) 범위로 짓눌러 넣는 시그모이드(sigmoid) 함수를 통과시킨다. 출력은 확률이다. 임계값(threshold)(보통 0.5)을 설정하고 결정을 내린다.
 
@@ -97,7 +97,7 @@ dL/dw = (1/n) * sum((p - y) * x)
 dL/db = (1/n) * sum(p - y)
 ```
 
-이것들은 선형 회귀의 그래디언트와 동일해 보인다. 차이는 p = wx + b 대신 p = sigmoid(wx + b)라는 점이다. 시그모이드가 비선형성을 도입하지만, 그래디언트 갱신 규칙은 그대로다.
+이 식들은 선형 회귀의 그래디언트와 똑같아 보인다. 차이는 p = wx + b 대신 p = sigmoid(wx + b)라는 점이다. 시그모이드가 비선형성을 도입하지만, 그래디언트 갱신 규칙은 그대로다.
 
 ```mermaid
 flowchart TD
@@ -491,7 +491,7 @@ print(f"\nConfusion Matrix:\n{confusion_matrix(y_te, y_pred)}")
 print(f"\nClassification Report:\n{classification_report(y_te, y_pred)}")
 ```
 
-당신의 밑바닥 구현은 같은 결정 경계와 지표를 만든다. scikit-learn은 솔버 옵션(liblinear, lbfgs, saga), 자동 정규화(regularization), 다중 클래스 전략(one-vs-rest, multinomial), 그리고 수치 안정성 최적화를 더한다.
+밑바닥 구현은 같은 결정 경계와 지표를 만든다. scikit-learn은 솔버 옵션(liblinear, lbfgs, saga), 자동 정규화(regularization), 다중 클래스 전략(one-vs-rest, multinomial), 그리고 수치 안정성 최적화를 더한다.
 
 ## 산출물 (Ship It)
 
@@ -520,3 +520,5 @@ print(f"\nClassification Report:\n{classification_report(y_te, y_pred)}")
 | 임계값(Threshold) | "컷오프" | 그 위에서 모델이 클래스 1을 예측하는 확률 값(기본 0.5, 튜닝 가능) |
 | 원-핫 인코딩(One-hot encoding) | "범주를 위한 이진 컬럼" | 클래스 k를 위치 k에 1이 있는 0의 벡터로 표현하는 것 |
 | 범주형 교차 엔트로피(Categorical cross-entropy) | "다중 클래스 로그 손실" | 원-핫 인코딩된 레이블을 사용해 이진 교차 엔트로피를 k개 클래스로 확장한 것 |
+</content>
+</invoke>

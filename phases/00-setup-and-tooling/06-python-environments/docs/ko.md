@@ -16,16 +16,16 @@
 
 ## 문제 (The Problem)
 
-당신은 파인튜닝(fine-tuning) 프로젝트를 위해 PyTorch 2.4를 설치한다. 다음 주에 또 다른 프로젝트가 CUDA 빌드가 고정되어 있어 PyTorch 2.1을 필요로 한다. 전역으로 업그레이드하면 첫 번째 프로젝트가 망가진다. 다운그레이드하면 두 번째 것이 망가진다.
+파인튜닝(fine-tuning) 프로젝트에 PyTorch 2.4를 설치한다고 하자. 다음 주에 다른 프로젝트가 CUDA 빌드가 고정되어 있어 PyTorch 2.1을 요구한다. 전역으로 업그레이드하면 첫 번째 프로젝트가 망가지고, 다운그레이드하면 두 번째 것이 망가진다.
 
 이것이 의존성 지옥이다. AI/ML 작업에서는 다음 이유로 끊임없이 발생한다.
 
 - PyTorch, JAX, TensorFlow가 각각 자체 CUDA 바인딩을 함께 배포한다
 - 모델 라이브러리들이 특정 프레임워크 버전을 고정한다
 - 전역 `pip install`은 이전에 있던 것을 덮어쓴다
-- CUDA 11.8 빌드는 CUDA 12.x 드라이버와 작동하지 않는다(그 반대도 마찬가지)
+- CUDA 11.8 빌드는 CUDA 12.x 드라이버와 함께 작동하지 않는다(그 반대도 마찬가지)
 
-해결책: 모든 프로젝트가 자체 패키지를 가진 자체 격리 환경을 갖는다.
+해결책: 모든 프로젝트가 자체 패키지를 담은 자체 격리 환경을 갖는다.
 
 ## 개념 (The Concept)
 
@@ -49,7 +49,7 @@ graph TD
 
 ### 옵션 1: uv venv (권장)
 
-`uv`는 가장 빠른 Python 패키지 매니저(package manager)다(pip보다 10~100배 빠름). 가상 환경, Python 버전, 의존성 해결을 하나의 도구로 처리한다.
+`uv`는 가장 빠른 Python 패키지 매니저(package manager)다(pip보다 10~100배 빠르다). 가상 환경, Python 버전, 의존성 해결을 하나의 도구로 처리한다.
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -77,7 +77,7 @@ uv add torch numpy matplotlib
 
 ### 옵션 2: venv (내장)
 
-`uv`를 설치할 수 없다면, Python에는 `venv`가 함께 들어 있다.
+`uv`를 설치할 수 없다면, Python에 `venv`가 함께 들어 있다.
 
 ```bash
 python3 -m venv .venv
@@ -91,7 +91,7 @@ pip install torch numpy
 
 ### 옵션 3: conda (필요할 때)
 
-Conda는 CUDA 툴킷, cuDNN, C 라이브러리 같은 비(非)Python 의존성을 관리한다. 다음 경우에 사용하라.
+Conda는 CUDA 툴킷, cuDNN, C 라이브러리 같은 비(非)Python 의존성을 관리한다. 다음 경우에 쓴다.
 
 - 시스템 전역으로 설치하지 않고 특정 CUDA 툴킷 버전이 필요할 때
 - 시스템 패키지를 설치할 수 없는 공유 클러스터에 있을 때
@@ -108,11 +108,11 @@ conda activate myproject
 conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia
 ```
 
-한 가지 규칙: 어떤 환경에 conda를 사용한다면, 그 환경의 모든 패키지에 conda를 사용하라. conda 환경에 `pip install`을 섞으면 디버깅하기 고통스러운 의존성 충돌이 발생한다.
+한 가지 규칙: 어떤 환경에 conda를 쓴다면, 그 환경의 모든 패키지에 conda를 써라. conda 환경에 `pip install`을 섞으면 디버깅하기 고통스러운 의존성 충돌이 발생한다.
 
 ### 이 강의를 위한 전략: 단계별 전략
 
-강의 전체를 위해 환경 하나를 만들 수도 있다. 그러지 마라. 단계마다 (때로는 충돌하는) 서로 다른 의존성이 필요하다.
+강의 전체를 위해 환경 하나만 만들 수도 있다. 그러지 마라. 단계마다 (때로는 충돌하는) 서로 다른 의존성이 필요하다.
 
 전략:
 
@@ -163,7 +163,7 @@ uv pip install -e ".[torch,llm]" # everything
 
 ## 락파일 (Lockfiles)
 
-락파일은 모든 의존성(전이 의존성(transitive dependency) 포함)을 정확한 버전으로 고정한다. 이는 재현성을 보장한다. 락파일로 설치하는 사람은 누구나 정확히 같은 패키지를 받는다.
+락파일은 전이 의존성(transitive dependency)을 포함한 모든 의존성을 정확한 버전으로 고정한다. 그래서 재현성이 보장된다. 락파일로 설치하는 사람은 누구나 정확히 같은 패키지를 받는다.
 
 ```bash
 # uv generates uv.lock automatically when using uv add
@@ -226,7 +226,7 @@ python train.py           # uses project Python, packages found
 echo ".venv/" >> .gitignore
 ```
 
-가상 환경은 200MB~2GB다. 로컬에 있는 것이며 머신 간에 이식 가능하지 않다. 대신 `pyproject.toml`과 락파일을 커밋하라.
+가상 환경은 200MB~2GB다. 로컬에만 있고 머신 간에 이식되지 않는다. 대신 `pyproject.toml`과 락파일을 커밋하라.
 
 ### 5. CUDA 버전 불일치
 

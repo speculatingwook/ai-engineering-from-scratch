@@ -1,6 +1,6 @@
 # Capstone 01 — 터미널 네이티브 코딩 에이전트 (Terminal-Native Coding Agent)
 
-> 2026년이면 코딩 에이전트(coding agent)의 형태는 이미 정해져 있다. TUI 하네스(harness), 상태를 가진 계획(plan), 샌드박스(sandbox)로 격리된 도구 표면(tool surface), 그리고 계획하고·행동하고·관찰하고·복구하는 루프. Claude Code, Cursor 3, OpenCode는 50피트 밖에서 보면 모두 똑같이 생겼다. 이 캡스톤(capstone)은 그런 에이전트를 처음부터 끝까지 하나 만드는 것을 요구한다 — CLI로 들어가서 풀 리퀘스트(pull request)로 나온다 — 그리고 SWE-bench Pro에서 mini-swe-agent와 Live-SWE-agent를 기준으로 측정한다. 어려운 부분은 모델 호출이 아니라 도구 루프(tool loop), 샌드박스, 그리고 50턴(turn) 실행에 걸리는 비용 상한이라는 것을 배우게 된다.
+> 2026년이면 코딩 에이전트(coding agent)의 형태는 이미 정해져 있다. TUI 하네스(harness), 상태를 가진 계획(plan), 샌드박스(sandbox)로 격리된 도구 표면(tool surface), 계획하고·행동하고·관찰하고·복구하는 루프. Claude Code, Cursor 3, OpenCode는 50피트 밖에서 보면 모두 똑같이 생겼다. 이 캡스톤(capstone)은 그런 에이전트를 처음부터 끝까지 하나 만드는 것을 요구한다 — CLI로 들어가서 풀 리퀘스트(pull request)로 나온다 — 그리고 SWE-bench Pro에서 mini-swe-agent와 Live-SWE-agent를 기준으로 측정한다. 어려운 부분은 모델 호출이 아니라 도구 루프(tool loop), 샌드박스, 50턴(turn) 실행에 걸리는 비용 상한임을 배우게 된다.
 
 **Type:** Capstone
 **Languages:** TypeScript / Bun (harness), Python (eval scripts)
@@ -10,15 +10,15 @@
 
 ## 문제 (Problem)
 
-코딩 에이전트는 2026년에 지배적인 AI 애플리케이션 범주가 되었다. Claude Code(Anthropic), Composer 2 및 Agent Tabs를 탑재한 Cursor 3(Cursor), Amp(Sourcegraph), OpenCode(스타 11.2만 개), Factory Droids, Google Jules는 모두 동일한 아키텍처의 변형을 출시한다. 터미널 하네스, 권한이 부여된 도구 표면, 샌드박스, 그리고 프런티어 모델(frontier model)을 중심으로 구축된 계획-행동-관찰 루프다. 프런티어는 좁다 — Live-SWE-agent는 Opus 4.5로 SWE-bench Verified에서 79.2%에 도달했다 — 하지만 엔지니어링 기교는 넓다. 대부분의 실패 모드는 모델의 실수가 아니다. 도구 루프 불안정성, 컨텍스트 오염(context poisoning), 폭주하는 토큰(token) 비용, 그리고 파괴적인 파일시스템 연산이다.
+코딩 에이전트는 2026년에 지배적인 AI 애플리케이션 범주가 되었다. Claude Code(Anthropic), Composer 2 및 Agent Tabs를 탑재한 Cursor 3(Cursor), Amp(Sourcegraph), OpenCode(스타 11.2만 개), Factory Droids, Google Jules는 모두 동일한 아키텍처의 변형을 출시한다. 터미널 하네스, 권한이 부여된 도구 표면, 샌드박스, 프런티어 모델(frontier model)을 중심으로 구축된 계획-행동-관찰 루프다. 프런티어는 좁다 — Live-SWE-agent는 Opus 4.5로 SWE-bench Verified에서 79.2%에 도달했다 — 하지만 엔지니어링 기교는 넓다. 대부분의 실패 모드는 모델의 실수가 아니다. 도구 루프 불안정성, 컨텍스트 오염(context poisoning), 폭주하는 토큰(token) 비용, 파괴적인 파일시스템 연산이다.
 
-이런 에이전트를 바깥에서 추론할 수는 없다. 직접 하나 만들어 보고, ripgrep이 8MB짜리 매치를 반환할 때 47번째 턴에서 루프가 무너지는 것을 지켜보고, 절단(truncation) 계층을 다시 만들어야 한다. 그것이 이 캡스톤의 핵심이다.
+이런 에이전트를 바깥에서 추론할 수는 없다. 직접 하나 만들어 보고, ripgrep이 8MB짜리 매치를 반환할 때 47번째 턴에서 루프가 무너지는 것을 지켜본 다음, 절단(truncation) 계층을 다시 만들어야 한다. 그것이 이 캡스톤의 핵심이다.
 
 ## 개념 (Concept)
 
 하네스에는 네 개의 표면이 있다. **계획(Plan)**은 모델이 매 턴 새로 쓰는 TodoWrite 스타일의 상태 객체를 유지한다. **행동(Act)**은 도구 호출(읽기, 편집, 실행, 검색, git)을 디스패치(dispatch)한다. **관찰(Observe)**은 stdout / stderr / 종료 코드를 포착하고, 절단하고, 요약을 다시 피드백한다. **복구(Recover)**는 컨텍스트 윈도우(context window)를 날려버리거나 영원히 루프에 빠지지 않으면서 도구 오류를 처리한다. 2026년의 형태는 한 가지를 더 추가한다. **훅(hooks)**이다. `PreToolUse`, `PostToolUse`, `SessionStart`, `SessionEnd`, `UserPromptSubmit`, `Notification`, `Stop`, `PreCompact` — 운영자가 정책, 텔레메트리(telemetry), 가드레일(guardrail)을 주입하는 설정 가능한 확장 지점이다.
 
-샌드박스는 E2B 또는 Daytona다. 각 작업은 git worktree가 읽기-쓰기로 마운트된 새 devcontainer에서 실행된다. 하네스는 호스트 파일시스템을 절대 건드리지 않는다. worktree는 성공하든 실패하든 해체된다. 비용 통제는 세 계층에서 강제된다. 턴당 토큰 상한, 세션당 달러 예산, 그리고 하드 턴 제한(보통 50)이다. 관측성(observability) 계층은 GenAI 시맨틱 컨벤션(semantic convention)을 따르는 OpenTelemetry 스팬(span)이며, 자체 호스팅한 Langfuse로 전송된다.
+샌드박스는 E2B 또는 Daytona다. 각 작업은 git worktree가 읽기-쓰기로 마운트된 새 devcontainer에서 실행된다. 하네스는 호스트 파일시스템을 절대 건드리지 않는다. worktree는 성공하든 실패하든 해체된다. 비용 통제는 세 계층에서 강제된다. 턴당 토큰 상한, 세션당 달러 예산, 하드 턴 제한(보통 50)이다. 관측성(observability) 계층은 GenAI 시맨틱 컨벤션(semantic convention)을 따르는 OpenTelemetry 스팬(span)이며, 자체 호스팅한 Langfuse로 전송된다.
 
 ## 아키텍처 (Architecture)
 

@@ -11,7 +11,7 @@
 
 세 가지 오디오 생성 작업이 있다.
 
-1. **텍스트-투-스피치(Text-to-speech).** 텍스트가 주어지면 음성을 만든다. 깨끗한 음성은 협대역이고 강한 음소 구조를 가진다. 토큰에 대한 트랜스포머로 잘 풀린다. VALL-E(Microsoft), NaturalSpeech 3, ElevenLabs, OpenAI TTS.
+1. **텍스트-투-스피치(Text-to-speech).** 텍스트가 주어지면 음성을 만든다. 깨끗한 음성은 협대역이고 음소 구조가 강하다. 토큰에 대한 트랜스포머로 잘 풀린다. VALL-E(Microsoft), NaturalSpeech 3, ElevenLabs, OpenAI TTS.
 2. **음악 생성(Music generation).** 프롬프트(텍스트, 멜로디, 코드 진행, 장르)가 주어지면 음악을 만든다. 훨씬 넓은 분포다. MusicGen(Meta), Stable Audio 2.5, Suno v4, Udio, Riffusion.
 3. **오디오 효과 / 사운드 디자인(Audio effects / sound design).** 프롬프트가 주어지면 환경음이나 폴리(Foley)를 만든다. AudioGen, AudioLDM 2, Stable Audio Open.
 

@@ -16,11 +16,11 @@
 
 ## 개념 (Concept)
 
-트리거는 GitHub 웹훅(이슈 레이블 또는 PR 코멘트)이다. 디스패처(dispatcher)가 ECS Fargate 또는 Lambda로 작업을 큐에 넣는다. 워커는 레포에서 추론한(언어, 프레임워크) 범용 Dockerfile로 레포를 Daytona 또는 E2B 샌드박스에 가져온다. 에이전트는 Claude Opus 4.7 또는 GPT-5.4-Codex에 대해 mini-swe-agent 또는 SWE-agent v2 루프를 실행한다. 이렇게 반복한다: 코드 읽기, 수정 제안, 패치 적용, 테스트 실행.
+트리거는 GitHub 웹훅(이슈 레이블 또는 PR 코멘트)이다. 디스패처(dispatcher)가 ECS Fargate 또는 Lambda로 작업을 큐에 넣는다. 워커는 레포에서 추론한(언어, 프레임워크) 범용 Dockerfile로 레포를 Daytona 또는 E2B 샌드박스에 올린다. 에이전트는 Claude Opus 4.7 또는 GPT-5.4-Codex에 대해 mini-swe-agent 또는 SWE-agent v2 루프를 실행한다. 이렇게 반복한다: 코드 읽기, 수정 제안, 패치 적용, 테스트 실행.
 
-검증은 게이팅 단계다. PR이 열리기 전에 샌드박스에서 전체 CI가 통과해야 한다. 커버리지(coverage) 차이가 계산된다. 임계값을 넘어 음수이면, PR은 열리지만 `needs-review` 레이블이 붙는다. 에이전트는 근거를 PR 설명으로 게시하고, 리뷰어가 후속 작업을 위해 핑(ping)할 수 있는 `@agent` 스레드를 추가한다.
+검증은 게이팅 단계다. PR이 열리기 전에 샌드박스에서 전체 CI가 통과해야 한다. 커버리지(coverage) 차이가 계산된다. 임계값을 넘어 음수이면, PR은 열리지만 `needs-review` 레이블이 붙는다. 에이전트는 근거를 PR 설명으로 게시하고 리뷰어가 후속 작업을 위해 핑(ping)할 수 있는 `@agent` 스레드를 추가한다.
 
-안전성은 두 개의 서로 다른 GitHub 표면을 통해 스코핑된다: App은 `workflows: read`와 좁은 레포 컨텐츠/PR 스코프를 갖는 단수명(short-lived) 설치 토큰을 제공한다. 브랜치 보호(앱 권한이 아님)가 "`main`에 직접 쓰기 금지"와 "force-push 금지"를 시행한다 — 앱은 결코 우회(bypass) 목록에 추가되지 않는다. `.github/workflows`에 대한 경로 스코프 읽기 전용 접근은 실제 GitHub App 원시 기능이 아니므로, 파일 편집에 대한 에이전트의 허용 목록(allow-list)이 워커에서 그것을 시행해야 한다. 레포당 일당 예산 상한은 디스패처에서 시행된다(예: 레포당 일당 최대 5 PR, PR당 $20).
+안전성은 서로 다른 두 GitHub 표면에서 스코핑된다: App은 `workflows: read`와 좁은 레포 컨텐츠/PR 스코프를 갖는 단수명(short-lived) 설치 토큰을 제공한다. 브랜치 보호(앱 권한이 아님)가 "`main`에 직접 쓰기 금지"와 "force-push 금지"를 시행한다 — 앱은 결코 우회(bypass) 목록에 추가되지 않는다. `.github/workflows`로 경로를 좁힌 읽기 전용 접근은 실제 GitHub App 원시 기능이 아니므로, 파일 편집을 제한하는 에이전트의 허용 목록(allow-list)이 워커에서 이를 시행해야 한다. 레포당 일당 예산 상한은 디스패처에서 시행된다(예: 레포당 일당 최대 5 PR, PR당 $20).
 
 ## 아키텍처 (Architecture)
 
@@ -67,7 +67,7 @@ GitHub issue labeled `@agent fix` or PR comment
 
 ## 직접 만들기 (Build It)
 
-1. **GitHub App.** 세분화된 설치 토큰: issues 읽기+쓰기, pull_requests 쓰기, contents 읽기+쓰기, workflows 읽기. 브랜치 보호(이것을 할 수 있는 유일한 표면)가 "`main`에 직접 푸시 금지"와 "force-push 금지"를 시행한다. 앱은 우회 목록에 없다. GitHub App 권한은 경로 스코프가 아니므로, 워커가 제안된 diff에 대한 허용 목록 검사로 "`.github/workflows` 아래 쓰기 금지"를 시행한다.
+1. **GitHub App.** 세분화된 설치 토큰: issues 읽기+쓰기, pull_requests 쓰기, contents 읽기+쓰기, workflows 읽기. 브랜치 보호(이것을 할 수 있는 유일한 표면)가 "`main`에 직접 푸시 금지"와 "force-push 금지"를 시행한다. 앱은 우회 목록에 없다. GitHub App 권한은 경로 스코프가 아니므로, 제안된 diff를 허용 목록으로 검사해 "`.github/workflows` 아래 쓰기 금지"를 워커가 시행한다.
 
 2. **웹훅 리시버.** Lambda 함수가 이슈 레이블 / PR 코멘트 웹훅을 받는다. `@agent fix this` 레이블로 필터링한다. SQS로 큐에 넣는다.
 

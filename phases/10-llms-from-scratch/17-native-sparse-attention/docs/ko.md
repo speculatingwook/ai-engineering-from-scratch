@@ -1,6 +1,6 @@
 # Native Sparse Attention (DeepSeek NSA)
 
-> 64k 토큰에서 어텐션(attention)은 디코드 지연 시간(latency)의 70~80%를 잡아먹는다. 모든 오픈 모델 연구소가 이를 해결할 계획을 가지고 있다. DeepSeek의 NSA(ACL 2025 최우수 논문)는 그중에서 살아남은 방법이다. 세 개의 병렬 어텐션 분기 — 압축된 거친 입자(coarse-grained) 토큰, 선택적으로 보존된 미세 입자(fine-grained) 토큰, 그리고 지역 컨텍스트를 위한 슬라이딩 윈도우 — 를 학습된 게이트(gate)를 통해 결합한다. 이는 하드웨어 정렬적(hardware-aligned)이며(커널 친화적), 네이티브하게 학습 가능하고(추론 시점에 덧붙이는 것이 아니라 사전 학습에서 동작한다), 64k 디코드에서 FlashAttention보다 빠르게 실행되면서도 전체 어텐션(full attention)의 품질에 맞먹거나 능가한다. 이 레슨은 세 분기를 처음부터 끝까지 만들고, 그 희소성(sparsity)이 어떻게 종단간(end-to-end)으로 미분 가능한지를 보여준다.
+> 64k 토큰에서 어텐션(attention)은 디코드 지연 시간(latency)의 70~80%를 잡아먹는다. 모든 오픈 모델 연구소가 이를 해결하려 한다. DeepSeek의 NSA(ACL 2025 최우수 논문)는 그중에서 살아남은 방법이다. 세 개의 병렬 어텐션 분기 — 압축된 거친 입자(coarse-grained) 토큰, 선택적으로 보존된 미세 입자(fine-grained) 토큰, 그리고 지역 컨텍스트를 위한 슬라이딩 윈도우 — 를 학습된 게이트(gate)를 통해 결합한다. 이는 하드웨어 정렬적(hardware-aligned)이며(커널 친화적), 네이티브하게 학습 가능하고(추론 시점에 덧붙이는 것이 아니라 사전 학습에서 동작한다), 64k 디코드에서 FlashAttention보다 빠르게 실행되면서도 전체 어텐션(full attention)의 품질에 맞먹거나 능가한다. 이 레슨은 세 분기를 처음부터 끝까지 만들고, 그 희소성(sparsity)이 어떻게 종단간(end-to-end)으로 미분 가능한지를 보여준다.
 
 **Type:** Build
 **Languages:** Python (stdlib)

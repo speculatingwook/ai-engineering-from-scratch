@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-어느 포춘 500 기업에 승인된 MCP 서버 30개, 개발자 5000명, 컴플라이언스 및 감사 요구사항, 그리고 중앙집중식 정책을 원하는 보안팀이 있다. 모든 개발자가 자신의 IDE에 임의의 서버를 설치하도록 두는 것은 애초에 불가능한 선택지다.
+어느 포춘 500 기업에 승인된 MCP 서버 30개, 개발자 5000명, 컴플라이언스 및 감사 요구사항, 중앙집중식 정책을 원하는 보안팀이 있다. 모든 개발자가 자신의 IDE에 임의의 서버를 설치하게 두는 것은 애초에 불가능하다.
 
 게이트웨이 패턴은 이렇다.
 
@@ -46,11 +46,11 @@ Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry,
 
 ### 자격 증명 볼팅 (Credential vaulting)
 
-개발자는 백엔드 토큰(token)을 결코 보지 못한다. 게이트웨이가 토큰을 보유한다(또는 토큰을 보유하는 ID 제공자(identity provider)로 프록시한다). 게이트웨이에서 `notes:read` 권한을 가진 개발자는 게이트웨이 자체의 백엔드 자격 증명으로 notes MCP 서버에 전이적으로(transitively) 접근할 수 있다 — 단, 그 전이적 접근을 결속하는 정책 하에서만 가능하다.
+개발자는 백엔드 토큰(token)을 결코 보지 못한다. 게이트웨이가 토큰을 보유한다(또는 토큰을 보유하는 ID 제공자(identity provider)로 프록시한다). 게이트웨이에서 `notes:read` 권한을 가진 개발자는 게이트웨이 자체의 백엔드 자격 증명으로 notes MCP 서버에 전이적으로(transitively) 접근할 수 있다. 단, 그 전이적 접근을 결속하는 정책 하에서만 가능하다.
 
 ### 게이트웨이에서의 툴 해시 고정 (Tool-hash pinning)
 
-게이트웨이는 승인된 툴 설명의 매니페스트(SHA256 해시)를 보유한다. 디스커버리(discovery) 시점에 각 백엔드의 `tools/list`를 가져와 해시를 매니페스트와 비교하고, 설명이 변형된 툴은 제거한다. 이는 Phase 13 · 15의 러그 풀(rug-pull) 방어를 중앙에서 적용한 것이다.
+게이트웨이는 승인된 툴 설명의 매니페스트(SHA256 해시)를 보유한다. 디스커버리(discovery) 시점에 각 백엔드의 `tools/list`를 가져와 해시를 매니페스트와 비교하고, 설명이 변형된 툴은 제거한다. Phase 13 · 15의 러그 풀(rug-pull) 방어를 중앙에서 적용한 것이다.
 
 ### 코드로서의 정책 (Policy-as-code)
 
@@ -58,7 +58,7 @@ Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry,
 
 ### 세션 인식 라우팅 (Session-aware routing)
 
-사용자의 세션이 여러 서버를 섞어 포함할 때, 게이트웨이는 멀티플렉싱(multiplexing)한다. 개발자의 단일 MCP 세션이 서버당 하나씩 N개의 백엔드 세션을 보유한다. 어떤 백엔드로부터의 알림(notification)이든 게이트웨이를 거쳐 개발자의 세션으로 라우팅된다.
+사용자의 세션이 여러 서버를 섞어 포함할 때, 게이트웨이는 멀티플렉싱(multiplexing)한다. 개발자의 단일 MCP 세션이 서버당 하나씩 N개의 백엔드 세션을 보유한다. 어떤 백엔드의 알림(notification)이든 게이트웨이를 거쳐 개발자의 세션으로 라우팅된다.
 
 ### 네임스페이스 병합 (Namespace merging)
 
@@ -66,7 +66,7 @@ Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry,
 
 ### 레지스트리 (Registries)
 
-- **공식 MCP 레지스트리(`registry.modelcontextprotocol.io`).** Anthropic, GitHub, PulseMCP, Microsoft의 관리 하에 출범했다. 네임스페이스 검증됨(역방향 DNS: `io.github.user/server`). 기본 품질에 대해 사전 필터링된다.
+- **공식 MCP 레지스트리(`registry.modelcontextprotocol.io`).** Anthropic, GitHub, PulseMCP, Microsoft의 관리 하에 출범했다. 네임스페이스 검증됨(역방향 DNS: `io.github.user/server`). 기본 품질이 사전에 걸러져 있다.
 - **Glama.** 다수 출처를 집계하는 검색 중심 메타레지스트리.
 - **MCPMarket.** 벤더 목록이 있는 상업 지향 디렉터리.
 - **MCP.so.** 커뮤니티 디렉터리; 공개 제출.
@@ -77,7 +77,7 @@ Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry,
 
 ### 역방향 DNS 명명 (Reverse-DNS naming)
 
-공식 레지스트리는 공개 서버에 대해 역방향 DNS 이름을 의무화한다: `io.github.alice/notes`. 네임스페이스는 스쿼팅(squatting)을 막고 신뢰 위임을 더 명확하게 만든다.
+공식 레지스트리는 공개 서버에 대해 역방향 DNS 이름을 의무화한다: `io.github.alice/notes`. 네임스페이스는 스쿼팅(squatting)을 막고 신뢰 위임을 더 명확하게 한다.
 
 ### 벤더 개관, 2026년 4월
 

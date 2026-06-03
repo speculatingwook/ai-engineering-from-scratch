@@ -1,6 +1,6 @@
 # Subword Tokenization — BPE, WordPiece, Unigram, SentencePiece
 
-> 단어 토크나이저(tokenizer)는 보지 못한 단어에서 질식한다. 문자 토크나이저는 시퀀스 길이를 폭발시킨다. 서브워드(subword) 토크나이저는 그 차이를 나눈다. 모든 현대 LLM은 그중 하나 위에 배포된다.
+> 단어 토크나이저(tokenizer)는 보지 못한 단어 앞에서 막힌다. 문자 토크나이저는 시퀀스 길이를 폭발시킨다. 서브워드(subword) 토크나이저는 그 사이를 가른다. 모든 현대 LLM은 그중 하나 위에 올라가 배포된다.
 
 **Type:** Learn
 **Languages:** Python
@@ -9,11 +9,11 @@
 
 ## 문제 (The Problem)
 
-당신의 어휘에 단어가 50,000개 있다. 사용자가 "untokenizable"을 입력한다. 당신의 토크나이저는 `[UNK]`를 반환한다. 이제 모델은 그 단어에 대한 어떤 신호도 갖지 못한다. 더 나쁜 것은: 당신의 코퍼스(corpus)에서 90 백분위수 문서에 희귀 단어가 40개 있으며, 이는 문서당 40비트의 정보가 버려진다는 뜻이다.
+어휘에 단어가 50,000개 있다. 사용자가 "untokenizable"을 입력한다. 토크나이저는 `[UNK]`를 반환한다. 이제 모델은 그 단어에 대한 어떤 신호도 갖지 못한다. 더 나쁜 경우도 있다. 코퍼스(corpus)에서 90 백분위수 문서에 희귀 단어가 40개 들어 있으면, 문서당 40비트의 정보가 버려진다는 뜻이다.
 
-서브워드 토큰화(subword tokenization)는 이를 해결한다. 흔한 단어는 단일 토큰으로 남는다. 희귀 단어는 의미 있는 조각으로 분해된다: `untokenizable` → `un`, `token`, `izable`. 어떤 문자열도 궁극적으로 바이트(byte)의 수열이므로 학습 데이터가 모든 것을 커버한다.
+서브워드 토큰화(subword tokenization)는 이를 해결한다. 흔한 단어는 단일 토큰으로 남는다. 희귀 단어는 의미 있는 조각으로 분해된다: `untokenizable` → `un`, `token`, `izable`. 어떤 문자열도 결국 바이트(byte)의 수열이므로, 학습 데이터가 모든 것을 커버한다.
 
-2026년의 모든 프런티어 LLM은 세 가지 알고리즘(BPE, Unigram, WordPiece) 중 하나 위에 배포되며, 세 가지 라이브러리(tiktoken, SentencePiece, HF Tokenizers) 중 하나로 감싸진다. 하나를 고르지 않고는 언어 모델(language model)을 배포할 수 없다.
+2026년의 모든 프런티어 LLM은 세 가지 알고리즘(BPE, Unigram, WordPiece) 중 하나 위에 배포되며, 세 가지 라이브러리(tiktoken, SentencePiece, HF Tokenizers) 중 하나로 감싼다. 하나를 고르지 않고는 언어 모델(language model)을 배포할 수 없다.
 
 ## 개념 (The Concept)
 
@@ -21,13 +21,13 @@
 
 **BPE (Byte-Pair Encoding).** 문자 수준 어휘에서 시작한다. 모든 인접 쌍을 센다. 가장 빈번한 쌍을 새 토큰으로 병합(merge)한다. 목표 어휘 크기에 도달할 때까지 반복한다. 지배적 알고리즘: GPT-2/3/4, Llama, Gemma, Qwen2, Mistral.
 
-**바이트 수준 BPE(Byte-level BPE).** 같은 알고리즘이지만 유니코드 문자 대신 원시 바이트(256개 기본 토큰)에 대해 작동한다. `[UNK]` 토큰이 0개임을 보장한다. 어떤 바이트 수열도 인코딩되기 때문이다. GPT-2는 50,257개 토큰을 사용한다(256개 바이트 + 50,000개 병합 + 1개 특수).
+**바이트 수준 BPE(Byte-level BPE).** 같은 알고리즘이지만 유니코드 문자 대신 원시 바이트(256개 기본 토큰)에 대해 작동한다. 어떤 바이트 수열도 인코딩되므로 `[UNK]` 토큰이 0개임을 보장한다. GPT-2는 50,257개 토큰을 사용한다(256개 바이트 + 50,000개 병합 + 1개 특수).
 
-**Unigram.** 거대한 어휘에서 시작한다. 각 토큰에 유니그램(unigram) 확률을 할당한다. 제거가 코퍼스 로그 가능도(log-likelihood)를 가장 적게 증가시키는 토큰을 반복적으로 가지친다(prune). 추론(inference) 시 확률적이다: 토큰화를 샘플링(sampling)할 수 있다(서브워드 정규화(subword regularization)를 통한 데이터 증강에 유용). T5, mBART, ALBERT, XLNet, Gemma가 사용한다.
+**Unigram.** 거대한 어휘에서 시작한다. 각 토큰에 유니그램(unigram) 확률을 할당한다. 제거했을 때 코퍼스 로그 가능도(log-likelihood)를 가장 적게 떨어뜨리는 토큰을 반복적으로 가지친다(prune). 추론(inference) 시에는 확률적이라, 토큰화를 샘플링(sampling)할 수 있다(서브워드 정규화(subword regularization)를 통한 데이터 증강에 유용). T5, mBART, ALBERT, XLNet, Gemma가 사용한다.
 
 **WordPiece.** 원시 빈도가 아니라 학습 코퍼스의 가능도를 최대화하는 쌍을 병합한다. BERT, DistilBERT, ELECTRA가 사용한다.
 
-**SentencePiece 대 tiktoken.** SentencePiece는 원시 유니코드 텍스트에서 직접 어휘(BPE 또는 Unigram)를 *학습하는* 라이브러리이며, 공백을 `▁`로 인코딩한다. tiktoken은 미리 만들어진 어휘에 대한 OpenAI의 빠른 *인코더*다. 학습하지 않는다.
+**SentencePiece 대 tiktoken.** SentencePiece는 원시 유니코드 텍스트에서 직접 어휘(BPE 또는 Unigram)를 *학습하는* 라이브러리이며, 공백을 `▁`로 인코딩한다. tiktoken은 미리 만들어진 어휘를 쓰는 OpenAI의 빠른 *인코더*다. 학습은 하지 않는다.
 
 경험 법칙:
 
@@ -58,7 +58,7 @@ def train_bpe(corpus, num_merges):
     return merges
 ```
 
-알고리즘이 인코딩하는 세 가지 사실. `</w>`는 단어 끝을 표시하여 "low"(접미사)와 "lower"(접두사)가 구별되게 한다. 빈도 가중치는 고빈도 쌍이 일찍 이기게 만든다. 병합 목록은 순서가 있다. 추론은 학습 순서로 병합을 적용한다.
+알고리즘이 인코딩하는 세 가지 사실. `</w>`는 단어 끝을 표시해 "low"(접미사)와 "lower"(접두사)를 구별되게 한다. 빈도 가중치는 고빈도 쌍이 일찍 이기게 만든다. 병합 목록은 순서가 있다. 추론은 학습 순서대로 병합을 적용한다.
 
 ### Step 2: 학습된 병합으로 인코딩
 
@@ -75,7 +75,7 @@ def encode_bpe(word, merges):
     return symbols
 ```
 
-순진한 O(n·|merges|). 프로덕션 구현(tiktoken, HF Tokenizers)은 우선순위 큐를 가진 병합 순위 조회를 사용하며 거의 선형 시간에 실행된다.
+순진한 O(n·|merges|)다. 프로덕션 구현(tiktoken, HF Tokenizers)은 우선순위 큐를 가진 병합 순위 조회를 써서 거의 선형 시간에 실행된다.
 
 ### Step 3: 실전에서의 SentencePiece
 
@@ -96,7 +96,7 @@ print(sp.encode("untokenizable", out_type=str))
 # ['▁un', 'token', 'izable']
 ```
 
-주목하라: 사전 토큰화가 필요 없고, 공백이 `▁`로 인코딩되며, `character_coverage`는 희귀 문자가 보존되는지 대 `<unk>`로 매핑되는지를 얼마나 공격적으로 제어할지 정한다.
+주목하라: 사전 토큰화가 필요 없고, 공백이 `▁`로 인코딩되며, `character_coverage`는 희귀 문자를 보존할지 아니면 `<unk>`로 매핑할지를 얼마나 공격적으로 정할지 제어한다.
 
 ### Step 4: OpenAI 호환 어휘를 위한 tiktoken
 
@@ -107,12 +107,12 @@ print(enc.encode("untokenizable"))        # [127340, 101028]
 print(len(enc.encode("Hello, world!")))   # 4
 ```
 
-인코딩 전용이다. 빠르다(Rust 백엔드). 바이트 카운팅, 비용 추정, 컨텍스트 윈도우(context-window) 예산을 위해 GPT-4/5 토큰화와 정확히 일치한다.
+인코딩 전용이다. 빠르다(Rust 백엔드). 바이트 카운팅, 비용 추정, 컨텍스트 윈도우(context-window) 예산 산정을 위해 GPT-4/5 토큰화와 정확히 일치한다.
 
 ## 2026년에도 여전히 배포되는 함정
 
-- **토크나이저 표류(Tokenizer drift).** 어휘 A로 학습하고, 어휘 B에 대해 배포한다. 토큰 ID가 다르다. 모델 출력이 쓰레기가 된다. CI에서 `tokenizer.json` 해시를 확인하라.
-- **공백 모호성(Whitespace ambiguity).** BPE "hello" 대 " hello"는 서로 다른 토큰을 만든다. 항상 `add_special_tokens`와 `add_prefix_space`를 명시적으로 지정하라.
+- **토크나이저 표류(Tokenizer drift).** 어휘 A로 학습하고, 어휘 B로 배포한다. 토큰 ID가 어긋난다. 모델 출력이 쓰레기가 된다. CI에서 `tokenizer.json` 해시를 확인하라.
+- **공백 모호성(Whitespace ambiguity).** BPE에서 "hello"와 " hello"는 서로 다른 토큰을 만든다. 항상 `add_special_tokens`와 `add_prefix_space`를 명시적으로 지정하라.
 - **다국어 과소 학습(Multilingual undertraining).** 영어 위주 코퍼스는 비라틴 문자 체계를 5-10배 더 많은 토큰으로 쪼개는 어휘를 만든다. 같은 프롬프트(prompt)가 GPT-3.5에서 일본어/아랍어로는 5-10배 더 비싸다. o200k_base가 이를 부분적으로 고쳤다.
 - **이모지 분할(Emoji splits).** 단일 이모지가 5개 토큰을 차지할 수 있다. 컨텍스트 예산을 잡을 때 이모지 처리를 점검하라.
 
@@ -157,9 +157,9 @@ Refuse to train a character-coverage <0.995 tokenizer on corpora with rare-scrip
 
 ## 연습 문제 (Exercises)
 
-1. **Easy.** `code/main.py`의 작은 코퍼스에 500-병합 BPE를 학습시켜라. 홀드아웃(held-out) 단어 세 개를 인코딩하라. 정확히 토큰 1개를 만든 것 대 토큰 >1개를 만든 것은 몇 개인가?
-2. **Medium.** 100개의 영어 위키피디아 문장에서 `cl100k_base`, `o200k_base`, 그리고 당신이 vocab=32k로 학습한 SentencePiece BPE 사이의 토큰 수를 비교하라. 각각의 압축률을 보고하라.
-3. **Hard.** 같은 코퍼스를 BPE, Unigram, WordPiece로 학습시켜라. 작은 감성 분류기(classifier)에서 각각을 사용할 때의 다운스트림 정확도를 측정하라. 선택이 F1을 1점 넘게 움직이는가?
+1. **Easy.** `code/main.py`의 작은 코퍼스에 500-병합 BPE를 학습시켜라. 홀드아웃(held-out) 단어 세 개를 인코딩하라. 정확히 토큰 1개를 만든 것과 토큰을 1개보다 많이 만든 것은 각각 몇 개인가?
+2. **Medium.** 100개의 영어 위키피디아 문장에서 `cl100k_base`, `o200k_base`, 그리고 vocab=32k로 직접 학습한 SentencePiece BPE 사이의 토큰 수를 비교하라. 각각의 압축률을 보고하라.
+3. **Hard.** 같은 코퍼스를 BPE, Unigram, WordPiece로 학습시켜라. 작은 감성 분류기(classifier)에서 각각을 사용했을 때의 다운스트림 정확도를 측정하라. 선택에 따라 F1이 1점 넘게 움직이는가?
 
 ## 핵심 용어 (Key Terms)
 

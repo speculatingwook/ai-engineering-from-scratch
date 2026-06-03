@@ -1,6 +1,6 @@
 # 음성 복제 & 음성 변환
 
-> 음성 복제(voice cloning)는 당신의 텍스트를 다른 사람의 목소리로 읽는다. 음성 변환(voice conversion)은 당신이 말한 내용을 보존하면서 당신의 목소리를 다른 사람의 것으로 다시 쓴다. 둘 다 같은 분해에 달려 있다: 화자 정체성(speaker identity)을 내용(content)과 분리하기.
+> 음성 복제(voice cloning)는 입력한 텍스트를 다른 사람의 목소리로 읽는다. 음성 변환(voice conversion)은 말한 내용은 그대로 둔 채 목소리만 다른 사람의 것으로 바꾼다. 둘 다 같은 분해에 달려 있다. 화자 정체성(speaker identity)을 내용(content)과 분리하는 일이다.
 
 **Type:** Build
 **Languages:** Python
@@ -18,13 +18,13 @@
 
 둘 다 파형(waveform)을 (내용, 화자, 운율(prosody))로 분해하고, 한 소스의 내용을 다른 소스의 화자와 재결합한다.
 
-2026년에 당신이 이제 출하할 때 따라야 할 핵심 제약: **워터마킹(watermarking)과 동의 게이트(consent gate)는 EU(AI Act, 2026년 8월 시행)와 캘리포니아(AB 2905, 2025년 발효)에서 법적으로 요구된다**. 당신의 파이프라인은 들리지 않는 워터마크를 방출하고 비동의 복제를 거부해야 한다.
+2026년에 출하하려면 지켜야 할 핵심 제약이 있다. **워터마킹(watermarking)과 동의 게이트(consent gate)는 EU(AI Act, 2026년 8월 시행)와 캘리포니아(AB 2905, 2025년 발효)에서 법적으로 요구된다**. 파이프라인은 들리지 않는 워터마크를 넣고 비동의 복제를 거부해야 한다.
 
 ## 개념 (The Concept)
 
 ![음성 복제 대 변환: 분해, 화자 교체, 재결합](../assets/voice-cloning.svg)
 
-**제로샷 복제.** 수천 명의 화자로 학습된 모델에 5초짜리 클립을 넘긴다. 화자 인코더(speaker encoder)가 클립을 화자 임베딩(speaker embedding)으로 사상하고; TTS 디코더가 그 임베딩에 텍스트를 더해 조건화한다.
+**제로샷 복제.** 수천 명의 화자로 학습된 모델에 5초짜리 클립을 넘긴다. 화자 인코더(speaker encoder)가 클립을 화자 임베딩(speaker embedding)으로 사상하고, TTS 디코더가 그 임베딩에 텍스트를 더해 조건화한다.
 
 사용: F5-TTS(2024), YourTTS(2022), XTTS v2(2024), OpenVoice v2(2024).
 
@@ -68,7 +68,7 @@ def clone_pipeline(ref_audio, text, target_embedder, tts_model):
     return vocoder(mel)
 ```
 
-개념적으로 단순하다; 구현의 무게는 `tts_model`과 화자 인코더에 있다.
+개념적으로는 단순하다. 구현의 무게는 `tts_model`과 화자 인코더에 있다.
 
 ### 단계 2: F5-TTS로 제로샷 복제
 
@@ -82,7 +82,7 @@ wav = tts.infer(
 )
 ```
 
-참조 전사는 오디오와 정확히 일치해야 한다; 불일치는 정렬(alignment)을 깨뜨린다.
+참조 전사는 오디오와 정확히 일치해야 한다. 어긋나면 정렬(alignment)이 깨진다.
 
 ### 단계 3: KNN-VC로 음성 변환
 
@@ -146,7 +146,7 @@ def cloned_inference(text, ref_audio, consent_record):
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** `code/main.py`를 실행하라. 교체 전후의 두 "화자" 사이의 코사인을 계산해 화자 임베딩 교체를 시연한다.
-2. **중간.** OpenVoice v2를 사용해 당신 자신의 목소리를 복제하라. 참조와 복제 사이의 SECS를 측정하라. Whisper를 통해 CER을 측정하라.
+2. **중간.** OpenVoice v2로 자기 목소리를 복제하라. 참조와 복제 사이의 SECS를 측정하라. Whisper로 CER을 측정하라.
 3. **어려움.** 20개 복제에 SilentCipher 워터마크를 적용하고, 128 kbps MP3 인코드+디코드를 통과시킨 뒤, 페이로드를 검출하라. 비트 정확도를 보고하라.
 
 ## 핵심 용어 (Key Terms)

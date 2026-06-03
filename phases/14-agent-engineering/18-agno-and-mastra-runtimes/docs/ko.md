@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트 루프, 빠르게, 내 런타임 안에서"를 원하는 팀들은 Agno(Python)나 Mastra(TypeScript)에 손을 뻗는다. 둘 다 프레임워크 소유 원시 요소 일부를 원시 속도(raw speed)와 주변 스택에 대한 더 빡빡한 적합(fit)으로 거래한다.
+LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트 루프, 빠르게, 내 런타임 안에서"를 원하는 팀들은 Agno(Python)나 Mastra(TypeScript)에 손을 뻗는다. 둘 다 프레임워크가 떠안던 원시 요소 일부를 포기하는 대신 원시 속도(raw speed)와 주변 스택에 더 잘 맞는 적합(fit)을 얻는다.
 
 ## 개념 (The Concept)
 
@@ -43,7 +43,7 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 
 ### 포지셔닝
 
-둘 다 LangGraph가 되려고 하지 않는다. 그들은 다음에서 경쟁한다.
+둘 다 LangGraph가 되려고 하지 않는다. 경쟁이 갈리는 지점은 다음과 같다.
 
 - **언어 적합.** Python 우선 팀에는 Agno; TypeScript 우선 팀에는 Mastra.
 - **런타임 사용성(ergonomics).** Agno = 거의 0에 가까운 오버헤드; Mastra = Vercel 생태계와의 통합.
@@ -64,7 +64,7 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 
 ## 직접 만들기 (Build It)
 
-이 레슨은 주로 비교적(comparative)이다 — 단일 코드 산출물로는 두 프레임워크를 모두 정당하게 다룰 수 없다. 나란히 놓인 토이는 `code/main.py`를 보라: 최소한의 "에이전트를 실행하고, 출력을 스트리밍하며, 세션을 영속한다" 흐름을 두 번 구현한 것(한 번은 Agno 형태로, 한 번은 Mastra 형태로).
+이 레슨은 주로 비교(comparative)에 초점을 둔다. 단일 코드 산출물 하나로는 두 프레임워크를 제대로 담아내기 어렵다. 나란히 놓인 토이는 `code/main.py`를 보라: 최소한의 "에이전트를 실행하고, 출력을 스트리밍하며, 세션을 영속한다" 흐름을 두 번 구현한 것(한 번은 Agno 형태로, 한 번은 Mastra 형태로).
 
 실행:
 

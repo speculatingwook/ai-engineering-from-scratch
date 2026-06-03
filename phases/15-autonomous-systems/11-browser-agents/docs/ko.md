@@ -1,6 +1,6 @@
 # 브라우저 에이전트와 장기 지평 웹 과제
 
-> ChatGPT agent(2025년 7월)는 Operator와 deep research를 하나의 브라우저/터미널 에이전트(agent)로 합치고, BrowseComp에서 68.9%로 SOTA를 세웠다. OpenAI는 2025년 8월 31일 Operator를 종료했다 — 제품 층에서의 통합이다. Anthropic의 Vercept 인수는 OSWorld에서 Claude Sonnet을 15% 미만에서 72.5%로 끌어올렸다. WebArena-Verified(ServiceNow, ICLR 2026)는 원본 WebArena의 거짓 음성률(false-negative rate) 11.3퍼센트포인트를 고치고, 258개 과제의 Hard 부분집합을 출시했다. 수치는 진짜다. 공격 표면(attack surface)도 진짜다. OpenAI의 대비(preparedness) 책임자는 브라우저 에이전트로의 간접 프롬프트 주입(indirect prompt injection)이 "완전히 패치할 수 있는 버그가 아니다"라고 공개적으로 밝혔다. 문서화된 2025~2026년 공격들: Tainted Memories(Atlas CSRF), HashJack(Cato Networks), 그리고 Perplexity Comet의 원클릭 하이재킹.
+> ChatGPT agent(2025년 7월)는 Operator와 deep research를 하나의 브라우저/터미널 에이전트(agent)로 합치고, BrowseComp에서 68.9%로 SOTA를 세웠다. OpenAI는 2025년 8월 31일 Operator를 종료했다 — 제품 층에서 통합한 것이다. Anthropic의 Vercept 인수는 OSWorld에서 Claude Sonnet을 15% 미만에서 72.5%로 끌어올렸다. WebArena-Verified(ServiceNow, ICLR 2026)는 원본 WebArena의 거짓 음성률(false-negative rate) 11.3퍼센트포인트를 고치고, 258개 과제의 Hard 부분집합을 출시했다. 수치는 진짜다. 공격 표면(attack surface)도 진짜다. OpenAI의 대비(preparedness) 책임자는 브라우저 에이전트로의 간접 프롬프트 주입(indirect prompt injection)이 "완전히 패치할 수 있는 버그가 아니다"라고 공개적으로 밝혔다. 문서화된 2025~2026년 공격들: Tainted Memories(Atlas CSRF), HashJack(Cato Networks), 그리고 Perplexity Comet의 원클릭 하이재킹.
 
 **Type:** Learn
 **Languages:** Python (stdlib, indirect prompt-injection attack surface model)
@@ -13,7 +13,7 @@
 
 방어 그림은 불편하다. OpenAI의 대비 책임자는 조용히 묻혀 있던 부분을 크게 말했다. 간접 프롬프트 주입은 "완전히 패치할 수 있는 버그가 아니다." 이는 공격이 에이전트의 읽기-대-행동 경계에 살기 때문인데, 그 경계는 아키텍처적으로 흐릿하다 — 모델이 읽는 모든 토큰(token)은 원리상 명령으로 읽힐 수 있다.
 
-이 레슨은 공격 표면을 명명하고, 벤치마크 지형(BrowseComp, OSWorld, WebArena-Verified)을 명명하며, 최소한의 간접 프롬프트 주입 시나리오를 모델링하여, 당신이 Lesson 14와 18에서 실제 방어를 추론할 수 있게 한다.
+이 레슨은 공격 표면을 명명하고, 벤치마크 지형(BrowseComp, OSWorld, WebArena-Verified)을 명명하며, 최소한의 간접 프롬프트 주입 시나리오를 모델링하여, Lesson 14와 18에서 실제 방어를 추론할 수 있게 한다.
 
 ## 개념 (The Concept)
 
@@ -76,7 +76,7 @@
 
 2. 살균기를 확장하여 HashJack 스타일 URL 프래그먼트 주입의 한 부류를 탐지하라. 합법적 프래그먼트가 있는 양성 URL에서 거짓 양성률(false-positive rate)을 측정하라.
 
-3. 당신이 아는 실제 브라우저 에이전트 워크플로 하나를 골라라(예: "항공편 예약"). 모든 읽기와 모든 쓰기를 나열하라. 어느 쓰기가 HITL이 필요하며 왜 그런지 표시하라.
+3. 알고 있는 실제 브라우저 에이전트 워크플로 하나를 골라라(예: "항공편 예약"). 모든 읽기와 모든 쓰기를 나열하라. 어느 쓰기가 HITL이 필요하며 왜 그런지 표시하라.
 
 4. WebArena-Verified ICLR 2026 논문을 읽어라. 원본 WebArena의 채점이 신뢰할 수 없었던 과제 범주 하나를 식별하고, Verified 부분집합이 그것을 어떻게 해결하는지 설명하라.
 

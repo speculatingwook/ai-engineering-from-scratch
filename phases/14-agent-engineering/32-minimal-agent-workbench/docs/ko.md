@@ -1,6 +1,6 @@
 # 최소 에이전트 워크벤치
 
-> 가장 작고 유용한 워크벤치(workbench)는 파일 세 개다: 루트 지시 라우터(root instructions router), 상태 파일(state file), 그리고 작업 보드(task board). 그 외 모든 것은 그 위에 층층이 쌓인다. 레포(repo)가 이 셋을 운반하지 못한다면, 어떤 모델(model)도 그것을 구하지 못한다.
+> 가장 작고 유용한 워크벤치(workbench)는 파일 세 개다: 루트 지시 라우터(root instructions router), 상태 파일(state file), 작업 보드(task board). 나머지는 모두 이 위에 층층이 쌓인다. 레포(repo)가 이 셋을 담아내지 못한다면, 어떤 모델(model)도 그 레포를 구하지 못한다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-대부분의 팀은 3000줄짜리 `AGENTS.md`를 작성하고는 다 됐다고 부르는 식으로 워크벤치에 손을 댄다. 모델은 그것을 로드하고, 요약할 수 없는 부분은 무시하며, 늘 실패하던 바로 그 표면(surface)에서 여전히 실패한다.
+대부분의 팀은 3000줄짜리 `AGENTS.md`를 작성하고는 다 됐다고 여기는 식으로 워크벤치에 손을 댄다. 모델은 그 파일을 로드하고, 요약할 수 없는 부분은 무시하며, 늘 실패하던 바로 그 표면(surface)에서 여전히 실패한다.
 
-당신에게 필요한 건 정반대다. 관련이 있을 때만 에이전트를 더 깊은 파일로 라우팅하는 작은 루트 파일. 에이전트가 행동하기 전에 읽고 행동한 후에 쓰는 지속적(durable) 상태. 무엇이 진행 중이고, 무엇이 막혀 있고, 다음에 무엇이 올지를 말해주는 작업 보드.
+필요한 건 정반대다. 관련이 있을 때만 에이전트를 더 깊은 파일로 라우팅하는 작은 루트 파일. 에이전트가 행동하기 전에 읽고 행동한 후에 쓰는 지속적(durable) 상태. 무엇이 진행 중이고, 무엇이 막혀 있고, 다음에 무엇이 올지를 말해주는 작업 보드.
 
 파일 세 개. 각각 하나의 임무를 가진다. 각각 나중에 실제 시스템으로 진화할 만큼 충분히 기계가 읽을 수 있다.
 
@@ -46,19 +46,19 @@ flowchart LR
 
 ### agent_state.json은 기록의 시스템이다
 
-상태는 다음을 운반한다: 활성 작업 id, 건드린 파일, 만든 가정(assumption), 차단 요소(blocker), 그리고 다음 액션. 에이전트는 매 턴마다 그것을 읽는다. 다음 세션은 채팅을 재생하는 대신 그것을 읽는다.
+상태는 다음을 담는다: 활성 작업 id, 건드린 파일, 만든 가정(assumption), 차단 요소(blocker), 다음 액션. 에이전트는 매 턴마다 상태를 읽는다. 다음 세션은 채팅을 재생하는 대신 이 상태를 읽는다.
 
 상태가 파일에 사는 이유는 채팅 히스토리가 신뢰할 수 없기 때문이다. 세션은 죽는다. 대화는 잘려 나간다. 파일은 그렇지 않다.
 
 ### task_board.json은 큐다
 
-작업 보드는 `todo | in_progress | done | blocked` 상태를 가진 모든 작업을 운반한다. 그것은 상태가 비었을 때 에이전트가 끌어오는 큐(queue)이고, 에이전트가 제대로 가고 있는지 알고 싶을 때 당신이 읽는 큐다.
+작업 보드는 `todo | in_progress | done | blocked` 상태를 가진 모든 작업을 담는다. 상태가 비었을 때 에이전트가 끌어오는 큐(queue)이자, 에이전트가 제대로 가고 있는지 알고 싶을 때 사람이 읽는 큐다.
 
-보드 위의 작업은 id, 목표(goal), 소유자(`builder`, `reviewer`, 또는 `human`), 그리고 합격 기준(acceptance criteria)을 가진다. 보드는 의도적으로 작다: 한 화면을 넘어 커지면, 당신에게 있는 건 보드 문제가 아니라 계획(planning) 문제다.
+보드 위의 작업은 id, 목표(goal), 소유자(`builder`, `reviewer`, `human`), 합격 기준(acceptance criteria)을 가진다. 보드는 의도적으로 작다: 한 화면을 넘어 커지면, 그건 보드 문제가 아니라 계획(planning) 문제다.
 
 ### 파일 세 개는 바닥이지 천장이 아니다
 
-이후 레슨은 범위 계약(scope contract), 피드백 러너(feedback runner), 검증 게이트(verification gate), 리뷰어 체크리스트(reviewer checklist), 핸드오프 패킷(handoff packet)을 추가한다. 여기 세 파일은 그것들이 모두 전제하는 것이다.
+이후 레슨은 범위 계약(scope contract), 피드백 러너(feedback runner), 검증 게이트(verification gate), 리뷰어 체크리스트(reviewer checklist), 핸드오프 패킷(handoff packet)을 추가한다. 여기 세 파일은 그 모두가 전제하는 토대다.
 
 ## 직접 만들기 (Build It)
 
@@ -75,7 +75,7 @@ flowchart LR
 python3 code/main.py
 ```
 
-스크립트는 자신 옆에 `workdir/`을 생성하고, 세 파일을 깔고, 한 턴을 실행하고, diff를 출력한다. 다시 실행하면 두 번째 턴이 첫 번째가 멈춘 지점을 어떻게 이어받는지 볼 수 있다.
+스크립트는 자신 옆에 `workdir/`을 생성하고, 세 파일을 깔고, 한 턴을 실행하고, diff를 출력한다. 다시 실행하면 두 번째 턴이 첫 번째가 멈춘 지점을 그대로 이어받는 모습이 보인다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -89,11 +89,11 @@ python3 code/main.py
 
 ## 야생의 프로덕션 패턴
 
-최소 워크벤치는, 그 위에 세 가지 패턴이 층층이 쌓일 때 실제 모노레포(monorepo)와의 접촉에서 살아남는다. 그것들은 독립적이다; 당신 레포가 실제로 필요로 하는 것을 골라라.
+최소 워크벤치는, 그 위에 세 가지 패턴이 층층이 쌓일 때 실제 모노레포(monorepo)와의 접촉에서 살아남는다. 세 패턴은 서로 독립적이니, 레포에 정말 필요한 것만 골라라.
 
 **가장 가까운 것이 이기는(nearest-wins) 우선순위를 가진 중첩 `AGENTS.md`.** OpenAI는 메인 레포 전반에 서브컴포넌트당 하나씩 88개의 `AGENTS.md` 파일을 출하한다. Codex, Cursor, Claude Code, Copilot은 모두 작업 중인 파일에서 레포 루트를 향해 걸어 올라가며, 도중에 찾은 모든 `AGENTS.md`를 연결한다. 하위 디렉터리 파일은 루트 파일을 확장한다. Codex는 확장하는 대신 대체하는 `AGENTS.override.md`를 추가한다; 이 오버라이드 메커니즘은 Codex 고유이므로 도구 간(cross-tool) 작업에서는 피하라. Augment Code의 측정이 중요한 문장이다: 최고의 `AGENTS.md` 파일은 Haiku에서 Opus로 업그레이드하는 것에 맞먹는 품질 도약을 준다; 최악의 것은 파일이 아예 없는 것보다 출력을 더 나쁘게 만든다.
 
-**커버리지처럼 보일 때조차 거부해야 할 안티패턴(anti-pattern).** 충돌하는 지시는 조용히 에이전트를 상호작용(interactive) 모드에서 탐욕적(greedy) 모드로 떨어뜨린다(ICLR 2026 AMBIG-SWE: 해결률 48.8% → 28%); 우선순위를 평평하게 쌓는 대신 번호를 매겨라. 강제 명령이 없는 검증 불가능한 스타일 규칙("Google Python Style Guide를 따르라")은 에이전트가 준수를 지어내게 만든다; 모든 스타일 규칙을 정확한 린트(lint) 명령과 짝지어라. 명령 대신 스타일로 시작하면 검증 경로가 묻힌다; 명령을 먼저, 스타일을 마지막에. 에이전트가 아니라 인간을 위해 쓰면 컨텍스트 예산(context budget)을 낭비한다; 간결함(terseness)이 기능이다.
+**커버리지처럼 보일 때조차 거부해야 할 안티패턴(anti-pattern).** 충돌하는 지시는 조용히 에이전트를 상호작용(interactive) 모드에서 탐욕적(greedy) 모드로 떨어뜨린다(ICLR 2026 AMBIG-SWE: 해결률 48.8% → 28%). 우선순위를 평평하게 쌓는 대신 번호를 매겨라. 강제 명령이 없는 검증 불가능한 스타일 규칙("Google Python Style Guide를 따르라")은 에이전트가 준수를 지어내게 만든다. 모든 스타일 규칙을 정확한 린트(lint) 명령과 짝지어라. 명령 대신 스타일로 시작하면 검증 경로가 묻힌다. 명령을 먼저, 스타일을 마지막에 둔다. 에이전트가 아니라 인간을 위해 쓰면 컨텍스트 예산(context budget)을 낭비한다. 간결함(terseness)이 곧 기능이다.
 
 **도구 간 심볼릭 링크.** 심볼릭 링크가 있는 단일 루트 파일(`ln -s AGENTS.md CLAUDE.md`, `ln -s AGENTS.md .github/copilot-instructions.md`, `ln -s AGENTS.md .cursorrules`)은 모든 코딩 에이전트를 동일한 진실의 출처(source of truth)에 둔다. Nx의 `nx ai-setup`은 단일 구성에서 Claude Code, Cursor, Copilot, Gemini, Codex, OpenCode 전반에 걸쳐 이것을 자동화한다.
 

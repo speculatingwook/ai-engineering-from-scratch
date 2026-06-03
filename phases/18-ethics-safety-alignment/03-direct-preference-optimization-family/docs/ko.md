@@ -1,6 +1,6 @@
 # 직접 선호 최적화 계열(The Direct Preference Optimization Family)
 
-> Rafailov et al. (2023)은 RLHF의 최적해가 선호 데이터에 관한 닫힌 형태(closed form)를 가짐을 보였고, 따라서 명시적 보상 모델(reward model)을 건너뛰고 정책(policy)을 직접 최적화할 수 있다. 그 통찰은 하나의 계열을 낳았다 — IPO, KTO, SimPO, ORPO, BPO — 각각 DPO의 실패 모드를 하나씩 고친다. 2026년에는 직접 정렬 알고리즘(direct alignment algorithm)이 PPO보다 더 많은 프론티어 사후 학습(post-training) 실행을 출시한다. 하지만 레슨 2의 과최적화 곡선은 여전히 적용된다: DAA는 굿하트(Goodhart)를 벗어나지 못하며, 단지 그것이 물어뜯는 자리를 옮길 뿐이다.
+> Rafailov et al. (2023)은 RLHF의 최적해가 선호 데이터에 관한 닫힌 형태(closed form)를 가짐을 보였고, 따라서 명시적 보상 모델(reward model)을 건너뛰고 정책(policy)을 직접 최적화할 수 있다. 그 통찰은 하나의 계열을 낳았다 — IPO, KTO, SimPO, ORPO, BPO — 각각 DPO의 실패 모드를 하나씩 고친다. 2026년에는 직접 정렬 알고리즘(direct alignment algorithm)이 PPO보다 더 많은 프론티어 사후 학습(post-training) 실행을 출시한다. 하지만 레슨 2의 과최적화 곡선은 여전히 적용된다: DAA는 굿하트(Goodhart)를 벗어나지 못하며, 단지 물어뜯는 자리를 옮길 뿐이다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, six-variant preference-loss comparator)
@@ -73,7 +73,7 @@ L_IPO = (log(pi(y_w | x) / pi_ref(y_w | x)) - log(pi(y_l | x) / pi_ref(y_l | x))
 v(x, y) = sigma(beta * log(pi(y|x) / pi_ref(y|x)) - z_ref)
 ```
 
-이득과 손실에 서로 다른 가중치(손실 회피, loss aversion)를 둔다. 이점: 쌍을 이루지 않은 데이터를 사용할 수 있으며, 이는 훨씬 풍부하다.
+이득과 손실에 서로 다른 가중치(손실 회피, loss aversion)를 둔다. 이점: 쌍을 이루지 않은 데이터를 쓸 수 있으며, 이런 데이터가 훨씬 풍부하다.
 
 ### SimPO (Meng et al., 2024)
 
@@ -102,13 +102,13 @@ L_OR = -log sigmoid(log(odds(y_w) / odds(y_l)))
 
 ### BPO (ICLR 2026 제출, OpenReview id=b97EwMUWu7)
 
-선택 응답 저하(Degraded Chosen Responses) 문제를 식별한다: DPO는 순위 `y_w > y_l`을 보존하지만 `y_w`의 절대 로그 확률은 떨어질 수 있다. BPO는 선택된 응답의 하향 이동을 벌하는 한 줄짜리 보정을 더한다. Llama-3.1-8B-Instruct에서 수학 추론에 대해 DPO보다 +10.1% 정확도를 보고한다.
+선택 응답 저하(Degraded Chosen Responses) 문제를 식별한다: DPO는 순위 `y_w > y_l`을 보존하지만 `y_w`의 절대 로그 확률은 떨어질 수 있다. BPO는 선택된 응답의 하향 이동을 벌하는 한 줄짜리 보정을 더한다. Llama-3.1-8B-Instruct에서 수학 추론에서 DPO보다 +10.1% 정확도를 보고한다.
 
 ### 보편적 결과: DAA는 여전히 과최적화한다
 
-Rafailov et al. "Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms" (NeurIPS 2024)은 여러 데이터셋에 걸쳐 KL 예산 전반에 대해 DPO, IPO, SLiC로 정책을 학습했다. 골드 보상 대 KL 곡선은 Gao et al.과 동일한 정점-후-붕괴 형태를 가진다. 암묵적 보상은 학습 중 분포 밖 표본을 질의하며, KL 정규화는 이를 안정화하지 못한다.
+Rafailov et al. "Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms" (NeurIPS 2024)은 여러 데이터셋과 여러 KL 예산 전반에서 DPO, IPO, SLiC로 정책을 학습했다. 골드 보상 대 KL 곡선은 Gao et al.과 동일한 정점-후-붕괴 형태를 가진다. 암묵적 보상은 학습 중 분포 밖 표본을 질의하며, KL 정규화는 이를 안정화하지 못한다.
 
-DAA는 굿하트를 벗어나지 못한다. 그것이 물어뜯는 표면을 "보상 모델이 과최적화됨"에서 "참조 정책 비율이 과최적화됨"으로 바꿀 뿐이다. 보편적 해법 — 더 나은 데이터, 앙상블, 조기 종료 — 은 둘 다에 적용된다.
+DAA는 굿하트를 벗어나지 못한다. 물어뜯는 표면을 "보상 모델이 과최적화됨"에서 "참조 정책 비율이 과최적화됨"으로 바꿀 뿐이다. 보편적 해법 — 더 나은 데이터, 앙상블, 조기 종료 — 은 둘 다에 적용된다.
 
 ### 그것들 중 선택하기 (2026)
 

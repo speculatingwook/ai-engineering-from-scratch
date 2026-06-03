@@ -10,7 +10,7 @@
 ## 학습 목표 (Learning Objectives)
 
 - Anthropic Client SDK(원시 API)와 Claude Agent SDK(하니스 형태)의 차이를 설명하기.
-- 서브에이전트 — 병렬화(parallelization)와 컨텍스트 격리 — 를 기술하고, 언제 그것에 손을 뻗을지 설명하기.
+- 서브에이전트(병렬화(parallelization)와 컨텍스트 격리)를 기술하고, 언제 쓰면 좋을지 설명하기.
 - Python SDK의 세션 저장소 표면(`append`, `load`, `list_sessions`, `delete`, `list_subkeys`)의 이름을 대고 `--session-mirror`의 역할을 설명하기.
 - 내장 도구, 격리된 컨텍스트를 가진 서브에이전트 생성, 생명주기 후크(lifecycle hook), 세션 저장소를 갖춘 stdlib 하니스를 구현하기.
 
@@ -22,7 +22,7 @@
 
 ### Client SDK 대 Agent SDK
 
-- **Client SDK (`anthropic`).** 원시 Messages API. 당신이 루프, 도구, 상태를 소유한다.
+- **Client SDK (`anthropic`).** 원시 Messages API. 루프, 도구, 상태를 직접 관리한다.
 - **Agent SDK (`claude-agent-sdk`).** 내장 도구 실행, MCP 연결, 후크, 서브에이전트 생성, 세션 저장소. 라이브러리로서의 Claude Code 루프.
 
 ### 내장 도구
@@ -69,7 +69,7 @@ TypeScript와의 프로토콜 동등성:
 
 ### Claude Managed Agents
 
-호스팅 대안(베타 헤더 `managed-agents-2026-04-01`). 장기 실행 비동기 작업, 내장 프롬프트 캐싱(prompt caching), 내장 압축. 관리형 인프라를 위해 제어를 거래한다.
+호스팅 대안(베타 헤더 `managed-agents-2026-04-01`). 장기 실행 비동기 작업, 내장 프롬프트 캐싱(prompt caching), 내장 압축. 관리형 인프라를 얻는 대신 제어권을 내준다.
 
 ### 이 패턴이 잘못되는 지점
 

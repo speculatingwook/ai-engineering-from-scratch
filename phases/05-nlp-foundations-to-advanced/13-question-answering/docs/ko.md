@@ -1,6 +1,6 @@
 # Question Answering Systems
 
-> 세 가지 시스템이 현대 QA를 빚어냈다. 추출적(extractive) 방식은 스팬(span)을 찾았다. 검색 증강(retrieval-augmented) 방식은 그것을 문서에 근거시켰다. 생성적(generative) 방식은 답을 만들어냈다. 모든 현대 AI 어시스턴트는 이 셋의 혼합이다.
+> 세 가지 시스템이 현대 QA를 빚어냈다. 추출적(extractive) 방식은 스팬(span)을 찾았다. 검색 증강(retrieval-augmented) 방식은 그 답을 문서에 근거시켰다. 생성적(generative) 방식은 답을 만들어냈다. 모든 현대 AI 어시스턴트는 이 셋의 혼합이다.
 
 **Type:** Build
 **Languages:** Python
@@ -25,7 +25,7 @@
 
 **추출적(Extractive).** 질문과 지문을 트랜스포머(transformer)(BERT 계열)로 함께 인코딩한다. 답의 시작과 끝 토큰(token) 인덱스를 예측하는 두 개의 헤드(head)를 학습시킨다. 손실(loss)은 유효한 위치에 대한 교차 엔트로피(cross-entropy)다. 출력은 지문에서 나온 스팬이다. (구조상) 절대 환각(hallucination)하지 않으며, (구조상) 지문이 답할 수 없는 질문은 절대 다루지 못한다.
 
-**검색 증강(Retrieval-augmented, RAG).** 두 단계다. 첫째, 검색기(retriever)가 코퍼스(corpus)에서 상위 `k`개 지문을 찾는다. 둘째, 리더(reader)(추출적 또는 생성적)가 그 지문들을 사용해 답을 만든다. 검색기-리더 분리는 각각을 독립적으로 학습하고 평가할 수 있게 해준다. 현대 RAG는 종종 그 사이에 리랭커(reranker)를 추가한다.
+**검색 증강(Retrieval-augmented, RAG).** 두 단계다. 첫째, 검색기(retriever)가 코퍼스(corpus)에서 상위 `k`개 지문을 찾는다. 둘째, 리더(reader)(추출적 또는 생성적)가 그 지문들을 사용해 답을 만든다. 검색기와 리더를 나누면 각각을 따로 학습하고 평가할 수 있다. 현대 RAG는 종종 그 사이에 리랭커(reranker)를 추가한다.
 
 **생성적(Generative).** 디코더 전용(decoder-only) LLM(GPT, Claude, Llama)이 학습된 가중치(weight)로부터 답한다. 검색 단계가 없다. 일반 지식에는 탁월하고, 희귀하거나 최근 사실에는 치명적이다. 환각률은 사전 학습(pretraining) 데이터에서의 사실 빈도와 반비례한다.
 
@@ -121,7 +121,7 @@ SQuAD는 **Exact Match (EM)**와 **토큰 수준 F1**을 사용한다. EM은 정
 
 `RAGAS`는 RAG 시스템을 위해 특별히 만들어졌으며 2026년의 배포 기본값이다. 골드 참조(gold reference)를 요구하지 않고 네 가지 차원을 채점한다.
 
-- **충실성(Faithfulness).** 답의 각 주장이 검색된 맥락에서 나오는가? NLI 기반 함의(entailment)로 측정한다. 당신의 주요 환각 지표다.
+- **충실성(Faithfulness).** 답의 각 주장이 검색된 맥락에서 나오는가? NLI 기반 함의(entailment)로 측정한다. 주요 환각 지표다.
 - **답 관련성(Answer relevance).** 답이 질문을 다루는가? 답으로부터 가상의 질문을 생성하고 실제 질문과 비교하여 측정한다.
 - **맥락 정밀도(Context precision).** 검색된 청크(chunk) 중 실제로 관련 있던 비율은? 낮은 정밀도 = 프롬프트의 잡음.
 - **맥락 재현율(Context recall).** 검색된 집합이 필요한 모든 정보를 담았는가? 낮은 재현율 = 리더가 성공할 수 없음.
@@ -172,7 +172,7 @@ Refuse closed-book LLM answers for regulatory or compliance-sensitive questions.
 
 1. **Easy.** 위의 SQuAD 추출적 파이프라인을 위키피디아 지문 10개에 설정하라. 질문 10개를 직접 만들어라. 답이 얼마나 자주 맞는지 측정하라. 지문과 질문이 깔끔하다면 7-9개가 맞는 것을 볼 것이다.
 2. **Medium.** 거부 분류기(classifier)를 추가하라. 최상위 검색 점수가 임계값(가령 코사인 0.3) 아래일 때, 리더를 호출하는 대신 "I don't know"를 반환하라. 홀드아웃(held-out) 세트에서 임계값을 튜닝하라.
-3. **Hard.** 당신이 선택한 10,000개 문서 코퍼스에 대한 RAG 파이프라인을 만들어라. RRF 융합(fusion)으로 하이브리드 검색(BM25 + 밀집)을 구현하라(레슨 14 참조). 하이브리드 단계가 있을 때와 없을 때의 답 정확도를 측정하라. 어떤 질문 유형이 가장 이득을 보는지 문서화하라.
+3. **Hard.** 직접 고른 10,000개 문서 코퍼스에 대한 RAG 파이프라인을 만들어라. RRF 융합(fusion)으로 하이브리드 검색(BM25 + 밀집)을 구현하라(레슨 14 참조). 하이브리드 단계가 있을 때와 없을 때의 답 정확도를 측정하라. 어떤 질문 유형이 가장 이득을 보는지 문서화하라.
 
 ## 핵심 용어 (Key Terms)
 

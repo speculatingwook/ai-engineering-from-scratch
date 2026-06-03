@@ -11,9 +11,9 @@
 
 트랜스포머(transformer) 이전, RNN 이전, 단어 임베딩(word embedding) 이전에, 언어 모델(language model)은 어떤 단어가 앞선 `n-1`개 단어를 얼마나 자주 뒤따르는지 세어서 다음 단어를 예측했다. "the cat" → "sat"을 47번, "the cat" → "jumped"를 12번, "the cat" → "refrigerator"를 0번 센다. 정규화(normalization)하여 확률 분포(probability distribution)를 얻는다.
 
-그것이 n-gram 언어 모델이다. 1980년부터 2015년까지 모든 음성 인식기, 모든 맞춤법 검사기, 모든 구문 기반 기계 번역(machine translation) 시스템을 돌렸다. 저렴한 온디바이스(on-device) 언어 모델링이 필요할 때는 여전히 돌아간다.
+그것이 n-gram 언어 모델이다. 1980년부터 2015년까지 모든 음성 인식기, 모든 맞춤법 검사기, 모든 구문 기반 기계 번역(machine translation) 시스템을 구동했다. 저렴한 온디바이스(on-device) 언어 모델링이 필요할 때는 여전히 돌아간다.
 
-흥미로운 문제는 보지 못한 n-gram을 어떻게 할 것인가다. 원시 카운트 기반 모델은 본 적 없는 모든 것에 0의 확률을 할당하는데, 이는 치명적이다. 문장은 길고 거의 모든 긴 문장은 적어도 하나의 보지 못한 수열을 포함하기 때문이다. 50년간의 스무딩 연구가 그것을 고쳤다. Kneser-Ney 스무딩이 그 결과이며, 현대 딥러닝(deep learning)은 그것의 경험적 전통을 물려받았다.
+흥미로운 문제는 보지 못한 n-gram을 어떻게 할 것인가다. 원시 카운트 기반 모델은 본 적 없는 모든 것에 0의 확률을 할당하는데, 이는 치명적이다. 문장은 길고 거의 모든 긴 문장은 적어도 하나의 보지 못한 수열을 포함하기 때문이다. 50년간의 스무딩 연구가 그것을 고쳤다. Kneser-Ney 스무딩이 그 결과이며, 현대 딥러닝(deep learning)은 그 경험적 전통을 물려받았다.
 
 ## 개념 (The Concept)
 
@@ -36,7 +36,7 @@ P(w | context) = count(context, w) / count(context)
 5. **절대 할인(Absolute discounting).** 모든 카운트에서 고정 할인 `D`를 빼고, 보지 못한 것으로 재분배한다.
 6. **Kneser-Ney.** 절대 할인에 더해, 저차(lower-order) 모델에 대한 영리한 선택: 원시 빈도 대신 *연속 확률(continuation probability)*(어떤 단어가 몇 개의 맥락에 나타나는지)을 사용한다.
 
-Kneser-Ney 통찰은 심오하다. "San Francisco"는 흔한 바이그램(bigram)이다. 유니그램(unigram) "Francisco"는 대부분 "San" 뒤에 나타난다. 순진한 절대 할인은 "Francisco"에 높은 유니그램 확률을 준다(카운트가 높기 때문). Kneser-Ney는 "Francisco"가 단 하나의 맥락에만 나타남을 알아채고 그에 따라 연속 확률을 낮춘다. 결과: "Francisco"로 끝나는 새로운 바이그램은 적절한 낮은 확률을 받는다.
+Kneser-Ney 통찰은 심오하다. "San Francisco"는 흔한 바이그램(bigram)이다. 유니그램(unigram) "Francisco"는 대부분 "San" 뒤에 나타난다. 순진한 절대 할인은 "Francisco"에 높은 유니그램 확률을 준다(카운트가 높기 때문). Kneser-Ney는 "Francisco"가 단 하나의 맥락에만 나타남을 알아채고 그에 맞춰 연속 확률을 낮춘다. 결과적으로 "Francisco"로 끝나는 새로운 바이그램은 적절한 낮은 확률을 받는다.
 
 **평가: 펄플렉시티.** 홀드아웃 테스트 세트에서 단어당 평균 음의 로그 가능도(negative log-likelihood)의 지수다. 낮을수록 좋다. 펄플렉시티 100은 모델이 100개 단어 중에서 균등하게 고를 때만큼 혼란스럽다는 뜻이다.
 
@@ -84,7 +84,7 @@ def laplace_probability(ngrams, contexts, vocab_size, context, word):
     return numerator / denominator
 ```
 
-모든 카운트에 1을 더한다. 스무딩하지만 보지 못한 사건에 질량을 과다 할당하여, 희귀하지만 알려진 사건도 해친다.
+모든 카운트에 1을 더한다. 스무딩은 되지만 보지 못한 사건에 질량을 과다 할당하여, 희귀하지만 알려진 사건까지 해친다.
 
 ### Step 3: Kneser-Ney (바이그램, 보간)
 
@@ -128,7 +128,7 @@ def kneser_ney_bigram_model(corpus_tokens, discount=0.75):
     return prob
 ```
 
-세 개의 움직이는 부분. `continuation_prob`는 "이 단어가 몇 개의 서로 다른 맥락에 나타나는가?"를 포착한다(Kneser-Ney 혁신). `lambda_prev`는 할인으로 풀려난 질량이며, 백오프에 가중치를 주는 데 쓰인다. 최종 확률은 할인된 주 항에 가중된 연속 항을 더한 것이다.
+세 개의 움직이는 부분. `continuation_prob`는 "이 단어가 몇 개의 서로 다른 맥락에 나타나는가?"를 포착한다(Kneser-Ney 혁신). `lambda_prev`는 할인으로 풀려난 질량이며, 백오프에 가중치를 주는 데 쓰인다. 최종 확률은 할인된 주 항에 가중된 연속 항을 더한 값이다.
 
 ### Step 4: 샘플링으로 텍스트 생성
 
@@ -154,7 +154,7 @@ def generate(prob_fn, vocab, prefix, max_len=30, seed=0):
     return tokens
 ```
 
-확률에 비례하는 샘플링(sampling)이다. 시드(seed)마다 항상 다른 출력을 준다. 빔 서치(beam-search) 같은 출력을 위해서는 각 스텝에서 argmax를 고르고(그리디), 작은 무작위성 노브(온도, temperature)를 추가한다.
+확률에 비례하는 샘플링(sampling)이다. 시드(seed)마다 출력이 달라진다. 빔 서치(beam-search) 같은 출력을 위해서는 각 스텝에서 argmax를 고르고(그리디), 작은 무작위성 노브(온도, temperature)를 추가한다.
 
 ### Step 5: 펄플렉시티
 
@@ -181,7 +181,7 @@ def perplexity(prob_fn, sentences):
 - **고전 NLP 교육.** 얻을 수 있는 스무딩, MLE, 펄플렉시티에 대한 가장 명료한 노출.
 - **KenLM.** 프로덕션(production) n-gram 라이브러리. 낮은 지연 시간(latency)이 중요한 음성 및 MT 시스템에서 리스코어러(rescorer)로 사용된다.
 - **온디바이스 자동완성.** 키보드의 트라이그램 모델. 여전히.
-- **베이스라인(Baseline).** 신경망 LM이 좋다고 선언하기 전에 항상 n-gram LM 펄플렉시티를 계산하라. 당신의 트랜스포머가 KN을 큰 차이로 이기지 못한다면, 무언가 잘못된 것이다.
+- **베이스라인(Baseline).** 신경망 LM이 좋다고 선언하기 전에 항상 n-gram LM 펄플렉시티를 계산하라. 트랜스포머가 KN을 큰 차이로 이기지 못한다면, 무언가 잘못된 것이다.
 
 ## 산출물 (Ship It)
 
@@ -208,7 +208,7 @@ Refuse to report perplexity computed with different tokenization between systems
 ## 연습 문제 (Exercises)
 
 1. **Easy.** 1,000문장짜리 셰익스피어 코퍼스에 트라이그램 LM을 학습시켜라. 20개 문장을 생성하라. 국소적으로는 그럴듯하지만 전역적으로는 일관성이 없을 것이다. 이것이 표준 데모다.
-2. **Medium.** 홀드아웃 셰익스피어 분할에서 당신의 KN 모델에 대한 펄플렉시티를 구현하라. 라플라스와 비교하라. KN이 펄플렉시티를 30-50% 낮추는 것을 볼 것이다.
+2. **Medium.** 홀드아웃 셰익스피어 분할에서 KN 모델의 펄플렉시티를 구현하라. 라플라스와 비교하라. KN이 펄플렉시티를 30-50% 낮추는 것을 볼 것이다.
 3. **Hard.** 트라이그램 맞춤법 교정기를 만들어라. 잘못 쓰인 단어와 그 맥락이 주어지면, 교정을 생성하고 LM 하의 맥락 확률로 순위를 매겨라. Birkbeck 맞춤법 코퍼스(공개)에서 평가하라.
 
 ## 핵심 용어 (Key Terms)

@@ -1,6 +1,6 @@
 # Capstone 08 — 규제 산업을 위한 프로덕션 RAG 챗봇
 
-> Harvey, Glean, Mendable, LlamaCloud는 모두 2026년에 같은 프로덕션(production) 형태를 운영한다. docling 또는 Unstructured와, 시각 자료를 위한 ColPali로 수집한다. 하이브리드 검색(hybrid search). bge-reranker-v2-gemma로 재순위(re-rank). 60-80% 적중률(hit rate)의 프롬프트 캐싱(prompt caching)을 사용해 Claude Sonnet 4.7로 합성. Llama Guard 4와 NeMo Guardrails로 가드(guard). Langfuse와 Phoenix로 관찰. 200개 질문 골든 셋(golden set)에서 RAGAS로 등급 매기기. 규제 도메인(법률, 임상, 보험)에서 하나 만들면, 캡스톤(capstone)은 골든 셋, 레드팀(red team), 드리프트(drift) 대시보드를 통과하는 것이다.
+> Harvey, Glean, Mendable, LlamaCloud는 모두 2026년에 같은 프로덕션(production) 형태를 운영한다. docling 또는 Unstructured와, 시각 자료를 위한 ColPali로 수집한다. 하이브리드 검색(hybrid search). bge-reranker-v2-gemma로 재순위(re-rank). 60-80% 적중률(hit rate)의 프롬프트 캐싱(prompt caching)을 사용해 Claude Sonnet 4.7로 합성. Llama Guard 4와 NeMo Guardrails로 가드(guard). Langfuse와 Phoenix로 관찰. 200개 질문 골든 셋(golden set)에서 RAGAS로 등급 매기기. 규제 도메인(법률, 임상, 보험)에서 하나 만들면, 캡스톤(capstone)은 골든 셋, 레드팀(red team), 드리프트(drift) 대시보드를 통과해야 한다.
 
 **Type:** Capstone
 **Languages:** Python (pipeline + API), TypeScript (chat UI)
@@ -10,9 +10,9 @@
 
 ## 문제 (Problem)
 
-규제 도메인 RAG(법률 계약, 임상 시험 프로토콜, 보험 약관)는 ROI가 명백하고 위험이 구체적이기 때문에 2026년에 가장 많이 출시된 프로덕션 형태다. Harvey(Allen & Overy)는 법률을 위해 그것을 만들었다. Mendable은 개발자 문서 버전을 출시한다. Glean은 엔터프라이즈 검색을 다룬다. 패턴은 이렇다. 고충실도로 수집하고, 재순위와 함께 하이브리드로 검색하고, 인용(citation) 강제와 프롬프트 캐싱으로 합성하고, 여러 안전 계층으로 가드하고, 드리프트를 지속적으로 모니터링한다.
+규제 도메인 RAG(법률 계약, 임상 시험 프로토콜, 보험 약관)는 ROI가 명백하고 위험이 구체적이어서 2026년에 가장 많이 출시된 프로덕션 형태다. Harvey(Allen & Overy)는 법률용으로 이를 만들었다. Mendable은 개발자 문서 버전을 출시한다. Glean은 엔터프라이즈 검색을 다룬다. 패턴은 이렇다. 고충실도로 수집하고, 재순위와 함께 하이브리드로 검색하고, 인용(citation) 강제와 프롬프트 캐싱으로 합성하고, 여러 안전 계층으로 가드하고, 드리프트를 지속적으로 모니터링한다.
 
-어려운 부분은 모델이 아니다. 그것은 관할권을 인식하는 컴플라이언스(HIPAA, GDPR, SOC2), 인용 수준의 감사 가능성(auditability), 비용 통제(적중률이 높을 때 프롬프트 캐싱은 60-90% 할인을 가져온다), RAGAS 충실도(faithfulness)를 통한 환각(hallucination) 탐지, 그리고 인덱스가 따라잡지 못한 채 원본 문서가 갱신될 때의 드리프트 탐지다. 이 캡스톤은 레드팀 스위트와 함께 200개 질문 골든 셋에서 이 모든 것을 출시하기를 요구한다.
+어려운 부분은 모델이 아니라 관할권을 인식하는 컴플라이언스(HIPAA, GDPR, SOC2), 인용 수준의 감사 가능성(auditability), 비용 통제(적중률이 높을 때 프롬프트 캐싱은 60-90% 할인을 가져온다), RAGAS 충실도(faithfulness)로 잡아내는 환각(hallucination) 탐지, 그리고 인덱스가 따라잡지 못한 채 원본 문서가 갱신될 때의 드리프트 탐지다. 이 캡스톤은 레드팀 스위트와 함께 200개 질문 골든 셋에서 이 모든 것을 출시하기를 요구한다.
 
 ## 개념 (Concept)
 
@@ -20,7 +20,7 @@
 
 평가 스택에는 네 계층이 있다. 정확성을 위한 **골든 셋**(인용이 달린 200개의 레이블링된 Q/A). 안전성을 위한 **레드팀**(탈옥(jailbreak), PII 추출 시도, 도메인 밖 질문). 턴마다 자동으로 충실도 / 답변 관련성 / 컨텍스트 정밀도를 측정하는 **RAGAS**. 검색 품질과 환각 점수를 매주 지켜보는 **드리프트 대시보드**(Arize Phoenix).
 
-프롬프트 캐싱은 비용 레버다. Claude 4.5+와 GPT-5+는 시스템 프롬프트 + 검색된 컨텍스트 캐싱을 지원한다. 60-80% 적중률에서, 쿼리당 비용이 3-5배 떨어진다. 높은 캐시 적중률을 달성하려면 파이프라인이 안정적인 접두사(접두사: 시스템 프롬프트 + 재순위된 컨텍스트 먼저)를 위해 설계되어야 한다.
+프롬프트 캐싱은 비용 레버다. Claude 4.5+와 GPT-5+는 시스템 프롬프트 + 검색된 컨텍스트 캐싱을 지원한다. 60-80% 적중률에서는 쿼리당 비용이 3-5배 떨어진다. 높은 캐시 적중률을 달성하려면 파이프라인이 안정적인 접두사(접두사: 시스템 프롬프트 + 재순위된 컨텍스트 먼저)를 위해 설계되어야 한다.
 
 ## 아키텍처 (Architecture)
 

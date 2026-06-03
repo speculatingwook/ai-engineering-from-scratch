@@ -1,6 +1,6 @@
 # AutoGen v0.4: 액터 모델과 에이전트 프레임워크
 
-> AutoGen v0.4(Microsoft Research, 2025년 1월)는 에이전트(agent) 오케스트레이션을 액터 모델(actor model)을 중심으로 재설계했다. 비동기 메시지 교환, 이벤트 기반(event-driven) 에이전트, 결함 격리(fault isolation), 자연스러운 동시성. 이 프레임워크는 이제 유지보수 모드(maintenance mode)에 있으며, 그동안 Microsoft Agent Framework(2025년 10월 퍼블릭 프리뷰)가 후계자가 되어간다.
+> AutoGen v0.4(Microsoft Research, 2025년 1월)는 에이전트(agent) 오케스트레이션을 액터 모델(actor model)을 중심으로 재설계했다. 비동기 메시지 교환, 이벤트 기반(event-driven) 에이전트, 결함 격리(fault isolation), 자연스러운 동시성. 이 프레임워크는 이제 유지보수 모드(maintenance mode)에 있고, 그 자리는 Microsoft Agent Framework(2025년 10월 퍼블릭 프리뷰)가 후계자로 이어받고 있다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib)
@@ -10,13 +10,13 @@
 ## 학습 목표 (Learning Objectives)
 
 - 액터 모델을 기술하기: 액터(actor)로서의 에이전트, 유일한 IPC로서의 메시지, 액터별 실패 격리.
-- AutoGen v0.4의 세 API 계층 — Core, AgentChat, Extensions — 의 이름을 대고 각각이 무엇을 위한 것인지 설명하기.
+- AutoGen v0.4의 세 API 계층(Core, AgentChat, Extensions)의 이름을 대고 각각이 무엇을 위한 것인지 설명하기.
 - 메시지 전달을 처리로부터 분리(decoupling)하는 것이 왜 결함 격리와 자연스러운 동시성을 주는지 설명하기.
 - Python으로 stdlib 액터 런타임(runtime)을 구현하고 두 에이전트 코드 리뷰 흐름을 그 위로 포팅하기.
 
 ## 문제 (The Problem)
 
-대부분의 에이전트 프레임워크는 동기적이다. 한 에이전트가 생산하고, 한 에이전트가 소비하며, 콜 스택(call stack) 안에서 이루어진다. 실패는 스택을 무너뜨린다. 동시성은 덧붙여진다. 분산(distribution)은 재작성을 요구한다.
+대부분의 에이전트 프레임워크는 동기적이다. 한 에이전트가 생산하고, 한 에이전트가 소비하며, 콜 스택(call stack) 안에서 이루어진다. 실패는 스택을 무너뜨린다. 동시성은 나중에 덧붙인다. 분산(distribution)을 하려면 코드를 다시 짜야 한다.
 
 AutoGen v0.4의 답: 액터 모델. 각 에이전트는 사설 받은편지함(private inbox)을 가진 액터다. 메시지가 유일한 상호작용이다. 런타임은 전달을 처리로부터 분리한다. 실패는 한 액터로 격리된다. 동시성은 기본 제공된다. 분산은 그저 다른 전송(transport)일 뿐이다.
 
@@ -40,7 +40,7 @@ AutoGen v0.4의 답: 액터 모델. 각 에이전트는 사설 받은편지함(p
 
 ### 분리가 왜 중요한가
 
-v0.2 모델에서 `agent_a.chat(agent_b)`를 호출하면 agent_b가 반환할 때까지 agent_a를 동기적으로 블로킹(block)한다. v0.4에서 `send(agent_b, msg)`는 메시지를 agent_b의 받은편지함에 넣고 반환한다. 런타임이 나중에 전달한다. 세 가지 결과가 따른다.
+v0.2 모델에서 `agent_a.chat(agent_b)`를 호출하면 agent_b가 반환할 때까지 agent_a를 동기적으로 블로킹(block)한다. v0.4에서 `send(agent_b, msg)`는 메시지를 agent_b의 받은편지함에 넣고 반환한다. 런타임이 나중에 전달한다. 그래서 세 가지 결과가 나온다.
 
 - **결함 격리.** Agent B의 크래시(crash)가 Agent A를 무너뜨리지 않는다 — 런타임이 B의 핸들러에서 실패를 잡고 무엇을 할지(로깅, 재시도, 데드레터(dead-letter)) 결정한다.
 - **자연스러운 동시성.** 한 번에 여러 메시지가 진행 중이다. 액터들이 자신의 받은편지함을 동시에 처리한다.
@@ -58,7 +58,7 @@ OpenTelemetry 지원이 내장되어 있다. 모든 메시지가 스팬(span)을
 
 ### 상태: 유지보수 모드
 
-2026년 초: AutoGen v0.7.x는 연구와 프로토타이핑에 안정적이다. Microsoft는 활발한 개발을 Microsoft Agent Framework(2025년 10월 1일 퍼블릭 프리뷰; 2026년 1분기 말 1.0 GA 목표)로 옮겼다. AutoGen 패턴은 깔끔하게 앞으로 포팅된다 — 액터 모델이 내구성 있는 아이디어다.
+2026년 초: AutoGen v0.7.x는 연구와 프로토타이핑에 안정적이다. Microsoft는 활발한 개발을 Microsoft Agent Framework(2025년 10월 1일 퍼블릭 프리뷰; 2026년 1분기 말 1.0 GA 목표)로 옮겼다. AutoGen 패턴은 앞으로 깔끔하게 포팅된다. 액터 모델이 그만큼 오래가는 아이디어이기 때문이다.
 
 ## 직접 만들기 (Build It)
 
@@ -90,7 +90,7 @@ python3 code/main.py
 
 ## 연습 문제 (Exercises)
 
-1. 데드레터 큐(dead-letter queue)를 추가하라. 핸들러가 예외를 일으키면 실패한 메시지를 사람의 검사를 위해 보관(park)하라. 당신의 토이에서 DLQ는 얼마나 자주 적중하는가?
+1. 데드레터 큐(dead-letter queue)를 추가하라. 핸들러가 예외를 일으키면 실패한 메시지를 사람이 검사하도록 보관(park)하라. 이 토이에서 DLQ는 얼마나 자주 적중하는가?
 2. `SelectorGroupChat`을 구현하라: 셀렉터 액터가 대화 상태를 바탕으로 다음 메시지를 누가 처리할지 고른다.
 3. 분산 전송을 추가하라: 프로세스 내 큐를 JSON-over-HTTP 서버로 교체하여 액터들이 별도 프로세스에서 실행될 수 있게 하라.
 4. 메시지마다 OTel 스팬(또는 no-op 대역)을 배선하라. Lesson 23에 따라 `gen_ai.agent.name`, `gen_ai.operation.name`을 방출하라.

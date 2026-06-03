@@ -1,6 +1,6 @@
 # 학습 루프와 평가 (Training Loop and Evaluation)
 
-> 측정하지 않는 루프(loop)는 거짓말하는 루프다. 이 레슨은 GPT 모델을 구동하는 학습 루프를 만든다: 가중치 감쇠(weight decay) 분할이 있는 AdamW, 워밍업(warmup) 더하기 코사인(cosine) 학습률(learning rate) 스케줄(schedule), `calc_loss_batch` 도우미(helper), 따로 떼어 둔(held out) 데이터에 대한 `evaluate_model` 패스, K 스텝마다의 `generate_and_print_sample` 정성적(qualitative) 프로브(probe), 그리고 나중에 플롯(plot)할 수 있는 손실의 JSONL 로그. 같은 골격(skeleton)이 당신이 만들 모든 디코더(decoder) LLM을 학습시킨다.
+> 측정하지 않는 루프(loop)는 거짓말하는 루프다. 이 레슨은 GPT 모델을 구동하는 학습 루프를 만든다: 가중치 감쇠(weight decay) 분할이 있는 AdamW, 워밍업(warmup) 더하기 코사인(cosine) 학습률(learning rate) 스케줄(schedule), `calc_loss_batch` 도우미(helper), 따로 떼어 둔(held out) 데이터에 대한 `evaluate_model` 패스, K 스텝마다의 `generate_and_print_sample` 정성적(qualitative) 프로브(probe), 그리고 나중에 플롯(plot)할 수 있는 손실의 JSONL 로그. 같은 골격(skeleton)이 앞으로 만들 모든 디코더(decoder) LLM을 학습시킨다.
 
 **Type:** Build
 **Languages:** Python

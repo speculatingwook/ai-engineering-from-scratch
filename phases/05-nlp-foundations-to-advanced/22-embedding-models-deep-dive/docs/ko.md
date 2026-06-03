@@ -1,6 +1,6 @@
 # 임베딩 모델(Embedding Models) — 2026년 심층 분석
 
-> Word2Vec은 단어당 하나의 벡터(vector)를 주었다. 현대 임베딩 모델은 단락당 하나의 벡터를 준다. 교차 언어(cross-lingual)이고, 희소(sparse)·밀집(dense)·다중 벡터(multi-vector) 관점을 제공하며, 당신의 인덱스에 맞는 크기로 조절된다. 잘못 고르면 RAG가 엉뚱한 것을 검색한다.
+> Word2Vec은 단어당 하나의 벡터(vector)를 주었다. 현대 임베딩 모델은 단락당 하나의 벡터를 준다. 교차 언어(cross-lingual)이고, 희소(sparse)·밀집(dense)·다중 벡터(multi-vector) 관점을 제공하며, 인덱스에 맞는 크기로 조절된다. 잘못 고르면 RAG가 엉뚱한 것을 검색한다.
 
 **Type:** Learn
 **Languages:** Python
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-당신의 RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인은 벡터 데이터베이스나 프롬프트(prompt)인 경우가 드물다. 임베딩 모델이다.
+RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인은 벡터 데이터베이스나 프롬프트(prompt)인 경우가 드물다. 임베딩 모델이다.
 
 2026년에 임베딩을 고른다는 것은 다섯 가지 축에 걸쳐 선택한다는 뜻이다.
 
@@ -37,7 +37,7 @@
 
 ### MTEB 리더보드는 이야기의 일부만 들려준다
 
-대규모 텍스트 임베딩 벤치마크(Massive Text Embedding Benchmark) — 출시 당시(2022) 8개 과제 유형에 걸친 56개 과제, MTEB v2에서 100개 이상으로 확장. 2026년 초 기준, Gemini Embedding 2가 검색(retrieval)에서 1위(67.71 MTEB-R)다. Cohere embed-v4가 범용(general)에서 선두(65.2 MTEB)다. BGE-M3가 오픈 웨이트 다국어에서 선두(63.0)다. 리더보드는 필요하지만 충분하지는 않다 — 항상 당신의 도메인에서 벤치마크(benchmark)하라.
+대규모 텍스트 임베딩 벤치마크(Massive Text Embedding Benchmark) — 출시 당시(2022) 8개 과제 유형에 걸친 56개 과제, MTEB v2에서 100개 이상으로 확장. 2026년 초 기준, Gemini Embedding 2가 검색(retrieval)에서 1위(67.71 MTEB-R)다. Cohere embed-v4가 범용(general)에서 선두(65.2 MTEB)다. BGE-M3가 오픈 웨이트 다국어에서 선두(63.0)다. 리더보드는 필요하지만 충분하지는 않다 — 항상 자신의 도메인에서 벤치마크(benchmark)하라.
 
 ### 3계층 패턴
 
@@ -113,7 +113,7 @@ colbert_score = model.colbert_score(q_col, d_col)
 final = 0.4 * dense_score + 0.2 * sparse_score + 0.4 * colbert_score
 ```
 
-가중치는 당신의 도메인에서 튜닝하라.
+가중치는 자신의 도메인에서 튜닝하라.
 
 ### Step 4: 커스텀 과제에 대한 MTEB 평가
 
@@ -125,7 +125,7 @@ evaluation = MTEB(tasks=tasks)
 results = evaluation.run(encoder, output_folder="./mteb-results")
 ```
 
-후보 모델을 *대표적인* 부분집합에서 실행하라. 리더보드 순위만 믿지 마라 — 당신의 도메인이 중요하다.
+후보 모델을 *대표적인* 부분집합에서 실행하라. 리더보드 순위만 믿지 마라 — 자신의 도메인이 중요하다.
 
 ### Step 5: 밑바닥부터 만든 코사인
 
@@ -135,7 +135,7 @@ results = evaluation.run(encoder, output_folder="./mteb-results")
 
 - **쿼리와 문서에 같은 모델.** 일부 모델(Voyage, Jina-ColBERT)은 비대칭 인코딩(asymmetric encoding)을 사용한다 — 쿼리와 문서가 서로 다른 경로를 통과한다. 항상 모델 카드를 확인하라.
 - **접두사 누락.** `bge-*` 모델은 쿼리 앞에 `"Represent this sentence for searching relevant passages: "`를 붙여야 한다. 잊으면 재현율이 3~5점 벌어진다.
-- **마트료시카 과도한 절단.** 1,536 → 256은 보통 안전하다. 1,536 → 64는 아니다. 당신의 평가 세트에서 검증하라.
+- **마트료시카 과도한 절단.** 1,536 → 256은 보통 안전하다. 1,536 → 64는 아니다. 자신의 평가 세트에서 검증하라.
 - **컨텍스트 절단.** 대부분의 모델은 최대 길이를 초과하는 입력을 조용히 잘라낸다. 긴 문서는 청킹(chunking)이 필요하다(레슨 23 참고).
 - **지연 시간 꼬리(latency tail) 무시.** MTEB 점수는 p99 지연 시간(latency)을 숨긴다. 600M 모델이 335M 모델을 2점 앞설 수 있지만 쿼리당 비용이 3배 더 들 수 있다.
 
@@ -153,7 +153,7 @@ results = evaluation.run(encoder, output_folder="./mteb-results")
 | 저장 공간 제약 | 마트료시카 절단 + int8 양자화(quantization) |
 | 키워드 중심 쿼리 | SPLADE 희소를 추가하고, 밀집과 RRF 융합 |
 
-2026년 패턴: BGE-M3나 text-3-large로 시작하고, MTEB로 당신의 도메인에서 평가하며, 도메인 특화 모델이 3점 넘게 이기면 교체하라.
+2026년 패턴: BGE-M3나 text-3-large로 시작하고, MTEB로 자신의 도메인에서 평가하며, 도메인 특화 모델이 3점 넘게 이기면 교체하라.
 
 ## 산출물 (Ship It)
 
@@ -183,8 +183,8 @@ Refuse recommendations that truncate Matryoshka to <64 dims without domain valid
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** `bge-small-en-v1.5`로 문장 100개를 전체 차원(384)에서 인코딩한 다음, 마트료시카 128에서 인코딩하라. 쿼리 10개에 대한 MRR 하락을 측정하라.
-2. **보통.** 당신의 도메인에서 단락 500개에 대해 BGE-M3 밀집, 희소, colbert를 비교하라. recall@10에서 어느 것이 이기는가? RRF 융합이 최고의 단일 모드를 이기는가?
-3. **어려움.** 당신의 상위 2개 도메인 과제에 걸쳐 후보 모델 세 개로 MTEB를 실행하라. MTEB 점수, 100개 쿼리 배치에서의 p99 지연 시간, 100만 쿼리당 비용($)을 보고하라. 파레토 최적(Pareto-optimal)인 것을 골라라.
+2. **보통.** 자신의 도메인에서 단락 500개에 대해 BGE-M3 밀집, 희소, colbert를 비교하라. recall@10에서 어느 것이 이기는가? RRF 융합이 최고의 단일 모드를 이기는가?
+3. **어려움.** 자신의 상위 2개 도메인 과제에 걸쳐 후보 모델 세 개로 MTEB를 실행하라. MTEB 점수, 100개 쿼리 배치에서의 p99 지연 시간, 100만 쿼리당 비용($)을 보고하라. 파레토 최적(Pareto-optimal)인 것을 골라라.
 
 ## 핵심 용어 (Key Terms)
 

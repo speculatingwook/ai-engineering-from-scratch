@@ -34,7 +34,7 @@
 
 멀티모달(multimodal) 지원은 `violence`, `self-harm`, `sexual`에 적용되지만 `sexual/minors`에는 적용되지 않는다. 나머지는 텍스트 전용이다.
 
-`code/main.py`의 코드 하니스(harness)에서는 교육적 단순성을 위해 `/threatening`, `/intent`, `/instructions`, `/graphic` 하위 범주를 그것들의 최상위 부모로 통합한다. 프로덕션 코드는 전체 13개 범주 스키마를 사용해야 한다.
+`code/main.py`의 코드 하니스(harness)에서는 교육적 단순성을 위해 `/threatening`, `/intent`, `/instructions`, `/graphic` 하위 범주를 각각의 최상위 부모로 통합한다. 프로덕션 코드는 전체 13개 범주 스키마를 사용해야 한다.
 
 이전 세대 모더레이션 엔드포인트(endpoint)보다 다국어 테스트 세트에서 42% 더 우수하다. 범주별 점수. 애플리케이션이 임계값을 설정한다.
 
@@ -42,13 +42,13 @@
 
 레슨 16에서 다룸. 14개 MLCommons 위해 범주(OpenAI의 13개 응답 스키마 불리언과 다르게 조직됨). 8개 언어 지원(v3). Llama Guard 4(2025년 4월)는 본질적으로 멀티모달이며 12B다.
 
-OpenAI와 Llama Guard 분류 체계는 겹치지만 발산한다. OpenAI는 "illicit"을 광범위한 범주로 가진다. Llama Guard는 "violent crimes"와 "non-violent crimes"를 별도로 가진다. 배포는 자신의 정책 분류 체계 적합성에 따라 선택한다.
+OpenAI와 Llama Guard 분류 체계는 겹치지만 발산한다. OpenAI는 "illicit"을 광범위한 범주로 가진다. Llama Guard는 "violent crimes"와 "non-violent crimes"를 별도로 가진다. 배포 환경마다 정책 분류 체계에 얼마나 들어맞는지를 보고 선택한다.
 
 ### Perspective API(Google Jigsaw)
 
 LLM-as-moderator 물결에 앞선(2020년 이전) 유해성 점수화 시스템. 범주: TOXICITY, SEVERE_TOXICITY, INSULT, PROFANITY, THREAT, IDENTITY_ATTACK. 하위 차원 변형을 가진 단일 차원 주 점수(TOXICITY).
 
-API가 안정적이고, 문서화되어 있으며, 수년간의 보정(calibration) 데이터를 가지고 있기 때문에 콘텐츠 모더레이션 연구 베이스라인으로 널리 쓰인다. 현대 LLM 인접 사용 사례에는 일반적으로 Llama Guard나 OpenAI Moderation이 더 적합하다.
+API가 안정적이고 문서화도 잘 되어 있으며 수년간의 보정(calibration) 데이터가 쌓여 있어 콘텐츠 모더레이션 연구 베이스라인으로 널리 쓰인다. 현대 LLM 인접 사용 사례에는 일반적으로 Llama Guard나 OpenAI Moderation이 더 적합하다.
 
 ### 세 계층 패턴
 
@@ -68,7 +68,7 @@ API가 안정적이고, 문서화되어 있으며, 수년간의 보정(calibrati
 
 ### Azure 폐기
 
-Azure Content Moderator: 2024년 2월 폐기 예정 처리, 2027년 2월 퇴역. Azure AI Content Safety로 대체되며, 이는 LLM 기반이고 Azure OpenAI와 통합된다. 마이그레이션(migration)은 Azure 배포에 대한 2024-2027년 현장 수준 프로젝트다.
+Azure Content Moderator: 2024년 2월 폐기 예정 처리, 2027년 2월 퇴역. Azure AI Content Safety로 대체되며, 이는 LLM 기반이고 Azure OpenAI와 통합된다. 마이그레이션(migration)은 Azure 배포에서 2024-2027년에 걸쳐 진행하는 현장 수준 프로젝트다.
 
 ### Phase 18에서 이 레슨의 위치
 

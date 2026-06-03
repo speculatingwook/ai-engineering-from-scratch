@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-학습시키는 모든 분류 모델에서 `CrossEntropyLoss()`를 호출한다. 모든 언어 모델 논문에서 "퍼플렉서티"를 본다. VAE, 증류(distillation), RLHF에서 KL 발산에 대해 읽는다. 이것들은 서로 단절된 개념이 아니다. 모두 다른 모자를 쓴 같은 아이디어다.
+학습시키는 모든 분류 모델에서 `CrossEntropyLoss()`를 호출한다. 모든 언어 모델 논문에서 "퍼플렉서티"를 본다. VAE, 증류(distillation), RLHF에서 KL 발산에 대해 읽는다. 이들은 서로 따로 노는 개념이 아니라, 모자만 바꿔 쓴 같은 아이디어다.
 
-정보 이론은 불확실성, 압축, 예측에 대해 추론하는 언어를 준다. Claude Shannon이 통신 문제를 풀기 위해 1948년에 발명했다. 알고 보니, 신경망(neural network)을 학습시키는 것은 통신 문제다: 모델은 학습된 가중치(weight)라는 잡음 많은 채널을 통해 올바른 레이블(label)을 전송하려 애쓰고 있다.
+정보 이론은 불확실성과 압축, 예측을 따져 보는 언어를 제공한다. Claude Shannon이 통신 문제를 풀려고 1948년에 만들었다. 알고 보면 신경망(neural network)을 학습시키는 일도 통신 문제다: 모델은 학습된 가중치(weight)라는 잡음 많은 채널로 올바른 레이블(label)을 전송하려 애쓴다.
 
-이 레슨은 모든 공식을 밑바닥부터 만들어, 그것들이 어디서 오는지 그리고 왜 동작하는지 볼 수 있게 한다.
+이 레슨은 모든 공식을 밑바닥부터 만들어, 그 공식이 어디서 나오고 왜 동작하는지 직접 확인하게 한다.
 
 ## 개념 (The Concept)
 
@@ -71,7 +71,7 @@ Biased coin:  H = -(0.99 * log2(0.99) + 0.01 * log2(0.01)) = 0.08 bits
 H(P, Q) = -sum( p(x) * log(q(x)) )  for all x
 ```
 
-P는 참 분포(레이블)다. Q는 당신 모델의 예측이다. Q가 P와 완벽하게 일치하면 교차 엔트로피는 엔트로피와 같아진다. 어떤 불일치든 그것을 더 크게 만든다.
+P는 참 분포(레이블)이고 Q는 모델의 예측이다. Q가 P와 완벽하게 일치하면 교차 엔트로피는 엔트로피와 같아진다. 조금이라도 어긋나면 그만큼 값이 커진다.
 
 분류에서 P는 원-핫(one-hot) 벡터다(참 클래스는 확률 1, 그 밖의 모든 것은 0). 이는 교차 엔트로피를 다음으로 단순화한다:
 
@@ -79,7 +79,7 @@ P는 참 분포(레이블)다. Q는 당신 모델의 예측이다. Q가 P와 완
 H(P, Q) = -log(q(true_class))
 ```
 
-그것이 분류를 위한 교차 엔트로피 손실 공식 전부다. 올바른 클래스의 예측 확률을 최대화하라.
+분류용 교차 엔트로피 손실 공식은 이게 전부다. 올바른 클래스의 예측 확률을 최대화하라.
 
 ### KL 발산 (분포 사이의 거리)
 
@@ -90,7 +90,7 @@ D_KL(P || Q) = sum( p(x) * log(p(x) / q(x)) )  for all x
              = H(P, Q) - H(P)
 ```
 
-교차 엔트로피는 엔트로피 더하기 KL 발산이다. 참 분포의 엔트로피는 학습 중에 상수이므로, 교차 엔트로피를 최소화하는 것은 KL 발산을 최소화하는 것과 같다. 당신은 모델의 분포를 참 분포 쪽으로 밀고 있는 것이다.
+교차 엔트로피는 엔트로피에 KL 발산을 더한 값이다. 참 분포의 엔트로피는 학습 중에 상수이므로, 교차 엔트로피를 최소화하는 것은 KL 발산을 최소화하는 것과 같다. 모델의 분포를 참 분포 쪽으로 밀어붙이는 셈이다.
 
 KL 발산은 대칭이 아니다: D_KL(P || Q) != D_KL(Q || P). 진정한 거리 척도가 아니다.
 
@@ -244,7 +244,7 @@ Log-likelihood = sum( log(q(y_i)) )
 Negative log-likelihood = -sum( log(q(y_i)) )
 ```
 
-그 마지막 줄이 교차 엔트로피 손실이다. 교차 엔트로피를 최소화하는 것 = 당신의 모델 하에서 학습 데이터의 우도를 최대화하는 것.
+그 마지막 줄이 교차 엔트로피 손실이다. 교차 엔트로피를 최소화하는 것 = 모델 하에서 학습 데이터의 우도를 최대화하는 것.
 
 **그래디언트 관점.** 로짓에 대한 교차 엔트로피의 그래디언트(gradient)는 단순히 (predicted - true)다. 깔끔하고, 안정적이며, 계산이 빠르다. 이것이 소프트맥스(softmax)와 완벽하게 짝을 이루는 이유다.
 
@@ -406,7 +406,7 @@ print(f"MI (dependent):   {mutual_information(dependent):.4f} bits")
 
 ## 라이브러리로 써보기 (Use It)
 
-NumPy를 사용한 같은 개념들, 실무에서 쓰게 될 방식:
+앞의 개념들을 NumPy로, 실무에서 쓰는 방식 그대로 옮긴 것이다:
 
 ```python
 import numpy as np
@@ -433,7 +433,7 @@ print(f"Cross-ent:  {np_cross_entropy(true, pred):.4f} nats")
 print(f"KL div:     {np_kl_divergence(true, pred):.4f} nats")
 ```
 
-당신은 `torch.nn.CrossEntropyLoss()`가 내부적으로 하는 일을 밑바닥부터 만들었다. 이제 학습 중에 왜 손실이 내려가는지 안다: 당신 모델의 예측 분포가 참 분포에 더 가까워지고 있으며, 이는 낭비된 정보의 내트로 측정된다.
+`torch.nn.CrossEntropyLoss()`가 내부적으로 하는 일을 밑바닥부터 만든 것이다. 이제 학습 중에 왜 손실이 내려가는지 안다: 모델의 예측 분포가 참 분포에 더 가까워지고 있으며, 이는 낭비된 정보의 내트로 측정된다.
 
 ## 연습 문제 (Exercises)
 
@@ -464,4 +464,4 @@ print(f"KL div:     {np_kl_divergence(true, pred):.4f} nats")
 
 - [Shannon 1948: A Mathematical Theory of Communication](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) - 원본 논문, 지금도 읽을 만하다
 - [Visual Information Theory (Chris Olah)](https://colah.github.io/posts/2015-09-Visual-Information/) - 엔트로피와 KL 발산에 대한 최고의 시각적 설명
-- [PyTorch CrossEntropyLoss docs](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) - 프레임워크가 방금 당신이 만든 것을 어떻게 구현하는지
+- [PyTorch CrossEntropyLoss docs](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) - 방금 밑바닥부터 만든 것을 프레임워크가 어떻게 구현하는지

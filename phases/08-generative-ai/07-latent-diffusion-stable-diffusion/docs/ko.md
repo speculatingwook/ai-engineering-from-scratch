@@ -25,7 +25,7 @@
 
 2. **2단계 — `z`에 대한 확산.** `z = E(x_real)`을 데이터로 취급한다. `z_t`의 잡음을 제거하도록 U-Net(또는 DiT)을 학습시킨다. 추론(inference) 시: 확산으로 `z_0`을 샘플링한 다음 `x = D(z_0)`.
 
-**텍스트 조건화(Text conditioning).** 두 가지 추가 구성 요소. 동결된 텍스트 인코더(SD 1.x는 CLIP-L, SD 2/XL은 CLIP-L+OpenCLIP-G, SD3과 Flux는 T5-XXL). 교차 어텐션(cross-attention) 주입: 모든 U-Net 블록이 `[Q = 이미지 특성, K = V = 텍스트 토큰]`을 받아 그것들을 섞는다. 토큰이 텍스트가 이미지에 영향을 주는 유일한 방법이다.
+**텍스트 조건화(Text conditioning).** 두 가지 추가 구성 요소. 동결된 텍스트 인코더(SD 1.x는 CLIP-L, SD 2/XL은 CLIP-L+OpenCLIP-G, SD3과 Flux는 T5-XXL). 교차 어텐션(cross-attention) 주입: 모든 U-Net 블록이 `[Q = 이미지 특성, K = V = 텍스트 토큰]`을 받아 섞는다. 텍스트가 이미지에 영향을 주는 통로는 이 토큰뿐이다.
 
 **손실 함수는 Lesson 06과 동일하다.** 잡음에 대한 같은 DDPM / 흐름 매칭 MSE다. 데이터 도메인만 교체할 뿐이다.
 
@@ -41,7 +41,7 @@
 | Flux.1-dev | 2024 | MMDiT | 128×128×16 | T5-XXL + CLIP-L | 12B |
 | Flux.1-schnell | 2024 | MMDiT 증류됨 | 128×128×16 | T5-XXL + CLIP-L | 12B, 1-4 스텝 |
 
-추세: U-Net을 DiT(잠재 패치에 대한 트랜스포머)로 교체, 텍스트 인코더 확장(프롬프트 준수에서 T5가 CLIP을 능가), 잠재 채널 증가(4 → 16은 더 많은 세부 여유를 준다).
+추세: U-Net을 DiT(잠재 패치에 대한 트랜스포머)로 교체, 텍스트 인코더 확장(프롬프트 준수에서 T5가 CLIP을 능가), 잠재 채널 증가(4 → 16이면 세부를 담을 여유가 늘어난다).
 
 ## 직접 만들기 (Build It)
 
@@ -126,7 +126,7 @@ h = h + CrossAttention(Q=h, K=text_embed, V=text_embed)
 
 ## 프로덕션 노트: 8GB 소비자용 GPU에서 Flux-12B 돌리기 (Production note: running Flux-12B on an 8GB consumer GPU)
 
-레퍼런스 Flux 통합은 "나에게 소비자용 GPU가 있는데, 이것을 출시할 수 있나?"의 전형적인 레시피다. 트릭은 프로덕션 추론 문헌이 나열하는 같은 세 손잡이 레시피를 확산 DiT에 적용한 것이다.
+레퍼런스 Flux 통합은 "나에게 소비자용 GPU가 있는데, 이것을 출시할 수 있나?"의 전형적인 레시피다. 핵심은 프로덕션 추론 문헌이 나열하는 바로 그 세 손잡이 레시피를 확산 DiT에 적용하는 데 있다.
 
 1. **시차 로딩(Staggered loading).** Flux는 VRAM에 공존할 필요가 결코 없는 세 네트워크를 가진다: T5-XXL 텍스트 인코더(fp32에서 약 10 GB), CLIP-L(작음), 12B MMDiT, 그리고 VAE. 먼저 프롬프트를 인코딩하고, 인코더를 *삭제*하고, DiT를 로드하고, 잡음을 제거하고, DiT를 *삭제*하고, VAE를 로드하고, 디코딩한다. 소비자용 8GB GPU는 한 번에 한 단계만 들어간다.
 2. **bitsandbytes를 통한 4비트 양자화.** T5 인코더와 DiT 양쪽에 `BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)`. 메모리를 8배 줄이고, Aritra의 벤치마크(benchmark)(노트북에 링크됨)에 따르면 텍스트-이미지에서 품질 저하는 감지할 수 없다.

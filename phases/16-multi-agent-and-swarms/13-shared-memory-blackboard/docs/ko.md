@@ -1,6 +1,6 @@
 # 공유 메모리와 블랙보드 패턴 (Shared Memory and Blackboard Patterns)
 
-> 2026년 멀티 에이전트 시스템에는 두 접근법이 공존한다. **메시지 풀(message pool)**(AutoGen GroupChat나 MetaGPT처럼 모두가 모두의 메시지를 본다)과 **구독 기반 블랙보드(blackboard with subscription)**(Context-Aware MCP나 Matrix 프레임워크처럼 에이전트가 관련 이벤트를 구독한다)다. 둘 다 멀티 에이전트 시스템에서 유일하게 상태를 가진 부분이다. 즉 둘 다 흥미로운 버그가 사는 곳이다. 대표적 실패 모드는 **메모리 오염(memory poisoning)**이다. 한 에이전트(agent)가 "사실"을 환각(hallucinate)하면, 다른 에이전트들이 그것을 검증된 것으로 취급하고, 정확도가 즉각적인 충돌보다 훨씬 디버깅하기 어려운 방식으로 서서히 무너진다. 이 레슨은 두 구조를 stdlib로 만들고, 오염 공격을 주입하고, 프로덕션(production)에서 실제로 통하는 세 가지 완화책을 보여준다.
+> 2026년 멀티 에이전트 시스템에는 두 접근법이 공존한다. **메시지 풀(message pool)**(AutoGen GroupChat나 MetaGPT처럼 모두가 모두의 메시지를 본다)과 **구독 기반 블랙보드(blackboard with subscription)**(Context-Aware MCP나 Matrix 프레임워크처럼 에이전트가 관련 이벤트를 구독한다)다. 둘 다 멀티 에이전트 시스템에서 유일하게 상태를 가진 부분이며, 그래서 흥미로운 버그가 사는 곳이다. 대표적 실패 모드는 **메모리 오염(memory poisoning)**이다. 한 에이전트(agent)가 "사실"을 환각(hallucinate)하면, 다른 에이전트들이 그것을 검증된 것으로 취급하고, 정확도가 즉각적인 충돌보다 훨씬 디버깅하기 어려운 방식으로 서서히 무너진다. 이 레슨은 두 구조를 stdlib로 만들고, 오염 공격을 주입하고, 프로덕션(production)에서 실제로 통하는 세 가지 완화책을 보여준다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib, `threading`)
@@ -72,7 +72,7 @@ agent-C ──pub────▶ │                  │ ──▶ agent-F (sub
 
 ### 블랙보드의 선례 (Hayes-Roth, 1985)
 
-블랙보드 패턴은 LLM 에이전트보다 40년 앞선다. Hayes-Roth(1985, "A Blackboard Architecture for Control")는 전역 블랙보드를 관찰하고, 부분 해법을 기여하고, 다른 소스를 촉발하는 전문가 지식 소스(Knowledge Source)를 기술했다. 2026년 블랙보드(CA-MCP, Matrix)는 LLM 에이전트를 지식 소스로, JSON 블롭(blob)을 부분 해법으로 둔 동일한 패턴이다. 과거 문헌은 현대 시스템이 재발견하는 쓰기 경합(write contention), 기회주의적 제어, 일관성에 대한 해법을 이미 문서화해 두었다.
+블랙보드 패턴은 LLM 에이전트보다 40년 앞선다. Hayes-Roth(1985, "A Blackboard Architecture for Control")는 전역 블랙보드를 관찰하고, 부분 해법을 기여하고, 다른 소스를 촉발하는 전문가 지식 소스(Knowledge Source)를 기술했다. 2026년 블랙보드(CA-MCP, Matrix)는 LLM 에이전트를 지식 소스로, JSON 블롭(blob)을 부분 해법으로 둔 동일한 패턴이다. 과거 문헌은 현대 시스템이 재발견하는 쓰기 경합(write contention), 기회주의적 제어, 일관성 해법을 이미 문서화해 두었다.
 
 ### 프로젝션 vs 전체 뷰
 
@@ -99,7 +99,7 @@ agent-C ──pub────▶ │                  │ ──▶ agent-F (sub
 - 검증자는 쓰기에서 인용된 출처를 독립적으로 가져온다. 불일치를 표시한다.
 - 검증자 자신의 출력은 사람이나 별도의 결정 에이전트로 라우팅되며, 절대 풀로 되먹임되지 않는다.
 
-이 분리가 없으면 검증자의 출력이 풀의 새 항목이 되고, 이는 오염된 풀이 검증자를 오염시키고, 그것이 그 검증을 오염시킨다는 뜻이 된다.
+이 분리가 없으면 검증자의 출력이 풀의 새 항목이 되고, 그러면 오염된 풀이 검증자를 오염시키며, 그 검증마저 오염된다.
 
 ## 직접 만들기 (Build It)
 

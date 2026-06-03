@@ -1,6 +1,6 @@
 # 스케일링 법칙(Scaling Laws)
 
-> 2020년 Kaplan 논문은 말했다: 더 큰 모델, 더 낮은 손실(loss). 2022년 Hoffmann 논문은 말했다: 당신은 학습(training)을 덜 시키고 있었다. 연산은 두 양동이로 들어간다 — 파라미터(parameter)와 토큰(token) — 그리고 그 분배는 자명하지 않다.
+> 2020년 Kaplan 논문은 말했다: 더 큰 모델, 더 낮은 손실(loss). 2022년 Hoffmann 논문은 말했다: 학습(training)을 덜 시키고 있었다. 연산은 두 양동이로 들어간다 — 파라미터(parameter)와 토큰(token) — 그리고 그 분배는 자명하지 않다.
 
 **Type:** Learn
 **Languages:** Python
@@ -111,9 +111,9 @@ GPT-3, Chinchilla, Llama 3 8B, DeepSeek-V3(활성 파라미터)에 대해 알려
 
 ## 라이브러리로 써보기 (Use It)
 
-당신이 직접 프런티어 모델을 학습할 가능성은 낮다. 하지만 스케일링 법칙은 다음을 알려 준다:
+직접 프런티어 모델을 학습할 가능성은 낮다. 하지만 스케일링 법칙은 다음을 알려 준다:
 
-1. **당신의 파인튜닝(fine-tuning)에 충분한 데이터가 있는가.** 작업 전용 데이터가 베이스 모델 파라미터당 20 토큰 미만이라면, 어떤 손실 바닥에서의 포화(saturation)를 예상하라.
+1. **파인튜닝(fine-tuning)에 충분한 데이터가 있는가.** 작업 전용 데이터가 베이스 모델 파라미터당 20 토큰 미만이라면, 어떤 손실 바닥에서의 포화(saturation)를 예상하라.
 2. **더 큰 베이스 모델을 골라야 하는가.** 예산을 전부 추론에 쓰고 있다면, 더 작고 더 길게 학습된 모델을 선호하라.
 3. **수익이 어디서 감소하는가.** Chinchilla-최적의 1000배를 넘어서면, 로그 손실 변화는 잡음이 된다.
 
@@ -131,7 +131,7 @@ GPT-3, Chinchilla, Llama 3 8B, DeepSeek-V3(활성 파라미터)에 대해 알려
 
 1. **쉬움.** `code/main.py`를 실행하라. 연산 예산 `1e20`, `1e22`, `1e24`에 대한 Chinchilla-최적 `(N, D)`를 출력하라. 실제 모델 표와 비교하라.
 2. **중간.** Hoffmann 손실-연산-함수 곡선을 구현하라. 연산 최적 프런티어에 대해 손실 vs `log10(C)`를 그려라. 다음 0.1의 교차 엔트로피 감소에 `>10^28` FLOPs가 필요하다고 법칙이 예측하는 지점을 식별하라.
-3. **어려움.** 같은 데이터셋(dataset)으로 학습한 5개의 작은 모델(100K~10M 파라미터)에 대해 자신만의 스케일링 법칙을 적합(fit)하라. `α`와 `E`를 추정하라. 당신의 지수가 발표된 것과 얼마나 잘 맞는가?
+3. **어려움.** 같은 데이터셋(dataset)으로 학습한 5개의 작은 모델(100K~10M 파라미터)에 대해 자신만의 스케일링 법칙을 적합(fit)하라. `α`와 `E`를 추정하라. 적합한 지수가 발표된 값과 얼마나 잘 맞는가?
 
 ## 핵심 용어 (Key Terms)
 
@@ -153,4 +153,3 @@ GPT-3, Chinchilla, Llama 3 8B, DeepSeek-V3(활성 파라미터)에 대해 알려
 - [Schaeffer et al. (2023). Are Emergent Abilities of Large Language Models a Mirage?](https://arxiv.org/abs/2304.15004) — 측정 인공물로서의 출현.
 - [Sardana, Frankle (2024). Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws](https://arxiv.org/abs/2401.00448) — Llama의 과학습이 그 워크로드에 옳은 이유.
 - [Jordan et al. (2024). Muon: An optimizer for hidden layers in neural networks](https://kellerjordan.github.io/posts/muon/) — 2배 연산 배수.
-</content>

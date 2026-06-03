@@ -9,11 +9,11 @@
 
 ## 문제 (The Problem)
 
-TF-IDF는 `dog`와 `puppy`가 서로 다른 단어임을 안다. 하지만 둘이 거의 같은 것을 의미한다는 사실은 모른다. `dog`로 학습된 분류기(classifier)는 `puppy`에 관한 리뷰로 일반화하지 못한다. 동의어 목록을 만들어 이를 덮을 수는 있지만, 희귀한 용어, 도메인 전문 용어, 그리고 당신이 예상하지 못한 모든 언어에서 실패한다.
+TF-IDF는 `dog`와 `puppy`가 서로 다른 단어임을 안다. 하지만 둘이 거의 같은 것을 의미한다는 사실은 모른다. `dog`로 학습된 분류기(classifier)는 `puppy`에 관한 리뷰로 일반화하지 못한다. 동의어 목록을 만들어 이를 덮을 수는 있지만, 희귀한 용어, 도메인 전문 용어, 그리고 예상하지 못한 모든 언어에서 실패한다.
 
-당신은 `dog`와 `puppy`가 공간에서 가까이 자리 잡는 표현을 원한다. `king - man + woman`이 `queen` 근처에 자리 잡는 표현을. `dog`로 학습된 모델이 일부 신호를 `puppy`로 공짜로 전이하는 표현을.
+우리가 원하는 것은 `dog`와 `puppy`가 공간에서 가까이 자리 잡는 표현이다. `king - man + woman`이 `queen` 근처에 자리 잡는 표현, `dog`로 학습된 모델이 일부 신호를 `puppy`로 공짜로 전이하는 표현이다.
 
-Word2Vec은 그 공간을 주었다. 2계층 신경망(neural network), 조 단위 토큰(token) 학습 실행, 2013년 발표. 그 아키텍처는 거의 민망할 정도로 단순하다. 그 결과는 10년간 NLP를 재편했다.
+Word2Vec은 그 공간을 주었다. 2계층 신경망(neural network), 조 단위 토큰(token) 학습 실행, 2013년 발표. 아키텍처는 거의 민망할 정도로 단순하다. 그 결과는 10년간 NLP를 재편했다.
 
 ## 개념 (The Concept)
 
@@ -64,7 +64,7 @@ def skipgram_pairs(docs, window=2):
 
 ### 2단계: 임베딩 테이블
 
-두 개의 행렬(matrix). `W`는 중심 단어 임베딩 테이블(당신이 보관하는 것). `W'`는 맥락 단어 테이블(흔히 버려지고, 때로는 `W`와 평균을 낸다).
+두 개의 행렬(matrix). `W`는 중심 단어 임베딩 테이블(우리가 보관하는 것). `W'`는 맥락 단어 테이블(흔히 버려지고, 때로는 `W`와 평균을 낸다).
 
 ```python
 import numpy as np
@@ -130,7 +130,7 @@ def train(docs, dim=16, window=2, k_neg=5, epochs=100, lr=0.05, seed=0):
     return vocab, W
 ```
 
-큰 코퍼스에서 충분한 에폭(epoch)을 돌린 뒤, 맥락을 공유하는 단어들은 비슷한 중심 임베딩을 갖는다. 장난감 코퍼스에서는 그 효과가 희미하게 보인다. 수십억 토큰에서는 극적으로 보인다.
+큰 코퍼스에서 충분한 에폭(epoch)을 돌린 뒤에는, 맥락을 공유하는 단어들이 비슷한 중심 임베딩을 갖는다. 장난감 코퍼스에서는 그 효과가 희미하게 보인다. 수십억 토큰에서는 극적으로 보인다.
 
 ### 5단계: 유추 트릭
 
@@ -165,7 +165,7 @@ def analogy(vocab, W, a, b, c, topk=5):
 [('queen', 0.71), ('monarch', 0.62), ('princess', 0.59), ...]
 ```
 
-`king - man + woman = queen`. 모델이 왕족이 무엇인지 알아서가 아니다. 벡터 `(king - man)`이 "왕족 같은" 무언가를 포착하고, 그것을 `woman`에 더하면 왕족-여성 영역 근처에 자리 잡기 때문이다.
+`king - man + woman = queen`. 모델이 왕족이 무엇인지 알아서가 아니다. 벡터 `(king - man)`이 "왕족 같은" 무언가를 포착하고, 이를 `woman`에 더하면 왕족-여성 영역 근처에 자리 잡기 때문이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -203,13 +203,13 @@ print(model.wv.most_similar("cat", topn=3))
 ### 2026년에도 Word2Vec이 이기는 때
 
 - 가벼운 도메인 특화 검색. 노트북에서 한 시간 만에 의학 초록으로 학습하여, 어떤 범용 모델도 포착하지 못하는 특화 벡터를 얻는다.
-- 유추 스타일의 특성 공학(feature engineering). `gender_vector = mean(man - woman pairs)`. 그것을 다른 단어에서 빼서 성 중립 축을 얻는다. 여전히 공정성 연구에서 쓰인다.
+- 유추 스타일의 특성 공학(feature engineering). `gender_vector = mean(man - woman pairs)`. 이를 다른 단어에서 빼서 성 중립 축을 얻는다. 여전히 공정성 연구에서 쓰인다.
 - 해석 가능성(interpretability). 100차원은 PCA나 t-SNE로 그려서 클러스터가 형성되는 것을 실제로 볼 수 있을 만큼 작다.
 - GPU 없이 온디바이스로 추론(inference)이 실행되어야 하는 모든 곳. Word2Vec 룩업은 단일 행 조회다.
 
 ### Word2Vec이 실패하는 곳
 
-다의성의 벽(polysemy wall). `bank`는 벡터가 하나다. `river bank`(강둑)와 `financial bank`(은행)가 그것을 공유한다. `table`(스프레드시트 vs. 가구)도 공유한다. 하류의 분류기는 그 벡터로부터 의미를 구별할 수 없다.
+다의성의 벽(polysemy wall). `bank`는 벡터가 하나다. `river bank`(강둑)와 `financial bank`(은행)가 이를 공유한다. `table`(스프레드시트 vs. 가구)도 공유한다. 하류의 분류기는 그 벡터로부터 의미를 구별할 수 없다.
 
 문맥적 임베딩(contextual embedding, ELMo, BERT, 그 이후의 모든 트랜스포머)은 주변 맥락에 기반해 단어의 각 출현마다 다른 벡터를 만들어 이를 해결했다. 그것이 Word2Vec에서 BERT로의 도약이다. 정적(static)에서 문맥적(contextual)으로. Phase 7이 트랜스포머 부분을 다룬다.
 

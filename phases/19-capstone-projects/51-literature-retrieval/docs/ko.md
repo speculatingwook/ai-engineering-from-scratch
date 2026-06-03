@@ -16,7 +16,7 @@
 
 ## 왜 두 번의 검색 패스인가 (Why two retrieval passes)
 
-초록에 대한 키워드 검색은 쿼리(query)와 어휘를 공유하는 논문을 반환한다. 그것이 표면 대부분을 다룬다. 두 경우를 놓친다. 첫째는 기초 논문이 다른 어휘를 쓸 때다. 예를 들어 "sparse attention"에 대한 쿼리는 "block selection in transformer routing"이라는 제목의 논문을 놓친다. 둘째는 관련 논문이 알려진 닻(anchor)을 인용하는 후속편일 때다. 초록 풀(pool)을 무차별 대입(brute force)하는 것보다 닻을 찾아 앞으로 걷는 것이 더 효율적이다.
+초록에 대한 키워드 검색은 쿼리(query)와 어휘를 공유하는 논문을 반환한다. 이것이 표면 대부분을 다루지만 두 경우를 놓친다. 첫째는 기초 논문이 다른 어휘를 쓸 때다. 예를 들어 "sparse attention"에 대한 쿼리는 "block selection in transformer routing"이라는 제목의 논문을 놓친다. 둘째는 관련 논문이 알려진 닻(anchor)을 인용하는 후속편일 때다. 초록 풀(pool)을 무차별 대입(brute force)하는 것보다 닻을 찾아 앞으로 걷는 것이 더 효율적이다.
 
 레슨은 두 패스를 모두 만든다. 초록에 대한 BM25가 어휘 적중을 잡는다. 인용 그래프 순회가 시드 집합을 한두 홉(hop) 앞뒤로 확장한다. 합집합은 논문 id로 중복 제거되고 작은 결합 점수로 순위 매겨진다.
 
@@ -34,7 +34,7 @@ Paper
   source      : str           (which mock api supplied it, "arxiv" or "s2")
 ```
 
-references와 citations 필드가 방향성 인용 그래프(directed citation graph)를 이룬다. 두 모의 API는 겹치지만 동일하지 않은 필드를 반환하므로, 코퍼스(corpus) 로더는 `id`로 그것들을 합집합한다.
+references와 citations 필드가 방향성 인용 그래프(directed citation graph)를 이룬다. 두 모의 API는 겹치지만 동일하지 않은 필드를 반환하므로, 코퍼스(corpus) 로더는 두 필드를 `id`로 합집합한다.
 
 ## 아키텍처 (Architecture)
 
@@ -62,7 +62,7 @@ flowchart TD
 
 구현은 기본 파라미터 `k1=1.5`, `b=0.75`를 가진 표준 Okapi BM25다. 인덱스는 두 개의 딕셔너리다. `term -> doc_frequency`와 `term -> list of (doc_id, term_count)`. 문서 길이는 초록의 토큰(token) 수다. 평균 문서 길이는 인덱스 구축 시점에 한 번 계산된다. 쿼리를 채점하는 것은 쿼리 항(term)에 대한 `idf * tf_norm`의 합이며, 여기서 `tf_norm`은 표준 BM25 길이 정규화된 항 빈도(term frequency)다.
 
-토크나이저(tokeniser)는 `lower` 후 비영숫자(non alphanumeric)로 분할한다. 어간 추출(stem)은 하지 않는다. 프로덕션 시스템은 작은 스테머(stemmer)로 교체할 것이다. 인터페이스는 그대로다.
+토크나이저(tokeniser)는 `lower` 후 비영숫자(non alphanumeric)로 분할한다. 어간 추출(stem)은 하지 않는다. 프로덕션 시스템이라면 작은 스테머(stemmer)로 교체하면 된다. 인터페이스는 그대로다.
 
 ```text
 idf(t)      = log((N - df + 0.5) / (df + 0.5) + 1.0)
@@ -74,7 +74,7 @@ score(d, q) = sum over t in q of idf(t) * tf_norm(t)
 
 그래프는 코퍼스에서 한 번 구축된다. 순방향 간선(forward edge)은 논문에서 그 참고문헌으로 간다. 역방향 간선(backward edge)은 논문에서 그것을 인용한 것으로 간다. 순회는 상위 BM25 적중으로 시드된 너비 우선 탐색(breadth first search)이며, 두 홉으로 제한된다.
 
-두 홉은 의도적인 천장이다. 한 홉은 너무 얕다. 에이전트는 종종 직계 조상이나 자손을 원한다. 세 홉은 연결된 그래프에서 결과 크기를 폭발시키고 주제를 벗어나 떠도는 경향이 있다. 레슨은 다운스트림 루프가 조일 수 있도록 홉 제한을 설정 손잡이(config knob)로 노출한다.
+두 홉은 의도적으로 둔 천장이다. 한 홉은 너무 얕아서, 에이전트는 종종 직계 조상이나 자손까지 원한다. 세 홉은 연결된 그래프에서 결과 크기를 폭발시키고 주제를 벗어나 떠도는 경향이 있다. 레슨은 다운스트림 루프가 조일 수 있도록 홉 제한을 설정 손잡이(config knob)로 노출한다.
 
 ## 중복 제거와 순위 매기기 (Dedup and ranking)
 
@@ -88,7 +88,7 @@ final_score = w_bm25 * bm25_score_norm
 
 `bm25_score_norm`은 BM25 점수를 병합된 집합의 최대 BM25 점수로 나눈 것이다(그래서 필드가 0에서 1 사이에 산다). `graph_score`는 직접 어휘 적중에 1, 한 홉에 `0.6`, 두 홉에 `0.3`, 그 외에는 0이다. `recency_score`는 코퍼스 최소 연도에서 0, 최대에서 1인 선형 증가다.
 
-기본 가중치는 `0.5`, `0.3`, `0.2`다. 가중치는 설정이다. 정체된 주제는 최신성(recency)을 낮게 조율할 수 있고 빠르게 움직이는 주제는 그것을 높인다.
+기본 가중치는 `0.5`, `0.3`, `0.2`다. 가중치는 설정이다. 정체된 주제는 최신성(recency)을 낮게 조율하고 빠르게 움직이는 주제는 높게 조율한다.
 
 ## 모의 코퍼스 (Mock corpus)
 

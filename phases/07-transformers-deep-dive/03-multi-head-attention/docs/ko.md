@@ -9,11 +9,11 @@
 
 ## 문제 (The Problem)
 
-단일 셀프 어텐션(self-attention) 헤드는 하나의 어텐션 행렬(matrix)을 계산한다. 그 행렬은 한 종류의 관계를 포착한다 — 보통 학습 신호가 무엇이든 그것에 대한 손실(loss)을 최소화하는 관계다. 데이터에 주어-동사 일치, 상호 참조(co-reference), 장거리 담화, 구문 청킹이 모두 뒤엉켜 있다면, 단일 헤드는 그것들을 하나의 소프트맥스(soft-max) 분포로 뭉개버리고 신호의 절반을 잃는다.
+단일 셀프 어텐션(self-attention) 헤드는 하나의 어텐션 행렬(matrix)을 계산한다. 그 행렬은 한 종류의 관계를 포착한다 — 보통 주어진 학습 신호의 손실(loss)을 최소화하는 관계다. 데이터에 주어-동사 일치, 상호 참조(co-reference), 장거리 담화, 구문 청킹이 모두 뒤엉켜 있다면, 단일 헤드는 그것들을 하나의 소프트맥스(soft-max) 분포로 뭉개버리고 신호의 절반을 잃는다.
 
 2017년 Vaswani 논문의 해법: 여러 어텐션 함수를 병렬로, 각각 자체 Q, K, V 투영(projection)을 가지고 실행한 뒤 출력을 이어 붙인다. 각 헤드는 차원 `d_model / n_heads`의 더 작은 부분 공간에서 동작한다. 전체 파라미터(parameter)는 그대로다. 표현력은 올라간다.
 
-멀티헤드 어텐션은 2026년의 모든 트랜스포머(transformer)가 기본으로 출시하는 것이다. 유일한 논쟁은 헤드를 *몇 개* 둘지, 그리고 키와 값이 투영을 공유하는지(Grouped-Query Attention, Multi-Query Attention, Multi-head Latent Attention)에 관한 것뿐이다.
+멀티헤드 어텐션은 2026년의 모든 트랜스포머(transformer)가 기본으로 탑재한다. 유일한 논쟁은 헤드를 *몇 개* 둘지, 그리고 키와 값이 투영을 공유하는지(Grouped-Query Attention, Multi-Query Attention, Multi-head Latent Attention)에 관한 것뿐이다.
 
 ## 개념 (The Concept)
 

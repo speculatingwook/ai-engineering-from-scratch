@@ -9,9 +9,9 @@
 
 ## 문제 (The Problem)
 
-OpenAI가 2022년 9월에 출시한 Whisper는 상품(commodity)으로 출하된 최초의 ASR 모델이었다: 오디오를 붙여넣으면, 텍스트를 얻고, 99개 언어, 잡음에 견고하며, 노트북에서 돌아간다. 2024년까지 OpenAI는 Large-v3와 Turbo 변형을 출하했고; 2026년 기준 Whisper는 팟캐스트 전사부터 음성 비서, YouTube 자막까지 모든 것의 기본 베이스라인(baseline)이다.
+OpenAI가 2022년 9월에 출시한 Whisper는 상품(commodity)으로 출하된 최초의 ASR 모델이었다: 오디오를 붙여넣으면 텍스트가 나오고, 99개 언어를 지원하며, 잡음에 견고하고, 노트북에서 돌아간다. 2024년까지 OpenAI는 Large-v3와 Turbo 변형을 출하했고; 2026년 기준 Whisper는 팟캐스트 전사부터 음성 비서, YouTube 자막까지 모든 것의 기본 베이스라인(baseline)이다.
 
-하지만 Whisper는 영원히 블랙박스로 취급할 수 있는 파이프라인(pipeline)이 아니다. 도메인 시프트(domain shift)가 그것을 죽인다 — 기술 전문 용어, 화자 억양, 고유명사, 짧은 클립, 침묵. 당신은 알아야 한다:
+하지만 Whisper는 영원히 블랙박스로 취급할 수 있는 파이프라인(pipeline)이 아니다. 도메인 시프트(domain shift) 앞에서는 무너진다. 기술 전문 용어, 화자 억양, 고유명사, 짧은 클립, 침묵이 그렇다. 다음을 알아야 한다:
 
 1. 내부적으로 그것이 실제로 무엇인지.
 2. 청크 단위(chunked), 스트리밍, 또는 장문 오디오를 올바르게 주는 방법.
@@ -40,9 +40,9 @@ Large-v3는 15.5억 파라미터(parameter)를 가진다. Turbo는 (32층에서)
 - `<|transcribe|>` 또는 `<|translate|>` — 임의 언어 입력에서 영어 출력을 번역하거나, 있는 그대로 전사한다.
 - `<|notimestamps|>` — 단어 수준 타임스탬프를 건너뛴다(더 빠름).
 
-프롬프트가 하나의 모델로 여러 과제를 하게 만드는 것이다. `<|en|>`을 `<|fr|>`로 바꾸면 프랑스어를 전사한다.
+하나의 모델로 여러 과제를 처리하게 만드는 것이 바로 이 프롬프트다. `<|en|>`을 `<|fr|>`로 바꾸면 프랑스어를 전사한다.
 
-**30초 윈도우.** 모든 것이 30초에 고정된다. 더 긴 클립은 청킹(chunking)이 필요하고; 더 짧은 클립은 패딩된다. 윈도우는 기본적으로 스트리밍되지 않는다 — 이것이 WhisperX, Whisper-Streaming, faster-whisper가 존재하는 이유다.
+**30초 윈도우.** 모든 것이 30초에 고정된다. 더 긴 클립은 청킹(chunking)이 필요하고; 더 짧은 클립은 패딩된다. 윈도우는 기본적으로 스트리밍되지 않는다. WhisperX, Whisper-Streaming, faster-whisper가 존재하는 이유가 여기에 있다.
 
 **로그 멜 정규화(Log-mel normalization).** `(log_mel - mean) / std`, 여기서 통계는 Whisper 자체의 학습 코퍼스에서 나온다. `librosa.feature.melspectrogram`이 아니라 Whisper의 전처리(`whisper.audio.log_mel_spectrogram`)를 *반드시* 사용해야 한다.
 
@@ -132,7 +132,7 @@ with torch.inference_mode():
 # out.cross_attentions: layer × head × step × src_len
 ```
 
-히트맵(heatmap)으로 시각화하라 — 디코더 스텝이 인코더 프레임을 훑어가면서 대각선 정렬(diagonal alignment)이 보일 것이다. 그 대각선이 단어 타임스탬프에 대한 Whisper의 개념이다.
+히트맵(heatmap)으로 시각화해 보라. 디코더 스텝이 인코더 프레임을 훑어가면서 대각선 정렬(diagonal alignment)이 나타난다. 그 대각선이 단어 타임스탬프에 대한 Whisper의 개념이다.
 
 ## 라이브러리로 써보기 (Use It)
 

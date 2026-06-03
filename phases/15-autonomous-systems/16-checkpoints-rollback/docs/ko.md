@@ -1,6 +1,6 @@
 # 체크포인트와 롤백 (Checkpoints and Rollback)
 
-> 모든 그래프 상태 전이(graph-state transition)는 영속화된다. 워커(worker)가 죽으면 그 리스(lease)가 만료되고 다른 워커가 가장 최근 체크포인트(checkpoint)에서 작업을 이어받는다. Cloudflare Durable Objects는 몇 시간에서 몇 주에 걸쳐 상태를 유지한다. 제안 후 커밋(propose-then-commit, Lesson 15)은 각 액션마다 롤백 계획을 정의한다. 액션 사후 검증(post-action verification)이 그 루프를 닫는다. EU AI Act 제14조는 고위험 시스템에 대해 효과적인 인간 감독(human oversight)을 의무화한다 — 실무적으로 이것은 체크포인트가 조회 가능해야 하고, 롤백이 리허설되어야 하며, 감사 추적(audit trail)이 배포(deploy)를 견뎌내야 함을 의미한다. 날카로운 실패 모드는 이것이다. 멱등성 키(idempotency key)와 사전 조건 검사(precondition check)가 없으면, 일시적 실패 이후의 재시도(retry)가 이미 승인된 액션을 이중 실행할 수 있다. 액션 사후 검증이 바로 이를 잡아낸다.
+> 모든 그래프 상태 전이(graph-state transition)는 영속화된다. 워커(worker)가 죽으면 그 리스(lease)가 만료되고 다른 워커가 가장 최근 체크포인트(checkpoint)에서 작업을 이어받는다. Cloudflare Durable Objects는 몇 시간에서 몇 주에 걸쳐 상태를 유지한다. 제안 후 커밋(propose-then-commit, Lesson 15)은 각 액션마다 롤백 계획을 정의한다. 액션 사후 검증(post-action verification)이 그 루프를 닫는다. EU AI Act 제14조는 고위험 시스템에 대해 효과적인 인간 감독(human oversight)을 의무화한다. 실무적으로 이는 체크포인트가 조회 가능해야 하고, 롤백이 리허설되어야 하며, 감사 추적(audit trail)이 배포(deploy)를 견뎌내야 한다는 뜻이다. 실패 모드는 날카롭다. 멱등성 키(idempotency key)와 사전 조건 검사(precondition check)가 없으면, 일시적 실패 이후의 재시도(retry)가 이미 승인된 액션을 이중 실행한다. 액션 사후 검증이 바로 이를 잡아낸다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, checkpoint and rollback state machine)
@@ -17,7 +17,7 @@
 - **Cloudflare Durable Objects**는 키별 상태를 몇 시간에서 몇 주에 걸쳐 유지한다. 승인된 액션에 대해 연산을 스토리지와 같은 위치에 둔다(co-locate).
 - **Microsoft Agent Framework**는 워크플로 API에서 `Checkpoint` 프리미티브를 노출한다. 재생(replay)과 멱등성이 재시도를 처리한다.
 
-모든 경우에서 실제로 작동하는 조합은 이것이다. 멱등성 키(이중 실행을 방지) + 사전 조건 검사(상태가 여전히 우리가 승인 당시 기준이던 그대로인지 확인) + 액션 사후 검증(부작용이 실제로 일어났는지 확인) + 검증 실패 시 롤백.
+어느 경우든 실제로 작동하는 조합은 같다. 멱등성 키(이중 실행을 방지) + 사전 조건 검사(상태가 여전히 우리가 승인 당시 기준이던 그대로인지 확인) + 액션 사후 검증(부작용이 실제로 일어났는지 확인) + 검증 실패 시 롤백.
 
 ## 개념 (The Concept)
 
@@ -27,7 +27,7 @@
 
 ### 리스 복구 (Lease recovery)
 
-워커가 죽어도 워크플로는 잃어버리지 않는다. 리스(lease, 이 워커가 이 실행을 수행 중이라는 단명(短命) 점유권)가 그저 만료될 뿐이다. 다른 워커가 가장 최근 체크포인트를 집어 들고 재개한다. 리스 메커니즘이 바로 프로덕션 시스템이 진행 중인 작업을 잃지 않고 롤링 배포(rolling deploy)를 견뎌내게 해주는 것이다.
+워커가 죽어도 워크플로는 잃어버리지 않는다. 리스(lease, 이 워커가 이 실행을 수행 중이라는 단명(短命) 점유권)가 그저 만료될 뿐이다. 다른 워커가 가장 최근 체크포인트를 집어 들고 재개한다. 프로덕션 시스템이 진행 중인 작업을 잃지 않고 롤링 배포(rolling deploy)를 견뎌내는 것은 바로 이 리스 메커니즘 덕분이다.
 
 ### 멱등성과 사전 조건
 

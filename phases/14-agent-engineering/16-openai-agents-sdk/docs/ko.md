@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-깔끔하게 위임(delegate)하지 못하는 에이전트(agent)는 결국 모든 것을 하나의 프롬프트에 욱여넣는다. 가드레일 없는 에이전트는 PII, 정책 위반 출력을 출시하거나 영원히 루프한다. OpenAI의 SDK는 멀티 에이전트 작업을 다룰 수 있게 만드는 세 가지 원시 요소를 성문화한다.
+깔끔하게 위임(delegate)하지 못하는 에이전트(agent)는 결국 모든 것을 하나의 프롬프트에 욱여넣는다. 가드레일 없는 에이전트는 PII나 정책 위반 출력을 내보내거나 끝없이 루프를 돈다. OpenAI의 SDK는 멀티 에이전트 작업을 다룰 수 있게 만드는 세 가지 원시 요소를 성문화한다.
 
 ## 개념 (The Concept)
 
@@ -30,7 +30,7 @@
 
 ### 도구로서의 핸드오프
 
-모델은 도구 목록에서 `transfer_to_billing_agent`를 본다. 이를 호출하면 런타임에 다음을 신호한다.
+모델은 도구 목록에서 `transfer_to_billing_agent`를 본다. 이를 호출하면 런타임에 다음을 알린다.
 
 1. 대화 컨텍스트를 복사한다(또는 `nest_handoff_history` 베타로 압축한다).
 2. 대상 에이전트를 그 지시문으로 초기화한다.
@@ -55,7 +55,7 @@
 
 ### 트레이싱
 
-기본으로 켜져 있다. 모든 LLM 생성, 도구 호출, 핸드오프, 가드레일이 스팬을 방출한다. `OPENAI_AGENTS_DISABLE_TRACING=1`로 옵트아웃(opt out)한다. `add_trace_processor(processor)`는 OpenAI의 것과 나란히 당신의 백엔드로 스팬을 팬아웃(fan out)한다.
+기본으로 켜져 있다. 모든 LLM 생성, 도구 호출, 핸드오프, 가드레일이 스팬을 방출한다. `OPENAI_AGENTS_DISABLE_TRACING=1`로 옵트아웃(opt out)한다. `add_trace_processor(processor)`는 OpenAI의 것과 나란히 직접 운영하는 백엔드로 스팬을 팬아웃(fan out)한다.
 
 ### 세션
 

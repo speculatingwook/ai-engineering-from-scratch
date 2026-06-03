@@ -18,7 +18,7 @@
 
 Google Doc 하나, 채팅 이력 하나, 그리고 반쯤 기억나는 스크립트 세 개에 사는 워크벤치는 매 분기 다시 만들어지는 워크벤치다. 치료법은 버전 관리된 팩이다: 표면, 스키마, 스크립트, 그리고 한 명령짜리 설치기(installer)를 가진 리포지터리 또는 디렉터리.
 
-당신은 이 레슨을 디스크에 출시된 `outputs/agent-workbench-pack/`과, 그것을 어떤 대상 리포지터리에든 떨어뜨리는 `bin/install.sh`로 끝낼 것이다.
+이 레슨은 디스크에 출시된 `outputs/agent-workbench-pack/`과, 이를 어떤 대상 리포지터리에든 떨어뜨리는 `bin/install.sh`로 끝난다.
 
 ## 개념 (The Concept)
 
@@ -85,7 +85,7 @@ outputs/agent-workbench-pack/
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`는 이 미니 트랙의 이전 레슨들에서 나온 스키마와 스크립트, 그리고 당신이 이미 작성한 문서로 시드(seed)된 팩을, 레슨 옆의 `outputs/agent-workbench-pack/`으로 조립한다.
+`code/main.py`는 이 미니 트랙의 이전 레슨들에서 나온 스키마와 스크립트, 그리고 앞서 작성한 문서로 시드(seed)된 팩을 레슨 옆의 `outputs/agent-workbench-pack/`으로 조립한다.
 
 실행하기:
 
@@ -113,7 +113,7 @@ python3 code/main.py
 
 - **리포지터리에 떨어뜨리는 디렉터리로서.** `cp -r outputs/agent-workbench-pack /path/to/repo`.
 - **공개 템플릿 리포지터리로서.** 포크 후 커스터마이즈, `VERSION`이 드리프트(drift)를 제어함.
-- **SkillKit 스킬로서.** 단일 명령이 그것을 깔도록 당신의 에이전트 제품에 연결됨.
+- **SkillKit 스킬로서.** 단일 명령으로 깔리도록 에이전트 제품에 연결됨.
 
 팩은 레시피다. 각 설치는 한 그릇 분량이다.
 
@@ -144,7 +144,7 @@ python3 code/main.py
 - Phases 14 · 31 to 14 · 41 — 이 팩이 묶는 모든 표면
 - [SkillKit](https://github.com/rohitg00/skillkit) — 32개의 AI 에이전트에 걸쳐 이 스킬 설치
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) — 여섯 도구에 걸친 단일 출처 생성기
-- [agents.md — the open spec](https://agents.md/) — 당신 팩의 라우터(router)가 구현해야 하는 것
+- [agents.md — the open spec](https://agents.md/) — 팩의 라우터(router)가 구현해야 하는 것
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) — 팩 등가물의 참조 구현
 - [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) — 평가 스위트를 가진 Redis 기반 참조
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) — 팩 문서 품질 기준

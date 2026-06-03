@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-당신은 모든 논문을 읽었다. 어텐션(attention), 멀티헤드(multi-head) 분할, 위치 인코딩(positional encoding), 인코더(encoder)와 디코더(decoder) 블록, BERT와 GPT 손실(loss), MoE, KV 캐시를 구현했다. 이제 그것들을 실제 작업에서 함께 작동시켜라.
+논문은 다 읽었다. 어텐션(attention), 멀티헤드(multi-head) 분할, 위치 인코딩(positional encoding), 인코더(encoder)와 디코더(decoder) 블록, BERT와 GPT 손실(loss), MoE, KV 캐시를 구현했다. 이제 이것들을 실제 작업에서 함께 작동시켜라.
 
 캡스톤(capstone): 작은 디코더 전용(decoder-only) 트랜스포머(transformer)를 문자 단위(character-level) 언어 모델링(language modeling) 작업에 대해 종단 간(end-to-end)으로 학습(training)한다. 셰익스피어를 읽는다. 새로운 셰익스피어를 생성한다. 노트북에서 10분 미만으로 학습할 만큼 작다. 더 큰 데이터셋(dataset)과 더 긴 학습으로 바꿔 넣으면 실제 LM이 될 만큼 정확하다.
 
@@ -132,7 +132,7 @@ The chief that well shame and hath been his friends,
 ...
 ```
 
-셰익스피어는 아니다. 하지만 셰익스피어 형태다. ~800K 파라미터와 노트북에서 6분에 대한 명백한 승리.
+셰익스피어는 아니다. 하지만 셰익스피어 형태다. 파라미터 ~800K로, 노트북에서 6분 만에 거둔 분명한 성과다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -142,7 +142,7 @@ The chief that well shame and hath been his friends,
 2. **더 큰 코퍼스(corpus)에 학습하라.** `OpenWebText`나 `fineweb-edu`(HuggingFace)를 써라. 단일 A100에서 125M 파라미터 GPT의 경우 10B 토큰에 ~24시간이 걸린다.
 3. **RoPE + KV 캐시 + Flash Attention을 추가하라.** 아래 연습 문제가 각각을 안내한다.
 
-이것은 유창한 영어를 생성하는 125M 파라미터 GPT로 마무리된다. 프런티어(frontier) 모델은 아니다. 하지만 같은 코드 경로 — 그저 더 클 뿐 — 가 Karpathy, EleutherAI, Allen Institute가 2026년에 연구 체크포인트를 학습하는 데 쓰는 것이다.
+이것은 유창한 영어를 생성하는 125M 파라미터 GPT로 마무리된다. 프런티어(frontier) 모델은 아니다. 하지만 Karpathy, EleutherAI, Allen Institute가 2026년에 연구 체크포인트를 학습하는 데 쓰는 코드 경로도 이와 같다. 그저 규모만 더 클 뿐이다.
 
 ## 산출물 (Ship It)
 

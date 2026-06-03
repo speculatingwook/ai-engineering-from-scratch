@@ -1,6 +1,6 @@
 # 음성 인식(ASR) — CTC, RNN-T, 어텐션
 
-> 음성 인식(speech recognition)은 매 타임스텝(timestep)에서의 오디오 분류(audio classification)이며, 영어와 침묵을 아는 시퀀스 모델(sequence model)로 이어 붙인 것이다. CTC, RNN-T, 어텐션(attention)이 그것을 하는 세 가지 방법이다. 하나를 고르고 왜 그런지 이해하라.
+> 음성 인식(speech recognition)은 매 타임스텝(timestep)마다 오디오를 분류하는 작업이고, 여기에 영어와 침묵을 아는 시퀀스 모델(sequence model)을 이어 붙인 것이다. 이를 해내는 방법은 CTC, RNN-T, 어텐션(attention) 세 가지다. 하나를 고르고 왜 그런지 이해하라.
 
 **Type:** Build
 **Languages:** Python
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-10초짜리 16 kHz 클립이 있다. 당신은 문자열을 원한다: "turn on the kitchen lights". 도전은 구조적이다: 오디오 프레임(frame)은 문자와 일대일로 정렬되지 않는다. "okay"라는 단어는 200 ms가 걸릴 수도 1200 ms가 걸릴 수도 있다. 침묵이 발화(utterance)에 구두점을 찍는다. 어떤 음소(phoneme)는 다른 것보다 길다. 출력 토큰(token)의 개수는 미리 알 수 없다.
+10초짜리 16 kHz 클립이 있고, 여기서 "turn on the kitchen lights"라는 문자열을 얻고 싶다. 어려움은 구조에서 온다. 오디오 프레임(frame)은 문자와 일대일로 정렬되지 않는다. "okay"라는 단어는 200 ms가 걸릴 수도 1200 ms가 걸릴 수도 있다. 침묵이 발화(utterance)에 구두점을 찍는다. 어떤 음소(phoneme)는 다른 것보다 길다. 출력 토큰(token)의 개수는 미리 알 수 없다.
 
 세 가지 공식화가 이를 해결한다:
 
@@ -23,15 +23,15 @@
 
 ![세 가지 ASR 공식화: CTC, RNN-T, 어텐션 인코더-디코더](../assets/asr-formulations.svg)
 
-**CTC 직관.** 인코더가 `V+1`개 토큰(V개 문자 + blank)에 대한 `T`개의 프레임 수준 분포를 출력하게 한다. 길이 `U < T`인 타깃 문자열 `y`에 대해, `y`로 합쳐지는 모든 프레임 정렬(alignment)이 인정된다. CTC 손실(loss)은 그러한 모든 정렬에 대해 합산한다. 추론: 프레임별 argmax, 반복 합치기, blank 제거.
+**CTC 직관.** 인코더가 `V+1`개 토큰(V개 문자 + blank)에 대한 `T`개의 프레임 수준 분포를 출력하게 한다. 길이 `U < T`인 타깃 문자열 `y`에 대해, `y`로 합쳐지는 모든 프레임 정렬(alignment)이 인정된다. CTC 손실(loss)은 그러한 모든 정렬을 합산한다. 추론: 프레임별 argmax, 반복 합치기, blank 제거.
 
-장점: 비자기회귀적, 스트리밍 가능, 룩어헤드(lookahead) 없음. 단점: *조건부 독립성 가정(conditional independence assumption)* — 각 프레임 예측이 다른 것과 독립적이라, 내부 언어 모델(language model)이 없다. 빔 서치(beam search)나 얕은 융합(shallow fusion)을 통한 외부 LM으로 해결한다.
+장점: 비자기회귀적, 스트리밍 가능, 룩어헤드(lookahead) 없음. 단점: *조건부 독립성 가정(conditional independence assumption)* — 각 프레임 예측이 서로 독립적이라 내부 언어 모델(language model)이 없다. 빔 서치(beam search)나 얕은 융합(shallow fusion)을 통한 외부 LM으로 해결한다.
 
 **RNN-T 직관.** 토큰 이력을 임베딩하는 *예측기(predictor)* 네트워크와, 예측기 상태를 인코더 프레임과 결합해 `V+1`(여기서 `+1`은 null / 비방출(no-emit))에 대한 결합 분포(joint distribution)로 만드는 *결합기(joiner)*를 추가한다. CTC가 무시한 조건부 의존성을 명시적으로 모델링한다. 각 스텝이 과거 프레임과 과거 토큰에만 조건화되므로 스트리밍 가능하다.
 
 장점: 스트리밍 가능 + 내부 LM. 단점: 학습이 더 복잡하고 메모리를 많이 먹는다(3D 손실 격자(loss lattice)); RNN-T 손실 커널은 그 자체로 하나의 라이브러리 범주다.
 
-**어텐션 인코더-디코더.** 로그 멜(log-mel) 프레임에 대한 인코더(6-32개 트랜스포머(Transformer) 층). 디코더(6-32개 트랜스포머 층)가 인코더 출력에 크로스 어텐션해 토큰을 자기회귀적으로 생성한다. 정렬 제약이 없다 — 어텐션은 오디오의 어디든 볼 수 있다. 어텐션을 제한하지 않는 한 스트리밍 불가능(청크 단위 Whisper-Streaming, 2024).
+**어텐션 인코더-디코더.** 로그 멜(log-mel) 프레임에 대한 인코더(6-32개 트랜스포머(Transformer) 층). 디코더(6-32개 트랜스포머 층)가 인코더 출력에 크로스 어텐션해 토큰을 자기회귀적으로 생성한다. 정렬 제약이 없다 — 어텐션은 오디오의 어디든 볼 수 있다. 어텐션을 제한하지 않는 한 스트리밍은 불가능하다(청크 단위 Whisper-Streaming, 2024).
 
 장점: 오프라인 ASR에서 최고 품질, 표준 seq2seq 도구로 학습하기 쉬움. 단점: 자기회귀 지연 시간(latency)이 출력 길이에 비례한다; 엔지니어링 없이는 스트리밍 불가.
 
@@ -65,7 +65,7 @@ def ctc_greedy(frame_logits, blank=0, vocab=None):
     return "".join(vocab[i] for i in out) if vocab else out
 ```
 
-두 가지 규칙: 연속된 반복을 합치고, blank를 버린다. 예시: `a a _ _ a b b _ c` → `a a b c`.
+규칙은 두 가지다. 연속된 반복을 합치고, blank를 버린다. 예시: `a a _ _ a b b _ c` → `a a b c`.
 
 ### 단계 2: 빔 서치 CTC
 
@@ -117,7 +117,7 @@ result = model.transcribe("clip.wav")
 print(result["text"])
 ```
 
-2026년 가장 강력한 범용 ASR을 위한 한 줄짜리. 24 GB GPU에서 실시간의 ~20배로 돌아간다.
+2026년 가장 강력한 범용 ASR을 한 줄로 돌리는 코드다. 24 GB GPU에서 실시간의 ~20배 속도로 돌아간다.
 
 ### 단계 5: Parakeet 또는 wav2vec 2.0로 스트리밍
 
@@ -146,7 +146,7 @@ for chunk in streaming_audio():
 ## 2026년에도 여전히 출시되는 함정들 (Pitfalls that still ship in 2026)
 
 - **VAD 없음.** 침묵에 Whisper를 돌리면 환각("Thanks for watching!")이 생긴다. 항상 VAD로 게이팅(gate)하라.
-- **문자 대 단어 대 서브워드 WER.** 정규화(소문자화, 구두점 제거) *이후*에 단어 수준 WER을 보고하라.
+- **문자 대 단어 대 서브워드 WER.** 정규화(소문자화, 구두점 제거)를 *마친 뒤*에 단어 수준 WER을 보고하라.
 - **언어 식별 드리프트(drift).** Whisper의 자동 LID는 잡음이 많은 클립을 일본어나 웨일스어로 잘못 라우팅한다; 알고 있을 때는 `language="en"`을 강제하라.
 - **청킹 없는 긴 클립.** Whisper는 30초 윈도우를 가진다. 그보다 긴 것에는 `chunk_length_s=30, stride=5`를 사용하라.
 

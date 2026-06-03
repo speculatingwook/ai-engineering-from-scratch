@@ -61,9 +61,9 @@ HPA on queue-wait metric
 
 ## 직접 만들기 (Build It)
 
-1. **타깃 모델 준비.** Llama 3.3 70B를 고른다. Marlin을 통해 FP8로 양자화한다. 1xH100(또는 2x 텐서 병렬)에서 vLLM 0.7로 배포한다.
+1. **타깃 모델 준비.** Llama 3.3 70B를 고른다. Marlin으로 FP8 양자화한다. 1xH100(또는 2x 텐서 병렬)에서 vLLM 0.7로 배포한다.
 
-2. **드래프트 소스.** Red Hat Speculators에서 정렬된 EAGLE-3 드래프트 헤드를 가져온다(또는 SpecForge를 통해 학습한다). vLLM의 추측 디코딩 설정에 로드한다.
+2. **드래프트 소스.** Red Hat Speculators에서 정렬된 EAGLE-3 드래프트 헤드를 가져온다(또는 SpecForge로 직접 학습한다). vLLM의 추측 디코딩 설정에 로드한다.
 
 3. **베이스라인 수치.** 추측 전: 배치 1/8/32에서 초당 토큰, p50/p99 지연 시간, GPU 사용률. 공개한다.
 

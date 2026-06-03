@@ -9,14 +9,14 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- 조건부 `breakpoint()`와 `debug_print`를 사용해 학습(training) 도중 텐서(tensor) 형태, dtype, NaN 값 검사하기
+- 조건부 `breakpoint()`와 `debug_print`로 학습(training) 도중 텐서(tensor) 형태, dtype, NaN 값 검사하기
 - `cProfile`, `line_profiler`, `tracemalloc`으로 훈련 루프를 프로파일링해 병목 찾기
-- 흔한 AI 버그를 탐지하기: 형태 불일치, NaN 손실, 데이터 누수(data leakage), 잘못된 디바이스의 텐서
+- 흔한 AI 버그 탐지하기: 형태 불일치, NaN 손실, 데이터 누수(data leakage), 잘못된 디바이스의 텐서
 - 손실 곡선, 가중치(weight) 히스토그램, 그래디언트(gradient) 분포를 시각화하도록 TensorBoard 설정하기
 
 ## 문제 (The Problem)
 
-AI 코드는 일반 코드와는 다르게 실패한다. 웹 앱은 스택 트레이스(stack trace)와 함께 크래시를 낸다. 잘못 구성된 훈련 루프는 8시간 동안 돌아가며 $200어치 GPU 시간을 태우고는, 모든 입력의 평균을 예측하는 모델을 만들어 낸다. 코드는 한 번도 오류를 내지 않았다. 버그는 잘못된 디바이스에 있던 텐서, 잊어버린 `.detach()`, 또는 특성(feature)으로 새어 들어간 레이블(label)이었다.
+AI 코드는 일반 코드와 다르게 실패한다. 웹 앱은 스택 트레이스(stack trace)와 함께 크래시를 낸다. 잘못 구성된 훈련 루프는 8시간 동안 돌아가며 $200어치 GPU 시간을 태우고는, 모든 입력의 평균을 예측하는 모델을 만들어 낸다. 코드는 한 번도 오류를 내지 않았다. 버그는 잘못된 디바이스에 있던 텐서, 잊어버린 `.detach()`, 또는 특성(feature)으로 새어 들어간 레이블(label)이었다.
 
 이런 조용한 실패가 시간과 연산을 낭비하기 전에 잡아내는 디버깅 도구가 필요하다.
 
@@ -31,13 +31,13 @@ graph TD
     L1["1. Standard Python<br/>Breakpoints, logging, profiling, memory"]
 ```
 
-대부분의 사람들은 곧장 수준 3(TensorBoard를 응시하기)으로 뛰어든다. 하지만 AI 버그의 80%는 수준 1과 2에 산다.
+대부분은 곧장 수준 3(TensorBoard 응시하기)으로 뛰어든다. 하지만 AI 버그의 80%는 수준 1과 2에 산다.
 
 ## 직접 만들기 (Build It)
 
 ### 1부: 출력 디버깅 (그렇다, 효과가 있다)
 
-출력 디버깅은 무시당한다. 그래선 안 된다. 텐서 코드의 경우, 표적화된 print 문이 디버거로 한 단계씩 진행하는 것보다 낫다. 형태, dtype, 값 범위를 한꺼번에 봐야 하기 때문이다.
+출력 디버깅은 무시당한다. 그래선 안 된다. 텐서 코드라면 표적화된 print 문이 디버거로 한 단계씩 진행하는 것보다 낫다. 형태, dtype, 값 범위를 한꺼번에 봐야 하기 때문이다.
 
 ```python
 def debug_print(name, tensor):
@@ -67,7 +67,7 @@ def training_step(model, batch, criterion, optimizer):
     optimizer.step()
 ```
 
-디버거가 당신을 멈춰 세웠을 때 유용한 명령어:
+디버거가 멈춰 세웠을 때 유용한 명령어:
 
 - 형태를 확인하려면 `p outputs.shape`
 - 손실 값을 보려면 `p loss.item()`
@@ -79,7 +79,7 @@ def training_step(model, batch, criterion, optimizer):
 
 ### 3부: Python 로깅
 
-디버깅이 빠른 확인을 넘어설 때 print 문을 로깅으로 교체하라.
+디버깅이 빠른 확인을 넘어서면 print 문을 로깅으로 교체하라.
 
 ```python
 import logging
@@ -99,7 +99,7 @@ logger.warning("Loss spike detected: %.4f at step %d", loss.item(), step)
 logger.error("NaN loss at step %d, stopping", step)
 ```
 
-로깅은 타임스탬프, 심각도 수준, 파일 출력을 준다. 훈련 실행이 새벽 3시에 실패하면, 화면 밖으로 스크롤되어 사라진 터미널 출력이 아니라 로그 파일을 원하게 된다.
+로깅은 타임스탬프, 심각도 수준, 파일 출력을 준다. 훈련 실행이 새벽 3시에 실패하면, 화면 밖으로 스크롤되어 사라진 터미널 출력이 아니라 로그 파일이 아쉬워진다.
 
 ### 4부: 코드 구간 시간 재기
 
@@ -134,13 +134,13 @@ with Timer("backward pass"):
 
 ### 5부: cProfile과 line_profiler
 
-수동 타이머 이상의 것이 필요할 때:
+수동 타이머 이상이 필요할 때:
 
 ```bash
 python -m cProfile -s cumtime train.py
 ```
 
-이것은 모든 함수 호출을 누적 시간으로 정렬해 보여 준다. 줄 단위 프로파일링을 위해서는:
+이것은 모든 함수 호출을 누적 시간으로 정렬해 보여 준다. 줄 단위로 프로파일링하려면:
 
 ```bash
 pip install line_profiler
@@ -218,7 +218,7 @@ OOM(Out of Memory, 메모리 부족)에 부딪혔을 때:
 
 #### 형태 불일치 (Shape Mismatch)
 
-가장 빈번한 버그다. 모델이 `[batch, channels, height, width]`를 기대하는데 텐서가 `[batch, features]` 형태를 가진다.
+가장 빈번한 버그다. 모델은 `[batch, channels, height, width]`를 기대하는데 텐서가 `[batch, features]` 형태인 경우다.
 
 ```python
 def check_shapes(model, sample_input):
@@ -282,7 +282,7 @@ def check_data_leakage(train_set, test_set, id_column="id"):
     return False
 ```
 
-시간적 누수도 확인하라. 미래 데이터를 사용해 과거를 예측하는 것이다. 분할하기 전에 타임스탬프로 정렬하라.
+시간적 누수도 확인하라. 미래 데이터로 과거를 예측하는 경우다. 분할하기 전에 타임스탬프로 정렬하라.
 
 #### 잘못된 디바이스 (Wrong Device)
 
@@ -362,7 +362,7 @@ tensorboard --logdir=runs
 
 여백(gutter)을 클릭해 중단점(breakpoint)을 설정하라. Variables 패널로 텐서 속성을 검사하라. Debug Console에서는 실행 중간에 임의의 Python 표현식을 실행할 수 있다.
 
-각 변환을 보고 싶은 데이터 전처리 파이프라인을 한 단계씩 진행할 때 유용하다.
+각 변환을 보고 싶은 데이터 전처리 파이프라인을 한 단계씩 짚어 갈 때 유용하다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -388,6 +388,6 @@ AI 고유의 버그를 진단하도록 돕는 프롬프트(prompt)는 `outputs/p
 
 1. `debug_tools.py`를 실행하고 각 섹션의 출력을 읽어 보라. 더미 모델을 수정해 NaN을 도입하고(힌트: 순방향 패스에서 0으로 나누기) 탐지기가 그것을 잡는 것을 지켜보라.
 2. `cProfile`로 훈련 루프를 프로파일링하고 가장 느린 함수를 식별하라.
-3. `tracemalloc`을 사용해 데이터 로딩 파이프라인에서 어느 줄이 메모리를 가장 많이 할당하는지 찾아라.
+3. `tracemalloc`으로 데이터 로딩 파이프라인에서 어느 줄이 메모리를 가장 많이 할당하는지 찾아라.
 4. 간단한 훈련 실행에 TensorBoard를 설정하고 모델이 과적합되는지 식별하라.
 5. 훈련 루프 안에서 `breakpoint()`를 사용하라. 디버거 프롬프트에서 텐서 형태, 디바이스, 그래디언트 값을 검사하는 것을 연습하라.

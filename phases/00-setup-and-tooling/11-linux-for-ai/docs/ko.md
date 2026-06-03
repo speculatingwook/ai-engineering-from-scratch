@@ -16,13 +16,13 @@
 
 ## 문제 (The Problem)
 
-당신은 macOS나 Windows에서 개발한다. 하지만 클라우드 GPU 박스에 SSH로 접속하거나, Lambda 인스턴스를 빌리거나, EC2 머신을 띄우는 순간 Ubuntu에 떨어진다. 터미널이 유일한 인터페이스다. Finder도, Explorer도, GUI도 없다. 파일 시스템을 탐색하고, 패키지를 설치하고, 명령줄에서 프로세스를 관리하지 못하면, "Linux에서 파일 압축 푸는 법"을 검색하는 동안 놀고 있는 GPU 시간에 돈을 내며 발이 묶이게 된다.
+개발은 macOS나 Windows에서 한다. 하지만 클라우드 GPU 박스에 SSH로 접속하거나, Lambda 인스턴스를 빌리거나, EC2 머신을 띄우는 순간 Ubuntu에 떨어진다. 터미널이 유일한 인터페이스다. Finder도, Explorer도, GUI도 없다. 파일 시스템을 탐색하고, 패키지를 설치하고, 명령줄에서 프로세스를 관리하지 못하면, "Linux에서 파일 압축 푸는 법"을 검색하는 동안 놀고 있는 GPU 시간에 돈을 내며 발이 묶인다.
 
 이것은 생존 가이드다. AI 작업을 위해 원격 Linux 머신에서 작동하는 데 정확히 필요한 것만 다룬다. 그 이상은 없다.
 
 ## 파일 시스템 레이아웃 (File System Layout)
 
-Linux는 모든 것을 단일 루트 `/` 아래에 조직한다. `C:\`도 `/Volumes`도 없다. 당신이 실제로 다룰 디렉터리는 다음과 같다.
+Linux는 모든 것을 단일 루트 `/` 아래에 조직한다. `C:\`도 `/Volumes`도 없다. 실제로 다룰 디렉터리는 다음과 같다.
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
     root --> proc["proc/ and /sys/<br/>Virtual files — kernel and hardware info"]
 ```
 
-당신의 홈 디렉터리는 `~` 또는 `/home/your-username`이다. 당신이 하는 거의 모든 일이 여기서 일어난다.
+홈 디렉터리는 `~` 또는 `/home/your-username`이다. 거의 모든 작업이 여기서 일어난다.
 
 ## 필수 명령어 (Essential Commands)
 
@@ -145,7 +145,7 @@ sudo apt update && sudo apt install -y \
 
 ## 사용자와 sudo (Users and sudo)
 
-당신은 보통 일반 사용자로 로그인한다. 일부 작업은 root(관리자) 접근이 필요하다.
+보통은 일반 사용자로 로그인한다. 일부 작업은 root(관리자) 접근이 필요하다.
 
 ```bash
 whoami                      # What user am I?
@@ -153,7 +153,7 @@ sudo command                # Run a single command as root
 sudo su                     # Become root (exit to go back, use sparingly)
 ```
 
-클라우드 GPU 인스턴스에서는 보통 당신이 유일한 사용자이고 이미 sudo 접근 권한을 가진다. 모든 것을 root로 실행하지 마라. 필요할 때만 sudo를 쓰라.
+클라우드 GPU 인스턴스에서는 보통 자신이 유일한 사용자이고 이미 sudo 접근 권한이 있다. 모든 것을 root로 실행하지 마라. 필요할 때만 sudo를 쓰라.
 
 ## 프로세스와 systemd (Processes and systemd)
 
@@ -208,7 +208,7 @@ rm -rf checkpoints/epoch_01/ checkpoints/epoch_02/
 
 ## 네트워킹 (Networking)
 
-당신은 명령줄에서 모델을 다운로드하고, 파일을 전송하고, API를 호출하게 된다.
+명령줄에서 모델을 다운로드하고, 파일을 전송하고, API를 호출하게 된다.
 
 ```bash
 # Download files
@@ -260,7 +260,7 @@ wsl --install -d Ubuntu-24.04
 sudo apt update && sudo apt upgrade -y
 ```
 
-WSL2는 진짜 Linux 커널을 실행한다. 이 레슨의 모든 것이 그 안에서 작동한다. WSL 안에서 당신의 Windows 파일은 `/mnt/c/Users/YourName/`에 있다.
+WSL2는 진짜 Linux 커널을 실행한다. 이 레슨의 모든 것이 그 안에서 작동한다. WSL 안에서 Windows 파일은 `/mnt/c/Users/YourName/`에 있다.
 
 GPU 패스스루(passthrough)는 Windows 쪽에 NVIDIA 드라이버가 설치되면 작동한다. Windows용 NVIDIA 드라이버를(Linux용이 아니라) 설치하면 WSL2 안에서 CUDA를 사용할 수 있다.
 

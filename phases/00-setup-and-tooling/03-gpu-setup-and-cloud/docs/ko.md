@@ -11,12 +11,12 @@
 
 - `nvidia-smi`와 PyTorch의 CUDA API로 로컬 GPU 가용성 검증하기
 - 무료 클라우드 기반 실험을 위해 T4 GPU가 달린 Google Colab 구성하기
-- CPU와 GPU에서 행렬 곱셈(matrix multiplication)을 벤치마크(benchmark)하고 속도 향상 측정하기
-- fp16 어림 규칙을 사용해 VRAM에 들어가는 가장 큰 모델 크기 추정하기
+- CPU와 GPU에서 행렬 곱셈(matrix multiplication)을 벤치마크(benchmark)해 속도 향상 측정하기
+- fp16 어림 규칙으로 VRAM에 들어가는 가장 큰 모델 크기 추정하기
 
 ## 문제 (The Problem)
 
-phase 1~3의 대부분 레슨은 CPU에서 문제없이 돌아간다. 하지만 CNN, 트랜스포머(transformer), LLM(phase 4 이후)을 훈련하기 시작하면 GPU 가속이 필요해진다. CPU에서 8시간 걸리는 훈련이 GPU에서는 10분이면 끝난다.
+phase 1~3의 대부분 레슨은 CPU에서 문제없이 돌아간다. 하지만 CNN, 트랜스포머(transformer), LLM(phase 4 이후)을 훈련하기 시작하면 GPU 가속이 필요하다. CPU에서 8시간 걸리는 훈련이 GPU에서는 10분이면 끝난다.
 
 선택지는 세 가지다. 로컬 GPU, 클라우드 GPU, 또는 (무료인) Google Colab.
 
@@ -84,7 +84,7 @@ python -c "import torch; print(torch.cuda.get_device_name(0))"
 
 ### GPU가 없다고? 괜찮다.
 
-대부분의 레슨은 CPU에서 돌아간다. GPU가 필요한 레슨은 그렇다고 명시하고 Colab 링크를 포함한다.
+대부분의 레슨은 CPU에서 돌아간다. GPU가 필요한 레슨은 그렇다고 명시하고 Colab 링크를 함께 넣는다.
 
 ```python
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

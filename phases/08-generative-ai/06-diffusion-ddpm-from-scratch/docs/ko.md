@@ -1,6 +1,6 @@
 # 확산 모델 — 밑바닥부터 만드는 DDPM (Diffusion Models — DDPM from Scratch)
 
-> Ho, Jain, Abbeel (2020)은 분야에 끊을 수 없는 레시피를 주었다. 천 번의 작은 스텝에 걸쳐 잡음으로 데이터를 파괴하라. 하나의 신경망(neural network)이 그 잡음을 예측하도록 학습시켜라. 추론(inference)에서 그 과정을 역전시켜라. 오늘날 모든 주류 이미지, 비디오, 3D, 음악 모델이 이 루프 위에서 돌아가며, 위에 흐름 매칭(flow matching)이나 일관성(consistency) 트릭이 얹혀 있을 수도 있다.
+> Ho, Jain, Abbeel (2020)은 이 분야에 두고두고 쓰일 레시피를 남겼다. 천 번의 작은 스텝에 걸쳐 잡음으로 데이터를 파괴하라. 하나의 신경망(neural network)이 그 잡음을 예측하도록 학습시켜라. 추론(inference)에서 그 과정을 역전시켜라. 오늘날 모든 주류 이미지, 비디오, 3D, 음악 모델이 이 루프 위에서 돌아가며, 위에 흐름 매칭(flow matching)이나 일관성(consistency) 트릭이 얹혀 있을 수도 있다.
 
 **Type:** Build
 **Languages:** Python
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-당신은 `p_data(x)`에 대한 샘플러(sampler)를 원한다. GAN은 종종 발산하는 미니맥스(minimax) 게임을 한다. VAE는 가우시안 디코더(decoder)에서 흐릿한 샘플을 만든다. 당신이 정말 원하는 것은 (a) 단일하고 안정적인 손실(loss)(안장점도, 미니맥스도 없음)이고, (b) `log p(x)`의 하한(lower bound)이며(그래서 가능도(likelihood)를 가짐), (c) SOTA 품질에 맞는 샘플을 주는 학습 목적함수다.
+목표는 `p_data(x)`의 샘플러(sampler)다. GAN은 종종 발산하는 미니맥스(minimax) 게임을 한다. VAE는 가우시안 디코더(decoder)에서 흐릿한 샘플을 만든다. 정작 필요한 것은 (a) 단일하고 안정적인 손실(loss)(안장점도, 미니맥스도 없음)이고, (b) `log p(x)`의 하한(lower bound)이며(그래서 가능도(likelihood)를 가짐), (c) SOTA 품질에 맞는 샘플을 주는 학습 목적함수다.
 
 Sohl-Dickstein et al. (2015)은 이론적 답을 갖고 있었다: 가우시안 잡음을 점진적으로 더하는 마르코프 연쇄(Markov chain) `q(x_t | x_{t-1})`를 정의하고, 잡음을 제거하도록 역방향 연쇄 `p_θ(x_{t-1} | x_t)`를 학습시킨다. Ho, Jain, Abbeel (2020)은 손실이 한 줄로 단순화될 수 있음을 보였고 — 잡음을 예측하라 — 수학을 정리했다. 2020년에 이것은 호기심거리였다. 2021년에는 최첨단 샘플을 만들었다. 2022년에는 Stable Diffusion이 되었다. 2026년에는 토대(substrate)다.
 

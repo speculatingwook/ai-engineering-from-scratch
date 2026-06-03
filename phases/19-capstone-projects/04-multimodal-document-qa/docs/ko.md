@@ -1,6 +1,6 @@
 # Capstone 04 — 멀티모달 문서 QA (Vision-First PDF, Tables, Charts)
 
-> 2026년의 문서 QA 프런티어는 OCR 후 텍스트(OCR-then-text)에서 비전 우선(vision-first) 늦은 상호작용(late interaction)으로 이동했다. ColPali, ColQwen2.5, ColQwen3-omni는 각 PDF 페이지를 이미지로 취급하고, 다중 벡터(multi-vector) 늦은 상호작용으로 임베딩(embedding)하고, 쿼리가 패치(patch)에 직접 어텐션(attention)하게 한다. 재무 10-K, 과학 논문, 손글씨 노트에서 이 패턴은 OCR 우선 방식을 큰 차이로 이긴다. 1만 페이지에 대해 파이프라인을 처음부터 끝까지 만들고, OCR 후 텍스트 방식과 나란히 비교한 결과를 발행하라.
+> 2026년의 문서 QA 프런티어는 OCR 후 텍스트(OCR-then-text)에서 비전 우선(vision-first) 늦은 상호작용(late interaction)으로 이동했다. ColPali, ColQwen2.5, ColQwen3-omni는 각 PDF 페이지를 이미지로 취급해 다중 벡터(multi-vector) 늦은 상호작용으로 임베딩(embedding)하고, 쿼리가 패치(patch)에 직접 어텐션(attention)하게 한다. 재무 10-K, 과학 논문, 손글씨 노트에서 이 패턴은 OCR 우선 방식을 큰 차이로 앞선다. 1만 페이지에 대해 파이프라인을 처음부터 끝까지 만들고, OCR 후 텍스트 방식과 나란히 비교한 결과를 발행하라.
 
 **Type:** Capstone
 **Languages:** Python (pipeline), TypeScript (viewer UI)
@@ -10,9 +10,9 @@
 
 ## 문제 (Problem)
 
-기업들은 OCR 파이프라인이 망가뜨리는 PDF 위에 앉아 있다. 회전된 표가 있는 스캔된 10-K, 방정식이 빽빽한 과학 논문, 이미지로만 말이 되는 차트, 손글씨 주석. 이것들을 텍스트 우선으로 취급하는 것은 신호의 절반을 잃는다는 뜻이다. 2026년의 답은 원시 페이지 이미지에 대한 늦은 상호작용 다중 벡터 검색이다. ColPali(Illuin Tech)가 그것을 도입했다. ColQwen2.5-v0.2와 ColQwen3-omni가 정확도를 끌어올렸다. ViDoRe v3에서 비전 우선 검색은 OCR 후 텍스트보다 의미 있는 차이로 높은 점수를 매긴다 — 그리고 그 격차는 차트, 표, 손글씨에서 더 벌어진다.
+기업들은 OCR 파이프라인이 망가뜨리는 PDF 위에 앉아 있다. 회전된 표가 있는 스캔된 10-K, 방정식이 빽빽한 과학 논문, 이미지로만 말이 되는 차트, 손글씨 주석. 이것들을 텍스트 우선으로 취급하면 신호의 절반을 잃는다. 2026년의 답은 원시 페이지 이미지에 대한 늦은 상호작용 다중 벡터 검색이다. ColPali(Illuin Tech)가 이 방식을 도입했고, ColQwen2.5-v0.2와 ColQwen3-omni가 정확도를 끌어올렸다. ViDoRe v3에서 비전 우선 검색은 OCR 후 텍스트보다 의미 있는 차이로 높은 점수를 받으며, 그 격차는 차트, 표, 손글씨에서 더 벌어진다.
 
-트레이드오프(trade-off)는 저장 공간과 지연 시간(latency)이다. ColQwen 임베딩은 단일 1024차원 벡터가 아니라 페이지당 ~2048개의 패치 벡터다. 원시 저장 공간이 급격히 늘어난다. DocPruner(2026)는 측정 가능한 정확도 손실 없이 50% 가지치기(pruning)를 가져온다. 당신은 1만 페이지를 색인하고, ViDoRe v3 nDCG@5를 측정하고, 답변을 2초 미만으로 서빙하고, OCR 후 텍스트 베이스라인(baseline)과 직접 비교하게 된다.
+트레이드오프(trade-off)는 저장 공간과 지연 시간(latency)이다. ColQwen 임베딩은 단일 1024차원 벡터가 아니라 페이지당 ~2048개의 패치 벡터다. 원시 저장 공간이 급격히 늘어난다. DocPruner(2026)는 측정 가능한 정확도 손실 없이 50% 가지치기(pruning)를 해낸다. 1만 페이지를 색인해 ViDoRe v3 nDCG@5를 측정하고, 답변을 2초 미만으로 서빙하며 OCR 후 텍스트 베이스라인(baseline)과 직접 비교한다.
 
 ## 개념 (Concept)
 

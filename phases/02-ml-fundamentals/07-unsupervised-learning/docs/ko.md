@@ -64,7 +64,7 @@ K-평균(K-Means)은 데이터를 정확히 K개 군집으로 분할한다. 각 
 
 ### DBSCAN: 밀도 기반 군집화
 
-K-평균은 군집이 구형이라고 가정하고 K를 미리 고를 것을 요구한다. DBSCAN은 둘 다 가정하지 않는다. 희소한 영역으로 분리된 밀집 영역으로 군집을 찾는다.
+K-평균은 군집이 구형이라고 가정하고 K를 미리 고르라고 요구한다. DBSCAN은 둘 다 가정하지 않는다. 희소한 영역으로 갈라진 밀집 영역에서 군집을 찾는다.
 
 두 파라미터(parameter):
 - **eps**: 이웃의 반경
@@ -452,7 +452,7 @@ if __name__ == "__main__":
 
 ## 라이브러리로 써보기 (Use It)
 
-scikit-learn으로는, 같은 알고리즘들이 한 줄짜리다.
+scikit-learn에서는 같은 알고리즘들이 한 줄이면 끝난다.
 
 ```python
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
@@ -465,7 +465,7 @@ agg = AgglomerativeClustering(n_clusters=3).fit(data)
 gmm_model = GaussianMixture(n_components=3, random_state=42).fit(data)
 ```
 
-밑바닥 버전들은 이 라이브러리들이 정확히 무엇을 계산하는지 보여준다. K-평균은 배정과 재계산 사이를 반복한다. DBSCAN은 밀집 씨앗(seed)에서 군집을 키운다. GMM은 기댓값과 최대화 사이를 번갈아 한다. 라이브러리 버전은 수치 안정성, 더 똑똑한 초기화(K-Means++), GPU 가속을 더하지만, 핵심 로직은 같다.
+밑바닥 버전들은 이 라이브러리들이 정확히 무엇을 계산하는지 보여준다. K-평균은 배정과 재계산 사이를 반복한다. DBSCAN은 밀집 씨앗(seed)에서 군집을 키운다. GMM은 기댓값과 최대화 사이를 번갈아 한다. 라이브러리 버전은 수치 안정성, 더 똑똑한 초기화(K-Means++), GPU 가속을 더하지만 핵심 로직은 같다.
 
 ## 산출물 (Ship It)
 

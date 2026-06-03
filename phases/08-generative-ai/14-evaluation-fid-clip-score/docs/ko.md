@@ -9,13 +9,13 @@
 
 ## 문제 (The Problem)
 
-생성 모델은 *샘플 품질*과 *조건화 준수*로 판단된다. 둘 다 닫힌 형식(closed-form)의 측도가 없다. 당신의 모델은 10,000장의 이미지를 렌더링해야 하고, 무언가가 그것들에 숫자를 매겨야 하며, 당신은 모델 계열, 해상도, 아키텍처를 넘나들며 그 숫자를 신뢰해야 한다. 2014-2026년의 가혹한 시험을 살아남은 세 가지 지표가 있다.
+생성 모델은 *샘플 품질*과 *조건화 준수*로 판단된다. 둘 다 닫힌 형식(closed-form)의 측도가 없다. 모델은 10,000장의 이미지를 렌더링해야 하고, 그 이미지에 무언가가 숫자를 매겨야 하며, 그 숫자는 모델 계열과 해상도, 아키텍처를 넘나들며 신뢰할 수 있어야 한다. 2014-2026년의 가혹한 시험을 살아남은 세 가지 지표가 있다.
 
 - **FID(Fréchet Inception Distance).** Inception 신경망(neural network)의 특성(feature) 공간에서 두 분포(실제와 생성) 사이의 거리. 낮을수록 좋다.
 - **CLIP 점수(CLIP score).** 생성된 이미지의 CLIP 이미지 임베딩(embedding)과 프롬프트(prompt)의 CLIP 텍스트 임베딩 사이의 코사인 유사도. 높을수록 좋다. 프롬프트 준수를 측정한다.
 - **인간 선호(Human preference).** 같은 프롬프트로 두 모델을 정면 대결시키고, 인간(또는 GPT-4급 모델)에게 더 나은 것을 고르게 하고, Elo 점수로 집계한다.
 
-다음도 보게 될 것이다. IS(inception score, 대체로 퇴역), KID, CMMD, ImageReward, PickScore, HPSv2, MJHQ-30k. 각각은 이전 것의 한 가지 실패를 교정한다.
+다음 지표도 함께 다룬다. IS(inception score, 대체로 퇴역), KID, CMMD, ImageReward, PickScore, HPSv2, MJHQ-30k. 각각은 이전 것의 한 가지 실패를 교정한다.
 
 ## 개념 (The Concept)
 

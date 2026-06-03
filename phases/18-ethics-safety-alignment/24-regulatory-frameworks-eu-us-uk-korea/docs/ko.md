@@ -57,7 +57,7 @@ AI Safety Institute에서 명칭을 변경했다. 이 명칭 변경은 범위를
 
 ### 미국 CAISI(2025년 6월)
 
-트럼프 행정부가 NIST의 AI Safety Institute를 Center for AI Standards and Innovation으로 전환한다. 밴스(Vance) 부통령의 Paris AI Action Summit 발언에 따르면 "성장 친화적 AI 정책"으로 전환한다. 배포 전(pre-deployment) 평가에 대한 강조를 줄이고, 표준과 혁신 지원을 강조한다. EU AI Act의 규제 입장에 대한 국내적 균형추다.
+트럼프 행정부가 NIST의 AI Safety Institute를 Center for AI Standards and Innovation으로 전환한다. 밴스(Vance) 부통령의 Paris AI Action Summit 발언에 따르면 "성장 친화적 AI 정책"으로 전환한다. 배포 전(pre-deployment) 평가 강조를 줄이고, 표준과 혁신 지원을 강조한다. EU AI Act의 규제 입장에 대한 국내적 균형추다.
 
 ### 한국 AI 기본법
 
@@ -85,7 +85,7 @@ AI Safety Institute에서 명칭을 변경했다. 이 명칭 변경은 범위를
 
 ## 라이브러리로 써보기 (Use It)
 
-코드 없음. EU AI Act 원문 자료를 읽어라: 규정 텍스트, GPAI 실천 강령, 영국 AISI Inspect 프레임워크. 각 관할권에 대해 적용 가능한 의무에 당신의 배포를 대응시켜라.
+코드 없음. EU AI Act 원문 자료를 읽어라: 규정 텍스트, GPAI 실천 강령, 영국 AISI Inspect 프레임워크. 각 관할권마다 적용 가능한 의무에 배포를 대응시켜라.
 
 ## 산출물 (Ship It)
 
@@ -95,7 +95,7 @@ AI Safety Institute에서 명칭을 변경했다. 이 명칭 변경은 범위를
 
 1. EU AI Act(규정 2024/1689)와 GPAI 실천 강령(2025년 7월 10일)을 읽어라. 모든 GPAI 제공자에게 적용되는 의무 셋과 시스템적 위험 GPAI에만 적용되는 의무 셋을 식별하라.
 
-2. 어떤 배포가 미국 기업에 의해 만들어지고, EU 인프라에서 실행되며, 한국 사용자에게 서비스된다. 세 관할권 중 어느 규칙이 적용되며, 각 실질적 문제에서 어느 규칙이 구속하는가?
+2. 어떤 배포를 미국 기업이 만들고, EU 인프라에서 실행하며, 한국 사용자에게 서비스한다고 하자. 세 관할권 중 어느 규칙이 적용되며, 각 실질적 문제에서 어느 규칙이 구속하는가?
 
 3. 영국 AI Security Institute의 명칭 변경은 범위를 좁힌다. 더 좁은 관점에 대해 찬성과 반대를 논하라. 각 입장이 의존하는 정책 가정을 식별하라.
 

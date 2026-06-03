@@ -1,6 +1,6 @@
 # Capstone 13 — 레지스트리와 거버넌스를 갖춘 MCP 서버 (MCP Server with Registry and Governance)
 
-> Model Context Protocol은 더 이상 미래가 아니라 2026년의 기본 도구 사용(tool-use) 명세가 되었다. Anthropic, OpenAI, Google, 그리고 모든 주요 IDE가 MCP 클라이언트를 탑재한다. Pinterest는 자사 내부 MCP 서버 생태계를 공개했다. AAIF 레지스트리(Registry)는 `.well-known`에서 역량(capability) 메타데이터를 공식화했다. AWS ECS는 레퍼런스 무상태(stateless) 배포를 발표했다. Block의 goose-agent는 동일한 프로토콜을 호스팅형 어시스턴트 안에 넣었다. 2026 프로덕션(production)의 형태는 이렇다: StreamableHTTP 전송, OAuth 2.1 스코프(scope), OPA 정책 게이팅(gating), 그리고 플랫폼 팀이 서버를 발견·검증·활성화할 수 있게 하는 레지스트리. 이것을 끝에서 끝까지 만든다.
+> Model Context Protocol은 더 이상 미래가 아니라 2026년의 기본 도구 사용(tool-use) 명세가 되었다. Anthropic, OpenAI, Google을 비롯한 모든 주요 IDE가 MCP 클라이언트를 탑재한다. Pinterest는 자사 내부 MCP 서버 생태계를 공개했다. AAIF 레지스트리(Registry)는 `.well-known`에서 역량(capability) 메타데이터를 공식화했다. AWS ECS는 레퍼런스 무상태(stateless) 배포를 발표했다. Block의 goose-agent는 동일한 프로토콜을 호스팅형 어시스턴트 안에 넣었다. 2026 프로덕션(production)의 형태는 이렇다: StreamableHTTP 전송, OAuth 2.1 스코프(scope), OPA 정책 게이팅(gating), 그리고 플랫폼 팀이 서버를 발견·검증·활성화할 수 있게 하는 레지스트리. 이것을 끝에서 끝까지 만든다.
 
 **Type:** Capstone
 **Languages:** Python (server, via FastMCP) or TypeScript (@modelcontextprotocol/sdk), Go (registry service)
@@ -10,9 +10,9 @@
 
 ## 문제 (Problem)
 
-MCP는 도구 사용의 링구아 프랑카(lingua franca)가 되었다. Claude Code, Cursor 3, Amp, OpenCode, Gemini CLI, 그리고 모든 매니지드 에이전트(agent)가 이제 MCP 서버를 소비한다. 프로덕션의 과제는 서버를 작성하는 것이 아니라(FastMCP가 그것을 쉽게 만든다) 엔터프라이즈 요구사항과 함께 대규모로 배포하는 것이다: 테넌트(tenant)별 OAuth 스코프, 파괴적(destructive) 도구에 대한 OPA 정책, StreamableHTTP 무상태 확장, 발견을 위한 레지스트리, 도구 호출별 감사 로그(audit log). Pinterest의 내부 MCP 생태계와 AAIF 레지스트리 명세가 2026 기준을 설정했다.
+MCP는 도구 사용의 링구아 프랑카(lingua franca)가 되었다. Claude Code, Cursor 3, Amp, OpenCode, Gemini CLI를 비롯한 모든 매니지드 에이전트(agent)가 이제 MCP 서버를 소비한다. 프로덕션의 과제는 서버를 작성하는 것이 아니라(FastMCP가 그것을 쉽게 만든다) 엔터프라이즈 요구사항과 함께 대규모로 배포하는 것이다: 테넌트(tenant)별 OAuth 스코프, 파괴적(destructive) 도구에 대한 OPA 정책, StreamableHTTP 무상태 확장, 발견을 위한 레지스트리, 도구 호출별 감사 로그(audit log). Pinterest의 내부 MCP 생태계와 AAIF 레지스트리 명세가 2026 기준을 설정했다.
 
-당신은 10개의 내부 도구(읽기 전용 Postgres, S3 목록, Jira, Linear, Datadog 등)를 노출하는 MCP 서버, 플랫폼 발견을 위한 레지스트리 UI, 그리고 파괴적 도구에 대한 사람 승인 게이트(human-approval gate)를 만들게 된다. 부하 테스트는 StreamableHTTP 수평 확장을 시연한다. 감사 추적(audit trail)은 엔터프라이즈 보안 검토를 만족시킨다.
+이 과제에서는 10개의 내부 도구(읽기 전용 Postgres, S3 목록, Jira, Linear, Datadog 등)를 노출하는 MCP 서버, 플랫폼 발견을 위한 레지스트리 UI, 파괴적 도구에 대한 사람 승인 게이트(human-approval gate)를 만든다. 부하 테스트는 StreamableHTTP 수평 확장을 시연한다. 감사 추적(audit trail)은 엔터프라이즈 보안 검토를 만족시킨다.
 
 ## 개념 (Concept)
 

@@ -1,6 +1,6 @@
 # 엔티티 링킹 및 중의성 해소(Entity Linking & Disambiguation)
 
-> NER이 "Paris"를 찾았다. 엔티티 링킹(entity linking)은 결정한다. 프랑스의 Paris? Paris Hilton? 텍사스의 Paris? Paris(트로이의 왕자)? 링킹이 없으면 당신의 지식 그래프(knowledge graph)는 모호한 채로 남는다.
+> NER이 "Paris"를 찾았다. 그게 어느 Paris인지를 가려내는 일이 엔티티 링킹(entity linking)이다. 프랑스의 Paris? Paris Hilton? 텍사스의 Paris? Paris(트로이의 왕자)? 링킹이 없으면 지식 그래프(knowledge graph)는 모호한 채로 남는다.
 
 **Type:** Build
 **Languages:** Python
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-한 문장이 이렇다. "Jordan beat the press." 당신의 NER이 "Jordan"을 PERSON으로 태깅한다. 좋다. 그런데 *어떤* Jordan인가?
+한 문장이 이렇다. "Jordan beat the press." NER이 "Jordan"을 PERSON으로 태깅한다. 좋다. 그런데 *어떤* Jordan인가?
 
 - Michael Jordan(농구)?
 - Michael B. Jordan(배우)?
@@ -17,12 +17,12 @@
 - Jordan(국가)?
 - Jordan(히브리어 이름)?
 
-엔티티 링킹(EL)은 각 언급(mention)을 지식 베이스(knowledge base)의 고유 항목으로 해결한다. Wikidata, Wikipedia, DBpedia, 또는 당신의 도메인 KB. 두 개의 하위 과제:
+엔티티 링킹(EL)은 각 언급(mention)을 지식 베이스(knowledge base)의 고유 항목으로 해결한다. Wikidata, Wikipedia, DBpedia, 또는 도메인 KB. 두 개의 하위 과제:
 
 1. **후보 생성(Candidate generation).** "Jordan"이 주어졌을 때, 어떤 KB 항목들이 그럴듯한가?
 2. **중의성 해소(Disambiguation).** 컨텍스트가 주어졌을 때, 어떤 후보가 옳은 것인가?
 
-두 단계 모두 학습 가능하다. 둘 다 벤치마크(benchmark)된다. 결합된 파이프라인(pipeline)은 10년간 안정적이었다 — 바뀌는 것은 중의성 해소기의 품질이다.
+두 단계 모두 학습 가능하다. 둘 다 벤치마크(benchmark)된다. 결합된 파이프라인(pipeline)은 10년간 안정적이었다. 바뀌는 것은 중의성 해소기의 품질이다.
 
 ## 개념 (The Concept)
 
@@ -165,7 +165,7 @@ Refuse any EL pipeline without a mention-recall baseline (you cannot evaluate a 
 
 1. **쉬움.** `code/main.py`의 사전 확률+컨텍스트 중의성 해소기를 모호한 언급 10개(Paris, Jordan, Apple)에 대해 구현하라. 올바른 엔티티를 직접 레이블링하라. 정확도를 측정하라.
 2. **보통.** 문장 트랜스포머로 모호한 언급 50개를 인코딩하라. 각 후보의 설명을 임베딩하라. 임베딩 기반 중의성 해소를 자카드 컨텍스트 중첩과 비교하라.
-3. **어려움.** 1천 엔티티 규모의 도메인 KB(예: 당신 회사의 직원 + 제품)를 구축하라. NER + EL을 종단 간으로 구현하라. 별도로 분리된 문장 100개에 대해 정밀도와 재현율을 측정하라.
+3. **어려움.** 1천 엔티티 규모의 도메인 KB(예: 회사의 직원 + 제품)를 구축하라. NER + EL을 종단 간으로 구현하라. 별도로 분리된 문장 100개에 대해 정밀도와 재현율을 측정하라.
 
 ## 핵심 용어 (Key Terms)
 
@@ -176,7 +176,7 @@ Refuse any EL pipeline without a mention-recall baseline (you cannot evaluate a 
 | 중의성 해소(Disambiguation) | 옳은 것 고르기 | 컨텍스트로 후보를 채점해 승자를 고른다. |
 | 별칭 인덱스(Alias index) | 그 조회 테이블 | 표층형 → 후보 엔티티로의 매핑. |
 | NIL | KB에 없음 | 일치하는 KB 항목이 없다는 명시적 예측. |
-| KB | 지식 베이스 | Wikidata, Wikipedia, DBpedia, 또는 당신의 도메인 KB. |
+| KB | 지식 베이스 | Wikidata, Wikipedia, DBpedia, 또는 도메인 KB. |
 | AIDA-CoNLL | 그 벤치마크 | 정답 엔티티 링크가 달린 로이터 기사 1,393개. |
 
 ## 더 읽을거리 (Further Reading)

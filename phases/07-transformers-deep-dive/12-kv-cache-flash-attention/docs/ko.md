@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-순진한 자기회귀(autoregressive) 디코더(decoder)는 `N`개의 토큰(token)을 생성하는 데 `O(N²)`의 일을 한다: 각 스텝에서 전체 접두사(prefix)에 대한 어텐션(attention)을 다시 계산한다. 4K 토큰 응답이라면 1,600만 번의 어텐션 연산이고, 대부분이 중복이다. 접두사 토큰의 모든 은닉 상태(hidden state)는 한 번 계산되면 결정론적이다 — 새 토큰의 쿼리(query)를 그 이전 모든 것의 캐시된 키(key)와 값(value)에 대해 돌리기만 하면 된다.
+순진한 자기회귀(autoregressive) 디코더(decoder)는 `N`개의 토큰(token)을 생성하는 데 `O(N²)`의 일을 한다: 각 스텝에서 전체 접두사(prefix)를 두고 어텐션(attention)을 다시 계산한다. 4K 토큰 응답이라면 1,600만 번의 어텐션 연산이고, 대부분이 중복이다. 접두사 토큰의 모든 은닉 상태(hidden state)는 한 번 계산되면 결정론적이다 — 새 토큰의 쿼리(query)를 그 이전 모든 것의 캐시된 키(key)와 값(value)에 대해 돌리기만 하면 된다.
 
 게다가 어텐션 자체가 많은 데이터를 옮긴다. 표준 어텐션은 N×N 점수 행렬(matrix), N×d softmax 출력, N×d 최종 출력을 실체화한다 — HBM에 대한 읽기와 쓰기가 너무 많다. N≥2K에서 어텐션은 FLOP에 묶이기 전에 메모리에 묶인다. 고전적 어텐션 커널(kernel)은 현대 GPU를 4~10배 적게 활용한다.
 
@@ -49,7 +49,7 @@ per token per layer = 2 * 8 * 128 * 2 = 4096 bytes (4 KB)
 per 32K context = 10.4 GB
 ```
 
-그 10 GB가 128K 컨텍스트(context)의 Llama 3 70B가 배치(batch) 크기 1에서도 KV 캐시만으로 40 GB A100의 대부분을 필요로 하는 이유다.
+그 10 GB가 128K 컨텍스트(context)의 Llama 3 70B가 배치(batch) 크기 1에서도 KV 캐시만으로 40 GB A100의 대부분을 차지하는 이유다.
 
 **GQA가 KV 캐시의 승리다.** 64개 헤드의 MHA였다면 32 GB가 될 것이다. MLA는 더 깊이 압축한다.
 
@@ -226,4 +226,3 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 - [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077) — 레슨이 인용하는 통합 드래프트 접근에 대한 EAGLE-1/2 논문.
 - [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774) — EAGLE과 함께 언급된 Medusa 접근.
 - [vLLM docs — PagedAttention](https://docs.vllm.ai/en/latest/design/kernel/paged_attention.html) — 16토큰 블록과 페이지 테이블 설계에 대한 표준 심층 해설.
-</content>
