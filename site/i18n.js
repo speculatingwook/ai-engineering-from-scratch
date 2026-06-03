@@ -44,7 +44,30 @@
       'home.modal.footnote': 'Progress saved in browser only', 'home.modal.reset': 'Reset progress',
       'home.colophon.eyebrow': 'Colophon',
       'home.colophon.body': 'The entire curriculum is on GitHub. Clone it, fork it, learn at your own pace. No paywall, no signup. Every lesson has runnable code in Python, TypeScript, Rust, or Julia, depending on what fits the concept best.',
-      'home.footer': '© 2026 · open source · free forever', 'home.footer.report': 'Report'
+      'home.footer': '© 2026 · open source · free forever', 'home.footer.report': 'Report',
+      // shared footer
+      'footer.home': 'Home', 'footer.report': 'Report / Suggest',
+      'footer.tagline': 'AI Engineering from Scratch · open source · free forever.',
+      // catalog
+      'catalog.title': 'Lesson Catalog',
+      'catalog.subtitle': 'Every lesson across all 20 phases. Search, filter, sort.',
+      'catalog.search': 'Search lessons...',
+      'catalog.allPhases': 'All Phases', 'catalog.allStatus': 'All Status',
+      'catalog.complete': 'Complete', 'catalog.planned': 'Planned', 'catalog.inprogress': 'In progress',
+      'catalog.th.phase': 'Phase', 'catalog.th.lesson': 'Lesson', 'catalog.th.type': 'Type',
+      'catalog.th.language': 'Language', 'catalog.th.status': 'Status',
+      'catalog.empty': 'No lessons match your filters.',
+      'catalog.lessons': 'lessons', 'catalog.of': 'of',
+      // prereqs / roadmap
+      'prereqs.title': 'Roadmap',
+      'prereqs.subtitle': 'Click any phase to see its prerequisites and what it unlocks downstream.',
+      'prereqs.skip': 'Skip to content',
+      'prereqs.none': 'None. This is a starting point.',
+      'prereqs.final': 'Final destination. End of the curriculum.',
+      'prereqs.prerequisites': 'Prerequisites', 'prereqs.unlocks': 'Unlocks',
+      'prereqs.read': 'Read', 'prereqs.github': 'View on GitHub',
+      'prereqs.lessonsComplete': 'lessons complete',
+      'prereqs.prereqPhases': 'prerequisite phases', 'prereqs.phasesUnlocked': 'phases unlocked'
     },
     ko: {
       'lang.toggle': 'EN', 'lang.toggleTitle': 'View in English', 'lang.toggleAria': '영어로 전환',
@@ -74,7 +97,30 @@
       'home.modal.footnote': '진행 상황은 브라우저에만 저장됩니다', 'home.modal.reset': '진행 상황 초기화',
       'home.colophon.eyebrow': '판권',
       'home.colophon.body': '커리큘럼 전체가 GitHub에 있다. 클론하고, 포크하고, 당신의 속도로 배워라. 유료 장벽도, 가입도 없다. 모든 레슨에는 개념에 가장 잘 맞는 언어—Python, TypeScript, Rust, Julia—로 된 실행 가능한 코드가 있다.',
-      'home.footer': '© 2026 · 오픈 소스 · 영원히 무료', 'home.footer.report': '제보'
+      'home.footer': '© 2026 · 오픈 소스 · 영원히 무료', 'home.footer.report': '제보',
+      // shared footer
+      'footer.home': '홈', 'footer.report': '제보 / 제안',
+      'footer.tagline': 'AI Engineering from Scratch · 오픈 소스 · 영원히 무료.',
+      // catalog
+      'catalog.title': '레슨 카탈로그',
+      'catalog.subtitle': '20개 페이즈의 모든 레슨. 검색·필터·정렬.',
+      'catalog.search': '레슨 검색...',
+      'catalog.allPhases': '모든 페이즈', 'catalog.allStatus': '모든 상태',
+      'catalog.complete': '완료', 'catalog.planned': '예정', 'catalog.inprogress': '진행 중',
+      'catalog.th.phase': '페이즈', 'catalog.th.lesson': '레슨', 'catalog.th.type': '유형',
+      'catalog.th.language': '언어', 'catalog.th.status': '상태',
+      'catalog.empty': '필터에 맞는 레슨이 없습니다.',
+      'catalog.lessons': '레슨', 'catalog.of': '/',
+      // prereqs / roadmap
+      'prereqs.title': '로드맵',
+      'prereqs.subtitle': '아무 페이즈나 클릭하면 그 선행 조건과 이후 무엇을 여는지 볼 수 있다.',
+      'prereqs.skip': '본문으로 건너뛰기',
+      'prereqs.none': '없음. 여기가 출발점이다.',
+      'prereqs.final': '최종 목적지. 커리큘럼의 끝.',
+      'prereqs.prerequisites': '선행 조건', 'prereqs.unlocks': '여는 것',
+      'prereqs.read': '읽기', 'prereqs.github': 'GitHub에서 보기',
+      'prereqs.lessonsComplete': '레슨 완료',
+      'prereqs.prereqPhases': '선행 페이즈', 'prereqs.phasesUnlocked': '페이즈 해금'
     }
   };
 
@@ -111,12 +157,23 @@
     return obj[field] != null ? obj[field] : '';
   }
 
-  // Apply [data-i18n] label text on the current page.
+  // Apply i18n attributes on the current page:
+  //   [data-i18n]             → textContent
+  //   [data-i18n-placeholder] → placeholder attribute (inputs)
+  //   [data-i18n-title]       → title attribute
   function applyLabels(root) {
     var scope = root || document;
-    var nodes = scope.querySelectorAll('[data-i18n]');
-    for (var i = 0; i < nodes.length; i++) {
-      nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
+    var text = scope.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < text.length; i++) {
+      text[i].textContent = t(text[i].getAttribute('data-i18n'));
+    }
+    var ph = scope.querySelectorAll('[data-i18n-placeholder]');
+    for (var p = 0; p < ph.length; p++) {
+      ph[p].setAttribute('placeholder', t(ph[p].getAttribute('data-i18n-placeholder')));
+    }
+    var ti = scope.querySelectorAll('[data-i18n-title]');
+    for (var k = 0; k < ti.length; k++) {
+      ti[k].setAttribute('title', t(ti[k].getAttribute('data-i18n-title')));
     }
   }
 
