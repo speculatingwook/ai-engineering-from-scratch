@@ -15,6 +15,7 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const README_PATH = path.join(REPO_ROOT, 'README.md');
 const ROADMAP_PATH = path.join(REPO_ROOT, 'ROADMAP.md');
 const GLOSSARY_PATH = path.join(REPO_ROOT, 'glossary', 'terms.md');
+const GLOSSARY_KO_PATH = path.join(REPO_ROOT, 'glossary', 'terms.ko.md');
 const OUTPUT_PATH = path.join(__dirname, 'data.js');
 
 const GITHUB_BASE = 'https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/';
@@ -454,6 +455,24 @@ function build() {
   console.log('🔍 Parsing glossary/terms.md...');
   const glossaryTerms = parseGlossary(glossary);
 
+  console.log('🔍 Parsing glossary/terms.ko.md...');
+  let glossaryKo = [];
+  try {
+    glossaryKo = parseGlossary(fs.readFileSync(GLOSSARY_KO_PATH, 'utf8'));
+  } catch (_) { /* Korean glossary optional — English fallback */ }
+  const koByTerm = {};
+  glossaryKo.forEach(t => { koByTerm[t.term.trim().toLowerCase()] = t; });
+  let glossaryKoMatched = 0;
+  glossaryTerms.forEach(t => {
+    const ko = koByTerm[t.term.trim().toLowerCase()];
+    if (ko) {
+      // Term name stays English (anchor/search key); only prose is translated.
+      if (ko.says)  t.saysKo  = ko.says;
+      if (ko.means) t.meansKo = ko.means;
+      if (ko.saysKo || ko.meansKo || ko.says || ko.means) glossaryKoMatched++;
+    }
+  });
+
   console.log('🔍 Discovering outputs + Phase 14 missions...');
   const artifacts = discoverArtifacts();
 
@@ -486,7 +505,7 @@ function build() {
   console.log(`   Lessons: ${totalLessons}`);
   console.log(`   Complete: ${completeLessons}`);
   console.log(`   Summaries: ${summarized}, Keywords: ${withKeywords}`);
-  console.log(`   Glossary terms: ${glossaryTerms.length}`);
+  console.log(`   Glossary terms: ${glossaryTerms.length} (Korean: ${glossaryKoMatched})`);
   console.log(`   Artifacts: ${artifacts.length}`);
 
   // Generate data.js
