@@ -342,9 +342,15 @@
     var query = (_inputEl() ? _inputEl().value : '').trim();
 
     if (!query) {
+      var lessonCount = typeof PHASES !== 'undefined' && Array.isArray(PHASES)
+        ? PHASES.reduce(function (n, phase) { return n + ((phase.lessons && phase.lessons.length) || 0); }, 0)
+        : 0;
+      var artifactCount = typeof ARTIFACTS !== 'undefined' && Array.isArray(ARTIFACTS)
+        ? ARTIFACTS.length
+        : 0;
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
-        'Type to search 503 lessons, 499 outputs, and glossary terms' +
+        'Type to search ' + lessonCount + ' lessons, ' + artifactCount + ' outputs, and glossary terms' +
         '</li>';
       _activeIdx = -1;
       return;

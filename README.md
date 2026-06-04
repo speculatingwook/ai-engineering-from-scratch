@@ -443,7 +443,7 @@ Twenty phases. Click any phase to expand its lesson list.
 </details>
 
 <details id="phase-7">
-<summary><b>Phase 7 — Transformers Deep Dive</b> &nbsp;<code>14 lessons</code>&nbsp; <em>The architecture that changed everything.</em></summary>
+<summary><b>Phase 7 — Transformers Deep Dive</b> &nbsp;<code>16 lessons</code>&nbsp; <em>The architecture that changed everything.</em></summary>
 <br/>
 
 | # | Lesson | Type | Lang |
@@ -468,7 +468,7 @@ Twenty phases. Click any phase to expand its lesson list.
 </details>
 
 <details id="phase-8">
-<summary><b>Phase 8 — Generative AI</b> &nbsp;<code>14 lessons</code>&nbsp; <em>Create images, video, audio, 3D, and more.</em></summary>
+<summary><b>Phase 8 — Generative AI</b> &nbsp;<code>15 lessons</code>&nbsp; <em>Create images, video, audio, 3D, and more.</em></summary>
 <br/>
 
 | # | Lesson | Type | Lang |
@@ -513,7 +513,7 @@ Twenty phases. Click any phase to expand its lesson list.
 </details>
 
 <details id="phase-10">
-<summary><b>Phase 10 — LLMs from Scratch</b> &nbsp;<code>22 lessons</code>&nbsp; <em>Build, train, and understand large language models.</em></summary>
+<summary><b>Phase 10 — LLMs from Scratch</b> &nbsp;<code>24 lessons</code>&nbsp; <em>Build, train, and understand large language models.</em></summary>
 <br/>
 
 | # | Lesson | Type | Lang |
@@ -1131,6 +1131,7 @@ Before submitting a lesson, run the invariant check:
 python3 scripts/audit_lessons.py           # full curriculum
 python3 scripts/audit_lessons.py --phase 14  # single phase
 python3 scripts/audit_lessons.py --json    # CI-friendly output
+python3 scripts/check_readme_lesson_links.py # README rows match lessons
 ```
 
 Exit code is non-zero when any rule fails. Rules (L001–L010) validate directory

@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1a1a1a?style=flat-square&labelColor=fafaf5" alt="MIT License"></a>
-  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/lessons-473-3553ff?style=flat-square&labelColor=fafaf5" alt="473 lessons"></a>
+  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/lessons-503-3553ff?style=flat-square&labelColor=fafaf5" alt="503 lessons"></a>
   <a href="#contents"><img src="https://img.shields.io/badge/phases-20-3553ff?style=flat-square&labelColor=fafaf5" alt="20 phases"></a>
   <a href="https://github.com/rohitg00/ai-engineering-from-scratch/stargazers"><img src="https://img.shields.io/github/stars/rohitg00/ai-engineering-from-scratch?style=flat-square&labelColor=fafaf5&color=3553ff" alt="GitHub stars"></a>
   <a href="https://aiengineeringfromscratch.com"><img src="https://img.shields.io/badge/web-aiengineeringfromscratch.com-3553ff?style=flat-square&labelColor=fafaf5" alt="Website"></a>
@@ -21,7 +21,7 @@
 > **학생의 84%가 이미 AI 도구를 사용한다. 그러나 그것을 전문적으로 사용할
 > 준비가 되었다고 느끼는 비율은 18%에 불과하다.** 이 커리큘럼은 그 격차를 메운다.
 >
-> 473개 레슨. 20개 페이즈(phase). 약 320시간. Python, TypeScript, Rust, Julia. 모든 레슨은
+> 503개 레슨. 20개 페이즈(phase). 약 320시간. Python, TypeScript, Rust, Julia. 모든 레슨은
 > 재사용 가능한 산출물을 만들어낸다. 프롬프트(prompt), 스킬(skill), 에이전트(agent), MCP 서버. 무료, 오픈 소스, MIT.
 >
 > 당신은 AI를 배우기만 하는 것이 아니다. AI를 직접 만든다. 처음부터 끝까지. 손으로.
@@ -33,7 +33,7 @@
 그 손실(loss) 곡선을 설명하지 못한다. 에이전트에 함수를 연결하지만, 그것을 호출하는 모델 내부에서
 어텐션(attention)이 무엇을 하는지 말하지 못한다.
 
-이 커리큘럼은 그 척추(spine)다. 20개 페이즈, 473개 레슨, 네 가지 언어: Python, TypeScript,
+이 커리큘럼은 그 척추(spine)다. 20개 페이즈, 503개 레슨, 네 가지 언어: Python, TypeScript,
 Rust, Julia. 한쪽 끝에는 선형대수(linear algebra), 다른 쪽 끝에는 자율 군집(autonomous swarm). 모든 알고리즘은
 먼저 날것의 수학에서부터 만들어진다. 역전파(backprop). 토크나이저(tokenizer). 어텐션. 에이전트 루프(agent loop). PyTorch가
 등장할 즈음이면, 당신은 이미 그것이 내부에서 무엇을 하는지 알게 된다.
@@ -176,7 +176,7 @@ ls phases/03-deep-learning-core/05-loss-functions/outputs/
 </table>
 
 > `python3 scripts/install_skills.py`로 전체를 설치한다. 숙제가 아니라 진짜 도구다.
-> 커리큘럼이 끝날 무렵, 당신은 직접 만들었기에 실제로 이해하는 473개의 산출물 포트폴리오를
+> 커리큘럼이 끝날 무렵, 당신은 직접 만들었기에 실제로 이해하는 503개의 산출물 포트폴리오를
 > 갖게 된다.
 
 ### FIG_002 · 작동하는 예제 (A worked sample)
@@ -442,7 +442,7 @@ the agent went wrong and explain why...
 </details>
 
 <details id="phase-7">
-<summary><b>Phase 7 — Transformers Deep Dive</b> &nbsp;<code>14개 레슨</code>&nbsp; <em>모든 것을 바꾼 아키텍처.</em></summary>
+<summary><b>Phase 7 — Transformers Deep Dive</b> &nbsp;<code>16개 레슨</code>&nbsp; <em>모든 것을 바꾼 아키텍처.</em></summary>
 <br/>
 
 | # | 레슨 | 유형 | 언어 |
@@ -461,11 +461,13 @@ the agent went wrong and explain why...
 | 12 | [KV 캐시, Flash Attention과 추론 최적화](phases/07-transformers-deep-dive/12-kv-cache-flash-attention/) | Build | Python |
 | 13 | [스케일링 법칙](phases/07-transformers-deep-dive/13-scaling-laws/) | Learn | Python |
 | 14 | [트랜스포머 직접 만들기](phases/07-transformers-deep-dive/14-build-a-transformer-capstone/) | Build | Python |
+| 15 | [어텐션 변형: Sliding Window, Sparse, Differential](phases/07-transformers-deep-dive/15-attention-variants/) | Build | Python |
+| 16 | [추측 디코딩 — Draft, Verify, Repeat](phases/07-transformers-deep-dive/16-speculative-decoding/) | Build | Python |
 
 </details>
 
 <details id="phase-8">
-<summary><b>Phase 8 — Generative AI</b> &nbsp;<code>14개 레슨</code>&nbsp; <em>이미지, 비디오, 오디오, 3D, 그리고 그 이상을 만든다.</em></summary>
+<summary><b>Phase 8 — Generative AI</b> &nbsp;<code>15개 레슨</code>&nbsp; <em>이미지, 비디오, 오디오, 3D, 그리고 그 이상을 만든다.</em></summary>
 <br/>
 
 | # | 레슨 | 유형 | 언어 |
@@ -484,6 +486,7 @@ the agent went wrong and explain why...
 | 12 | [3D 생성](phases/08-generative-ai/12-3d-generation/) | Build | Python |
 | 13 | [Flow Matching과 Rectified Flow](phases/08-generative-ai/13-flow-matching-rectified-flows/) | Build | Python |
 | 14 | [평가: FID, CLIP Score](phases/08-generative-ai/14-evaluation-fid-clip-score/) | Build | Python |
+| 19 | [시각 자기회귀 모델링 (VAR)](phases/08-generative-ai/19-visual-autoregressive-var/) | Build | Python |
 
 </details>
 
@@ -509,7 +512,7 @@ the agent went wrong and explain why...
 </details>
 
 <details id="phase-10">
-<summary><b>Phase 10 — LLMs from Scratch</b> &nbsp;<code>22개 레슨</code>&nbsp; <em>대규모 언어 모델을 만들고, 학습시키고, 이해한다.</em></summary>
+<summary><b>Phase 10 — LLMs from Scratch</b> &nbsp;<code>24개 레슨</code>&nbsp; <em>대규모 언어 모델을 만들고, 학습시키고, 이해한다.</em></summary>
 <br/>
 
 | # | 레슨 | 유형 | 언어 |
@@ -536,6 +539,8 @@ the agent went wrong and explain why...
 | 20 | [DeepSeek-V3 아키텍처 둘러보기](phases/10-llms-from-scratch/20-deepseek-v3-walkthrough/) | Learn | Python |
 | 21 | [Jamba — 하이브리드 SSM-트랜스포머](phases/10-llms-from-scratch/21-jamba-hybrid-ssm-transformer/) | Learn | Python |
 | 22 | [Async와 Hogwild! 추론](phases/10-llms-from-scratch/22-async-hogwild-inference/) | Build | Python |
+| 25 | [추측 디코딩과 EAGLE](phases/10-llms-from-scratch/25-speculative-decoding/) | Build | Python |
+| 34 | [그래디언트 체크포인팅과 활성값 재계산](phases/10-llms-from-scratch/34-gradient-checkpointing/) | Build | Python |
 
 </details>
 
@@ -826,7 +831,7 @@ the agent went wrong and explain why...
 </details>
 
 <details id="phase-19">
-<summary><b>Phase 19 — Capstone Projects</b> &nbsp;<code>55개 레슨</code>&nbsp; <em>17개의 엔드투엔드 제품 + 4개의 심층 빌드 트랙. 프로젝트당 20-40시간; 트랙당 4-12개 레슨.</em></summary>
+<summary><b>Phase 19 — Capstone Projects</b> &nbsp;<code>85개 레슨</code>&nbsp; <em>17개의 엔드투엔드 제품 + 9개의 심층 빌드 트랙. 프로젝트당 20-40시간; 트랙당 4-12개 레슨.</em></summary>
 <br/>
 
 | # | 프로젝트 | 결합 | 언어 |
@@ -891,6 +896,36 @@ the agent went wrong and explain why...
 | 55 | [Critic 루프](phases/19-capstone-projects/55-critic-loop/) | D. Auto research | Python |
 | 56 | [반복 스케줄러](phases/19-capstone-projects/56-iteration-scheduler/) | D. Auto research | Python |
 | 57 | [엔드투엔드 연구 데모](phases/19-capstone-projects/57-end-to-end-research-demo/) | D. Auto research | Python |
+| 58 | [Vision Encoder Patches](phases/19-capstone-projects/58-vision-encoder-patches/) | E. Multimodal VLM | Python |
+| 59 | [Vision Transformer Encoder](phases/19-capstone-projects/59-vit-transformer/) | E. Multimodal VLM | Python |
+| 60 | [Projection Layer for Modality Alignment](phases/19-capstone-projects/60-projection-layer-modality-align/) | E. Multimodal VLM | Python |
+| 61 | [Cross-Attention Fusion](phases/19-capstone-projects/61-cross-attention-fusion/) | E. Multimodal VLM | Python |
+| 62 | [Vision-Language Pretraining](phases/19-capstone-projects/62-vision-language-pretraining/) | E. Multimodal VLM | Python |
+| 63 | [Multimodal Evaluation](phases/19-capstone-projects/63-multimodal-eval/) | E. Multimodal VLM | Python |
+| 64 | [Chunking Strategies, Compared](phases/19-capstone-projects/64-chunking-strategies-advanced/) | F. Advanced RAG | Python |
+| 65 | [Hybrid Retrieval with BM25 and Dense Embeddings](phases/19-capstone-projects/65-hybrid-retrieval-bm25-dense/) | F. Advanced RAG | Python |
+| 66 | [Cross-Encoder Reranker](phases/19-capstone-projects/66-reranker-cross-encoder/) | F. Advanced RAG | Python |
+| 67 | [Query Rewriting: HyDE, Multi-Query, and Decomposition](phases/19-capstone-projects/67-query-rewriting-hyde/) | F. Advanced RAG | Python |
+| 68 | [RAG Evaluation: Precision, Recall, MRR, nDCG, Faithfulness, Answer Relevance](phases/19-capstone-projects/68-rag-eval-precision-recall/) | F. Advanced RAG | Python |
+| 69 | [End-to-End RAG System](phases/19-capstone-projects/69-end-to-end-rag-system/) | F. Advanced RAG | Python |
+| 70 | [Task Spec Format](phases/19-capstone-projects/70-task-spec-format/) | G. Eval framework | Python |
+| 71 | [Classical Metrics](phases/19-capstone-projects/71-classical-metrics/) | G. Eval framework | Python |
+| 72 | [Code Exec Metric](phases/19-capstone-projects/72-code-exec-metric/) | G. Eval framework | Python |
+| 73 | [Perplexity and Calibration](phases/19-capstone-projects/73-perplexity-calibration/) | G. Eval framework | Python |
+| 74 | [Leaderboard Aggregation](phases/19-capstone-projects/74-leaderboard-aggregation/) | G. Eval framework | Python |
+| 75 | [End-to-End Eval Runner](phases/19-capstone-projects/75-end-to-end-eval-runner/) | G. Eval framework | Python |
+| 76 | [Collective Ops From Scratch](phases/19-capstone-projects/76-collective-ops-from-scratch/) | H. Distributed train | Python |
+| 77 | [Data Parallel DDP From Scratch](phases/19-capstone-projects/77-data-parallel-ddp/) | H. Distributed train | Python |
+| 78 | [ZeRO Optimizer State Sharding](phases/19-capstone-projects/78-zero-parameter-sharding/) | H. Distributed train | Python |
+| 79 | [Pipeline Parallel and Bubble Analysis](phases/19-capstone-projects/79-pipeline-parallel/) | H. Distributed train | Python |
+| 80 | [Sharded Checkpoint and Atomic Resume](phases/19-capstone-projects/80-checkpoint-sharded-resume/) | H. Distributed train | Python |
+| 81 | [End-to-End Distributed Training](phases/19-capstone-projects/81-end-to-end-distributed-train/) | H. Distributed train | Python |
+| 82 | [Jailbreak Taxonomy](phases/19-capstone-projects/82-jailbreak-taxonomy/) | I. Safety harness | Python |
+| 83 | [Prompt Injection Detector](phases/19-capstone-projects/83-prompt-injection-detector/) | I. Safety harness | Python |
+| 84 | [Refusal Evaluation](phases/19-capstone-projects/84-refusal-evaluation/) | I. Safety harness | Python |
+| 85 | [Content Classifier Integration](phases/19-capstone-projects/85-content-classifier-integration/) | I. Safety harness | Python |
+| 86 | [Constitutional Rules Engine](phases/19-capstone-projects/86-constitutional-rules-engine/) | I. Safety harness | Python, YAML |
+| 87 | [End-to-End Safety Gate](phases/19-capstone-projects/87-end-to-end-safety-gate/) | I. Safety harness | Python |
 
 </details>
 
@@ -1104,7 +1139,7 @@ python3 scripts/audit_lessons.py --json    # CI-friendly output
 
 ## 작업을 후원하기 (Sponsor the work)
 
-무료, MIT 라이선스, 473개 레슨. 이 커리큘럼은 오직 후원만으로 유지된다. 현금만 받는다.
+무료, MIT 라이선스, 503개 레슨. 이 커리큘럼은 오직 후원만으로 유지된다. 현금만 받는다.
 
 **도달 범위(2026-05-14 검증):** 월 방문자 55,593명 · 페이지 뷰 90,709회 · 7.5K 스타 ·
 Twitter/X가 1위 유입 채널.

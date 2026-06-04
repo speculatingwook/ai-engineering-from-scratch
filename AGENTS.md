@@ -2,13 +2,13 @@
 
 Operating manual for contributors and AI agents touching this repo. Read it before opening a PR.
 
-The repo is a curriculum, not a SaaS app. The lessons are the product. Every rule below keeps 435 lessons coherent over time.
+The repo is a curriculum, not a SaaS app. The lessons are the product. Every rule below keeps 503 lessons coherent over time.
 
 ---
 
 ## Philosophy
 
-435 lessons. 20 phases. Every algorithm built from raw math before a single framework gets imported. You write backprop, the tokenizer, the attention mechanism, and the agent loop by hand in Python, TypeScript, Rust, or Julia. Then you run the same operation through the production library so the framework stops being a black box. The "Build It / Use It" split is the spine. Each lesson ships a reusable artifact you can plug into your daily workflow.
+503 lessons. 20 phases. Every algorithm built from raw math before a single framework gets imported. You write backprop, the tokenizer, the attention mechanism, and the agent loop by hand in Python, TypeScript, Rust, or Julia. Then you run the same operation through the production library so the framework stops being a black box. The "Build It / Use It" split is the spine. Each lesson ships a reusable artifact you can plug into your daily workflow.
 
 ---
 
@@ -118,6 +118,7 @@ Run locally before pushing:
 
 ```bash
 python3 scripts/audit_lessons.py
+python3 scripts/check_readme_lesson_links.py
 python3 scripts/check_readme_counts.py        # advisory — CI fixes on merge
 
 # For each lesson touched:
@@ -129,7 +130,7 @@ CI gates (`.github/workflows/curriculum.yml`):
 
 | Job                              | Trigger      | Behavior                                              |
 |----------------------------------|--------------|-------------------------------------------------------|
-| `audit`                          | push + PR    | Runs `audit_lessons.py`. Blocking.                    |
+| `audit`                          | push + PR    | Runs lesson audit + README lesson-link checks. Blocking. |
 | `readme-counts-sync` (main only) | push to main | Rebuilds catalog + auto-fixes README counts.         |
 | `site-rebuild` (main only)       | push to main | Re-runs `node site/build.js`, commits `site/data.js`. |
 | `readme-counts-drift`            | PR           | Advisory only — main self-heals on merge.             |

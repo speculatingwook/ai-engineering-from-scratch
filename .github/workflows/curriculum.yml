@@ -8,6 +8,7 @@ on:
       - "scripts/audit_lessons.py"
       - "scripts/build_catalog.py"
       - "scripts/check_readme_counts.py"
+      - "scripts/check_readme_lesson_links.py"
       - "README.md"
       - "ROADMAP.md"
       - "glossary/**"
@@ -20,6 +21,7 @@ on:
       - "scripts/audit_lessons.py"
       - "scripts/build_catalog.py"
       - "scripts/check_readme_counts.py"
+      - "scripts/check_readme_lesson_links.py"
       - "README.md"
       - "ROADMAP.md"
       - "glossary/**"
@@ -42,6 +44,8 @@ jobs:
           python-version: "3.12"
       - name: run scripts/audit_lessons.py
         run: python3 scripts/audit_lessons.py
+      - name: check README lesson links
+        run: python3 scripts/check_readme_lesson_links.py
 
   readme-counts-sync:
     name: README counts auto-fix (main only)
