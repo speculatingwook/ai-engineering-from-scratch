@@ -59,9 +59,13 @@ OPENAI_API_KEY=sk-...
 ### 2단계: 첫 API 호출 (Python)
 
 ```python
+import os
+
 import anthropic
 
 client = anthropic.Anthropic()
+
+MODEL = os.environ.get("LLM_MODEL", "claude-sonnet-5")
 
 response = client.messages.create(
     model=MODEL,
@@ -72,12 +76,16 @@ response = client.messages.create(
 print(response.content[0].text)
 ```
 
+`LLM_MODEL`이 Anthropic 모델 id를 고르며, 기본값은 날짜가 붙지 않은 Sonnet 별칭이다. 다른 제공자(OpenAI, Google 등)도 키와 모델 id를 쓰는 같은 방식을 따르지만, 각자 자기 SDK와 엔드포인트, 요청과 응답 스키마를 가진다.
+
 ### 3단계: 첫 API 호출 (TypeScript)
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
+
+const MODEL = process.env.LLM_MODEL ?? "claude-sonnet-5";
 
 const response = await client.messages.create({
   model: MODEL,

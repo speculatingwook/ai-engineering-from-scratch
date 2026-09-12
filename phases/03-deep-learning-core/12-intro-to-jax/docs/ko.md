@@ -243,6 +243,8 @@ batchnorm-effect
 
 ## 직접 만들기 (Build It)
 
+### 1단계: 준비와 데이터
+
 JAX와 Optax를 써서 MNIST에 3층 MLP를 학습시켜 본다. 입력 784개, 256개와 128개 뉴런(neuron)의 은닉층(hidden layer) 두 개, 출력 클래스 10개다.
 
 ```python
