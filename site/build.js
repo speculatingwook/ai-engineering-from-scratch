@@ -16,7 +16,8 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const README_PATH = path.join(REPO_ROOT, 'README.md');
 const ROADMAP_PATH = path.join(REPO_ROOT, 'ROADMAP.md');
 const GLOSSARY_PATH = path.join(REPO_ROOT, 'glossary', 'terms.md');
-const GLOSSARY_KO_PATH = path.join(REPO_ROOT, 'glossary', 'terms.ko.md');
+const glossaryTranslationPath = code => path.join(REPO_ROOT, 'glossary', `terms.${code}.md`);
+const phaseNamesPath = code => path.join(REPO_ROOT, 'i18n', code, 'phases.json');
 const OUTPUT_PATH = path.join(__dirname, 'data.js');
 const CERTIFICATIONS_PATH = path.join(REPO_ROOT, 'certifications');
 const CERTIFICATION_OUTPUT_PATH = path.join(__dirname, 'certification-data.js');
@@ -102,30 +103,43 @@ function lessonPath(url) {
   return m ? m[1] : null;
 }
 
-// Korean phase names/descriptions (20 phases). Keyed by phase id.
-// English names/descs come from README.md; Korean follows README.ko.md vocabulary.
-const PHASE_KO = {
-  0:  { name: '설정과 도구',              desc: '이후 모든 것을 위한 개발 환경을 갖춘다.' },
-  1:  { name: '수학 기초',                desc: '모든 AI 알고리즘의 직관을, 코드로.' },
-  2:  { name: 'ML 기초',                  desc: '고전 머신러닝 — 여전히 대부분의 프로덕션 AI를 떠받치는 뼈대.' },
-  3:  { name: '딥러닝 코어',               desc: '신경망을 제1원리부터. 직접 하나를 만들기 전까진 프레임워크 없이.' },
-  4:  { name: '컴퓨터 비전',               desc: '픽셀에서 이해로 — 이미지, 비디오, 3D, VLM, 월드 모델.' },
-  5:  { name: 'NLP: 기초에서 심화까지',     desc: '언어는 지능으로 향하는 인터페이스다.' },
-  6:  { name: '음성과 오디오',             desc: '듣고, 이해하고, 말한다.' },
-  7:  { name: '트랜스포머 심층 분석',        desc: '모든 것을 바꾼 아키텍처.' },
-  8:  { name: '생성형 AI',                desc: '이미지, 비디오, 오디오, 3D, 그 이상을 만든다.' },
-  9:  { name: '강화학습',                 desc: 'RLHF와 게임 플레이 AI의 토대.' },
-  10: { name: 'LLM 직접 만들기',          desc: '대규모 언어 모델을 만들고, 학습시키고, 이해한다.' },
-  11: { name: 'LLM 엔지니어링',           desc: 'LLM을 프로덕션에 투입한다.' },
-  12: { name: '멀티모달 AI',              desc: '여러 모달리티를 넘나들며 보고, 듣고, 읽고, 추론한다 — ViT 패치부터 컴퓨터 사용 에이전트까지.' },
-  13: { name: '도구와 프로토콜',           desc: 'AI와 현실 세계 사이의 인터페이스.' },
-  14: { name: '에이전트 엔지니어링',        desc: '에이전트를 제1원리부터 — 루프, 메모리, 계획, 프레임워크, 벤치마크, 프로덕션, 워크벤치.' },
-  15: { name: '자율 시스템',              desc: '장기 호라이즌 에이전트, 자기 개선, 그리고 2026년 안전 스택.' },
-  16: { name: '멀티 에이전트와 군집',       desc: '협응, 창발, 그리고 집단 지능.' },
-  17: { name: '인프라와 프로덕션',         desc: 'AI를 현실 세계로 출시한다.' },
-  18: { name: '윤리, 안전, 정렬',         desc: '인류를 돕는 AI를 만든다. 선택이 아니다.' },
-  19: { name: '캡스톤 프로젝트',           desc: '17개 엔드투엔드 제품 + 4개 심층 빌드 트랙. 프로젝트당 20~40시간, 트랙당 4~12개 레슨.' }
-};
+// Languages whose lesson markdown is hand-authored on this branch
+// (languages.json → "lessons": "human"). Their translated lesson, phase, and
+// glossary strings are baked into data.js under a per-language field suffix, so
+// the site can render them without a second fetch. Every field falls back to
+// English when a translation is absent, which is what lets a language ship
+// partial coverage.
+function humanLanguages() {
+  const registryPath = path.join(REPO_ROOT, 'languages.json');
+  if (!fs.existsSync(registryPath)) return [];
+  const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+  return registry.languages
+    .filter(entry => entry.lessons === 'human')
+    .map(entry => ({ code: entry.code, suffix: fieldSuffix(entry.code) }));
+}
+
+// 'ko' → 'Ko', 'zh-TW' → 'ZhTW'. The suffix is appended to a field name
+// (name → nameKo) so one record can carry English plus every translation.
+function fieldSuffix(code) {
+  return String(code)
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+}
+
+// Translated phase names/descriptions, keyed by phase id, from
+// i18n/<lang>/phases.json. Absent file → that language keeps English.
+function loadPhaseNames(code) {
+  const file = phaseNamesPath(code);
+  if (!fs.existsSync(file)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (error) {
+    console.warn(`   ! ignoring malformed ${path.relative(REPO_ROOT, file)}: ${error.message}`);
+    return {};
+  }
+}
 
 // ─── Parse ROADMAP.md for lesson statuses ────────────────────────────
 function parseRoadmap(content) {
@@ -744,16 +758,24 @@ function parseCurriculumPrereqs(content, phases) {
  * Both fields are empty strings when the file is absent or has no
  * matching content — expected for planned lessons with no docs yet.
  */
-function extractLessonMeta(relPath) {
-  const result = { summary: '', keywords: '', summaryKo: '', keywordsKo: '', nameKo: '' };
+function extractLessonMeta(relPath, languages) {
+  const result = { summary: '', keywords: '' };
+  for (const { suffix } of languages) {
+    result['summary' + suffix] = '';
+    result['keywords' + suffix] = '';
+    result['name' + suffix] = '';
+  }
   readDocMeta(path.join(REPO_ROOT, relPath, 'docs', 'en.md'), result, '');
-  readDocMeta(path.join(REPO_ROOT, relPath, 'docs', 'ko.md'), result, 'Ko');
+  for (const { code, suffix } of languages) {
+    readDocMeta(path.join(REPO_ROOT, relPath, 'docs', `${code}.md`), result, suffix);
+  }
   return result;
 }
 
 /**
  * Fill result.summary<suffix> / keywords<suffix> from a single doc.
- * For the Korean doc (suffix 'Ko') also capture nameKo from the H1 title.
+ * A translated doc (any non-empty suffix) also yields name<suffix> from its H1,
+ * which is how a lesson gets a translated title in the catalog.
  * Missing file → leaves fields empty (expected for planned lessons).
  */
 function readDocMeta(docPath, result, suffix) {
@@ -763,8 +785,8 @@ function readDocMeta(docPath, result, suffix) {
     let gotSummary = false;
     for (const raw of lines) {
       const line = raw.trim();
-      if (suffix === 'Ko' && !result.nameKo && line.startsWith('# ')) {
-        result.nameKo = line.slice(2).trim();
+      if (suffix && !result['name' + suffix] && line.startsWith('# ')) {
+        result['name' + suffix] = line.slice(2).trim();
       }
       if (!gotSummary && line.startsWith('> ') && line.length > 3) {
         const s = line.slice(2).trim();
@@ -2131,36 +2153,43 @@ function build() {
   console.log('Parsing focused learning paths...');
   const learningPaths = parseLearningPaths(REPO_ROOT, phases);
 
-  // Attach Korean phase names/descriptions (English fallback when absent).
-  for (const phase of phases) {
-    const ko = PHASE_KO[phase.id];
-    if (ko) {
-      if (ko.name) phase.nameKo = ko.name;
-      if (ko.desc) phase.descKo = ko.desc;
+  // Attach translated phase names/descriptions (English fallback when absent).
+  const translatedLangs = humanLanguages();
+  for (const { code, suffix } of translatedLangs) {
+    const names = loadPhaseNames(code);
+    for (const phase of phases) {
+      const translated = names[phase.id] || names[String(phase.id)];
+      if (!translated) continue;
+      if (translated.name) phase['name' + suffix] = translated.name;
+      if (translated.desc) phase['desc' + suffix] = translated.desc;
     }
   }
 
   console.log('🔍 Parsing glossary/terms.md...');
   const glossaryTerms = parseGlossary(glossary);
 
-  console.log('🔍 Parsing glossary/terms.ko.md...');
-  const glossaryKo = parseGlossaryTranslation(GLOSSARY_KO_PATH);
-  const koByTerm = {};
-  glossaryKo.forEach(t => { koByTerm[t.term.trim().toLowerCase()] = t; });
-  let glossaryKoMatched = 0;
-  glossaryTerms.forEach(t => {
-    const ko = koByTerm[t.term.trim().toLowerCase()];
-    if (!ko) return;
-    // The term name stays English because it is the anchor and the search key;
-    // only the prose fields are translated.
-    let translated = false;
-    GLOSSARY_TRANSLATED_FIELDS.forEach(field => {
-      if (!ko[field]) return;
-      t[field + 'Ko'] = ko[field];
-      translated = true;
+  const glossaryMatched = {};
+  for (const { code, suffix } of translatedLangs) {
+    console.log(`🔍 Parsing glossary/terms.${code}.md...`);
+    const translatedTerms = parseGlossaryTranslation(glossaryTranslationPath(code));
+    const byTerm = {};
+    translatedTerms.forEach(t => { byTerm[t.term.trim().toLowerCase()] = t; });
+    let matched = 0;
+    glossaryTerms.forEach(t => {
+      const translation = byTerm[t.term.trim().toLowerCase()];
+      if (!translation) return;
+      // The term name stays English because it is the anchor and the search key;
+      // only the prose fields are translated.
+      let any = false;
+      GLOSSARY_TRANSLATED_FIELDS.forEach(field => {
+        if (!translation[field]) return;
+        t[field + suffix] = translation[field];
+        any = true;
+      });
+      if (any) matched++;
     });
-    if (translated) glossaryKoMatched++;
-  });
+    glossaryMatched[code] = matched;
+  }
 
   console.log('🔍 Discovering outputs + Phase 14 missions...');
   const artifacts = discoverArtifacts();
@@ -2175,12 +2204,15 @@ function build() {
     for (const lesson of phase.lessons) {
       if (lesson.url) {
         const relPath = lesson.url.replace(GITHUB_BASE, '').replace(/\/+$/, '');
-        const meta = extractLessonMeta(relPath);
+        const meta = extractLessonMeta(relPath, translatedLangs);
         if (meta.summary)    { lesson.summary    = meta.summary;    summarized++;   }
         if (meta.keywords)   { lesson.keywords   = meta.keywords;   withKeywords++; }
-        if (meta.nameKo)     { lesson.nameKo     = meta.nameKo;     }
-        if (meta.summaryKo)  { lesson.summaryKo  = meta.summaryKo;  }
-        if (meta.keywordsKo) { lesson.keywordsKo = meta.keywordsKo; }
+        for (const { suffix } of translatedLangs) {
+          for (const field of ['name', 'summary', 'keywords']) {
+            const value = meta[field + suffix];
+            if (value) lesson[field + suffix] = value;
+          }
+        }
       }
     }
   }
@@ -2201,7 +2233,11 @@ function build() {
   console.log(`   Lessons: ${totalLessons}`);
   console.log(`   Complete: ${completeLessons}`);
   console.log(`   Summaries: ${summarized}, Keywords: ${withKeywords}`);
-  console.log(`   Glossary terms: ${glossaryTerms.length} (Korean: ${glossaryKoMatched})`);
+  const glossaryCoverage = translatedLangs
+    .map(({ code }) => `${code}: ${glossaryMatched[code] || 0}`)
+    .join(', ');
+  console.log(`   Glossary terms: ${glossaryTerms.length}`
+    + (glossaryCoverage ? ` (${glossaryCoverage})` : ''));
   console.log(`   Artifacts: ${artifacts.length}`);
   console.log(`   Curriculum edges: ${Object.values(roadmapPrereqs).reduce((sum, ids) => sum + ids.length, 0)}`);
   console.log(`   Focused learning paths: ${learningPaths.length}`);

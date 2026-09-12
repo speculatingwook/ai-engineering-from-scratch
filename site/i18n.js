@@ -1,25 +1,29 @@
 /**
- * AIFS Korean UI layer.
+ * AIFS translated UI layer.
  *
  * The site-wide language control is site/lang-picker.js (40 languages, backed
  * by languages.json). This module does not own the language state: it reads
- * whatever the picker selected and supplies hand-written Korean UI labels when
- * that selection is Korean. Every other language falls back to English labels,
- * because only Korean has hand-written labels in this fork.
+ * whatever the picker selected and supplies hand-written UI labels when a table
+ * exists for that language. Every other language falls back to English labels.
  *
- * Data-driven content uses pick() against the *Ko fields baked into data.js by
- * build.js. A missing Korean field falls back to English.
+ * Adding a language here is one entry in UI keyed by its languages.json `code`.
+ * Korean is the first one; the code below never names it.
+ *
+ * Data-driven content uses pick() against the per-language field suffix baked
+ * into data.js by build.js (name → nameKo for 'ko'). A missing translated field
+ * falls back to English, so partial coverage renders correctly.
  */
 (function () {
   var STORAGE_KEY = 'lang';          // owned by lang-picker.js
   var LEGACY_KEYS = ['siteLang', 'lessonLang'];
 
-  // One-time migration: honor a language chosen by this fork's older toggle.
+  // One-time migration: honor a language chosen by an older per-page toggle.
   try {
     if (!localStorage.getItem(STORAGE_KEY)) {
       for (var m = 0; m < LEGACY_KEYS.length; m++) {
-        if (localStorage.getItem(LEGACY_KEYS[m]) === 'ko') {
-          localStorage.setItem(STORAGE_KEY, 'ko');
+        var legacy = localStorage.getItem(LEGACY_KEYS[m]);
+        if (legacy && legacy !== 'en') {
+          localStorage.setItem(STORAGE_KEY, legacy);
           break;
         }
       }
@@ -197,26 +201,43 @@
     }
   };
 
-  // The picker owns the language. We only need to know whether it is Korean.
+  // A language is usable here only when UI carries a table for it; anything
+  // else renders English chrome even though the lesson body may be translated.
+  function supported(lang) {
+    return !!(lang && Object.prototype.hasOwnProperty.call(UI, lang));
+  }
+
+  // The picker owns the language. We only resolve it to a table we can render.
   function getLang() {
     try {
       if (typeof window.AIFS_currentLang === 'function') {
-        return window.AIFS_currentLang() === 'ko' ? 'ko' : 'en';
+        var picked = window.AIFS_currentLang();
+        return supported(picked) ? picked : 'en';
       }
       var params = new URLSearchParams(window.location.search);
-      if (params.get('lang') === 'ko') return 'ko';
-      if (localStorage.getItem(STORAGE_KEY) === 'ko') return 'ko';
+      var fromQuery = params.get('lang');
+      if (supported(fromQuery)) return fromQuery;
+      var stored = localStorage.getItem(STORAGE_KEY);
+      if (supported(stored)) return stored;
     } catch (e) { /* ignore */ }
     return 'en';
+  }
+
+  // 'ko' → 'Ko', 'zh-TW' → 'ZhTW'. Mirrors fieldSuffix() in site/build.js, which
+  // writes the translated fields into data.js under exactly these names.
+  function fieldSuffix(lang) {
+    return String(lang).split(/[^A-Za-z0-9]+/).filter(Boolean)
+      .map(function (part) { return part.charAt(0).toUpperCase() + part.slice(1); })
+      .join('');
   }
 
   // Kept for callers that switch language programmatically (tests, deep links).
   // The picker re-reads localStorage, so writing there keeps both in sync.
   function setLang(lang) {
-    if (lang !== 'ko' && lang !== 'en') return;
+    if (lang !== 'en' && !supported(lang)) return;
     try {
-      if (lang === 'ko') localStorage.setItem(STORAGE_KEY, 'ko');
-      else localStorage.removeItem(STORAGE_KEY);
+      if (lang === 'en') localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, lang);
     } catch (e) { /* ignore */ }
     document.documentElement.setAttribute('lang', lang);
     window.dispatchEvent(new CustomEvent('aifs:langchange', { detail: { lang: lang } }));
@@ -227,12 +248,13 @@
     return (UI[lang] && UI[lang][key]) || (UI.en && UI.en[key]) || key;
   }
 
-  // pick(obj, 'name') → obj.nameKo when ko and present, else obj.name
+  // pick(obj, 'name') → obj.nameKo under 'ko' when present, else obj.name
   function pick(obj, field) {
     if (!obj) return '';
-    if (getLang() === 'ko') {
-      var ko = obj[field + 'Ko'];
-      if (ko != null && ko !== '') return ko;
+    var lang = getLang();
+    if (lang !== 'en') {
+      var translated = obj[field + fieldSuffix(lang)];
+      if (translated != null && translated !== '') return translated;
     }
     return obj[field] != null ? obj[field] : '';
   }
