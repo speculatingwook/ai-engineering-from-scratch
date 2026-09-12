@@ -32,7 +32,9 @@ AutoGen v0.4의 답: 액터 모델. 각 에이전트는 사설 받은편지함(p
 
 두 액터는 메모리를 공유할 수 없다. 오직 메시지만 보낼 수 있다.
 
-### AutoGen v0.4의 세 API 계층
+### 세 가지 API 계층
+
+AutoGen v0.4는 자신의 표면을 셋으로 나눈다.
 
 1. **Core.** 저수준 액터 프레임워크. `AgentRuntime`, `Agent`, `Message`, `Topic`. 비동기 메시지 교환, 이벤트 기반.
 2. **AgentChat.** 작업 주도(task-driven) 고수준 API(v0.2의 ConversableAgent를 대체). `AssistantAgent`, `UserProxyAgent`, `RoundRobinGroupChat`, `SelectorGroupChat`.

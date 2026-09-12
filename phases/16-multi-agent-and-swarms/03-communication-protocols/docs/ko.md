@@ -38,16 +38,11 @@ AI 생태계는 네 개의 프로토콜로 응답했고, 각각은 문제의 다
 이 네 프로토콜을 각각 다른 질문을 다루는 계층(layer)으로 생각하라.
 
 ```mermaid
-block-beta
-  columns 1
-  block:ANP["ANP — How do agents trust strangers?\nDecentralized identity (DID), E2EE, meta-protocol"]
-  end
-  block:A2A["A2A — How do agents collaborate on goals?\nAgent Cards, task lifecycle, streaming, negotiation"]
-  end
-  block:ACP["ACP — How do agents talk in auditable systems?\nRuns, trajectory metadata, session continuity"]
-  end
-  block:MCP["MCP — How does an agent use a tool?\nTool discovery, execution, context sharing"]
-  end
+flowchart TD
+  ANP["ANP — How do agents trust strangers?<br/>Decentralized identity (DID), E2EE, meta-protocol"]
+  A2A["A2A — How do agents collaborate on goals?<br/>Agent Cards, task lifecycle, streaming, negotiation"]
+  ACP["ACP — How do agents talk in auditable systems?<br/>Runs, trajectory metadata, session continuity"]
+  MCP["MCP — How does an agent use a tool?<br/>Tool discovery, execution, context sharing"]
 
   style ANP fill:#f3e8ff,stroke:#7c3aed
   style A2A fill:#dbeafe,stroke:#2563eb
@@ -191,7 +186,11 @@ stateDiagram-v2
     canceled --> [*]
     rejected --> [*]
 
-    note right of completed: Terminal states are immutable.\nFollow-ups create new tasks\nwithin the same contextId.
+    note right of completed
+        Terminal states are immutable.
+        Follow-ups create new tasks
+        within the same contextId.
+    end note
 ```
 
 8개 상태 전부 (명세는 센티넬로 `UNSPECIFIED`도 정의하나 여기서는 생략):

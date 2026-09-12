@@ -55,6 +55,7 @@
 - 하네스 런타임: Bun 1.2 + Ink 5 (터미널 안의 React)
 - 모델 접근: Claude Sonnet 4.7, GPT-5.4-Codex, Gemini 3 Pro, Opus 4.5(가장 어려운 작업용)를 갖춘 OpenRouter 통합 API
 - 도구 전송: Model Context Protocol StreamableHTTP (MCP 2026 개정판)
+- 샌드박스: E2B 샌드박스(JS SDK) 또는 Daytona devcontainer
 - 코드 검색: ripgrep 서브프로세스, 17개 언어용 tree-sitter 파서(사전 컴파일됨)
 - 격리: 작업마다 `git worktree add`, 성공 / 실패 시 정리
 - 평가 하네스: SWE-bench Pro(검증된 서브셋) + Terminal-Bench 2.0 + 직접 만든 30개 작업 홀드아웃(holdout)
