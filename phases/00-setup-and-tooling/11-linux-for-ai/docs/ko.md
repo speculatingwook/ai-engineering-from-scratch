@@ -294,6 +294,10 @@ Network:        curl, wget, scp, rsync
 Sessions:       tmux new/attach/detach
 ```
 
+```figure
+s0-process-fork
+```
+
 ## 연습 문제 (Exercises)
 
 1. 아무 Linux 머신에 SSH로 접속하거나(또는 WSL2를 열어) 홈 디렉터리로 이동하라. 프로젝트 폴더를 만들고, 그 안에 `touch`로 빈 파일 세 개를 만든 뒤, `ls -la`로 나열하라.

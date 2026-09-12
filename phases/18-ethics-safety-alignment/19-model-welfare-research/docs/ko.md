@@ -78,6 +78,10 @@ Anthropic의 응답: 개입은 저비용이다; 끌개는 과장 주장 없이 �
 
 Lesson 18은 연구소 거버넌스 계층이다. Lesson 19는 연구소 복지 계층(모델 행동이 아니라 모델 경험에 대한 직교 투자) 이다. Lesson 20-23은 편향, 프라이버시, 워터마킹을 다루며, 이는 사용자 측 유사물이다.
 
+```figure
+an-welfare-endchat
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 코드 없음. Anthropic의 "Exploring Model Welfare" 발표(2025년 4월)와 Chalmers 외 전문가 보고서를 읽어라. 후회 적은 선이 어디쯤 놓이는지 스스로 견해를 세워 보라.

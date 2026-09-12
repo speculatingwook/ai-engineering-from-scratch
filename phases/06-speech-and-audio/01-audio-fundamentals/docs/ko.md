@@ -45,6 +45,10 @@
 **FFT.** 고속 푸리에 변환(Fast Fourier Transform): `N`이 2의 거듭제곱일 때 DFT를 위한 `O(N log N)` 알고리즘이다. 모든 오디오 라이브러리는 내부적으로 FFT를 사용한다. 16 kHz에서 1024 샘플 FFT는 0–8 kHz에 걸쳐 15.6 Hz 해상도로 512개의 사용 가능한 주파수 빈을 준다.
 
 **프레이밍 + 윈도우(Framing + window).** 우리는 클립 전체를 FFT하지 않는다. 겹치는 *프레임(frame)*(보통 25 ms, 10 ms 홉(hop))으로 잘게 나누고, 각 프레임에 윈도우 함수(window function)(Hann, Hamming)를 곱해 가장자리 불연속(edge discontinuity)을 죽인 뒤, 각 프레임을 FFT한다. 이것이 단시간 푸리에 변환(Short-Time Fourier Transform, STFT)이다. Lesson 02가 여기서부터 이어진다.
+```figure
+mel-scale
+```
+
 
 ## 직접 만들기 (Build It)
 

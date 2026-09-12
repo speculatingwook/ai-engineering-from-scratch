@@ -59,6 +59,10 @@
 
 "Effective context engineering for AI agents"(Anthropic 2025)는 인접한 분야를 형식화한다: 200k 윈도우는 컨테이너가 아니라 예산(budget)이다. 무엇을 포함할지, 언제 압축(compact)할지, 언제 컨텍스트가 자라도록 둘지. Phase 14의 컨텍스트 압축(context compression) 레슨에서 자세히 다룬다(이 커리큘럼의 재번호 이전 Phase 14의 이전 레슨 06).
 
+```figure
+workflow-chain
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 `ScriptedLLM`에 대해 다섯 워크플로 패턴을 모두 구현한다.

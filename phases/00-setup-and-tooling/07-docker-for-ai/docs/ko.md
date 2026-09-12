@@ -72,6 +72,10 @@ Inference Container
   Optimized for serving. Small image. Fast cold start.
   Runs behind a load balancer in production.
 ```
+```figure
+s0-image-layers
+```
+
 
 ## 직접 만들기 (Build It)
 

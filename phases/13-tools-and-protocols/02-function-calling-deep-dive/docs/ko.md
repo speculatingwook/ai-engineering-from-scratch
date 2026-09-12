@@ -114,6 +114,10 @@ Tool(
 
 프로덕션 팀은 이 번역기를 `AbstractToolset`(Pydantic AI), `UniversalToolNode`(LangGraph), 또는 `BaseTool`(LlamaIndex)로 감싼다. Phase 13 · 17은 세 가지 중 어느 것 앞에서든 OpenAI 형태 API를 노출하는 게이트웨이를 출시한다.
 
+```figure
+function-call-args
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 하나의 표준 `Tool` 데이터클래스(dataclass)와 OpenAI, Anthropic, Gemini 선언 JSON을 내보내는 세 개의 번역기를 정의한다. 그다음 각 형태의 손으로 만든 제공자 응답을 동일한 표준 호출 객체로 파싱해, 의미론이 껍질 아래에서는 동일함을 보여준다. 이를 돌리고 세 선언을 나란히 비교하라.

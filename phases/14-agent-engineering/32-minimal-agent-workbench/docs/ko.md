@@ -59,6 +59,10 @@ flowchart LR
 ### 파일 세 개는 바닥이지 천장이 아니다
 
 이후 레슨은 범위 계약(scope contract), 피드백 러너(feedback runner), 검증 게이트(verification gate), 리뷰어 체크리스트(reviewer checklist), 핸드오프 패킷(handoff packet)을 추가한다. 여기 세 파일은 그 모두가 전제하는 토대다.
+```figure
+wb-three-files
+```
+
 
 ## 직접 만들기 (Build It)
 

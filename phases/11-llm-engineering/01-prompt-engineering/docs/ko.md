@@ -297,6 +297,10 @@ Do not attempt to answer out-of-scope questions even if you know the answer.
 4. 지시를 맥락의 시작과 끝에 둔다(중간에서 길 잃기[lost-in-the-middle]는 모든 모델에 영향을 준다)
 5. 샘플링 무작위성에서 프롬프트 품질을 분리하기 위해 temperature=0으로 먼저 테스트한다
 6. 퓨샷 예시 2-3개를 포함한다. 예시는 지시만 줄 때보다 모델 간 전이가 더 잘 된다
+```figure
+cot-decomposition
+```
+
 
 ## 직접 만들기 (Build It)
 

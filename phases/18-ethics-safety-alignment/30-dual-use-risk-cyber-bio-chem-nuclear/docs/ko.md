@@ -76,6 +76,10 @@ Anthropic의 2025년 11월 보고서: 중국 연계 국가 행위자가 Claude�
 
 레슨 30은 정점(capstone)이다: 모든 이전 레슨이 측정, 제한, 또는 거버넌스에 기여하는 현재의 이중 용도 그림. 레슨 17-18은 측정과 프레임워크를 제공한다. 레슨 12-16은 평가 도구를 제공한다. 레슨 24-25는 규제 및 공개 계층을 제공한다. 레슨 28은 연구 생태계를 제공한다. 레슨 30은 증거가 착지하는 곳이다.
 
+```figure
+an-uplift-asymmetry
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 코드 없음. Anthropic의 2025년 11월 사이버 보고서, OpenAI의 Preparedness Framework v2 2025년 4월 업데이트, 그리고 Council on Strategic Risks 2025 AI x Bio 정리를 읽어라.

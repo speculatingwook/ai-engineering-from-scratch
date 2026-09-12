@@ -82,6 +82,10 @@ Phase 17 · 17 분리형 서빙 + LMCache는 복합적이다: 프리필 풀에�
 - 16x H100 벤치마크: KV 풋프린트가 HBM을 초과할 때 LMCache가 도움.
 - 작은 HBM 압박: 이득 없이 3-5% 오버헤드.
 
+```figure
+zero-sharding
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 LMCache가 있을 때와 없을 때 선점 중심 워크로드를 시뮬레이션한다. 회피된 재프리필, 처리량 이득, 손익분기 HBM 사용률을 보고한다.

@@ -288,6 +288,10 @@ flowchart TD
     J -->|"No labels"| M["Unsupervised or self-supervised"]
 ```
 
+```figure
+f3-learning-boundary
+```
+
 ## 직접 만들기 (Build It)
 
 `code/ml_intro.py`의 코드는 가능한 가장 단순한 ML 알고리즘인 최근접 중심점 분류기(nearest centroid classifier)를 밑바닥부터 구현한다. 이는 핵심 아이디어를 보여준다. 데이터로부터 학습하고, 그다음 새 데이터에 대해 예측한다.

@@ -28,6 +28,10 @@
 **검색 증강(Retrieval-augmented, RAG).** 두 단계다. 첫째, 검색기(retriever)가 코퍼스(corpus)에서 상위 `k`개 지문을 찾는다. 둘째, 리더(reader)(추출적 또는 생성적)가 그 지문들을 사용해 답을 만든다. 검색기와 리더를 나누면 각각을 따로 학습하고 평가할 수 있다. 현대 RAG는 종종 그 사이에 리랭커(reranker)를 추가한다.
 
 **생성적(Generative).** 디코더 전용(decoder-only) LLM(GPT, Claude, Llama)이 학습된 가중치(weight)로부터 답한다. 검색 단계가 없다. 일반 지식에는 탁월하고, 희귀하거나 최근 사실에는 치명적이다. 환각률은 사전 학습(pretraining) 데이터에서의 사실 빈도와 반비례한다.
+```figure
+qa-span
+```
+
 
 ## 직접 만들기 (Build It)
 

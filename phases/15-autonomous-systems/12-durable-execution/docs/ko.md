@@ -64,6 +64,10 @@ METR은 측정된 모든 에이전트 부류가 약 35분의 연속 작동을 �
 - 엄격히 읽기 전용인 정보 검색.
 - 정확성이 단일 컨텍스트 윈도우(context window) 안에서 종단 간(end-to-end)으로 이뤄져야 하는 과제(일부 추론 과제; 일부 원샷 생성).
 
+```figure
+memory-consolidation
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 stdlib Python으로 최소한의 지속 실행 엔진을 구현한다. 다음을 지원한다:

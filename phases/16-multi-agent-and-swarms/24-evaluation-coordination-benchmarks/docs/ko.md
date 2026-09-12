@@ -86,6 +86,10 @@ AAAI 2026 Bridge Program: Workshop on Multi-Agent Coordination (https://multiage
 
 실제로 신경 쓰는 축을 두고 자체 내부 벤치마크를 만드는 것이 종종 옳은 수다.
 
+```figure
+a5-bench-gap
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 비대화형 워크스루다.

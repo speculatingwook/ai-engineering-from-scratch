@@ -99,6 +99,10 @@ Janus-Pro(레슨 12.15)는 이해와 생성을 위해 비전 인코더를 둘(�
 
 이미지를 내는 2026년 프로덕션(production) VLM, 곧 Gemini 3 Pro, GPT-5, Claude Opus 4.7의 이미지 생성 경로는 거의 확실히 이 계열의 어떤 후손을 쓴다. 세부 사항은 독점이다.
 
+```figure
+cfg-guidance-scale
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 아주 작은 MNIST 유사 문제에서 장난감 Transfusion을 만든다.

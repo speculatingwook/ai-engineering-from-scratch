@@ -109,6 +109,10 @@ Qwen2.5-VL의 에이전트 학습은 명시적으로 구조화된 도구 호출�
 
 파싱은 결정론적이다. 모델 출력에 JSON.parse를 돌리면 된다. 정규식과 모호성 처리가 필요했던 자유형식 "click at (1024, 512)"와 비교해 보라. 이 전환 덕분에 Qwen2.5-VL의 ScreenSpot 점수가 Qwen2-VL의 55%에서 84%로 뛰었다.
 
+```figure
+mm-mrope-axes
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다음을 구현한다:

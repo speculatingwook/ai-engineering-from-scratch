@@ -35,6 +35,10 @@ one-hot(center) ── W ──▶ hidden (d-dim) ── W' ──▶ softmax(vo
 ```
 
 비결: 10만 단어에 대한 소프트맥스는 비용이 감당할 수 없을 만큼 크다. Word2Vec은 **네거티브 샘플링(negative sampling)**을 사용해 이를 이진 분류(binary classification) 과제로 바꾼다. "이 맥락 단어가 이 중심 단어 근처에 나타났는가, 예 또는 아니오"를 예측한다. 전체 어휘에 대한 소프트맥스를 계산하는 대신, 학습 쌍마다 소수의 네거티브(동시 출현하지 않는) 단어를 샘플링한다.
+```figure
+word-vector-arithmetic
+```
+
 
 ## 직접 만들기 (Build It)
 

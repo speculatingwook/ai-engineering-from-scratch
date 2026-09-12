@@ -86,6 +86,10 @@ Phase 14의 모든 레슨은 평가 케이스를 생성한다:
 - **평가에 대한 과적합(over-fitting).** 평가를 위해 최적화하면 프로덕션 유용성에서 멀어진다. 케이스를 교체(rotate)하라.
 - **불안정한(flaky) 평가.** 비결정론적 케이스는 거짓 경보를 유발한다. 시드(seed)를 고정하고 상태를 스냅샷하라.
 
+```figure
+ae-eval-three-layers
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 stdlib 평가 하니스(harness)다:

@@ -73,6 +73,10 @@ flowchart TD
 | `handoff_quality` | 다음 세션이 이것에 대해 대가를 치르거나 이득을 본다 |
 | `reviewer_total` | 게이트 위의 정성적 판단 |
 
+```figure
+wb-ab-runs
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 같은 샘플 앱 픽스처(fixture)에 대해 두 파이프라인을 조율한다. 두 파이프라인 모두 스크립트화되어 있어(루프에 LLM 없음) 측정이 재현 가능하다. 스크립트는 비교를 `before-after-report.md`와 `comparison.json`에 작성한다.

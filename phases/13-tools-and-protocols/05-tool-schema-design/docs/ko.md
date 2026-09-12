@@ -121,6 +121,10 @@ GOOD : Invalid input: 'city' is required. Example: {"city": "Bengaluru"}.
 
 셋 다 공개되어 있다. 완전한 평가 루프는 적당한 GPU 환경에서 한 시간 안에 돈다. CI에 하나를 포함하라(평가 주도 개발(eval-driven development)은 미래 phase에서 다룬다).
 
+```figure
+tp-schema-routing
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 위의 규칙에 대해 레지스트리를 감사하는 도구 스키마 린터를 제공한다. 린터는 다음을 표시한다.

@@ -60,6 +60,10 @@
 - 평가 하네스: SWE-bench Pro(검증된 서브셋) + Terminal-Bench 2.0 + 직접 만든 30개 작업 홀드아웃(holdout)
 - 관측성: `gen_ai.*` semconv를 따르는 OpenTelemetry SDK → 자체 호스팅 Langfuse
 - PR 게시: 세분화된 토큰을 가진 GitHub App, 범위는 대상 저장소로 제한
+```figure
+ce-agent-loop
+```
+
 
 ## 직접 만들기 (Build It)
 

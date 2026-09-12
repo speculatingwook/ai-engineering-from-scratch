@@ -55,6 +55,10 @@ Bahdanau, Cho, Bengio는 2014년에 세 줄짜리 해결책을 발표했다. 디
 - `concat`: 본질적으로 Bahdanau 형태. 앞의 둘이 더 저렴해서 드물게 쓰인다.
 
 **짚어 둘 만한 Bahdanau / Luong 함정.** Bahdanau는 `s_{t-1}`(현재 단어를 생성하기 *전*의 디코더 상태)을 쓴다. Luong은 `s_t`(*후*의 상태)를 쓴다. 둘을 헷갈리면 디버깅하기 극도로 어려운, 미묘하게 잘못된 그래디언트(gradient)가 나온다. 한 논문을 골라 그 관례를 고수하라.
+```figure
+attention-heatmap
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -111,6 +111,10 @@ MIO는 순수 토큰 임의-대-임의에 가장 가깝다. AnyGPT는 그 개념
 
 이들은 미해결 연구 문제다. Qwen3-Omni(레슨 12.20)는 2025년 가장 진보한 오픈 시도다.
 
+```figure
+any-to-any-stream
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

@@ -40,6 +40,10 @@ Your options:
    Setup: SSH + install
    Best for: Serious training, large models
 ```
+```figure
+s0-gpu-dispatch
+```
+
 
 ## 직접 만들기 (Build It)
 

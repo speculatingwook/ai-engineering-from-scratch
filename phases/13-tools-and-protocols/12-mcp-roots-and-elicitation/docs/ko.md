@@ -126,6 +126,10 @@
 
 `code/main.py`는 노트 서버를 다음으로 확장한다:
 
+```figure
+t3-roots-boundary
+```
+
 - root-list-changed 알림 후 서버가 다시 질의하는 `roots/list` 응답.
 - 여러 노트가 일치할 때 `elicitation/create`를 사용해 명확화하는 `notes_delete` 도구.
 - 첫 실행 구성 페이지를 여는 데 URL 모드 유도를 사용하는 `notes_setup` 도구(시뮬레이션됨).

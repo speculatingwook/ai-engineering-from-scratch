@@ -67,6 +67,10 @@ LangGraph는 중첩된 `create_supervisor` 호출을 사용한다. 내부 슈퍼
 
 레퍼런스: https://reference.langchain.com/python/langgraph-supervisor.
 
+```figure
+swarm-hierarchy-token
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 3단계 계층을 실행한다.

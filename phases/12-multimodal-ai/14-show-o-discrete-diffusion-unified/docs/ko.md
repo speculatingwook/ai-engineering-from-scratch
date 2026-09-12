@@ -90,6 +90,10 @@ Show-o2(2025년 후속작, arXiv 2506.15564)는 Show-o를 확장한다. 더 큰 
 
 태스크로 선택하라: 합리적인 속도로 하나의 오픈 모델에서 T2I + 인페인팅 + VQA를 원할 때 Show-o; 품질이 무엇보다 중요하고 두 손실 배관을 감당할 수 있을 때 Transfusion.
 
+```figure
+masked-diffusion-unmask
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 Show-o 샘플링을 시뮬레이션한다.

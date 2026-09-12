@@ -45,6 +45,10 @@
 - **저하 곡선.** 컨텍스트 길이 대비 정확도, 과제 유형별로 그린 것.
 
 사양표에 적을 두 숫자: 검색 유효(retrieval-effective)와 추론 유효(reasoning-effective). 보통 추론 유효는 광고된 윈도우의 25~50%다.
+```figure
+gx-niah-decay
+```
+
 
 ## 직접 만들기 (Build It)
 

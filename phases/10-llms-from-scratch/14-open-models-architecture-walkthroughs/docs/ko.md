@@ -220,6 +220,10 @@ kv_cache = 2 * num_layers * num_kv_heads * head_dim * max_seq_len * bytes_per_el
 - **긴 컨텍스트 필요**: Llama 3(RoPE 스케일링으로 128k), DeepSeek(MLA 이점).
 - **저지연 서빙**: Gemma 2 9B(슬라이딩 윈도우가 긴 컨텍스트 연산을 줄임).
 
+```figure
+rmsnorm-vs-layernorm
+```
+
 ## 직접 만들기 (Build It)
 
 이 레슨의 코드는 계산기다. 어떤 config.json이든 주어지면, 구성요소별 파라미터 수, 최대 컨텍스트에서의 KV 캐시, SwiGLU MLP 비율, 그리고 아키텍처에 대한 짧은 판정(밀집 / GQA / MLA / MoE)을 출력한다.

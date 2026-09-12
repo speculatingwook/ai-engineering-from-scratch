@@ -58,6 +58,10 @@ query ----+----> retrieve top-k pages (MaxSim)
 - VLM 답변기: 자체 호스팅된 Qwen3-VL-30B 또는 호스팅된 Gemini 2.5 Pro; 폴백으로 InternVL3
 - 평가: ViDoRe v3 벤치마크(benchmark), 다중 페이지 추론을 위한 M3DocVQA
 - 뷰어 UI: 증거 영역을 위한 캔버스 오버레이를 갖춘 Next.js 15
+```figure
+ce-late-interaction
+```
+
 
 ## 직접 만들기 (Build It)
 

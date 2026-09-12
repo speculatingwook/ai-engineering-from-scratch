@@ -72,6 +72,10 @@ TRT-LLM은 C++ + CUDA + 폐쇄 소스 커널이다. 모델은 특정 GPU SKU에 
 
 TRT-LLM의 분리형 서빙(별도 프리필과 디코드 풀)은 Phase 17 · 20에서 깊이 다룬다. Blackwell에서, 승수가 쌓인다: FP4 가중치 × MTP 속도 향상 × 분리형 배치 × 캐시 인식 라우팅. 7배 숫자는 이 전체 스택을 가정한다.
 
+```figure
+pipeline-parallel
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 세 스택에 걸쳐 모델의 HBM 풋프린트, 디코드 처리량(메모리 바운드 체제), 100만 토큰당 달러를 계산한다: H100 + BF16 + vLLM, H100 + FP8 + vLLM, B200 + NVFP4/FP8 + TRT-LLM. 실행하여 복리 효과와 각 변경이 기여하는 격차의 몫을 보라.

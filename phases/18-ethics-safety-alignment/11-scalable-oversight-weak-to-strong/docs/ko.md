@@ -69,6 +69,10 @@ OpenAI의 Superalignment 팀은 Jan Leike가 Anthropic으로 떠난 후 2024년 
 
 Lesson 6-10은 U가 신뢰할 수 없다는 가정 하에 위협과 방어적 패러다임을 기술한다. Lesson 11은 공격적 패러다임이다: 감독자를 U의 정렬을 검증할 수 있을 만큼 강하게 만드는 것이다. 그다음 Lesson 12-16은 적대적 평가의 실용적 도구로 넘어간다.
 
+```figure
+scalable-oversight
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 합성 작업에 대한 W2SG 파인튜닝을 시뮬레이션한다. 약한 레이블러(labeler)는 구조화된 오류와 함께 정확도가 70%이며, 강한 모델은 골드 레이블에서 상한이 95%다. 약한 레이블로 강한 모델을 파인튜닝하고, PGR을 측정하고, 강한-골드(strong-on-gold) 및 약한-단독(weak-alone)과 비교한다.

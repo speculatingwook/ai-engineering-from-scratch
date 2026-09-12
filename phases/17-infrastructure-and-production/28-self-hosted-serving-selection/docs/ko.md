@@ -91,6 +91,10 @@ Phase 17 · 01(매니지드 하이퍼스케일러)과 · 02(추론 플랫폼)가
 - SGLang 프로덕션 규모: 400,000개 이상 GPU.
 - Ollama 처리량 격차 vs llama.cpp: 15~30% 느림; 프로덕션 부하에서 3배.
 
+```figure
+data-parallel
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 결정 트리 워커(decision-tree walker)다: 하드웨어 + 규모 + 워크로드가 주어지면 엔진을 고르고 이유를 설명한다.

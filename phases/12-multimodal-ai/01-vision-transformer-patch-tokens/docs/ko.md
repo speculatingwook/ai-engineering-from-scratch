@@ -100,6 +100,10 @@ total       ≈ 86M
 
 그 설정의 모든 결정은 직접 읽어 볼 수 있는 논문으로 거슬러 올라간다.
 
+```figure
+image-patch-tokens
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 패치 토크나이저(tokenizer)이자 기하 계산기다. (이미지 H, W, 패치 P, 은닉 D, 깊이 L)를 받아 다음을 보고한다:

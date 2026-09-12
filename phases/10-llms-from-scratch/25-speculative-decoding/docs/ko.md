@@ -114,6 +114,10 @@ EAGLE-3(Li et al. 2025, "EAGLE-3: Scaling up Inference Acceleration of Large Lan
 
 프로덕션 현장은 일반적으로 챗에서 2-3배, 코드 생성에서 3-5배의 실측(wall-clock) 속도 향상, 창작 글쓰기에서는 거의 0의 향상을 보고한다.
 
+```figure
+speculative-decoding
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`:

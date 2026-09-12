@@ -87,6 +87,10 @@ AlphaEvolve(arXiv:2506.13131, DeepMind, 2025년 6월)는 다른 종류의 짐승
 - **진짜 평가자 없는 AlphaEvolve.** "코드가 더 나은지 LLM에게 물어보라"는 적합도 함수가 아니다. 평가자는 결정론적(deterministic)이고 빨라야 한다.
 - **과잉 설계(over-engineering).** 대부분의 에이전트 작업은 둘 다 필요로 하지 않는다. 먼저 ReAct나 ReWOO부터 써 보라.
 
+```figure
+htn-tree-expand
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 두 개의 토이를 구현한다.

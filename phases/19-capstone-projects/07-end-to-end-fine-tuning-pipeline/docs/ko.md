@@ -65,6 +65,10 @@ model card (2026 MOF) + safety eval (Llama Guard 4)
 - 안전성 평가: Llama Guard 4, ShieldGemma-2
 - 인프라: Kubernetes + NVIDIA device plugin, 큐 대기 지표에 대한 HPA
 - 관측성(observability): 학습을 위한 W&B, 추론(inference)을 위한 Langfuse
+```figure
+ce-finetune-stages
+```
+
 
 ## 직접 만들기 (Build It)
 

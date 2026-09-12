@@ -160,6 +160,10 @@ graph LR
 - **완전한 RLHF**: 규칙이나 짧은 헌법으로 표현할 수 없는 다목적(multi-objective) 트레이드오프(trade-off)가 필요할 때 여전히 적절하다.
 
 대부분의 2026년 프런티어 파이프라인은 네 가지를 모두 돌린다. 안전 계층을 위한 CAI. 추론 후학습(post-training) 패스를 위한 GRPO. 선호 마무리를 위한 DPO. 다른 방법에 저항하는 잔여 행동을 위한 소규모 RLHF 패스.
+```figure
+self-critique-loop
+```
+
 
 ## 직접 만들기 (Build It)
 

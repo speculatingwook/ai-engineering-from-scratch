@@ -100,6 +100,10 @@ Z = d
 - **delta < 1.25** (임계값 정확도): `max(d_pred/d_gt, d_gt/d_pred) < 1.25`인 픽셀의 비율. 높을수록 좋다. SOTA는 0.9+.
 
 상대 깊이(Depth Anything V3, MiDaS)의 경우, 평가는 두 메트릭의 스케일·이동 불변(scale-and-shift invariant) 버전을 쓴다.
+```figure
+depth-sweep
+```
+
 
 ## 직접 만들기 (Build It)
 

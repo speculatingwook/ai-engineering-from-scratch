@@ -66,6 +66,10 @@ OpenHands 저자들과 Epoch AI 모두 SWE-bench Verified에 쉬운 꼬리가 �
 
 에이전트 선택에 대한 함의: 자신의 버그 백로그(backlog)에서 Pro 같은 부분집합을 돌려라. 중요한 점수는 실제로 출하하는 작업을 대표하는 과제들에서의 점수다.
 
+```figure
+a5-scaffold-delta
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 고정된 미니 과제 분포에서 두 개의 장난감 에이전트 스캐폴드를 비교한다:

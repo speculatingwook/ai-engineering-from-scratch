@@ -113,6 +113,10 @@ DPO 구현은 참조 모델을 신중하게 다뤄야 한다. 참조는 그 자�
 - 모든 참조 파라미터에 `requires_grad=False`를 설정한다.
 - 참조가 만들어진 뒤 `policy.load_state_dict(reference.state_dict())`로 정책을 구성한다.
 
+```figure
+cap-dpo-preference
+```
+
 ## 아키텍처 (Architecture)
 
 ```mermaid

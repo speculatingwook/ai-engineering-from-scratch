@@ -116,6 +116,10 @@ Anthropic의 다중 에이전트 연구 시스템은 "레인보우 배포(rainbo
 - 상태 보존 워크로드를 위한 레인보우/카나리 배포.
 - 관측 가능성: 에이전트별 추적, 슈퍼 스텝 감사, 재시도 카운터.
 
+```figure
+sw-checkpoint-replay
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다.

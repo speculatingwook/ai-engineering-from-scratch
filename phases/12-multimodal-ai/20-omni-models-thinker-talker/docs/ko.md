@@ -93,6 +93,10 @@ Qwen2.5-Omni는 기본적으로 반이중을 지원하며, 침묵 임계값으�
 
 이것이 "그냥 메인 모델을 쓰면 되지" 대신 작은 전용 Talker 모델이 존재하는 이유다.
 
+```figure
+l5-thinker-talker
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

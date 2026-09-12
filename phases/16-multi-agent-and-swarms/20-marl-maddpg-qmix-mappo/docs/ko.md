@@ -97,6 +97,10 @@ LLM 에이전트 시스템에서 비정상성은 "내 에이전트가 지난달�
 
 실제 신경망(neural network) 학습은 Phase 09 주제다. 이 레슨은 그래디언트 갱신 없이 CTDE, 가치 분해, 중앙 집중 가치 패턴을 보여주는 스크립트 정책 버전을 만든다. 목표는 전체 MARL 라이브러리(PyMARL, MARLlib, RLlib multi-agent)를 집어 들기 전에 패턴을 내면화하는 것이다.
 
+```figure
+sw-ctde
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 세 가지 패턴 시연을 구현하며, 모두 작은 2 에이전트 협력 격자 세계에서 이루어진다.

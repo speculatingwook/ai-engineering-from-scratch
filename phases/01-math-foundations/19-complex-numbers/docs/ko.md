@@ -267,6 +267,10 @@ graph LR
     U1 --> A3
 ```
 
+```figure
+roots-of-unity
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: Complex 클래스

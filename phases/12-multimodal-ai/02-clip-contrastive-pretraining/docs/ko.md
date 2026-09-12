@@ -105,6 +105,10 @@ ALIGN(Google, 2021): CLIP과 같은 아이디어, 18억 쌍 규모, 90% 잡음. 
 
 CLIP 계열 모델은 ImageNet 제로샷에서 76% 부근에서 멈춘다(CLIP-G, OpenCLIP-G). 그 너머는 훨씬 더 큰 데이터(SigLIP 2는 80%+를 얻는다)나 아키텍처 변경(지도 헤드, 더 많은 파라미터)이 필요하다. 벤치마크(benchmark)는 포화(saturation)되고 있다. 진짜 가치는 다운스트림 VLM이 소비하는 임베딩 공간이다.
 
+```figure
+multimodal-fusion
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다음을 구현한다:

@@ -80,6 +80,10 @@ flowchart LR
 
 다음 에폭 시작으로 튀는 이어받기는 몇 분에서 하루까지 낭비한다. 해법은 `(epoch, batch_in_epoch)`와 RNG 상태다. 불러오기 후 학습 루프는 현재 에폭에서 이미 소비된 배치를 지나도록 난수 생성기를 빨리 감고(fast-forward) `batch_in_epoch`부터 이어간다. 레슨 코드는 정확히 이것을 한다. 그래서 이어받기 후 손실 궤적이 중단 없는 베이스라인과 1e-4 이내로 일치한다고 단언한다.
 
+```figure
+cc-atomic-checkpoint
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 네 가지 프리미티브(primitive)와 데모 드라이버를 제공한다.

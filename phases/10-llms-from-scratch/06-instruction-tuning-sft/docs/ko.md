@@ -188,6 +188,10 @@ graph TD
     style B3 fill:#1a1a2e,stroke:#e94560,color:#fff
     style C3 fill:#1a1a2e,stroke:#51cf66,color:#fff
 ```
+```figure
+loss-masking
+```
+
 
 ## 직접 만들기 (Build It)
 

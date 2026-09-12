@@ -50,6 +50,10 @@
 | Moshi (full-duplex) | 200-300 ms | CC-BY 4.0 | 단일 모델, 다른 아키텍처, 레슨 15 |
 | Vapi / Retell (managed) | 300-500 ms | commercial | 가장 빠른 출시, 제한적 커스터마이징 |
 | Whisper.cpp + llama.cpp + Kokoro-ONNX | offline | open | 프라이버시 / 엣지 |
+```figure
+v4-voice-latency
+```
+
 
 ## 직접 만들기 (Build It)
 

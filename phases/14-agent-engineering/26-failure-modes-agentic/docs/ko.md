@@ -73,6 +73,10 @@ Arize, Galileo, NimbleBrain의 2024-2026 현장 분석은 다음으로 수렴한
 - **베이스라인(baseline) 없음.** 드리프트(drift) 탐지는 마지막으로 알려진 정상값(last-known-good)이 필요하다; 그것 없이는 "이것이 나빠지고 있다"고 말할 수 없다.
 - **과도한 경보.** 모든 실패가 호출을 발생시킨다. 군집화하고 속도 제한하라.
 
+```figure
+failure-cascade
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 stdlib 실패 양상 태거를 구현한다:

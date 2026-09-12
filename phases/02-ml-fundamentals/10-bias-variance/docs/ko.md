@@ -254,6 +254,10 @@ flowchart TD
     G --> H[Try more complex model]
 ```
 
+```figure
+bias-variance
+```
+
 ## 직접 만들기 (Build It)
 
 `code/bias_variance.py`의 코드는 완전한 편향-분산 분해 실험을 실행한다. 단계별 접근법은 다음과 같다.

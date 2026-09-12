@@ -54,6 +54,10 @@ SD-Inpaint, SDXL-Inpaint, Flux-Fill는 모두 이 9채널(또는 그에 준하�
 ### RePaint (Lugmayr et al., 2022)
 
 표준 무조건부(unconditional) 디퓨전 모델을 그대로 유지한다. 각 역방향 스텝에서 재샘플링한다. 가끔 더 노이즈가 낀 상태로 되돌아가서 다시 생성한다. 경계 아티팩트를 피한다. 학습된 인페인팅 모델이 없을 때 사용한다.
+```figure
+inpaint-mask-reinject
+```
+
 
 ## 직접 만들기 (Build It)
 

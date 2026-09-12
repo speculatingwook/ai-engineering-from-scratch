@@ -77,6 +77,10 @@ TypeScript와의 프로토콜 동등성:
 - **후크 증식(creep).** 모든 팀이 후크를 추가하고, 시작 시간이 부풀어 오른다. 후크를 분기마다 검토하라.
 - **세션 비대화.** 세션이 누적되고, 크기가 자란다. `list_sessions` + 만료(expiry) 정책을 사용하라.
 
+```figure
+ae-subagent-isolation
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 SDK 형태를 stdlib로 구현한다.

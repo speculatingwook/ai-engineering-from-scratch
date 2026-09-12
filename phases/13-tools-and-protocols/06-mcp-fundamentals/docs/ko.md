@@ -118,6 +118,10 @@ JSON-RPC 2.0(2010)은 가벼운 양방향 프로토콜이다. REST는 클라이�
 볼 것:
 
 - `initialize`는 능력을 양방향으로 선언한다. 응답은 `serverInfo`와 `protocolVersion: "2025-11-25"`를 가진다.
+```figure
+mcp-tool-call
+```
+
 - `tools/list`는 `tools` 배열을 반환한다. 각 항목은 `name`, `description`, `inputSchema`를 가진다.
 - `tools/call`은 `params.name`과 `params.arguments`를 사용한다.
 - 응답 `content`는 `{type, text}` 블록의 배열이다.

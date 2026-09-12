@@ -105,6 +105,10 @@ TMRoPE 덕분에 "고양이가 몇 초에 뛰는가?" 같은 질의가 가능해
 - 출력: 시간 + 사건 필드를 갖춘 구조화된 JSON.
 - 벤치마크: 일반용 VideoMME + TempCompass; 긴 시야용 EgoSchema.
 
+```figure
+video-temporal-patches
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다음을 포함한다.

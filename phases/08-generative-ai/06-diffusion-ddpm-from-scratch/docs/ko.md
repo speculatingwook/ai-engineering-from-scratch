@@ -52,6 +52,10 @@ L_simple = E_{x_0, t, ε} [ || ε - ε_θ( sqrt(α̅_t) · x_0 + sqrt(1 - α̅_t
 2. **변장한 점수 매칭(score matching).** Vincent (2011)은 잡음을 예측하는 것이 `∇_x log q(x_t | x_0)`, 즉 *점수(score)*를 추정하는 것과 동등함을 증명했다. 역방향 SDE는 이 점수를 사용해 밀도(density) 그래디언트를 따라 올라간다. 고확률 영역을 향한 안내된 무작위 보행이다.
 
 3. **ELBO가 단순 MSE로 줄어든다.** 전체 변분 하한(variational lower bound)에는 타임스텝당 KL 항이 있다. DDPM의 매개변수화로 그 KL 항들은 특정 계수를 가진 잡음 예측에 대한 MSE로 단순화된다; Ho는 그 계수를 버렸고("simple" 손실이라 부름) 품질이 *향상되었다*.
+```figure
+diffusion-denoise
+```
+
 
 ## 직접 만들기 (Build It)
 

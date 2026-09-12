@@ -103,6 +103,10 @@ flowchart LR
 
 가중치는 설정 가능하다. 기본 배합은 퍼플렉서티 0.2, 정확 일치 0.3, 토큰 F1 0.3, judge 0.2이다. 가중치 선택은 제품 결정(product decision)이며, 레슨은 실험할 수 있도록 이 손잡이를 노출한다.
 
+```figure
+cg-eval-quadrant
+```
+
 ## 아키텍처 (Architecture)
 
 ```mermaid

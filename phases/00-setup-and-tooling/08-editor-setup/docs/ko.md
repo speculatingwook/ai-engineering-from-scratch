@@ -32,6 +32,10 @@ graph TD
     L2["2. Extensions<br/>Python, Jupyter, Pylance, GitLens"] --> L1
     L1["1. Base Editor<br/>VS Code — free, extensible, universal"]
 ```
+```figure
+s0-lsp-roundtrip
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -90,6 +90,10 @@ Controlled-experiments Using Pre-Experiment Data. 사후 기간(post-period)을 
 - CUPED 분산 감소: 30~70%.
 - LLM 비결정성 → +30~50% 표본 크기 버퍼.
 
+```figure
+mx-sequential-test
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 고정 경계와 순차 경계를 가진 순차 A/B 테스트를 시뮬레이션한다. 순차 방식이 어떻게 일찍 멈출 수 있게 해주는지 보여준다.

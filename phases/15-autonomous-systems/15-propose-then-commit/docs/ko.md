@@ -66,6 +66,10 @@ HITL의 기본 UI("Approve" / "Reject" 버튼)는 진정한 검토 없는 빠른
 
 제14조는 EU의 고위험 AI 시스템에 대해 효과적인 사람의 감독을 의무화한다. "효과적"은 장식이 아니다. 규제 언어는 고무 도장 패턴을 특정하여 배제한다. 챌린지-앤-리스폰스를 갖춘 제안-후-커밋은 Microsoft Agent Governance Toolkit 컴플라이언스 문서에서 제14조 정밀 조사를 견뎌내는 형태다.
 
+```figure
+mx-propose-then-commit
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 stdlib Python으로 제안-후-커밋 상태 기계를 구현한다. 지속 저장소는 JSON 파일이다. 멱등성 키는 (thread_id, action_signature)의 해시다. 드라이버는 세 경우를 시뮬레이션한다: 깔끔한 승인 흐름, 일시적 실패 후 재시도(이중 실행되어서는 안 됨), 그리고 고무 도장 기본값 대 챌린지-앤-리스폰스 흐름.

@@ -224,6 +224,10 @@ flowchart LR
 ```
 log P(class | features) = log P(class) + sum_i log P(feature_i | class)
 ```
+```figure
+naive-bayes
+```
+
 
 ## 직접 만들기 (Build It)
 

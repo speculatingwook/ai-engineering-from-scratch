@@ -223,6 +223,10 @@ where w_i = 1 / distance_i
 
 KNN 회귀는 구간별 상수(가중 시 구간별 매끄러운) 예측을 만든다. 학습 데이터의 범위를 넘어 외삽(extrapolate)할 수 없다. 학습 타깃이 모두 0과 100 사이라면, KNN은 결코 200을 예측하지 않는다.
 
+```figure
+knn-smoothness
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 거리 함수

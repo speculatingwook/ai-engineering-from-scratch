@@ -110,6 +110,10 @@ call_C: median API, returns third
 
 모델 자체가 스트리밍하면, 모든 호출이 확정되기를 기다리는 대신 한 호출의 인자가 완전해지자마자 실행을 시작할 수 있다. 이것은 OpenAI가 문서화하지만 모든 SDK가 노출하지는 않는 최적화다. 이 레슨의 하니스는 그것을 한다. 시뮬레이션된 스트림이 완전한 인자 객체를 산출하자마자, 호스트는 그 호출을 시작한다.
 
+```figure
+tp-parallel-fanout
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 두 절반을 가진다. 첫 번째는 `concurrent.futures.ThreadPoolExecutor`를 써서 세 시뮬레이션된 날씨 호출을 직렬과 병렬로 돌리고 벽시계 시간을 출력한다. 두 번째 절반은 가짜 스트리밍 응답(한 스트림에 인터리브된 세 병렬 호출의 `arguments` 청크)을 재생하고 `StreamAccumulator`로 id별로 재조립한다. LLM 없음, 네트워크 없음, 오직 재조립 로직만.

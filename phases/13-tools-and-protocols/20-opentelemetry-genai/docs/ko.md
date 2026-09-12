@@ -109,6 +109,10 @@ MCP 클라이언트가 서버를 호출할 때 W3C traceparent 헤더를 요청�
 
 AgentOps(2024년 설립)는 GenAI 관찰성에 특화한다. 인기 프레임워크(LangGraph, Pydantic AI, CrewAI)를 감싸 OTel 스팬을 자동으로 방출한다. 스택이 지원되는 프레임워크를 사용하면 유용하고, 그렇지 않으면 수동 계측을 사용한다.
 
+```figure
+t3-span-waterfall
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 LLM을 호출하고, 두 개의 툴을 디스패치하고, 한 번의 MCP 왕복을 하는 에이전트에 대해 OTel 형태의 스팬을 (OTLP-JSON 유사 포맷으로) stdout으로 방출한다. 실제 익스포터는 없다. 이 레슨은 스팬 형태와 속성 집합에 집중한다. 출력을 OTLP 호환 뷰어에 붙여넣거나 그냥 읽으면 된다.

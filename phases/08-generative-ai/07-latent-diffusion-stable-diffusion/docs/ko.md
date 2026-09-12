@@ -42,6 +42,10 @@
 | Flux.1-schnell | 2024 | MMDiT 증류됨 | 128×128×16 | T5-XXL + CLIP-L | 12B, 1-4 스텝 |
 
 추세: U-Net을 DiT(잠재 패치에 대한 트랜스포머)로 교체, 텍스트 인코더 확장(프롬프트 준수에서 T5가 CLIP을 능가), 잠재 채널 증가(4 → 16이면 세부를 담을 여유가 늘어난다).
+```figure
+noise-schedule
+```
+
 
 ## 직접 만들기 (Build It)
 

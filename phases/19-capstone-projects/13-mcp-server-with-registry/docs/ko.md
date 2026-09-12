@@ -55,6 +55,10 @@ Postgres    S3 listing  Jira       Linear     Datadog
      UI: search / validate / enable-disable / ownership
 ```
 
+```figure
+cf-mcp-gate
+```
+
 ## 스택 (Stack)
 
 - 서버 프레임워크: FastMCP (Python) 또는 `@modelcontextprotocol/sdk` (TypeScript)

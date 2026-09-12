@@ -40,6 +40,10 @@ Hypothesis
 `variables`와 `metric`은 자유 텍스트가 아니다. 파서는 태깅된 응답에서 그것들을 뽑아낸다. lesson 52의 러너는 실험 설정(config)을 만들 때 이 필드들을 직접 읽는다.
 
 `baseline_ref`는 선택 사항이지만 채워 두기를 권한다. lesson 53의 평가기(evaluator)는 비교할 베이스라인(baseline)이 있어야 하기 때문이다. 가설이 이를 생략하면 평가기는 같은 지표(metric)를 측정한 이전 실행으로 폴백(fall back)한다.
+```figure
+cg-novelty-ramp
+```
+
 
 ## 아키텍처 (Architecture)
 

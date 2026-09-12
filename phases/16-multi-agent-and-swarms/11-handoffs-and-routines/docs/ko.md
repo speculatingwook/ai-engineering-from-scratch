@@ -80,6 +80,10 @@ Swarm는 실행과 실행 사이에 명시적으로 무상태다. 프레임워�
 
 Swarm는 "에이전트가 다음을 결정"하고, GroupChat는 "매니저가 다음을 결정"한다. Swarm의 결정은 활성 에이전트의 도구 호출 안에 있고, GroupChat의 결정은 `GroupChatManager` 안에 있다.
 
+```figure
+sw-handoff-routing
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 Swarm를 밑바닥부터 구현한다. Agent 데이터클래스, 핸드오프 메커니즘(도구가 Agent를 반환), 그리고 에이전트 전환을 감지하는 실행 루프다.

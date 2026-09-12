@@ -35,6 +35,10 @@ Paper
 ```
 
 references와 citations 필드가 방향성 인용 그래프(directed citation graph)를 이룬다. 두 모의 API는 겹치지만 동일하지 않은 필드를 반환하므로, 코퍼스(corpus) 로더는 두 필드를 `id`로 합집합한다.
+```figure
+cg-citation-hops
+```
+
 
 ## 아키텍처 (Architecture)
 

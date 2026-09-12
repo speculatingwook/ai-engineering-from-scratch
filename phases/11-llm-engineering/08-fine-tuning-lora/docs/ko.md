@@ -217,6 +217,10 @@ graph TD
     style Start fill:#1a1a2e,stroke:#e94560,color:#fff
     style Done fill:#0f3460,stroke:#16213e,color:#fff
 ```
+```figure
+lora-params
+```
+
 
 ## 직접 만들기 (Build It)
 

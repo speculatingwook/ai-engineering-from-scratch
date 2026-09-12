@@ -54,6 +54,10 @@ ArtPrompt를 일반화한다: 흔치 않은 텍스트 인코딩 구조(Uncommon 
 
 Lesson 12-14는 세 가지 직교(orthogonal) 공격 벡터를 기술한다: 반복적 정제(PAIR), 컨텍스트 길이(MSJ), 인코딩(ArtPrompt/StructuralSleight). Lesson 15는 모델 중심 공격에서 시스템 경계 공격(간접 프롬프트 주입, indirect prompt injection)으로 전환한다. Lesson 16은 방어 도구 대응을 기술한다.
 
+```figure
+al-ascii-cloak
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 ArtPrompt를 만든다. 유해 쿼리에서 특정 단어를 아스키 아트 글리프(glyph)로 위장하고, 위장된 문자열이 키워드 필터를 통과하는지 검증하고, (선택적으로) 간단한 인식기로 위장된 문자열을 다시 디코딩할 수 있다.

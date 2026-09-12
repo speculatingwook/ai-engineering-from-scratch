@@ -65,6 +65,10 @@ Llama Guard를 모델 양쪽에 둔다. 회귀(regression)를 위해 Garak를 �
 
 Lesson 12-15는 공격 계열이다. Lesson 16은 프로덕션 도구다. Lesson 17(WMDP)은 이중 용도(dual-use) 역량에 대한 평가다. Lesson 18은 이 도구들을 정책 구조로 감싸는 프런티어(frontier) 안전 프레임워크다.
 
+```figure
+al-guard-stack
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 Llama Guard 방식 분류기(14개 범주에 대한 키워드 + 의미 특성), 장난감 Garak 하니스(프로브-디텍터 루프), PyRIT 방식 다중 턴 변환기 체인을 만든다. 세 도구를 모의 대상에 대해 실행하고 서로 다른 커버리지 시그니처를 관찰할 수 있다.

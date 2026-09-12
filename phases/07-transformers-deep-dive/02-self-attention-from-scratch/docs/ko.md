@@ -101,6 +101,10 @@ Scores = Q @ K^T    shape: (n, n)
 Each row: one token's attention over the entire sequence
 ```
 
+```figure
+attention-matrix
+```
+
 ### 왜 스케일링하는가?
 
 내적은 차원 dk와 함께 커진다. dk = 64이면, 내적은 수십 단위 범위에 들 수 있고, 소프트맥스를 그래디언트(gradient)가 소실되는 영역으로 밀어 넣는다. 해법: sqrt(dk)로 나눈다.
@@ -163,6 +167,10 @@ For token 1:
 ```
 Attention(Q, K, V) = softmax( Q @ K^T / sqrt(dk) ) @ V
 ```
+```figure
+softmax-attention-scaling
+```
+
 
 ## 직접 만들기 (Build It)
 

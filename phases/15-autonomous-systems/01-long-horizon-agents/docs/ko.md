@@ -59,6 +59,10 @@ METR(전 ARC Evals)은 로지스틱 곡선(logistic curve)을, 작업 성공 확
 
 모든 행이 이 단계의 한 레슨이 된다.
 
+```figure
+task-decomposition
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`를 실행하라. METR 지평 곡선을 시뮬레이션하며 다음을 보여준다:

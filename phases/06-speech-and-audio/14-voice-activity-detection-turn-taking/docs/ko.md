@@ -52,6 +52,10 @@
 | pyannote segmentation | 95% | ~10 ms | MIT-ish |
 
 Silero가 올바른 기본값이다. Cobra는 컴플라이언스 / 정확도 업그레이드다. 에너지 전용 VAD는 2026년 프로덕션에 설 자리가 없다.
+```figure
+sp-vad-cascade
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -40,6 +40,10 @@ Model Context Protocol은 그 행렬을 무너뜨린다. JSON-RPC 기반 명세 
 - 검색 API가 아니다. 무엇을 가져올지는 여전히 RAG(Phase 11 · 06)가 결정한다; MCP는 검색 결과를 리소스로 노출하는 전송 수단이다.
 - 에이전트 프레임워크가 아니다. MCP는 배관이고, LangGraph, PydanticAI, OpenAI Agents SDK 같은 프레임워크가 그 위에 올라간다.
 - Anthropic에 묶여 있지 않다. 명세와 참조 구현은 `modelcontextprotocol` 조직 아래 오픈소스로 공개돼 있다.
+```figure
+mcp-nxm-collapse
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -78,6 +78,10 @@ Vertex: HIPAA, GDPR, 리전별 데이터 거주성. Google Cloud의 컴플라이
 - Azure PTU 손익분기점: 약 40~60% 지속 사용률.
 - 높은 사용률에서 온디맨드 대비 PTU 절감: 최대 70%.
 
+```figure
+i4-platform-lanes
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 합성 워크로드에서 세 플랫폼을 비교하면서 온디맨드 vs PTU 경제학, TTFT 변동성, 비용 귀속 충실도(fidelity)를 모델링한다. 실행하여 PTU가 어디서 이득을 보는지, 그리고 어디서 마켓플레이스의 모델 폭이 TTFT 격차를 능가하는지 확인하라.

@@ -48,6 +48,10 @@ RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인
 | 상위 50개에 대한 정밀도 | 다중 벡터(ColBERTv2) 또는 교차 인코더(cross-encoder) 리랭커(reranker) |
 
 대부분의 프로덕션(production) 스택은 셋 다 사용한다.
+```figure
+gx-matryoshka
+```
+
 
 ## 직접 만들기 (Build It)
 

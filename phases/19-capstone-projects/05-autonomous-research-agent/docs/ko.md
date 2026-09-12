@@ -68,6 +68,10 @@ seed idea + domain
 - 리뷰어: 가중 집계를 갖춘 5개 심판 앙상블(Opus 4.7, GPT-5.4, Gemini 3 Pro, DeepSeek R1, Qwen3-Max)
 - 실험 프레임워크: 물리적 실험을 위한 PyTorch 2.5, 로깅을 위한 W&B
 - 관측성(observability): 에이전트 트레이스를 위한 Langfuse, 논문당 $30 하드 예산
+```figure
+ce-experiment-tree
+```
+
 
 ## 직접 만들기 (Build It)
 

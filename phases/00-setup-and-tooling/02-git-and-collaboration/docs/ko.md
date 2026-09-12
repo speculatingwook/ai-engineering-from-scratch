@@ -40,6 +40,10 @@ sequenceDiagram
 2. 원격(remote)에 푸시한다 (`git push`)
 3. 실험을 위해 브랜치를 딴다 (`git checkout -b experiment`)
 
+```figure
+s0-commit-dag
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: git 구성하기

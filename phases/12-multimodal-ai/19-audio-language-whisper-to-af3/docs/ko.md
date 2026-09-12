@@ -108,6 +108,10 @@ MMAU(Massive Multimodal Audio Understanding)는 2024~2025년 오디오 추론 �
 
 오픈 SOTA(AF3)는 0.72, 독점 프런티어는 약 0.78(Gemini 2.5 Pro, Claude Opus 4.7)이다. 이 격차는 VideoMME의 오픈 대 클로즈드 차이보다 작으며, 이는 오디오-LLM이 성숙하고 있음을 시사한다.
 
+```figure
+audio-text-ctc
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

@@ -79,6 +79,10 @@ while True:
 
 - *긴 지평을 가진 완전 정보 게임*(바둑, 체스): 여전히 탐색 기반. AlphaZero / MuZero가 지배한다.
 - *LLM 추론*: 아직 프로덕션(production)에 MCTS 없음; 전체 롤아웃(rollout)에 GRPO, 추론 계산에 best-of-N. 과정 보상 모델(process reward models, PRMs)이 스텝 수준 탐색이 다시 추가될 것임을 암시한다.
+```figure
+f3-selfplay-ladder
+```
+
 
 ## 직접 만들기 (Build It)
 

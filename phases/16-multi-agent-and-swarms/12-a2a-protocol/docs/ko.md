@@ -98,6 +98,10 @@ A2A는 흔한 세 가지 패턴을 지원한다.
 
 A2A는 2026년 4월 기준 가장 많이 채택된 피어 프로토콜이다. 비교는 arXiv:2505.02279(Liu et al., "A Survey of Agent Interoperability Protocols")를 보라.
 
+```figure
+sw-agent-card-discovery
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 `http.server`와 JSON을 사용해 A2A 최소 서버와 클라이언트를 구현한다. 서버는:

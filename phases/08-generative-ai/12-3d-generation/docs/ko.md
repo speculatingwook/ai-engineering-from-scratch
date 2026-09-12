@@ -58,6 +58,10 @@
 ### NeRF (맥락을 위해)
 
 신경 방사 필드(Neural Radiance Field, Mildenhall et al., 2020). 작은 MLP가 `(x, y, z, view direction)`을 받아 `(color, density)`를 출력한다. 광선을 따라 적분해 렌더링한다. 품질 면에서 메시 기반 새 시점 합성(novel-view synthesis)을 능가하지만 렌더링이 100-1000배 느리다. 대부분의 실시간 용도에서는 가우시안 스플래팅으로 대체되었지만 연구에서는 여전히 지배적이다.
+```figure
+v4-3d-multiview
+```
+
 
 ## 직접 만들기 (Build It)
 

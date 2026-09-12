@@ -381,6 +381,10 @@ Replace x_i^T x_j with K(x_i, x_j) to get the kernel trick.
 | Adam | O(n) | O(n) | 딥러닝 기본값 |
 | K-FAC | O(n) | 층당 O(n) | 연구, 대용량 배치 학습 |
 
+```figure
+convex-vs-nonconvex
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 볼록성 검사기

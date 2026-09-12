@@ -102,6 +102,10 @@ Phase 14 · 12는 오류 복구와 자가 치유(self-healing)를 깊이 다루�
 
 남은 모든 레슨은 이 4단계 루프의 정교화다. 이것을 불변항으로 마음에 새겨라.
 
+```figure
+tp-tool-loop
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 LLM 없이 4단계 루프를 돌린다. 가짜 "decider" 함수가 사용자 메시지를 패턴 매칭하여 모델을 시뮬레이션하고, 실행기, 스키마 검증기(validator), observe 단계 하니스(harness)는 진짜다. 이를 돌려서 출력 가능한 중간 상태와 함께 전체 요청/응답 안무(choreography)를 확인한 뒤, 나중 레슨에서 가짜 decider를 실제 제공자로 교체하라.

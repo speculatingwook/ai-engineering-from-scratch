@@ -59,6 +59,10 @@
 | WAN 2.2 (Alibaba) | 2025-07 | 5s | 720p | 예 | 2025년 중반 가장 강한 오픈 모델 |
 
 오픈 가중치는 이미지 공간보다 격차를 더 빠르게 좁히고 있다. HunyuanVideo + WAN 2.2 LoRA는 2026년 중반이면 이미 대부분의 오픈소스 워크플로를 구동한다.
+```figure
+video-diffusion-denoise
+```
+
 
 ## 직접 만들기 (Build It)
 

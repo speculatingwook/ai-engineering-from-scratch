@@ -139,6 +139,10 @@ DeepSeek-R1(2025)은 V3 백본(backbone)에 대한 추론 학습 실행이다. R
 
 DeepSeek-V4(만약 출시된다면)는 MLA + MoE + MTP를 유지하고 Phase 10 · 17의 NSA를 잇는 DSA(DeepSeek Sparse Attention)를 추가할 것으로 예상된다. 계보는 안정적이다. 아키텍처 수준의 혁신이 누적되고, 각 버전이 손잡이를 하나씩 더 돌린다.
 
+```figure
+moe-routing
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 DeepSeek-V3의 형태에 특화된 파라미터 계산기다. 실행하여 그 출력을 논문의 수치와 비교하고, 가상의 변형(전문가 256 대 512, top-8 대 top-16, MLA 랭크 512 대 1024)에 사용한다.

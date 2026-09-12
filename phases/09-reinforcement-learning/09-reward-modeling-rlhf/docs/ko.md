@@ -53,6 +53,10 @@ RLHF(Christiano et al. 2017; Ouyang et al. 2022)는 선호를 보상 모델로 �
 - **GRPO** (DeepSeek 2024–2025): 크리틱(critic) 대신 그룹 상대 베이스라인(baseline)을 가진 PPO, 인간 학습 RM 대신 *검증기(verifier)*(코드 실행 / 수학 답 일치)로부터의 보상. 추론 모델에 지배적이다. Phase 9 · 12에서 다룬다.
 - **과정 보상 모델(process reward models, PRMs):** 부분 해(각 추론 스텝)를 채점하며, 추론을 위한 RLHF와 GRPO 변형 모두에서 사용된다.
 - **헌법적 AI / RLAIF:** 인간 대신 정렬된 LLM을 사용해 선호를 생성한다. 선호 예산을 확장한다.
+```figure
+reward-model
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -77,6 +77,10 @@ UCT 공식: `Q(s, a) + c * sqrt(ln N(s) / N(s, a))`. 첫 항은 활용(exploitat
 
 AlphaEvolve(Lesson 11)는 2025년의 극단이다: 코드에 대한 진화적 탐색, 기계 검증 가능한 적합도(fitness), 프런티어 이득(56년 만의 첫 4x4 행렬곱 개선).
 
+```figure
+tree-of-thoughts
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다:

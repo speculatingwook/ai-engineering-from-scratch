@@ -69,6 +69,10 @@ AudioMarkBench에서: "피치 시프트 하에서 모든 워터마크가 비트 
 ### C2PA / Content Authenticity Initiative
 
 ML 기법이 아니라 매니페스트(manifest) 형식이다. 오디오 파일이 생성 도구, 저자, 날짜에 대한 암호학적으로 서명된 메타데이터를 담는다. Audobox / Seamless가 이를 쓴다. 출처에는 좋다. 악의적 행위자가 재인코딩해 메타데이터를 벗겨내면 아무것도 못 한다.
+```figure
+v4-audio-watermark
+```
+
 
 ## 직접 만들기 (Build It)
 

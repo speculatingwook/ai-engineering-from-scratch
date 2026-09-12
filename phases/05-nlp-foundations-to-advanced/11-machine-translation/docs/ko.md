@@ -26,6 +26,10 @@
 - **토크나이저(Tokenizer).** 혼합 언어 코퍼스(corpus)로 학습된 SentencePiece BPE. 언어 간 공유 어휘(shared vocabulary)가 바로 NLLB에서 제로샷(zero-shot) 언어쌍을 가능하게 만드는 요소다.
 - **모델 크기(Model size).** NLLB-200 distilled 600M은 노트북에 들어간다. NLLB-200 3.3B가 공개된 프로덕션 기본값이다. 54.5B는 연구의 상한선이다.
 - **디코딩(Decoding).** 일반 콘텐츠에는 빔 너비(beam width) 4-5. 너무 짧은 출력을 피하기 위한 길이 페널티(length penalty). 용어 일관성이 필요할 때는 제약 디코딩(constrained decoding).
+```figure
+seq2seq-alignment
+```
+
 
 ## 직접 만들기 (Build It)
 

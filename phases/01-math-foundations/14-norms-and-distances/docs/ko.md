@@ -423,6 +423,10 @@ Product quant.    Compress vectors, search       FAISS (memory-constrained)
 
 HNSW(Hierarchical Navigable Small World)는 현대 벡터 데이터베이스에서 지배적인 알고리즘이다. 각 노드가 근사 최근접 이웃에 연결되는 다층 그래프를 만든다. 탐색은 최상위 층(희소, 긴 도약)에서 시작하여 최하위 층(조밀, 짧은 도약)으로 내려간다.
 
+```figure
+norm-unit-balls
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 모든 노름과 거리 함수

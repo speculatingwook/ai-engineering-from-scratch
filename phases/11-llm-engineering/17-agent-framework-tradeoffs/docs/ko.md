@@ -100,6 +100,10 @@ LLM 호출이 하나 이상 필요한 작업이 있다고 하자. 연구 워크�
 | 리듀서를 가진 수천 개의 병렬 팬아웃 | LangGraph + `Send` | 일급 병렬 디스패치 API를 가진 유일한 것. |
 | 빠른 프로토타입, 프레임워크 약속 없음 | 순수 Python + 프로바이더 SDK | 프레임워크 없음이 가장 빠른 프레임워크다. |
 
+```figure
+l5-framework-fit
+```
+
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** 같은 작업("Anthropic의 본사를 연구하고, 200단어 브리프를 쓰고, 출처를 인용하라")을 가져와 LangGraph(네 노드: plan, search, write, cite)와 CrewAI(세 역할: researcher, writer, editor)에서 구현하라. 실행당 토큰 비용과 코드 줄 수를 보고하라.

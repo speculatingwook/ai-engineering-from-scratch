@@ -70,6 +70,10 @@ Abadi et al. 2016. 표준 레시피:
 
 레슨 20-21은 편향/공정성이다. 레슨 22는 프라이버시다. 레슨 23은 워터마킹을 통한 출처(provenance)다. 레슨 27은 규제 데이터 출처 계층을 다룬다.
 
+```figure
+an-dp-clip-noise
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 수준의 이진 분류(binary classification) 데이터셋에 대해 DP-SGD를 시뮬레이션한다. 노이즈 승수(noise multiplier) σ와 클리핑 노름(clipping norm) C를 훑으면서 (ε, δ) 예산과 정확도 비용을 추적할 수 있다. "카나리 공격"은 고유한 학습 예제를 삽입하고, DP 적용 전후에 로그 손실(log-loss) 테스트가 그것을 탐지할 수 있는지 측정한다.

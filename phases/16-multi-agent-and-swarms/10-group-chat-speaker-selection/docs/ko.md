@@ -90,6 +90,10 @@ manager = GroupChatManager(groupchat=chat, llm_config={...})
 
 둘 다 Lesson 04의 네 가지 프리미티브를 사용한다. 그룹 챗은 기본적으로 LLM 선택 오케스트레이션(orchestration)과 전체 풀 공유 상태를 사용한다.
 
+```figure
+swarm-speaker
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 stdlib만으로 GroupChat를 밑바닥부터 구현한다. 세 에이전트(코더, 리뷰어, 매니저), 라운드 로빈과 LLM 선택 변형, 그리고 `TERMINATE` 토큰에 대한 종료를 담는다.

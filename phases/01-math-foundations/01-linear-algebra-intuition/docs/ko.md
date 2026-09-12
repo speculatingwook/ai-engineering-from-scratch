@@ -177,6 +177,10 @@ Output: u1, u2, u3, ... (orthonormal basis)
 - 선형 시스템 풀기 (가우스 소거법(Gaussian elimination)보다 더 안정적)
 - 고윳값(eigenvalue) 계산 (QR 알고리즘)
 - 최소제곱 회귀 (표준적인 수치 해법)
+```figure
+eigen-directions
+```
+
 
 ## 직접 만들기 (Build It)
 

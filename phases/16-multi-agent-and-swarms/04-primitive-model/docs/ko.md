@@ -111,6 +111,10 @@ Orchestrator = ({state, last_speaker}) -> next_agent
 
 모두 프리미티브 위에 구현 가능하다. 그중 어느 것도 새 프리미티브가 아니다.
 
+```figure
+a5-primitive-radar
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 약 150줄의 stdlib Python으로 네 프리미티브를 구현한다. 실제 LLM은 없다. 각 에이전트는 스크립트된 정책(policy)이라서 초점이 조율 구조에 머무른다.

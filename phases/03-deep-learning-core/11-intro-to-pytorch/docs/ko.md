@@ -282,6 +282,10 @@ for inputs, targets in loader:
 | 학습 곡선 | 직접 만들었음 | 보통 | 가파름 (함수형 패러다임) |
 | 프로덕션 사용 | 장난감 문제 | Meta, OpenAI, Anthropic, HF | Google DeepMind, Midjourney |
 
+```figure
+dropout-mask
+```
+
 ## 직접 만들기 (Build It)
 
 오직 PyTorch 기본 요소만 써서 MNIST에 학습시킨 3층 MLP다. 고수준 래퍼 없음. `torchvision.datasets` 없음. 원시 데이터를 직접 내려받고 파싱한다.

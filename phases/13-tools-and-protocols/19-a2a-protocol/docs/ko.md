@@ -136,6 +136,10 @@ submitted -> working -> completed | failed | canceled | rejected
 
 특정 툴을 호출하고 싶을 때 MCP를 사용하라. 전체 태스크를 다른 에이전트에 위임하고 싶을 때 A2A를 사용하라. 많은 프로덕션 시스템은 둘 다 사용한다: 에이전트가 툴 계층에는 MCP를, 협업 계층에는 A2A를 쓴다.
 
+```figure
+a2a-task-lifecycle
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 최소 A2A 하니스(harness)를 구현한다: 리서치 에이전트가 자신의 카드를 게시하고, 작성 에이전트가 PDF와 텍스트 지시를 포함한 파트와 함께 `tasks/send`를 받아, working → input_required → working → completed로 전이하고, 텍스트 아티팩트를 반환한다. 모두 stdlib이며, 메시지 형태에 집중하기 위해 인메모리 전송을 사용한다.

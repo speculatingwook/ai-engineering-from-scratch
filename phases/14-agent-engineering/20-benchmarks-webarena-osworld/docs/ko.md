@@ -61,6 +61,10 @@ Claude computer use, OpenAI CUA, Gemini 2.5 Computer Use(Lesson 21)는 모두 We
 - **궤적 길이 무시.** 성공률만 채점하면 OSWorld-Human이 드러내는 1.4~2.7배의 스텝 비효율을 놓친다.
 - **오래된 자체 호스팅 앱.** WebArena의 앱은 특정 버전을 고정한다. 재선별 없이 업데이트하면 비교 가능성이 깨진다.
 
+```figure
+ae-agent-human-gap
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 장난감 수준의 웹 에이전트 하니스(harness)를 구현한다:

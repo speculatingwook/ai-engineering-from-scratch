@@ -39,6 +39,14 @@ were is aux of running
 at is prep of running
 3pm is pobj of at
 ```
+```figure
+pos-tagger
+```
+
+```figure
+dependency-arcs
+```
+
 
 ## 직접 만들기 (Build It)
 

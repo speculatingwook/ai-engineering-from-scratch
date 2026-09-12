@@ -71,6 +71,10 @@ MATS는 연구자를 훈련한다. 졸업생은 Anthropic, DeepMind, OpenAI(연�
 
 레슨 7-11은 Redwood와 Apollo의 작업을 참조한다. 레슨 18은 METR의 프레임워크 비교를 참조한다. 레슨 19는 Eleos를 참조한다. 레슨 28은 Phase의 나머지가 의존하는 생태계에 대한 명시적 조직 지도다.
 
+```figure
+sae-features
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 코드 없음. 외부 종합이 연구소 내부 정책 작업에 어떻게 가치를 더하는지 보여주는 예시로 METR의 "Common Elements of Frontier AI Safety Policies"를 읽어라.

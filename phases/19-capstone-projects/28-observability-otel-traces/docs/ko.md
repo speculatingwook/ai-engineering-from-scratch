@@ -46,6 +46,10 @@ GenAI 컨벤션은 다음 속성 키들을 표준화한다. `gen_ai.system`(어�
 익스포터는 JSONL을 기록한다. 한 줄에 JSON 객체 하나. 하위 도구가 스트림(stream)하고, grep하고, 임포트(import)하기에 가장 단순한 형식이다. 실제 OTel 익스포터라면 OTLP gRPC를 구사한다. 레슨의 JSONL 익스포터는 그 오프라인 등가물이며 모든 워크스테이션에서 0으로 종료한다.
 
 지표는 트레이스 옆에 산다. 카운터는 각 도구 호출마다 증가한다. `tools_called_total{tool="read_file"}`. 히스토그램은 관측된 지연 시간을 기록한다. `tool_latency_ms{tool="read_file"}`. 둘 다 풀 기반(pull-based) 지표의 사실상 표준인 Prometheus 텍스트 노출 형식으로 직렬화(serialise)된다.
+```figure
+trace-spans
+```
+
 
 ## 아키텍처 (Architecture)
 

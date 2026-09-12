@@ -87,6 +87,10 @@ Flamingo(Lesson 12.04)는 BLIP-2보다 앞섰고 같은 교차 어텐션 아이�
 
 네 가지 모두 유효하다. 결정을 가르는 질문은 토큰 예산에 제약을 받는지, 토큰당 품질에 제약을 받는지다.
 
+```figure
+modality-projection
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 표준 라이브러리로 Q-Former 스타일 교차 어텐션을 만든다:

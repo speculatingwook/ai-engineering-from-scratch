@@ -38,6 +38,10 @@ BERTopic(2020)은 문서를 BERT로 인코딩하고, UMAP으로 차원을 축소
 4. 각 군집에 대해, 군집의 문서들에 대한 클래스 기반 TF-IDF를 계산하여 상위 단어를 추출한다.
 
 출력은 문서당 하나의 토픽(더하기 -1 이상치 레이블)이다. 선택적으로 HDBSCAN의 확률 벡터를 통한 소프트 소속(soft membership).
+```figure
+topic-drift
+```
+
 
 ## 직접 만들기 (Build It)
 

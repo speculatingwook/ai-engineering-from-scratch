@@ -14,6 +14,10 @@
 - 라운드 간 점수를 비교해 수렴을 탐지하기. 정체(plateau), 목표 달성, 또는 예산 소진 시 멈추기.
 - 수렴하지 않는 비평가가 영원히 실행되지 않도록 최대 반복(max-iteration) 예산으로 라운드를 한정하기.
 - 대시보드나 다음 단계가 점수 궤적(score trajectory)을 렌더링할 수 있도록 라운드별 트레이스(trace)를 내보내기.
+```figure
+ch-critic-converge
+```
+
 
 ## 왜 다섯 가지 고정 차원인가 (Why five fixed dimensions)
 

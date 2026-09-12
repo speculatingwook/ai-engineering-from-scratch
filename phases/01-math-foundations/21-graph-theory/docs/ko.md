@@ -240,6 +240,10 @@ graph LR
 | L의 고윳값 | 커뮤니티 탐지, 그래프 분할 |
 | 스펙트럼 클러스터링 | 비지도 노드 그룹화 |
 | PageRank | 노드 중요도, 웹 검색 |
+```figure
+graph-degree-distribution
+```
+
 
 ## 직접 만들기 (Build It)
 

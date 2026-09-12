@@ -94,6 +94,10 @@ NVIDIA Dynamo Planner와 llm-d Workload Variant Autoscaler는 이 신호들을 �
 - HPA 신호로서 `DCGM_FI_DEV_GPU_UTIL`: 망가짐. 큐 깊이나 KV 사용률을 쓰라.
 - Karpenter `WhenEmptyOrUnderutilized`: 실행 중인 GPU 작업을 종료한다. 추론에는 `WhenEmpty + consolidateAfter: 1h`를 쓰라.
 
+```figure
+autoscaling
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 버스트성 GPU 워크로드에서 3계층 오토스케일러를 시뮬레이션한다. 순진한 HPA(듀티 사이클), 큐 깊이 HPA, KAI 갱 스케줄링 스케일링을 비교한다. 미충족 요청, 유휴 GPU 분(minute), 그리고 종합 점수를 보고한다.

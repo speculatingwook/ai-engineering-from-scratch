@@ -124,6 +124,10 @@ SEP-1686은 2025-11-25에 출시되었지만 더 넓은 로드맵은 세 가지 
 
 이 레슨은 `outputs/skill-task-store-designer.md`를 만든다. 장기 실행 도구(리서치, 빌드, 내보내기)가 주어지면, 이 스킬은 태스크 저장소(상태 형태, ttl, 내구성)를 설계하고, 올바른 taskSupport 플래그를 고르고, 진행 알림을 스케치한다.
 
+```figure
+tp-task-lifecycle
+```
+
 ## 연습 문제 (Exercises)
 
 1. `code/main.py`를 실행한다. `generate_report` 태스크를 시작하고, 상태를 폴링한 뒤, 결과를 가져온다.

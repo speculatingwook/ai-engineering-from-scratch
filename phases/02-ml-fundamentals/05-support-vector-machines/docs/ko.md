@@ -221,6 +221,10 @@ SVM은 다음 상황에서 여전히 이긴다.
 - 명확한 마진 구조를 가진 이진 분류(binary classification)
 - 이상 탐지(anomaly detection)(one-class SVM)
 
+```figure
+svm-margin
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 힌지 손실과 그래디언트

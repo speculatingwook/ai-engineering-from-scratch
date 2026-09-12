@@ -103,6 +103,10 @@ LLM 서비스를 전용 서브넷에 둔다:
 - Vercel 2026: CI/CD 자격 증명 손상 → 수천 개 고객 env 변수 유출.
 - 감사 로그 보관: SOC 2 = 1년, HIPAA = 6년.
 
+```figure
+i4-vault-rotation
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 일관된 토큰화를 갖춘 토이(toy) PII 스크러버와 추가 전용(append-only) 감사 로그를 구현한다.

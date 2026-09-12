@@ -105,6 +105,10 @@ GB300 NVL72 + Dynamo는 Hopper 베이스라인 대비 50배 MoE 처리량을 보
 - 분리 임계값: 프롬프트 >512 토큰 + 출력 >200 토큰.
 - NIXL을 통한 KV 전송: 70B FP8에서 4K 프롬프트 KV에 대해 20-80ms.
 
+```figure
+prefill-decode-split
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 코로케이션 대 분리형 서빙을 시뮬레이션한다. 처리량, 요청당 비용, 프롬프트 길이 교차점을 보고한다.

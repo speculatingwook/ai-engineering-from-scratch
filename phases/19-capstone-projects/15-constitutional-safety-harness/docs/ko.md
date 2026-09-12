@@ -72,6 +72,10 @@ output: CVSS-scored findings + disclosure timeline + before/after harmlessness d
 - 헌법적 학습: Anthropic 스타일 자기 비평 루프 + 비평에 대한 SFT
 - PII 스크럽: Presidio
 - 타깃: 8B 인스트럭션 튜닝 모델 또는 다른 캡스톤의 RAG 챗봇 중 하나
+```figure
+cf-safety-stack
+```
+
 
 ## 직접 만들기 (Build It)
 

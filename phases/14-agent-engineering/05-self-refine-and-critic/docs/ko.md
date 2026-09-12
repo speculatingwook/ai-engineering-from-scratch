@@ -83,6 +83,10 @@ OpenAI Agents SDK는 이 패턴을 "출력 가드레일(output guardrails)"로 �
 - **과도한 정제(Over-refinement).** 각 정제 패스는 지연(latency)과 토큰을 더한다. 1~3패스를 예산으로 잡고, 그 이후에는 사람 검토로 에스컬레이션하라.
 - **사소한 작업에 대한 CRITIC.** 외부 검증기가 없으면 CRITIC은 Self-Refine으로 퇴화한다. 스텁(stub) 검증기를 위해 지연을 치르지 마라.
 
+```figure
+self-refine
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 장난감 작업에 Self-Refine과 CRITIC을 구현한다: 주제가 주어지면 짧은 글머리 기호 목록을 생성하기. 검증기는 서식을 확인한다(글머리 3개, 각각 60자 미만). CRITIC은 알려진 환각을 벌하는 외부 "사실 검증기"를 추가한다.

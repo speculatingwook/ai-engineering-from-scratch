@@ -232,6 +232,10 @@ det = -1:  area preserved but orientation flipped (reflection)
 | det(Reflection) | = -1     (orientation flipped)
 ```
 
+```figure
+matrix-transform
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 밑바닥부터 만드는 변환 행렬 (Python)

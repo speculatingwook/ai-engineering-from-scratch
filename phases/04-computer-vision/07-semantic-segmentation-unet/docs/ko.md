@@ -134,6 +134,10 @@ U-Net의 인코더는 해상도를 네 번 절반으로 줄이므로, 입력은 
 2. 병목을 공간 해상도를 더 높게 유지하면서 수용 영역(receptive field)을 넓히는 팽창 합성곱(dilated convolution)으로 대체한다(DeepLab 계열).
 
 첫 모델에는 64채널 기반 U-Net을 가진 256x256 입력이 8 GB VRAM에서 편안하게 학습된다.
+```figure
+segmentation-flood
+```
+
 
 ## 직접 만들기 (Build It)
 

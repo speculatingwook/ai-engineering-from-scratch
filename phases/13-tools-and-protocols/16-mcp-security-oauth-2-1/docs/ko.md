@@ -101,6 +101,10 @@ WWW-Authenticate: Bearer error="insufficient_scope",
 
 샘플링 서버(Phase 13 · 11)는 클라이언트의 토큰을 다른 서비스로 통과(passthrough)시켜서는 안 된다. 샘플링 요청이 경계다.
 
+```figure
+t3-scope-stepup
+```
+
 ### 혼동된 대리자 방지
 
 토큰은 `aud`에 바인딩된다. 클라이언트는 `client_id`에 바인딩된다. 모든 요청이 둘 다에 대해 검증된다. 사양은 MCP 이전 원격 도구 생태계에서 흔했던 옛 "토큰 전달(pass-the-token)" 패턴을 명시적으로 금지한다.

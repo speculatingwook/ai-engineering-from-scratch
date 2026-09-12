@@ -98,6 +98,10 @@ OpenAI는 SOC 2 Type 2, ISO/IEC 27001:2022, ISO/IEC 27701:2019, GDPR/CCPA/HIPAA 
 - SOC 2 Type II 기간: 작동된 제어 6~12개월.
 - Colorado AI Act 발효일: 2026년 6월 30일(SB25B-004에 의해 2026년 2월에서 연기됨).
 
+```figure
+i4-control-matrix
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 Python으로 된 컴플라이언스 매핑 스프레드시트다. 제어가 주어지면 그것이 충족하는 프레임워크들을 나열한다.

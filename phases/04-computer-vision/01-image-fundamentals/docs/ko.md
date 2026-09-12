@@ -196,6 +196,10 @@ Lanczos               slowest, best quality, used for final display
 
 경험칙: 학습에는 bilinear, 들여다볼 에셋에는 bicubic이나 lanczos, 정수 클래스 ID를 담은 것에는 nearest를 쓴다.
 
+```figure
+conv-output-size
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 이미지 로드하고 형태 검사하기

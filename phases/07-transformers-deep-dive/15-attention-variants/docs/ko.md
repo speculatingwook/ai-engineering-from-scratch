@@ -81,6 +81,10 @@ DiffAttn = (A1 - λ · A2) V
 | BigBird (국소 + 전역 + 무작위) | O(N) 근사 | 혼합 | 2배 컨텍스트에서 완전 어텐션에 필적 | 초기 장문 컨텍스트 BERT |
 | 네이티브 희소 (DeepSeek-V3.2) | O(N · 활성 비율) | O(N) | 0.05 ppl 이내 | DeepSeek-V3.2, 2025 |
 | 차분 | O(2·N²) | O(2N) | -5 ~ -10% ppl | DIFF Transformer, 2026년 초 모델 |
+```figure
+gqa-kv-sharing
+```
+
 
 ## 직접 만들기 (Build It)
 

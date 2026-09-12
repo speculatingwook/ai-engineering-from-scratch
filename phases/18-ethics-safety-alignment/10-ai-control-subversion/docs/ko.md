@@ -76,6 +76,10 @@ UK AISI와 Redwood는 통제 안전 사례(Control Safety Cases)(metr.org / redw
 
 레슨 6-9는 위협을 기술한다(기만이 가능하다). 레슨 10은 위협이 실재한다는 가정 아래의 방어적 패러다임을 기술한다. 레슨 11은 보완적인 공격적 패러다임(확장 가능한 감독을 통해 U를 신뢰할 만하게 만들기)을 기술한다.
 
+```figure
+al-control-protocol
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 백도어 작업에서 네 프로토콜을 시뮬레이션한다. U가 출력을 만들고; 일부가 백도어화된다(레드팀 정책). T가 승인하거나 편집한다. H가 예산 내에서 호출된다. 예산과 공모 파라미터를 스윕하여 Greenblatt et al. 2024 Figure 2의 파레토 경계(Pareto frontier)(형태, 수치 아님)를 재현할 수 있다.

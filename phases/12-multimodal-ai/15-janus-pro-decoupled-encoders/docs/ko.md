@@ -89,6 +89,10 @@ InternVL-U는 Janus-Pro의 아키텍처 선택을 더 큰 프레임워크 안에
 
 둘 다 필요한 제품에는 Janus-Pro가 이제 참조 오픈 아키텍처다.
 
+```figure
+l5-janus-decouple
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 Janus-Pro 라우팅을 시뮬레이션한다.

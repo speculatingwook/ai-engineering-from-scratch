@@ -88,6 +88,10 @@ Mem0는 메모리를 범위(scope)로 나눈다:
 - **KV 스키마 잠식(KV schema creep).** `(user_id, type, entity)`는 모든 팀이 자기 `type`을 추가하기 전까지는 단순해 보인다. 분기마다 타입 집합을 감사하라.
 - **그래프 폭발(Graph explosion).** 시끄러운 추출기 하나가 메시지당 50개의 간선을 추가한다. `add` 호출당 그래프 쓰기를 제한하라; 신뢰도가 낮은 간선은 버려라.
 
+```figure
+ae-memory-fusion
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 3저장소 패턴을 stdlib로 구현한다:

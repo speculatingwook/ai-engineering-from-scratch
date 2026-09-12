@@ -37,6 +37,10 @@
 | Multi-head latent (MLA) | N | compressed to low-rank | DeepSeek-V2, V3 |
 
 GQA는 거의 완전한 품질을 유지하면서 KV 캐시(cache) 메모리를 `N/G`배 줄이기 때문에 현대의 기본값이다. MLA는 한 걸음 더 나아가 K/V를 잠재(latent) 공간으로 압축한 뒤 계산 시점에 되투영한다. FLOPs를 들이고, 훨씬 더 많은 메모리를 아낀다.
+```figure
+multihead-split
+```
+
 
 ## 직접 만들기 (Build It)
 

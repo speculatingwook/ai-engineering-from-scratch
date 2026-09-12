@@ -93,6 +93,10 @@ M[i, j] = 1 iff there exists b where offsets[b] <= i < offsets[b+1] and offsets[
 
 2026년 프로덕션 규칙은 이렇다. 작업별 최대 픽셀 상한을 고르고, 그 상한까지 네이티브 종횡비로 인코딩하고, 배치를 패킹하고, 패딩을 건너뛴다. Qwen2.5-VL은 정확히 이 손잡이를 위해 `min_pixels`와 `max_pixels`를 노출한다.
 
+```figure
+mm-patch-n-pack
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 정수 픽셀 좌표를 가진 이질적 이미지 배치에 대해 patch-n'-pack을 구현한다. 이것은 다음을 한다.

@@ -69,6 +69,10 @@ flowchart LR
 
 세 개의 노브(knob), 세 가지 다른 동작. 온도가 0에 가까우면 그리디(greedy)로 붕괴한다. 온도 1은 모델의 자연스러운 분포와 일치한다. top-k 1은 그리디다. top-k 40은 긴 꼬리(long tail)를 거른다. 조합이 중요하다. 다음 학습 레슨은 생성을 정성적(qualitative) 평가 신호로 사용한다.
 
+```figure
+cc-gpt-assembly
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다.

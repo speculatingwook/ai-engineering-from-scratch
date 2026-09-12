@@ -66,6 +66,10 @@ MSJ는 PAIR(Lesson 12)와 합성된다. PAIR로 공격 구조를 찾고, 거기�
 
 Lesson 12는 인컨텍스트 반복 공격이다. Lesson 13은 긴 컨텍스트 길이 활용이다. Lesson 14는 인코딩 공격이다. Lesson 15는 시스템 경계에서의 주입(injection) 공격이다. 이들이 함께 2026년 탈옥 공격 표면을 정의한다.
 
+```figure
+jailbreak-defense
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 키워드 필터와 "패턴화된 이어쓰기(patterned-continuation)" 약점을 가진 장난감 대상을 만든다. 컨텍스트가 유해-응순(harmful-compliance) 쌍의 예시 N개를 담고 있으면, 대상의 필터 점수가 거듭제곱 법칙 인자만큼 감쇠한다. 샷-대-ASR 곡선을 재현할 수 있다.

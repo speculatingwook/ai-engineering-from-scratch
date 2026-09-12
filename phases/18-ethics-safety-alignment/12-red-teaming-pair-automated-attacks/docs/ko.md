@@ -67,6 +67,10 @@ ASR은 보통 고정된 쿼리 예산에서 보고된다. 공격을 비교하려
 
 Lesson 12는 자동화 공격의 토대다. Lesson 13(다중샷 탈옥, Many-Shot Jailbreaking)은 상호 보완적인 길이 활용(length-exploit)이다. Lesson 14(아스키 아트 / 시각적)는 인코딩 공격이다. Lesson 15(간접 프롬프트 주입, Indirect Prompt Injection)는 2026년 프로덕션 공격 표면이다. Lesson 16은 방어 도구 대응물(Llama Guard, Garak, PyRIT)을 다룬다.
 
+```figure
+al-pair-loop
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 PAIR 루프를 만든다. 대상은 "명백한" 유해 프롬프트를 거부하는 모의 분류기(키워드 필터)다. 공격자는 패러프레이즈(paraphrase), 역할극 프레이밍(roleplay-framing), 인코딩을 시도하는 규칙 기반 정제기다. 심판이 응답에 점수를 매긴다. 공격자가 키워드 필터에 대해 약 5-15회 반복 안에 성공하고 의미 필터에 대해 실패하는 것을 지켜본다.

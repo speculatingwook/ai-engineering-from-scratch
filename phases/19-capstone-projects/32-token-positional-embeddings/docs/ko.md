@@ -13,6 +13,10 @@
 - 파라미터(parameter)가 없는, 위치로 인덱싱되는 고정 사인파(sinusoidal) 위치 임베딩을 만든다.
 - 토큰 임베딩과 위치 임베딩을 트랜스포머(transformer) 블록(block)을 위한 단일 입력으로 합성한다.
 - 길이 일반화(length generalization)와 파라미터 수에 대해 학습형 임베딩과 사인파 임베딩을 대조한다.
+```figure
+cc-embedding-lookup
+```
+
 
 ## 틀 (The frame)
 

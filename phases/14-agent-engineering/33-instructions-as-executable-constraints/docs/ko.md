@@ -55,6 +55,10 @@ flowchart LR
 ### 규칙 vs 프레임워크 가드레일
 
 프레임워크 가드레일(guardrail)(OpenAI Agents SDK 가드레일, LangGraph 인터럽트(interrupt))은 런타임 수준에서 규칙을 강제한다. 이 레슨의 규칙 집합은 그 가드레일이 구현하는, 인간이 읽을 수 있고 리뷰 가능한 계약이다. 둘 다 필요하다. 런타임은 턴 도중 위반을 잡고, 규칙 집합은 런타임이 올바른 일을 하고 있음을 증명한다.
+```figure
+wb-rule-checkoff
+```
+
 
 ## 직접 만들기 (Build It)
 

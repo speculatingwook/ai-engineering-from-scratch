@@ -98,6 +98,10 @@ Prismatic VLMs(Karamcheti et al., 2024)는 모든 축을 통제한 논문이다.
 
 그 기본값 하나하나가 이 레슨 끝에 인용된 논문의 측정된 절제 연구로 거슬러 올라간다.
 
+```figure
+l5-vlm-recipe-knobs
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 절제 표 파서이자 레시피 선택기다. MM1과 Idefics2 절제 표(압축본)를 인코딩하고 다음을 질의하게 해 준다:

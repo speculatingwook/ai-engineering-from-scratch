@@ -70,6 +70,10 @@ Google은 2025년 AI Overviews에 추측 디코딩을 배포했다(같은 품질
 - 도메인 학습된 드래프트 헤드가 없는 특수 도메인. Alpha가 너무 낮다.
 - vLLM v0.18.0 + 드래프트 모델 추측 디코딩 + `--enable-chunked-prefill`. 이 조합은 컴파일되지 않는다. 문서화된 예외는 V1의 N-gram GPU 추측 디코딩이다.
 
+```figure
+mx-speculative-tree
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다양한 alpha 값과 드래프트 길이 K에 걸쳐 추측 디코딩이 있을 때와 없을 때의 디코드 루프를 시뮬레이션한다. 손익분기 alpha, 측정된 속도 향상, 꼬리 동작을 출력한다. 여러 (alpha, K) 조합에서 실행하여 추측 디코딩이 정확히 어디서 더 이상 이득이 되지 않는지 보라.

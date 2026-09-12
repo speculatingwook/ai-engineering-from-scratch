@@ -133,6 +133,10 @@ LangChain과 독립적. Python 3.10에서 3.13. `uv`를 사용. 스타 수: [cre
 - **깨지기 쉬운 핸드오프.** 작업 N의 `expected_output`이 "개요(outline)"다. 작업 N+1이 그것을 `context`로 읽고 세 개 섹션을 파싱하려 한다. LLM은 네 개를 만들었다. 하류 Agent가 즉흥적으로 처리한다. 작업 N에 `output_pydantic`을 두어 작업 N+1이 자유 텍스트가 아니라 타입 객체를 읽게 하여 고쳐라.
 - **프로덕션으로서의 Crew.** Flow 래퍼 없이 프로덕션에 출시된 자유 형식 Crew. 출력 변동성이 높다. 재현이 불가능하다. 온콜이 나쁜 실행과 좋은 실행을 diff할 수 없다. Flow로 감싸라.
 
+```figure
+ae-crew-vs-flow
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 두 형태의 stdlib 버전과 세 에이전트 크루를 구현한다.

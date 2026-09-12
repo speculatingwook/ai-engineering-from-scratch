@@ -103,6 +103,10 @@ flowchart LR
   avg --> over[overall = mean of task scores]
 ```
 
+```figure
+eval-harness-matrix
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`가 실행 가능한 산출물이다.

@@ -67,6 +67,10 @@ eval:
 - 관측성(observability): 주석 큐(annotation queue)를 갖춘 자체 호스팅 Langfuse; 드리프트를 위한 Arize Phoenix
 - 가드레일: Llama Guard 4 입력/출력 분류기, NeMo Guardrails v0.12 정책, Presidio PII 제거
 - 컴플라이언스: 청크에 대한 역할 기반 접근 레이블; GDPR/HIPAA를 위한 관할권 태그
+```figure
+canary-rollout
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -76,6 +76,10 @@ GAIA는 "범용 능력(generalist capability)"을 측정하기 위해 실행하�
 - **오염된 주장.** Verified나 SWE-bench+를 언급하지 않고 SWE-bench를 보고하는 것은 오해를 부른다.
 - **개발 목표로서의 벤치마크.** 벤치마크를 위해 최적화하면 프로덕션 유용성에서 멀어진다.
 
+```figure
+ae-swebench-gate
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 장난감 수준의 SWE-bench 유사 하니스를 구현한다:

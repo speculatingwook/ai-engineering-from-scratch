@@ -14,6 +14,10 @@
 - 결정론적(deterministic) 슬롯 메커니즘을 통해 실험 출력(경로와 캡션)의 그림을 골격에 주입하기.
 - 모델 없이 하니스(harness)가 테스트 가능하도록, 구조화된 개요(outline)에서 각 섹션을 채우는 모의(mocked) 산문 생성기를 연결하기.
 - 참조된 모든 그림과 사용된 모든 인용을 나열하는 단일 `paper.tex` 더하기 `references.bib` 더하기 매니페스트(manifest)를 내보내기.
+```figure
+ch-paper-skeleton
+```
+
 
 ## 왜 골격을 먼저 (Why a skeleton first)
 

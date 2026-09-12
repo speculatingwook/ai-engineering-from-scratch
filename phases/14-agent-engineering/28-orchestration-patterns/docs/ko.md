@@ -79,6 +79,10 @@ CrewAI는 두 가지 배포(deployment) 모드를 공식화한다:
 - **스웜에서 핸드오프가 튀는(bouncing) 현상.** A -> B -> A -> B. 홉 카운터(hop counter)를 사용하라.
 - **가짜 계층 구조.** "엔터프라이즈"라서 세 개의 계층을 두지만 실제 팀은 둘뿐인 경우. 무너뜨려라(collapse).
 
+```figure
+orchestration-pattern
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 스크립트화된 LLM을 대상으로 네 가지 패턴을 모두 stdlib로 구현한다:

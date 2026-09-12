@@ -111,6 +111,10 @@ MuRAG(Chen et al., 2022)는 최초의 멀티모달 RAG였다. 멀티모달 지�
 
 모든 모달리티를 아우르는 표준 벤치마크는 없다. 대부분의 논문은 도메인 특화 과제에서 평가한다.
 
+```figure
+contrastive-matrix
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

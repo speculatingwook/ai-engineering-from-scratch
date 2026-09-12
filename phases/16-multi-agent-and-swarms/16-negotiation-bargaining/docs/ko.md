@@ -102,6 +102,10 @@ NeurIPS 2024(https://proceedings.neurips.cc/paper_files/paper/2024/file/984dd3db
 
 제안이 숫자여야 한다면(가격, ETA, 수량), 협상 상태에서 결정론적으로 생성하고 LLM이 프레이밍을 만들게 하라. 제안이 제안 구조여야 한다면(작업 분해, 역할 배정), LLM이 초안을 작성하게 하되, 보내기 전에 스키마에 대해 검증하고 제약 검사하라.
 
+```figure
+a5-og-narrator
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다.

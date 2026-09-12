@@ -28,6 +28,10 @@
 **표제어 추출(Lemmatization)**은 문법 지식을 사용해 단어를 사전형(dictionary form)으로 환원한다. 더 느리고, 더 정확하며, 룩업 테이블(lookup table)이나 형태소 분석기(morphological analyzer)를 필요로 한다. `ran -> run`("ran"이 "run"의 과거형임을 알아야 한다). `better -> good`(비교급 형태를 알아야 한다).
 
 경험 법칙. 속도가 중요하고 노이즈를 어느 정도 감수할 수 있을 때(검색 인덱싱, 거친 분류) 어간 추출을 쓴다. 의미가 중요할 때(질의응답, 의미 검색, 사용자가 읽게 될 모든 것) 표제어 추출을 쓴다.
+```figure
+edit-distance
+```
+
 
 ## 직접 만들기 (Build It)
 

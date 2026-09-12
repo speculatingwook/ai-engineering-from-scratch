@@ -168,6 +168,10 @@ F1 = 2 * (Precision * Recall) / (Precision + Recall)
 - **정밀도(Precision)**: 거짓 양성이 비쌀 때(스팸 필터, 정상 이메일을 차단하고 싶지 않다)
 - **재현율(Recall)**: 거짓 음성이 비쌀 때(암 검진, 종양을 놓치고 싶지 않다)
 - **F1**: 단일한 균형 지표가 필요할 때
+```figure
+logistic-sigmoid
+```
+
 
 ## 직접 만들기 (Build It)
 

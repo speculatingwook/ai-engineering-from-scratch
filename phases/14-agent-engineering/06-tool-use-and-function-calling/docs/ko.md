@@ -81,6 +81,10 @@ Anthropic은 `input_schema`를 직접 쓰고, OpenAI는 `function.parameters`를
 
 도구 실행이 샌드박스 경계다. 자세한 내용은 Lesson 09 참고. 짧은 버전: 모든 도구는 읽기/쓰기 표면, 네트워크 접근, 타임아웃, 메모리 상한을 명시해야 한다. 일반적인 `run_shell(cmd)`은 위험 신호다. 구체적인 `git_status()`가 더 안전하다.
 
+```figure
+tool-routing
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 프로덕션 형태의 도구 레지스트리를 구현한다:

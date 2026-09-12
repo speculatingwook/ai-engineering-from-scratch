@@ -13,6 +13,10 @@
 - 다음 계획이 정보에 입각하도록 직전 오류를 컨텍스트에 담아 현재 커서(cursor)에서 재계획하기.
 - 다운스트림 추적기나 UI가 계획이 왜 바뀌었는지 보여줄 수 있도록 각 개정(revision)에서 계획 차이(plan diff) 방출하기.
 - 두 가지 예산 시행하기: 하드 스텝 상한과 하드 재계획 상한.
+```figure
+cg-plan-replan
+```
+
 
 ## 사고 연쇄가 아니라 계획-실행 (Plan and execute, not chain-of-thought)
 

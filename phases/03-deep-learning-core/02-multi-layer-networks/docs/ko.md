@@ -145,6 +145,10 @@ graph LR
 ### 조합 가능성 (Composability)
 
 신경망은 조합 가능(composable)하다. 쌓을 수도, 연결할 수도, 병렬로 돌릴 수도 있다. Whisper 모델은 오디오를 처리하는 데 인코더(encoder) 신경망을, 텍스트를 생성하는 데 별도의 디코더(decoder) 신경망을 쓴다. 현대 LLM은 디코더 전용(decoder-only)이다. BERT는 인코더 전용(encoder-only)이다. T5는 인코더-디코더(encoder-decoder)다. 아키텍처 선택이 모델이 할 수 있는 일을 정의한다.
+```figure
+mlp-forward
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -464,6 +464,10 @@ def generate(model, prompt_tokens, max_new_tokens=100, temperature=0.8):
 
 `tokens[-seq_len:]` 윈도우가 필요한 까닭은 모델의 최대 컨텍스트 길이가 정해져 있기 때문이다(GPT-2라면 1024). 이를 초과하면 가장 오래된 토큰을 버려야 한다. 이것이 모두가 이야기하는 "컨텍스트 윈도우(context window)"다.
 
+```figure
+sampling-decoder
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 ### 전체 학습 및 생성 데모

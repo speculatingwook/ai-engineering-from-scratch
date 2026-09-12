@@ -103,6 +103,10 @@ LoRA는 거의 모든 커뮤니티 파인튜닝이 배포되는 방식이다. Ci
 - **LCM / TCD / Turbo**: 일관성 모델(consistency model)과 증류된(distilled) 변형들. 약간의 품질을 희생하는 대신 1~4스텝.
 
 스케줄러를 교체하는 것은 `diffusers`에서 한 줄짜리 변경이며, 때로는 재학습 없이 샘플 문제를 고쳐준다.
+```figure
+cv3-latent-compression
+```
+
 
 ## 직접 만들기 (Build It)
 

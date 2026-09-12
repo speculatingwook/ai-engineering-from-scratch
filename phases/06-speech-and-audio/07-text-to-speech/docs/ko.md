@@ -65,6 +65,10 @@ LibriTTS test-clean의 2026년 수치:
 | VITS | 3.62 | 3.1% | 25M |
 | Kokoro v0.19 | 3.87 | 1.8% | 82M |
 | Parler-TTS Large | 3.76 | 2.8% | 2.3B |
+```figure
+sp-tts-stack
+```
+
 
 ## 직접 만들기 (Build It)
 

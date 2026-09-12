@@ -89,6 +89,10 @@ flowchart LR
 
 혼동 행렬은 네 횟수를 2x2 격자로 출력한다. 데모는 두 학습 체제 모두에 대해 이것을 stdout에 기록한다.
 
+```figure
+cap-classifier-head-swap
+```
+
 ## 아키텍처 (Architecture)
 
 ```mermaid

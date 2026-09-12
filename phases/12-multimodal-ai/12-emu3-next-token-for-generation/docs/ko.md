@@ -85,6 +85,10 @@ Emu3의 깊은 기여는 개념적이다. 다음 토큰 예측이 이미지 생�
 
 Show-o, Janus-Pro, InternVL-U는 모두 이 논제 위에 쌓거나 이에 도전한다. 중국 연구소(BAAI, DeepSeek)는 2025년까지 미국 연구소보다 이 방향으로 더 공격적으로 발표한다.
 
+```figure
+l5-emu3-next-token
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 두 가지 장난감 조각을 만든다.

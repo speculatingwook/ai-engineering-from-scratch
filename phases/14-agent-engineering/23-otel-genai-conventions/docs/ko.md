@@ -71,6 +71,10 @@ Datadog v1.37+는 GenAI 속성을 자신의 LLM Observability 스키마로 네�
 - **부모 링크 없는 스팬.** 고아가 된 도구 스팬. 항상 컨텍스트를 전파하라.
 - **안정성 옵트인 미설정.** 백엔드 업그레이드 시 속성 이름이 바뀔 수 있다.
 
+```figure
+ae-genai-span-tree
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 GenAI 컨벤션에 부합하는 stdlib 스팬 방출기를 구현한다:

@@ -69,6 +69,10 @@ Large-v3는 15.5억 파라미터(parameter)를 가진다. Turbo는 (32층에서)
 5. Whisper 자체의 토크나이저(tokenizer)와 프롬프트 형식을 사용하라; 절대 토크나이저를 바꾸지 마라.
 
 커뮤니티 결과: 20시간의 의료 받아쓰기에 Medium을 파인튜닝하면 의료 어휘에 대한 WER이 12%에서 4.5%로 떨어진다. 4시간의 아이슬란드어에 Turbo를 파인튜닝하면 WER이 18%에서 6%로 떨어진다.
+```figure
+sp-asr-attention
+```
+
 
 ## 직접 만들기 (Build It)
 

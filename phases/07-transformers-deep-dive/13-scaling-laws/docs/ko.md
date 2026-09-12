@@ -84,6 +84,10 @@ Schaeffer et al. (2023)는 이것이 측정 인공물(measurement artifact)이�
 
 Muon 옵티마이저(optimizer)(Kimi Moonlight, 2024)는 동일 데이터에서 AdamW 대비 ~2배의 유효 연산 이득을 보였다. 일부 2026년 학습 실행은 기본적으로 Muon을 쓴다. 스케일링 법칙의 모양이 아니라 절대 상수를 바꾼다.
 
+```figure
+scaling-laws
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`를 참고하라. Chinchilla 손실 방정식을 구현하고, 여러 연산 예산 각각에서 연산 최적 `(N, D)`를 푼다.

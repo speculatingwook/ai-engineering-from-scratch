@@ -43,6 +43,10 @@ US       B-GPE
 - **CRF.** 조건부 무작위장(Conditional Random Field). HMM과 비슷하지만 판별적(discriminative)이라, 임의의 특성(단어 형태, 대문자화, 인접 단어)을 섞을 수 있다. 2026년에도 저자원 배포에서는 여전히 고전적 프로덕션 일꾼이다.
 - **BiLSTM-CRF.** 수작업 대신 신경망 특성. LSTM이 문장을 양방향으로 읽고, 그 위의 CRF 층(layer)이 일관된 태그 시퀀스를 강제한다.
 - **트랜스포머 기반.** 토큰 분류 헤드로 BERT를 파인튜닝(fine-tuning). 최고의 정확도. 가장 많은 연산.
+```figure
+ner-bio-tagging
+```
+
 
 ## 직접 만들기 (Build It)
 

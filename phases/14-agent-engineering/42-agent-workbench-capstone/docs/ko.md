@@ -83,6 +83,10 @@ outputs/agent-workbench-pack/
 
 팩은 `VERSION` 파일을 담는다. 마이그레이션(migration)을 요구하는 스키마 변경과 스크립트 변경은 메이저(major)를 올린다. 문서만 변경하는 것은 패치(patch)를 올린다. 대상 리포지터리의 `agent_state.json`은 자신이 어떤 팩 버전에 대해 초기화되었는지 기록한다.
 
+```figure
+wb-pack-install
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 이 미니 트랙의 이전 레슨들에서 나온 스키마와 스크립트, 그리고 앞서 작성한 문서로 시드(seed)된 팩을 레슨 옆의 `outputs/agent-workbench-pack/`으로 조립한다.

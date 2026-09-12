@@ -92,6 +92,10 @@ VideoAgent는 도구만 좋으면 검색이 바늘을 정확히 짚어내므로,
 
 이는 전역 이해를 위한 무차별 컨텍스트와 국소 세부를 위한 검색을 결합한다.
 
+```figure
+mm-video-token-budget
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

@@ -254,6 +254,10 @@ Same result, no overflow.
 
 임의 분포에서 샘플링하려면 역변환 샘플링(inverse transform sampling), 기각 샘플링(rejection sampling), 또는 재매개변수화 트릭(reparameterization trick, VAE에서 사용) 같은 기법이 필요하다.
 
+```figure
+gaussian-pdf
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 확률 기초

@@ -72,6 +72,10 @@ target: the  quick brown fox jumps  over  the lazy dog
 | NER / 토큰 라벨링 | 위치별 출력, 본래 양방향 |
 | 제로샷 함의 (NLI) | 인코더 위의 분류기 헤드 |
 | RAG용 리랭커 | 크로스 인코더 점수화, LLM 리랭커보다 10배 빠름 |
+```figure
+transformer-residual
+```
+
 
 ## 직접 만들기 (Build It)
 

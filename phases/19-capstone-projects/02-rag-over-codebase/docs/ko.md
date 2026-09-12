@@ -61,6 +61,10 @@ git push --> webhook --> ingest worker (LlamaIndex Workflow)
 - 합성기: 프롬프트 캐싱을 갖춘 Claude Sonnet 4.7 (100만 컨텍스트)
 - 심볼 그래프: import 및 call 간선을 위한 Neo4j(매니지드) 또는 kuzu(임베디드)
 - 관측성(observability): 검색 + 합성 단계마다 Langfuse 스팬(span)
+```figure
+ce-hybrid-retrieval
+```
+
 
 ## 직접 만들기 (Build It)
 

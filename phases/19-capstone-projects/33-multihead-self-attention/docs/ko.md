@@ -13,6 +13,10 @@
 - 한 위치가 미래 위치에 어텐드(attend)하는 것을 막는 인과 마스크(causal mask)를 적용한다.
 - 고정된 입력에 대한 헤드별 어텐션 가중치(attention weight)를 살펴보고 각 헤드가 무엇을 보는지 추론한다.
 - 작은 어텐션 블록을 장난감(toy) 작업에서 학습시키고 헤드가 특수화(specialize)됨에 따라 손실(loss)이 떨어지는 것을 지켜본다.
+```figure
+cap-multihead-attention
+```
+
 
 ## 틀 (The frame)
 

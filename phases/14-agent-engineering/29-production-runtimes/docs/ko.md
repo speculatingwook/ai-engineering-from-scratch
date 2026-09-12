@@ -80,6 +80,10 @@ OpenTelemetry GenAI 스팬(Lesson 23)과 Langfuse/Phoenix/Opik 백엔드(Lesson 
 - **불투명한 백그라운드 작업.** 트레이스(trace) 내보내기 없이 실행되는 백그라운드 에이전트. 사용자가 보고할 때까지 실패가 보이지 않는다.
 - **지속적 상태 생략.** 재시작을 감당할 수 없는 30초 이상의 실행은 지속적 실행이 필요하다.
 
+```figure
+wb-runtime-shapes
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 stdlib로 만든 다중 형태(multi-shape) 데모다:

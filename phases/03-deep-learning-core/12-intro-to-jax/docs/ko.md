@@ -237,6 +237,10 @@ w = jax.random.normal(key1, shape=(784, 256))
 
 처음에는 성가시다. 하지만 이 방식은 디바이스와 컴파일 전반의 재현성을 보장한다. PyTorch의 `torch.manual_seed`가 다중 GPU 환경에서 보장할 수 없는 속성이다.
 
+```figure
+batchnorm-effect
+```
+
 ## 직접 만들기 (Build It)
 
 JAX와 Optax를 써서 MNIST에 3층 MLP를 학습시켜 본다. 입력 784개, 256개와 128개 뉴런(neuron)의 은닉층(hidden layer) 두 개, 출력 클래스 10개다.

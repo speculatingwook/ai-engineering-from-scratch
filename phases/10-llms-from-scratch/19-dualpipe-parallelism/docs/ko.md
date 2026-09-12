@@ -108,6 +108,10 @@ DeepSeek-V3의 사전 학습은 대략 2.8M GPU-시간에 걸쳐 2,048개의 H80
 - **ZeRO-3** 그래디언트 샤딩과 호환. 두 복사본 복제를 위한 부기(bookkeeping)는 ZeRO의 샤딩된 그래디언트와 협력해야 한다.
 - 특정 클러스터 토폴로지(topology)에 맞춰 튜닝된 **커스텀 all-to-all 커널**이 필요하다. DeepSeek의 오픈소스 커널이 참조 구현이다.
 
+```figure
+expert-capacity
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 파이프라인 스케줄 시뮬레이터다. `(P, n_micro_batches, schedule)`을 받아 1F1B, Zero Bubble, DualPipe, DualPipeV 각각의 안정 단계 활용도를 출력한다. 이는 교육 도구다. 수치는 논문의 정성적 주장과 일치하며, 프로덕션에서 측정된 속도 향상에 대한 주장이 아니다.

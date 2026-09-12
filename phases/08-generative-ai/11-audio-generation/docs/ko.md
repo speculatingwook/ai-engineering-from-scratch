@@ -55,6 +55,10 @@ waveform (16000 samples/sec)
 | MusicGen 3.3B | 음악 | Encodec 32kHz에 토큰-AR | 실시간 |
 | AudioCraft 2 | 음악 + SFX | 플로 매칭 | 5초 클립에 ~5초 |
 | Riffusion v2 | 음악 | 스펙트로그램 디퓨전 | ~10초 |
+```figure
+score-matching
+```
+
 
 ## 직접 만들기 (Build It)
 

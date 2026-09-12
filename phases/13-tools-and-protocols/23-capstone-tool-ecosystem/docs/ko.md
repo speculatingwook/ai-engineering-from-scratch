@@ -105,6 +105,10 @@ research-system/
 | 19 | OTel GenAI 추적 |
 | 20 | LLM 계층을 위한 라우팅 게이트웨이 |
 | 21 | SKILL.md + AGENTS.md 패키징 |
+```figure
+t3-capstone-chain
+```
+
 
 ## 라이브러리로 써보기 (Use It)
 

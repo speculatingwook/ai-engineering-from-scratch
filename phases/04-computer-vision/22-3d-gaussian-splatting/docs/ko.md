@@ -119,6 +119,10 @@ c_i = eval_SH(SH_i, view_direction)    view-dependent colour
 - **4D 가우시안 스플래팅(4D Gaussian Splatting)**: 가우시안이 시간의 함수다; 체적 비디오(volumetric video)에 사용됨(Superman 2026, A$AP Rocky의 "Helicopter").
 - **생성적 스플랫(Generative splats)**: 장면 전체를 환각으로 만들어내는 텍스트-투-스플랫(text-to-splat) 모델(World Labs의 Marble).
 - **3D Gaussian Unscented Transform**: 자율주행 시뮬레이션을 위한 NVIDIA NuRec의 변형.
+```figure
+cv3-gaussian-splat
+```
+
 
 ## 직접 만들기 (Build It)
 

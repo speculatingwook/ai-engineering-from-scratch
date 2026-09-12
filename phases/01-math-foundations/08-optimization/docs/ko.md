@@ -195,6 +195,10 @@ graph TD
 
 날카로운(sharp) 최솟값은 일반화(generalization)가 나쁘다. 평평한(flat) 최솟값은 일반화가 좋다. 이것이 모멘텀이 있는 SGD가 최종 테스트 정확도에서 Adam을 능가하는 경우가 많은 한 가지 이유다: 그 노이즈가 날카로운 최솟값에 안착하지 못하게 막는다.
 
+```figure
+gradient-descent
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 테스트 함수 정의

@@ -91,6 +91,10 @@ Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry,
 | Envoy AI Gateway | 오픈소스; 커스터마이즈 가능한 필터 |
 
 Phase 17(프로덕션 인프라)에서 게이트웨이 운영을 더 깊이 다룬다.
+```figure
+t3-gateway-funnel
+```
+
 
 ## 라이브러리로 써보기 (Use It)
 

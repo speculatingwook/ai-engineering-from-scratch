@@ -106,6 +106,10 @@ RT-2의 비율은 약 1:1이다. OpenVLA는 웹 대 로봇 약 0.5:1, π0도 비
 
 이들은 VLA 외부에 제어 계층 점검으로 자리한다. VLA의 출력은 명령이 아니라 제안이다.
 
+```figure
+mm-action-tokens
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

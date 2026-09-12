@@ -59,6 +59,10 @@ flowchart LR
 ### 스코프 검사는 디프 검사다
 
 에이전트는 디프를 작성한다. 검사기는 디프, 허용 글롭, 금지 글롭, 그리고 실행된 수용 명령(acceptance command)의 목록을 읽는다. 각 위반은 검증 게이트(verification gate)가 거부할 수 있는 태그된 발견 사항(tagged finding)이다.
+```figure
+wb-scope-bounce
+```
+
 
 ## 직접 만들기 (Build It)
 

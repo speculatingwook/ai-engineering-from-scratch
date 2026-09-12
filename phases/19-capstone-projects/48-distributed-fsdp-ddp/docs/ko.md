@@ -73,6 +73,10 @@ flowchart LR
 ### CPU와 gloo 백엔드
 
 CUDA가 프로덕션 타깃이지만, 같은 코드 경로가 CPU에 존재한다. `gloo`는 CPU 집합 백엔드다. GPU에서 `nccl`보다 여러 자릿수 느리지만, API 표면은 동일하다. 레슨의 프로세스 그룹은 `backend="gloo"`로 초기화되고 랭크는 `torchrun`이 아니라 `torch.multiprocessing`으로 스폰(spawn)된다. 둘 다 같은 `torch.distributed` 호출에 도달한다. 다중 GPU 노드에서 유일한 변경은 `backend="nccl"`, 디바이스 텐서, 그리고 실행을 위한 `torchrun`이다.
+```figure
+cg-allreduce-ring
+```
+
 
 ## 직접 만들기 (Build It)
 

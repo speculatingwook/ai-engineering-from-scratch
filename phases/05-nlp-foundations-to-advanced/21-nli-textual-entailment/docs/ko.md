@@ -45,6 +45,10 @@
 **아키텍처.** 트랜스포머(transformer) 인코더(BERT, RoBERTa, DeBERTa)가 `[CLS] premise [SEP] hypothesis [SEP]`를 읽는다. `[CLS]` 표현이 3방향 소프트맥스(softmax)로 들어간다. MNLI로 학습하고, 별도로 분리된 벤치마크(benchmark)로 평가하면, 분포 내(in-distribution) 쌍에 대해 90% 이상의 정확도를 얻는다.
 
 **NLI를 통한 제로샷.** 문서와 후보 레이블이 주어지면, 각 레이블을 가설로 바꾼다("이 텍스트는 스포츠에 관한 것이다"). 각각에 대해 함의 확률을 계산한다. 최댓값을 고른다. 이것이 Hugging Face의 `zero-shot-classification` 파이프라인(pipeline) 뒤에 있는 메커니즘이다.
+```figure
+nli-router
+```
+
 
 ## 직접 만들기 (Build It)
 

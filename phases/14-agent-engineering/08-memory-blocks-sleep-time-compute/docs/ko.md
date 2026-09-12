@@ -74,6 +74,10 @@ Letta V1(`letta_v1_agent`, 2026)은 `send_message`/하트비트(heartbeat)와 �
 - **조용한 표류(Silent drift).** 수면 시간 에이전트가 블록을 재작성하는데 주 에이전트가 전혀 알아채지 못한다. 블록을 버전 관리하고 트레이스에 차이(diff)를 드러내라.
 - **오염된 통합(Poisoned consolidation).** 수면 시간 에이전트가 공격자도 닿을 수 있는 콘텐츠를 core로 처리한다. Lesson 27은 수면 시간 표면에도 적용된다.
 
+```figure
+memory-blocks
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다:

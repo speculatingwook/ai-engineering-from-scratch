@@ -181,6 +181,10 @@ flowchart TD
 - **하드 보팅(Hard voting):** 클래스 레이블(label)에 대한 다수결.
 - **소프트 보팅(Soft voting):** 예측된 확률을 평균내어, 평균 확률이 가장 높은 클래스를 고른다. 확신(confidence) 정보를 사용하므로 보통 더 낫다.
 
+```figure
+f3-ensemble-average
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 결정 스텀프 (베이스 학습기)

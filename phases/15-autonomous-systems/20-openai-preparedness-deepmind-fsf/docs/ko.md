@@ -62,6 +62,10 @@ v2의 핵심 프레이밍: 연구 카테고리는 완화책을 자동으로 발�
 - 주기(Cadence): 정책이 선언된 일정으로 갱신되는가, 아니면 특정 사건 이후에만 갱신되는가? 선언된 주기가 더 강하다.
 - 독립성(Independence): 외부 검토가 의무적인가 선택적인가? Anthropic은 Apollo 및 US AI Safety Institute와 협력한다. OpenAI는 METR과. DeepMind는 주로 내부 SAG와.
 
+```figure
+a5-tracked-vs-research
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 작은 결정 테이블 차이(diff) 도구를 구현한다. 어떤 능력(자율성, 기만적 정렬, R&D 자동화, 사이버 증강 등)이 주어지면, 세 정책 각각이 그 능력을 어떻게 분류하는지, 그리고 어떤 완화책이 발동하는지를 출력한다. 이것은 읽기 보조 도구이지 정책 도구가 아니다.

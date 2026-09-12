@@ -65,6 +65,10 @@ W' = W + ΔW,  ΔW = B @ A,  A ∈ R^{r×d},  B ∈ R^{d×r}
 | T2I-Adapter | 더 가벼운 ControlNet 대안 | 70MB | 엣지 디바이스, 추론 예산 |
 
 ControlNet ≈ 공간. LoRA ≈ 의미. 둘 다 써라.
+```figure
+v4-controlnet-zero
+```
+
 
 ## 직접 만들기 (Build It)
 

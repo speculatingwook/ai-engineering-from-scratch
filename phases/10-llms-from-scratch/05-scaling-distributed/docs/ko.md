@@ -238,6 +238,10 @@ graph TD
     style G8 fill:#1a1a2e,stroke:#0f3460,color:#fff
     style N1 fill:#1a1a2e,stroke:#e94560,color:#fff
 ```
+```figure
+paged-kv-cache
+```
+
 
 ## 직접 만들기 (Build It)
 

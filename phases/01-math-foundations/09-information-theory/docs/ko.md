@@ -273,6 +273,10 @@ Perplexity = e^H(P,Q)   (if using nats)
 
 GPT-2는 일반적인 벤치마크(benchmark)에서 퍼플렉서티 ~30을 달성했다. 현대 모델은 잘 표현된 도메인에서 한 자릿수다.
 
+```figure
+entropy-kl
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 정보량과 엔트로피

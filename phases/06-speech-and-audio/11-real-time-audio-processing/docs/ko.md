@@ -47,6 +47,10 @@ Moshi(Kyutai, 2024)는 풀 듀플렉스(full-duplex) 200ms를 기록했다. GPT-
 - **샘플 레이트 변환 지연.** 파이프라인 내부의 리샘플링은 5-20ms를 더한다. 앞단에서 미리 리샘플링하거나 무지연 리샘플러(PolyPhase, `soxr_hq`)를 써라.
 - **TTS 프라이밍(priming).** Kokoro 같은 빠른 TTS도 첫 요청에서 100-200ms의 워밍업이 있다. 모델을 캐시하고, 첫 실제 턴 전에 더미 실행으로 워밍업하라.
 - **에코 제거(Echo cancellation).** AEC가 없으면 TTS 출력이 마이크로 다시 들어와 봇 자신의 목소리에 대해 ASR을 트리거한다. WebRTC AEC3이 오픈소스 기본값이다.
+```figure
+nyquist-aliasing
+```
+
 
 ## 직접 만들기 (Build It)
 

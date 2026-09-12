@@ -151,6 +151,10 @@ graph TD
         B["BERT (340M)<br/>Peak: 1e-4<br/>Warmup: 10K steps<br/>Schedule: Linear decay"]
     end
 ```
+```figure
+lr-schedule
+```
+
 
 ## 직접 만들기 (Build It)
 

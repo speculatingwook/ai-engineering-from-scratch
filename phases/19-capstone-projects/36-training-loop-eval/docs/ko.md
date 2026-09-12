@@ -63,6 +63,10 @@ flowchart TB
 ### 이른 신호로서의 정성적 샘플링 (Qualitative sampling as an early signal)
 
 학습 손실은 잘 떨어지지만 생성된 샘플이 모두 같은 토큰인 모델은 망가진 것이다. 손실 곡선은 평평해 보이지만 생성된 샘플이 일관된 단어로 날카로워지는 모델은 학습하고 있는 것이다. 정성적 프로브는 전체 곡선을 읽는 것보다 빠르게 실행되고 스칼라가 놓치는 모드(mode)를 잡는다.
+```figure
+cap-training-loop
+```
+
 
 ## 직접 만들기 (Build It)
 

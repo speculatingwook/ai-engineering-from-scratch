@@ -68,6 +68,10 @@ LangGraph 2025 문서는 "Swarm Architecture"를 멀티 에이전트 패턴 중 
 
 스웜은 콘텐츠 기반 라우팅(content-based routing)(Lesson 22)과 자연스럽게 짝을 이룬다. 범용 큐 대신, 메시지 타입당 하나의 큐를 둔다. 전문가 워커는 자기 타입만 구독한다. 이것이 수천 개의 에이전트로 확장되는 메시지 버스 아키텍처의 기반이다.
 
+```figure
+sw-work-stealing
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 공유 `queue.Queue`에서 가져오는 4개의 워커 스레드 스웜을 구현한다. 작업은 가변 지속 시간을 가진다(일부 빠르고, 일부 느림). 데모는 다음을 대조한다.

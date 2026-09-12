@@ -66,6 +66,10 @@ Plan-and-Act는 이 패턴을 장기 지평 웹 및 모바일 에이전트로 �
 
 Anthropic의 2024년 12월 지침: 가장 단순한 것부터 시작하라. 작업이 도구 호출 하나에 요약 하나라면 ReWOO를 만들지 마라. 작업이 40단계 연구 과제라면 ReAct만으로 하지 마라.
 
+```figure
+rewoo-plan
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 장난감 ReWOO를 구현한다:

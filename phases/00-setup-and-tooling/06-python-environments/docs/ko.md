@@ -44,6 +44,10 @@ graph TD
         PB --> PB2["diffusers 0.28"]
     end
 ```
+```figure
+s0-env-isolation
+```
+
 
 ## 직접 만들기 (Build It)
 

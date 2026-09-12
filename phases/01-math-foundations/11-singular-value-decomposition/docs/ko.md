@@ -360,6 +360,10 @@ It is faster and more numerically stable.
 
 이는 Lesson 10에서 차원 축소에 대해 배운 모든 것이 내부적으로 SVD임을 뜻한다. PCA는 머신러닝에서 SVD의 가장 흔한 응용이다.
 
+```figure
+svd-rank-reconstruction
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 거듭제곱 반복을 사용한 밑바닥부터의 SVD

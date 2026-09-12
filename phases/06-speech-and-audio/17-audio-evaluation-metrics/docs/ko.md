@@ -111,6 +111,10 @@
 | MMAU music subset | Music LALM | (within MMAU) |
 | HEAR benchmark | Self-supervised audio | `hearbenchmark.com` |
 
+```figure
+sp-wer-align
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 정규화를 동반한 WER

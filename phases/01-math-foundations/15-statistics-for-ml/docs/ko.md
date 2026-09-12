@@ -488,6 +488,10 @@ For highly skewed distributions, you might need n >= 100.
 
 모두 밑바닥부터, `math`와 `random`만 사용한다. numpy도, scipy도 없다.
 
+```figure
+f3-bootstrap-resample
+```
+
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 정의 |

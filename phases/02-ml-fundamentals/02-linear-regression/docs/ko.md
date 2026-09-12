@@ -146,6 +146,10 @@ Cost = MSE + lambda * sum(w_i^2)
 ```
 
 페널티 항은 큰 가중치를 억제한다. 하이퍼파라미터(hyperparameter) lambda가 트레이드오프(trade-off)를 제어한다. lambda가 클수록 가중치가 작아지고 정규화가 더 강해진다. 이는 뒤의 레슨에서 깊이 다룬다. 지금은 그것이 존재한다는 것과 왜 도움이 되는지만 알면 된다.
+```figure
+linear-regression-fit
+```
+
 
 ## 직접 만들기 (Build It)
 

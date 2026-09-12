@@ -58,6 +58,10 @@ HPA on queue-wait metric
 - 배포: Kubernetes + NVIDIA device plugin; 큐 대기 메트릭에 대한 HPA
 - 평가: 도메인 분포별 수용률 측정을 위한 ShareGPT, MT-Bench-v2, GSM8K, HumanEval
 - 레퍼런스: 벤더 베이스라인을 위한 TensorRT-LLM 추측 디코딩
+```figure
+cf-spec-decode
+```
+
 
 ## 직접 만들기 (Build It)
 

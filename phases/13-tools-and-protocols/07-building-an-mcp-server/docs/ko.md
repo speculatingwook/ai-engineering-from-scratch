@@ -120,6 +120,10 @@ def notes_search(query: str, limit: int = 10) -> list[dict]:
 
 TypeScript SDK도 등가의 형태를 가진다. 졸업 경로는 준비되면 그대로 들어간다(drop-in). 개념(능력, 디스패치, 콘텐츠 블록)은 동일하다.
 
+```figure
+t3-dispatch-loop
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 stdio 위에서 stdlib만으로 만든 완전한 노트 MCP 서버다. 세 도구(`notes_list`, `notes_search`, `notes_create`)에 대한 `initialize`, `tools/list`, `tools/call`, 각 노트에 대한 `resources/list`와 `resources/read`, 그리고 `review_note` 프롬프트를 처리한다. JSON-RPC 메시지를 파이프(pipe)로 흘려보내 구동할 수 있다.

@@ -119,6 +119,10 @@ SKILL.md는 "스타일 규칙은 style-guide.md를 보라"고 말한다. 에이�
 같은 프로토콜, 더 풍부한 UX.
 
 ### SkillKit을 통한 크로스 에이전트 이식성
+```figure
+skill-package-anatomy
+```
+
 
 SkillKit 같은 도구와 유사한 크로스 에이전트 배포 계층은 단일 SKILL.md를 32개 이상의 AI 에이전트(Claude Code, Cursor, Codex, Gemini CLI, OpenCode 등) 각각의 네이티브 형식으로 변환한다. 하나의 진실 소스, 다수의 소비자.
 
@@ -129,6 +133,14 @@ SkillKit 같은 도구와 유사한 크로스 에이전트 배포 계층은 단�
 | AGENTS.md | 레포 루트 | 세션 시작 | 프로젝트 수준 컨벤션 |
 | SKILL.md | 스킬 디렉터리 | 스킬 호출 시 | 재사용 가능한 워크플로 |
 | MCP 서버 | 외부 프로세스 | 툴 필요 시 | 호출 가능한 액션 |
+```figure
+skill-tool-orthogonality
+```
+
+```figure
+skill-runtime-lifecycle
+```
+
 
 셋은 모두 결합한다: 에이전트가 세션 시작 시 AGENTS.md를 읽고, 사용자가 스킬을 호출하고, 스킬의 명령이 MCP 툴 호출을 포함하고, 에이전트가 MCP 클라이언트로 디스패치한다.
 
@@ -141,6 +153,10 @@ SkillKit 같은 도구와 유사한 크로스 에이전트 배포 계층은 단�
 - 최소 stdlib 파서로 파싱된 YAML 프론트매터(`pyyaml` 의존성 없음).
 - 스킬 본문은 그대로 저장된다. 에이전트가 호출할 때 그것을 시스템 프롬프트 앞에 붙인다.
 - 참조된 파일을 필요할 때 가져오는 `read_subresource` 함수로 시연하는 점진적 공개.
+```figure
+skill-validation-order
+```
+
 
 ## 산출물 (Ship It)
 

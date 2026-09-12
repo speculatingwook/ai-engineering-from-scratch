@@ -102,6 +102,10 @@ N워커 Hogwild! 시간, 조율이 공짜라면: `T_serial * ((1 - p) + p / N)`.
 
 알아둘 가치가 있다. 실험해 볼 가치가 있다. 아직 제품을 걸 가치는 없다.
 
+```figure
+continuous-batching
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 장난감 Hogwild! 시뮬레이터를 구현한다:

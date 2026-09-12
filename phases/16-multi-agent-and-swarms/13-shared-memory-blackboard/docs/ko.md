@@ -101,6 +101,10 @@ agent-C ──pub────▶ │                  │ ──▶ agent-F (sub
 
 이 분리가 없으면 검증자의 출력이 풀의 새 항목이 되고, 그러면 오염된 풀이 검증자를 오염시키며, 그 검증마저 오염된다.
 
+```figure
+swarm-blackboard
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 두 토폴로지를 stdlib 파이썬으로 구현하며, 장난감 오염 공격과 세 가지 완화책을 더한다.

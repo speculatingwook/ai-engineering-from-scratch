@@ -61,6 +61,10 @@ answer + (start, end) timestamps + frame thumbs + citations
 - UI: HTML5 비디오 플레이어와 장면 썸네일을 갖춘 Next.js 15
 - 평가: ActivityNet-QA, NeXT-GQA, 직접 레이블링한 100개 질문 커스텀 세트
 - 환각 벤치마크: 수작업 레이블이 있는 세기 및 동작 유형 부분집합
+```figure
+cf-scene-index
+```
+
 
 ## 직접 만들기 (Build It)
 

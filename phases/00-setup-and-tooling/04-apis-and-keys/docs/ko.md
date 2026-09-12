@@ -34,6 +34,10 @@ sequenceDiagram
 3. 요청 본문(request body)(원하는 것)
 4. 응답 본문(response body)(받는 것)
 
+```figure
+s0-secret-inject
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: API 키를 안전하게 저장하기

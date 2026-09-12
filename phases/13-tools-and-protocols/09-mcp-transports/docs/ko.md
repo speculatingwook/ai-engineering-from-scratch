@@ -78,6 +78,10 @@ Phase 13 · 13은 태스크(Task)를 다루며, 이를 통해 장기 실행 작�
 
 2026년 프로덕션(production) 원격 MCP 서버는 Cloudflare Workers(그들의 MCP Agents SDK 사용), Vercel Functions, 또는 컨테이너화된 Node/Python에서 실행된다. 핵심은 이렇다. 호스팅이 SSE GET을 위한 장기 연결 HTTP 연결을 지원해야 한다. Vercel의 무료 티어는 10초로 제한되어 적합하지 않다. Cloudflare Workers는 무기한 스트림을 지원한다.
 
+```figure
+tp-transport-handshake
+```
+
 ### 게이트웨이 구성(composition)
 
 게이트웨이(Phase 13 · 17)로 여러 MCP 서버를 앞단에서 묶으면, 게이트웨이는 세션 id를 다시 쓰고 업스트림을 다중화(multiplex)하는 단일 Streamable HTTP 엔드포인트가 된다. 도구는 게이트웨이 계층에서 병합되며, 클라이언트는 하나의 논리적 서버만 본다.

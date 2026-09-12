@@ -101,6 +101,10 @@ generate -> parse -> validate -> if fail, inject error and retry, max 3x
 
 제약 디코딩은 소형 모델에서도 동작한다. 문법 강제를 갖춘 30억 파라미터 오픈 모델은 구조화된 작업에서 원시 프롬프팅(raw prompting)을 쓴 700억 파라미터 모델을 능가한다. 구조화된 출력이 프로덕션에 중요한 주된 이유가 이것이다. 신뢰성을 모델 크기에서 떼어내기 때문이다.
 
+```figure
+constrained-decoding
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 stdlib로 최소한의 JSON Schema 2020-12 검증기(타입, required, enum, min/max, pattern, items, additionalProperties)를 제공한다. `Invoice` 스키마를 감싸고 가짜 LLM 출력을 검증기에 통과시켜, 파싱 오류, 스키마 위반, 거부 경로를 보여준다. 프로덕션에서는 가짜 출력을 어떤 제공자의 실제 응답으로 교체하라.

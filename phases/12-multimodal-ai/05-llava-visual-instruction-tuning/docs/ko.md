@@ -126,6 +126,10 @@ LLaVA-1.5-7B 분해:
 
 2단계 학습 비용: 8xA100에서 약 20시간. 이것이 핵심 수치다. 하루, 한 노드, 재현 가능. 그래서 LLaVA가 퍼졌다.
 
+```figure
+mm-llava-projector
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다음을 구현한다:

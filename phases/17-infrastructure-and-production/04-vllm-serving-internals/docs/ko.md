@@ -93,6 +93,10 @@ while True:
 
 `code/main.py`는 가짜 토큰 수와 가짜 순방향 지연 시간을 가진 stdlib Python에서 정확히 이 루프다. 실행하면 긴 프리필 동안 청크 프리필이 어떻게 디코드 시퀀스를 살려 두는지 보여준다.
 
+```figure
+tensor-parallel
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 토글 가능한 기능을 가진 vLLM 스타일 스케줄러를 시뮬레이션한다. 실행하여 다음을 보라:

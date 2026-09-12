@@ -189,6 +189,10 @@ importance(feature_j) = sum over all nodes where feature_j is used:
 
 신경망은 데이터가 공간적이거나 순차적인 구조(이미지, 텍스트, 오디오)를 가질 때 이긴다. 특성들이 평평하게 나열된 표에서는 트리가 기본 선택이다.
 
+```figure
+decision-tree-depth
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 지니 불순도와 엔트로피

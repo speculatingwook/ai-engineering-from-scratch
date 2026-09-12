@@ -219,6 +219,10 @@ Input ──▶ Split ├──▶ Agent B ──├──▶ Merge ──▶ Ou
 
 경험 법칙: 작업이 도구 호출 20번 미만이고 100k 토큰에 들어간다면, 단일 에이전트로 유지하라.
 
+```figure
+swarm-messages
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 과부하된 단일 에이전트

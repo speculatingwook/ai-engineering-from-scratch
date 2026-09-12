@@ -147,6 +147,10 @@ tiktoken(OpenAI)은 Python 바인딩을 가진 Rust로 작성되었다. HuggingF
 관점을 잡기 위해: Llama 3 사전 학습(pre-training)을 위해 15조 토큰을 초당 100만 토큰(빠른 Python)으로 토큰화하면 174일이 걸린다. 초당 1억 토큰(Rust)이면 1.7일이 걸린다.
 
 여기서는 알고리즘을 이해하려고 Python으로 만든다. 프로덕션에서는 컴파일된 구현을 쓰고 Python 래퍼(wrapper)만 건드린다.
+```figure
+weight-tying
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -14,6 +14,10 @@
 - 스케줄러가 탐색(exploration)을 포기하지 않고 저수율(low-yield) 가지를 가지치기할 수 있도록 UCB로 각 가설 가지(branch)를 채점하기.
 - 고수율(high-yield) 가지가 후속 가설을 낳도록, 완료된 결과를 논문 작성 단계와 재큐(re-queue) 단계로 팬아웃(fan out)하기.
 - 가지 점수, 슬롯 점유(slot occupancy), 가지치기(pruning) 결정을 가진 반복별 트레이스(trace)를 노출하기.
+```figure
+ch-ucb-scheduler
+```
+
 
 ## 왜 작업 목록이 아니라 스케줄러인가 (Why a scheduler, not a worklist)
 

@@ -51,6 +51,10 @@
 ```
 
 스키마 필드 순서는 서식이 아니라 논리다.
+```figure
+constrained-decoder
+```
+
 
 ## 직접 만들기 (Build It)
 

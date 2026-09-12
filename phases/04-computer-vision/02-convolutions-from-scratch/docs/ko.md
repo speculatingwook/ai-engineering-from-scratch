@@ -179,6 +179,10 @@ With strides:   RF grows multiplicatively with stride along each layer.
 ```
 
 "끝까지 3x3"이 통하는(VGG, ResNet, ConvNeXt) 전체 이유는, 3x3 합성곱 두 개가 5x5 합성곱 하나와 같은 입력 영역을 보면서도 파라미터는 더 적고 그 사이에 비선형성이 하나 더 들어가기 때문이다.
+```figure
+convolution-kernel
+```
+
 
 ## 직접 만들기 (Build It)
 

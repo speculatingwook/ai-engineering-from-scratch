@@ -55,6 +55,10 @@ flowchart LR
 ### 피드백 없이는 전진을 거부한다
 
 러너가 종료를 캡처하기 전에 에러를 내면, 레코드는 `exit_code: null`과 `error: <reason>`을 담는다. 에이전트 루프는 `null` 종료에 대해 성공을 주장하기를 거부해야 한다. 종료가 없으면 진전도 없다.
+```figure
+wb-feedback-loop
+```
+
 
 ## 직접 만들기 (Build It)
 

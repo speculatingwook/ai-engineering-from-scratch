@@ -71,6 +71,10 @@ dataprovenance.org. Longpre, Mahari, Lee et al. "Consent in Crisis"(2024년 7월
 
 레슨 26은 모델 수준 문서화다. 레슨 27은 데이터셋 수준 거버넌스다. 둘이 함께 투명성 계층을 정의한다. 레슨 28은 이러한 질문을 다루는 연구 생태계를 대응시킨다.
 
+```figure
+an-provenance-oneway
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 장난감 수준의 데이터셋에 대해 California AB 2013을 준수하는 12개 필드 데이터셋 요약 골격(scaffold)을 생성한다. 필드를 채우고, 어느 것이 프라이버시 또는 저작권 후속 의무를 유발하는지 관찰할 수 있다.

@@ -69,6 +69,10 @@ PwC는 (CrewAI 배포, 2025) 구조화된 검증 루프를 추가하면 정확�
 - **AutoGen**: GroupChat 안의 한 단어 이름을 가진 역할별 ConversableAgent.
 - **OpenAI Agents SDK**: 역할 전문화된 Agent 간의 핸드오프(handoff) 도구.
 
+```figure
+swarm-roles
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 간단한 Python 함수를 만드는 4-역할 파이프라인을 구현한다.

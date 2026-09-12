@@ -388,6 +388,10 @@ LayerNorm(x) = (x - mean(x)) / (std(x) + epsilon) * gamma + beta
 원인: float16은 6e-8보다 작은 그래디언트 크기나 65,504보다 큰 활성값을 표현할 수 없음.
 해결: 손실 스케일링이 있는 혼합 정밀도(AMP)를 쓰거나, 대신 bfloat16을 써라.
 
+```figure
+logsumexp-stability
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 부동소수점 정밀도 한계 보여주기

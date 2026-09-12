@@ -27,6 +27,10 @@
 4. **잔차 연결(Residual connection).** `x + sublayer(x)`. 이것이 없으면 약 6층을 넘어가면 그래디언트(gradient)가 소실된다.
 5. **층 정규화(Layer normalization).** `LayerNorm` 또는 `RMSNorm`(현대). 잔차 스트림(residual stream)을 안정화한다.
 6. **크로스 어텐션(디코더 전용).** 쿼리는 디코더에서, 키와 값은 인코더 출력에서 온다.
+```figure
+transformer-block
+```
+
 
 ### 인코더 블록 (BERT, T5 인코더가 사용)
 

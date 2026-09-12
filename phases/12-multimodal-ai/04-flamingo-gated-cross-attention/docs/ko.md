@@ -108,6 +108,10 @@ Otter(2023)는 MIMIC-IT(멀티모달 명령어 데이터셋)에 대한 명령어
 
 예산이 빠듯한 단일 이미지 VQA에는 BLIP-2를 골라라. 인터리브, 퓨샷, 또는 멀티 이미지 추론에는 Flamingo/Idefics2를 골라라.
 
+```figure
+cross-attention-fusion
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`는 다음을 보여 준다:

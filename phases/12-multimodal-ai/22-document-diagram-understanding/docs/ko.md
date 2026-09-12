@@ -127,6 +127,10 @@ OCR 파이프라인은 여전히 다음에서 이긴다:
 - 전체 arXiv 입력: 수학에는 Nougat, 그림에는 VLM.
 - 규제: OCR 파이프라인 + 교차 점검을 위한 VLM 검증기.
 
+```figure
+mm-doc-layout
+```
+
 ## 라이브러리로 써보기 (Use It)
 
 `code/main.py`:

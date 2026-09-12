@@ -47,6 +47,10 @@
 | Seamless M4T v2 | 1.7% | 3.5% | 2.3B |
 
 이들 모두 인코더-디코더 또는 RNN-T 기반이다. 순수 CTC 시스템(wav2vec 2.0)은 test-clean에서 1.8–2.1% 근처에 있다.
+```figure
+ctc-collapse
+```
+
 
 ## 직접 만들기 (Build It)
 

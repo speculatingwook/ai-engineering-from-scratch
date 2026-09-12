@@ -46,6 +46,10 @@ flowchart TD
 
 `SandboxResult`의 종료 코드(exit code)는 관습적인 것들이다. 0은 성공, 0이 아닌 값은 실패이고, 여기에 denied(-100), timed_out(-101)를 위한 세 가지 센티넬 코드(sentinel code), 그리고 truncated(종료 코드는 실제 값이고 플래그가 설정됨)가 더해진다. 하위 레슨들은 stderr를 파싱하는 대신 이 구조화된 결과를 읽는다.
 
+```figure
+cg-path-jail
+```
+
 ## 아키텍처 (Architecture)
 
 ```mermaid

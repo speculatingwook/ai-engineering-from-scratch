@@ -62,6 +62,10 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 - **생태계 종속(lock-in).** Mastra의 Vercel 풍 통합은 Vercel에서는 장점, 다른 곳에서는 단점이다.
 - **엔터프라이즈 라이선스 혼동.** Mastra의 `ee/` 디렉터리는 Apache 2.0이 아니라 소스 공개다. 포크(fork)를 계획한다면 라이선스를 읽어라.
 
+```figure
+wb-runtime-spawn
+```
+
 ## 직접 만들기 (Build It)
 
 이 레슨은 주로 비교(comparative)에 초점을 둔다. 단일 코드 산출물 하나로는 두 프레임워크를 제대로 담아내기 어렵다. 나란히 놓인 토이는 `code/main.py`를 보라: 최소한의 "에이전트를 실행하고, 출력을 스트리밍하며, 세션을 영속한다" 흐름을 두 번 구현한 것(한 번은 Agno 형태로, 한 번은 Mastra 형태로).

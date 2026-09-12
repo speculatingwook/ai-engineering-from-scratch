@@ -13,6 +13,10 @@
 - 다음 토큰 예측(next-token prediction)을 위해 입력과 타깃(target) 텐서(tensor)를 반환하는 PyTorch Dataset을 만든다.
 - 에폭(epoch)마다 시드(seed)된 결정론적(deterministic) 셔플(shuffle)로 데이터셋(dataset)을 DataLoader로 감싼다.
 - 스트라이드, 중복성(redundancy), 유효 데이터셋 크기 사이의 트레이드오프(trade-off)를 추론한다.
+```figure
+cap-sliding-window
+```
+
 
 ## 틀 (The frame)
 

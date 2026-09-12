@@ -14,6 +14,10 @@
 - 루프를 자기 종료(self-terminating) 끝까지 실행하고 모든 단계의 출력을 나열하는 단일 데모 리포트를 내보내기.
 - 테스트 스위트(test suite)가 최종 형태를 단언할 수 있도록 데모를 결정론적(deterministic)으로 유지하기.
 - 어떤 단계의 계약이 깨질 때 명확한 실패 모드를 노출하여, 다음 단계가 깨진 입력으로 실행되지 않게 하기.
+```figure
+ch-research-pipeline
+```
+
 
 ## 여기서 조합되는 것 (What composes here)
 

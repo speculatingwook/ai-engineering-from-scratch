@@ -69,6 +69,10 @@ flowchart TB
 
 잔차 연결은 그래디언트 경로를 깊이에 걸쳐 가산적(additive)으로 만들어, 12개 층을 통과하며 그래디언트 노름(norm)을 척도(scale)에 맞게 유지한다. 또한 각 블록이 실행 중인 표현(representation)을 완전히 교체하는 대신 가산적 갱신(update)을 학습하게 한다. 두 효과 모두 블록이 확장(scale)되는 이유다.
 
+```figure
+cc-transformer-block
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다.

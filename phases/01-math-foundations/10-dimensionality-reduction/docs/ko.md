@@ -190,6 +190,10 @@ explained_ratio_k = eigenvalue_k / sum(all eigenvalues)
 
 재구성 오차는 k를 고르는 것 이상으로 유용하다. 이상 탐지(anomaly detection)에도 쓸 수 있다: 재구성 오차가 높은 샘플은 학습된 부분공간에 맞지 않는 이상치(outlier)다. 이것이 프로덕션(production) 시스템에서 PCA 기반 이상 탐지의 토대다.
 
+```figure
+pca-axes
+```
+
 ## 직접 만들기 (Build It)
 
 ### 1단계: 밑바닥부터 만드는 PCA

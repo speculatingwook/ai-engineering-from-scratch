@@ -112,6 +112,10 @@ Broadcasting stretches the vector across rows:
 ```
 
 현대 프레임워크는 모두 이 작업을 자동으로 처리한다. 원리를 이해하면 형태가 안 맞아 보이는데도 코드가 돌아갈 때 당황하지 않는다.
+```figure
+vector-projection
+```
+
 
 ## 직접 만들기 (Build It)
 

@@ -74,6 +74,10 @@ MemGPT는 메모리-인터럽트(memory-as-interrupt)를 도입한다: 대화 �
 - **메모리 오염(Memory poisoning).** 외부 메모리는 검색된 텍스트다. 공격자가 통제하는 콘텐츠가 메모리 노트에 들어오면, 에이전트는 다음 세션에 그것을 다시 흡수한다. 이는 Greshake et al.(Lesson 27) 공격을 시간에 걸쳐 다시 진술한 것이다.
 - **인용 손실(Citation loss).** 에이전트가 "사용자가 X를 출하해달라고 했다"를 기억하지만 어느 턴인지 인용할 수 없다. 모든 archival 쓰기에 소스 참조(세션 ID, 턴 ID)를 저장하라.
 
+```figure
+context-budget
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 MemGPT의 2계층 패턴을 stdlib로 구현한다:

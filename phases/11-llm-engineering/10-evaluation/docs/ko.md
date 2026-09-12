@@ -217,6 +217,10 @@ GPT-5-mini로 모든 PR마다 실행되는 200 케이스 평가 스위트는 실
 | [Arize Phoenix](https://phoenix.arize.com) | 오픈소스 관측성 + 평가, 트레이싱, 스팬 수준 채점 | 무료 (OSS) |
 
 이 레슨에서는 모든 계층을 이해하기 위해 밑바닥부터 만든다. 프로덕션에서는 이 도구들 중 하나를 사용하라.
+```figure
+llm-judge-rubric
+```
+
 
 ## 직접 만들기 (Build It)
 

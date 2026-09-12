@@ -258,6 +258,10 @@ flowchart TD
 | 데이터 검증 없음 | 잘못된 데이터에 조용히 틀린 예측 | 예측 전에 스키마 검사를 추가한다 |
 | 학습/서빙 스큐 | 모델이 프로덕션에서 다른 특성을 본다 | 둘 다에 하나의 Pipeline 객체 사용 |
 
+```figure
+f3-pipeline-flow
+```
+
 ## 직접 만들기 (Build It)
 
 `code/pipeline.py`의 코드는 완전한 ML 파이프라인을 밑바닥부터 만든다:

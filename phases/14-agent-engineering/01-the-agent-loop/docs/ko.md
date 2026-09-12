@@ -68,6 +68,10 @@ Claude Agent SDK, OpenAI Agents SDK, LangGraph, AutoGen v0.4 AgentChat, CrewAI, 
 - **연쇄 실패(Cascading failure).** 유령 SKU 하나, 하류 API 호출 네 번, 다중 시스템 장애 하나. 에이전트는 "내가 실패했다"와 "작업이 불가능하다"를 구분하지 못하며, 400 에러에서 종종 성공을 환각한다. Lesson 26 참고.
 - **루프 길이 폭발(Loop length explosion).** 대부분의 2026년 에이전트는 40~400 단계를 돈다. 38단계의 잘못된 결정을 디버깅하려면 관측가능성(observability)(Lesson 23)과 평가 트래젝토리(eval trajectory)(Lesson 30)가 필요하다.
 
+```figure
+agent-loop
+```
+
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 stdlib만으로 루프를 처음부터 끝까지 구현한다. 구성 요소:

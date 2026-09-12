@@ -35,6 +35,10 @@ ExperimentSpec
 ```
 
 스크립트는 디스크에 산다. 러너는 스크립트가 읽는 임시 파일 경로에 설정(config)을 쓴다. 스크립트는 키가 `metric_keys`의 상위 집합(superset)인 단일 json 줄을 stdout에 출력할 것으로 기대된다. stdout의 다른 모든 것은 포착되지만 지표 파서가 무시한다.
+```figure
+cg-runner-limits
+```
+
 
 ## 아키텍처 (Architecture)
 

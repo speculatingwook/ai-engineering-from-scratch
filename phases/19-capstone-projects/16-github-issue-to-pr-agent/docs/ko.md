@@ -64,6 +64,10 @@ GitHub issue labeled `@agent fix` or PR comment
 - 검증: 샌드박스 내 전체 CI + 커버리지 차이 게이트
 - 관측성: PR 본문에서 링크된 PR별 트레이스 아카이브를 갖는 Langfuse
 - 예산: 레포별 일당 달러 상한; 레포당 일당 최대 PR 수
+```figure
+cf-issue-to-pr
+```
+
 
 ## 직접 만들기 (Build It)
 

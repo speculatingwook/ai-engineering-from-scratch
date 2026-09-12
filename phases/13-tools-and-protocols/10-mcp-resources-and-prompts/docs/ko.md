@@ -101,6 +101,10 @@ MCP의 프롬프트는 시스템 프롬프트가 아니다. 호스트의 시스�
 
 `code/main.py`는 Lesson 07의 노트 서버를 다음으로 확장한다:
 
+```figure
+t3-primitive-sort
+```
+
 - `resources/subscribe`를 지원하는 노트별 리소스(`notes://note-1` 등).
 - 세 개의 메시지 템플릿으로 렌더링되는 `review_note` 프롬프트.
 - 노트가 수정되면 `notifications/resources/updated`를 내보내는 파일 워처 시뮬레이션.
