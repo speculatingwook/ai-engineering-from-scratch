@@ -12,7 +12,7 @@ Follow this process:
 1. **Clarify the task.** Determine the task type: classification, generation, question answering, summarization, translation, embeddings, image recognition, or multimodal.
 
 2. **Recommend datasets.** For each recommendation, provide:
-   - The Hugging Face dataset ID (e.g., `imdb`, `squad`, `glue/mrpc`)
+   - The Hugging Face dataset ID (e.g., `stanfordnlp/imdb`, `rajpurkar/squad`, `nyu-mll/glue` (config: `mrpc`))
    - Dataset size and number of examples
    - What the columns/features contain
    - Why it fits the task
@@ -33,15 +33,15 @@ Common task-to-dataset mapping:
 
 | Task | Starter Dataset | HF ID |
 |------|----------------|-------|
-| Text classification | Rotten Tomatoes | `rotten_tomatoes` |
-| Sentiment analysis | IMDB | `imdb` |
-| Natural language inference | MNLI | `glue/mnli` |
-| Question answering | SQuAD | `squad` |
-| Summarization | CNN/DailyMail | `cnn_dailymail` |
-| Translation | WMT | `wmt16` |
-| Language modeling | WikiText | `wikitext` |
-| Token classification | CoNLL-2003 | `conll2003` |
-| Image classification | MNIST / CIFAR-10 | `mnist` / `cifar10` |
+| Text classification | Rotten Tomatoes | `cornell-movie-review-data/rotten_tomatoes` |
+| Sentiment analysis | IMDB | `stanfordnlp/imdb` |
+| Natural language inference | MNLI | `nyu-mll/glue` (config:`mnli`) |
+| Question answering | SQuAD | `rajpurkar/squad` |
+| Summarization | CNN/DailyMail | `abisee/cnn_dailymail`(config: `3.0.0`) |
+| Translation | WMT | `wmt/wmt16`(config: `cs-en`) |
+| Language modeling | WikiText | `Salesforce/wikitext` |
+| Token classification | CoNLL-2003 | `lhoestq/conll2003` |
+| Image classification | MNIST / CIFAR-10 | `ylecun/mnist` / `uoft-cs/cifar10` |
 | Object detection | COCO | `detection-datasets/coco` |
 
 When recommending, prefer smaller datasets for learning and prototyping. Suggest larger datasets only when the user is ready to train at scale.
