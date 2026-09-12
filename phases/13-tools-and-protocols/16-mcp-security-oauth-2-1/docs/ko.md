@@ -1,57 +1,54 @@
-# MCP 보안 II: OAuth 2.1, 리소스 표시자, 점진적 스코프
+# MCP 인가: CIMD, 발급자 결속, PKCE, 단계 상향 (MCP Authorization: CIMD, Issuer Binding, PKCE, and Step-Up)
 
-> 원격 MCP 서버는 인증(authentication)만이 아니라 인가(authorization)가 필요하다. 2025-11-25 사양은 OAuth 2.1 + PKCE + 리소스 표시자(resource indicator, RFC 8707) + 보호된 리소스 메타데이터(protected-resource metadata, RFC 9728)와 정렬된다. SEP-835는 403 WWW-Authenticate에 대한 단계 상승 인가(step-up authorization)와 함께 점진적 스코프 동의를 추가한다. 이 레슨은 단계 상승 플로(flow)를 상태 기계(state machine)로 구현해 모든 홉(hop)을 볼 수 있게 한다.
+> 원격 MCP 요청은 무상태이지만 그 인가가 익명인 것은 아니다. 모든 자격 증명을 그것을 만든 발급자에 묶고, 모든 토큰을 그것을 받는 리소스에 묶으라.
 
 **Type:** Build
 **Languages:** Python
 **Prerequisites:** Phase 13 · 09 (transports), Phase 13 · 15 (security)
-**Time:** ~75분
+**Time:** ~90 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- 리소스 서버(resource server)와 인가 서버(authorization server)의 책임을 구분하기.
-- PKCE로 보호된 OAuth 2.1 인가 코드 플로를 따라가기.
-- 혼동된 대리자(confused-deputy) 공격을 막기 위해 `resource`(RFC 8707)와 보호된 리소스 메타데이터(RFC 9728)를 사용하기.
-- 단계 상승 인가 구현하기: 서버가 더 높은 스코프를 요청하는 WWW-Authenticate와 함께 403으로 응답하면, 클라이언트가 사용자 동의를 다시 받아 재시도한다.
+- 보호된 리소스 메타데이터를 통해 인가 서버를 찾아낸다.
+- 폐기 예정인 동적 클라이언트 등록보다 Client ID Metadata Document를 먼저 쓴다.
+- DCR 호환 경로를 피할 수 없을 때 올바른 `application_type`을 선언한다.
+- 인가 응답의 `iss`를 검증하고 자격 증명을 발급자별로 격리한다.
+- PKCE, 리소스 지시자, 대상 검증, 점진적 스코프를 쓴다.
+- 프로토콜 세션 없이 인가된 MCP 2026-07-28 요청을 보낸다.
 
 ## 문제 (The Problem)
 
-초기 MCP(2025년 이전)는 임시 API 키나 심지어 인증 없이 원격 서버를 출시했다. 2025-11-25 사양은 완전한 OAuth 2.1 프로파일로 그 격차를 메운다.
+원격 MCP 서버는 사적인 기록을 읽거나, 외부 시스템에 쓰거나, 비용이 큰 작업을 일으킬 수 있다. 인증은 누가 자격 증명을 내밀었는지 알려 준다. 인가는 여기에 더해 다음에도 답해야 한다.
 
-세 가지 실세계 필요:
+- 그 자격 증명은 어느 인가 서버가 발급했는가?
+- 그 토큰은 어느 MCP 리소스를 위한 것인가?
+- 어느 클라이언트와 리디렉션 URI가 흐름을 마쳤는가?
+- 사용자는 어떤 작업을 승인했는가?
+- 바로 이 요청이 아직 그 승인에 들어맞는가?
 
-- **평범한 원격 서버.** 사용자가 자신의 Notion / GitHub / Gmail에 접근하는 원격 MCP 서버를 설치한다. PKCE를 동반한 OAuth 2.1이 올바른 형태다.
-- **스코프 에스컬레이션.** `notes:read`를 부여받은 노트 서버가 나중에 특정 동작을 위해 `notes:write`가 필요해질 수 있다. 전체 플로를 다시 하는 대신, 단계 상승(SEP-835)이 추가 스코프를 요청한다.
-- **혼동된 대리자 방지.** 클라이언트가 서버 A에 대상(audience) 범위가 지정된 토큰을 보유한다. 악의적인 서버 A가 그 토큰을 서버 B에 제시하려 한다. 리소스 표시자(RFC 8707)는 토큰을 의도된 대상에 고정한다.
+2026-07-28 인가 프로필은 클라이언트 등록과 발급자 처리를 더 단단하게 만들었다. Client ID Metadata Document를 먼저 쓰고, 동적 클라이언트 등록은 권장하지 않고, DCR에는 올바른 `application_type`을 요구하고, RFC 9207 발급자 응답을 검증하며, 발급자를 넘나드는 자격 증명 재사용을 금지한다.
 
-OAuth 2.1은 새롭지 않다. 새로운 것은 MCP의 프로파일이다. 특정 필수 플로(인가 코드 + PKCE만. implicit 없음, 기본적으로 client credentials 없음), 모든 토큰 요청에 필수인 리소스 표시자, 그리고 클라이언트가 어디로 가야 할지 알도록 발행되는 보호된 리소스 메타데이터.
+이 규칙들은 무상태 코어를 보완한다. 코어 악수나 `Mcp-Session-Id`를 되살리지는 않는다.
 
 ## 개념 (The Concept)
 
-### 역할
+### 세 역할을 알아 두라 (Know the three roles)
 
-- **클라이언트.** MCP 클라이언트(Claude Desktop, Cursor 등).
-- **리소스 서버.** MCP 서버(노트, GitHub, Postgres, 무엇이든).
-- **인가 서버.** 토큰을 발행한다. 리소스 서버와 같은 서비스일 수도, 별도의 IdP(Auth0, Keycloak, Cognito)일 수도 있다.
+- **MCP 클라이언트:** 리소스 소유자를 대신해 요청을 보낸다.
+- **MCP 리소스 서버:** 접근 토큰을 받아들이고 MCP 엔드포인트를 제공한다.
+- **인가 서버:** 리소스 소유자를 인증하고, 동의를 받고, 토큰을 발급한다.
 
-MCP의 프로파일에서 리소스 서버와 인가 서버는 같은 호스트일 수 있지만 URL로 구분되어야 한다.
+리소스 서버와 인가 서버를 함께 운영할 수는 있지만, 식별자와 검증 책임은 분리해 두라.
 
-### 인가 코드 + PKCE
+### 인가는 HTTP에 적용된다 (Authorization applies to HTTP)
 
-플로:
+MCP 인가 명세는 HTTP 기반 전송에 적용된다. 로컬 stdio 서버는 프로세스와 운영체제의 신뢰 경계 아래에서 돈다. 대칭을 맞추겠다고 stdio에 가짜 브라우저 OAuth 흐름을 붙이지 마라.
 
-1. 클라이언트가 `code_verifier`(무작위)와 `code_challenge`(SHA256)를 생성한다.
-2. 클라이언트가 사용자를 `/authorize?response_type=code&client_id=...&redirect_uri=...&scope=notes:read&code_challenge=...&resource=https://notes.example.com`로 리다이렉트한다.
-3. 사용자가 동의한다. 인가 서버가 `redirect_uri?code=...`로 리다이렉트한다.
-4. 클라이언트가 `/token?grant_type=authorization_code&code=...&code_verifier=...&resource=...`로 POST한다.
-5. 인가 서버가 검증자(verifier)의 해시를 저장된 챌린지에 대해 검증하고 액세스 토큰을 발행한다.
-6. 클라이언트가 토큰을 사용한다: 리소스 서버로의 모든 요청에 `Authorization: Bearer ...`.
+원격 Streamable HTTP에서는 요청마다 `Authorization` 헤더에 소지자 토큰을 실어 보낸다. URL에는 절대 넣지 마라.
 
-PKCE는 인가 코드 가로채기 공격을 막는다. 리소스 표시자는 토큰이 다른 곳에서 유효해지는 것을 막는다.
+### 보호된 리소스 메타데이터에서 출발하라 (Start with protected-resource metadata)
 
-### 보호된 리소스 메타데이터 (RFC 9728)
-
-리소스 서버가 `.well-known/oauth-protected-resource` 문서를 발행한다:
+리소스 서버는 RFC 9728 메타데이터를 게시한다.
 
 ```json
 {
@@ -61,109 +58,246 @@ PKCE는 인가 코드 가로채기 공격을 막는다. 리소스 표시자는 �
 }
 ```
 
-클라이언트는 리소스 서버로부터 인가 서버를 발견한다. 구성이 줄어든다. 클라이언트에 필요한 것은 리소스 URL뿐이다.
+클라이언트는 MCP 리소스 URL에서 출발해 이 문서를 가져오고, 거기 실린 인가 서버를 하나 고른 다음, 그 서버의 OAuth 또는 OpenID Connect 메타데이터를 가져온다.
 
-### 리소스 표시자 (RFC 8707)
+RFC 9728의 잘 알려진 URL을 만들 때 리소스 경로를 보존하라. 리소스가 `https://notes.example.com/mcp`라면 이 레슨은 `https://notes.example.com/.well-known/oauth-protected-resource/mcp`를 쓴다. `/mcp` 꼬리를 떼면 같은 origin의 다른 보호된 리소스의 메타데이터를 고를 수 있다.
 
-토큰 요청의 `resource` 매개변수는 토큰의 의도된 대상을 고정한다. 발행된 토큰은 `aud: "https://notes.example.com"`를 담는다. 이 토큰을 받는 다른 MCP 서버는 `aud`를 검사하고 거부한다.
+호스트 이름을 보고 인가 서버를 짐작하지 마라. 검증되지 않은 오류 본문에서 발견한 발급자를 따라가지 마라. 클라이언트가 어떤 발급자를 신뢰할 의사가 있는지 정책으로 정해 두라.
 
-### 스코프 모델
+### 인가 서버 메타데이터를 확인하라 (Verify authorization server metadata)
 
-스코프는 공백으로 구분된 문자열이다. 흔한 MCP 규약:
+메타데이터는 엔드포인트와 지원하는 통제 수단을 드러내야 한다.
 
-- `notes:read`, `notes:write`, `notes:delete`
-- 관리자 기능을 위한 `admin:*`(아껴서 사용)
-- 신원을 위한 `profile:read`
-
-스코프 선택은 최소 권한(least-privilege)이어야 한다. 지금 필요한 것을 요청하고, 더 필요할 때 단계 상승한다.
-
-### 단계 상승 인가 (SEP-835)
-
-사용자가 `notes:read`를 부여한다. 그러다 나중에 에이전트에게 노트를 삭제하라고 요청한다. 서버가 응답한다:
-
+```json
+{
+  "issuer": "https://auth.example.com",
+  "authorization_endpoint": "https://auth.example.com/authorize",
+  "token_endpoint": "https://auth.example.com/token",
+  "code_challenge_methods_supported": ["S256"],
+  "authorization_response_iss_parameter_supported": true,
+  "client_id_metadata_document_supported": true
+}
 ```
-HTTP/1.1 403 Forbidden
+
+PKCE에는 S256을 요구하라. 발급자 문자열을 정확히 기록하라. 그 정확한 값이 등록과 토큰 저장의 키가 된다.
+
+### 등록 우선순위를 따르라 (Follow the registration priority)
+
+클라이언트가 고른 발급자와 이미 명시적인 관계를 맺고 있다면 미리 등록된 클라이언트 정보를 쓰라. 그렇지 않다면, 인가 서버가 지원을 알릴 때 Client ID Metadata Document를 먼저 쓰라. DCR은 폐기 예정인 호환 대비책으로만 쓰고, 이 중 어느 것도 쓸 수 없으면 클라이언트 정보를 사용자에게 물어보라.
+
+### Client ID Metadata Document를 먼저 쓰라 (Prefer Client ID Metadata Documents)
+
+Client ID Metadata Document는 인가 서버에게 클라이언트 식별자이면서 동시에 그 메타데이터의 위치이기도 한 HTTPS URL을 준다.
+
+```json
+{
+  "client_id": "https://client.example.com/oauth/metadata.json",
+  "client_name": "Notes desktop client",
+  "application_type": "native",
+  "redirect_uris": ["http://127.0.0.1:8765/callback"],
+  "grant_types": ["authorization_code"],
+  "response_types": ["code"]
+}
+```
+
+인가 서버가 그 문서를 가져와 검증한다. `client_id`는 경로가 있는 HTTPS URL이어야 하고, 문서 안의 값은 그 URL과 정확히 같아야 한다. 필수 문서 필드는 `client_id`, `client_name`, `redirect_uris`다. `application_type`은 이 예제에 나오지만 CIMD의 필수 항목은 아니다. 이 항목이 새로 필수가 된 곳은 DCR 경로다.
+
+문서를 가져오는 일을 SSRF에 민감한 작업으로 다루라. 목적지를 해석하고 검증하고, 루프백과 사설, 링크 로컬, 그 밖에 허용되지 않는 주소를 거부하고, 리디렉션과 DNS 변경 뒤에 다시 확인하고, 리디렉션 횟수와 바이트와 시간을 제한하고, JSON을 요구하고, 검증된 HTTP 캐시 제어를 따를 때만 캐시하라. `client_name`을 비롯한 표시 필드는 신뢰할 수 없는 텍스트로 다루라.
+
+CIMD는 처음 만날 때마다 새 동적 식별자를 찍어 낼 필요를 없애 준다. 리디렉션 URI 검증이나 발급자 정책, 사용자 동의를 없애 주지는 않는다.
+
+### DCR은 호환 경로다 (DCR is a compatibility path)
+
+동적 클라이언트 등록은 옛 인가 서버를 위해 남아 있지만, 새 MCP 구현에서는 권장되지 않는다.
+
+DCR을 쓸 때는 `application_type`을 선언하라.
+
+```json
+{
+  "client_name": "Notes desktop client",
+  "application_type": "native",
+  "redirect_uris": ["http://127.0.0.1:8765/callback"],
+  "grant_types": ["authorization_code"],
+  "response_types": ["code"]
+}
+```
+
+- 데스크톱, 모바일, 명령줄, 루프백 클라이언트는 `native`를 쓴다.
+- 원격에 호스팅되는 브라우저 애플리케이션은 `web`과 원격 HTTPS 리디렉션을 쓴다.
+
+이 필드를 빼면 OpenID Connect 등록 구현에서 `web`이 기본값이 될 수 있고, 정당한 루프백 리디렉션이 실패한다.
+
+DCR 코드는 명시적인 대비책 판단 뒤에 두라. CIMD 검증이 아무 이유로든 실패했다고 조용히 물러서지 마라. 그러면 보안 실패가 더 약한 등록 경로로 바뀔 수 있다.
+
+### 자격 증명을 발급자에 묶어라 (Bind credentials to the issuer)
+
+발급자가 찍어 준 등록 자료는 정확한 발급자 아래에 저장하라.
+
+```text
+issuer_credentials[issuer] = pre_registered_or_dcr_client
+tokens[(issuer, resource)] = access_token
+```
+
+보호된 리소스 탐색 결과가 `https://auth-one.example`에서 `https://auth-two.example`로 바뀌면 신뢰를 다시 따져 보라. 첫 발급자의 클라이언트 비밀, DCR 클라이언트 id, 등록 접근 토큰, 갱신 토큰, 접근 토큰을 두 번째 발급자에게 절대 보내지 마라. 미리 등록된 클라이언트와 DCR 클라이언트는 새 발급자용으로 발급된 자격 증명을 써야 한다.
+
+CIMD 클라이언트 id는 다르다. 인가 서버가 찍어 낸 자격 증명이 아니라 스스로 호스팅하는 HTTPS URL이기 때문이다. 같은 CIMD URL은 옮겨 쓸 수 있다. 새로 신뢰하게 된 발급자가 DCR 재등록 없이 그 문서를 가져와 검증한다. 인가 응답과 토큰은 여전히 새 발급자 아래에서 검증되고 저장된다.
+
+### PKCE를 곁들인 인가 코드 (Authorization code with PKCE)
+
+대화형 흐름은 이렇다.
+
+1. 엔트로피가 높은 `code_verifier`를 만든다.
+2. S256 `code_challenge`를 유도한다.
+3. 정확한 `client_id`, `redirect_uri`, `scope`, `code_challenge`, `resource`를 실어 인가 요청을 보낸다.
+4. `code`와, 제공된다면 `iss`를 담은 인가 응답을 받는다.
+5. 응답 필드를 하나라도 쓰기 전에 기록해 둔 발급자와 `iss`를 대조해 검증한다.
+6. `code_verifier`, 같은 리디렉션 URI, 같은 `resource`를 실어 코드를 교환한다.
+7. 받아 낸 토큰을 `(issuer, resource)` 아래에 저장한다.
+
+RFC 8707의 `resource` 매개변수는 인가 요청과 토큰 요청 양쪽에 나타난다. 이것이 정식 MCP 서버 URI를 식별한다.
+
+### `iss`를 정확히 검증하라 (Validate `iss` exactly)
+
+RFC 9207은 한 발급자의 인가 응답이 다른 발급자의 응답과 헷갈리는 것을 막아 준다.
+
+`iss`가 있으면 기록해 둔 발급자와 비교하되, 대소문자를 접거나, 끝의 슬래시를 바꾸거나, 기본 포트를 떼거나, 퍼센트 인코딩을 정규화하지 마라. 어긋나면 그 코드를 쓰지 말고, 그 응답에 담긴 공격자 조종 오류 내용을 화면에 보여 주지도 마라.
+
+`iss`를 담아 주는 인가 서버는 `authorization_response_iss_parameter_supported: true`를 알린다. 현행 클라이언트는 그런 알림이 없더라도 들어 있는 `iss`를 검증한다.
+
+### MCP 서버에서 대상을 검증하라 (Validate audience at the MCP server)
+
+리소스 서버는 자기 자신을 위해 발급된 토큰만 받아들인다.
+
+```text
+token.issuer == configured_authorization_server
+token.audience == canonical_mcp_resource
+```
+
+유효하지 않거나, 만료됐거나, 발급자가 다르거나, 대상이 다른 토큰은 401을 받는다. MCP 서버는 다른 서비스용 토큰을 받아들이거나 흘려보내서는 안 된다.
+
+### 지금 필요한 가장 작은 스코프를 요청하라 (Request the smallest current scope)
+
+지금 필요한 스코프에서 시작하라. 나중에 어떤 도구가 더 필요로 하면, 서버는 권위 있는 스코프 요구와 함께 403을 돌려준다.
+
+```text
 WWW-Authenticate: Bearer error="insufficient_scope",
-    scope="notes:delete", resource="https://notes.example.com"
+  scope="notes:delete",
+  resource_metadata="https://notes.example.com/.well-known/oauth-protected-resource/mcp"
 ```
 
-클라이언트는 insufficient_scope 오류를 보고 추가 스코프에 대한 동의 다이얼로그로 사용자에게 요청한 뒤, 그것을 위한 미니 OAuth 플로를 수행하고 새 토큰으로 요청을 재시도한다.
+클라이언트는 새 권한을 설명하고, 동의를 받고, 합친 스코프 집합으로 새 인가 흐름을 수행한 다음, 새 JSON-RPC id로 MCP 요청을 재시도한다.
 
-### 토큰 대상 검증
+요구된 스코프가 `scopes_supported`의 부분집합이라고 가정하지 마라. 지금 이 작업에 대해서는 그 요구가 권위를 가진다.
 
-모든 요청에서: 서버가 `token.aud == self.resource_url`을 검사한다. 불일치 = 401. 이것은 교차 서버 토큰 재사용을 막는다.
+### 인가와 무상태 MCP 전선 (Authorization and the stateless MCP wire)
 
-### 단명 토큰과 회전
+인가된 도구 호출도 현행 요청 봉투를 온전히 싣고 다닌다.
 
-액세스 토큰은 단명(short-lived)이어야 한다(기본 1시간). 리프레시 토큰은 매 갱신마다 회전한다. 클라이언트가 백그라운드에서 조용한 갱신을 처리한다.
+```text
+POST /mcp
+Authorization: Bearer <access-token>
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: notes.delete
+```
 
-### 토큰 통과 금지
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 12,
+  "method": "tools/call",
+  "params": {
+    "name": "notes.delete",
+    "arguments": {"id": "note-7"},
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "oauth-lesson-client",
+        "version": "1.0.0"
+      }
+    }
+  }
+}
+```
 
-샘플링 서버(Phase 13 · 11)는 클라이언트의 토큰을 다른 서비스로 통과(passthrough)시켜서는 안 된다. 샘플링 요청이 경계다.
+토큰은 주체를 인가한다. 요청 메타데이터는 프로토콜 동작을 협상한다. 어느 쪽도 다른 쪽을 대신하지 않는다.
+
+전선은 정해진 순서로 검증하라. JSON-RPC와 메타데이터 타입, 헤더와 본문의 일치, 그다음 프로토콜 지원 여부다. 라우팅 헤더나 버전 헤더가 어긋나면 `-32020`과 함께 HTTP 400을 돌려준다. 헤더와 본문이 지원하지 않는 버전에서 일치하면 `-32022`와 함께 HTTP 400을 돌려주고 `data`는 정확히 `{"supported":["2026-07-28"],"requested":"<actual>"}`로 채운다. 알 수 없는 메서드에는 `-32601`과 함께 HTTP 404를 돌려준다.
+
+401 유효하지 않은 토큰과 403 스코프 부족을 포함해 모든 요청 오류는 원래 요청 `id`를 담은 JSON-RPC 오류 봉투다. 구조화된 복구 정보는 선택적인 오류 `data`에 담고, `WWW-Authenticate`는 HTTP 응답 헤더로 남겨 둔다. 알림에는 `id`가 없으므로 JSON-RPC 본문을 받지 않는다. 받아들인 HTTP 알림은 빈 본문과 함께 202를 돌려준다.
+
+서버는 `server/discover`를 구현하고 도구를 알리므로 필수인 `tools/list` 메서드도 구현한다. 도구 서술자에는 안정적인 이름과 설명, 루트가 객체인 `inputSchema` 값이 들어간다. 목록은 결정적이며 `resultType`, 서버 신원 메타데이터, 상한이 있는 `ttlMs`, `cacheScope`를 돌려준다. 탐색과 사용자에 무관한 도구 목록은 인가 전에도 제공할 수 있다. 둘 중 하나가 주체에 따라 달라진다면 평소의 정책과 비공개 캐싱을 적용하라.
+
+### 토큰을 그대로 넘기지 마라 (No token passthrough)
+
+MCP 서버는 클라이언트의 MCP 접근 토큰을 하위 API로 그대로 넘겨서는 안 된다. 올바른 대상을 가진 별도의 하위 토큰을 얻거나 명시적인 토큰 교환 설계를 쓰라. 대상 검증은 서비스들이 남을 위해 찍힌 토큰을 거부할 때만 작동한다.
+
+### 갱신 토큰 (Refresh tokens)
+
+갱신 토큰은 선택 사항이다. 발급되면 비밀로 저장하고 발급자와 리소스를 키로 삼으라. 그것이 있으리라고 가정하지 마라. 인가 서버가 순환을 지원하면 순환시키고, 무효화된 값이 다시 쓰이는 것을 탐지하라.
 
 ```figure
 t3-scope-stepup
 ```
 
-### 혼동된 대리자 방지
+## 만들어 보기 (Build It)
 
-토큰은 `aud`에 바인딩된다. 클라이언트는 `client_id`에 바인딩된다. 모든 요청이 둘 다에 대해 검증된다. 사양은 MCP 이전 원격 도구 생태계에서 흔했던 옛 "토큰 전달(pass-the-token)" 패턴을 명시적으로 금지한다.
+`code/main.py`는 프로세스 안에서 도는 프로토콜 및 인가 시뮬레이터다. 보호된 리소스 탐색, 인가 서버 메타데이터, CIMD 등록, 버전으로 걸러진 DCR 대비책, 애플리케이션 타입 검사, PKCE, 발급자 검증, 리소스에 묶인 토큰, 스코프 단계 상향, `server/discover`, `tools/list`, 그리고 무상태 도구 요청을 구현한다.
 
-### 클라이언트 ID 발견
+이 모형은 이미 파싱된 요청 본문과 라우팅 헤더를 받는다. 완전한 HTTP 어댑터가 아니며 `Content-Type`이나 `Accept`를 파싱하지 않는다. `Content-Type: application/json`과 `application/json`, `text/event-stream`을 모두 담은 `Accept` 값을 요구하는 레슨 09의 Streamable HTTP 어댑터에 붙여 쓰라.
 
-각 MCP 클라이언트는 고정된 URL에 자신의 메타데이터를 발행한다. 인가 서버는 클라이언트의 메타데이터 문서를 가져와 리다이렉트 URI와 연락처 정보를 발견할 수 있다. 이렇게 하면 수동 클라이언트 등록이 없어진다.
+실행은 이렇게 한다.
 
-### 게이트웨이와 OAuth
+```bash
+cd phases/13-tools-and-protocols/16-mcp-security-oauth-2-1
+python3 code/main.py
+python3 -m unittest discover code/tests -v
+```
 
-Phase 13 · 17은 엔터프라이즈 게이트웨이가 OAuth를 어떻게 처리하는지 보여준다. 게이트웨이가 업스트림 서버에 대한 자격 증명을 보유하고, 클라이언트로의 토큰은 게이트웨이가 발행하며, 업스트림 토큰은 게이트웨이를 결코 떠나지 않는다. 이것은 신뢰 모델을 뒤집는다. 사용자는 게이트웨이와 한 번 인증하고, 게이트웨이가 N개의 서버 인가를 처리한다.
+출력은 먼저 탐색을 보여 주고, CIMD 등록, 평범한 읽기, 서로 다른 스코프 단계 상향 두 번, 발급자를 키로 삼은 자격 증명 저장을 차례로 보여 준다.
 
-## 라이브러리로 써보기 (Use It)
+## 직접 해 보기 (Use It)
 
-`code/main.py`는 완전한 OAuth 2.1 단계 상승 플로를 상태 기계로 시뮬레이션한다. 다음을 구현한다:
+시뮬레이터의 객체를 실제 운영 구성 요소에 대응시켜 보라.
 
-- PKCE 코드 검증자 / 챌린지 생성.
-- 리소스 표시자를 동반한 인가 코드 플로.
-- 보호된 리소스 메타데이터 엔드포인트.
-- 대상 검사를 동반한 토큰 검증.
-- `insufficient_scope`에 대한 단계 상승.
+- `ResourceServer.protected_resource_metadata`는 RFC 9728 엔드포인트가 된다.
+- `AuthorizationServer.metadata`는 RFC 8414이나 OpenID Connect 탐색이 된다.
+- `Client.enroll`은 CIMD 해석과 명시적인 DCR 호환 분기가 된다.
+- 발급자가 찍어 준 클라이언트 자격 증명과 `tokens_by_issuer_resource`는 암호화된 레코드가 된다. CIMD URL은 옮겨 쓸 수 있는 채로 남아도, 그 인가 결과는 발급자에 묶인 채로 남는다.
+- `ResourceServer.handle`은 디스패치 전에 현행 MCP 헤더와 토큰, 도구 스코프를 검증하면서 모든 요청 오류를 짝이 맞는 JSON-RPC 봉투에 담아 두는 미들웨어가 된다.
 
-이 레슨에는 HTTP 서버가 없다. 상태 기계가 메모리에서 실행되어 모든 홉을 추적할 수 있다. Phase 13 · 17의 게이트웨이 레슨이 이를 실제 트랜스포트에 연결한다.
+## 결과물 (Ship It)
 
-## 산출물 (Ship It)
-
-이 레슨은 `outputs/skill-oauth-scope-planner.md`를 만든다. 도구를 가진 원격 MCP 서버가 주어지면, 이 스킬은 스코프 집합, 고정 규칙, 단계 상승 정책을 설계한다.
+이 레슨은 `outputs/skill-oauth-scope-planner.md`를 만든다. 이제 등록 우선순위, 발급자에 묶인 자격 증명 저장, 애플리케이션 타입, PKCE, 리소스 지시자, 스코프 요구, 현행 무상태 요청 경계까지 설계해 준다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행한다. 두-스코프 단계 상승 플로를 추적한다. 단계 상승 시 어떤 홉이 반복되는지 적는다.
-
-2. 리프레시 토큰 회전을 추가한다. 매 갱신마다 새 리프레시 토큰을 발행하고 옛것을 무효화한다. 회전 후 탈취된 리프레시 토큰이 사용되는 것을 시뮬레이션하고 실패하는지 확인한다.
-
-3. stdlib http.server를 사용해 보호된 리소스 메타데이터 엔드포인트를 실제 HTTP 응답으로 구현한다. Lesson 09의 /mcp 엔드포인트를 반영한다.
-
-4. GitHub MCP 서버를 위한 스코프 계층을 설계한다: 리포 읽기, PR 쓰기, PR 승인, PR 머지, 관리자. 각 수준 사이에 단계 상승을 사용한다.
-
-5. RFC 8707과 RFC 9728을 읽는다. MCP가 RFC의 예제와 다르게 사용하는 9728의 필드 하나를 식별한다. (힌트: `scopes_supported`에 관한 것이다.)
+1. 갱신 토큰 순환을 추가하고 이전 갱신 토큰의 재사용을 거부하라.
+2. 발급자 허용 목록을 추가하라. 발급자가 바뀌면 옮겨 쓸 수 있는 CIMD URL만 다시 쓰고, 앞선 발급자가 찍어 준 자격 증명과 토큰은 모두 거부하라.
+3. 인가 코드에 만료를 추가하고 늦은 교환이 실패하는지 확인하라.
+4. 원격 HTTPS 리디렉션을 쓰는 웹 클라이언트 변형을 만들고, 그 DCR 메타데이터를 네이티브 클라이언트의 것과 비교하라.
+5. 같은 발급자 아래에 리소스를 하나 더 추가하라. 그 접근 토큰을 첫 리소스에서는 쓸 수 없음을 확인하라.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 흔히 말하는 것 | 실제 의미 |
+| 용어 | 뜻 |
 |------|---------|
-| OAuth 2.1 | "현대 OAuth" | PKCE를 의무화하고 implicit 플로를 금지하는 통합 RFC |
-| PKCE | "소유 증명" | 인가 코드 가로채기를 막는 코드 검증자 + 챌린지 |
-| 리소스 표시자 | "토큰 대상" | 토큰을 한 서버에 고정하는 RFC 8707 `resource` 매개변수 |
-| 보호된 리소스 메타데이터 | "발견 문서" | RFC 9728 `.well-known/oauth-protected-resource` |
-| 단계 상승 인가 | "점진적 동의" | 필요 시 스코프를 추가하는 SEP-835 플로 |
-| `insufficient_scope` | "WWW-Authenticate를 동반한 403" | 더 큰 스코프에 재동의하라는 서버 신호 |
-| 혼동된 대리자 | "서비스 간 토큰 재사용" | 신뢰받는 보유자가 토큰을 부적절하게 전달하는 공격 |
-| 단명 토큰 | "액세스 토큰 TTL" | 빠르게 만료되는 Bearer. 리프레시 토큰이 갱신 |
-| 스코프 계층 | "최소 권한 스택" | 수준 사이에 단계 상승이 있는 점진적 스코프 집합 |
-| 클라이언트 ID 메타데이터 | "클라이언트 발견 문서" | 클라이언트가 자신의 OAuth 메타데이터를 발행하는 URL |
+| Protected-resource metadata | 리소스와 인가 서버를 식별해 주는 RFC 9728 문서 |
+| CIMD | URL 자체가 OAuth 클라이언트 식별자인 HTTPS 메타데이터 문서 |
+| DCR | 호환성을 위해 남겨 둔, 폐기 예정인 동적 클라이언트 등록 |
+| `application_type` | 리디렉션 URI 규칙을 검증하는 데 쓰는 `native` 또는 `web` |
+| PKCE | 가로채인 인가 코드를 보호하는 검증자와 S256 도전 값 |
+| `iss` | RFC 9207의 인가 응답 발급자 식별자 |
+| Resource indicator | 토큰 요청을 MCP 리소스에 묶는 RFC 8707 매개변수 |
+| Audience | 토큰이 유효한 리소스 |
+| Step-up | 지금 이 작업에 필요한 추가 스코프를 위한 새 동의와 토큰 발급 |
+| Issuer-bound credentials | 정확한 인가 서버 발급자별로 격리한 등록 및 토큰 레코드 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP(Authorization spec](https://modelcontextprotocol.io/specification/draft/basic/authorization)) 표준 MCP OAuth 프로파일
-- [den.dev(MCP November authorization spec](https://den.dev/blog/mcp-november-authorization-spec/)) 2025-11-25 변경 사항 설명
-- [RFC 8707(Resource indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707)) 대상 고정 RFC
-- [RFC 9728(OAuth 2.0 protected resource metadata](https://datatracker.ietf.org/doc/html/rfc9728)) 발견 문서 RFC
-- [Aembit(MCP OAuth 2.1, PKCE and the future of AI authorization](https://aembit.io/blog/mcp-oauth-2-1-pkce-and-the-future-of-ai-authorization/)) 실용적 단계 상승 플로 설명
+- [MCP 2026-07-28 authorization specification](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
+- [RFC 9728: OAuth 2.0 Protected Resource Metadata](https://www.rfc-editor.org/rfc/rfc9728)
+- [RFC 8707: Resource Indicators for OAuth 2.0](https://www.rfc-editor.org/rfc/rfc8707)
+- [RFC 9207: OAuth 2.0 Authorization Server Issuer Identification](https://www.rfc-editor.org/rfc/rfc9207)
+- [OAuth Client ID Metadata Document draft](https://datatracker.ietf.org/doc/draft-ietf-oauth-client-id-metadata-document/)
