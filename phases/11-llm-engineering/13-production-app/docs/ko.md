@@ -305,6 +305,20 @@ class ModelName(Enum):
     GPT_4O_MINI = "gpt-4o-mini"
 
 
+def resolve_primary_model() -> ModelName:
+    override = (os.environ.get("LLM_MODEL") or "").strip()
+    if not override:
+        return ModelName.CLAUDE_SONNET
+    for model in ModelName:
+        if model.value == override:
+            return model
+    known = ", ".join(m.value for m in ModelName)
+    raise ValueError(f"LLM_MODEL={override!r} is not in the pricing registry (known: {known})")
+
+
+PRIMARY_MODEL = resolve_primary_model()
+
+
 MODEL_PRICING = {
     ModelName.CLAUDE_SONNET: {"input": 3.00, "output": 15.00},
     ModelName.GPT_4O: {"input": 2.50, "output": 10.00},
