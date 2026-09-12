@@ -28,6 +28,10 @@ ROOT = Path(__file__).resolve().parent.parent
 README = ROOT / "README.md"
 OUT_ROOT = ROOT / "i18n"
 
+# Languages that also get a README at the repository root, because README.md's
+# language bar links there directly.
+ROOT_READMES = {"ko": "README.ko.md"}
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 FENCE = re.compile(r"^\s*```")
@@ -193,6 +197,30 @@ def main():
             dst.parent.mkdir(parents=True, exist_ok=True)
             dst.write_text(content, encoding="utf-8")
             print(f"wrote {dst.relative_to(ROOT)}")
+
+        # This fork also links a Korean README from the repository root, because
+        # the language bar at the top of README.md points there. It is generated
+        # from the same table so the two Korean copies can never disagree, and it
+        # keeps README.md's own relative links, being at the same depth.
+        if lang not in ROOT_READMES:
+            continue
+        root_body = render(text, lang, TRANSLATIONS)
+        root_content = f"{note}\n{root_body}" if note else root_body
+        # The note is written for a file two levels deep; at the root the
+        # canonical README sits alongside it. The language bar likewise has to
+        # flip: the reader is already on the translated page.
+        root_content = root_content.replace('href="../../README.md"', 'href="README.md"')
+        root_content = root_content.replace(
+            '<b>English</b> · <a href="README.ko.md">한국어</a>',
+            '<a href="README.md">English</a> · <b>한국어</b>',
+        )
+        root_dst = ROOT / ROOT_READMES[lang]
+        if args.check:
+            if not root_dst.is_file() or root_dst.read_text(encoding="utf-8") != root_content:
+                stale.append(f"{lang} (root)")
+        else:
+            root_dst.write_text(root_content, encoding="utf-8")
+            print(f"wrote {root_dst.relative_to(ROOT)}")
     if args.check and stale:
         print(f"stale README translations: {stale}; run build_readme_i18n.py", file=sys.stderr)
         return 1
