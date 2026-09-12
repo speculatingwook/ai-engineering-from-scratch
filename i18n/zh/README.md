@@ -1,9 +1,5 @@
 <p align="center"><sub>社区翻译，以<a href="../../README.md">英文原文为准</a> · <a href="https://aiengineeringfromscratch.com">aiengineeringfromscratch.com</a></sub></p>
 <p align="center">
-  <b>English</b> · <a href="../../README.ko.md">한국어</a>
-</p>
-
-<p align="center">
   <img src="../../assets/banner.svg" alt="AI Engineering from Scratch — reference manual banner" width="100%">
 </p>
 

@@ -1,9 +1,5 @@
 <p align="center"><sub>Traduzione della community. Fa fede la <a href="../../README.md">versione inglese</a> · <a href="https://aiengineeringfromscratch.com">aiengineeringfromscratch.com</a></sub></p>
 <p align="center">
-  <b>English</b> · <a href="../../README.ko.md">한국어</a>
-</p>
-
-<p align="center">
   <img src="../../assets/banner.svg" alt="AI Engineering from Scratch — reference manual banner" width="100%">
 </p>
 
