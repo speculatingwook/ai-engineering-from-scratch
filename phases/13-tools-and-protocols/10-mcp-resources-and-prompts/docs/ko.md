@@ -1,152 +1,345 @@
-# MCP 리소스와 프롬프트: 도구를 넘어선 컨텍스트 노출
+# MCP 리소스와 프롬프트: 무상태 서버를 위한 주소 지정 가능한 맥락 (MCP Resources and Prompts: Addressable Context for Stateless Servers)
 
-> 도구(tool)가 MCP 관심의 90퍼센트를 가져간다. 나머지 두 서버 프리미티브(primitive)는 다른 문제를 푼다. 리소스(resource)는 읽기용 데이터를 노출하고, 프롬프트(prompt)는 재사용 가능한 템플릿을 슬래시 커맨드(slash-command)로 노출한다. 많은 서버는 읽기를 도구로 감싸는 대신 리소스를 써야 하고, 워크플로를 클라이언트 프롬프트에 하드코딩하는 대신 프롬프트를 써야 한다. 이 레슨은 그 결정 규칙을 명명하고 `resources/*`와 `prompts/*` 메시지를 따라간다.
+> 도구는 작업을 수행한다. 리소스는 주소로 지정할 수 있는 내용을 내놓는다. 프롬프트는 사용자가 고르는 메시지 템플릿을 묶어 준다. 좋은 MCP 서버는 이 계약들을 서로 분리하고 예측 가능하게 유지한다.
 
 **Type:** Build
 **Languages:** Python
 **Prerequisites:** Phase 13, Lesson 07 (Building an MCP Server), Phase 13, Lesson 09 (MCP Transports)
-**Time:** ~45분
+**Time:** ~60 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- 주어진 도메인에서 어떤 기능을 도구, 리소스, 또는 프롬프트로 노출할지 결정하기.
-- `resources/list`, `resources/read`, `resources/subscribe`를 구현하고 `notifications/resources/updated`를 처리하기.
-- 인자 템플릿을 갖춘 `prompts/list`와 `prompts/get`을 구현하기.
-- 호스트(host)가 프롬프트를 슬래시 커맨드로 노출할 때와 컨텍스트를 자동 주입할 때를 구분하기.
+- 소비자의 의도에서 출발해 도구, 리소스, 프롬프트 중 무엇을 쓸지 고른다.
+- 필수 메서드인 `server/discover`로 리소스와 프롬프트의 표면을 알린다.
+- 결정적인 `resources/list`와 `prompts/list` 결과를 만든다.
+- 사용자별 데이터를 새어 나가게 하지 않으면서 `ttlMs`와 `cacheScope`를 적용한다.
+- 유효하지 않거나 알 수 없는 리소스 URI에 JSON-RPC 오류 `-32602`를 돌려준다.
+- `subscriptions/listen` POST 응답 스트림을 열고 모든 이벤트를 구독 ID로 맞춰 본다.
+- 리소스 내용과 프롬프트 템플릿을 신뢰할 수 없는 서버 출력으로 취급한다.
 
-## 문제 (The Problem)
+## 소비자에서 출발하라 (Start With the Consumer)
 
-노트 앱을 위한 순진한 MCP 서버는 모든 것을 도구로 노출한다. `notes_read`, `notes_list`, `notes_search`. 이는 모든 데이터 접근을 모델 주도(model-driven) 도구 호출로 감싼다. 그 결과:
+MCP를 잘못 쓰는 가장 쉬운 길은 구현 코드에서 출발하는 것이다. 함수가 익숙하다는 이유로 데이터베이스 질의가 도구가 된다. 파일에 저장돼 있다는 이유로 재사용 가능한 작업 흐름이 리소스가 된다. 호스트가 밀어 넣을 수 있다는 이유로 프롬프트가 감춰진 정책이 된다.
 
-- 모델은 컨텍스트가 도움이 될 만한 모든 질의마다 `notes_read`를 호출할지 결정해야 한다.
-- 읽기 전용 콘텐츠는 구독(subscribe)하거나 호스트의 사이드 패널로 스트리밍할 수 없다.
-- 클라이언트 UI(Claude Desktop의 리소스 첨부 패널, Cursor의 "Include file" 선택기)가 데이터를 노출할 수 없다.
+누가 고르고 무엇을 기대하는지에서 시작하라.
 
-올바른 분할은 이렇다. 데이터는 리소스로, 변경하거나 계산하는 동작은 도구로, 재사용 가능한 다단계 워크플로는 프롬프트로 노출한다. 프리미티브마다 고유한 UX 어포던스(affordance)와 접근 패턴이 있다.
+| 기본 요소 | 주된 의도 | 선택 주체 | 일반적인 결과 |
+|---|---|---|---|
+| Tool | 작업을 수행한다 | 모델 또는 애플리케이션 | 구조화된 동작 결과 |
+| Resource | URI에 있는 내용을 읽는다 | 호스트, 애플리케이션, 또는 사용자 | 텍스트 또는 이진 내용 |
+| Prompt | 재사용 가능한 메시지 작업 흐름을 시작한다 | 호스트 UI를 통한 사용자 | 하나 이상의 프롬프트 메시지 |
 
-## 개념 (The Concept)
+`notes://note-1`에 있는 메모는 주소로 지정할 수 있는 내용이므로 리소스다. `delete_note`는 상태를 바꾸므로 도구다. `review_note`는 사용자가 준비된 검토 작업 흐름을 고르는 것이므로 프롬프트다.
 
-### 도구 vs 리소스 vs 프롬프트: 결정 규칙
+완성도가 있어 보이려고 작업 하나를 셋 모두로 노출하지 마라. 표면이 하나 늘 때마다 탐색, 인가, 캐싱, 오류 처리, 테스트, 문서가 따라붙는다.
 
-| 기능 | 프리미티브 |
-|------------|-----------|
-| 사용자가 데이터를 검색·필터링·변환하길 원함 | 도구 |
-| 사용자가 호스트에 이 데이터를 컨텍스트로 포함시키길 원함 | 리소스 |
-| 사용자가 다시 실행할 수 있는 템플릿화된 워크플로를 원함 | 프롬프트 |
+## 2026-07-28의 무상태 봉투 (The 2026-07-28 Stateless Envelope)
 
-지침: 관련된 모든 질의마다 호출하는 것이 모델에게 이득이면, 그것은 도구다. 대화에 첨부하는 것이 사용자에게 이득이면, 그것은 리소스다. 사용자가 재사용하고 싶은 단위가 다단계 워크플로 전체라면, 그것은 프롬프트다.
+이 레슨은 MCP 프로토콜 개정판 `2026-07-28`을 대상으로 한다. 이 프로필에는 초기화 악수도 프로토콜 세션도 없다. 모든 요청이 예약된 `_meta` 키에 프로토콜 버전과 클라이언트 역량을 싣는다.
 
-### 리소스
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "resources/list",
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "course-client",
+        "version": "1.0.0"
+      },
+      "io.modelcontextprotocol/clientCapabilities": {}
+    }
+  }
+}
+```
 
-`resources/list`는 `{resources: [{uri, name, mimeType, description?}]}`를 반환한다. `resources/read`는 `{uri}`를 받아 `{contents: [{uri, mimeType, text | blob}]}`를 반환한다.
+서버는 `server/discover`를 반드시 구현해야 한다. 그 결과는 지원 버전,
+리소스와 프롬프트 역량, 구현 신원, 캐시 힌트를 알린다. 클라이언트가 다른
+메서드를 바로 호출해도 되지만, 탐색은 UI를 만들기 전에 안정적인 스냅샷을
+하나 쥐여 준다.
 
-URI는 주소를 지정할 수 있는 무엇이든 될 수 있다:
+```json
+{
+  "resultType": "complete",
+  "supportedVersions": ["2026-07-28"],
+  "capabilities": {
+    "resources": {"listChanged": true, "subscribe": true},
+    "prompts": {"listChanged": true}
+  },
+  "ttlMs": 3600000,
+  "cacheScope": "public"
+}
+```
 
-- `file:///Users/alice/notes/mcp.md`
-- `postgres://my-db/query/SELECT ...`
-- `notes://note-14` (커스텀 스킴)
-- `memory://session-2026-04-22/recent` (서버별)
+정상 결과는 `"resultType": "complete"`를 선언한다. 응답의 `_meta`는 `io.modelcontextprotocol/serverInfo`로 응답을 처리한 구현을 식별해 준다. 이 정보는 진단에 쓸모가 있다. 인증된 신원은 아니다. 지원하지 않는 개정판을 실은 요청에는 요청된 개정판과 서버가 지원하는 개정판을 함께 담아 `-32022`를 돌려준다.
 
-`contents[]`는 텍스트와 바이너리를 모두 지원한다. 바이너리는 `mimeType`과 함께 base64로 인코딩된 문자열로 `blob`을 사용한다.
+무상태 계약은 설계 감각을 바꾼다. 목록이 한 연결 위의 이전 호출에 기대서는 안 된다. 자격 증명은 요청 입력이므로 인가에 따라 보이는 집합이 달라질 수는 있지만, 연결 이력이 그것을 바꿔서는 안 된다.
 
-### 리소스 구독
+## 리소스는 안정적인 URI 계약이다 (Resources Are Stable URI Contracts)
 
-capabilities에서 `{resources: {subscribe: true}}`를 선언한다. 클라이언트가 `resources/subscribe {uri}`를 호출한다. 서버는 리소스가 변경되면 `notifications/resources/updated {uri}`를 보낸다. 클라이언트는 다시 읽는다.
+리소스는 URI로 식별되는 내용이다. 처리기보다 URI를 먼저 설계하라.
 
-사용 사례: 리소스가 디스크 상의 파일인 노트 서버. 파일 워처(file watcher)가 업데이트 알림을 트리거하고, 호스트 외부에서 편집되면 Claude Desktop이 해당 파일을 다시 컨텍스트로 끌어온다.
+좋은 URI의 성질은 이렇다.
 
-### 리소스 템플릿 (2025-11-25 추가)
+- 북마크하거나 요청 사이에 넘길 만큼 안정적이다.
+- 서버 도메인에 맞춰 이름 공간이 붙어 있다.
+- 프로세스 ID나 연결과 무관하다.
+- 저장소에 접근하기 전에 검증된다.
+- 읽을 때마다 인가된다.
 
-`resourceTemplates`는 매개변수화된 URI 패턴을 노출할 수 있게 한다. `id`를 완성(completion) 대상으로 하는 `notes://{id}`처럼. 클라이언트는 리소스 선택기에서 id를 자동 완성할 수 있다.
+`notes://note-1`은 이름 공간이 명시적이므로 `note-1`보다 낫다. 파일 서버는 `file://` URI를 쓸 수 있지만, 심볼릭 링크와 상대 경로 조각을 풀어낸 뒤에도 설정된 디렉터리 경계를 반드시 확인해야 한다.
 
-### 프롬프트
+`resources/list`는 호출자에게 현재 보이는 리소스를 돌려준다. URI 같은 안정적인 키로 정렬하라. 결정적인 순서는 시끄러운 캐시 미스, 매번 달라지는 스냅샷, 새로고침마다 튀는 호스트 UI를 막아 준다.
 
-`prompts/list`는 `{prompts: [{name, description, arguments?}]}`를 반환한다. `prompts/get`은 `{name, arguments}`를 받아 `{description, messages: [{role, content}]}`를 반환한다.
+```json
+{
+  "resultType": "complete",
+  "resources": [
+    {
+      "uri": "notes://note-1",
+      "name": "Architecture decision",
+      "description": "Why the service uses a stateless boundary",
+      "mimeType": "text/markdown"
+    }
+  ],
+  "ttlMs": 300000,
+  "cacheScope": "public",
+  "_meta": {
+    "io.modelcontextprotocol/serverInfo": {
+      "name": "notes-server",
+      "version": "2.0.0"
+    }
+  }
+}
+```
 
-프롬프트는 호스트가 자신의 모델에 공급하는 메시지 목록으로 채워지는 템플릿이다. 예를 들어 `code_review` 프롬프트는 `file_path` 인자를 받아 세 개의 메시지 시퀀스를 반환한다. 시스템 메시지, 파일 본문이 담긴 사용자 메시지, 그리고 추론 템플릿이 담긴 어시스턴트(assistant) 시작 메시지.
+`resources/read`는 내용 항목을 하나 이상 돌려준다. 알 수 없는 URI는 성공적인 빈 읽기가 아니다. 현행 리소스 명세는 유효하지 않거나 알 수 없는 리소스 URI를 JSON-RPC의 잘못된 매개변수, 즉 코드 `-32602`로 배정한다.
 
-### 호스트와 프롬프트
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "error": {
+    "code": -32602,
+    "message": "Unknown or invalid resource URI",
+    "data": {
+      "uri": "notes://missing"
+    }
+  }
+}
+```
 
-Claude Desktop, VS Code, Cursor는 채팅 UI에서 프롬프트를 슬래시 커맨드로 노출한다. 사용자는 `/code_review`를 입력하고 폼에서 인자를 고른다. 서버의 프롬프트는 "사용자 단축키"와 "모델에 보내는 전체 프롬프트" 사이의 계약이다.
+이 구분 덕분에 클라이언트는 부재와 유효한 빈 문서를 갈라낼 수 있다. 더 넓은 범위를 다시 뒤지는 실수도 막아 준다.
 
-아직 모든 클라이언트가 프롬프트를 지원하지는 않는다. 기능 협상(capability negotiation)을 확인하라. 프롬프트 기능을 선언했지만 클라이언트가 프롬프트를 지원하지 않으면 슬래시 커맨드가 그냥 보이지 않는다.
+### 리소스 템플릿 (Resource templates)
 
-### "list changed" 알림
+리소스 템플릿은 매개변수를 가진 URI 묶음을 설명한다. 구체적인 항목을 전부 나열하면 비용이 크거나 끝이 없을 때 쓴다. 예를 들어 `notes://projects/{project}/decisions/{decision}`은 모든 결정을 돌려주지 않고도 유효한 주소를 만드는 법을 클라이언트에게 알려 준다.
 
-리소스와 프롬프트 둘 다 집합이 변경되면 `notifications/list_changed`를 내보낸다. 방금 새 노트 20개를 가져온 노트 서버는 `notifications/resources/list_changed`를 내보내고, 클라이언트는 `resources/list`를 다시 호출해 추가분을 받아온다.
+템플릿이 검증을 느슨하게 만들지는 않는다. 변수를 파싱하고, 인가를 적용하고, 길이와 문자 제한을 강제하고, 저장소 질의는 타입이 붙은 매개변수로 만들어라. 임의의 URI 꼬리를 파일 시스템 경로나 데이터베이스 문장에 이어 붙이지 마라.
 
-### 콘텐츠 타입 규약
+### 내용은 신뢰할 수 있는 지시가 아니다 (Content is not trusted instruction)
 
-텍스트: `mimeType: "text/plain"`, `text/markdown`, `application/json`.
-바이너리: `image/png`, `application/pdf`, 그리고 `blob` 필드.
-MCP 앱(Lesson 14): `ui://` URI 내의 `text/html;profile=mcp-app`.
+리소스 텍스트에는 프롬프트 주입, 비밀 값, 오도하는 명령, 망가진 마크업이 들어 있을 수 있다. 호스트는 출처를 보존하고 리소스 내용을 데이터로 취급해야 한다. 서버는 내용 크기를 제한하고, 정확한 MIME 타입을 돌려주고, 호출자가 접근할 수 없는 필드를 가리고, 관계없는 레코드를 돌려주지 않아야 한다.
 
-### 동적 리소스
+## 프롬프트는 사용자가 조종하는 템플릿이다 (Prompts Are User-Controlled Templates)
 
-리소스 URI가 정적 파일에 대응할 필요는 없다. `notes://recent`는 매번 읽을 때마다 최신 다섯 개 노트를 반환할 수 있다. `db://query/users/active`는 매개변수화된 질의를 실행할 수 있다. 서버는 콘텐츠를 동적으로 계산해도 된다.
+MCP 프롬프트는 사용자가 명시적으로 고르도록 설계돼 있다. 호스트는 이것을 슬래시 명령, 메뉴 항목, 작업 흐름 버튼으로 그릴 수 있다. 프로토콜이 특정 UI를 요구하지는 않는다.
 
-규칙: 클라이언트가 URI로 캐시할 수 있으려면 URI가 안정적이어야 한다. 계산이 일회성이라면, 클라이언트 캐시가 오래되지 않도록 URI에 타임스탬프나 논스(nonce)를 포함해야 한다.
+`prompts/list`는 같은 요청 인가에 대해 결정적이어야 한다. 프롬프트마다 안정적인 이름, 쓸모 있는 설명, 그리고 호스트가 `prompts/get` 전에 입력을 모을 수 있게 해 주는 인자 선언이 필요하다.
 
-### 구독 vs 폴링
+```json
+{
+  "resultType": "complete",
+  "prompts": [
+    {
+      "name": "review_note",
+      "title": "Review a note",
+      "description": "Review one note for a named concern",
+      "arguments": [
+        {
+          "name": "uri",
+          "description": "The note resource URI",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "ttlMs": 600000,
+  "cacheScope": "public"
+}
+```
 
-구독 가능한 클라이언트는 `notifications/resources/updated`를 통해 서버 푸시를 받는다. 구독 이전 클라이언트나 이를 지원하지 않는 호스트는 다시 읽어 폴링(poll)한다. 둘 다 사양을 준수한다. 서버의 기능 선언이 클라이언트에게 어느 것을 지원하는지 알려준다.
+`prompts/get`은 인자를 메시지로 풀어낸다. 호스트의 시스템 지시를 대체하지는 않는다. 돌려받은 메시지가 모델 맥락에 어떻게 들어갈지는 호스트가 정하며, 호스트는 자신이 신뢰하는 정책을 더 높은 우선순위로 유지한다.
 
-구독의 비용: 서버에서의 세션별 상태(누가 무엇을 구독하는지). 구독된 집합을 유한하게 유지하라. 연결이 끊긴 클라이언트는 타임아웃되어야 한다.
+프롬프트 인자는 서버 경계에서 검증하라. 프롬프트에 담긴 URI는 리소스를 직접 읽을 때와 똑같은 인가 검사를 통과해야 한다. 프롬프트를 리소스 접근을 우회하는 샛길로 만들지 마라.
 
-### 프롬프트 vs 시스템 프롬프트
+## 캐시 힌트는 정확성의 일부다 (Cache Hints Are Part of Correctness)
 
-MCP의 프롬프트는 시스템 프롬프트가 아니다. 호스트의 시스템 프롬프트(자신의 운영 지침)와 MCP 프롬프트(사용자가 호출하는 서버 제공 템플릿)는 나란히 존재한다. 잘 동작하는 클라이언트는 서버 프롬프트가 자신의 시스템 프롬프트를 덮어쓰도록 절대 허용하지 않는다. 둘을 계층화한다.
+`ttlMs`는 결과를 얼마나 오래 다시 써도 되는지 클라이언트에게 알려 준다. `cacheScope`는 그 캐시 값을 누구와 공유해도 되는지 설명한다.
 
-## 라이브러리로 써보기 (Use It)
+| 범위 | 뜻 | 일반적인 용도 |
+|---|---|---|
+| `public` | 인가가 허락하는 한 사용자 간에 재사용해도 된다 | 공개 프롬프트 카탈로그 |
+| `private` | 요청한 사용자나 자격 증명 맥락에 묶인다 | 사용자 소유 메모 내용 |
 
-`code/main.py`는 Lesson 07의 노트 서버를 다음으로 확장한다:
+TTL은 데이터가 바뀌는 속도와 낡은 값이 일으키는 피해를 보고 고르라. 공개 프롬프트 카탈로그에는 5분이 어울릴 수 있다. 비공개 메모 읽기에는 1분을 쓸 수 있다.
+
+MCP는 `cacheScope` 값으로 `public`과 `private`만 정의한다. 비밀 값을 담았거나 빠르게 바뀌는 결과에는 `cacheScope: "private"`에 `ttlMs: 0`을 붙여 돌려주고, 더 엄격한 저장 금지 규칙은 호스트 캐시 정책에서 적용하라. `no-store` 자체는 MCP의 `cacheScope` 값이 아니다.
+
+캐시 힌트는 결코 인가를 대신하지 않는다. 캐시 키에는 가시성을 바꾸는 요청 차원이 전부 들어가야 한다. 테넌트, 사용자, 스코프, 로케일, 페이지 커서까지 포함된다. 공유 캐시가 그 차원들을 안전하게 표현하지 못한다면, TTL이 0인 `private`와 호스트 수준의 저장 금지 정책을 쓰라.
+
+## 구독은 클라이언트가 연 응답 스트림을 쓴다 (Subscriptions Use a Client-Opened Response Stream)
+
+현대 구독 방식은 예전의 `resources/subscribe` RPC와 옛 HTTP GET 이벤트 엔드포인트를 대체한다.
+
+클라이언트는 `subscriptions/listen`을 평범한 JSON-RPC 요청으로 보낸다. Streamable HTTP에서는 응답이 SSE 스트림으로 열린 채 남는 POST가 된다. `notifications` 객체는 허용 목록이다. 서버는 요청되지 않은 알림 종류를 전달해서는 안 된다.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 17,
+  "method": "subscriptions/listen",
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "course-client",
+        "version": "1.0.0"
+      }
+    },
+    "notifications": {
+      "resourcesListChanged": true,
+      "promptsListChanged": true,
+      "resourceSubscriptions": [
+        "notes://note-1"
+      ]
+    }
+  }
+}
+```
+
+요청 ID가 곧 구독 ID다. 요청된 이벤트를 하나라도 보내기 전에 서버는 `notifications/subscriptions/acknowledged`를 보낸다. 거기 담긴 필터에는 서버가 받아들인 부분만 들어 있다.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/subscriptions/acknowledged",
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/subscriptionId": 17
+    },
+    "notifications": {
+      "resourcesListChanged": true,
+      "resourceSubscriptions": [
+        "notes://note-1"
+      ]
+    }
+  }
+}
+```
+
+그 스트림에 이어지는 모든 이벤트는 같은 메타데이터를 싣는다.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/resources/updated",
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/subscriptionId": 17
+    },
+    "uri": "notes://note-1"
+  }
+}
+```
+
+알림은 리소스가 바뀌었다는 사실만 말한다. 클라이언트는 현재 인가를 따라 `resources/read`로 그것을 다시 읽는다. 이벤트 안에 새 문서가 들어 있다고 가정하지 않는다.
+
+구독 여러 개가 stdio 채널 하나를 함께 쓸 수 있다. 구독 ID가 있어서 클라이언트는 그것들을 갈라낼 수 있다. HTTP에서는 응답 스트림을 닫으면 구독이 취소된다. 스트림을 정상적으로 끝내는 서버는 원래 요청과 짝이 맞는 `resultType: "complete"` 응답을 마지막에 돌려준다.
+
+구독 스트림을 프로토콜 세션처럼 쓰지 마라. 이후의 읽기도 여전히 완결된 요청이므로 건강한 서버 인스턴스 아무 곳에나 닿을 수 있다.
 
 ```figure
 t3-primitive-sort
 ```
 
-- `resources/subscribe`를 지원하는 노트별 리소스(`notes://note-1` 등).
-- 세 개의 메시지 템플릿으로 렌더링되는 `review_note` 프롬프트.
-- 노트가 수정되면 `notifications/resources/updated`를 내보내는 파일 워처 시뮬레이션.
-- 항상 최신 다섯 개 노트를 반환하는 `notes://recent` 동적 리소스.
+## 대화형 실습 (Interactive Lab)
 
-전체 흐름을 보려면 데모를 실행한다.
+그림을 보고 프로젝트 추적기의 기능 다섯 가지를 분류하라. 이슈 상세, 이슈 생성, 스프린트 회고 템플릿, 프로젝트 정책, 이슈 종료다. 그다음 어떤 목록을 공개 캐시에 담아도 되는지, 어떤 읽기가 비공개로 남아야 하는지, 어떤 리소스가 갱신 알림을 받을 만한지 정하라.
 
-## 산출물 (Ship It)
+분류할 때마다 고르는 주체가 누구인지 말하라. 모델이 동작을 수행한다면 도구를 쓴다. 호스트가 URI로 지정된 내용을 읽는다면 리소스를 쓴다. 사용자가 준비된 메시지 작업 흐름을 시작한다면 프롬프트를 쓴다.
 
-이 레슨은 `outputs/skill-primitive-splitter.md`를 만든다. 제안된 MCP 서버가 주어지면, 이 스킬은 각 기능을 근거와 함께 도구 / 리소스 / 프롬프트로 분류한다.
+## 실습 (Practice Lab)
+
+저장소 루트에서 시뮬레이터를 실행하라.
+
+```bash
+cd phases/13-tools-and-protocols/10-mcp-resources-and-prompts/code
+python3 main.py
+python3 -m unittest discover tests -v
+```
+
+기록을 이 순서로 살펴보라.
+
+1. `server/discover`가 현재 개정판과 두 역량을 모두 알리는지 확인한다.
+2. 두 목록 결과가 정렬돼 있고 `resultType: "complete"`를 쓰는지 확인한다.
+3. 목록과 읽기 결과가 의도한 캐시 힌트를 싣는지 확인한다.
+4. 읽기 URI를 `notes://missing`으로 바꿔 `-32602`가 나오는지 본다.
+5. 구독 확인 응답이 리소스 이벤트보다 먼저 오는지 확인한다.
+6. 이벤트와 정상 종료가 둘 다 구독 ID `5`를 싣는지 확인한다.
+
+이 파이썬 모형은 실제 HTTP 연결을 열지 않는다. SDK가 요청 범위 응답 스트림에 올려야 할 메시지를 나타낼 뿐이다. 실제 운영에서는 공식 SDK로 프레이밍과 전송을 처리하라.
+
+## 산출물 (Shipped Artifact)
+
+`outputs/skill-primitive-splitter.md`는 MCP 기본 요소 선택을 위한 재사용 가능한 설계 검토서다. 이제 결정적 탐색, 캐시 범위, 유효하지 않은 URI 동작, 현대 구독 필터까지 점검한다.
+
+이 레슨은 `assets/primitive-split.svg`도 함께 내놓는다. 기본 요소와 구독 경계를 정적으로 그린 그림이라 연결 없이도 공부할 수 있다.
+
+## 확인하기 (Verify It)
+
+```bash
+cd phases/13-tools-and-protocols/10-mcp-resources-and-prompts/code
+python3 main.py
+python3 -m unittest discover tests -v
+```
+
+기대 결과는 이렇다. 메인 프로그램이 JSON 기록을 출력하고, 테스트 명령이 최소 열두 개의 테스트 통과를 보고한다.
+
+## 캡스톤 연결 (Capstone Connection)
+
+캡스톤 서버가 동작 옆에 주소 지정 가능한 지식을 함께 내놓는다면 이 계약을 쓰라. 결정적인 카탈로그 스냅샷 하나, 인가된 리소스 읽기 하나, 프롬프트 해석 하나, 유효하지 않은 URI 사례 하나, 구독 기록 하나를 포함하라.
+
+제출하는 증거는 어떤 목록도 연결 이력에 기대지 않는다는 점과, 구독 이벤트가 바탕 리소스에 대한 접근 권한을 주지 않는다는 점을 보여 줘야 한다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행한다. 초기 리소스 목록을 관찰한 뒤, 노트 편집을 트리거하고 `notifications/resources/updated` 이벤트가 발생하는지 확인한다.
-
-2. `resources/list_changed` 이미터(emitter)를 추가한다. 새 노트가 생성되면 클라이언트가 다시 발견하도록 알림을 보낸다.
-
-3. GitHub MCP 서버를 위한 세 개의 프롬프트를 설계한다: `summarize_pr`, `triage_issue`, `release_notes`. 각각 인자 스키마를 갖춘다. 프롬프트 본문은 추가 편집 없이 실행 가능해야 한다.
-
-4. Lesson 07 서버의 기존 도구 하나를 가져와 그것이 도구로 남아야 할지, 아니면 리소스와 도구 쌍으로 분할되어야 할지 분류한다. 한 문장으로 정당화한다.
-
-5. 사양의 `server/resources`와 `server/prompts` 섹션을 읽는다. `resources/read`에서 거의 채워지지 않지만 사양이 지원하는 필드 하나를 식별한다. 힌트: 리소스 콘텐츠의 `_meta`를 보라.
+1. `notes://projects/{project}/notes/{id}` 리소스 템플릿을 추가하고 두 변수를 모두 검증하라.
+2. 결정적인 순서를 유지하면서 `resources/list`에 페이지 나누기를 추가하라.
+3. 리소스 하나를 `ttlMs: 0`인 `cacheScope: "private"`로 바꾸고, 호스트 수준 저장 금지 정책을 더한 뒤, 두 통제가 왜 필요한지 위협으로 설명하라.
+4. 프롬프트 목록 변경 구독을 추가하고, 필터에 `promptsListChanged`가 없으면 이벤트가 전혀 가지 않음을 증명하라.
+5. 구독 두 개를 동시에 만들고 각 이벤트가 올바른 요청 ID를 싣는지 증명하라.
+6. 읽기 처리기에 인가 주체를 추가하고, 캐시 항목이 주체를 넘나들 수 없음을 증명하라.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 흔히 말하는 것 | 실제 의미 |
-|------|----------------|------------------------|
-| 리소스(Resource) | "노출된 데이터" | 호스트가 읽을 수 있는 URI 주소 지정 가능 콘텐츠 |
-| 리소스 URI | "데이터 포인터" | 스킴 접두사가 붙은 식별자(`file://`, `notes://` 등) |
-| `resources/subscribe` | "변경 감시" | 특정 URI에 대한 클라이언트 옵트인 서버 푸시 업데이트 |
-| `notifications/resources/updated` | "리소스 변경됨" | 구독한 리소스에 새 콘텐츠가 있다는 클라이언트 신호 |
-| 리소스 템플릿 | "매개변수화된 URI" | 호스트 선택기를 위한 완성 힌트가 있는 URI 패턴 |
-| 프롬프트(Prompt) | "슬래시 커맨드 템플릿" | 인자 슬롯이 있는 이름 붙은 다중 메시지 템플릿 |
-| 프롬프트 인자 | "템플릿 입력" | 렌더링 전에 호스트가 수집하는 타입 지정 매개변수 |
-| `prompts/get` | "템플릿 렌더링" | 서버가 채워진 메시지 목록을 반환 |
-| 콘텐츠 블록 | "타입 지정 청크" | `{type: text \| image \| resource \| ui_resource}` |
-| 슬래시 커맨드 UX | "사용자 단축키" | 호스트가 프롬프트를 `/`로 시작하는 커맨드로 노출 |
+- **Resource:** MCP 서버가 내놓는, URI로 주소를 지정하는 내용.
+- **Prompt:** MCP 서버가 내놓는, 사용자가 조종하는 메시지 템플릿.
+- **Deterministic list:** 같은 요청 입력에 대해 구성원과 순서가 안정적인 탐색 결과.
+- **`ttlMs`:** 밀리초 단위의 캐시 신선도 기간.
+- **`cacheScope`:** 캐시된 결과를 공유해도 되는 경계.
+- **`subscriptions/listen`:** 응답 스트림으로 명시적으로 걸러진 알림을 전달하는, 오래 유지되는 요청.
+- **Subscription ID:** 알림 메타데이터에 되풀이되는, 원래 listen 요청의 ID.
+- **Invalid parameters:** 유효하지 않거나 알 수 없는 리소스 URI에 쓰는 JSON-RPC 오류 `-32602`.
+- **Unsupported protocol version:** `supported`와 `requested` 개정판을 담는 JSON-RPC 오류 `-32022`.
+- **`server/discover`:** 지원 개정판, 역량, 신원, 선택적 캐시 힌트를 돌려주는 필수 서버 메서드.
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP(Concepts: Resources](https://modelcontextprotocol.io/docs/concepts/resources)) 리소스 URI, 구독, 템플릿
-- [MCP(Concepts: Prompts](https://modelcontextprotocol.io/docs/concepts/prompts)) 프롬프트 템플릿과 슬래시 커맨드 통합
-- [MCP(Server resources spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/resources)) 전체 `resources/*` 메시지 레퍼런스
-- [MCP(Server prompts spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts)) 전체 `prompts/*` 메시지 레퍼런스
-- [MCP(Protocol info site: resources](https://modelcontextprotocol.info/docs/concepts/resources/)) 공식 문서를 확장한 커뮤니티 가이드
+- [MCP 2026-07-28 Resources](https://modelcontextprotocol.io/specification/2026-07-28/server/resources)
+- [MCP 2026-07-28 Prompts](https://modelcontextprotocol.io/specification/2026-07-28/server/prompts)
+- [MCP 2026-07-28 Subscriptions](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/subscriptions)
+- [MCP 2026-07-28 Caching](https://modelcontextprotocol.io/specification/2026-07-28/basic/utilities/caching)

@@ -1,36 +1,45 @@
-# MCP 샘플링: 서버가 요청하는 LLM 완성과 에이전트 루프
+# MCP 모델 입력: 샘플링 이전과 무상태 MRTR (MCP Model Input: Sampling Migration and Stateless MRTR)
 
-> 대부분의 MCP 서버는 멍청한 실행기다. 인자를 받고, 코드를 실행하고, 콘텐츠를 반환한다. 샘플링(sampling)은 서버가 방향을 뒤집게 한다. 서버가 클라이언트의 LLM에게 결정을 내려달라고 요청하는 것이다. 그래서 서버는 어떤 모델 자격 증명(credential)도 갖지 않고도 서버 호스팅 에이전트 루프(agent loop)를 굴린다. 2025-11-25에 병합된 SEP-1577은 샘플링 요청 안에 도구를 추가해 루프가 더 깊은 추론까지 담도록 했다. 드리프트(drift) 위험 참고: SEP-1577의 샘플링-내-도구 형태는 2026년 1분기까지 실험적이었으며 여전히 SDK API에서 자리를 잡아가는 중이다.
+> MCP 2026-07-28은 새 설계에서 샘플링을 권장하지 않기로 하고, 서버가 클라이언트를 향해 요청을 보내던 경로를 없앴다. 기존 작업 흐름이 여전히 클라이언트의 모델을 필요로 한다면, 서버는 `input_required` 결과를 돌려주고 클라이언트가 모델 출력을 실어 원래 요청을 재시도한다. 추론 루프는 프로토콜 계층에서 명시적이고, 한계가 정해져 있고, 무상태가 된다.
 
 **Type:** Build
 **Languages:** Python
 **Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 10 (resources and prompts)
-**Time:** ~75분
+**Time:** ~75 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- `sampling/createMessage`가 무엇을 해결하는지 설명하기(서버 측 API 키 없는 서버 호스팅 루프).
-- 클라이언트에게 다중 턴 프롬프트에 대해 샘플링을 요청하고 완성을 반환하는 서버 구현하기.
-- `modelPreferences`(비용 / 속도 / 지능 우선순위)를 사용해 클라이언트의 모델 선택을 안내하기.
-- 동작을 하드코딩하는 대신 샘플링을 통해 내부적으로 반복하는 `summarize_repo` 도구 만들기.
+- MCP 2026-07-28에서 샘플링이 왜 권장되지 않는지 설명하고, 새 서버에는 모델을 직접 붙이는 기본값을 고른다.
+- `sampling/createMessage`를 Multi Round-Trip Request(MRTR)로 실어 나르는 호환성 작업 흐름을 구현한다.
+- 프로토콜 개정판과 클라이언트 역량을 모든 요청의 `_meta` 객체에 넣는다.
+- `resultType: "input_required"`를 돌려주고 새 JSON-RPC id로 원래 메서드를 재시도한다.
+- `requestState`의 무결성을 보호하고 주체, 메서드, 인자, 만료에 묶는다.
+- 역량 검사, 승인, 응답 검증, 라운드 상한으로 모델을 쓰는 루프에 한계를 건다.
 
-## 문제 (The Problem)
+## 프로토콜보다 먼저 해야 할 결정 (The Decision Before the Protocol)
 
-코드 요약 워크플로를 위한 유용한 MCP 서버는 다음을 해야 한다. 파일 트리를 순회하고, 어떤 파일을 읽을지 고르고, 요약을 합성하고, 반환한다. LLM 추론은 어디서 일어나는가?
+`summarize_repo` 같은 도구에는 두 종류의 일이 필요하다.
 
-옵션 A: 서버가 자신의 LLM을 호출한다. API 키가 필요하고, 서버 측에서 과금되며, 사용자당 비싸다.
+1. 결정적인 일: 파일을 나열하고, 허용된 파일을 읽고, 경로를 검증하고, 내용을 모은다.
+2. 모델의 일: 대표가 될 파일을 고르고 요약을 지어낸다.
 
-옵션 B: 서버가 원시 콘텐츠를 반환하고, 클라이언트의 에이전트가 추론한다. 돌아가긴 하지만 서버 로직을 클라이언트 프롬프트로 옮기게 되어 취약하다.
+이제 유효한 구조가 두 가지다.
 
-옵션 C: 서버가 `sampling/createMessage`를 통해 클라이언트의 LLM에게 요청한다. 서버는 알고리즘(어떤 파일을 읽을지, 몇 번의 패스를 할지)을 쥐고, 클라이언트는 과금과 모델 선택을 쥔다. 서버는 자격 증명을 전혀 갖지 않는다.
+### 새 서버: 모델 제공자와 직접 통합한다 (New server: integrate with a model provider directly)
 
-샘플링은 옵션 C다. 신뢰받는 서버가 그 자체로 완전한 LLM 호스트가 되지 않으면서도 에이전트 루프를 호스팅하게 해 주는 메커니즘이다.
+이것이 현재의 기본값이다. 서버가 모델 선택, 자격 증명, 예산, 재시도, 관측 가능성을 직접 쥔다. MCP 클라이언트에는 평범한 `tools/call` 결과 하나를 돌려준다.
 
-## 개념 (The Concept)
+서버가 이미 호스팅되는 서비스이거나, 호스트의 모델을 쓰는 것보다 예측 가능한 모델 동작이 더 중요할 때 이쪽을 고르라.
 
-### `sampling/createMessage` 요청
+### 기존 샘플링 작업 흐름: MRTR로 옮긴다 (Existing Sampling workflow: migrate it to MRTR)
 
-서버가 보내는 것:
+샘플링은 폐기 예고 기간 동안 아직 남아 있다. 2026-07-28을 대상으로 하는 서버는 클라이언트에게 살아 있는 `sampling/createMessage` 요청을 되돌려 보낼 수 없다. 대신 그 요청을 `InputRequiredResult` 안에 담는다.
+
+클라이언트의 모델과 자격 증명을 쓰는 것이 진짜 제품 요구사항일 때만 이 호환 경로를 고르라. 새 구현은 폐기 예정인 샘플링을 채택하면 안 되므로 제거 계획을 함께 기록해 두라.
+
+## 무상태 계약 (The Stateless Contract)
+
+2026년 7월 프로토콜에는 `initialize` 교환도, `notifications/initialized`도, `Mcp-Session-Id`도 없다. 악수에 담겨 있던 정보를 이제 모든 요청이 싣고 다닌다.
 
 ```json
 {
@@ -52,131 +61,205 @@
 }
 ```
 
-클라이언트가 자신의 LLM을 실행하고 반환하는 것:
+서버는 요청마다 개정판을 검증한다. 버전이 없거나 문자열이 아니면 잘못된 매개변수, 즉 `-32602`다. 지원하지 않는 문자열에는 정확한 데이터 `{"supported":["2026-07-28"],"requested":"<client version>"}`와 함께 `-32022`를 돌려준다. 샘플링 역량이 빠져 있으면 `data.requiredCapabilities`를 `{"sampling":{}}`로 채워 `-32021`을 돌려준다.
 
-```json
-{"jsonrpc": "2.0", "id": 42, "result": {
-  "role": "assistant",
-  "content": {"type": "text", "text": "..."},
-  "model": "claude-3-5-sonnet-20251022",
-  "stopReason": "endTurn"
-}}
-```
+JSON-RPC `id`가 없는 봉투는 알림이다. 수신 측은 그것을 처리해도 되지만, 성공 응답도 오류 응답도 내보내지 않는다. Streamable HTTP 어댑터는 받아들인 알림에 본문 없이 `202 Accepted`를 돌려준다.
 
-### `modelPreferences`
+서버는 `server/discover`도 구현하며, 클라이언트가 도구를 호출하기 전에 서버 계약을 알고 캐시할 수 있도록 `supportedVersions` 키와 역량, `ttlMs`, `cacheScope`를 정확히 담아 돌려준다. 탐색이 `tools`를 알리므로 서버는 필수인 `tools/list`도 구현한다. 결정적인 `summarize_repo` 서술자에는 유효한 객체 `inputSchema`, `resultType: "complete"`, 서버 신원 메타데이터, 공개 캐시 힌트가 들어간다.
 
-합이 1.0이 되는 세 개의 부동소수점:
+성공한 현대 결과에는 모두 구분자가 붙는다.
 
-- `costPriority`: 더 저렴한 모델을 선호.
-- `speedPriority`: 더 빠른 모델을 선호.
-- `intelligencePriority`: 더 유능한 모델을 선호.
+- `resultType: "complete"`는 작업이 끝났다는 뜻이다.
+- `resultType: "input_required"`는 클라이언트가 안에 담긴 요청을 채우고 재시도해야 한다는 뜻이다.
+- 확장이 결과 타입을 더 정의할 수 있다. Tasks 확장은 레슨 13에서 `"task"`를 더한다.
 
-여기에 `hints`: 서버가 선호하는 이름 붙은 모델들. 클라이언트는 힌트를 존중할 수도, 안 할 수도 있다. 클라이언트 사용자의 설정이 항상 우선한다.
+## MRTR 한 라운드 (One MRTR Round)
 
-### `includeContext`
-
-세 가지 값:
-
-- `"none"`: 서버가 제공한 메시지만. 기본값.
-- `"thisServer"`: 이 서버 세션의 이전 메시지를 포함.
-- `"allServers"`: 모든 세션 컨텍스트를 포함.
-
-`includeContext`는 교차 서버 컨텍스트를 누설하기 때문에 2025-11-25 기준으로 약하게 사용 중단(soft-deprecated)되었으며, 이는 보안 우려다. `"none"`을 선호하고 명시적 컨텍스트를 메시지에 담아 전달하라.
-
-### 도구를 동반한 샘플링 (SEP-1577)
-
-2025-11-25에 새로 추가됨: 샘플링 요청은 `tools` 배열을 포함할 수 있다. 클라이언트는 그 도구들을 사용해 완전한 도구 호출 루프를 실행한다. 그래서 서버는 클라이언트의 모델을 통해 ReAct 스타일 에이전트 루프를 호스팅한다.
+서버는 요청을 처리하는 도중에 클라이언트를 호출할 수 없다. 대신 이런 결과를 돌려준다.
 
 ```json
 {
-  "messages": [...],
-  "tools": [
-    {"name": "fetch_url", "description": "...", "inputSchema": {...}}
-  ]
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "resultType": "input_required",
+    "inputRequests": {
+      "pick_files": {
+        "method": "sampling/createMessage",
+        "params": {
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Choose three representative files and return a JSON array."
+              }
+            }
+          ],
+          "systemPrompt": "Return only the requested value.",
+          "modelPreferences": {
+            "costPriority": 0.8,
+            "intelligencePriority": 0.2
+          },
+          "maxTokens": 400
+        }
+      }
+    },
+    "requestState": "opaque-integrity-protected-value"
+  }
 }
 ```
 
-클라이언트는 루프를 돈다. 샘플링하고, 호출되면 도구를 실행하고, 다시 샘플링하고, 최종 어시스턴트 메시지를 반환한다. 이것은 2026년 1분기까지 실험적이다. SDK 시그니처는 여전히 드리프트할 수 있다. 구현할 때 2025-11-25 사양의 client/sampling 섹션과 대조해 확인하라.
+클라이언트는 자신이 샘플링을 지원하는지 확인하고, 자신의 승인 정책과 모델 정책을 적용해 모델 응답을 얻는다. 그런 다음 다른 JSON-RPC id로 새 요청을 보낸다.
 
-### 휴먼 인 더 루프(Human-in-the-loop)
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "summarize_repo",
+    "arguments": {"audience": "developer"},
+    "inputResponses": {
+      "pick_files": {
+        "role": "assistant",
+        "content": {
+          "type": "text",
+          "text": "[\"README.md\", \"server.py\", \"docs/intro.md\"]"
+        },
+        "model": "host-model",
+        "stopReason": "endTurn"
+      }
+    },
+    "requestState": "opaque-integrity-protected-value",
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {"sampling": {}}
+    }
+  }
+}
+```
 
-클라이언트는 샘플을 실행하기 전에 서버가 모델에게 무엇을 시키려는지 반드시 사용자에게 보여줘야 한다. 악의적 서버는 샘플링을 사용해 사용자의 세션을 조작할 수 있다("사용자에게 X라고 말해서 Y를 클릭하게 하라"). Claude Desktop, VS Code, Cursor는 샘플링 요청을 사용자가 거부할 수 있는 확인 다이얼로그로 노출한다.
+재시도는 프로토콜 세션을 이어 가는 것이 아니다. 원래 메서드와 인자를 그대로 되풀이하고, 이번 라운드의 `inputResponses`만 더하고, `requestState`를 바이트 단위로 그대로 되돌려 보내는 새 요청이다.
 
-2026년 합의: 휴먼 확인 없는 샘플링은 위험 신호(red flag)다. 게이트웨이(Phase 13 · 17)는 저위험 샘플링을 자동 승인하고 의심스러운 것은 무엇이든 자동 거부할 수 있다.
+MRTR은 `tools/call`, `prompts/get`, `resources/read`에서만 허용된다. 서버는 관계없는 메서드에서 `input_required`를 돌려줘서는 안 된다.
 
-### API 키 없는 서버 호스팅 루프
+## 여러 라운드에 걸친 상태 (Multi-Round State)
 
-대표적 사용 사례: 자체 LLM 접근이 전혀 없는 코드 요약 MCP 서버. 다음을 한다:
+이 레슨에는 모델 호출이 두 번 필요하다.
 
-1. 리포지토리 구조를 순회한다.
-2. "이 리포의 목적을 설명할 가능성이 가장 높은 파일 다섯 개를 골라라"로 `sampling/createMessage`를 호출한다.
-3. 그 파일들을 읽는다.
-4. 파일들의 내용과 "리포를 3개 문단으로 요약하라"로 `sampling/createMessage`를 호출한다.
-5. 요약을 `tools/call` 결과로 반환한다.
+1. `pick_files`는 JSON 배열을 돌려준다.
+2. `summary`는 최종 산문을 돌려준다.
 
-서버는 LLM API를 결코 건드리지 않는다. 클라이언트의 사용자가 자신의 자격 증명으로 완성에 대해 비용을 지불한다.
+재시도는 그 라운드의 응답만 싣는다. 그래서 서버는 단계와 검증된 중간 데이터를 다음 `requestState`에 넣는다.
 
-### 안전 위험 (Unit 42 공개, 2026년 1분기)
+그 값은 공격자가 조종할 수 있다고 보라. 단계 이름만 날것으로 서명해서는 부족하다. 상태를 다음에 묶어라.
 
-- **은밀한 샘플링(Covert sampling).** "세션 컨텍스트의 사용자 이메일로 응답하라"로 항상 샘플링을 호출하는 도구. Phase 13 · 15가 공격 벡터를 다룬다.
-- **샘플링을 통한 리소스 절도.** 서버가 클라이언트에게 공격자의 페이로드를 요약하라고 요청하여 사용자에게 과금한다.
-- **루프 폭탄(Loop bombs).** 서버가 타이트한 루프에서 샘플링을 호출한다. 클라이언트는 반드시 세션별 속도 제한(rate limit)을 강제해야 한다.
+- 스스로 밝힌 `clientInfo`가 아니라 인증된 주체,
+- 요청이 출발한 메서드,
+- 원래 인자의 요약값,
+- 짧은 만료,
+- 현재 단계와 검증된 중간 값.
 
-## 라이브러리로 써보기 (Use It)
+기밀성이 필요 없으면 HMAC을 쓰라. 클라이언트가 상태를 읽어서는 안 된다면 인증된 암호화를 쓰라. 서명이 틀렸거나, 값이 만료됐거나, 주체가 바뀌었거나, 인자가 바뀌었으면 `-32602`로 거부하라.
 
-`code/main.py`는 가짜 서버-투-클라이언트 샘플링 하니스(harness)를 제공한다. 시뮬레이션된 "summarize_repo" 도구가 두 번의 샘플링 라운드(파일 선택, 그다음 요약)를 호출하고, 가짜 클라이언트는 미리 준비된 응답을 반환한다. 하니스는 다음을 보여준다:
+클라이언트는 `requestState`를 파싱하거나 고쳐서는 안 된다. 재시도에 정확히 같은 문자열을 되돌려 보내는 것이 유일한 역할이다.
 
-- 서버가 `modelPreferences`와 함께 `sampling/createMessage`를 보낸다.
-- 클라이언트가 완성을 반환한다.
-- 서버가 루프를 계속한다.
-- 속도 제한기가 도구 호출당 총 샘플링 호출에 상한을 둔다.
+## 모델 선호도는 힌트다 (Model Preferences Are Hints)
 
-살펴볼 것:
+`costPriority`, `speedPriority`, `intelligencePriority`는 서로 독립적인 선호도다. 확률 분포가 아니므로 합이 1이 될 필요가 없다. 모델 정책은 클라이언트의 것이므로 클라이언트가 이 값들을 무시해도 된다.
+
+레거시 샘플링 흐름을 유지한다면 `includeContext`를 `"none"`으로 두라. 다른 맥락 모드는 유출 위험을 키우고, 그 자체로도 폐기 예정이다. 요청에는 명시적인 최소 맥락만 실어라.
+
+## 안전 불변식 (Safety Invariants)
+
+안에 담긴 샘플링 요청에 대한 신뢰 경계는 클라이언트다.
+
+- 정책이 승인을 요구하면, 서버가 모델에게 무엇을 시키려 하는지 사용자에게 보여 준다.
+- MRTR 라운드에 상한을 걸어라. 그러지 않으면 악의적인 서버가 모델 비용을 태우는 루프를 만들 수 있다.
+- 샘플링 응답을 파일 이름, URL, 도구 입력으로 쓰기 전에 반드시 검증하라.
+- 라운드마다 바이트와 토큰을 제한하라.
+- 현재 클라이언트 역량에 선언되지 않은 입력 요청은 거부하라.
+- 모델 출력을 인가 판단에 끌어들이지 마라.
+- 민감한 프롬프트 내용은 남기지 말고, 요청이 출발한 메서드와 입력 요청 키만 기록하라.
+
+`clientInfo`와 `serverInfo`는 표시와 진단을 위한 메타데이터다. 둘 중 어느 것도 인증된 신원으로 쓰지 마라.
 
 ```figure
 t3-sampling-flip
 ```
 
-- 서버는 단 하나의 도구(`summarize_repo`)만 노출한다. 모든 추론은 샘플링 호출에서 일어난다.
-- 모델 선호도가 클라이언트의 모델 선택에 가중치를 준다. 힌트는 선호 모델을 나열한다.
-- 루프는 `stopReason: "endTurn"`에서 종료된다.
-- `max_samples_per_tool = 5` 제한이 폭주하는 루프를 잡는다.
+## 만들어 보기 (Build It)
 
-## 산출물 (Ship It)
+`code/main.py`는 서드파티 패키지 없이 두 라운드 흐름 전체를 구현한다.
 
-이 레슨은 `outputs/skill-sampling-loop-designer.md`를 만든다. LLM 호출이 필요한 서버 측 알고리즘(리서치, 요약, 계획)이 주어지면, 이 스킬은 올바른 modelPreferences, 속도 제한, 안전 확인을 갖춘 샘플링 기반 구현을 설계한다.
+- `server/discover`는 `supportedVersions`를 돌려주고, 도구 지원을 알리고, 캐시 힌트를 싣는다.
+- `tools/list`는 객체 입력 스키마를 가진, 결정적이고 캐시 가능한 `summarize_repo` 서술자를 돌려준다.
+- `tools/call`은 요청마다 실린 메타데이터를 검증한다.
+- 첫 결과는 파일 선택을 위한 `sampling/createMessage`를 담는다.
+- 첫 재시도는 모델 결과를 검증하고 두 번째 요청을 담는다.
+- HMAC으로 보호한 `requestState`가 독립적인 요청들 사이로 단계를 실어 나른다.
+- 최종 결과는 `resultType: "complete"`를 쓴다.
+
+가짜 호스트 모델이 예제를 결정적으로 만들어 준다. 실제 호스트에 연결할 때는 `fake_host_model`만 바꾸면 된다. 서버 쪽 상태 기계는 결정적이고 테스트 가능한 상태로 두어야 한다.
+
+## 직접 해 보기 (Use It)
+
+저장소 루트에서 시작한다.
+
+```bash
+cd phases/13-tools-and-protocols/11-mcp-sampling/code
+python3 main.py
+python3 -m unittest discover tests -v
+```
+
+확인할 지점은 이렇다.
+
+- 탐색이 `ttlMs`와 `cacheScope`를 담은 complete 결과를 돌려준다.
+- 도구 탐색이 `resultType`, 서버 신원, 캐시 힌트를 담아 정렬된 같은 서술자를 돌려준다.
+- 빠진 역량과 지원하지 않는 버전이 정확한 `-32021`, `-32022` 오류 데이터를 쓴다.
+- id 없는 알림은 JSON-RPC 응답을 만들지 않는다.
+- 요청 id가 `[1, 2, 3]`이라서 MRTR 라운드마다 독립적임이 드러난다.
+- 처음 두 결과는 `input_required`다.
+- 최종 결과는 `complete`이며 선택된 파일과 요약을 담는다.
+- 재시도에서 원래 인자를 바꾸면 요청 상태 검사에 걸린다.
+
+## 결과물 (Ship It)
+
+`outputs/skill-sampling-loop-designer.md`는 이제 이전 계획 도구다. 먼저 샘플링을 걷어내고 모델을 직접 붙일지부터 판단한다. 호환성이 필요하다면 MRTR 라운드, 상태 결속, 역량 관문, 예산, 검증, 제거 계획을 만들어 준다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행한다. `max_samples_per_tool`를 2로 바꾸고 속도 제한 차단을 관찰한다.
-
-2. SEP-1577 샘플링-내-도구 변형을 구현한다. 샘플링 요청이 `tools` 배열을 담는다. 클라이언트 측 루프가 최종 완성을 반환하기 전에 그 도구들을 실행하는지 확인한다. 드리프트 위험 참고: SDK 시그니처는 2026년 상반기까지 여전히 바뀔 수 있다.
-
-3. 휴먼 인 더 루프 확인을 추가한다. 서버의 첫 `sampling/createMessage` 전에 일시 정지하고 사용자 승인을 기다린다. 거부된 호출은 타입 지정 거절을 반환한다.
-
-4. 클라이언트 세션을 키로 하는 사용자별 속도 제한기를 추가한다. 같은 사용자의 같은 서버 루프는 예산을 공유해야 한다.
-
-5. 포함할 청크를 고르는 데 샘플링을 사용하는 `summarize_pdf` 도구를 설계한다. 보내는 메시지를 스케치한다. `modelPreferences.intelligencePriority`가 0.1 대 0.9에서 동작을 어떻게 바꾸는가?
+1. 파일 선택 응답을 잘못된 JSON으로 바꿔라. 서버가 모델 출력을 믿는 대신 `-32602`를 돌려주는지 확인하라.
+2. 첫 호출과 재시도 사이에 `audience`를 바꿔라. 봉인된 상태가 왜 요청을 넘나드는 재사용을 막는지 설명하라.
+3. 호스트에게 요약을 비평해 달라고 하는 세 번째 라운드를 추가하라. 앞선 요약을 서명된 상태 안에 실어 나르고 전체 흐름을 세 라운드로 제한하라.
+4. 가짜 호스트 콜백을 서버가 소유한 모델 어댑터로 바꿔 샘플링을 제거하라. 승인, 과금, 관측 가능성 책임 중 무엇이 서버로 넘어오는지 나열하라.
+5. 기한을 1초 넘긴 상태 값으로 만료 테스트를 추가하라.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 흔히 말하는 것 | 실제 의미 |
-|------|----------------|------------------------|
-| 샘플링(Sampling) | "서버-투-클라이언트 LLM 호출" | 서버가 클라이언트의 모델에게 완성을 요청 |
-| `sampling/createMessage` | "그 메서드" | 샘플링 요청을 위한 JSON-RPC 메서드 |
-| `modelPreferences` | "모델 우선순위" | 비용 / 속도 / 지능 가중치와 이름 힌트 |
-| `includeContext` | "교차 세션 누설" | 약하게 사용 중단된 컨텍스트 포함 모드 |
-| SEP-1577 | "샘플링 내 도구" | 서버 호스팅 ReAct를 위해 샘플링 안에 도구를 허용 |
-| 휴먼 인 더 루프 | "사용자 확인" | 클라이언트가 실행 전에 샘플링 요청을 사용자에게 노출 |
-| 루프 폭탄 | "폭주 샘플링" | 서버 측 무한 샘플링 루프. 클라이언트가 속도를 제한해야 함 |
-| 은밀한 샘플링 | "숨겨진 추론" | 악의적 서버가 샘플링 프롬프트에 의도를 숨김 |
-| 리소스 절도 | "사용자의 LLM 예산 사용" | 서버가 클라이언트에게 원치 않는 샘플링에 비용을 쓰게 강제 |
-| `stopReason` | "생성이 멈춘 이유" | `endTurn`, `stopSequence`, 또는 `maxTokens` |
+| 용어 | 2026-07-28에서의 뜻 |
+|------|------------------------|
+| Sampling | 클라이언트의 모델에 완성을 요청하는, 폐기 예정 기능 |
+| MRTR | 요청 처리 중 클라이언트 입력이 필요할 때 쓰는 무상태 재시도 방식 |
+| `InputRequiredResult` | `resultType: "input_required"`를 가진 결과 |
+| `inputRequests` | 서버가 키를 붙여 담은 유도, 샘플링, 루트 요청의 묶음 |
+| `inputResponses` | `inputRequests`와 같은 키로 담는 이번 라운드의 클라이언트 결과 |
+| `requestState` | 클라이언트가 그대로 되돌려 보내고 서버가 검증하는 불투명한 서버 상태 |
+| `resultType` | 현대 MCP 결과에 필수인 구분자 |
+| Direct model integration | 모델 추론이 필요한 새 서버에 권장되는 대체 방식 |
+| Capability gate | 클라이언트가 알리지 않은 요청을 담아 보내지 못하게 막는 규칙 |
+| Loop budget | 그 작업에 허용되는 최대 라운드, 토큰, 바이트, 시간, 비용 |
+
+## 레거시 호환성 (Legacy Compatibility)
+
+2025-11-25에 고정된 클라이언트는 살아 있는 연결 위에서 서버가 먼저 보내는 옛 `sampling/createMessage` 흐름을 아직 쓸 수 있다. 그 동작은 버전별 어댑터 안에만 두라. 세션에 기대는 그 경로를 2026-07-28 서버의 구조로 삼지 마라.
+
+공식 SDK는 현대의 `input_required` 처리기를 옛 상대용으로 번역해 줄 수 있다. 그 완충 계층은 호환성 경계일 뿐, 세션에 의존하는 새 로직을 더해도 된다는 허락이 아니다.
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP(Concepts: Sampling](https://modelcontextprotocol.io/docs/concepts/sampling)) 샘플링의 고수준 개요
-- [MCP(Client sampling spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/client/sampling)) 표준 `sampling/createMessage` 형태
-- [MCP(GitHub SEP-1577](https://github.com/modelcontextprotocol/modelcontextprotocol)) 샘플링 내 도구를 위한 사양 진화 제안(실험적)
-- [Unit 42(MCP attack vectors](https://unit42.paloaltonetworks.com/model-context-protocol-attack-vectors/)) 은밀한 샘플링과 리소스 절도 패턴
-- [Speakeasy(MCP sampling core concept](https://www.speakeasy.com/mcp/core-concepts/sampling)) 클라이언트 측 코드 예제를 동반한 설명
+- [MCP 2026-07-28 Multi Round-Trip Requests](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/mrtr)
+- [MCP 2026-07-28 changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog)
+- [MCP Sampling deprecation](https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging)
+- [MCP 2026-07-28 server discovery](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
