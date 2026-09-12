@@ -59,6 +59,37 @@ flowchart LR
 ### 스코프 검사는 디프 검사다
 
 에이전트는 디프를 작성한다. 검사기는 디프, 허용 글롭, 금지 글롭, 그리고 실행된 수용 명령(acceptance command)의 목록을 읽는다. 각 위반은 검증 게이트(verification gate)가 거부할 수 있는 태그된 발견 사항(tagged finding)이다.
+
+### 스코프의 두 높이: 기능 목록과 과제 계약
+
+스코프 계약은 과제 하나의 경계를 정한다. 프로젝트의 경계를 정하지는 않는다. 에이전트는 로그인 수정 계약 안에 완벽하게 머물면서도, 다음 턴에 이 프로젝트에는 설정 화면과 다크 모드 토글, 라우터 재작성도 필요하다고 판단할 수 있다. 그 계약은 애초에 프로젝트에서 어떤 작업이 범위 안인지 묻지 않았다. 이번 과제에서 어떤 파일이 범위 안인지만 물었다.
+
+그 두 번째 높이에는 자기만의 기본 장치가 필요하다. 세션을 시작할 때 에이전트가 읽는 `feature_list.json`이다. 이것은 기계가 읽을 수 있고 순서가 있는 파일로 적어 둔 프로젝트 백로그다. 에이전트는 `status`가 `todo`인 기능을 정확히 하나만 고르고, 그 `id`를 지금의 스코프 계약에 적고, 같은 세션에서 두 번째 기능을 시작하는 것이 금지된다. 그러면 "한 번에 기능 하나"가 에이전트가 그럴듯하게 빠져나갈 수 있는 프롬프트 속 문장이 아니라, 디스크에서 읽는 값이자 관문이 강제하는 검사가 된다.
+
+```json
+{
+  "project": "knowledge-base",
+  "active": "import-pdf",
+  "features": [
+    { "id": "import-pdf",   "status": "in_progress", "goal": "import a PDF into the library",        "done_when": "pytest tests/test_import.py && a sample PDF appears in the library view" },
+    { "id": "full-text-search", "status": "todo",     "goal": "search document text and rank hits",   "done_when": "query returns ranked results with snippets" },
+    { "id": "cite-answers", "status": "todo",         "goal": "answers carry source citations",        "done_when": "every answer renders at least one clickable citation" }
+  ]
+}
+```
+
+| 필드 | 목적 |
+|-------|---------|
+| `active` | 지금 세션이 건드려도 되는 단 하나의 기능. 비어 있으면 하나를 골라 채워 넣는다 |
+| `features[].id` | 스코프 계약의 `task_id`가 가리키는 안정된 슬러그 |
+| `features[].status` | `todo`, `in_progress`, `done`, `blocked`. 동시에 `in_progress`인 것은 하나뿐이다 |
+| `features[].goal` | 검토자가 확인할 수 있는 한 문장 |
+| `features[].done_when` | `in_progress`를 `done`으로 바꾸는 완료 조건 |
+
+이 목록이 장식이 아니라 실제로 무게를 받치게 만드는 규칙이 둘 있다. 첫째, "`in_progress`는 많아야 하나"라는 불변 조건 자체가 시작 시점의 검사다(Phase 14 · 33). 목록에 둘이 보이면 사람이 정리할 때까지 세션이 시작되지 않는다. 둘째, 기능 목록은 대화 메시지가 아니라 파일이다. 대화는 맥락 밖으로 밀려나지만 파일은 세션을 넘어, 에이전트를 넘어 남기 때문이다. 인계(Phase 14 · 40)는 끝난 기능의 상태를 `done`으로 되돌려 적는다. 그러면 다음 세션이 남은 일을 다시 추론하는 대신 정확한 현황판을 열게 된다.
+
+계약과 목록은 아래에서 설명하는 것과 같은 최소 권한 방식으로 맞물린다. 과제 계약의 `allowed_files`는 지금 활성인 기능이 건드리는 범위 안에 있어야 하고, 결코 그 밖으로 나가서는 안 된다.
+
 ```figure
 wb-scope-bounce
 ```

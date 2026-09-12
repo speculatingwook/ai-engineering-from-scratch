@@ -1,6 +1,6 @@
-# 메모리: 가상 컨텍스트(Virtual Context)와 MemGPT
+# 에이전트 메모리: 가상 컨텍스트와 메모리 페이징 (Agent Memory — Virtual Context and Memory Paging)
 
-> 컨텍스트 윈도우(context window)는 유한하다. 대화, 문서, 도구 트레이스는 그렇지 않다. MemGPT(Packer et al., 2023)는 이를 OS 가상 메모리(virtual memory)로 틀 잡는다. 메인 컨텍스트(main context)는 RAM, 외부 저장소는 디스크, 에이전트는 둘 사이를 페이징(paging)한다. 이것이 모든 2026년 메모리 시스템이 물려받는 패턴이다.
+> 컨텍스트 윈도우(context window)는 유한하다. 대화, 문서, 도구 트레이스는 그렇지 않다. 해법은 운영체제의 가상 메모리(virtual memory)를 다시 말한 것이다. 메인 컨텍스트(main context)는 RAM, 외부 저장소는 디스크, 에이전트는 둘 사이를 페이징(paging)한다. MemGPT(Packer et al., 2023)가 이 패턴에 이름을 붙였고, 실무의 메모리 시스템 상당수가 그 위에 올라서 있다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -26,9 +26,9 @@
 
 ## 개념 (The Concept)
 
-### MemGPT: OS 비유
+### 운영체제 비유
 
-Packer et al. (arXiv:2310.08560, v2 2024년 2월)은 컨텍스트 관리를 운영체제 가상 메모리에 매핑한다:
+MemGPT(Packer et al., arXiv:2310.08560, v2 2024년 2월)는 컨텍스트 관리를 운영체제 가상 메모리에 대응시킨다:
 
 | OS 개념 | MemGPT 개념 | 2026 프로덕션 유사물 |
 |------------|---------------|------------------------|
@@ -58,7 +58,7 @@ MemGPT는 메모리-인터럽트(memory-as-interrupt)를 도입한다: 대화 �
 - `archival_memory_search(query, top_k)`: 외부 저장소에서 검색.
 - `conversation_search(query)`: 과거 턴 스캔.
 
-### MemGPT가 끝나고 Letta가 시작하는 곳
+### 논문이 끝나고 실무가 시작되는 곳
 
 2024년 9월 MemGPT는 Letta가 됐다. 연구 저장소(`cpacker/MemGPT`)는 남아 있고, Letta는 설계를 확장한다:
 
@@ -106,6 +106,25 @@ python3 code/main.py
 
 핵심 패턴이 아니라 운영 형태(셀프 호스팅, 관리형, 프레임워크 통합)로 하나를 골라라. 핵심 패턴은 MemGPT다.
 
+### 에이전트 메모리의 갈래
+
+페이징은 용량 문제를 푼다. 무엇을 저장할지는 정해 주지 않는다. 실무 시스템에서 되풀이해 나타나는 메모리 유형이 넷 있고, 각각 다른 질문에 답한다.
+
+- **작업 기억(working memory)**: 지금 무엇이 중요한가? 맥락 안에 있는 계층이다. 지금의 과제와 최근 발화, 고정해 둔 핵심 절이 여기에 들어간다. 곧 프롬프트 자체다.
+- **일화 기억(episodic memory)**: 무슨 일이 있었는가? 과거의 발화와 진행 기록을 세션과 턴 참조와 함께 저장해 두고, 필요할 때 다시 꺼내 본다.
+- **의미 기억(semantic memory)**: 무엇이 참인가? 사용자와 분야, 세상에 대한 사실이며, 바뀔 때마다 갱신하고 중복을 정리한다.
+- **절차 기억(procedural memory)**: 이 일을 어떻게 하는가? 학습한 절차와 선호, 규칙이며, 무언가를 떠올리게 하기보다 이후의 행동을 이끈다.
+
+오픈 소스 구현들은 서로 다른 지점을 공략한다.
+
+| 유형 | 구현 | 공략하는 방식 |
+|------|----------------|-------------------|
+| 작업 기억 | MemGPT / Letta | 메모리 도구로 정해진 프롬프트 예산 안팎으로 내용을 페이징한다(이 레슨과 레슨 08) |
+| 일화 기억 | Zep | 시간 정보를 가진 지식 그래프. 사실마다 유효 기간이 붙어서 "그때 무엇이 참이었는지"를 질의할 수 있다 |
+| 의미 기억 | Mem0 | 벡터와 KV, 그래프 저장소에 걸쳐 사실의 중복을 제거하고 갱신하는 추출 파이프라인(레슨 09) |
+| 의미 기억과 절차 기억 | LangMem | 사실과 행동 규칙을 백그라운드에서 뽑아 저장소에 넣고, 에이전트가 턴 사이에 참조한다 |
+| 일화 기억과 의미 기억 | agentmemory | 세션이 진행되는 동안 그것을 붙잡아, 타입이 정해지고 검색 가능한 기록으로 정리한다 |
+
 ## 산출물 (Ship It)
 
 `outputs/skill-virtual-memory.md`는 재사용 가능한 스킬로, 어떤 대상 런타임에 대해서든 올바른 2계층 메모리 골조(메인 + archival + 도구 표면)를 축출 정책과 인용 필드가 연결된 채로 생성한다.
@@ -137,3 +156,7 @@ python3 code/main.py
 - [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks): 3계층 진화
 - [Anthropic, Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): 컨텍스트를 예산으로 다루기
 - [Chhikara et al., Mem0 (arXiv:2504.19413)](https://arxiv.org/abs/2504.19413): 이 패턴 위의 하이브리드 프로덕션 메모리
+- [Zep (getzep/zep)](https://github.com/getzep/zep): 위 분류 표에 나온, 시간 정보를 가진 지식 그래프 메모리
+- [Mem0 (mem0ai/mem0)](https://github.com/mem0ai/mem0): 레슨 09의 혼합 저장소를 떠받치는 추출 파이프라인
+- [LangMem (langchain-ai/langmem)](https://github.com/langchain-ai/langmem): 사실과 행동 규칙을 백그라운드에서 뽑아내는 방식
+- [agentmemory (rohitg00/agentmemory)](https://github.com/rohitg00/agentmemory): 세션을 붙잡아 타입이 정해지고 검색 가능한 기록으로 정리하는 방식
