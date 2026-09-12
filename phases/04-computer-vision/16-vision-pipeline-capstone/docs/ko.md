@@ -348,7 +348,7 @@ CPU에서의 전형적인 출력은 전처리 약 3ms, 검출 300~500ms, 분류 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Full Stack Deep Learning(Deploying Models](https://fullstackdeeplearning.com/course/2022/lecture-5-deployment/)) 프로덕션 ML 배포의 표준 개요
+- [Full Stack Deep Learning: Deploying Models](https://fullstackdeeplearning.com/course/2022/lecture-5-deployment/) 프로덕션 ML 배포의 표준 개요
 - [BentoML docs](https://docs.bentoml.com): 배치 처리, 버전 관리, 메트릭을 갖춘 서빙 프레임워크
 - [torchserve docs](https://pytorch.org/serve/): PyTorch의 공식 서빙 라이브러리
 - [NVIDIA Triton Inference Server](https://developer.nvidia.com/triton-inference-server): 배치 처리와 다중 모델 지원을 갖춘 고처리량 서빙

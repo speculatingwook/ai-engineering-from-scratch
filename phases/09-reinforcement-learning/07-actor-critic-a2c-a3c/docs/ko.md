@@ -191,7 +191,7 @@ Refuse single-worker A2C on environments with horizon > 1000 (too on-policy, too
 
 - [Mnih et al. (2016). Asynchronous Methods for Deep Reinforcement Learning](https://arxiv.org/abs/1602.01783): A3C, 원조 비동기 액터-크리틱 논문.
 - [Schulman et al. (2016). High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438) — GAE.
-- [Sutton & Barto (2018). Ch. 13(Actor-Critic Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 기초; 크리틱이 신경망일 때 함수 근사에 관한 9장과 짝지어 읽어라.
+- [Sutton & Barto (2018). Ch. 13: Actor-Critic Methods](http://incompleteideas.net/book/RLbook2020.pdf) 기초; 크리틱이 신경망일 때 함수 근사에 관한 9장과 짝지어 읽어라.
 - [Espeholt et al. (2018). IMPALA](https://arxiv.org/abs/1802.01561): V-trace 오프-폴리시 보정을 가진 확장 가능한 분산 액터-크리틱.
 - [OpenAI Baselines / Stable-Baselines3](https://stable-baselines3.readthedocs.io/): 읽을 가치가 있는 프로덕션 A2C/PPO 구현.
 - [Konda & Tsitsiklis (2000). Actor-Critic Algorithms](https://papers.nips.cc/paper/1786-actor-critic-algorithms): 두-시간척도 액터-크리틱 분해의 기초적 수렴 결과.

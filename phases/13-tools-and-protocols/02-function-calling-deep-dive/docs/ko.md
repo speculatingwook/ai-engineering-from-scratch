@@ -161,10 +161,8 @@ function-call-args
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Function calling guide](https://platform.openai.com/docs/guides/function-calling)) 엄격 모드와 병렬 호출을 포함한 표준 레퍼런스
-- [Anthropic(Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview)) `tool_use`와 `tool_result` 블록 의미론
-- [Google(Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling)) 병렬 호출, 고유 id, OpenAPI 부분집합
-- [Vertex AI(Function calling reference](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling)) Gemini의 엔터프라이즈 표면
-- [OpenAI(Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)) 엄격 모드 스키마 강제 세부 사항
-</content>
-</invoke>
+- [OpenAI: Function calling guide](https://platform.openai.com/docs/guides/function-calling) 엄격 모드와 병렬 호출을 포함한 표준 레퍼런스
+- [Anthropic: Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview) `tool_use`와 `tool_result` 블록 의미론
+- [Google: Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling) 병렬 호출, 고유 id, OpenAPI 부분집합
+- [Vertex AI: Function calling reference](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling) Gemini의 엔터프라이즈 표면
+- [OpenAI: Structured outputs](https://platform.openai.com/docs/guides/structured-outputs) 엄격 모드 스키마 강제 세부 사항

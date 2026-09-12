@@ -129,11 +129,10 @@ l5-framework-fit
 - [CrewAI documentation](https://docs.crewai.com/) — Crews, Flows, Agents, Tasks, Processes
 - [AutoGen documentation](https://microsoft.github.io/autogen/): ConversableAgent, GroupChat, 팀, 도구
 - [Agno documentation](https://docs.agno.com/): Agent, Team, Workflow, 저장소, 메모리
-- [Anthropic(Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents)) 프레임워크 비종속적 패턴 라이브러리(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-옵티마이저)
+- [Anthropic: Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) 프레임워크 비종속적 패턴 라이브러리(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-옵티마이저)
 - [Yao et al., "ReAct: Synergizing Reasoning and Acting" (ICLR 2023)](https://arxiv.org/abs/2210.03629): 모든 프레임워크가 꾸며내는 루프
 - [Wu et al., "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation" (2023)](https://arxiv.org/abs/2308.08155): AutoGen의 설계 논문
 - [Park et al., "Generative Agents: Interactive Simulacra of Human Behavior" (UIST 2023)](https://arxiv.org/abs/2304.03442): CrewAI 스타일 페르소나 스택이 기반하는 롤플레이 토대
 - Phase 11 · 16 (LangGraph): 이 레슨이 벤치마킹하는 프레임워크
 - Phase 11 · 19 (Reflexion): LangGraph에는 깔끔하게 매핑되지만 CrewAI에는 어색하게 매핑되는 패턴
 - Phase 11 · 22 (Production observability): 당신이 고른 프레임워크가 무엇이든 계측하는 방법
-</content>

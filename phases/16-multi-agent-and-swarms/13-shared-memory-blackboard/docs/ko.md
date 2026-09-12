@@ -162,8 +162,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계. 메모리 오염은 조정 실패 하위 계열이다
-- [CA-MCP(Context-Aware Multi-Server MCP](https://arxiv.org/abs/2601.11595)) 조정된 MCP 서버를 위한 Shared Context Store
-- [Matrix(decentralized multi-agent framework](https://arxiv.org/abs/2511.21686)) 중앙 오케스트레이터 없는 메시지 큐 기반 블랙보드
+- [Cemri et al.: Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) MAST 분류 체계. 메모리 오염은 조정 실패 하위 계열이다
+- [CA-MCP: Context-Aware Multi-Server MCP](https://arxiv.org/abs/2601.11595) 조정된 MCP 서버를 위한 Shared Context Store
+- [Matrix: decentralized multi-agent framework](https://arxiv.org/abs/2511.21686) 중앙 오케스트레이터 없는 메시지 큐 기반 블랙보드
 - [LangGraph state and reducers](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 프로덕션의 에이전트별 프로젝션 패턴
-- [Anthropic(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 프로덕션 배포에서 얻은 출처와 검증 노트
+- [Anthropic: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) 프로덕션 배포에서 얻은 출처와 검증 노트

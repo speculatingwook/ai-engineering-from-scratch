@@ -136,8 +136,8 @@ tensor-parallel
 
 ## 더 읽을거리 (Further Reading)
 
-- [vLLM documentation(Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode/)) 청크 프리필과 추측 디코딩 호환성에 관한 공식 출처.
+- [vLLM documentation: Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode/) 청크 프리필과 추측 디코딩 호환성에 관한 공식 출처.
 - [vLLM Release Notes (NVIDIA)](https://docs.nvidia.com/deeplearning/frameworks/vllm-release-notes/index.html): 2026년 릴리스 주기와 버전별 동작.
-- [vLLM Blog(PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html)) 할당자를 어떻게 생각해야 하는지를 여전히 정의하는 원본 글.
+- [vLLM Blog: PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html) 할당자를 어떻게 생각해야 하는지를 여전히 정의하는 원본 글.
 - [PagedAttention paper (arXiv:2309.06180)](https://arxiv.org/abs/2309.06180): 단편화 분석과 스케줄러 설계.
-- [Aleksa Gordic(Inside vLLM](https://www.aleksagordic.com/blog/vllm)) 플레임 그래프를 곁들인 상세한 V1 스케줄러 안내.
+- [Aleksa Gordic: Inside vLLM](https://www.aleksagordic.com/blog/vllm) 플레임 그래프를 곁들인 상세한 V1 스케줄러 안내.

@@ -221,5 +221,3 @@ Refuse to ship a multilingual model without per-language evaluation — aggregat
 - [Costa-jussà et al. (2022). No Language Left Behind](https://arxiv.org/abs/2207.04672): NLLB-200 논문.
 - [Üstün et al. (2024). Aya Model: An Instruction Finetuned Open-Access Multilingual Language Model](https://arxiv.org/abs/2402.07827): Aya, Cohere의 다국어 LLM.
 - [Language Similarity Predicts Cross-Lingual Transfer Learning Performance (2026)](https://www.mdpi.com/2504-4990/8/3/65): qWALS / LANGRANK 소스 언어 논문.
-</content>
-</invoke>

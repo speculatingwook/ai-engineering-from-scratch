@@ -116,7 +116,7 @@ interpretability-probe
 
 ## 더 읽을거리 (Further Reading)
 
-- [Hubinger, van Merwijk, Mikulik, Skalse, Garrabrant(Risks from Learned Optimization in Advanced ML Systems (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820)) 정전적인 2019년 논문
-- [Hubinger(How likely is deceptive alignment? (2022 AF writeup)](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment)) 조건부 확률 논증
-- [Hubinger et al.(Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566)) 학습에 견고한 기만의 경험적 입증
-- [Greenblatt et al.(Alignment Faking (Lesson 9, arXiv:2412.14093)](https://arxiv.org/abs/2412.14093)) Claude에서의 자발적 발현
+- [Hubinger, van Merwijk, Mikulik, Skalse, Garrabrant: Risks from Learned Optimization in Advanced ML Systems (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820) 정전적인 2019년 논문
+- [Hubinger: How likely is deceptive alignment? (2022 AF writeup)](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment) 조건부 확률 논증
+- [Hubinger et al.: Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566) 학습에 견고한 기만의 경험적 입증
+- [Greenblatt et al.: Alignment Faking (Lesson 9, arXiv:2412.14093)](https://arxiv.org/abs/2412.14093) Claude에서의 자발적 발현

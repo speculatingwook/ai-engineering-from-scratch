@@ -119,4 +119,4 @@ bounded-gates
 - [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): 다중 목표 능력 임계값.
 - [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/): 불변량 원시 요소로서의 기만적 정렬 모니터링.
 - [Schmidhuber (2003). Godel Machines](https://people.idsia.ch/~juergen/goedelmachine.html): 이 원시 요소들의 형식 증명 조상.
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 이유 기반 정렬 닻.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) 이유 기반 정렬 닻.

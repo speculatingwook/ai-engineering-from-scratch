@@ -127,7 +127,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangGraph workflows and agents(Swarm Architecture](https://docs.langchain.com/oss/python/langgraph/workflows-agents)) 명시적 스웜 지원
-- [Matrix(A Decentralized Framework for Multi-Agent Systems](https://arxiv.org/abs/2511.21686)) 완전한 메시지 전달 스웜
-- [Anthropic engineering(why supervisor not swarm in Research](https://www.anthropic.com/engineering/multi-agent-research-system)) 특정 프로덕션 시스템이 스웜 대신 슈퍼바이저를 명시적으로 선택한 이유
+- [LangGraph workflows and agents: Swarm Architecture](https://docs.langchain.com/oss/python/langgraph/workflows-agents) 명시적 스웜 지원
+- [Matrix: A Decentralized Framework for Multi-Agent Systems](https://arxiv.org/abs/2511.21686) 완전한 메시지 전달 스웜
+- [Anthropic engineering: why supervisor not swarm in Research](https://www.anthropic.com/engineering/multi-agent-research-system) 특정 프로덕션 시스템이 스웜 대신 슈퍼바이저를 명시적으로 선택한 이유
 - [AutoGen v0.4 actor-model docs](https://microsoft.github.io/autogen/stable/): 이벤트 주도 액터(actor) 재작성, v0.2의 GroupChat보다 스웜에 가까움

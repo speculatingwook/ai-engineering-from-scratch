@@ -135,7 +135,7 @@ al-asl-ladder
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL 티어, 로드맵, AI R&D 분리
-- [OpenAI(Updating the Preparedness Framework (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) 다섯 기준, 조정 조항
-- [DeepMind(Strengthening our Frontier Safety Framework (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) CCL v3.0, 유해 조작
-- [METR(Common Elements of Frontier AI Safety Policies (2025)](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 연구소 간 비교
+- [Anthropic: Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) ASL 티어, 로드맵, AI R&D 분리
+- [OpenAI: Updating the Preparedness Framework (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) 다섯 기준, 조정 조항
+- [DeepMind: Strengthening our Frontier Safety Framework (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) CCL v3.0, 유해 조작
+- [METR: Common Elements of Frontier AI Safety Policies (2025)](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) 연구소 간 비교

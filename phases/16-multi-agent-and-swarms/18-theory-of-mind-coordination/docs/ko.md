@@ -161,7 +161,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al.(Theory of Mind for Multi-Agent Collaboration via Large Language Models](https://arxiv.org/abs/2310.10701)) 협력 게임에서의 창발적 ToM; 긴 시야 실패 모드
-- [Riedl(Emergent Coordination in Multi-Agent Language Models](https://arxiv.org/abs/2510.05174)) 집단 규모 측정; ToM 프롬프트가 핵심 조건
-- [Premack & Woodruff(Does the chimpanzee have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-chimpanzee-have-a-theory-of-mind/1E96B02CD9850E69AF20F81FA7EB3595)) ToM 개념의 1978년 기원
-- [Baron-Cohen, Leslie, Frith(Does the autistic child have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-autistic-child-have-a-theory-of-mind/)) 샐리-앤 논문 (1985)
+- [Li et al.: Theory of Mind for Multi-Agent Collaboration via Large Language Models](https://arxiv.org/abs/2310.10701) 협력 게임에서의 창발적 ToM; 긴 시야 실패 모드
+- [Riedl: Emergent Coordination in Multi-Agent Language Models](https://arxiv.org/abs/2510.05174) 집단 규모 측정; ToM 프롬프트가 핵심 조건
+- [Premack & Woodruff: Does the chimpanzee have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-chimpanzee-have-a-theory-of-mind/1E96B02CD9850E69AF20F81FA7EB3595) ToM 개념의 1978년 기원
+- [Baron-Cohen, Leslie, Frith: Does the autistic child have a theory of mind?](https://doi.org/10.1016/0010-0277(85)90022-8) 샐리-앤 논문 (1985)

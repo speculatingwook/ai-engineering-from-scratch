@@ -107,7 +107,7 @@ al-scheming-probe
 
 ## 더 읽을거리 (Further Reading)
 
-- [Meinke, Schoen, Scheurer, Balesni, Shah, Hobbhahn(Frontier Models are Capable of In-context Scheming (arXiv:2412.04984)](https://arxiv.org/abs/2412.04984)) 정전적인 Apollo 논문
-- [Apollo Research(Towards Safety Cases For AI Scheming](https://www.apolloresearch.ai/research/towards-safety-cases-for-ai-scheming)) 안전 사례 프레임워크
-- [Schoen et al.(Stress Testing Deliberative Alignment for Anti-Scheming Training](https://www.apolloresearch.ai/blog/stress-testing-deliberative-alignment-for-anti-scheming-training)) 2025년 OpenAI+Apollo 협업
-- [METR(Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 맥락 속의 세 기둥 프레임워크
+- [Meinke, Schoen, Scheurer, Balesni, Shah, Hobbhahn: Frontier Models are Capable of In-context Scheming (arXiv:2412.04984)](https://arxiv.org/abs/2412.04984) 정전적인 Apollo 논문
+- [Apollo Research: Towards Safety Cases For AI Scheming](https://www.apolloresearch.ai/research/towards-safety-cases-for-ai-scheming) 안전 사례 프레임워크
+- [Schoen et al.: Stress Testing Deliberative Alignment for Anti-Scheming Training](https://www.apolloresearch.ai/blog/stress-testing-deliberative-alignment-for-anti-scheming-training) 2025년 OpenAI+Apollo 협업
+- [METR: Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) 맥락 속의 세 기둥 프레임워크

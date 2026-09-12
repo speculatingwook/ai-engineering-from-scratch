@@ -177,10 +177,10 @@ H100의 배치 64에서 EAGLE-3을 사용한 SGLang: EAGLE-3 논문에 따르면
 
 ## 더 읽을거리 (Further Reading)
 
-- [Leviathan, Kalman, Matias(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192, ICML 2023)](https://arxiv.org/abs/2211.17192)) 기초 논문과 동등성 정리
-- [Chen et al.(Accelerating Large Language Model Decoding with Speculative Sampling (arXiv:2302.01318)](https://arxiv.org/abs/2302.01318)) 깔끔한 증명을 곁들인 동시의 독립적 도입
-- [Li et al.(EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077)) EAGLE-1, 은닉 상태 조건화 드래프트
-- [Li et al.(EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858)) 동적 트리 탐색
-- [Li et al.(EAGLE-3: Scaling up Inference Acceleration via Training-Time Test (arXiv:2503.01840, NeurIPS 2025)](https://arxiv.org/abs/2503.01840)) 2026년 프로덕션 기본값
-- [Cai et al.(Medusa: Multiple Decoding Heads (arXiv:2401.10774)](https://arxiv.org/abs/2401.10774)) 대안적 드래프트 없는 접근법
+- [Leviathan, Kalman, Matias: Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192, ICML 2023)](https://arxiv.org/abs/2211.17192) 기초 논문과 동등성 정리
+- [Chen et al.: Accelerating Large Language Model Decoding with Speculative Sampling (arXiv:2302.01318)](https://arxiv.org/abs/2302.01318) 깔끔한 증명을 곁들인 동시의 독립적 도입
+- [Li et al.: EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077) EAGLE-1, 은닉 상태 조건화 드래프트
+- [Li et al.: EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858) 동적 트리 탐색
+- [Li et al.: EAGLE-3: Scaling up Inference Acceleration via Training-Time Test (arXiv:2503.01840, NeurIPS 2025)](https://arxiv.org/abs/2503.01840) 2026년 프로덕션 기본값
+- [Cai et al.: Medusa: Multiple Decoding Heads (arXiv:2401.10774)](https://arxiv.org/abs/2401.10774) 대안적 드래프트 없는 접근법
 - [vLLM Speculative Decoding documentation](https://docs.vllm.ai/en/latest/features/spec_decode.html): 모든 전략이 연결된 표준적인 프로덕션 참조

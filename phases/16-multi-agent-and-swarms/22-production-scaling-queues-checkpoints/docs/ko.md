@@ -176,8 +176,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangChain(The runtime behind production deep agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents)) LangGraph 런타임 설계
+- [LangChain: The runtime behind production deep agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents) LangGraph 런타임 설계
 - [MegaAgent](https://arxiv.org/abs/2408.09955): 에이전트별 생산자-소비자 큐. 수천 개 동시 에이전트에서의 2계층 협응
 - [Matrix](https://arxiv.org/abs/2511.21686): 메시지 큐를 협응 기반으로 하는 분산 프레임워크
 - [Temporal docs](https://docs.temporal.io/): 내구성 실행을 위한 참조 워크플로 엔진
-- [Anthropic(Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 레인보우 배포를 포함한 프로덕션 교훈
+- [Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) 레인보우 배포를 포함한 프로덕션 교훈

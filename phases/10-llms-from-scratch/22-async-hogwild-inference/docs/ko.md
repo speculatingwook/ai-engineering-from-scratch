@@ -190,9 +190,9 @@ continuous-batching
 
 ## 더 읽을거리 (Further Reading)
 
-- [Rodionov et al.(Hogwild! Inference: Parallel LLM Generation via Concurrent Attention (arXiv:2504.06261)](https://arxiv.org/abs/2504.06261)) Hogwild! 논문, QwQ와 DeepSeek-R1에 대한 예비 평가
-- [Recht, Re, Wright, Niu(Hogwild!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent (arXiv:1106.5730, NeurIPS 2011)](https://arxiv.org/abs/1106.5730)) 원래 Hogwild!, 이름의 기원
-- [Su et al.(RoFormer: Enhanced Transformer with Rotary Position Embedding (arXiv:2104.09864)](https://arxiv.org/abs/2104.09864)) RoPE, 공유 캐시 추론을 다루기 쉽게 만드는 속성
-- [Yao et al.(Tree of Thoughts: Deliberate Problem Solving with Large Language Models (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601)) Hogwild!가 직교하여 자리 잡는 tree-of-thought 추론 전략
-- [Leviathan et al.(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192)) 추측 디코딩, Hogwild!가 조합되는 시퀀스 내 병렬성
+- [Rodionov et al.: Hogwild! Inference: Parallel LLM Generation via Concurrent Attention (arXiv:2504.06261)](https://arxiv.org/abs/2504.06261) Hogwild! 논문, QwQ와 DeepSeek-R1에 대한 예비 평가
+- [Recht, Re, Wright, Niu: Hogwild!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent (arXiv:1106.5730, NeurIPS 2011)](https://arxiv.org/abs/1106.5730) 원래 Hogwild!, 이름의 기원
+- [Su et al.: RoFormer: Enhanced Transformer with Rotary Position Embedding (arXiv:2104.09864)](https://arxiv.org/abs/2104.09864) RoPE, 공유 캐시 추론을 다루기 쉽게 만드는 속성
+- [Yao et al.: Tree of Thoughts: Deliberate Problem Solving with Large Language Models (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601) Hogwild!가 직교하여 자리 잡는 tree-of-thought 추론 전략
+- [Leviathan et al.: Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192) 추측 디코딩, Hogwild!가 조합되는 시퀀스 내 병렬성
 - [Hogwild! reference PyTorch implementation](https://github.com/eqimp/hogwild_llm): 논문 실험의 유일한 진실 공급원

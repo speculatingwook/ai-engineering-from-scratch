@@ -222,6 +222,5 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 - [Li et al. (2024). EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees](https://arxiv.org/abs/2406.16858): EAGLE-2; 동적 트리 깊이.
 - [Li et al. (2025). EAGLE-3: Scaling up Inference Acceleration of Large Language Models via Training-Time Test](https://arxiv.org/abs/2503.01840) — EAGLE-3.
 - [Fu et al. (2024). Break the Sequential Dependency of LLM Inference Using Lookahead Decoding](https://arxiv.org/abs/2402.02057): 룩어헤드, 드래프트 없는 접근.
-- [vLLM docs(Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode.html)) 네 가지 전략을 모두 연결한 표준 프로덕션 레퍼런스.
+- [vLLM docs: Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode.html) 네 가지 전략을 모두 연결한 표준 프로덕션 레퍼런스.
 - [SafeAILab / EAGLE reference implementation](https://github.com/SafeAILab/EAGLE): EAGLE-1/2/3의 레퍼런스 코드.
-</content>

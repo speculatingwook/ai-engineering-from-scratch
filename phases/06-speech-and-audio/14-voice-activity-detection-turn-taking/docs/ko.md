@@ -171,7 +171,7 @@ def flush_on_end(stt_client, audio_buffer):
 
 - [Silero VAD](https://github.com/snakers4/silero-vad): 레퍼런스 오픈 VAD.
 - [Picovoice Cobra VAD](https://picovoice.ai/products/cobra/): 상용 정확도 선두주자.
-- [Kyutai(Unmute + flush trick](https://kyutai.org/stt)) 200ms 미만 엔지니어링 트릭.
-- [LiveKit(turn detection](https://docs.livekit.io/agents/logic/turns/)) 프로덕션에서의 의미적 엔드포인팅.
+- [Kyutai: Unmute + flush trick](https://kyutai.org/stt) 200ms 미만 엔지니어링 트릭.
+- [LiveKit: turn detection](https://docs.livekit.io/agents/logic/turns/) 프로덕션에서의 의미적 엔드포인팅.
 - [WebRTC VAD](https://webrtc.googlesource.com/src/): 레거시 베이스라인.
 - [pyannote segmentation](https://github.com/pyannote/pyannote-audio): 화자 분리급 세분화.

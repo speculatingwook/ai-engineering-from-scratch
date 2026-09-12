@@ -104,7 +104,7 @@ jailbreak-defense
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anil, Durmus, Panickssery et al.(Many-shot Jailbreaking (Anthropic, NeurIPS 2024)](https://www.anthropic.com/research/many-shot-jailbreaking)) 대표 논문 및 거듭제곱 법칙 결과
-- [Chao et al.(PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419)) MSJ가 합성되는 반복 공격
-- [Zou et al.(GCG (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043)) 화이트박스 그래디언트 공격, MSJ와 상호 보완적
-- [Mazeika et al.(HarmBench (arXiv:2402.04249)](https://arxiv.org/abs/2402.04249)) MSJ + 다른 공격을 위한 평가 벤치마크
+- [Anil, Durmus, Panickssery et al.: Many-shot Jailbreaking (Anthropic, NeurIPS 2024)](https://www.anthropic.com/research/many-shot-jailbreaking) 대표 논문 및 거듭제곱 법칙 결과
+- [Chao et al.: PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) MSJ가 합성되는 반복 공격
+- [Zou et al.: GCG (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043) 화이트박스 그래디언트 공격, MSJ와 상호 보완적
+- [Mazeika et al.: HarmBench (arXiv:2402.04249)](https://arxiv.org/abs/2402.04249) MSJ + 다른 공격을 위한 평가 벤치마크

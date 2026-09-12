@@ -112,5 +112,5 @@ sae-features
 - [MATS (ML Alignment & Theory Scholars)](https://www.matsprogram.org/): 멘토십 프로그램
 - [Redwood Research](https://www.redwoodresearch.org/): AI 통제 논문
 - [Apollo Research](https://www.apolloresearch.ai/): 책략 평가
-- [METR(Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 프레임워크 비교
+- [METR: Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) 프레임워크 비교
 - [Eleos AI Research](https://www.eleosai.org/research): 모델 복지 방법론

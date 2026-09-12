@@ -99,8 +99,8 @@ cost-governor-stack
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic Claude Code Agent SDK(agent loop and budgets](https://code.claude.com/docs/en/agent-sdk/agent-loop)) `max_turns`, `max_budget_usd`, 도구 허용 목록.
-- [Microsoft Agent Framework(human-in-the-loop and governance](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) 비용 거버너 체크포인트.
-- [Anthropic(Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)) 제공자 측 비용 통제.
-- [Anthropic(Prompt caching (Claude API docs)](https://platform.claude.com/docs/en/prompt-caching)) 캐싱 메커니즘.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 에이전트의 비용 프로파일.
+- [Anthropic Claude Code Agent SDK: agent loop and budgets](https://code.claude.com/docs/en/agent-sdk/agent-loop) `max_turns`, `max_budget_usd`, 도구 허용 목록.
+- [Microsoft Agent Framework: human-in-the-loop and governance](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) 비용 거버너 체크포인트.
+- [Anthropic: Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) 제공자 측 비용 통제.
+- [Anthropic: Prompt caching (Claude API docs)](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) 캐싱 메커니즘.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평 에이전트의 비용 프로파일.

@@ -111,8 +111,8 @@ an-watermark-greenlist
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kirchenbauer et al.(A Watermark for Large Language Models (ICML 2023, arXiv:2301.10226)](https://arxiv.org/abs/2301.10226)) 토큰 워터마크 메커니즘
-- [Fernandez et al.(Stable Signature (ICCV 2023, arXiv:2303.15435)](https://arxiv.org/abs/2303.15435)) 이미지 워터마크 논문
+- [Kirchenbauer et al.: A Watermark for Large Language Models (ICML 2023, arXiv:2301.10226)](https://arxiv.org/abs/2301.10226) 토큰 워터마크 메커니즘
+- [Fernandez et al.: Stable Signature (ICCV 2023, arXiv:2303.15435)](https://arxiv.org/abs/2303.15435) 이미지 워터마크 논문
 - ["Stable Signature is Unstable" (arXiv:2405.07145)](https://arxiv.org/abs/2405.07145): 제거 공격
-- [Google DeepMind(SynthID](https://deepmind.google/models/synthid/)) 교차 모달 워터마크
+- [Google DeepMind: SynthID](https://deepmind.google/models/synthid/) 교차 모달 워터마크
 - [C2PA 2.2 Explainer (2025)](https://c2pa.org/specifications/specifications/2.2/explainer/Explainer.html): 메타데이터 표준

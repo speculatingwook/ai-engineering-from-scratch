@@ -232,7 +232,7 @@ Refuse to ship RLHF-PPO without a KL monitor. Refuse to use an RM smaller than t
 ## 더 읽을거리 (Further Reading)
 
 - [Christiano et al. (2017). Deep Reinforcement Learning from Human Preferences](https://arxiv.org/abs/1706.03741): RLHF를 시작한 논문.
-- [Ouyang et al. (2022). InstructGPT(Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155)) ChatGPT 뒤의 레시피.
+- [Ouyang et al. (2022). InstructGPT: Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) ChatGPT 뒤의 레시피.
 - [Stiennon et al. (2020). Learning to summarize with human feedback](https://arxiv.org/abs/2009.01325): 요약을 위한 초기 RLHF.
 - [Rafailov et al. (2023). Direct Preference Optimization](https://arxiv.org/abs/2305.18290): DPO; 2026년 RLHF 이후의 기본값.
 - [Bai et al. (2022). Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073): RLAIF와 자기 비판 루프.
@@ -240,4 +240,4 @@ Refuse to ship RLHF-PPO without a KL monitor. Refuse to use an RM smaller than t
 - [Hugging Face TRL library](https://huggingface.co/docs/trl): 프로덕션 `RewardTrainer`와 `PPOTrainer`. 적응적-KL과 가치 헤드 세부사항은 트레이너 소스를 읽어라.
 - [Hugging Face(Illustrating Reinforcement Learning from Human Feedback](https://huggingface.co/blog/rlhf) by Lambert, Castricato, von Werra, Havrilla) 다이어그램과 함께하는 3단계 파이프라인의 정전적 안내.
 - [von Werra et al. (2020). TRL: Transformer Reinforcement Learning](https://github.com/huggingface/trl): 그 라이브러리; `examples/`에 Llama, Mistral, Qwen을 위한 종단간(end-to-end) RLHF 스크립트가 있다.
-- [Sutton & Barto (2018). Ch. 17.4(Designing Reward Signals](http://incompleteideas.net/book/RLbook2020.pdf)) 보상 가설 관점; 보상 해킹을 생각하기 위한 필수 전제조건.
+- [Sutton & Barto (2018). Ch. 17.4: Designing Reward Signals](http://incompleteideas.net/book/RLbook2020.pdf) 보상 가설 관점; 보상 해킹을 생각하기 위한 필수 전제조건.

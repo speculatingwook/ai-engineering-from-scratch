@@ -112,7 +112,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Du et al.(Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325)) 레퍼런스 논문, ICML 2024
-- [Zhuge et al.(Mindstorms in Natural Language-Based Societies of Mind](https://arxiv.org/abs/2305.17066)) 129-에이전트 NLSOM
+- [Du et al.: Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325) 레퍼런스 논문, ICML 2024
+- [Zhuge et al.: Mindstorms in Natural Language-Based Societies of Mind](https://arxiv.org/abs/2305.17066) 129-에이전트 NLSOM
 - [Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs](https://arxiv.org/abs/2311.17371): 토론 변형을 벤치마크함
 - [Debate project page](https://composable-models.github.io/llm_debate/): Du et al.의 코드, 데모, 절제 실험 세부사항

@@ -118,5 +118,5 @@ i4-platform-lanes
 - [Azure OpenAI Service Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/): PTU 경제학과 요금표.
 - [Vertex AI Generative AI Pricing](https://cloud.google.com/vertex-ai/generative-ai/pricing): Gemini 등급과 Model Garden 추가 요금.
 - [Artificial Analysis LLM Leaderboard](https://artificialanalysis.ai/): 공급자 전반의 지속적인 지연 시간·처리량 벤치마크.
-- [The AI Journal(AWS Bedrock vs Azure OpenAI CTO Guide 2026](https://theaijournal.co/2026/03/aws-bedrock-vs-azure-openai/)) 엔터프라이즈 의사결정 프레임워크.
-- [Finout(Bedrock vs Vertex vs Azure FinOps](https://www.finout.io/blog/bedrock-vs.-vertex-vs.-azure-cognitive-a-finops-comparison-for-ai-spend)) 귀속 메커니즘 비교.
+- [The AI Journal: AWS Bedrock vs Azure OpenAI CTO Guide 2026](https://theaijournal.co/2026/03/aws-bedrock-vs-azure-openai/) 엔터프라이즈 의사결정 프레임워크.
+- [Finout: Bedrock vs Vertex vs Azure FinOps](https://www.finout.io/blog/bedrock-vs.-vertex-vs.-azure-cognitive-a-finops-comparison-for-ai-spend) 귀속 메커니즘 비교.

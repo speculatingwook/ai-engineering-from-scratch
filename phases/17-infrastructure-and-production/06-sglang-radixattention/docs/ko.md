@@ -123,6 +123,6 @@ roofline
 
 - [SGLang GitHub](https://github.com/sgl-project/sglang): 소스와 문서.
 - [SGLang documentation](https://sgl-project.github.io/): RadixAttention과 스케줄링 세부사항.
-- [SGLang paper(Efficiently Programming Large Language Models (arXiv:2312.07104)](https://arxiv.org/abs/2312.07104)) 설계 레퍼런스.
-- [LMSYS blog(SGLang with RadixAttention](https://www.lmsys.org/blog/2024-01-17-sglang/)) 벤치마크 숫자와 스케줄러 근거.
-- [vLLM(Prefix Caching](https://docs.vllm.ai/en/latest/features/prefix_caching.html)) 비교를 위한 vLLM 자체의 라딕스 유사 구현.
+- [SGLang paper: Efficiently Programming Large Language Models (arXiv:2312.07104)](https://arxiv.org/abs/2312.07104) 설계 레퍼런스.
+- [LMSYS blog: SGLang with RadixAttention](https://www.lmsys.org/blog/2024-01-17-sglang/) 벤치마크 숫자와 스케줄러 근거.
+- [vLLM: Prefix Caching](https://docs.vllm.ai/en/latest/features/prefix_caching.html) 비교를 위한 vLLM 자체의 라딕스 유사 구현.

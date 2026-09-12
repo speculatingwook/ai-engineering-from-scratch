@@ -204,7 +204,7 @@ FIPA-ACL을 다시 가져오지 마라. 그 체크리스트를 가져와라:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Liu et al.(A Survey of Agent Interoperability Protocols: MCP, ACP, A2A, ANP](https://arxiv.org/html/2505.02279v1)) 현대 명세들을 FIPA 유산에 연결하는 정전적 2025년 서베이
+- [Liu et al.: A Survey of Agent Interoperability Protocols: MCP, ACP, A2A, ANP](https://arxiv.org/html/2505.02279v1) 현대 명세들을 FIPA 유산에 연결하는 정전적 2025년 서베이
 - [FIPA ACL Message Structure Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/): 2000년에 비준된 봉투 형식
 - [FIPA Communicative Act Library Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/): 전체 수행문 카탈로그
 - [MCP specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25): `request`/`query-ref`의 현대 도구 사용 등가물

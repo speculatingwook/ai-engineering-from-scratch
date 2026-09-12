@@ -108,7 +108,7 @@ dgm-archive
 ## 더 읽을거리 (Further Reading)
 
 - [Zhang et al. (2025). Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents](https://arxiv.org/abs/2505.22954): 논문.
-- [Sakana AI(Darwin Godel Machine announcement](https://sakana.ai/dgm/)) 벤더 요약.
+- [Sakana AI: Darwin Godel Machine announcement](https://sakana.ai/dgm/) 벤더 요약.
 - [Jimenez et al. SWE-bench leaderboard](https://www.swebench.com/): 벤치마크 명세와 채점.
-- [OpenAI(Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/)) DGM이 측정되는 대상 부분집합.
+- [OpenAI: Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/) DGM이 측정되는 대상 부분집합.
 - [Anthropic RSP v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): 이 실패 부류에 대한 "안전장치 무력화" 규정.

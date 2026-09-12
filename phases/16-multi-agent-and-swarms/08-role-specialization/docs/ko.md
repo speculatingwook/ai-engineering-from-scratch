@@ -127,7 +127,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Hong et al.(MetaGPT: Meta Programming for Multi-Agent Collaboration](https://arxiv.org/abs/2308.00352)) SOP-as-역할-프롬프트 레퍼런스 논문
-- [Qian et al.(Communicative Agents for Software Development (ChatDev)](https://arxiv.org/abs/2307.07924)) 채팅 사슬 + communicative dehallucination
-- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계; 검증 격차가 실패의 21.3%
-- [CrewAI docs(Agent roles](https://docs.crewai.com/en/introduction)) 프로덕션 역할 명세 표면
+- [Hong et al.: MetaGPT: Meta Programming for Multi-Agent Collaboration](https://arxiv.org/abs/2308.00352) SOP-as-역할-프롬프트 레퍼런스 논문
+- [Qian et al.: Communicative Agents for Software Development (ChatDev)](https://arxiv.org/abs/2307.07924) 채팅 사슬 + communicative dehallucination
+- [Cemri et al.: Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) MAST 분류 체계; 검증 격차가 실패의 21.3%
+- [CrewAI docs: Agent roles](https://docs.crewai.com/en/introduction) 프로덕션 역할 명세 표면

@@ -75,6 +75,8 @@ git merge experiment/new-optimizer
 
 ### 4단계: 이 강의 저장소로 작업하기
 
+강의 저장소 자체에는 푸시할 수 없다. 쓰기 권한은 관리자에게만 있다. GitHub에서 먼저 포크하라(오른쪽 위의 Fork 버튼). 그래야 `origin`이 여러분 자신의 사본을 가리킨다.
+
 ```bash
 git clone https://github.com/YOUR-USERNAME/ai-engineering-from-scratch.git
 cd ai-engineering-from-scratch

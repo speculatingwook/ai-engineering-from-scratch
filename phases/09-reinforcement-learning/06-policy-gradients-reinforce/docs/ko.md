@@ -197,6 +197,6 @@ Refuse REINFORCE-no-baseline on horizons > 500 steps. Refuse continuous-action c
 
 - [Williams (1992). Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning](https://link.springer.com/article/10.1007/BF00992696): 원조 REINFORCE 논문.
 - [Sutton et al. (2000). Policy Gradient Methods for Reinforcement Learning with Function Approximation](https://papers.nips.cc/paper_files/paper/1999/hash/464d828b85b0bed98e80ade0a5c43b0f-Abstract.html): 함수 근사를 가진 현대적 정책 그래디언트 정리.
-- [Sutton & Barto (2018). Ch. 13(Policy Gradient Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 교과서적 제시.
-- [OpenAI Spinning Up(VPG / REINFORCE](https://spinningup.openai.com/en/latest/algorithms/vpg.html)) PyTorch 코드를 곁들인 명료한 교육적 설명.
+- [Sutton & Barto (2018). Ch. 13: Policy Gradient Methods](http://incompleteideas.net/book/RLbook2020.pdf) 교과서적 제시.
+- [OpenAI Spinning Up: VPG / REINFORCE](https://spinningup.openai.com/en/latest/algorithms/vpg.html) PyTorch 코드를 곁들인 명료한 교육적 설명.
 - [Peters & Schaal (2008). Reinforcement Learning of Motor Skills with Policy Gradients](https://homes.cs.washington.edu/~todorov/courses/amath579/reading/PolicyGradient.pdf): 분산 감소와 REINFORCE를 신뢰 영역 계열(TRPO, PPO)에 연결하는 자연 그래디언트 관점.

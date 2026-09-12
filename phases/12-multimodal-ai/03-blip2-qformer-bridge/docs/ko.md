@@ -136,9 +136,9 @@ modality-projection
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al.(BLIP-2 (arXiv:2301.12597)](https://arxiv.org/abs/2301.12597)) 핵심 논문.
-- [Li et al.(BLIP (arXiv:2201.12086)](https://arxiv.org/abs/2201.12086)) ITC/ITM/ITG 삼총사를 가진 선행 연구.
+- [Li et al.: BLIP-2 (arXiv:2301.12597)](https://arxiv.org/abs/2301.12597) 핵심 논문.
+- [Li et al.: BLIP (arXiv:2201.12086)](https://arxiv.org/abs/2201.12086) ITC/ITM/ITG 삼총사를 가진 선행 연구.
 - [Li et al.: ALBEF (arXiv:2107.07651)](https://arxiv.org/abs/2107.07651): "align before fuse": 1단계 학습의 개념적 조상.
-- [Dai et al.(InstructBLIP (arXiv:2305.06500)](https://arxiv.org/abs/2305.06500)) 명령어 인식 Q-Former.
-- [Zhu et al.(MiniGPT-4 (arXiv:2304.10592)](https://arxiv.org/abs/2304.10592)) 투영기만 쓰는 접근법.
-- [Jaegle et al.(Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795)) 학습 가능 쿼리 교차 어텐션을 위한 일반 아키텍처.
+- [Dai et al.: InstructBLIP (arXiv:2305.06500)](https://arxiv.org/abs/2305.06500) 명령어 인식 Q-Former.
+- [Zhu et al.: MiniGPT-4 (arXiv:2304.10592)](https://arxiv.org/abs/2304.10592) 투영기만 쓰는 접근법.
+- [Jaegle et al.: Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795) 학습 가능 쿼리 교차 어텐션을 위한 일반 아키텍처.

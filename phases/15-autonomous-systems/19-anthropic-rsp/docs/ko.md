@@ -98,8 +98,8 @@ a5-rsp-ladder
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) 전체 32쪽 정책.
-- [Anthropic(RSP v3.0 announcement](https://www.anthropic.com/news/responsible-scaling-policy-v3)) v2로부터의 변경 사항 요약.
-- [Anthropic(Frontier Safety Roadmap](https://www.anthropic.com/research/frontier-safety)) RSP v3.0에서 연결된 상설 문서.
-- [Anthropic(Risk Report: Claude Opus 4.6](https://www.anthropic.com/research/risk-report-claude-opus-4-6)) 현재 프런티어 모델에 대한 회고.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) AI R&D-4를 측정된 자율성과 연결한다.
+- [Anthropic: Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) 전체 32쪽 정책.
+- [Anthropic: RSP v3.0 announcement](https://www.anthropic.com/news/responsible-scaling-policy-v3) v2로부터의 변경 사항 요약.
+- [Anthropic: Frontier Safety Roadmap](https://www.anthropic.com/research/frontier-safety) RSP v3.0에서 연결된 상설 문서.
+- [Anthropic: Risk Report: Claude Opus 4.6](https://www.anthropic.com/research/risk-report-claude-opus-4-6) 현재 프런티어 모델에 대한 회고.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) AI R&D-4를 측정된 자율성과 연결한다.

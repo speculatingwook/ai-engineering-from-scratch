@@ -524,5 +524,3 @@ print(f"\nClassification Report:\n{classification_report(y_te, y_pred)}")
 | 임계값(Threshold) | "컷오프" | 그 위에서 모델이 클래스 1을 예측하는 확률 값(기본 0.5, 튜닝 가능) |
 | 원-핫 인코딩(One-hot encoding) | "범주를 위한 이진 컬럼" | 클래스 k를 위치 k에 1이 있는 0의 벡터로 표현하는 것 |
 | 범주형 교차 엔트로피(Categorical cross-entropy) | "다중 클래스 로그 손실" | 원-핫 인코딩된 레이블을 사용해 이진 교차 엔트로피를 k개 클래스로 확장한 것 |
-</content>
-</invoke>

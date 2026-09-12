@@ -164,6 +164,6 @@ python3 code/main.py
 ## 더 읽을거리 (Further Reading)
 
 - [A2A specification](https://a2a-protocol.org/latest/specification/): 정전(canonical) 스펙
-- [Google Developers Blog(A2A announcement](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)) 2025년 4월 출시 게시물
+- [Google Developers Blog: A2A announcement](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) 2025년 4월 출시 게시물
 - [A2A GitHub repo](https://github.com/a2aproject/A2A): 레퍼런스 구현과 SDK
-- [Liu et al.(A Survey of Agent Interoperability Protocols](https://arxiv.org/html/2505.02279v1)) MCP, ACP, A2A, ANP 비교
+- [Liu et al.: A Survey of Agent Interoperability Protocols](https://arxiv.org/html/2505.02279v1) MCP, ACP, A2A, ANP 비교

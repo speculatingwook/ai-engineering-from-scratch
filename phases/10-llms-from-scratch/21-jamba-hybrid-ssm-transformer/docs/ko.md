@@ -181,9 +181,9 @@ swiglu-ffn
 
 ## 더 읽을거리 (Further Reading)
 
-- [Lieber et al.(Jamba: A Hybrid Transformer-Mamba Language Model (arXiv:2403.19887)](https://arxiv.org/abs/2403.19887)) 원래 Jamba 논문, 비율 절제, 256k 컨텍스트 주장
-- [AI21(Jamba 1.5: Hybrid Transformer-Mamba at Scale (arXiv:2408.12570)](https://arxiv.org/abs/2408.12570)) 확장된 계열, 398B/94B와 12B/52B 공개 출시
-- [Gu, Dao(Mamba: Linear-Time Sequence Modeling with Selective State Spaces (arXiv:2312.00752)](https://arxiv.org/abs/2312.00752)) Jamba가 그 위에 만드는 선택적 SSM 논문
-- [Dao, Gu(Mamba-2 (arXiv:2405.21060)](https://arxiv.org/abs/2405.21060)) 단순화된 구조화 상태 공간 후속
-- [Lahoti et al.(Mamba-3 (arXiv:2603.15569, ICLR 2026)](https://arxiv.org/abs/2603.15569)) 복소수 값 상태, MIMO, 2026년 순수 SSM 프런티어
-- [Gu et al.(Efficiently Modeling Long Sequences with Structured State Spaces (arXiv:2111.00396)](https://arxiv.org/abs/2111.00396)) S4 논문, LLM을 위한 SSM 계보의 출발점
+- [Lieber et al.: Jamba: A Hybrid Transformer-Mamba Language Model (arXiv:2403.19887)](https://arxiv.org/abs/2403.19887) 원래 Jamba 논문, 비율 절제, 256k 컨텍스트 주장
+- [AI21: Jamba 1.5: Hybrid Transformer-Mamba at Scale (arXiv:2408.12570)](https://arxiv.org/abs/2408.12570) 확장된 계열, 398B/94B와 12B/52B 공개 출시
+- [Gu, Dao: Mamba: Linear-Time Sequence Modeling with Selective State Spaces (arXiv:2312.00752)](https://arxiv.org/abs/2312.00752) Jamba가 그 위에 만드는 선택적 SSM 논문
+- [Dao, Gu: Mamba-2 (arXiv:2405.21060)](https://arxiv.org/abs/2405.21060) 단순화된 구조화 상태 공간 후속
+- [Lahoti et al.: Mamba-3 (arXiv:2603.15569, ICLR 2026)](https://arxiv.org/abs/2603.15569) 복소수 값 상태, MIMO, 2026년 순수 SSM 프런티어
+- [Gu et al.: Efficiently Modeling Long Sequences with Structured State Spaces (arXiv:2111.00396)](https://arxiv.org/abs/2111.00396) S4 논문, LLM을 위한 SSM 계보의 출발점

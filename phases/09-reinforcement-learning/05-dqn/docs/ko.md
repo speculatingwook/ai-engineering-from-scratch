@@ -203,6 +203,6 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) — DDQN.
 - [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581): 듀얼링 DQN.
 - [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298): 트릭을 쌓은 논문.
-- [OpenAI Spinning Up(DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html)) 명료한 현대적 설명.
-- [Sutton & Barto (2018). Ch. 9(On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf)) DQN의 타깃 네트워크와 재현 버퍼가 길들이도록 설계된 "치명적 삼중주"(함수 근사 + 부트스트래핑 + 오프-폴리시)의 교과서적 다룸.
+- [OpenAI Spinning Up: DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html) 명료한 현대적 설명.
+- [Sutton & Barto (2018). Ch. 9: On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf) DQN의 타깃 네트워크와 재현 버퍼가 길들이도록 설계된 "치명적 삼중주"(함수 근사 + 부트스트래핑 + 오프-폴리시)의 교과서적 다룸.
 - [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/): 절제 연구(ablation studies)에서 사용되는 참조 단일 파일 DQN; 이 레슨의 밑바닥 버전과 함께 읽으면 좋다.

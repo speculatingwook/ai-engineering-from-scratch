@@ -103,7 +103,7 @@ al-guard-stack
 
 ## 더 읽을거리 (Further Reading)
 
-- [Meta(Llama Guard 3 (in Llama 3 Herd paper, arXiv:2407.21783)](https://arxiv.org/abs/2407.21783)) 8B 분류기
-- [Meta(Llama Guard 3-1B-INT4 (arXiv:2411.17713)](https://arxiv.org/abs/2411.17713)) 양자화 모바일 분류기
-- [NVIDIA Garak(GitHub](https://github.com/NVIDIA/garak)) 스캐너 저장소와 문서
-- [Microsoft PyRIT(GitHub](https://github.com/Azure/PyRIT)) 캠페인 툴킷
+- [Meta: Llama Guard 3 (in Llama 3 Herd paper, arXiv:2407.21783)](https://arxiv.org/abs/2407.21783) 8B 분류기
+- [Meta: Llama Guard 3-1B-INT4 (arXiv:2411.17713)](https://arxiv.org/abs/2411.17713) 양자화 모바일 분류기
+- [NVIDIA Garak: GitHub](https://github.com/NVIDIA/garak) 스캐너 저장소와 문서
+- [Microsoft PyRIT: GitHub](https://github.com/Azure/PyRIT) 캠페인 툴킷

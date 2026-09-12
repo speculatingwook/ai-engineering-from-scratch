@@ -118,8 +118,8 @@ mx-priority-tiers
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 79쪽 CC0 문서.
-- [Bai et al.(Constitutional AI: Harmlessness from AI Feedback](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback)) 2022년 원본.
-- [Anthropic(Collective Constitutional AI (2023)](https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input)) 참여형 실험.
-- [Anthropic(Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) RSP 스택에서 헌법이 위치하는 곳.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 배포에서 헌법의 역할.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) 79쪽 CC0 문서.
+- [Bai et al.: Constitutional AI: Harmlessness from AI Feedback](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback) 2022년 원본.
+- [Anthropic: Collective Constitutional AI (2023)](https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input) 참여형 실험.
+- [Anthropic: Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) RSP 스택에서 헌법이 위치하는 곳.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평 배포에서 헌법의 역할.

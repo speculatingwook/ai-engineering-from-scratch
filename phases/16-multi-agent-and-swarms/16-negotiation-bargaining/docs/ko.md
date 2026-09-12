@@ -166,4 +166,4 @@ python3 code/main.py
 - [Measuring Bargaining Abilities of Language Models](https://arxiv.org/abs/2402.15813): OG-Narrator와 구매자가 판매자보다 어렵다는 결과
 - [Large-Scale Autonomous Negotiation Competition](https://arxiv.org/abs/2503.06416): ~18만 건의 협상. 사고 사슬 은폐가 이긴다
 - [LLM-Stakeholders Interactive Negotiation (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/file/984dd3db213db2d1454a163b65b84d08-Paper-Datasets_and_Benchmarks_Track.pdf): 비밀 효용을 가진 다자 채점 게임
-- [Smith 1980(The Contract Net Protocol](https://ieeexplore.ieee.org/document/1675516)) 고전적 메커니즘, IEEE Transactions on Computers
+- [Smith 1980: The Contract Net Protocol](https://ieeexplore.ieee.org/document/1675516) 고전적 메커니즘, IEEE Transactions on Computers

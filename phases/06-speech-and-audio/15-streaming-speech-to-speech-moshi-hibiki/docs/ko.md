@@ -176,9 +176,9 @@ Moshi가 이기지 못한다:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Défossez et al. (2024). Moshi(speech-text foundation model](https://arxiv.org/html/2410.00037v2)) 그 논문.
+- [Défossez et al. (2024). Moshi: speech-text foundation model](https://arxiv.org/html/2410.00037v2) 그 논문.
 - [Kyutai Labs (2026). Hibiki-Zero](https://arxiv.org/abs/2602.12345): 정렬 데이터 없는 스트리밍 번역.
 - [Sesame (2025). Crossing the uncanny valley of voice](https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice): CSM 사양.
-- [Kyutai(Moshi repo](https://github.com/kyutai-labs/moshi)) 설치 + 서버.
-- [OpenAI(Realtime API](https://platform.openai.com/docs/guides/realtime)) 클로즈드 상용 동급.
-- [Kyutai(Delayed Streams Modeling](https://github.com/kyutai-labs/delayed-streams-modeling)) 내부의 STT/TTS 프레임워크.
+- [Kyutai: Moshi repo](https://github.com/kyutai-labs/moshi) 설치 + 서버.
+- [OpenAI: Realtime API](https://platform.openai.com/docs/guides/realtime) 클로즈드 상용 동급.
+- [Kyutai: Delayed Streams Modeling](https://github.com/kyutai-labs/delayed-streams-modeling) 내부의 STT/TTS 프레임워크.

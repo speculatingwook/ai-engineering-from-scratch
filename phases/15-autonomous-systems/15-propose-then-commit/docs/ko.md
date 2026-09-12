@@ -105,8 +105,8 @@ mx-propose-then-commit
 
 ## 더 읽을거리 (Further Reading)
 
-- [Microsoft Agent Framework(Human in the loop](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) `RequestInfoEvent`, 지속 승인.
-- [Cloudflare Agents(Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/)) `waitForApproval()`과 Durable Objects.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 위험에 대한 완화책으로서의 HITL.
-- [EU AI Act(Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/)) 고위험 시스템에 대한 규제 베이스라인.
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 감독을 둘러싼 헌법적 프레이밍.
+- [Microsoft Agent Framework: Human in the loop](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) `RequestInfoEvent`, 지속 승인.
+- [Cloudflare Agents: Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/) `waitForApproval()`과 Durable Objects.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평 위험에 대한 완화책으로서의 HITL.
+- [EU AI Act: Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/) 고위험 시스템에 대한 규제 베이스라인.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) 감독을 둘러싼 헌법적 프레이밍.

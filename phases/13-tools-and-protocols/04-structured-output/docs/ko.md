@@ -148,8 +148,8 @@ constrained-decoding
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)) 엄격 모드, 거부, 스키마 요구 사항
-- [OpenAI(Introducing structured outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/)) 디코딩 보장을 설명하는 2024년 8월 출시 게시물
-- [Pydantic AI(Output](https://ai.pydantic.dev/output/)) 각 제공자로 직렬화되는 타입 지정 output_type 바인딩
-- [JSON Schema(2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes)) 표준 명세
-- [Microsoft(Structured outputs in Azure OpenAI](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs)) 엔터프라이즈 배포 노트와 엄격 모드 주의 사항
+- [OpenAI: Structured outputs](https://platform.openai.com/docs/guides/structured-outputs) 엄격 모드, 거부, 스키마 요구 사항
+- [OpenAI: Introducing structured outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) 디코딩 보장을 설명하는 2024년 8월 출시 게시물
+- [Pydantic AI: Output](https://ai.pydantic.dev/output/) 각 제공자로 직렬화되는 타입 지정 output_type 바인딩
+- [JSON Schema: 2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes) 표준 명세
+- [Microsoft: Structured outputs in Azure OpenAI](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs) 엔터프라이즈 배포 노트와 엄격 모드 주의 사항

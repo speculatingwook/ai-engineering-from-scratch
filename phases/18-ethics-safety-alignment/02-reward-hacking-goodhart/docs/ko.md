@@ -108,9 +108,9 @@ rlhf-reward-kl
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gao, Schulman, Hilton(Scaling Laws for Reward Model Overoptimization (ICML 2023)](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf)) 함수 형태 적합과 과최적화 곡선
+- [Gao, Schulman, Hilton: Scaling Laws for Reward Model Overoptimization (ICML 2023)](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf) 함수 형태 적합과 과최적화 곡선
 - [Catastrophic Goodhart (OpenReview UXuBzWoZGK)](https://openreview.net/forum?id=UXuBzWoZGK): 두꺼운 꼬리 보상 오차 아래에서 KL 정규화만으로 실패하는 이유
-- [Turpin et al.(Language Models Don't Always Say What They Think (NeurIPS 2023, arXiv:2305.04388)](https://arxiv.org/abs/2305.04388)) 불충실한 사고 연쇄
-- [Manheim & Garrabrant(Categorizing Variants of Goodhart's Law (arXiv:1803.04585)](https://arxiv.org/abs/1803.04585)) 회귀적/극단적/인과적/적대적 분류법
-- [Rafailov et al.(Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms (NeurIPS 2024, arXiv:2406.02900)](https://arxiv.org/abs/2406.02900)) DPO 계열도 예외가 아니다
-- [Coste et al.(Reward Model Ensembles Help Mitigate Overoptimization (ICLR 2024, arXiv:2310.02743)](https://arxiv.org/abs/2310.02743)) 실재하지만 부분적인 완화책
+- [Turpin et al.: Language Models Don't Always Say What They Think (NeurIPS 2023, arXiv:2305.04388)](https://arxiv.org/abs/2305.04388) 불충실한 사고 연쇄
+- [Manheim & Garrabrant: Categorizing Variants of Goodhart's Law (arXiv:1803.04585)](https://arxiv.org/abs/1803.04585) 회귀적/극단적/인과적/적대적 분류법
+- [Rafailov et al.: Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms (NeurIPS 2024, arXiv:2406.02900)](https://arxiv.org/abs/2406.02900) DPO 계열도 예외가 아니다
+- [Coste et al.: Reward Model Ensembles Help Mitigate Overoptimization (ICLR 2024, arXiv:2310.02743)](https://arxiv.org/abs/2310.02743) 실재하지만 부분적인 완화책

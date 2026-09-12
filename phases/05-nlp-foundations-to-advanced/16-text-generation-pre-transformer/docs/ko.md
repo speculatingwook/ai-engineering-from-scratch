@@ -232,7 +232,7 @@ Refuse to report perplexity computed with different tokenization between systems
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jurafsky and Martin(Speech and Language Processing, Chapter 3 (2026 draft)](https://web.stanford.edu/~jurafsky/slp3/3.pdf)) n-gram LM과 스무딩에 대한 표준 해설.
+- [Jurafsky and Martin: Speech and Language Processing, Chapter 3 (2026 draft)](https://web.stanford.edu/~jurafsky/slp3/3.pdf) n-gram LM과 스무딩에 대한 표준 해설.
 - [Chen and Goodman (1998). An Empirical Study of Smoothing Techniques for Language Modeling](https://dash.harvard.edu/handle/1/25104739): Kneser-Ney를 최고의 n-gram 스무더로 정착시킨 논문.
 - [Kneser and Ney (1995). Improved Backing-off for M-gram Language Modeling](https://ieeexplore.ieee.org/document/479394): 원래의 KN 논문.
 - [KenLM](https://kheafield.com/code/kenlm/): 빠른 프로덕션 n-gram LM, 2026년에도 지연 시간에 민감한 응용에 여전히 사용됨.

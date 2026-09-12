@@ -109,8 +109,8 @@ constitutional-ai
 
 ## 더 읽을거리 (Further Reading)
 
-- [Bai et al.(Constitutional AI: Harmlessness from AI Feedback (arXiv:2212.08073)](https://arxiv.org/abs/2212.08073)) 원조 2단계 파이프라인
-- [Anthropic(Claude's Constitution (Jan 2026)](https://www.anthropic.com/news/claudes-constitution)) 2026 4단 개정, CC0 1.0
-- [Anthropic(Constitutional Classifiers (2024-2026)](https://www.anthropic.com/research/constitutional-classifiers)) v2에서 ~1% 오버헤드를 둔 출력 게이트 방어책
-- [Lee et al.(RLAIF vs RLHF: Scaling Reinforcement Learning from Human Feedback (arXiv:2309.00267)](https://arxiv.org/abs/2309.00267)) 경험적 RLAIF / RLHF 비교
-- [Kundu et al.(Specific versus General Principles for Constitutional AI (arXiv:2310.13798)](https://arxiv.org/abs/2310.13798)) 원칙 세분성의 효과
+- [Bai et al.: Constitutional AI: Harmlessness from AI Feedback (arXiv:2212.08073)](https://arxiv.org/abs/2212.08073) 원조 2단계 파이프라인
+- [Anthropic: Claude's Constitution (Jan 2026)](https://www.anthropic.com/news/claudes-constitution) 2026 4단 개정, CC0 1.0
+- [Anthropic: Constitutional Classifiers (2024-2026)](https://www.anthropic.com/research/constitutional-classifiers) v2에서 ~1% 오버헤드를 둔 출력 게이트 방어책
+- [Lee et al.: RLAIF vs RLHF: Scaling Reinforcement Learning from Human Feedback (arXiv:2309.00267)](https://arxiv.org/abs/2309.00267) 경험적 RLAIF / RLHF 비교
+- [Kundu et al.: Specific versus General Principles for Constitutional AI (arXiv:2310.13798)](https://arxiv.org/abs/2310.13798) 원칙 세분성의 효과

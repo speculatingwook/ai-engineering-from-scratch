@@ -118,7 +118,7 @@ an-card-scopes
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mitchell et al.(Model Cards for Model Reporting (arXiv:1810.03993, FAT* 2019)](https://arxiv.org/abs/1810.03993)) 표준적인 모델 카드
-- [Gebru et al.(Datasheets for Datasets (CACM 2021, arXiv:1803.09010)](https://arxiv.org/abs/1803.09010)) 데이터시트 논문
-- [Pushkarna et al.(Data Cards (Google 2022)](https://arxiv.org/abs/2204.01075)) 계층적 데이터 문서
-- [Sidhpurwala et al.(Blueprints of Trust (arXiv:2509.20394)](https://arxiv.org/abs/2509.20394)) 시스템 카드 형식화
+- [Mitchell et al.: Model Cards for Model Reporting (arXiv:1810.03993, FAT* 2019)](https://arxiv.org/abs/1810.03993) 표준적인 모델 카드
+- [Gebru et al.: Datasheets for Datasets (CACM 2021, arXiv:1803.09010)](https://arxiv.org/abs/1803.09010) 데이터시트 논문
+- [Pushkarna et al.: Data Cards (Google 2022)](https://arxiv.org/abs/2204.01075) 계층적 데이터 문서
+- [Sidhpurwala et al.: Blueprints of Trust (arXiv:2509.20394)](https://arxiv.org/abs/2509.20394) 시스템 카드 형식화

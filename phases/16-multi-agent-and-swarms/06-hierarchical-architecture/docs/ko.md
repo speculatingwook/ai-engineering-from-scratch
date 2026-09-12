@@ -124,7 +124,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [CrewAI introduction(Process.hierarchical](https://docs.crewai.com/en/introduction)) 매니저 LLM을 가진 교과서적 계층형
+- [CrewAI introduction: Process.hierarchical](https://docs.crewai.com/en/introduction) 매니저 LLM을 가진 교과서적 계층형
 - [LangGraph supervisor reference](https://reference.langchain.com/python/langgraph-supervisor): `create_supervisor`를 통한 중첩 슈퍼바이저
-- [Anthropic engineering(Research system](https://www.anthropic.com/engineering/multi-agent-research-system)) Anthropic이 계층형 대신 평평한 슈퍼바이저를 의도적으로 선택한 이유
-- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계; 조율 실패에 관한 절이 분해 표류를 문서화한다
+- [Anthropic engineering: Research system](https://www.anthropic.com/engineering/multi-agent-research-system) Anthropic이 계층형 대신 평평한 슈퍼바이저를 의도적으로 선택한 이유
+- [Cemri et al.: Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) MAST 분류 체계; 조율 실패에 관한 절이 분해 표류를 문서화한다

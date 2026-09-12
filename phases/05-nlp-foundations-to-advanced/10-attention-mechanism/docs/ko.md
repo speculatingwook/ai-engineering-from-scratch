@@ -219,4 +219,4 @@ For Bahdanau confusion, insist the decoder input is `s_{t-1}` (pre-step state). 
 - [Bahdanau, Cho, Bengio (2014). Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473): 그 논문.
 - [Luong, Pham, Manning (2015). Effective Approaches to Attention-based Neural Machine Translation](https://arxiv.org/abs/1508.04025): 세 가지 점수 변형과 그 비교.
 - [Jain and Wallace (2019). Attention is not Explanation](https://arxiv.org/abs/1902.10186): 해석 가능성에 대한 주의.
-- [Dive into Deep Learning(Bahdanau Attention](https://d2l.ai/chapter_attention-mechanisms-and-transformers/bahdanau-attention.html)) PyTorch로 된 실행 가능한 따라하기.
+- [Dive into Deep Learning: Bahdanau Attention](https://d2l.ai/chapter_attention-mechanisms-and-transformers/bahdanau-attention.html) PyTorch로 된 실행 가능한 따라하기.

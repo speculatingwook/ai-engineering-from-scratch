@@ -210,7 +210,7 @@ python3 code/main.py
 
 책, 논문, 참조 구현:
 
-- [Jaymin West, Agentic Engineering(Chapter 6: Harnesses](https://www.jayminwest.com/agentic-engineering-book/6-harnesses)) 책 분량의 다룸, 하니스를 일차적 보안 경계로 취급
+- [Jaymin West, Agentic Engineering: Chapter 6: Harnesses](https://www.jayminwest.com/agentic-engineering-book/6-harnesses) 책 분량의 다룸, 하니스를 일차적 보안 경계로 취급
 - [preprints.org, Harness Engineering for Language Agents (March 2026)](https://www.preprints.org/manuscript/202603.1756): 제어 / 행위성(agency) / 런타임으로서의 학술적 프레이밍
 - [walkinglabs/awesome-harness-engineering](https://github.com/walkinglabs/awesome-harness-engineering): 컨텍스트, 평가, 관찰 가능성, 오케스트레이션을 가로지르는 큐레이션된 읽기 목록
 - [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering): 대체 큐레이션 목록(도구, 평가, 메모리, MCP, 권한)

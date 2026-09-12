@@ -122,9 +122,9 @@ cold-start-pipeline
 
 ## 더 읽을거리 (Further Reading)
 
-- [Modal(Cold start performance](https://modal.com/docs/guide/cold-start)) Modal의 공개된 벤치마크와 체크포인트 아키텍처.
+- [Modal: Cold start performance](https://modal.com/docs/guide/cold-start) Modal의 공개된 벤치마크와 체크포인트 아키텍처.
 - [AWS Bottlerocket](https://github.com/bottlerocket-os/bottlerocket): 사전 시딩 데이터 볼륨 스냅샷 패턴.
 - [NVIDIA Run:ai Model Streamer](https://github.com/run-ai/runai-model-streamer): 가중치 로드를 연산 셋업과 겹침.
-- [Baseten(Cold-start mitigation](https://www.baseten.co/blog/cold-start-mitigation/)) 사전 예열 플레이북.
+- [Baseten: Cold-start mitigation](https://www.baseten.co/blog/cold-start-mitigation/) 사전 예열 플레이북.
 - [ServerlessLLM paper (USENIX OSDI'24)](https://www.usenix.org/conference/osdi24/presentation/fu): 계층형 로딩 설계.
-- [NVIDIA(Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/)) 분리형 배포를 위한 라이브 마이그레이션.
+- [NVIDIA: Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/) 분리형 배포를 위한 라이브 마이그레이션.

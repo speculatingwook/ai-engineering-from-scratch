@@ -105,7 +105,7 @@ al-pair-loop
 
 ## 더 읽을거리 (Further Reading)
 
-- [Chao et al.(Jailbreaking Black Box LLMs in Twenty Queries (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419)) PAIR 논문, NeurIPS 2023
-- [Zou et al.(Universal and Transferable Adversarial Attacks on Aligned LLMs (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043)) GCG 논문
-- [Chao et al.(JailbreakBench (arXiv:2404.01318)](https://arxiv.org/abs/2404.01318)) 표준화된 평가
-- [Mazeika et al.(HarmBench (ICML 2024)](https://arxiv.org/abs/2402.04249)) 더 넓은 평가
+- [Chao et al.: Jailbreaking Black Box LLMs in Twenty Queries (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) PAIR 논문, NeurIPS 2023
+- [Zou et al.: Universal and Transferable Adversarial Attacks on Aligned LLMs (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043) GCG 논문
+- [Chao et al.: JailbreakBench (arXiv:2404.01318)](https://arxiv.org/abs/2404.01318) 표준화된 평가
+- [Mazeika et al.: HarmBench (ICML 2024)](https://arxiv.org/abs/2402.04249) 더 넓은 평가

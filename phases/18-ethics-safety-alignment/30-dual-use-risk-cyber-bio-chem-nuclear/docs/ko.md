@@ -114,7 +114,7 @@ an-uplift-asymmetry
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(November 2025 cyber threat report](https://www.anthropic.com/news/disrupting-AI-espionage)) 중국 연계 캠페인 자동화
-- [OpenAI(Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) 생물 "문턱에 있음"
-- [Anthropic(RSP v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL-3 생물 문턱
-- [Council on Strategic Risks(2025 AI x Bio wrapup](https://councilonstrategicrisks.org/2025/12/22/2025-aixbio-wrapped-a-year-in-review-and-projections-for-2026/)) 연말 종합
+- [Anthropic: November 2025 cyber threat report](https://www.anthropic.com/news/disrupting-AI-espionage) 중국 연계 캠페인 자동화
+- [OpenAI: Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) 생물 "문턱에 있음"
+- [Anthropic: RSP v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) ASL-3 생물 문턱
+- [Council on Strategic Risks: 2025 AI x Bio wrapup](https://councilonstrategicrisks.org/2025/12/22/2025-aixbio-wrapped-a-year-in-review-and-projections-for-2026/) 연말 종합

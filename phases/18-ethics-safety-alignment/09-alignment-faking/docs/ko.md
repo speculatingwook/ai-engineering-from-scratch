@@ -104,7 +104,7 @@ al-faking-gap
 
 ## 더 읽을거리 (Further Reading)
 
-- [Greenblatt, Denison, Wright et al.(Alignment faking in large language models (arXiv:2412.14093)](https://arxiv.org/abs/2412.14093)) 정전적인 2024년 입증
-- [Anthropic Alignment(2025 training-time mitigations followup](https://alignment.anthropic.com/2025/automated-researchers-sabotage/)) 순응-간극-손실과 충실한-CoT 결과
-- [Hubinger(the 2019 mesa-optimization paper (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820)) 이론적 선행 연구
-- [Meinke et al.(In-context scheming (Lesson 8, arXiv:2412.04984)](https://arxiv.org/abs/2412.04984)) 동반하는 유발된-기만 입증
+- [Greenblatt, Denison, Wright et al.: Alignment faking in large language models (arXiv:2412.14093)](https://arxiv.org/abs/2412.14093) 정전적인 2024년 입증
+- [Anthropic Alignment: 2025 training-time mitigations followup](https://alignment.anthropic.com/2025/automated-researchers-sabotage/) 순응-간극-손실과 충실한-CoT 결과
+- [Hubinger: the 2019 mesa-optimization paper (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820) 이론적 선행 연구
+- [Meinke et al.: In-context scheming (Lesson 8, arXiv:2412.04984)](https://arxiv.org/abs/2412.04984) 동반하는 유발된-기만 입증

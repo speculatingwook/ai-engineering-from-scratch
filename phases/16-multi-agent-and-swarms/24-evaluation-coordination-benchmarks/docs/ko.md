@@ -1,6 +1,6 @@
 # 평가와 협응 벤치마크 (Evaluation and Coordination Benchmarks)
 
-> 2025-2026년의 다섯 벤치마크(benchmark)가 다중 에이전트(multi-agent) 평가 공간을 다룬다. **MultiAgentBench / MARBLE** (ACL 2025, arXiv:2503.01935)은 마일스톤 KPI로 별/사슬/트리/그래프 토폴로지(topology)를 평가한다. **그래프가 연구에 가장 좋고**, 인지적 계획 수립이 마일스톤 달성을 약 3% 더한다. **COMMA**는 멀티모달 비대칭 정보 협응을 평가한다. GPT-4o를 포함한 최첨단 모델들이 무작위 베이스라인(baseline)을 이기는 데 고전한다. **MedAgentBoard** (arXiv:2505.12371)는 네 가지 의료 과제 범주를 다루며, 다중 에이전트가 단일 LLM을 지배하지 못한다는 것을 종종 발견한다. **AgentArch** (arXiv:2509.10769)는 도구 사용 + 메모리 + 오케스트레이션(orchestration)을 결합한 엔터프라이즈 에이전트(agent) 아키텍처를 벤치마크한다. **SWE-bench Pro** ([arXiv:2509.16941](https://arxiv.org/abs/2509.16941))는 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41개 저장소의 1865개 문제를 가진다. 프런티어 모델들은 Pro에서 약 23%를, Verified에서 70%+를 받는다. 오염(contamination)에 대한 현실 점검이다. Claude Opus 4.7(2026년 4월)은 명시적 에이전트 팀 협응으로 Pro에서 **64.3%**로 보고된다(아직 Anthropic 1차 출처가 발표되지 않음: 예비적으로 취급). Verdent(에이전트 스캐폴드)는 Verified에서 **76.1% pass@1**을 달성한다([Verdent technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report)). **AAAI 2026 Bridge Program WMAC** (https://multiagents.org/2026/)는 2026년 커뮤니티 초점이다. 이 레슨은 MARBLE의 지표를 토대로, 토폴로지 대 지표 스윕을 실행하고, "SWE-bench Verified를 그냥 통과하는 것은 일반화의 증거가 아니다" 규칙을 못 박는다.
+> 2025-2026년의 다섯 벤치마크(benchmark)가 다중 에이전트(multi-agent) 평가 공간을 다룬다. **MultiAgentBench / MARBLE** (ACL 2025, arXiv:2503.01935)은 마일스톤 KPI로 별/사슬/트리/그래프 토폴로지(topology)를 평가한다. **그래프가 연구에 가장 좋고**, 인지적 계획 수립이 마일스톤 달성을 약 3% 더한다. **COMMA**는 멀티모달 비대칭 정보 협응을 평가한다. GPT-4o를 포함한 최첨단 모델들이 무작위 베이스라인(baseline)을 이기는 데 고전한다. **MedAgentBoard** (arXiv:2505.12371)는 네 가지 의료 과제 범주를 다루며, 다중 에이전트가 단일 LLM을 지배하지 못한다는 것을 종종 발견한다. **AgentArch** (arXiv:2509.10769)는 도구 사용 + 메모리 + 오케스트레이션(orchestration)을 결합한 엔터프라이즈 에이전트(agent) 아키텍처를 벤치마크한다. **SWE-bench Pro** ([arXiv:2509.16941](https://arxiv.org/abs/2509.16941)는 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41개 저장소의 1865개 문제를 가진다. 프런티어 모델들은 Pro에서 약 23%를, Verified에서 70%+를 받는다. 오염(contamination)에 대한 현실 점검이다. Claude Opus 4.7(2026년 4월)은 명시적 에이전트 팀 협응으로 Pro에서 **64.3%**로 보고된다(아직 Anthropic 1차 출처가 발표되지 않음: 예비적으로 취급). Verdent(에이전트 스캐폴드)는 Verified에서 **76.1% pass@1**을 달성한다([Verdent technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report). **AAAI 2026 Bridge Program WMAC** (https://multiagents.org/2026/)는 2026년 커뮤니티 초점이다. 이 레슨은 MARBLE의 지표를 토대로, 토폴로지 대 지표 스윕을 실행하고, "SWE-bench Verified를 그냥 통과하는 것은 일반화의 증거가 아니다" 규칙을 못 박는다.
 
 **Type:** Learn
 **Languages:** Python (stdlib)
@@ -57,8 +57,8 @@ arXiv:2509.16941. 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41
 
 2026년 4월 점수:
 - Pro에서의 Claude Opus 4.7: **64.3%**(명시적 에이전트 팀 협응으로 보고됨. 아직 Anthropic 1차 출처가 발표되지 않음: 예비적으로 취급).
-- Verified에서의 Verdent(에이전트 스캐폴드): **76.1% pass@1**([technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report)).
-- 에이전트 스캐폴딩 없는 Pro에서의 프런티어 원시 점수: 약 23-35%([SWE-bench Pro paper](https://arxiv.org/abs/2509.16941)).
+- Verified에서의 Verdent(에이전트 스캐폴드): **76.1% pass@1**([Verdent technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report).
+- 에이전트 스캐폴딩 없는 Pro에서의 프런티어 원시 점수: 약 23-35%([arXiv:2509.16941](https://arxiv.org/abs/2509.16941).
 
 요점: "우리가 SWE-bench Verified를 이겼다"는 더 이상 능력의 증거가 아니다. Pro가 현재의 관문 테스트다. 에이전트 팀 스캐폴딩은 Pro에서 측정 가능한 이득(약 30-40점 차이)을 낸다. 이것이 2026년 다중 에이전트 협응에 대한 가장 강력한 경험적 논거 중 하나다.
 

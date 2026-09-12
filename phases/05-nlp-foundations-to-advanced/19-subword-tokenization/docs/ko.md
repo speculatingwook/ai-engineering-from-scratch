@@ -182,5 +182,5 @@ Refuse to train a character-coverage <0.995 tokenizer on corpora with rare-scrip
 - [Sennrich, Haddow, Birch (2015). Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909): BPE 논문.
 - [Kudo (2018). Subword Regularization with Unigram Language Model](https://arxiv.org/abs/1804.10959): Unigram 논문.
 - [Kudo, Richardson (2018). SentencePiece: A simple and language independent subword tokenizer](https://arxiv.org/abs/1808.06226): 라이브러리.
-- [Hugging Face(Summary of the tokenizers](https://huggingface.co/docs/transformers/tokenizer_summary)) 간결한 레퍼런스.
+- [Hugging Face: Summary of the tokenizers](https://huggingface.co/docs/transformers/tokenizer_summary) 간결한 레퍼런스.
 - [OpenAI tiktoken repo](https://github.com/openai/tiktoken): 쿡북 + 인코딩 목록.

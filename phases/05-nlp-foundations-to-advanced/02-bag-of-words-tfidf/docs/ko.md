@@ -259,6 +259,6 @@ Example output:
 
 ## 더 읽을거리 (Further Reading)
 
-- [scikit-learn(feature extraction from text](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction)) 표준 API 레퍼런스, 모든 손잡이에 대한 설명 포함.
+- [scikit-learn: feature extraction from text](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction) 표준 API 레퍼런스, 모든 손잡이에 대한 설명 포함.
 - [Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval](https://www.sciencedirect.com/science/article/pii/0306457388900210): TF-IDF를 10년간 기본값으로 만든 논문.
-- ["Why TF-IDF Still Beats Embeddings"(Ashfaque Thonikkadavan (Medium)](https://medium.com/@cmtwskb/why-tf-idf-still-beats-embeddings-ad85c123e1b2)) 옛 방법이 언제, 왜 이기는지에 대한 2026년의 관점.
+- ["Why TF-IDF Still Beats Embeddings": Ashfaque Thonikkadavan (Medium)](https://medium.com/@cmtwskb/why-tf-idf-still-beats-embeddings-ad85c123e1b2) 옛 방법이 언제, 왜 이기는지에 대한 2026년의 관점.

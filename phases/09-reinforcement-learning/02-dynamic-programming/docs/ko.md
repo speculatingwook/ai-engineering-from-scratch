@@ -201,7 +201,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutton & Barto (2018). Ch. 4(Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf)) 정책 반복과 가치 반복의 정전(正典)적 제시.
+- [Sutton & Barto (2018). Ch. 4: Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) 정책 반복과 가치 반복의 정전(正典)적 제시.
 - [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html): 축약 사상(contraction-mapping) 논증의 엄밀한 다룸.
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887): 수정 정책 반복과 그 수렴 분석.
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/): 원조 정책 반복 논문.

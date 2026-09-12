@@ -132,9 +132,9 @@ gpu-memory-breakdown
 
 ## 더 읽을거리 (Further Reading)
 
-- [VRLA Tech(LLM Quantization 2026](https://vrlatech.com/llm-quantization-explained-int4-int8-fp8-awq-and-gptq-in-2026/)) 비교 벤치마크.
-- [Jarvis Labs(vLLM Quantization Complete Guide](https://jarvislabs.ai/blog/vllm-quantization-complete-guide-benchmarks)) 포맷별 처리량 숫자.
-- [PremAI(GGUF vs AWQ vs GPTQ vs bitsandbytes 2026](https://blog.premai.io/llm-quantization-guide-gguf-vs-awq-vs-gptq-vs-bitsandbytes-compared-2026/)) 포맷별 선택.
-- [vLLM docs(Quantization](https://docs.vllm.ai/en/latest/features/quantization/index.html)) 지원 포맷과 플래그.
+- [VRLA Tech: LLM Quantization 2026](https://vrlatech.com/llm-quantization-explained-int4-int8-fp8-awq-and-gptq-in-2026/) 비교 벤치마크.
+- [Jarvis Labs: vLLM Quantization Complete Guide](https://jarvislabs.ai/blog/vllm-quantization-complete-guide-benchmarks) 포맷별 처리량 숫자.
+- [PremAI: GGUF vs AWQ vs GPTQ vs bitsandbytes 2026](https://blog.premai.io/llm-quantization-guide-gguf-vs-awq-vs-gptq-vs-bitsandbytes-compared-2026/) 포맷별 선택.
+- [vLLM docs: Quantization](https://docs.vllm.ai/en/latest/features/quantization/index.html) 지원 포맷과 플래그.
 - [AWQ paper (arXiv:2306.00978)](https://arxiv.org/abs/2306.00978): 원본 AWQ 정식화.
 - [GPTQ paper (arXiv:2210.17323)](https://arxiv.org/abs/2210.17323): 원본 GPTQ 정식화.

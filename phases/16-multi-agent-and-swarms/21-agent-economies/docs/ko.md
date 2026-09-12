@@ -152,8 +152,8 @@ python3 code/main.py
 ## 더 읽을거리 (Further Reading)
 
 - [The Agent Economy](https://arxiv.org/abs/2602.14219): 5계층 에이전트 경제 스택의 2026년 서베이
-- [Google Research(Mechanism design for large language models](https://research.google/blog/mechanism-design-for-large-language-models/)) 단조 집계를 갖춘 토큰 경매
-- [AAMAS 2025(decentralized LaMAS](https://www.ifaamas.org/Proceedings/aamas2025/pdfs/p2896.pdf)) 섀플리 가치 기여 귀속
+- [Google Research: Mechanism design for large language models](https://research.google/blog/mechanism-design-for-large-language-models/) 단조 집계를 갖춘 토큰 경매
+- [AAMAS 2025: decentralized LaMAS](https://www.ifaamas.org/Proceedings/aamas2025/pdfs/p2896.pdf) 섀플리 가치 기여 귀속
 - [Bittensor TAO documentation](https://docs.bittensor.com/): 서브넷 구조와 보상 분배
 - [Fetch.ai / ASI Alliance](https://fetch.ai/): ASI-1 Mini LLM과 FET 토큰
 - [W3C Decentralized Identifiers (DIDs) spec](https://www.w3.org/TR/did-core/): 신원 기반

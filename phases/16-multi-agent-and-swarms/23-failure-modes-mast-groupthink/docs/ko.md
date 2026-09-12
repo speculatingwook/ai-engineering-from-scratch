@@ -200,8 +200,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계, NeurIPS 2025
+- [Cemri et al.: Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) MAST 분류 체계, NeurIPS 2025
 - [Groupthink failures in multi-agent LLMs](https://arxiv.org/abs/2508.05687): 단일 문화, 동조, 그리고 다섯 계열 분류 체계
-- [STRATUS(specialized agents for MAS incident response](https://neurips.cc/)) NeurIPS 2025 프로시딩 항목(탐지 + 진단 + 검증)
-- [Release It!(stability patterns (Nygard)](https://pragprog.com/titles/mnee2/release-it-second-edition/)) 정석 회로 차단기 참조
-- [Anthropic(Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 프로덕션 실패 모드 노트
+- [STRATUS: specialized agents for MAS incident response](https://neurips.cc/) NeurIPS 2025 프로시딩 항목(탐지 + 진단 + 검증)
+- [Release It!: stability patterns (Nygard)](https://pragprog.com/titles/mnee2/release-it-second-edition/) 정석 회로 차단기 참조
+- [Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) 프로덕션 실패 모드 노트

@@ -157,4 +157,4 @@ Flux 특화: Niels의 Flux-on-8GB 노트북은 기저를 4비트로 양자화한
 - [Ye et al. (2023). IP-Adapter: Text Compatible Image Prompt Adapter](https://arxiv.org/abs/2308.06721) — IP-Adapter.
 - [Mou et al. (2023). T2I-Adapter: Learning Adapters to Dig Out More Controllable Ability](https://arxiv.org/abs/2302.08453): ControlNet의 더 가벼운 대안.
 - [Ruiz et al. (2023). DreamBooth: Fine Tuning Text-to-Image Diffusion Models for Subject-Driven Generation](https://arxiv.org/abs/2208.12242) — DreamBooth.
-- [HuggingFace Diffusers(ControlNet / LoRA / IP-Adapter docs](https://huggingface.co/docs/diffusers/training/controlnet)) 레퍼런스 파이프라인.
+- [HuggingFace Diffusers: ControlNet / LoRA / IP-Adapter docs](https://huggingface.co/docs/diffusers/training/controlnet) 레퍼런스 파이프라인.

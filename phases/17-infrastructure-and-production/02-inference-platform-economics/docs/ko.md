@@ -131,5 +131,5 @@ cost-per-token
 - [Modal Pricing](https://modal.com/pricing): 초당 GPU 요율과 무료 등급.
 - [Together AI Pricing](https://www.together.ai/pricing): 모델 카탈로그와 토큰당 요율.
 - [Anyscale Pricing](https://www.anyscale.com/pricing): RayTurbo와 매니지드 Ray 가격.
-- [Northflank(Fireworks AI Alternatives](https://northflank.com/blog/7-best-fireworks-ai-alternatives-for-inference)) 비교 평가.
-- [Infrabase(AI Inference API Providers 2026](https://infrabase.ai/blog/ai-inference-api-providers-compared)) 벤더 지형.
+- [Northflank: Fireworks AI Alternatives](https://northflank.com/blog/7-best-fireworks-ai-alternatives-for-inference) 비교 평가.
+- [Infrabase: AI Inference API Providers 2026](https://infrabase.ai/blog/ai-inference-api-providers-compared) 벤더 지형.

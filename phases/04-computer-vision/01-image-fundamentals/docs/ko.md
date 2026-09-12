@@ -407,7 +407,7 @@ print(f"\nbatched shape: {tuple(batch.shape)}   # (N, C, H, W) — ready for a m
 
 ## 더 읽을거리 (Further Reading)
 
-- [Charles Poynton(A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf)) 왜 그렇게 많은 색 공간이 있고 각각이 언제 중요한지에 대한 가장 명료한 기술적 해설
+- [Charles Poynton: A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf) 왜 그렇게 많은 색 공간이 있고 각각이 언제 중요한지에 대한 가장 명료한 기술적 해설
 - [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html): 프로덕션에서 실제로 조립하게 될 변환들의 전체 파이프라인
 - [How JPEG Works (Colt McAnlis)](https://www.youtube.com/watch?v=F1kYBnY6mwg): 크로마 서브샘플링, DCT, 그리고 JPEG가 왜 RGB가 아니라 YCbCr을 인코딩하는지에 대한 날카로운 시각적 투어
 - [ImageNet Preprocessing Conventions (torchvision models)](https://pytorch.org/vision/stable/models.html): `mean=[0.485, 0.456, 0.406]`의 출처이자 동물원의 모든 모델이 왜 그것을 기대하는지에 대한 진실의 원천

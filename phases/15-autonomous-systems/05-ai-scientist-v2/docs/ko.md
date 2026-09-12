@@ -109,4 +109,4 @@ mx-research-loop
 - [Sakana blog on the Nature 2026 publication](https://sakana.ai/ai-scientist-nature/): 동료 심사 맥락을 담은 벤더 요약.
 - [Beel et al. (2025). Independent evaluation of The AI Scientist](https://arxiv.org/abs/2502.14297): 외부 평가 수치.
 - [Sakana AI Scientist v1 paper](https://arxiv.org/abs/2408.06292): 템플릿화된 선행 시스템.
-- [Anthropic(Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)) 개방형 연구 에이전트에 대한 더 넓은 규정.
+- [Anthropic: Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) 개방형 연구 에이전트에 대한 더 넓은 규정.

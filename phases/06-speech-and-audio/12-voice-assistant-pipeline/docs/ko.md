@@ -173,9 +173,9 @@ while True:
 
 ## 더 읽을거리 (Further Reading)
 
-- [LiveKit(voice agent quickstart](https://docs.livekit.io/agents/)) 프로덕션급 레퍼런스.
-- [Pipecat(voice agent examples](https://github.com/pipecat-ai/pipecat)) DIY 친화적 프레임워크.
+- [LiveKit: voice agent quickstart](https://docs.livekit.io/agents/) 프로덕션급 레퍼런스.
+- [Pipecat: voice agent examples](https://github.com/pipecat-ai/pipecat) DIY 친화적 프레임워크.
 - [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime): 매니지드 음성 네이티브 경로.
 - [Kyutai Moshi](https://github.com/kyutai-labs/moshi): 풀 듀플렉스 레퍼런스 (레슨 15).
 - [Porcupine wake-word](https://picovoice.ai/products/porcupine/): 웨이크 워드 게이팅.
-- [Anthropic(tool use guide](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)) LLM 함수 호출.
+- [Anthropic: tool use guide](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) LLM 함수 호출.

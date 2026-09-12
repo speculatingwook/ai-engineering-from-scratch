@@ -157,8 +157,8 @@ tp-parallel-fanout
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Parallel function calling](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling)) 기본 동작과 옵트아웃 플래그
-- [Anthropic(Tool use: implementing tool use](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implementing-tool-use)) `disable_parallel_tool_use`와 결과 배치(batching)
-- [Google(Gemini function calling parallel section](https://ai.google.dev/gemini-api/docs/function-calling)) Gemini 3부터의 id 상관 병렬 호출
-- [OpenAI(Streaming responses with tools](https://platform.openai.com/docs/api-reference/responses-streaming)) OpenAI 스트림을 위한 청크 인자 재조립
-- [Anthropic(Streaming messages](https://docs.anthropic.com/en/api/messages-streaming)) `input_json_delta`를 가진 `content_block_delta`
+- [OpenAI: Parallel function calling](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling) 기본 동작과 옵트아웃 플래그
+- [Anthropic: Tool use: implementing tool use](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implementing-tool-use) `disable_parallel_tool_use`와 결과 배치(batching)
+- [Google: Gemini function calling parallel section](https://ai.google.dev/gemini-api/docs/function-calling) Gemini 3부터의 id 상관 병렬 호출
+- [OpenAI: Streaming responses with tools](https://platform.openai.com/docs/api-reference/responses-streaming) OpenAI 스트림을 위한 청크 인자 재조립
+- [Anthropic: Streaming messages](https://docs.anthropic.com/en/api/messages-streaming) `input_json_delta`를 가진 `content_block_delta`

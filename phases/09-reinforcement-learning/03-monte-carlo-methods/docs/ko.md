@@ -201,7 +201,7 @@ Refuse to run MC on non-episodic tasks without a finite horizon cap. Refuse to r
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutton & Barto (2018). Ch. 5(Monte Carlo Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 정전적 다룸.
+- [Sutton & Barto (2018). Ch. 5: Monte Carlo Methods](http://incompleteideas.net/book/RLbook2020.pdf) 정전적 다룸.
 - [Singh & Sutton (1996). Reinforcement Learning with Replacing Eligibility Traces](https://link.springer.com/article/10.1007/BF00114726): 첫-방문 대 모든-방문 분석.
 - [Precup, Sutton, Singh (2000). Eligibility Traces for Off-Policy Policy Evaluation](http://incompleteideas.net/papers/PSS-00.pdf): 오프-폴리시 MC와 분산 제어.
 - [Mahmood et al. (2014). Weighted Importance Sampling for Off-Policy Learning](https://arxiv.org/abs/1404.6362): 현대의 저분산 IS 추정기.

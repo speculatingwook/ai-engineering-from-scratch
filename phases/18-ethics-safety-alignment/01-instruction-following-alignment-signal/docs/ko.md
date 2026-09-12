@@ -117,7 +117,7 @@ al-instruct-pipeline
 
 ## 더 읽을거리 (Further Reading)
 
-- [Ouyang et al.(Training language models to follow instructions with human feedback (arXiv:2203.02155)](https://arxiv.org/abs/2203.02155)) InstructGPT 논문, 이후 모든 RLHF 파이프라인의 토대
-- [Stiennon et al.(Learning to summarize from human feedback (arXiv:2009.01325)](https://arxiv.org/abs/2009.01325)) 요약을 위한 RLHF의 선행 연구
-- [Christiano et al.(Deep reinforcement learning from human preferences (arXiv:1706.03741)](https://arxiv.org/abs/1706.03741)) 원조 선호 기반 RL 정식화
-- [Bai et al.(Training a Helpful and Harmless Assistant with RLHF (arXiv:2204.05862)](https://arxiv.org/abs/2204.05862)) Anthropic의 InstructGPT 파이프라인 HH 확장
+- [Ouyang et al.: Training language models to follow instructions with human feedback (arXiv:2203.02155)](https://arxiv.org/abs/2203.02155) InstructGPT 논문, 이후 모든 RLHF 파이프라인의 토대
+- [Stiennon et al.: Learning to summarize from human feedback (arXiv:2009.01325)](https://arxiv.org/abs/2009.01325) 요약을 위한 RLHF의 선행 연구
+- [Christiano et al.: Deep reinforcement learning from human preferences (arXiv:1706.03741)](https://arxiv.org/abs/1706.03741) 원조 선호 기반 RL 정식화
+- [Bai et al.: Training a Helpful and Harmless Assistant with RLHF (arXiv:2204.05862)](https://arxiv.org/abs/2204.05862) Anthropic의 InstructGPT 파이프라인 HH 확장

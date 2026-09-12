@@ -106,7 +106,7 @@ an-echoleak-chain
 
 ## 더 읽을거리 (Further Reading)
 
-- [Aim Labs(EchoLeak writeup (June 2025)](https://www.aim.security/lp/aim-labs-echoleak-blogpost)) CVE 공개
-- [Aim Labs(LLM Scope Violation framework](https://arxiv.org/html/2509.10540v1)) 위협 모델 프레임워크
+- [Aim Labs: EchoLeak writeup (June 2025)](https://www.aim.security/lp/aim-labs-echoleak-blogpost) CVE 공개
+- [Aim Labs: LLM Scope Violation framework](https://arxiv.org/html/2509.10540v1) 위협 모델 프레임워크
 - [Microsoft MSRC CVE-2025-32711](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-32711): CVE 기록
-- [OWASP(LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/)) LLM01 프롬프트 인젝션
+- [OWASP: LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/) LLM01 프롬프트 인젝션

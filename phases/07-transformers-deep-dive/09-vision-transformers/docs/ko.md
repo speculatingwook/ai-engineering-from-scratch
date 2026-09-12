@@ -154,5 +154,3 @@ cls_emb = out[:, 0]                       # image representation
 - [Liu et al. (2021). Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030) — Swin.
 - [Oquab et al. (2023). DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193) — DINOv2.
 - [Darcet et al. (2023). Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588): DINOv2를 위한 레지스터 토큰 해결책.
-</content>
-</invoke>

@@ -233,4 +233,4 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 - [Leviathan et al. (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192): 추측 디코딩.
 - [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077): 레슨이 인용하는 통합 드래프트 접근에 대한 EAGLE-1/2 논문.
 - [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774): EAGLE과 함께 언급된 Medusa 접근.
-- [vLLM docs(PagedAttention](https://docs.vllm.ai/en/latest/design/kernel/paged_attention.html)) 16토큰 블록과 페이지 테이블 설계에 대한 표준 심층 해설.
+- [vLLM docs: PagedAttention](https://docs.vllm.ai/en/latest/design/kernel/paged_attention.html) 16토큰 블록과 페이지 테이블 설계에 대한 표준 심층 해설.

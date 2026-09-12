@@ -107,8 +107,8 @@ scalable-oversight
 
 ## 더 읽을거리 (Further Reading)
 
-- [Burns et al.(Weak-to-Strong Generalization (OpenAI 2023)](https://openai.com/index/weak-to-strong-generalization/)) W2SG 논문
-- [Irving, Christiano, Amodei(AI safety via debate (arXiv:1805.00899)](https://arxiv.org/abs/1805.00899)) 토론 메커니즘
-- [Leike et al.(Scalable agent alignment via reward modeling (arXiv:1811.07871)](https://arxiv.org/abs/1811.07871)) 재귀적 보상 모델링
-- [Khan et al.(Debating with More Persuasive LLMs Leads to More Truthful Answers (arXiv:2402.06782)](https://arxiv.org/abs/2402.06782)) 더 강한 토론자를 사용한 토론에 대한 2024년 경험적 연구
-- [Lang et al.(Debate Helps Weak-to-Strong Generalization (arXiv:2501.13124)](https://arxiv.org/abs/2501.13124)) 토론 + W2SG의 2025년 결합
+- [Burns et al.: Weak-to-Strong Generalization (OpenAI 2023)](https://openai.com/index/weak-to-strong-generalization/) W2SG 논문
+- [Irving, Christiano, Amodei: AI safety via debate (arXiv:1805.00899)](https://arxiv.org/abs/1805.00899) 토론 메커니즘
+- [Leike et al.: Scalable agent alignment via reward modeling (arXiv:1811.07871)](https://arxiv.org/abs/1811.07871) 재귀적 보상 모델링
+- [Khan et al.: Debating with More Persuasive LLMs Leads to More Truthful Answers (arXiv:2402.06782)](https://arxiv.org/abs/2402.06782) 더 강한 토론자를 사용한 토론에 대한 2024년 경험적 연구
+- [Lang et al.: Debate Helps Weak-to-Strong Generalization (arXiv:2501.13124)](https://arxiv.org/abs/2501.13124) 토론 + W2SG의 2025년 결합

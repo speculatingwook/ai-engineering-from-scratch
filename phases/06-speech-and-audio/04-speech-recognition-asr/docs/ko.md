@@ -181,5 +181,5 @@ for chunk in streaming_audio():
 - [Graves et al. (2006). Connectionist Temporal Classification](https://www.cs.toronto.edu/~graves/icml_2006.pdf): CTC 논문.
 - [Graves (2012). Sequence Transduction with RNNs](https://arxiv.org/abs/1211.3711): RNN-T 논문.
 - [Radford et al. / OpenAI (2022). Whisper: Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356): 2022년의 정전 격 논문; 2024년 v3-turbo 확장.
-- [NVIDIA NeMo(Parakeet-TDT card](https://huggingface.co/nvidia/parakeet-tdt-1.1b)) 2026년 Open ASR Leaderboard 선두.
-- [Hugging Face(Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard)) 25개 이상 모델에 걸친 라이브 벤치마크.
+- [NVIDIA NeMo: Parakeet-TDT card](https://huggingface.co/nvidia/parakeet-tdt-1.1b) 2026년 Open ASR Leaderboard 선두.
+- [Hugging Face: Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard) 25개 이상 모델에 걸친 라이브 벤치마크.

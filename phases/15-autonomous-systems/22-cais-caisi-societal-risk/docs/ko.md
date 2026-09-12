@@ -117,7 +117,7 @@ a5-four-risks
 ## 더 읽을거리 (Further Reading)
 
 - [Center for AI Safety](https://safe.ai/): 네 가지 위험 프레임워크의 기관 본거지.
-- [CAIS(AI Risks that Could Lead to Catastrophe](https://safe.ai/ai-risk)) 네 가지 위험 논문.
-- [CAIS(May 2023 statement on extinction risk](https://safe.ai/statement-on-ai-risk)) 짧은 공동 성명.
+- [CAIS: AI Risks that Could Lead to Catastrophe](https://safe.ai/ai-risk) 네 가지 위험 논문.
+- [CAIS: May 2023 statement on extinction risk](https://safe.ai/statement-on-ai-risk) 짧은 공동 성명.
 - [NIST CAISI](https://www.nist.gov/caisi): 정부 대상 AI 표준 및 혁신 센터.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 연구소 수준 약속을 사회적 규모 프레이밍과 연결한다.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 연구소 수준 약속을 사회적 규모 프레이밍과 연결한다.

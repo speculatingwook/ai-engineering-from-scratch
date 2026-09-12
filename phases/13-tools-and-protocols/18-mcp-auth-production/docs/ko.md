@@ -299,9 +299,9 @@ t3-jwks-rotate
 ## 더 읽을거리 (Further Reading)
 
 - [MCP(Authorization spec (2025-11-25)](https://modelcontextprotocol.io/specification/draft/basic/authorization))이 레슨이 구현하는 MCP 인증 프로파일
-- [RFC 8414(OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)) 디스커버리 계약
+- [RFC 8414: OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414) 디스커버리 계약
 - [RFC 7591 — OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591) — DCR
-- [RFC 7636(Proof Key for Code Exchange (PKCE)](https://datatracker.ietf.org/doc/html/rfc7636)) 퍼블릭 클라이언트 소유 증명
-- [RFC 8707(Resource Indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707)) 오디언스 고정
-- [RFC 9728(OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728)) 리소스 서버 디스커버리
+- [RFC 7636: Proof Key for Code Exchange (PKCE)](https://datatracker.ietf.org/doc/html/rfc7636) 퍼블릭 클라이언트 소유 증명
+- [RFC 8707: Resource Indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707) 오디언스 고정
+- [RFC 9728: OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728) 리소스 서버 디스커버리
 - [OAuth 2.1 draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1): 통합된 OAuth 기반

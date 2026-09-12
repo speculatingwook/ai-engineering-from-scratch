@@ -176,4 +176,3 @@ The chief that well shame and hath been his friends,
 ## 더 읽을거리 (Further Reading)
 
 - [The Annotated Transformer (Harvard NLP)](https://nlp.seas.harvard.edu/annotated-transformer/): 고전적인 주석 달린 구현.
-</content>

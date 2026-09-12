@@ -101,8 +101,8 @@ a5-tracked-vs-research
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Updating our Preparedness Framework](https://openai.com/index/updating-our-preparedness-framework/)) v2 발표.
-- [OpenAI(Preparedness Framework v2 PDF](https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf)) 전체 문서.
-- [DeepMind(Strengthening our Frontier Safety Framework](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) FSF v3 발표.
-- [DeepMind(Updating the Frontier Safety Framework (April 2026)](https://deepmind.google/blog/updating-the-frontier-safety-framework/)) Tracked Capability Levels 추가.
+- [OpenAI: Updating our Preparedness Framework](https://openai.com/index/updating-our-preparedness-framework/) v2 발표.
+- [OpenAI: Preparedness Framework v2 PDF](https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf) 전체 문서.
+- [DeepMind: Strengthening our Frontier Safety Framework](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) FSF v3 발표.
+- [DeepMind: Updating the Frontier Safety Framework (April 2026)](https://deepmind.google/blog/updating-the-frontier-safety-framework/) Tracked Capability Levels 추가.
 - [Gemini 3 Pro FSF Report](https://storage.googleapis.com/deepmind-media/gemini/gemini_3_pro_fsf_report.pdf): FSF 형식 Risk Report의 예시.

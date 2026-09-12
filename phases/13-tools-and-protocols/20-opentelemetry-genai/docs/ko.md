@@ -157,8 +157,8 @@ t3-span-waterfall
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenTelemetry(GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/)) GenAI 스팬, 메트릭, 이벤트를 위한 표준 컨벤션
-- [OpenTelemetry(GenAI spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)) LLM 및 툴 실행 스팬 속성 목록
-- [OpenTelemetry(GenAI agent spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)) 에이전트 수준 `invoke_agent` 스팬
-- [open-telemetry/semantic-conventions(GenAI spans](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)) GitHub 호스팅 진실 소스
-- [Datadog(LLM OTel semantic convention](https://www.datadoghq.com/blog/llm-otel-semantic-convention/)) 프로덕션 통합 안내
+- [OpenTelemetry: GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/) GenAI 스팬, 메트릭, 이벤트를 위한 표준 컨벤션
+- [OpenTelemetry: GenAI spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/) LLM 및 툴 실행 스팬 속성 목록
+- [OpenTelemetry: GenAI agent spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/) 에이전트 수준 `invoke_agent` 스팬
+- [open-telemetry/semantic-conventions: GenAI spans](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md) GitHub 호스팅 진실 소스
+- [Datadog: LLM OTel semantic convention](https://www.datadoghq.com/blog/llm-otel-semantic-convention/) 프로덕션 통합 안내

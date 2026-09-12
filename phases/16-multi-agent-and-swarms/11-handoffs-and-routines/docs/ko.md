@@ -133,7 +133,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI cookbook(Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 레퍼런스 정식 설명
+- [OpenAI cookbook: Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) 레퍼런스 정식 설명
 - [OpenAI Swarm repo](https://github.com/openai/swarm): 원본 구현, 개념적 레퍼런스로 유지됨
 - [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): 세션과 추적을 갖춘 프로덕션 후속작
 - [Anthropic handoff-in-Claude notes](https://docs.anthropic.com/en/docs/claude-code): Claude Code 서브에이전트가 `Task`를 통해 핸드오프 유사 패턴을 사용하는 방식

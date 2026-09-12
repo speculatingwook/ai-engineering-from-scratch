@@ -109,8 +109,8 @@ memory-consolidation
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop)) 예산, 턴, 재개 시맨틱.
-- [Microsoft(Agent Framework: human-in-the-loop and checkpointing](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) RequestInfoEvent 형태.
-- [LangChain(The Runtime Behind Production Deep Agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents)) 구체적 런타임 요구사항.
+- [Anthropic: Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop) 예산, 턴, 재개 시맨틱.
+- [Microsoft: Agent Framework: human-in-the-loop and checkpointing](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) RequestInfoEvent 형태.
+- [LangChain: The Runtime Behind Production Deep Agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents) 구체적 런타임 요구사항.
 - [OpenAI Agents SDK + Temporal integration (Trigger.dev announcement)](https://trigger.dev): LLM 호출을 위한 액티비티 형태.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 35분 열화 참조.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 35분 열화 참조.

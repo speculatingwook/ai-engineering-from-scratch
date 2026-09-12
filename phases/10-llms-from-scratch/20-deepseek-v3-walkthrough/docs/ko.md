@@ -187,7 +187,7 @@ moe-routing
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437)) 전체 아키텍처, 학습, 결과 문서
+- [DeepSeek-AI: DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437) 전체 아키텍처, 학습, 결과 문서
 - [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3): config 파일과 배포(deployment) 메모
 - [DeepSeek-V2 paper (arXiv:2405.04434)](https://arxiv.org/abs/2405.04434): MLA를 도입한 전신
 - [DeepSeek-R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948): V3의 아키텍처에 대한 추론 학습 후속

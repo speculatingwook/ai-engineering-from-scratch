@@ -182,4 +182,4 @@ model = AutoModel.from_pretrained("meta-llama/Llama-3.2-3B")
 - [Peng et al. (2023). YaRN: Efficient Context Window Extension of Large Language Models](https://arxiv.org/abs/2309.00071): 최신 RoPE 스케일링.
 - [Chen et al. (2023). Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595): Meta의 Llama 2 장기 컨텍스트 논문.
 - [Ding et al. (2024). LongRoPE: Extending LLM Context Window Beyond 2 Million Tokens](https://arxiv.org/abs/2402.13753): Phi-3-Long이 쓰고 Use It 섹션에서 인용한 Microsoft 방법.
-- [HuggingFace Transformers(`modeling_rope_utils.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/modeling_rope_utils.py)) 모든 RoPE 스케일링 방식(default, linear, dynamic, YaRN, LongRoPE, Llama-3)의 프로덕션급 구현.
+- [HuggingFace Transformers: `modeling_rope_utils.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/modeling_rope_utils.py) 모든 RoPE 스케일링 방식(default, linear, dynamic, YaRN, LongRoPE, Llama-3)의 프로덕션급 구현.

@@ -129,7 +129,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic engineering(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 슈퍼바이저 패턴의 프로덕션 레퍼런스
+- [Anthropic engineering: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) 슈퍼바이저 패턴의 프로덕션 레퍼런스
 - [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 도구 호출 슈퍼바이저가 이제 권장 형태다
 - [LangGraph supervisor reference](https://reference.langchain.com/python/langgraph-supervisor): 레거시 헬퍼, 2026년 프로덕션에서 여전히 사용됨
-- [OpenAI cookbook(Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 핸드오프 기반 슈퍼바이저 변형
+- [OpenAI cookbook: Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) 핸드오프 기반 슈퍼바이저 변형

@@ -133,7 +133,7 @@ autoscaling
 
 - [KAI Scheduler GitHub](https://github.com/kai-scheduler/KAI-Scheduler): 설계 문서와 설정 예제.
 - [Karpenter Disruption Controls](https://karpenter.sh/docs/concepts/disruption/): 통합 정책 의미론과 GPU 안전 기본값.
-- [NVIDIA(Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/)) Dynamo Planner 스케일링 신호.
-- [Ray docs(KAI Scheduler for RayClusters](https://docs.ray.io/en/latest/cluster/kubernetes/k8s-ecosystem/kai-scheduler.html)) Ray 통합 패턴.
+- [NVIDIA: Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/) Dynamo Planner 스케일링 신호.
+- [Ray docs: KAI Scheduler for RayClusters](https://docs.ray.io/en/latest/cluster/kubernetes/k8s-ecosystem/kai-scheduler.html) Ray 통합 패턴.
 - [AWS EKS Compute and Autoscaling Best Practices](https://docs.aws.amazon.com/eks/latest/best-practices/aiml-compute.html): 매니지드 Kubernetes 특화 가이드.
 - [llm-d GitHub](https://github.com/llm-d/llm-d): Workload Variant Autoscaler 설계.

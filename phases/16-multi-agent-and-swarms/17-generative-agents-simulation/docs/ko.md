@@ -144,7 +144,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Park et al.(Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442)) 레퍼런스 아키텍처
+- [Park et al.: Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442) 레퍼런스 아키텍처
 - [UIST '23 paper page](https://dl.acm.org/doi/10.1145/3586183.3606763): 출판 장소
 - [Smallville code release](https://github.com/joonspk-research/generative_agents): 레퍼런스 파이썬 구현
-- [Hayes-Roth 1985(A Blackboard Architecture for Control](https://www.sciencedirect.com/science/article/abs/pii/0004370285900639)) 구조화 메모리 에이전트의 선행 기술
+- [Hayes-Roth 1985: A Blackboard Architecture for Control](https://www.sciencedirect.com/science/article/abs/pii/0004370285900639) 구조화 메모리 에이전트의 선행 기술

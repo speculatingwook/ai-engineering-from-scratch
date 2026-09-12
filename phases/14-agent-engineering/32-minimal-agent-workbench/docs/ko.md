@@ -124,7 +124,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [agents.md(the open spec](https://agents.md/)) Cursor, Codex, Claude Code, Copilot, Gemini, OpenCode가 채택
+- [agents.md: the open spec](https://agents.md/) Cursor, Codex, Claude Code, Copilot, Gemini, OpenCode가 채택
 - [Augment Code, A good AGENTS.md is a model upgrade. A bad one is worse than no docs at all](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files): 측정된 품질 도약
 - [Blake Crosley, AGENTS.md Patterns: What Actually Changes Agent Behavior](https://blakecrosley.com/blog/agents-md-patterns): 경험적으로 무엇이 작동하고 무엇이 안 되는지
 - [Datadog Frontend, Steering AI Agents in Monorepos with AGENTS.md](https://dev.to/datadog-frontend-dev/steering-ai-agents-in-monorepos-with-agentsmd-13g0): 실전에서의 중첩 우선순위

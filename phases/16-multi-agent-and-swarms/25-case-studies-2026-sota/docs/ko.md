@@ -162,10 +162,10 @@ a5-orchestrator-scale
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 감독자-워커 프로덕션 참조
-- [MetaGPT(Meta Programming for Multi-Agent Collaborative Framework](https://arxiv.org/abs/2308.00352)) SOP 역할 분해
-- [ChatDev(Communicative Agents for Software Development](https://arxiv.org/abs/2307.07924)) 소통적 탈환각
-- [MacNet(scaling role-based agents to 1000+](https://arxiv.org/abs/2406.07155)) DAG 기반 확장
+- [Anthropic: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) 감독자-워커 프로덕션 참조
+- [MetaGPT: Meta Programming for Multi-Agent Collaborative Framework](https://arxiv.org/abs/2308.00352) SOP 역할 분해
+- [ChatDev: Communicative Agents for Software Development](https://arxiv.org/abs/2307.07924) 소통적 탈환각
+- [MacNet: scaling role-based agents to 1000+](https://arxiv.org/abs/2406.07155) DAG 기반 확장
 - [OpenClaw on Wikipedia](https://en.wikipedia.org/wiki/OpenClaw): 생태계 개요
 - [WMAC 2026](https://multiagents.org/2026/) — AAAI 2026 Bridge Program Workshop on Multi-Agent Coordination
 - [LangGraph docs](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 프로덕션 선두

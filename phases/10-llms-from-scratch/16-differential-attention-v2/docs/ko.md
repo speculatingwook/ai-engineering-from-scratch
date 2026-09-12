@@ -194,9 +194,9 @@ DIFF V2는 2026년 4월 기준으로 아직 모든 프로덕션 추론 서버에
 
 ## 더 읽을거리 (Further Reading)
 
-- [Ye et al.(Differential Transformer (arXiv:2410.05258, ICLR 2025)](https://arxiv.org/abs/2410.05258)) 노이즈 상쇄 이론과 긴 컨텍스트 절제를 담은 원조 논문
-- [Microsoft unilm(Differential Transformer V2 (Hugging Face blog, January 2026)](https://huggingface.co/blog/microsoft/diff-attn-v2)) 프로덕션 스택 재작성, 베이스라인 디코드에 맞고 FlashAttention 호환
+- [Ye et al.: Differential Transformer (arXiv:2410.05258, ICLR 2025)](https://arxiv.org/abs/2410.05258) 노이즈 상쇄 이론과 긴 컨텍스트 절제를 담은 원조 논문
+- [Microsoft unilm: Differential Transformer V2 (Hugging Face blog, January 2026)](https://huggingface.co/blog/microsoft/diff-attn-v2) 프로덕션 스택 재작성, 베이스라인 디코드에 맞고 FlashAttention 호환
 - [Understanding Differential Transformer Unchains Pretrained Self-Attentions (arXiv:2505.16333)](https://arxiv.org/abs/2505.16333): 왜 뺄셈이 사전 학습된 어텐션 구조를 복구하는지에 대한 이론적 분석
 - [Shared DIFF Transformer (arXiv:2501.17900)](https://arxiv.org/html/2501.17900): 파라미터 공유 변형
-- [Vaswani et al.(Attention Is All You Need (arXiv:1706.03762)](https://arxiv.org/abs/1706.03762)) DIFF가 빼는 대상인 베이스라인 Transformer
-- [Liu et al.(Lost in the Middle (arXiv:2307.03172)](https://arxiv.org/abs/2307.03172)) DIFF 어텐션이 겨냥하는 긴 컨텍스트 벤치마크
+- [Vaswani et al.: Attention Is All You Need (arXiv:1706.03762)](https://arxiv.org/abs/1706.03762) DIFF가 빼는 대상인 베이스라인 Transformer
+- [Liu et al.: Lost in the Middle (arXiv:2307.03172)](https://arxiv.org/abs/2307.03172) DIFF 어텐션이 겨냥하는 긴 컨텍스트 벤치마크

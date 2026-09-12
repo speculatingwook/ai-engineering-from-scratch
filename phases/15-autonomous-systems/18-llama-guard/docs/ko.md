@@ -122,8 +122,8 @@ a5-guard-sieve
 
 ## 더 읽을거리 (Further Reading)
 
-- [Inan et al.(Llama Guard: LLM-based Input-Output Safeguard](https://ai.meta.com/research/publications/llama-guard-llm-based-input-output-safeguard-for-human-ai-conversations/)) 원본 논문.
-- [Meta(Llama Guard 4 model card](https://www.llama.com/docs/model-cards-and-prompt-formats/llama-guard-4/)) 멀티모달, S1–S14 분류 체계.
+- [Inan et al.: Llama Guard: LLM-based Input-Output Safeguard](https://ai.meta.com/research/publications/llama-guard-llm-based-input-output-safeguard-for-human-ai-conversations/) 원본 논문.
+- [Meta: Llama Guard 4 model card](https://www.llama.com/docs/model-cards-and-prompt-formats/llama-guard-4/) 멀티모달, S1–S14 분류 체계.
 - [NVIDIA NeMo Guardrails (GitHub)](https://github.com/NVIDIA-NeMo/Guardrails): v0.20.0 2026년 1월.
-- [Huang et al.(Bypassing Prompt Injection and Jailbreak Detection in LLM Guardrails](https://arxiv.org/abs/2504.11168)) 가드 시스템 전반의 ASR 수치.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 분류기 더하기 런타임 프레이밍.
+- [Huang et al.: Bypassing Prompt Injection and Jailbreak Detection in LLM Guardrails](https://arxiv.org/abs/2504.11168) 가드 시스템 전반의 ASR 수치.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 분류기 더하기 런타임 프레이밍.

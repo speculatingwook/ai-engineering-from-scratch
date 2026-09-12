@@ -100,7 +100,7 @@ al-sleeper-trigger
 
 ## 더 읽을거리 (Further Reading)
 
-- [Hubinger et al.(Sleeper Agents (arXiv:2401.05566)](https://arxiv.org/abs/2401.05566)) 정전적인 2024년 입증 논문
-- [MacDiarmid et al.(Simple probes can catch sleeper agents (2024 Anthropic writeup)](https://www.anthropic.com/research/probes-catch-sleeper-agents)) 잔차 스트림 프로브 후속 연구
-- [Hubinger et al.(Risks from Learned Optimization (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820)) 레슨 6의 이론적 선행 연구
-- [Carlini et al.(Poisoning Web-Scale Training Datasets is Practical (arXiv:2302.10149)](https://arxiv.org/abs/2302.10149)) 의도적 구성 없이 백도어가 이식될 수 있는 방법
+- [Hubinger et al.: Sleeper Agents (arXiv:2401.05566)](https://arxiv.org/abs/2401.05566) 정전적인 2024년 입증 논문
+- [MacDiarmid et al.: Simple probes can catch sleeper agents (2024 Anthropic writeup)](https://www.anthropic.com/research/probes-catch-sleeper-agents) 잔차 스트림 프로브 후속 연구
+- [Hubinger et al.: Risks from Learned Optimization (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820) 레슨 6의 이론적 선행 연구
+- [Carlini et al.: Poisoning Web-Scale Training Datasets is Practical (arXiv:2302.10149)](https://arxiv.org/abs/2302.10149) 의도적 구성 없이 백도어가 이식될 수 있는 방법

@@ -114,7 +114,7 @@ al-control-protocol
 
 ## 더 읽을거리 (Further Reading)
 
-- [Greenblatt, Shlegeris, Sachan, Roger(AI Control (arXiv:2312.06942)](https://arxiv.org/abs/2312.06942)) 정전적인 ICML 2024 논문
-- [Redwood Research(Recent AI Control papers index](https://redwoodresearch.substack.com/)) 2024-2025 후속 연구
-- [UK AISI + METR(Control safety cases](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 프론티어 연구소를 위한 운영화
-- [Hubinger et al.(Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566)) 통제가 가정하는 위협 모델
+- [Greenblatt, Shlegeris, Sachan, Roger: AI Control (arXiv:2312.06942)](https://arxiv.org/abs/2312.06942) 정전적인 ICML 2024 논문
+- [Redwood Research: Recent AI Control papers index](https://redwoodresearch.substack.com/) 2024-2025 후속 연구
+- [UK AISI + METR: Control safety cases](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) 프론티어 연구소를 위한 운영화
+- [Hubinger et al.: Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566) 통제가 가정하는 위협 모델

@@ -220,7 +220,7 @@ Refuse any design that puts `answer` or `decision` before reasoning fields. Refu
 
 - [Willard, Louf (2023). Efficient Guided Generation for LLMs](https://arxiv.org/abs/2307.09702): Outlines 논문.
 - [XGrammar paper (2024)](https://arxiv.org/abs/2411.15100): 빠른 CFG 기반 제약 디코딩.
-- [vLLM(Structured Outputs](https://docs.vllm.ai/en/latest/features/structured_outputs.html)) 추론 서버 통합.
-- [OpenAI(Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs)) API 레퍼런스 + 주의점.
+- [vLLM: Structured Outputs](https://docs.vllm.ai/en/latest/features/structured_outputs.html) 추론 서버 통합.
+- [OpenAI: Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs) API 레퍼런스 + 주의점.
 - [Instructor library](https://python.useinstructor.com/): 프로바이더 전반에 걸친 Pydantic + 재시도.
 - [JSONSchemaBench (2025)](https://arxiv.org/abs/2501.10868): 6개 제약 디코딩 프레임워크 벤치마킹.

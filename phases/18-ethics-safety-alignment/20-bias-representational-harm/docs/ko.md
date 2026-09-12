@@ -93,7 +93,7 @@ an-bias-two-harms
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gallegos et al.(Bias and Fairness in LLMs: A Survey (arXiv:2309.00770, Computational Linguistics 2024)](https://arxiv.org/abs/2309.00770)) 대표 서베이
-- [An et al.(Intersectional resume-evaluation bias (PNAS Nexus, March 2025)](https://academic.oup.com/pnasnexus/article/4/3/pgaf089/8111343)) 다섯 모델 교차 연구
-- [WinoIdentity(uncertainty-based intersectional fairness (arXiv:2508.07111, COLM 2025)](https://arxiv.org/abs/2508.07111)) 새로운 벤치마크
-- [UniBias(attention-head manipulation (Zhou et al. 2024, ACL)](https://arxiv.org/abs/2405.20612)) 제로샷 디바이어싱
+- [Gallegos et al.: Bias and Fairness in LLMs: A Survey (arXiv:2309.00770, Computational Linguistics 2024)](https://arxiv.org/abs/2309.00770) 대표 서베이
+- [An et al.: Intersectional resume-evaluation bias (PNAS Nexus, March 2025)](https://academic.oup.com/pnasnexus/article/4/3/pgaf089/8111343) 다섯 모델 교차 연구
+- [WinoIdentity: uncertainty-based intersectional fairness (arXiv:2508.07111, COLM 2025)](https://arxiv.org/abs/2508.07111) 새로운 벤치마크
+- [UniBias: attention-head manipulation (Zhou et al. 2024, ACL)](https://arxiv.org/abs/2405.20612) 제로샷 디바이어싱

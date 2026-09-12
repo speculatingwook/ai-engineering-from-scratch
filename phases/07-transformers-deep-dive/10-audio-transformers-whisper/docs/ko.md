@@ -190,10 +190,9 @@ for s in segments:
 
 - [Radford et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356): Whisper 논문.
 - [OpenAI Whisper repo](https://github.com/openai/whisper): 레퍼런스 코드 + 모델 가중치(weight). `whisper/model.py`를 읽으면 Conv1D 스템 + 인코더 + 디코더를 ~400줄 안에서 위에서 아래로 볼 수 있다.
-- [OpenAI Whisper(`whisper/decoding.py`](https://github.com/openai/whisper/blob/main/whisper/decoding.py)) 5~6단계에서 설명한 빔 서치 + 작업 토큰 로직이 여기 있다; 500줄, 완전히 읽을 만하다.
+- [OpenAI Whisper: `whisper/decoding.py`](https://github.com/openai/whisper/blob/main/whisper/decoding.py) 5~6단계에서 설명한 빔 서치 + 작업 토큰 로직이 여기 있다; 500줄, 완전히 읽을 만하다.
 - [Baevski et al. (2020). wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations](https://arxiv.org/abs/2006.11477): 선행 연구; 일부 환경에서는 여전히 SOTA 특성.
 - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper): 프로덕션 래퍼, 레퍼런스보다 4배 빠름.
 - [Jia et al. (2024). Moonshine: Speech Recognition for Live Transcription and Voice Commands](https://arxiv.org/abs/2410.15608): 2024년의 엣지 친화적 ASR, Whisper 형태이지만 더 작다.
-- [HuggingFace blog("Fine-Tune Whisper For Multilingual ASR with 🤗 Transformers"](https://huggingface.co/blog/fine-tune-whisper)) 멜 스펙트로그램 전처리기와 토큰-타임스탬프 처리를 포함한 표준 파인튜닝 레시피.
+- [HuggingFace blog: "Fine-Tune Whisper For Multilingual ASR with 🤗 Transformers"](https://huggingface.co/blog/fine-tune-whisper) 멜 스펙트로그램 전처리기와 토큰-타임스탬프 처리를 포함한 표준 파인튜닝 레시피.
 - [HuggingFace `modeling_whisper.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/whisper/modeling_whisper.py): 이 레슨의 아키텍처 다이어그램을 그대로 따르는 전체 구현(인코더, 디코더, 교차 어텐션(cross-attention), 생성).
-</content>

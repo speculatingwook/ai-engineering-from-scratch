@@ -132,7 +132,7 @@ Codex CLI, Claude Code, OpenCode는 각각 다른 압축(compaction) 이야기�
 - [JD Hodges, Claude Handoff Prompt: How to Keep Context Across Sessions (2026)](https://www.jdhodges.com/blog/ai-session-handoffs-keep-context-across-conversations/): CLAUDE.md + HANDOVER.md, 50-75% 컨텍스트 예산
 - [Mervin Praison, Managing Handoffs in Multi-Agent Coding Sessions: Fresh Context Without Losing Continuity](https://mer.vin/2026/04/managing-handoffs-in-multi-agent-coding-sessions-fresh-context-without-losing-continuity/): 분산 시스템 프레이밍
 - [Hermes Issue #20372 — automatic fresh-session handoff when compression becomes risky](https://github.com/NousResearch/hermes-agent/issues/20372)
-- [Hermes Issue #499(Context Compaction Quality Overhaul](https://github.com/NousResearch/hermes-agent/issues/499)) Codex CLI의 핸드오프 지향 프롬프트
+- [Hermes Issue #499: Context Compaction Quality Overhaul](https://github.com/NousResearch/hermes-agent/issues/499) Codex CLI의 핸드오프 지향 프롬프트
 - [Microsoft Agent Framework, Compaction](https://learn.microsoft.com/en-us/agent-framework/agents/conversations/compaction)
 - [OpenCode, Context Management and Compaction](https://deepwiki.com/sst/opencode/2.4-context-management-and-compaction)
 - [LangChain, Context Engineering for Agents](https://www.langchain.com/blog/context-engineering-for-agents)

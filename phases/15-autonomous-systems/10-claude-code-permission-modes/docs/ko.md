@@ -105,8 +105,8 @@ autonomy-oversight
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop)) 권한 모드, 예산, 액션 형식.
-- [Anthropic(Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)) 관리형 서비스 실행 모델.
-- [Anthropic(Claude Code product page](https://www.anthropic.com/product/claude-code)) 기능 표면과 Auto Mode 발표.
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 분류기 판단을 형성하는 이유 기반 층.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 권한 설계에 대한 내부 관점.
+- [Anthropic: How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) 권한 모드, 예산, 액션 형식.
+- [Anthropic: Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) 관리형 서비스 실행 모델.
+- [Anthropic: Claude Code product page](https://www.anthropic.com/product/claude-code) 기능 표면과 Auto Mode 발표.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) 분류기 판단을 형성하는 이유 기반 층.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평 권한 설계에 대한 내부 관점.

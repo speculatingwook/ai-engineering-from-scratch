@@ -209,5 +209,4 @@ out = flex_attention(q, k, v, block_mask=mask)
 - [Gemma Team (2025). Gemma 3 technical report](https://arxiv.org/abs/2503.19786): 이제 교과서 기본값인 window=1024의 5:1 혼합.
 - [Ye et al. (2024). Differential Transformer](https://arxiv.org/abs/2410.05258): DIFF Transformer 논문.
 - [Yuan et al. (2025). Native Sparse Attention](https://arxiv.org/abs/2502.11089): DeepSeek-V3.2의 학습된 희소성 어텐션.
-- [PyTorch(FlexAttention blog and docs](https://pytorch.org/blog/flexattention/)) Use It의 마스크-호출가능 패턴에 대한 API 레퍼런스.
-</content>
+- [PyTorch: FlexAttention blog and docs](https://pytorch.org/blog/flexattention/) Use It의 마스크-호출가능 패턴에 대한 API 레퍼런스.

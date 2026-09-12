@@ -709,4 +709,3 @@ for epoch in range(100):
 - Northcutt et al., "Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks" (2021): ImageNet, CIFAR-10, 그 외 주요 벤치마크에서 레이블의 3-6%가 틀렸음을 입증
 - Zhang et al., "Understanding Deep Learning Requires Rethinking Generalization" (2017): 신경망이 무작위 레이블을 암기할 수 있음을 보인 논문으로, 한 배치 과적합 테스트가 작동하는 이유
 - 내장 NaN/Inf 탐지를 위한 `torch.autograd.detect_anomaly`와 `torch.autograd.set_detect_anomaly`에 관한 PyTorch 문서
-</content>

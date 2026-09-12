@@ -159,9 +159,9 @@ expert-capacity
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437), Section 3.3.2 and Figure 5](https://arxiv.org/abs/2412.19437)) 주된 DualPipe 참조
-- [DeepSeek(DualPipe GitHub repository](https://github.com/deepseek-ai/DualPipe)) DualPipeV(Cut-in-half) 모드를 포함한 오픈소스 참조 구현
-- [Qi et al.(Zero Bubble Pipeline Parallelism (arXiv:2401.10241, Sea AI Lab 2023)](https://arxiv.org/abs/2401.10241)) Zero Bubble 전신
-- [Sea AI Lab(DualPipe could be better without the Dual](https://sail.sea.com/blog/articles/63)) DeepSeek의 EP-off 모드에 영향을 준 DualPipeV 분석
-- [Narayanan et al.(PipeDream / 1F1B (arXiv:1806.03377, 2018-2021)](https://arxiv.org/abs/1806.03377)) DualPipe가 비교하는 1F1B 스케줄
-- [Huang et al.(GPipe (arXiv:1811.06965, 2018)](https://arxiv.org/abs/1811.06965)) 원래 파이프라인 병렬화 논문과 버블 문제
+- [DeepSeek-AI: DeepSeek-V3 Technical Report (arXiv:2412.19437), Section 3.3.2 and Figure 5](https://arxiv.org/abs/2412.19437) 주된 DualPipe 참조
+- [DeepSeek: DualPipe GitHub repository](https://github.com/deepseek-ai/DualPipe) DualPipeV(Cut-in-half) 모드를 포함한 오픈소스 참조 구현
+- [Qi et al.: Zero Bubble Pipeline Parallelism (arXiv:2401.10241, Sea AI Lab 2023)](https://arxiv.org/abs/2401.10241) Zero Bubble 전신
+- [Sea AI Lab: DualPipe could be better without the Dual](https://sail.sea.com/blog/articles/63) DeepSeek의 EP-off 모드에 영향을 준 DualPipeV 분석
+- [Narayanan et al.: PipeDream / 1F1B (arXiv:1806.03377, 2018-2021)](https://arxiv.org/abs/1806.03377) DualPipe가 비교하는 1F1B 스케줄
+- [Huang et al.: GPipe (arXiv:1811.06965, 2018)](https://arxiv.org/abs/1811.06965) 원래 파이프라인 병렬화 논문과 버블 문제

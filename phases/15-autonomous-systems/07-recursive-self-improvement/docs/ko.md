@@ -102,6 +102,6 @@ world-model-rollout
 
 - [ICLR 2026 RSI Workshop summary (OpenReview)](https://openreview.net/pdf?id=OsPQ6zTQXV): 현재의 엔지니어링 규정.
 - [Recursive Workshop site](https://recursive-workshop.github.io/): 일정과 논문.
-- [Anthropic(Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 정렬 위장 맥락 포함.
-- [Anthropic(Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy)) 표준 랜딩 페이지. AI R&D 임계값(2026년 4월 기준 v3.0이 현재 버전이었음).
-- [DeepMind(Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) 기만적 정렬(deceptive alignment) 모니터링.
+- [Anthropic: Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 정렬 위장 맥락 포함.
+- [Anthropic: Responsible Scaling Policy](https://www.anthropic.com/responsible-scaling-policy) 표준 랜딩 페이지. AI R&D 임계값(2026년 4월 기준 v3.0이 현재 버전이었음).
+- [DeepMind: Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) 기만적 정렬(deceptive alignment) 모니터링.

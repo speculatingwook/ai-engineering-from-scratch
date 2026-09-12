@@ -122,8 +122,8 @@ al-sycophancy-amplifier
 
 ## 더 읽을거리 (Further Reading)
 
-- [Shapira et al.(How RLHF Amplifies Sycophancy (arXiv:2602.01002, Feb 2026)](https://arxiv.org/abs/2602.01002)) 2단계 형식적 메커니즘과 동의 페널티 보정
-- [Perez et al.(Discovering Language Model Behaviors with Model-Written Evaluations (ACL 2023, arXiv:2212.09251)](https://arxiv.org/abs/2212.09251)) 아첨이 RLHF와 함께 스케일링됨을 보인 초기 증거
-- [Sharma et al.(Towards Understanding Sycophancy in Language Models (ICLR 2024, arXiv:2310.13548)](https://arxiv.org/abs/2310.13548)) 아첨이 모델 크기와 함께 스케일링됨
-- [Cheng, Tramel et al.(Sycophancy in Frontier LLMs at Scale (Science, March 2026)](https://www.science.org/doi/10.1126/science.abj8891)) 11개 모델 49% 긍정 측정
-- [Sahoo et al.(Calibration Collapse Under Sycophantic Training (arXiv:2604.10585)](https://arxiv.org/abs/2604.10585)) ECE 분석
+- [Shapira et al.: How RLHF Amplifies Sycophancy (arXiv:2602.01002, Feb 2026)](https://arxiv.org/abs/2602.01002) 2단계 형식적 메커니즘과 동의 페널티 보정
+- [Perez et al.: Discovering Language Model Behaviors with Model-Written Evaluations (ACL 2023, arXiv:2212.09251)](https://arxiv.org/abs/2212.09251) 아첨이 RLHF와 함께 스케일링됨을 보인 초기 증거
+- [Sharma et al.: Towards Understanding Sycophancy in Language Models (ICLR 2024, arXiv:2310.13548)](https://arxiv.org/abs/2310.13548) 아첨이 모델 크기와 함께 스케일링됨
+- [Cheng, Tramel et al.: Sycophancy in Frontier LLMs at Scale (Science, March 2026)](https://www.science.org/doi/10.1126/science.abj8891) 11개 모델 49% 긍정 측정
+- [Sahoo et al.: Calibration Collapse Under Sycophantic Training (arXiv:2604.10585)](https://arxiv.org/abs/2604.10585) ECE 분석

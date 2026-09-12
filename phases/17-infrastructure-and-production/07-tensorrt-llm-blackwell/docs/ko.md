@@ -107,8 +107,8 @@ pipeline-parallel
 
 ## 더 읽을거리 (Further Reading)
 
-- [NVIDIA(Blackwell Ultra MLPerf Inference v6.0](https://developer.nvidia.com/blog/nvidia-blackwell-ultra-sets-new-inference-records-in-mlperf-debut/)) 2026년 4월 MLPerf 결과.
-- [NVIDIA(MoE Inference on Blackwell](https://developer.nvidia.com/blog/delivering-massive-performance-leaps-for-mixture-of-experts-inference-on-nvidia-blackwell/)) NVLink 5 all-to-all과 MoE 커널.
+- [NVIDIA: Blackwell Ultra MLPerf Inference v6.0](https://developer.nvidia.com/blog/nvidia-blackwell-ultra-sets-new-inference-records-in-mlperf-debut/) 2026년 4월 MLPerf 결과.
+- [NVIDIA: MoE Inference on Blackwell](https://developer.nvidia.com/blog/delivering-massive-performance-leaps-for-mixture-of-experts-inference-on-nvidia-blackwell/) NVLink 5 all-to-all과 MoE 커널.
 - [TensorRT-LLM Overview](https://nvidia.github.io/TensorRT-LLM/overview.html): 공식 엔진 문서.
-- [NVIDIA(Introducing Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/)) TRT-LLM 위의 분리형 오케스트레이션.
+- [NVIDIA: Introducing Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/) TRT-LLM 위의 분리형 오케스트레이션.
 - [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/): Blackwell 숫자를 공표하는 벤치마크 스위트.

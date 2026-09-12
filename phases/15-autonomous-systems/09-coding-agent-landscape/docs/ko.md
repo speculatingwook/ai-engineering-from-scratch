@@ -110,8 +110,8 @@ a5-scaffold-delta
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jimenez et al.(SWE-bench](https://www.swebench.com/)) 원본 벤치마크와 방법론.
-- [OpenAI(Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/)) 큐레이션된 부분집합이 어떻게 만들어졌는지.
-- [Wang et al.(OpenHands: An Open Platform for AI Software Developers](https://arxiv.org/abs/2407.16741)) CodeAct 아키텍처와 이벤트 스트림 설계.
-- [Epoch AI(SWE-bench leaderboard](https://epoch.ai/benchmarks)) 실시간 추적 점수.
-- [Anthropic(Measuring agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 코딩 에이전트 신뢰성 프레이밍.
+- [Jimenez et al.: SWE-bench](https://www.swebench.com/) 원본 벤치마크와 방법론.
+- [OpenAI: Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/) 큐레이션된 부분집합이 어떻게 만들어졌는지.
+- [Wang et al.: OpenHands: An Open Platform for AI Software Developers](https://arxiv.org/abs/2407.16741) CodeAct 아키텍처와 이벤트 스트림 설계.
+- [Epoch AI: SWE-bench leaderboard](https://epoch.ai/benchmarks) 실시간 추적 점수.
+- [Anthropic: Measuring agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평 코딩 에이전트 신뢰성 프레이밍.

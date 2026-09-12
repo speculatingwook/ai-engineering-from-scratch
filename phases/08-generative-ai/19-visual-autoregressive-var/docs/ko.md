@@ -135,8 +135,8 @@ gx-var-next-scale
 
 ## 더 읽을거리 (Further Reading)
 
-- [Tian et al., 2024("Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction"](https://arxiv.org/abs/2404.02905)) VAR 논문, 표준 참고 문헌
-- [Peebles and Xie, 2022("Scalable Diffusion Models with Transformers"](https://arxiv.org/abs/2212.09748)) DiT, 확산 비교 베이스라인(baseline)
-- [Esser et al., 2021("Taming Transformers for High-Resolution Image Synthesis"](https://arxiv.org/abs/2012.09841)) VQGAN, VAR의 다중 스케일 토크나이저가 확장하는 토크나이저 계열
-- [van den Oord et al., 2017("Neural Discrete Representation Learning"](https://arxiv.org/abs/1711.00937)) VQ-VAE, 이산 이미지 토큰화의 토대
-- [Tang et al., 2024("HART: Efficient Visual Generation with Hybrid Autoregressive Transformer"](https://arxiv.org/abs/2410.10812)) 텍스트 조건부 VAR
+- [Tian et al., 2024: "Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction"](https://arxiv.org/abs/2404.02905) VAR 논문, 표준 참고 문헌
+- [Peebles and Xie, 2022: "Scalable Diffusion Models with Transformers"](https://arxiv.org/abs/2212.09748) DiT, 확산 비교 베이스라인(baseline)
+- [Esser et al., 2021: "Taming Transformers for High-Resolution Image Synthesis"](https://arxiv.org/abs/2012.09841) VQGAN, VAR의 다중 스케일 토크나이저가 확장하는 토크나이저 계열
+- [van den Oord et al., 2017: "Neural Discrete Representation Learning"](https://arxiv.org/abs/1711.00937) VQ-VAE, 이산 이미지 토큰화의 토대
+- [Tang et al., 2024: "HART: Efficient Visual Generation with Hybrid Autoregressive Transformer"](https://arxiv.org/abs/2410.10812) 텍스트 조건부 VAR

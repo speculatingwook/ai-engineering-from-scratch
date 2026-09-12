@@ -184,9 +184,9 @@ NSA를 꺼내 쓸 때:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Yuan et al.(Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089, ACL 2025 Best Paper)](https://arxiv.org/abs/2502.11089)) 논문
+- [Yuan et al.: Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089, ACL 2025 Best Paper)](https://arxiv.org/abs/2502.11089) 논문
 - [DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437): NSA가 겨냥하는 아키텍처 계열
-- [Moonshot AI(MoBA: Mixture of Block Attention for Long-Context LLMs (arXiv:2502.13189)](https://arxiv.org/abs/2502.13189)) 동시 연구, 블록에 대한 MoE 스타일 어텐션
-- [Beltagy et al.(Longformer: The Long-Document Transformer (arXiv:2004.05150)](https://arxiv.org/abs/2004.05150)) 슬라이딩 윈도우의 기원
-- [Xiao et al.(StreamingLLM: Efficient Streaming Language Models with Attention Sinks (arXiv:2309.17453)](https://arxiv.org/abs/2309.17453)) NSA가 개선하는 추론 시점 희소성 베이스라인
-- [Dao et al.(FlashAttention-2 (arXiv:2307.08691)](https://arxiv.org/abs/2307.08691)) NSA 커널이 64k에서 능가하는 전체 어텐션 베이스라인
+- [Moonshot AI: MoBA: Mixture of Block Attention for Long-Context LLMs (arXiv:2502.13189)](https://arxiv.org/abs/2502.13189) 동시 연구, 블록에 대한 MoE 스타일 어텐션
+- [Beltagy et al.: Longformer: The Long-Document Transformer (arXiv:2004.05150)](https://arxiv.org/abs/2004.05150) 슬라이딩 윈도우의 기원
+- [Xiao et al.: StreamingLLM: Efficient Streaming Language Models with Attention Sinks (arXiv:2309.17453)](https://arxiv.org/abs/2309.17453) NSA가 개선하는 추론 시점 희소성 베이스라인
+- [Dao et al.: FlashAttention-2 (arXiv:2307.08691)](https://arxiv.org/abs/2307.08691) NSA 커널이 64k에서 능가하는 전체 어텐션 베이스라인

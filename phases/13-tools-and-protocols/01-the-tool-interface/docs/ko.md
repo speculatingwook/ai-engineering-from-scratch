@@ -149,8 +149,8 @@ tp-tool-loop
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Function calling guide](https://platform.openai.com/docs/guides/function-calling)) OpenAI 스타일 도구 선언과 호출 형태에 대한 표준 레퍼런스
-- [Anthropic(Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview)) Claude의 `tool_use` / `tool_result` 블록 형식
-- [Google(Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling)) Gemini의 `functionDeclarations`와 병렬 호출 의미론
-- [Model Context Protocol(Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) 도구 인터페이스의 제공자 비종속적 일반화
-- [JSON Schema(2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes)) 모든 현대 도구 API가 사용하는 스키마 방언(dialect)
+- [OpenAI: Function calling guide](https://platform.openai.com/docs/guides/function-calling) OpenAI 스타일 도구 선언과 호출 형태에 대한 표준 레퍼런스
+- [Anthropic: Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview) Claude의 `tool_use` / `tool_result` 블록 형식
+- [Google: Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling) Gemini의 `functionDeclarations`와 병렬 호출 의미론
+- [Model Context Protocol: Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) 도구 인터페이스를 무상태로, 제공자에 매이지 않게 일반화한 현행 명세
+- [JSON Schema: 2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes) 모든 현대 도구 API가 사용하는 스키마 방언(dialect)

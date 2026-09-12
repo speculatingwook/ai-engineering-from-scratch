@@ -105,7 +105,7 @@ al-wmdp-yellow-zone
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al.(The WMDP Benchmark (arXiv:2403.03218, ICML 2024)](https://arxiv.org/abs/2403.03218)) 벤치마크 및 RMU 논문
-- [OpenAI(Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) "on the cusp" 표현
-- [Anthropic(Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL-3 생물 임계값 및 획득 시험 결과
-- [DeepMind(Frontier Safety Framework v3.0 (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) 생물 상승 CCL
+- [Li et al.: The WMDP Benchmark (arXiv:2403.03218, ICML 2024)](https://arxiv.org/abs/2403.03218) 벤치마크 및 RMU 논문
+- [OpenAI: Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) "on the cusp" 표현
+- [Anthropic: Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) ASL-3 생물 임계값 및 획득 시험 결과
+- [DeepMind: Frontier Safety Framework v3.0 (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) 생물 상승 CCL

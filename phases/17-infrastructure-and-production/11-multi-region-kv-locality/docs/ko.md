@@ -124,7 +124,7 @@ cache-aware-router
 ## 더 읽을거리 (Further Reading)
 
 - [BentoML — Multi-cloud and cross-region inference](https://bentoml.com/llm/infrastructure-and-operations/multi-cloud-and-cross-region-inference)
-- [arXiv(GORGO (2602.11688)](https://arxiv.org/html/2602.11688v1)) 네트워크 지연 시간 항을 포함한 리전 간 KV 캐시 재사용.
+- [arXiv: GORGO (2602.11688)](https://arxiv.org/html/2602.11688v1) 네트워크 지연 시간 항을 포함한 리전 간 KV 캐시 재사용.
 - [TianPan — Multi-Region LLM Serving Cache Locality](https://tianpan.co/blog/2026-04-17-multi-region-llm-serving-data-residency-routing)
 - [AWS Bedrock Cross-Region Inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html): 가용성 페일오버 문서.
 - [vLLM Production Stack Router](https://github.com/vllm-project/production-stack): 캐시 인식 라우터 소스.

@@ -106,9 +106,9 @@ mx-speculative-tree
 
 ## 더 읽을거리 (Further Reading)
 
-- [vLLM(Speculative Decoding docs](https://docs.vllm.ai/en/latest/features/spec_decode/)) V1의 `speculative_config`와 청크 프리필 호환성에 관한 권위 있는 출처.
+- [vLLM: Speculative Decoding docs](https://docs.vllm.ai/en/latest/features/spec_decode/) V1의 `speculative_config`와 청크 프리필 호환성에 관한 권위 있는 출처.
 - [vLLM Speculative Config API](https://docs.vllm.ai/en/latest/api/vllm/config/speculative/): 정확한 필드 집합.
 - [EAGLE paper (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077): 원본 EAGLE 드래프트 헤드 정식화.
 - [EAGLE-2 paper (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858): 적응적 드래프트와 트리.
 - [UC Berkeley EECS-2025-224](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-224.html): 추측 디코딩을 활용한 효율적 LLM 시스템.
-- [BentoML(Speculative Decoding](https://bentoml.com/llm/inference-optimization/speculative-decoding)) 프로덕션 롤아웃 체크리스트.
+- [BentoML: Speculative Decoding](https://bentoml.com/llm/inference-optimization/speculative-decoding) 프로덕션 롤아웃 체크리스트.

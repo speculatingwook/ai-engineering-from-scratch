@@ -148,8 +148,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Castro & Liskov(Practical Byzantine Fault Tolerance (OSDI 1999)](https://pmg.csail.mit.edu/papers/osdi99.pdf)) 토대
-- [CP-WBFT(Confidence-Probe Weighted BFT](https://arxiv.org/abs/2511.10400)) 신뢰도에 의한 투표 가중
-- [DecentLLMs(leaderless multi-agent consensus](https://arxiv.org/abs/2507.14928)) 기하 중앙값 집계
-- [WBFT(Weighted BFT with Hierarchical Structure Clustering](https://arxiv.org/abs/2505.05103)) 한정된 지연 시간을 위한 Core/Edge 분할
+- [Castro & Liskov: Practical Byzantine Fault Tolerance (OSDI 1999)](https://pmg.csail.mit.edu/papers/osdi99.pdf) 토대
+- [CP-WBFT: Confidence-Probe Weighted BFT](https://arxiv.org/abs/2511.10400) 신뢰도에 의한 투표 가중
+- [DecentLLMs: leaderless multi-agent consensus](https://arxiv.org/abs/2507.14928) 기하 중앙값 집계
+- [WBFT: Weighted BFT with Hierarchical Structure Clustering](https://arxiv.org/abs/2505.05103) 한정된 지연 시간을 위한 Core/Edge 분할
 - [Can AI Agents Agree?](https://arxiv.org/abs/2603.01213): 스칼라 합의의 취약성과 기만적 페르소나 공격

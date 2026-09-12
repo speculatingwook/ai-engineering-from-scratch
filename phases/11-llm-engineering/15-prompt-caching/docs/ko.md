@@ -231,10 +231,10 @@ Refuse to ship a cache plan that places a dynamic field above the breakpoint. Re
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)) `cache_control`, 1시간 TTL, 손익분기 표
-- [OpenAI(Prompt caching](https://platform.openai.com/docs/guides/prompt-caching)) 자동 프리픽스 매칭
-- [Google(Context caching](https://ai.google.dev/gemini-api/docs/caching)) `CachedContent` API와 저장소 가격
-- [Anthropic engineering(Prompt caching for long-context workloads](https://www.anthropic.com/news/prompt-caching)) 지연 시간 수치가 담긴 원래 출시 게시물
+- [Anthropic: Prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) `cache_control`, 1시간 TTL, 손익분기 표
+- [OpenAI: Prompt caching](https://platform.openai.com/docs/guides/prompt-caching) 자동 프리픽스 매칭
+- [Google: Context caching](https://ai.google.dev/gemini-api/docs/caching) `CachedContent` API와 저장소 가격
+- [Anthropic engineering: Prompt caching for long-context workloads](https://www.anthropic.com/news/prompt-caching) 지연 시간 수치가 담긴 원래 출시 게시물
 - Phase 11 · 05 (Context Engineering): 캐시가 안착할 수 있도록 프롬프트를 어디서 자를지
 - Phase 11 · 11 (Caching and Cost): 프롬프트 캐싱을 사용자 메시지에 대한 시맨틱 캐시와 짝지으라
 - [Pope et al., "Efficiently Scaling Transformer Inference" (2022)](https://arxiv.org/abs/2211.05102): 프롬프트 캐싱이 사용자에게 노출하는 KV 캐시 메모리 모델; 캐시된 프리픽스를 다시 읽는 것이 다시 계산하는 것보다 ~10배 싼 이유를 설명한다

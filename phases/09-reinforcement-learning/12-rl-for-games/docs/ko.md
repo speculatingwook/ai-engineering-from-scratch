@@ -223,6 +223,6 @@ Refuse AlphaZero on imperfect-info games (route to CFR). Refuse GRPO without a t
 - [DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning](https://arxiv.org/abs/2501.12948): 전체 4단계 R1 레시피와 R1-Zero 절제.
 - [Brown et al. (2019). Superhuman AI for multiplayer poker (Pluribus)](https://www.science.org/doi/10.1126/science.aay2400): 대규모 CFR + 딥러닝.
 - [Tesauro (1995). Temporal Difference Learning and TD-Gammon](https://dl.acm.org/doi/10.1145/203330.203343): 모든 것을 시작한 논문.
-- [Hugging Face TRL(GRPOTrainer](https://huggingface.co/docs/trl/main/en/grpo_trainer)) 커스텀 보상 함수로 GRPO를 적용하는 프로덕션 레퍼런스.
-- [Qwen Team (2024). Qwen2.5-Math(GRPO replication](https://github.com/QwenLM/Qwen2.5-Math)) 여러 규모에서 R1 레시피의 오픈 재현.
-- [Sutton & Barto (2018). Ch. 17(Frontiers of Reinforcement Learning](http://incompleteideas.net/book/RLbook2020.pdf)) R1이 LLM 규모에서 구현하는 자기 대국, 탐색, "설계된 보상"에 대한 교과서적 틀.
+- [Hugging Face TRL: GRPOTrainer](https://huggingface.co/docs/trl/main/en/grpo_trainer) 커스텀 보상 함수로 GRPO를 적용하는 프로덕션 레퍼런스.
+- [Qwen Team (2024). Qwen2.5-Math: GRPO replication](https://github.com/QwenLM/Qwen2.5-Math) 여러 규모에서 R1 레시피의 오픈 재현.
+- [Sutton & Barto (2018). Ch. 17: Frontiers of Reinforcement Learning](http://incompleteideas.net/book/RLbook2020.pdf) R1이 LLM 규모에서 구현하는 자기 대국, 탐색, "설계된 보상"에 대한 교과서적 틀.

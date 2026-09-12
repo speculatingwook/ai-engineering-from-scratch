@@ -121,8 +121,8 @@ checkpoint-replay
 
 ## 더 읽을거리 (Further Reading)
 
-- [Microsoft Agent Framework(Checkpointing and HITL](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) 체크포인트 프리미티브와 리스 복구.
-- [Cloudflare Agents(Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/)) 상태 기질(substrate)로서의 Durable Objects.
-- [EU AI Act(Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/)) 규제 베이스라인(baseline).
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평(long-horizon) 워크플로에 대한 신뢰성 프레이밍.
-- [Anthropic(Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop)) Claude Code Routines를 위한 워크플로 형태.
+- [Microsoft Agent Framework: Checkpointing and HITL](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) 체크포인트 프리미티브와 리스 복구.
+- [Cloudflare Agents: Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/) 상태 기질(substrate)로서의 Durable Objects.
+- [EU AI Act: Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/) 규제 베이스라인(baseline).
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 장기 지평(long-horizon) 워크플로에 대한 신뢰성 프레이밍.
+- [Anthropic: Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop) Claude Code Routines를 위한 워크플로 형태.

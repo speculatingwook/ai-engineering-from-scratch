@@ -187,5 +187,5 @@ with torch.inference_mode():
 - [Radford et al. (2022). Whisper paper](https://arxiv.org/abs/2212.04356): 원조 아키텍처와 학습 레시피.
 - [OpenAI (2024). Whisper Large-v3-turbo release](https://github.com/openai/whisper/discussions/2363): 4층 디코더, 8배 속도 향상.
 - [Bain et al. (2023). WhisperX](https://arxiv.org/abs/2303.00747): 장문, 단어 정렬, 화자 분리.
-- [Systran(faster-whisper repo](https://github.com/SYSTRAN/faster-whisper)) CTranslate2 기반, 4배 빠름.
-- [HuggingFace(Whisper fine-tune tutorial](https://huggingface.co/blog/fine-tune-whisper)) 정전 격 LoRA / 전체 파인튜닝 안내.
+- [Systran: faster-whisper repo](https://github.com/SYSTRAN/faster-whisper) CTranslate2 기반, 4배 빠름.
+- [HuggingFace: Whisper fine-tune tutorial](https://huggingface.co/blog/fine-tune-whisper) 정전 격 LoRA / 전체 파인튜닝 안내.

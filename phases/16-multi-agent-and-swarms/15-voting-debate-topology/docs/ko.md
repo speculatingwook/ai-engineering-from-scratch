@@ -158,8 +158,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Wang et al.(Self-Consistency Improves Chain of Thought Reasoning](https://arxiv.org/abs/2203.11171)) 단일 모델 베이스라인
-- [Du et al.(Improving Factuality and Reasoning via Multiagent Debate](https://arxiv.org/abs/2305.14325)) 에이전트와 라운드 둘 다 독립적으로 중요하다
+- [Wang et al.: Self-Consistency Improves Chain of Thought Reasoning](https://arxiv.org/abs/2203.11171) 단일 모델 베이스라인
+- [Du et al.: Improving Factuality and Reasoning via Multiagent Debate](https://arxiv.org/abs/2305.14325) 에이전트와 라운드 둘 다 독립적으로 중요하다
 - [MultiAgentBench / MARBLE](https://arxiv.org/abs/2503.01935): 연구에는 그래프, 파이프라인에는 체인이 최선임을 보이는 토폴로지 벤치마크
 - [Should we be going MAD?](https://arxiv.org/abs/2311.17371): MAD 전략 서베이. MAD가 동일 예산에서 종종 자기 일관성에 진다는 것을 발견
 - [AgentVerse (ICLR 2024)](https://proceedings.iclr.cc/paper_files/paper/2024/file/578e65cdee35d00c708d4c64bce32971-Paper-Conference.pdf): 자원과 동조 창발 패턴

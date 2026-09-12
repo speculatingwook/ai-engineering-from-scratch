@@ -197,8 +197,8 @@ MTP는 DeepSeek-V3(2024년 12월)와 DeepSeek-R1 시리즈에 통합되어 있�
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437)) 결합 손실 식과 추론 시 1.8배 속도 향상을 포함한 전체 순차적 MTP 설명(2.2절)
-- [Gloeckle et al.(Better & Faster Large Language Models via Multi-token Prediction (arXiv:2404.19737)](https://arxiv.org/abs/2404.19737)) DeepSeek의 설계가 개선한 병렬 MTP 베이스라인
+- [DeepSeek-AI: DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437) 결합 손실 식과 추론 시 1.8배 속도 향상을 포함한 전체 순차적 MTP 설명(2.2절)
+- [Gloeckle et al.: Better & Faster Large Language Models via Multi-token Prediction (arXiv:2404.19737)](https://arxiv.org/abs/2404.19737) DeepSeek의 설계가 개선한 병렬 MTP 베이스라인
 - [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3): 총 685B(본 모델 671B + MTP 14B), 배포(deployment) 메모
-- [Leviathan et al.(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192)) MTP가 들어맞는 추측 디코딩 프레임워크
-- [Li et al.(EAGLE-3 (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840)) EAGLE의 2025년 드래프트 아키텍처, MTP가 경쟁하는 상대
+- [Leviathan et al.: Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192) MTP가 들어맞는 추측 디코딩 프레임워크
+- [Li et al.: EAGLE-3 (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840) EAGLE의 2025년 드래프트 아키텍처, MTP가 경쟁하는 상대

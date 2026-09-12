@@ -119,8 +119,8 @@ circuit-breaker
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 자율 에이전트를 위한 킬 스위치와 회로 차단기 프레이밍.
-- [Microsoft Agent Framework(HITL and oversight](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) 프로덕션 거버넌스 패턴.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 자율 에이전트를 위한 킬 스위치와 회로 차단기 프레이밍.
+- [Microsoft Agent Framework: HITL and oversight](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) 프로덕션 거버넌스 패턴.
 - [OWASP LLM / Agentic Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/): 탐지 및 대응 요구사항.
-- [Cilium(Network policy and eBPF](https://docs.cilium.io/en/stable/security/network/)) 파드 수준 송신 리다이렉트와 포렌식 허니팟 패턴.
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) "헌법적 한계"로서의 하드코딩된 금지.
+- [Cilium: Network policy and eBPF](https://docs.cilium.io/en/stable/security/network/) 파드 수준 송신 리다이렉트와 포렌식 허니팟 패턴.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) "헌법적 한계"로서의 하드코딩된 금지.

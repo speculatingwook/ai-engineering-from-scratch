@@ -98,7 +98,7 @@ an-fairness-trilemma
 
 ## 더 읽을거리 (Further Reading)
 
-- [Dwork et al.(Fairness through Awareness (arXiv:1104.3913)](https://arxiv.org/abs/1104.3913)) 개인 공정성
-- [Kusner, Loftus, Russell, Silva(Counterfactual Fairness (arXiv:1703.06856)](https://arxiv.org/abs/1703.06856)) 반사실 공정성
-- [Chouldechova(Fair prediction with disparate impact (arXiv:1703.00056)](https://arxiv.org/abs/1703.00056)) 불가능성
+- [Dwork et al.: Fairness through Awareness (arXiv:1104.3913)](https://arxiv.org/abs/1104.3913) 개인 공정성
+- [Kusner, Loftus, Russell, Silva: Counterfactual Fairness (arXiv:1703.06856)](https://arxiv.org/abs/1703.06856) 반사실 공정성
+- [Chouldechova: Fair prediction with disparate impact (arXiv:1703.00056)](https://arxiv.org/abs/1703.00056) 불가능성
 - [Backtracking Counterfactuals (arXiv:2401.13935)](https://arxiv.org/abs/2401.13935): 보호 속성 개입을 위한 새로운 패러다임

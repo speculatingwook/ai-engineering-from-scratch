@@ -112,8 +112,8 @@ a5-horizon-fit
 
 ## 더 읽을거리 (Further Reading)
 
-- [METR(Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/)) HCAST, RE-Bench, SWAA 명세.
-- [METR(Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) 원본 지평 논문.
-- [METR(Time Horizon 1.1 (January 2026)](https://metr.org/research/)) 현재 수치와 방법론.
-- [Epoch AI(METR Time Horizons benchmark](https://epoch.ai/benchmarks/metr-time-horizons)) 실시간 추적.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) METR 측정에 대한 내부 관점.
+- [METR: Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/) HCAST, RE-Bench, SWAA 명세.
+- [METR: Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) 원본 지평 논문.
+- [METR: Time Horizon 1.1 (January 2026)](https://metr.org/research/) 현재 수치와 방법론.
+- [Epoch AI: METR Time Horizons benchmark](https://epoch.ai/benchmarks/metr-time-horizons) 실시간 추적.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) METR 측정에 대한 내부 관점.

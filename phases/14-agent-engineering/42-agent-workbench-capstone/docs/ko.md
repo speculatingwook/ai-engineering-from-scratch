@@ -148,7 +148,7 @@ python3 code/main.py
 - Phases 14 · 31 to 14 · 41: 이 팩이 묶는 모든 표면
 - [SkillKit](https://github.com/rohitg00/skillkit): 32개의 AI 에이전트에 걸쳐 이 스킬 설치
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills): 여섯 도구에 걸친 단일 출처 생성기
-- [agents.md(the open spec](https://agents.md/)) 팩의 라우터(router)가 구현해야 하는 것
+- [agents.md: the open spec](https://agents.md/) 팩의 라우터(router)가 구현해야 하는 것
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness): 팩 등가물의 참조 구현
 - [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness): 평가 스위트를 가진 Redis 기반 참조
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files): 팩 문서 품질 기준

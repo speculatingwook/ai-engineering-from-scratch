@@ -101,8 +101,8 @@ injection-boundary
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI(Introducing ChatGPT agent](https://openai.com/index/introducing-chatgpt-agent/)) Operator와 deep research의 병합; BrowseComp SOTA.
-- [OpenAI(Computer-Using Agent](https://openai.com/index/computer-using-agent/)) Operator 계보와 ChatGPT agent가 된 아키텍처.
-- [Zhou et al.(WebArena](https://webarena.dev/)) 원본 벤치마크.
+- [OpenAI: Introducing ChatGPT agent](https://openai.com/index/introducing-chatgpt-agent/) Operator와 deep research의 병합; BrowseComp SOTA.
+- [OpenAI: Computer-Using Agent](https://openai.com/index/computer-using-agent/) Operator 계보와 ChatGPT agent가 된 아키텍처.
+- [Zhou et al.: WebArena](https://webarena.dev/) 원본 벤치마크.
 - [WebArena-Verified (OpenReview)](https://openreview.net/forum?id=94tlGxmqkN): ICLR 2026 고친 부분집합 논문.
-- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 컴퓨터 사용 에이전트에 대한 공격 표면 논의 포함.
+- [Anthropic: Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 컴퓨터 사용 에이전트에 대한 공격 표면 논의 포함.

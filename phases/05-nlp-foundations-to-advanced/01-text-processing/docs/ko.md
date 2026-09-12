@@ -253,5 +253,5 @@ Refuse to recommend stemming for user-visible text. Refuse to recommend lemmatiz
 ## 더 읽을거리 (Further Reading)
 
 - [Porter, M. F. (1980). An algorithm for suffix stripping](https://tartarus.org/martin/PorterStemmer/def.txt): 원본 논문, 다섯 쪽, 여전히 가장 명료한 설명.
-- [spaCy 101(linguistic features](https://spacy.io/usage/linguistic-features)) 실제 파이프라인이 어떻게 연결되는지.
+- [spaCy 101: linguistic features](https://spacy.io/usage/linguistic-features) 실제 파이프라인이 어떻게 연결되는지.
 - [NLTK book, chapter 3](https://www.nltk.org/book/ch03.html): 미처 생각지 못한 토큰화 엣지 케이스까지.

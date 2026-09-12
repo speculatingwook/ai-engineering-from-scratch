@@ -169,7 +169,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI cookbook: Orchestrating Agents(Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 핸드오프 주도 오케스트레이션의 가장 명료한 설명
+- [OpenAI cookbook: Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) 핸드오프 주도 오케스트레이션의 가장 명료한 설명
 - [AutoGen stable docs](https://microsoft.github.io/autogen/stable/): GroupChat + 화자 선택은 LLM 선택 오케스트레이션의 레퍼런스다
 - [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 그래프 간선 오케스트레이션과 리듀서 기반 공유 상태
 - [CrewAI introduction](https://docs.crewai.com/en/introduction): 역할-목표-배경(role-goal-backstory) 에이전트, Sequential / Hierarchical 프로세스

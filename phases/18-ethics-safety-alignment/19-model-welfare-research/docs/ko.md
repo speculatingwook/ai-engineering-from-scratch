@@ -116,7 +116,7 @@ an-welfare-endchat
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Exploring Model Welfare (April 2025)](https://www.anthropic.com/research/exploring-model-welfare)) 프로그램 발표
-- [Chalmers et al.(Near-term AI Consciousness and Moral Status (2024 expert report)](https://arxiv.org/abs/2411.00986)) 철학적 프레이밍
-- [Eleos AI Research(Model welfare evaluation](https://www.eleosai.org/research)) 외부 방법론 비판
-- [Fish et al.(Spiritual Bliss Attractor writeup (2025 Anthropic blog)](https://www.anthropic.com/research/exploring-model-welfare)) 경험적 발견
+- [Anthropic: Exploring Model Welfare (April 2025)](https://www.anthropic.com/research/exploring-model-welfare) 프로그램 발표
+- [Chalmers et al.: Near-term AI Consciousness and Moral Status (2024 expert report)](https://arxiv.org/abs/2411.00986) 철학적 프레이밍
+- [Eleos AI Research: Model welfare evaluation](https://www.eleosai.org/research) 외부 방법론 비판
+- [Anthropic: Exploring Model Welfare (April 2025)](https://www.anthropic.com/research/exploring-model-welfare) 경험적 발견

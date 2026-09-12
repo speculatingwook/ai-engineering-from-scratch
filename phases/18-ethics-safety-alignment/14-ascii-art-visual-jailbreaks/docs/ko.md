@@ -92,7 +92,7 @@ al-ascii-cloak
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jiang et al.(ArtPrompt (ACL 2024, arXiv:2402.11753)](https://arxiv.org/abs/2402.11753)) 아스키 아트 탈옥 논문
-- [Li et al.(StructuralSleight (arXiv:2406.08754)](https://arxiv.org/abs/2406.08754)) UTES 일반화
-- [Chao et al.(PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419)) 상호 보완적 반복 공격
-- [Anil et al.(Many-shot Jailbreaking (Lesson 13)](https://www.anthropic.com/research/many-shot-jailbreaking)) 상호 보완적 길이 공격
+- [Jiang et al.: ArtPrompt (ACL 2024, arXiv:2402.11753)](https://arxiv.org/abs/2402.11753) 아스키 아트 탈옥 논문
+- [Li et al.: StructuralSleight (arXiv:2406.08754)](https://arxiv.org/abs/2406.08754) UTES 일반화
+- [Chao et al.: PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) 상호 보완적 반복 공격
+- [Anil et al.: Many-shot Jailbreaking (Lesson 13)](https://www.anthropic.com/research/many-shot-jailbreaking) 상호 보완적 길이 공격

@@ -94,7 +94,7 @@ al-injection-vector
 
 ## 더 읽을거리 (Further Reading)
 
-- [MDPI Information 17(1):54(Indirect Prompt Injection Survey (January 2026)](https://www.mdpi.com/2078-2489/17/1/54)) 2023-2025 종합
-- [Nasr et al.(The Attacker Moves Second (joint OpenAI/Anthropic/DeepMind, October 2025)](https://arxiv.org/abs/2510.18108)) 적응형 공격 평가
-- [Greshake et al.(Not what you've signed up for (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173)) 최초의 IPI 논문
-- [OWASP(LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/)) 프롬프트 주입을 LLM01로 순위 매김
+- [MDPI Information 17(1):54: Indirect Prompt Injection Survey (January 2026)](https://www.mdpi.com/2078-2489/17/1/54) 2023-2025 종합
+- [Nasr et al.: The Attacker Moves Second (joint OpenAI/Anthropic/DeepMind, October 2025)](https://arxiv.org/abs/2510.18108) 적응형 공격 평가
+- [Greshake et al.: Not what you've signed up for (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173) 최초의 IPI 논문
+- [OWASP: LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/) 프롬프트 주입을 LLM01로 순위 매김

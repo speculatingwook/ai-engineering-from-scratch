@@ -169,8 +169,8 @@ tp-schema-routing
 
 ## 더 읽을거리 (Further Reading)
 
-- [Composio(How to build tools for AI agents: field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide)) 이름 짓기, 설명, 측정된 정확도 향상
-- [OneUptime(Tool schemas for agents](https://oneuptime.com/blog/post/2026-01-30-tool-schemas/view)) 프로덕션에서 나온 파라미터 설계 패턴
-- [Databricks(Agent system design patterns](https://docs.databricks.com/aws/en/generative-ai/guide/agent-system-design-patterns)) 측정 가능한 벤치마크를 가진 레지스트리 수준 설계
-- [Anthropic(Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk)) Claude 기반 에이전트를 위한 설명 패턴
-- [OpenAI(Function calling best practices](https://platform.openai.com/docs/guides/function-calling#best-practices)) 설명 길이, 엄격 모드 요구 사항, 원자적 도구 지침
+- [Composio: How to build tools for AI agents: field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide) 이름 짓기, 설명, 측정된 정확도 향상
+- [OneUptime: Tool schemas for agents](https://oneuptime.com/blog/post/2026-01-30-tool-schemas/view) 프로덕션에서 나온 파라미터 설계 패턴
+- [Databricks: Agent system design patterns](https://docs.databricks.com/aws/en/generative-ai/guide/agent-system-design-patterns) 측정 가능한 벤치마크를 가진 레지스트리 수준 설계
+- [Anthropic: Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) Claude 기반 에이전트를 위한 설명 패턴
+- [OpenAI: Function calling best practices](https://platform.openai.com/docs/guides/function-calling#best-practices) 설명 길이, 엄격 모드 요구 사항, 원자적 도구 지침

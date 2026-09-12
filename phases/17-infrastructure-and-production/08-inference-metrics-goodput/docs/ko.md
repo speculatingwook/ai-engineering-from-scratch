@@ -136,9 +136,9 @@ throughput-latency
 
 ## 더 읽을거리 (Further Reading)
 
-- [NVIDIA NIM(LLM Benchmarking Metrics](https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html)) TTFT, ITL, TPOT의 정전(canonical) 정의.
-- [Anyscale(LLM Serving Benchmarking Metrics](https://docs.anyscale.com/llm/serving/benchmarking/metrics)) 대안적 정의와 측정 레시피.
-- [BentoML(LLM Inference Metrics](https://bentoml.com/llm/inference-optimization/llm-inference-metrics)) 실제 배포에서의 응용 측정.
+- [NVIDIA NIM: LLM Benchmarking Metrics](https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html) TTFT, ITL, TPOT의 정전(canonical) 정의.
+- [Anyscale: LLM Serving Benchmarking Metrics](https://docs.anyscale.com/llm/serving/benchmarking/metrics) 대안적 정의와 측정 레시피.
+- [BentoML: LLM Inference Metrics](https://bentoml.com/llm/inference-optimization/llm-inference-metrics) 실제 배포에서의 응용 측정.
 - [LLMPerf](https://github.com/ray-project/llmperf): Ray 기반 오픈소스 벤치마크.
 - [GenAI-Perf](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/client/src/c++/perf_analyzer/genai-perf/README.html): NVIDIA의 벤치마크 도구.
 - [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/): 업계에서 인정받는 굿풋 기반 벤치마크.

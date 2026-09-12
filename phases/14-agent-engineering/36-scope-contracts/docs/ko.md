@@ -159,7 +159,7 @@ python3 code/main.py
 
 - [LangGraph human-in-the-loop interrupts](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/)
 - [OpenAI Agents SDK tool approval policies](https://platform.openai.com/docs/guides/agents-sdk)
-- [logi-cmd/agent-guardrails(merge gates and scope validation](https://github.com/logi-cmd/agent-guardrails)) 위반 예산, 심각도 계층
+- [logi-cmd/agent-guardrails: merge gates and scope validation](https://github.com/logi-cmd/agent-guardrails) 위반 예산, 심각도 계층
 - [Dev|Journal, Preventing AI Agent Configuration Drift with Agent Contract Testing](https://earezki.com/ai-news/2026-05-05-i-built-a-tiny-ci-tool-to-keep-ai-agent-configs-from-drifting-in-my-repo/): 외부 의존성 없는 `--strict` 모드
 - [Agentic Coding Is Not a Trap (production logs)](https://dev.to/jtorchia/agentic-coding-is-not-a-trap-i-answered-the-viral-hn-post-with-my-own-production-logs-33d9): specsmaxxing 증거: 52% → 21%
 - [OpenCode permission globs](https://opencode.ai/docs/agents/): 권한별 세밀한 스코프

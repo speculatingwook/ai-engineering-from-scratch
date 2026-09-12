@@ -186,7 +186,7 @@ a2a-task-lifecycle
 ## 더 읽을거리 (Further Reading)
 
 - [a2a-protocol.org](https://a2a-protocol.org/latest/): 표준 A2A 명세
-- [a2aproject/A2A(GitHub](https://github.com/a2aproject/A2A)) 레퍼런스 구현과 SDK
-- [Linux Foundation(A2A launch press release](https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents)) 2025년 6월 거버넌스 이전
-- [Google Cloud(A2A protocol upgrade](https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade)) 로드맵과 파트너 모멘텀
-- [Google Dev(A2A 1.0 milestone](https://discuss.google.dev/t/the-a2a-1-0-milestone-ensuring-and-testing-backward-compatibility/352258)) v1.0 릴리스 노트와 하위 호환성 지침
+- [a2aproject/A2A: GitHub](https://github.com/a2aproject/A2A) 레퍼런스 구현과 SDK
+- [Linux Foundation: A2A launch press release](https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents) 2025년 6월 거버넌스 이전
+- [Google Cloud: A2A protocol upgrade](https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade) 로드맵과 파트너 모멘텀
+- [Google Dev: A2A 1.0 milestone](https://discuss.google.dev/t/the-a2a-1-0-milestone-ensuring-and-testing-backward-compatibility/352258) v1.0 릴리스 노트와 하위 호환성 지침

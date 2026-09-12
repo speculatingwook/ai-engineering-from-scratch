@@ -203,7 +203,7 @@ Refuse `K > 30` or `ε > 0.3` (unsafe trust region). Refuse any PPO run without 
 - [Schulman et al. (2015). Trust Region Policy Optimization](https://arxiv.org/abs/1502.05477): TRPO, PPO의 선구자.
 - [Andrychowicz et al. (2021). What Matters In On-Policy RL? A Large-Scale Empirical Study](https://arxiv.org/abs/2006.05990): 모든 PPO 하이퍼파라미터를 절제(ablation)함.
 - [Ouyang et al. (2022). Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155): InstructGPT; RLHF에서의 PPO 레시피.
-- [OpenAI Spinning Up(PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html)) PyTorch를 곁들인 명료한 현대적 설명.
+- [OpenAI Spinning Up: PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html) PyTorch를 곁들인 명료한 현대적 설명.
 - [CleanRL PPO implementation](https://github.com/vwxyzjn/cleanrl): 많은 논문이 사용하는 참조 단일 파일 PPO.
-- [Hugging Face TRL(PPOTrainer](https://huggingface.co/docs/trl/main/en/ppo_trainer)) 언어 모델에서 PPO의 프로덕션 레시피; Lesson 09 (RLHF)와 함께 읽어라.
+- [Hugging Face TRL: PPOTrainer](https://huggingface.co/docs/trl/main/en/ppo_trainer) 언어 모델에서 PPO의 프로덕션 레시피; Lesson 09 (RLHF)와 함께 읽어라.
 - [Engstrom et al. (2020). Implementation Matters in Deep Policy Gradients](https://arxiv.org/abs/2005.12729): "37가지 코드 수준 최적화" 논문; 어떤 PPO 트릭이 하중을 견디고 어떤 것이 민간 전승인지.

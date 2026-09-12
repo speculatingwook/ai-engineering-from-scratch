@@ -236,11 +236,11 @@ Refuse to recommend a pure-LLM agent for any destructive action (payments, accou
 
 ## 더 읽을거리 (Further Reading)
 
-- [Weizenbaum (1966). ELIZA(A Computer Program For the Study of Natural Language Communication](https://web.stanford.edu/class/cs124/p36-weizenabaum.pdf)) 원래의 규칙 기반 챗봇 논문.
+- [Weizenbaum (1966). ELIZA: A Computer Program For the Study of Natural Language Communication](https://web.stanford.edu/class/cs124/p36-weizenabaum.pdf) 원래의 규칙 기반 챗봇 논문.
 - [Thoppilan et al. (2022). LaMDA: Language Models for Dialog Applications](https://arxiv.org/abs/2201.08239): LLM 에이전트가 장악하기 직전, Google의 후기 신경망 챗봇 논문.
 - [Yao et al. (2022). ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629): 에이전트 루프 패턴을 명명한 논문.
 - [Anthropic's guide on building effective agents](https://www.anthropic.com/research/building-effective-agents): 2026년에도 유효한 2024년 프로덕션 가이드.
 - [Greshake et al. (2023). Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection](https://arxiv.org/abs/2302.12173): 프롬프트 인젝션 논문.
-- [OWASP Top 10 for LLM Applications 2025(LLM01 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)) 프롬프트 인젝션을 최상위 보안 우려로 만든 순위.
-- [AWS(Securing Amazon Bedrock Agents against Indirect Prompt Injections](https://aws.amazon.com/blogs/machine-learning/securing-amazon-bedrock-agents-a-guide-to-safeguarding-against-indirect-prompt-injections/)) Plan-Verify-Execute와 사용자 확인 흐름을 포함한 실용적인 오케스트레이션 계층 방어.
+- [OWASP Top 10 for LLM Applications 2025: LLM01 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) 프롬프트 인젝션을 최상위 보안 우려로 만든 순위.
+- [AWS: Securing Amazon Bedrock Agents against Indirect Prompt Injections](https://aws.amazon.com/blogs/machine-learning/securing-amazon-bedrock-agents-a-guide-to-safeguarding-against-indirect-prompt-injections/) Plan-Verify-Execute와 사용자 확인 흐름을 포함한 실용적인 오케스트레이션 계층 방어.
 - [EchoLeak (CVE-2025-32711)](https://www.vectra.ai/topics/prompt-injection): 간접 프롬프트 인젝션으로 인한 표준 제로 클릭 데이터 탈취 CVE. 쓰기 권한 에이전트가 런타임 방어를 필요로 하는 이유에 대한 참조 사례.

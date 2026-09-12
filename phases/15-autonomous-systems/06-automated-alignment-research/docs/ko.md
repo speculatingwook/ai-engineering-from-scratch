@@ -95,8 +95,8 @@ aar-forum
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic(Automated Weak-to-Strong Researcher](https://alignment.anthropic.com/2026/automated-w2s-researcher/)) 1차 자료.
+- [Anthropic: Automated Weak-to-Strong Researcher](https://alignment.anthropic.com/2026/automated-w2s-researcher/) 1차 자료.
 - [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): AI R&D 임계값 규정.
-- [Anthropic(Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)) 더 넓은 에이전트 자율성 규정.
+- [Anthropic: Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) 더 넓은 에이전트 자율성 규정.
 - [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/): RSP와 병행하는 ML R&D 자율성 수준.
 - [Burns et al. (2023). Weak-to-Strong Generalization (OpenAI)](https://openai.com/index/weak-to-strong-generalization/): AAR이 공략한 근본 문제.

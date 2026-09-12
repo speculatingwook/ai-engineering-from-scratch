@@ -108,8 +108,8 @@ an-dp-clip-noise
 
 ## 더 읽을거리 (Further Reading)
 
-- [Abadi et al.(DP-SGD (arXiv:1607.00133)](https://arxiv.org/abs/1607.00133)) 표준 DP 학습 알고리즘
-- [Carlini et al.(Extracting Training Data (arXiv:2012.07805)](https://arxiv.org/abs/2012.07805)) 표준적인 추출 논문
-- [Duan et al.(Canary MIA on LLMs (arXiv:2402.07841, 2024)](https://arxiv.org/abs/2402.07841)) 제한적 성공의 MIA
-- [Kowalczyk et al.(Auditing DP for LLMs (arXiv:2503.06808, March 2025)](https://arxiv.org/abs/2503.06808)) 긴장 관계의 해소
+- [Abadi et al.: DP-SGD (arXiv:1607.00133)](https://arxiv.org/abs/1607.00133) 표준 DP 학습 알고리즘
+- [Carlini et al.: Extracting Training Data (arXiv:2012.07805)](https://arxiv.org/abs/2012.07805) 표준적인 추출 논문
+- [Duan et al.: Canary MIA on LLMs (arXiv:2402.07841, 2024)](https://arxiv.org/abs/2402.07841) 제한적 성공의 MIA
+- [Kowalczyk et al.: Auditing DP for LLMs (arXiv:2503.06808, March 2025)](https://arxiv.org/abs/2503.06808) 긴장 관계의 해소
 - [PMixED (arXiv:2403.15638)](https://arxiv.org/abs/2403.15638): 추론 시점의 사적 예측

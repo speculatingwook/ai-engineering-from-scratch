@@ -181,8 +181,8 @@ Refuse to apply tabular TD to state spaces > 10⁶. Refuse to ship a Q-learning 
 ## 더 읽을거리 (Further Reading)
 
 - [Watkins & Dayan (1992). Q-learning](https://link.springer.com/article/10.1007/BF00992698): 원조 논문과 수렴 증명.
-- [Sutton & Barto (2018). Ch. 6(Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf)) TD(0), SARSA, Q-러닝, 기대 SARSA.
+- [Sutton & Barto (2018). Ch. 6: Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf) TD(0), SARSA, Q-러닝, 기대 SARSA.
 - [Hasselt (2010). Double Q-learning](https://papers.nips.cc/paper_files/paper/2010/hash/091d584fced301b442654dd8c23b3fc9-Abstract.html): 최대화 편향에 대한 해법.
 - [Seijen, Hasselt, Whiteson, Wiering (2009). A Theoretical and Empirical Analysis of Expected SARSA](https://ieeexplore.ieee.org/document/4927542): 기대 SARSA의 동기.
 - [Rummery & Niranjan (1994). On-line Q-learning using connectionist systems](https://www.researchgate.net/publication/2500611_On-Line_Q-Learning_Using_Connectionist_Systems): SARSA(당시에는 "수정 연결주의 Q-러닝"으로 불림)를 만든 논문.
-- [Sutton & Barto (2018). Ch. 7(n-step Bootstrapping](http://incompleteideas.net/book/RLbook2020.pdf)) TD(0)를 TD(n)으로 일반화, Q-러닝에서 적격성 흔적(eligibility traces)으로, 그리고 나중에 PPO의 GAE로 가는 경로.
+- [Sutton & Barto (2018). Ch. 6: Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf) TD(0)를 TD(n)으로 일반화, Q-러닝에서 적격성 흔적(eligibility traces)으로, 그리고 나중에 PPO의 GAE로 가는 경로.

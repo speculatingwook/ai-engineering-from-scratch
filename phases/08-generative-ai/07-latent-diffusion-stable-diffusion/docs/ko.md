@@ -145,5 +145,5 @@ h = h + CrossAttention(Q=h, K=text_embed, V=text_embed)
 - [Peebles & Xie (2023). Scalable Diffusion Models with Transformers (DiT)](https://arxiv.org/abs/2212.09748) — DiT.
 - [Esser et al. (2024). Scaling Rectified Flow Transformers for High-Resolution Image Synthesis](https://arxiv.org/abs/2403.03206) — SD3, MMDiT.
 - [Ho & Salimans (2022). Classifier-Free Diffusion Guidance](https://arxiv.org/abs/2207.12598) — CFG.
-- [Labs (2024). Flux.1(Black Forest Labs announcement](https://blackforestlabs.ai/announcing-black-forest-labs/)) Flux.1 계열.
+- [Labs (2024). Flux.1: Black Forest Labs announcement](https://blackforestlabs.ai/announcing-black-forest-labs/) Flux.1 계열.
 - [Hugging Face Diffusers docs](https://huggingface.co/docs/diffusers/index): 위 모든 체크포인트의 레퍼런스 구현.

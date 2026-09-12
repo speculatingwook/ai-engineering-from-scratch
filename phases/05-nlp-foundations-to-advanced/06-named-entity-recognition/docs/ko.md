@@ -317,5 +317,5 @@ Refuse to recommend fine-tuning a transformer for under 500 labeled examples unl
 
 - [Lample et al. (2016). Neural Architectures for Named Entity Recognition](https://arxiv.org/abs/1603.01360): BiLSTM-CRF 논문. 표준.
 - [Devlin et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers](https://arxiv.org/abs/1810.04805): 표준이 된 토큰 분류 패턴을 도입.
-- [spaCy linguistic features(named entities](https://spacy.io/usage/linguistic-features#named-entities)) `Doc.ents`와 `Span`의 모든 속성에 대한 실용 레퍼런스.
+- [spaCy linguistic features: named entities](https://spacy.io/usage/linguistic-features#named-entities) `Doc.ents`와 `Span`의 모든 속성에 대한 실용 레퍼런스.
 - [seqeval](https://github.com/chakki-works/seqeval): 올바른 지표 라이브러리. 항상 이것을 써라.

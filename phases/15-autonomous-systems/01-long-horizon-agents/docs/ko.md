@@ -104,8 +104,8 @@ task-decomposition
 
 ## 더 읽을거리 (Further Reading)
 
-- [METR(Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) 최초의 지평 논문과 방법론.
+- [METR: Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) 최초의 지평 논문과 방법론.
 - [METR Time Horizons benchmark (Epoch AI)](https://epoch.ai/benchmarks/metr-time-horizons): 2026년까지 갱신된 현재 수치.
-- [Anthropic(Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 지평, 정렬 위장, 배포 격차에 대한 내부 관점.
-- [METR(Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/)) HCAST, RE-Bench, SWAA 스위트 명세.
-- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 장기 지평 Claude 행동을 지배하는 우선순위 위계.
+- [Anthropic: Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) 지평, 정렬 위장, 배포 격차에 대한 내부 관점.
+- [METR: Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/) HCAST, RE-Bench, SWAA 스위트 명세.
+- [Anthropic: Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) 장기 지평 Claude 행동을 지배하는 우선순위 위계.

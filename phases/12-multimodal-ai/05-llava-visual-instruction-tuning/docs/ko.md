@@ -171,8 +171,8 @@ mm-llava-projector
 
 ## 더 읽을거리 (Further Reading)
 
-- [Liu et al.(Visual Instruction Tuning (arXiv:2304.08485)](https://arxiv.org/abs/2304.08485)) LLaVA 논문.
+- [Liu et al.: Visual Instruction Tuning (arXiv:2304.08485)](https://arxiv.org/abs/2304.08485) LLaVA 논문.
 - [Liu et al. — Improved Baselines with Visual Instruction Tuning (arXiv:2310.03744)](https://arxiv.org/abs/2310.03744) — LLaVA-1.5.
-- [Chen et al.(ShareGPT4V (arXiv:2311.12793)](https://arxiv.org/abs/2311.12793)) 밀집 캡션 데이터셋.
-- [Karamcheti et al.(Prismatic VLMs (arXiv:2402.07865)](https://arxiv.org/abs/2402.07865)) 설계 공간 절제 연구.
-- [Li et al.(LLaVA-OneVision (arXiv:2408.03326)](https://arxiv.org/abs/2408.03326)) 통합된 단일 이미지, 멀티 이미지, 비디오.
+- [Chen et al.: ShareGPT4V (arXiv:2311.12793)](https://arxiv.org/abs/2311.12793) 밀집 캡션 데이터셋.
+- [Karamcheti et al.: Prismatic VLMs (arXiv:2402.07865)](https://arxiv.org/abs/2402.07865) 설계 공간 절제 연구.
+- [Li et al.: LLaVA-OneVision (arXiv:2408.03326)](https://arxiv.org/abs/2408.03326) 통합된 단일 이미지, 멀티 이미지, 비디오.

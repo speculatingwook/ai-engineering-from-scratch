@@ -119,4 +119,4 @@ alphaevolve-loop
 - [DeepMind blog on AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/): 결과가 담긴 벤더 작성 글.
 - [AlphaEvolve results repository](https://github.com/google-deepmind/alphaevolve_results): 48-곱셈 4x4 matmul을 포함해 발견된 알고리즘들.
 - [Romera-Paredes et al. (2023). Mathematical discoveries from program search with LLMs (FunSearch)](https://www.nature.com/articles/s41586-023-06924-6): 선행 시스템.
-- [Anthropic(Responsible Scaling Policy v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) 평가기에 묶인 자율성을 핵심 연구 방향으로 규정한다.
+- [Anthropic: Responsible Scaling Policy v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) 평가기에 묶인 자율성을 핵심 연구 방향으로 규정한다.

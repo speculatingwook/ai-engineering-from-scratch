@@ -149,8 +149,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kennedy & Eberhart(Particle Swarm Optimization](https://ieeexplore.ieee.org/document/488968)) 1995년 PSO 논문
-- [Dorigo(Ant Colony Optimization](https://www.aco-metaheuristic.org/about.html)) 1992년 ACO 기초
-- [LMPSO(Language Model Particle Swarm Optimization](https://arxiv.org/abs/2504.09247)) 구조화된 LLM 출력을 위한 PSO
-- [Model Swarms(gradient-free LLM expert optimization](https://arxiv.org/abs/2410.11163)) 모델 가중치 부분 공간에 대한 PSO
-- [AMRO-S(ant-colony multi-agent routing](https://arxiv.org/abs/2603.12933)) 품질 게이트를 갖춘 페로몬 기반 라우팅
+- [Kennedy & Eberhart: Particle Swarm Optimization](https://ieeexplore.ieee.org/document/488968) 1995년 PSO 논문
+- [Dorigo: Ant Colony Optimization](https://www.aco-metaheuristic.org/about.html) 1992년 ACO 기초
+- [LMPSO: Language Model Particle Swarm Optimization](https://arxiv.org/abs/2504.09247) 구조화된 LLM 출력을 위한 PSO
+- [Model Swarms: gradient-free LLM expert optimization](https://arxiv.org/abs/2410.11163) 모델 가중치 부분 공간에 대한 PSO
+- [AMRO-S: ant-colony multi-agent routing](https://arxiv.org/abs/2603.12933) 품질 게이트를 갖춘 페로몬 기반 라우팅

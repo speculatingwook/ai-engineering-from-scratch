@@ -153,9 +153,9 @@ cross-attention-fusion
 
 ## 더 읽을거리 (Further Reading)
 
-- [Alayrac et al.(Flamingo (arXiv:2204.14198)](https://arxiv.org/abs/2204.14198)) 원논문.
-- [Awadalla et al.(OpenFlamingo (arXiv:2308.01390)](https://arxiv.org/abs/2308.01390)) 오픈 재현.
-- [Laurençon et al.(OBELICS (arXiv:2306.16527)](https://arxiv.org/abs/2306.16527)) 인터리브 웹 코퍼스.
-- [Jaegle et al.(Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795)) 일반 퍼시버 아키텍처.
-- [Li et al.(Otter (arXiv:2305.03726)](https://arxiv.org/abs/2305.03726)) 명령어 튜닝된 Flamingo 후손.
-- [Laurençon et al.(Idefics2 (arXiv:2405.02246)](https://arxiv.org/abs/2405.02246)) Flamingo 접근법의 현대적 단순화.
+- [Alayrac et al.: Flamingo (arXiv:2204.14198)](https://arxiv.org/abs/2204.14198) 원논문.
+- [Awadalla et al.: OpenFlamingo (arXiv:2308.01390)](https://arxiv.org/abs/2308.01390) 오픈 재현.
+- [Laurençon et al.: OBELICS (arXiv:2306.16527)](https://arxiv.org/abs/2306.16527) 인터리브 웹 코퍼스.
+- [Jaegle et al.: Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795) 일반 퍼시버 아키텍처.
+- [Li et al.: Otter (arXiv:2305.03726)](https://arxiv.org/abs/2305.03726) 명령어 튜닝된 Flamingo 후손.
+- [Laurençon et al.: Idefics2 (arXiv:2405.02246)](https://arxiv.org/abs/2405.02246) Flamingo 접근법의 현대적 단순화.

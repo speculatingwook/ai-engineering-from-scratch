@@ -204,7 +204,7 @@ LangGraph에 손을 뻗기 전에 60초 설계를 하라.
 - [LangGraph Persistence and Checkpoints](https://langchain-ai.github.io/langgraph/concepts/persistence/): Postgres/SQLite/Redis 저장소, 체크포인트 네임스페이스, 스레드 ID에 관한 세부사항
 - [LangGraph Human-in-the-loop](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/): `interrupt_before`, `interrupt_after`, `Command(resume=...)`, 그리고 상태 편집 패턴
 - [Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models" (ICLR 2023)](https://arxiv.org/abs/2210.03629): 모든 LangGraph 에이전트가 구현하는 패턴; 추론 트레이스 근거를 위해 읽으라
-- [Anthropic(Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents)) 어떤 그래프 형태(체인, 라우터, 오케스트레이터-워커, 평가자-옵티마이저)를 언제 선호할지
+- [Anthropic: Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) 어떤 그래프 형태(체인, 라우터, 오케스트레이터-워커, 평가자-옵티마이저)를 언제 선호할지
 - Phase 11 · 09 (Function Calling): 모든 LangGraph 에이전트 노드가 재사용하는 도구 호출 프리미티브
 - Phase 11 · 14 (Model Context Protocol): MCP 어댑터를 통해 LangGraph `ToolNode`에 플러그인되는 외부 도구 발견
 - Phase 11 · 17 (Agent framework tradeoffs): CrewAI, AutoGen, Agno 대신 LangGraph를 언제 선택할지

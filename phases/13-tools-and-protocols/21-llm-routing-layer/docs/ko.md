@@ -147,8 +147,8 @@ tp-router-failover
 
 ## 더 읽을거리 (Further Reading)
 
-- [LiteLLM(docs](https://docs.litellm.ai/)) 셀프 호스팅 라우팅 게이트웨이
-- [OpenRouter(quickstart](https://openrouter.ai/docs/quickstart)) 매니지드 라우팅 SaaS
-- [Portkey(docs](https://portkey.ai/docs)) 가드레일이 있는 프로덕션 라우팅
-- [TrueFoundry(LiteLLM vs OpenRouter](https://www.truefoundry.com/blog/litellm-vs-openrouter)) 결정 가이드
-- [Relayplane(LLM gateway comparison 2026](https://relayplane.com/blog/llm-gateway-comparison-2026)) 벤더 개관
+- [LiteLLM: docs](https://docs.litellm.ai/) 셀프 호스팅 라우팅 게이트웨이
+- [OpenRouter: quickstart](https://openrouter.ai/docs/quickstart) 매니지드 라우팅 SaaS
+- [Portkey: docs](https://portkey.ai/docs) 가드레일이 있는 프로덕션 라우팅
+- [TrueFoundry: LiteLLM vs OpenRouter](https://www.truefoundry.com/blog/litellm-vs-openrouter) 결정 가이드
+- [Relayplane: LLM gateway comparison 2026](https://relayplane.com/blog/llm-gateway-comparison-2026) 벤더 개관

@@ -136,7 +136,7 @@ def dft(x):
 ## 더 읽을거리 (Further Reading)
 
 - [Shannon (1949). Communication in the Presence of Noise](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf): 샘플링 정리의 배경이 된 논문.
-- [Smith(The Scientist and Engineer's Guide to Digital Signal Processing](https://www.dspguide.com/ch8.htm)) 무료의 정전(正典) 격 DSP 교과서.
-- [librosa docs(audio primer](https://librosa.org/doc/latest/tutorial.html)) 코드와 함께하는 실용적 안내.
-- [Heinrich Kuttruff(Room Acoustics (6th ed.)](https://www.routledge.com/Room-Acoustics/Kuttruff/p/book/9781482260434)) 실제 오디오가 깨끗한 사인파가 아닌 이유에 대한 참고서.
-- [Steve Eddins(FFT Interpretation notebook](https://blogs.mathworks.com/steve/2020/03/30/fft-spectrum-and-spectral-densities/)) 주파수 빈 직관을 10분 만에 정리.
+- [Smith: The Scientist and Engineer's Guide to Digital Signal Processing](https://www.dspguide.com/ch8.htm) 무료의 정전(正典) 격 DSP 교과서.
+- [librosa docs: audio primer](https://librosa.org/doc/latest/tutorial.html) 코드와 함께하는 실용적 안내.
+- [Heinrich Kuttruff: Room Acoustics (6th ed.)](https://www.routledge.com/Room-Acoustics/Kuttruff/p/book/9781482260434) 실제 오디오가 깨끗한 사인파가 아닌 이유에 대한 참고서.
+- [Steve Eddins: FFT Interpretation notebook](https://blogs.mathworks.com/steve/2020/03/30/fft-spectrum-and-spectral-densities/) 주파수 빈 직관을 10분 만에 정리.

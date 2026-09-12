@@ -169,6 +169,6 @@ def dct_ii(x, n_coeffs):
 
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420): MFCC 논문.
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/): 원조 멜 스케일.
-- [OpenAI(Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py)) 참조 구현을 읽어보라.
+- [OpenAI: Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py) 참조 구현을 읽어보라.
 - [librosa feature extraction docs](https://librosa.org/doc/main/feature.html): `mfcc`, `melspectrogram`, 홉/윈도우 참고 자료.
-- [NVIDIA NeMo(audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers)) Parakeet + Canary 모델을 위한 프로덕션 규모 파이프라인.
+- [NVIDIA NeMo: audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers) Parakeet + Canary 모델을 위한 프로덕션 규모 파이프라인.
