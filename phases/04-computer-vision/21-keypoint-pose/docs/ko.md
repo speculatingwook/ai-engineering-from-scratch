@@ -86,10 +86,10 @@ For each connection (limb):
   - 작은 MLP로 2D 예측을 3D로 끌어올림(lift)(VideoPose3D).
   - 이미지에서 직접 3D 회귀(PyMAF, MHFormer).
   - 정답(ground truth)을 위한 다중 시점(multi-view) 구성(CMU Panoptic).
+
 ```figure
 cv3-pose-heatmap
 ```
-
 
 ## 직접 만들기 (Build It)
 

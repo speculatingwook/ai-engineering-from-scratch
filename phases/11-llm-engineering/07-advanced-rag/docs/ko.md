@@ -169,10 +169,10 @@ graph TD
         Q --> Correct["Correctness evaluation<br/>Does answer match<br/>expected answer?"]
     end
 ```
+
 ```figure
 agentic-rag-loop
 ```
-
 
 ## 직접 만들기 (Build It)
 

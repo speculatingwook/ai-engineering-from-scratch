@@ -63,10 +63,10 @@ PagerDuty / Alertmanager webhook
 - 조치: ArgoCD 롤백 웹훅, PagerDuty 에스컬레이트, Slack 승인 카드
 - 감사: 추가 전용(append-only) 구조화된 로그(고려됨, 실행됨, 승인됨, 결과)
 - 배포: 자체의 좁은 RBAC 역할을 가진 K8s 배포; 별도 네임스페이스
+
 ```figure
 ce-rootcause-walk
 ```
-
 
 ## 직접 만들기 (Build It)
 

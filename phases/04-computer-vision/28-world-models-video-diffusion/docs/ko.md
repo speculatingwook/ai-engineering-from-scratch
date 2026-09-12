@@ -118,10 +118,10 @@ Sora 2의 2026년 출시는 **물리적 그럴듯함(physical plausibility)** �
 | HunyuanVideo | 오픈 텍스트-투-비디오 | 13B | 10초 클립 | 관대함(permissive) |
 | Cosmos / Cosmos-Drive | 자율주행 시뮬레이션 | 7-14B | 운전 장면 | NVIDIA 오픈 |
 | Magica / Mirage 2 | AI 네이티브 게임 엔진 |: | 수정 가능 월드 | 제품 |
+
 ```figure
 v4-world-rollout
 ```
-
 
 ## 직접 만들기 (Build It)
 

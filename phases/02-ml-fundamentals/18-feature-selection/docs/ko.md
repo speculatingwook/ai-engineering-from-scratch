@@ -201,10 +201,10 @@ flowchart TD
     K -->|Yes| L["Ship with selected features"]
     K -->|No| M["Try different method or keep all features"]
 ```
+
 ```figure
 f3-feature-prune
 ```
-
 
 ## 직접 만들기 (Build It)
 

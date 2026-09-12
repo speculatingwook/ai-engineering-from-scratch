@@ -63,10 +63,10 @@ Coder A          Coder B          Coder C          Coder D          (4 parallel)
 - 평가: SWE-bench Pro(50개 이슈), SWE-AF 시나리오, 단위 테스트를 위한 HumanEval++
 - 관측성(observability): 역할 태그가 달린 스팬(span)을 갖춘 Langfuse, 에이전트별 토큰 회계
 - 배포: 각 역할을 별도 Deployment + 백로그(backlog)에 대한 HPA로 갖춘 K8s
+
 ```figure
 ce-team-handoff
 ```
-
 
 ## 직접 만들기 (Build It)
 

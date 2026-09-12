@@ -90,10 +90,10 @@ PipelineResult(
 ### 배치 처리 (Batching)
 
 프로덕션 서비스는 여러 클라이언트를 서빙한다. 요청들에 걸쳐 검출과 분류를 배치(batch)하면 처리량(throughput)이 곱절이 된다. 트레이드오프(trade-off)는 배치가 채워지기를 기다리며 생기는 추가 지연 시간이다. 전형적인 설정은 이렇다. 최대 20ms 동안 요청을 모으고, 함께 배치하고, 처리하고, 응답을 분배한다. `torchserve`와 `triton`은 이를 기본으로 하고, 부하가 예측 가능한 작은 서비스는 자체 마이크로 배처(micro-batcher)를 만든다.
+
 ```figure
 v4-vision-pipeline
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -13,10 +13,10 @@
 - 새로운 봉투(envelope) 키를 발명하지 않고 요청(request), 응답(response), 알림(notification), 배치(batch) 구별하기.
 - 스트림의 나머지를 오염시키지 않으면서 줄당 하나의 파싱 오류 처리하기.
 - 레슨이 자식 프로세스를 스폰(spawn)하지 않고 실행되도록 io.BytesIO를 사용해 자가 종료(self-terminating) 데모 만들기.
+
 ```figure
 cf-jsonrpc-frames
 ```
-
 
 ## 왜 JSON-RPC가 링구아 프랑카로 남는가 (Why JSON-RPC stays the lingua franca)
 

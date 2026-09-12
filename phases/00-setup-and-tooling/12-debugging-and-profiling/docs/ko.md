@@ -32,10 +32,10 @@ graph TD
 ```
 
 대부분은 곧장 수준 3(TensorBoard 응시하기)으로 뛰어든다. 하지만 AI 버그의 80%는 수준 1과 2에 산다.
+
 ```figure
 s0-flame-hot
 ```
-
 
 ## 직접 만들기 (Build It)
 

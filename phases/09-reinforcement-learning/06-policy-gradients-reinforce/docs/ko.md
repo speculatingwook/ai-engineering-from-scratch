@@ -51,10 +51,10 @@ REINFORCE 정리(Williams 1992)는 이 그래디언트가 계산 가능함을 �
 즉, 취한 행동의 점수에서 정책 하의 기댓값을 뺀 것이다.
 
 **연속 행동을 위한 가우시안 정책.** `π_θ(a | s) = N(μ_θ(s), σ_θ(s))`. `∇ log N(a; μ, σ)`는 닫힌 형식(closed form)을 가진다. Phase 9 · 07의 SAC에 필요한 것은 그게 전부다.
+
 ```figure
 policy-gradient-landscape
 ```
-
 
 ## 직접 만들기 (Build It)
 

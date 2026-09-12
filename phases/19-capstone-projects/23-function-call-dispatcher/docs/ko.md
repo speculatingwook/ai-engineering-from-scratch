@@ -13,10 +13,10 @@
 - 느린 원본과 경합(race)하는 재시도가 두 번 실행되지 않도록 멱등성 키(idempotency key)로 재시도 중복 제거하기.
 - 핸들러 예외와 전송 결함을 하네스 루프가 이미 이해하는 단일 오류 봉투(error envelope)로 매핑하기.
 - 마흔 개의 도구 호출 팬아웃(fan-out)이 이벤트 루프를 소진하지 않도록 동시성 한도(concurrency limit)로 병렬 디스패치 제한하기.
+
 ```figure
 cf-dispatch-retry
 ```
-
 
 ## 디스패처가 자리하는 곳 (Where the dispatcher sits)
 

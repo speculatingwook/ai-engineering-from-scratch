@@ -186,10 +186,10 @@ graph LR
     CE_S -->|"Best for"| Cls2["Classification"]
     CL_S -->|"Best for"| Emb2["Representation learning"]
 ```
+
 ```figure
 cross-entropy-loss
 ```
-
 
 ## 직접 만들기 (Build It)
 

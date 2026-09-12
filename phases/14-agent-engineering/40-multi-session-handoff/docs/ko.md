@@ -57,10 +57,10 @@ flowchart LR
 ### 피드백 로그 잘라내기
 
 전체 `feedback_record.jsonl`은 수백 개의 항목일 수 있다. 핸드오프는 마지막 K개와 0이 아닌 종료를 가진 모든 항목만 담는다. 다음 세션은 필요하면 전체 로그를 로드하지만, 패킷은 작게 유지된다.
+
 ```figure
 wb-handoff-packet
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -81,10 +81,10 @@ CTC는 2015년에 CRNN이 작동한 이유이며, 2026년에도 여전히 대부
 - **단어 오류율(Word Error Rate, WER)**: 단어 수준에서 동일.
 - **구조화된 필드의 F1**: 키-값 작업용. `{invoice_total: 42.50}`이 올바르게 나타나는지 측정한다.
 - **JSON에 대한 편집 거리(Edit distance on JSON)**: 종단 간 문서 파싱용. Donut 논문이 정규화된 트리 편집 거리(normalised tree edit distance)를 도입했다.
+
 ```figure
 cv3-ctc-collapse
 ```
-
 
 ## 직접 만들기 (Build It)
 

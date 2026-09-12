@@ -87,10 +87,10 @@ y_ij = +1 if matching, -1 otherwise
 - **텍스트-투-이미지 생성**: Stable Diffusion, DALL-E 3이 CLIP 텍스트 임베딩에 조건화한다.
 
 공유 임베딩 공간이 갖춰지면 모든 비전+언어 작업이 거리 계산으로 귀결된다.
+
 ```figure
 clip-contrastive
 ```
-
 
 ## 직접 만들기 (Build It)
 

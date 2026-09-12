@@ -34,10 +34,10 @@
 - **새 어휘 학습:** SentencePiece(다국어, 사전 토큰화 없음) 또는 HF Tokenizers.
 - **GPT 어휘에 대한 빠른 추론:** tiktoken(cl100k_base, o200k_base).
 - **둘 다:** HF Tokenizers: 하나의 라이브러리, 학습 + 서빙.
+
 ```figure
 bpe-merge
 ```
-
 
 ## 직접 만들기 (Build It)
 

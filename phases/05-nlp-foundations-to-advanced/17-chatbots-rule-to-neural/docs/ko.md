@@ -18,10 +18,10 @@
 ## 개념 (The Concept)
 
 ![Chatbot evolution: rule-based → retrieval → neural → agent](../assets/chatbot.svg)
+
 ```figure
 chatbot-lineage
 ```
-
 
 **규칙 기반(Rule-based, ELIZA, AIML, DialogFlow).** 손으로 작성한 패턴이 사용자 입력과 매칭되어 응답을 만든다. 의도 분류기(intent classifier)가 미리 정의된 흐름으로 라우팅(routing)한다. 슬롯 채우기(slot-filling) 상태 기계가 필요한 정보를 수집한다. 설계된 좁은 범위 안에서는 훌륭하게 작동한다. 그 밖에서는 즉시 실패한다. 환각(hallucination)이 용납되지 않는 안전이 중요한 도메인(은행 인증, 항공 예약)에서는 여전히 배포된다.
 

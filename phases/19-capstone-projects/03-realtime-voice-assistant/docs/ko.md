@@ -68,10 +68,10 @@ browser / Twilio PSTN
 - 도구: 날씨/캘린더/예약을 위한 FastMCP 사이드 채널; 도구가 300ms를 초과하면 에이전트는 필러(filler)를 미리 방출
 - 관측성(observability): OpenTelemetry 음성 스팬(span), 오디오 재생이 가능한 Langfuse 음성 트레이스
 - 배포: 자체 호스팅 Whisper + Orpheus를 위한 단일 g5.xlarge(24GB VRAM); 가장 낮은 지연 시간을 위한 호스팅 API
+
 ```figure
 ce-voice-latency
 ```
-
 
 ## 직접 만들기 (Build It)
 

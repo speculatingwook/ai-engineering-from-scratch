@@ -119,10 +119,10 @@ feature_map += MLP(t_embedding)
 ```
 
 시간 조건화가 없으면 신경망은 이미지 자체로부터 잡음 수준을 추측해야 하는데, 작동하기는 하지만 샘플 효율이 훨씬 낮다.
+
 ```figure
 cv-diffusion-image
 ```
-
 
 ## 직접 만들기 (Build It)
 

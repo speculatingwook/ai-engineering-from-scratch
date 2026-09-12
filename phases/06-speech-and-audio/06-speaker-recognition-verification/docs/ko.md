@@ -48,10 +48,10 @@
 ### 화자 분리 (Diarization)
 
 다중 화자 클립에서 "누가 언제 말했는가". 파이프라인: VAD → 분절(segment) → 각 분절 임베딩 → 클러스터링(응집(agglomerative) 또는 스펙트럼) → 경계 매끄럽게. 현대 스택: `pyannote.audio` 3.1, 화자 분절 + 임베딩 + 클러스터링을 하나의 호출 뒤에 묶는다. AMI에서 2026년 SOTA DER은 ~15%다(2022년 23%에서 하락).
+
 ```figure
 sp-eer-crossover
 ```
-
 
 ## 직접 만들기 (Build It)
 

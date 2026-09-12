@@ -94,7 +94,6 @@ flowchart LR
 wb-scope-bounce
 ```
 
-
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다:

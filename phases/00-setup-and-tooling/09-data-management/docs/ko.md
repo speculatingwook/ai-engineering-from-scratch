@@ -31,10 +31,10 @@ graph TD
 ```
 
 Hugging Face `datasets` 라이브러리는 AI 작업을 위해 데이터를 로드하는 표준 방식이다. 다운로드, 캐싱, 형식 변환, 스트리밍을 별도 설정 없이 처리한다.
+
 ```figure
 s0-data-pipeline
 ```
-
 
 ## 직접 만들기 (Build It)
 

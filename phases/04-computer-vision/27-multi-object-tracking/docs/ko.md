@@ -95,10 +95,10 @@ SAM 2는 인스턴스별 시공간 특성의 **메모리 뱅크**를 유지하�
 - **HOTA (Higher Order Tracking Accuracy)**: 검출 정확도(DetA)와 연결 정확도(AssA)로 분해. 2020년 이래 커뮤니티 표준; 가장 포괄적.
 
 감시(누가 누구인가)에는 IDF1을 보고한다. 스포츠 분석(패스 세기)에는 HOTA. 일반적 학술 비교에도 HOTA.
+
 ```figure
 cv3-track-assoc
 ```
-
 
 ## 직접 만들기 (Build It)
 

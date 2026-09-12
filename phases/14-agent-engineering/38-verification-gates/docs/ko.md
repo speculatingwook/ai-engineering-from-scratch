@@ -63,10 +63,10 @@ flowchart TD
 ### 예외 없이 거부한다
 
 차단 심각도 발견 사항은 에이전트가 무시할 수 없다. 오직 사람만이 기록된 `override_reason`과 `overridden_by` 사용자 id를 곁들여 무시할 수 있다. 무시(override)는 에이전트의 결정이 아니라 서명된 변경이다.
+
 ```figure
 wb-gate-sequence
 ```
-
 
 ## 직접 만들기 (Build It)
 

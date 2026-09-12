@@ -206,10 +206,10 @@ graph TD
 | 학습 정확도 = 테스트 정확도지만 둘 다 낮음 | 과소적합(underfitting) | 더 큰 모델, 더 많은 층, 더 많은 특성 |
 | 그래디언트가 모두 0 | 죽은 ReLU 또는 분리된 계산 그래프 | LeakyReLU로 전환, `.requires_grad` 확인 |
 | 학습 중 메모리 부족 | 배치가 너무 크거나 그래프가 해제되지 않음 | 배치 크기 줄이기, 평가에 `torch.no_grad()` 사용 |
+
 ```figure
 learning-curves
 ```
-
 
 ## 직접 만들기 (Build It)
 

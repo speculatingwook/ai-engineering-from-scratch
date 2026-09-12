@@ -26,10 +26,10 @@
 **추상적(Abstractive).** 문서-요약 쌍으로 트랜스포머 인코더-디코더(encoder-decoder)(BART, T5, Pegasus)를 파인튜닝(fine-tuning)한다. 추론(inference) 시 모델은 문서를 읽고 크로스 어텐션(cross-attention)으로 요약을 토큰(token) 단위로 생성한다. 특히 Pegasus는 갭 문장(gap-sentence) 사전 학습(pretraining) 목표를 사용하여, 많은 파인튜닝 없이도 요약에 탁월하다.
 
 평가는 **ROUGE**(Recall-Oriented Understudy for Gisting Evaluation)로 한다. ROUGE-1과 ROUGE-2는 유니그램(unigram)과 바이그램(bigram) 중복을 채점한다. ROUGE-L은 최장 공통 부분 수열(longest common subsequence)을 채점한다. 높을수록 좋지만 ROUGE-L 40은 "좋은" 수준이고 50은 "탁월한" 수준이다. 모든 논문이 세 가지를 모두 보고한다. `rouge-score` 패키지를 사용하라.
+
 ```figure
 summarize-collapse
 ```
-
 
 ## 직접 만들기 (Build It)
 

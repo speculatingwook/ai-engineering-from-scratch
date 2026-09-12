@@ -123,10 +123,10 @@ delta_i = t_{i+1} - t_i
 - **KITTI**: 자율 주행을 위한 실외 LIDAR 포인트 클라우드.
 - **NeRF Synthetic** / **Blended MVS**: 뷰 합성(view synthesis)을 위한 포즈 이미지 데이터셋(dataset).
 - **Mip-NeRF 360** 데이터셋: 경계가 없는 실제 장면.
+
 ```figure
 nerf-rays
 ```
-
 
 ## 직접 만들기 (Build It)
 

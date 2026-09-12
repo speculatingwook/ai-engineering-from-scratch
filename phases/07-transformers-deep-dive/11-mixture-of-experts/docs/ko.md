@@ -77,10 +77,10 @@ DeepSeek-V3는 **토큰당 더 적은 활성 FLOPs**를 쓰면서도 거의 모�
 ### 함정: 메모리
 
 어떤 전문가가 작동하든 모든 전문가는 GPU에 상주한다. 671B 모델은 fp16 가중치(weight)에 ~1.3 TB의 VRAM이 필요하다. 프런티어 MoE 배포(deployment)에는 전문가 병렬화(expert parallelism)가 필요하다. 전문가를 GPU에 걸쳐 샤딩(shard)하고 토큰을 네트워크에 걸쳐 라우팅한다. 지연 시간은 행렬곱(matmul)이 아니라 all-to-all 통신이 지배한다.
+
 ```figure
 expert-routing
 ```
-
 
 ## 직접 만들기 (Build It)
 

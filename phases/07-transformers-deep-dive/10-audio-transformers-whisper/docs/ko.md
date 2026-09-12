@@ -88,10 +88,10 @@ Large-v3-turbo(2024)는 디코더를 32층에서 4층으로 줄였다. 디코딩
 | 스트리밍 ASR | faster-whisper + VAD | 150 ms 지연 목표 달성 가능 |
 | TTS | Piper, XTTS-v2, Kokoro | 인코더-디코더 패턴이지만 Whisper 형태 |
 | 오디오 + 언어 | AudioLM, SeamlessM4T | 텍스트 토큰 + 오디오 토큰을 하나의 트랜스포머에 |
+
 ```figure
 n5-mel-decode
 ```
-
 
 ## 직접 만들기 (Build It)
 

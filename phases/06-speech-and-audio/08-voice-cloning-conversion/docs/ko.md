@@ -56,10 +56,10 @@
 | VoiceBox | 예 | 0.78 | 2.1% | 330M |
 
 SECS > 0.70은 대부분의 청취자에게 일반적으로 타깃과 구별 불가능하다.
+
 ```figure
 sp-voice-factorize
 ```
-
 
 ## 직접 만들기 (Build It)
 

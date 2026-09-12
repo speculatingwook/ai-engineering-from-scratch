@@ -34,10 +34,10 @@ graph TD
 ```
 
 세 가지가 동시에 돌아간다. 터미널 하나로. 분리(detach)했다가 집에 가고, 다시 SSH로 접속해 붙일(reattach) 수 있다. 훈련은 계속 돌아간다.
+
 ```figure
 s0-shell-pipeline
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -45,10 +45,10 @@
 3. 고유수용감각(proprioception, 다리 관절 인코더)만 사용해 교사로부터 증류된 학생 정책.
 4. 실제 IMU에 대한 오토인코더(autoencoder)를 통한 선택적 관측 적응.
 5. 배포. 10개 이상의 환경에서 제로샷(zero-shot). 실패하면, 안전 제약 PPO로 수 분간 실세계 파인튜닝을 한다.
+
 ```figure
 f3-reality-gap
 ```
-
 
 ## 직접 만들기 (Build It)
 

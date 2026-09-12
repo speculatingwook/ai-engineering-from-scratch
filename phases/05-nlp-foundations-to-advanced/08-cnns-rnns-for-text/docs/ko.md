@@ -30,10 +30,10 @@ TF-IDF와 Word2Vec은 단어 순서를 무시하는 평평한 벡터(vector)를 
 순수 RNN은 기울기 소실(vanishing gradient)을 겪는다. **LSTM**은 무엇을 잊을지, 무엇을 저장할지, 무엇을 출력할지 결정하는 게이트를 더해, 긴 시퀀스 전반에서 그래디언트(gradient)를 안정화한다. **GRU**는 LSTM을 두 개의 게이트로 단순화한다. 더 적은 파라미터(parameter)로 비슷하게 동작한다.
 
 **양방향 RNN(Bidirectional RNN)**은 하나의 RNN을 순방향으로, 다른 하나를 역방향으로 돌려 은닉 상태를 연결한다. 모든 토큰의 표현이 좌우 맥락을 모두 본다. 태깅 과제에 필수적이다.
+
 ```figure
 rnn-unroll
 ```
-
 
 ## 직접 만들기 (Build It)
 

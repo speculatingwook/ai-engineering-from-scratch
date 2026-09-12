@@ -160,10 +160,10 @@ flowchart TD
     Kaiming2 --> Check
     GPT --> Check
 ```
+
 ```figure
 weight-init-variance
 ```
-
 
 ## 직접 만들기 (Build It)
 

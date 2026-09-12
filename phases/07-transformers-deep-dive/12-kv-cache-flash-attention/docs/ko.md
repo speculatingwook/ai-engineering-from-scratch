@@ -52,10 +52,10 @@ per 32K context = 10.4 GB
 그 10 GB가 128K 컨텍스트(context)의 Llama 3 70B가 배치(batch) 크기 1에서도 KV 캐시만으로 40 GB A100의 대부분을 차지하는 이유다.
 
 **GQA가 KV 캐시의 승리다.** 64개 헤드의 MHA였다면 32 GB가 될 것이다. MLA는 더 깊이 압축한다.
+
 ```figure
 kv-cache-sizer
 ```
-
 
 ### Flash Attention: 타일링 트릭
 
@@ -115,10 +115,10 @@ Flash 4는 출시 시점에 순방향 패스 전용이다. 학습은 여전히 F
 ### PagedAttention: 가상 메모리로서의 KV 캐시
 
 vLLM의 대표 기능이다. KV 캐시는 16토큰 블록 단위로 할당되고, 페이지 테이블(page table)이 논리적 위치를 물리적 블록에 매핑한다. 병렬 샘플(빔 서치(beam search), 병렬 샘플링) 간에 KV를 공유하고, 프롬프트 캐싱(prompt caching)을 위해 접두사를 핫스왑(hot-swap)하며, 메모리를 조각 모음(defragment)할 수 있게 한다. 순진한 연속 할당 대비 4배 처리량 향상.
+
 ```figure
 flash-attention-memory
 ```
-
 
 ## 직접 만들기 (Build It)
 

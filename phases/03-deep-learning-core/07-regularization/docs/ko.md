@@ -186,10 +186,10 @@ flowchart TD
     Light --> D1["Dropout p=0.05-0.1"]
     Light --> WD0["Weight decay 1e-4"]
 ```
+
 ```figure
 l2-regularization
 ```
-
 
 ## 직접 만들기 (Build It)
 

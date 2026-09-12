@@ -62,10 +62,10 @@ file under failure class + attach repro
 - 테스트 하네스: 병렬 러너, Jacoco(Java) 또는 coverage.py(Python)를 통한 커버리지
 - 관측성(observability): Langfuse + 모든 diff 청크(chunk)가 담긴 저장소별 트레이스 번들
 - 대시보드: 클래스별 개수와 예시 diff를 갖춘 실패 분류 체계 대시보드
+
 ```figure
 ce-migration-funnel
 ```
-
 
 ## 직접 만들기 (Build It)
 

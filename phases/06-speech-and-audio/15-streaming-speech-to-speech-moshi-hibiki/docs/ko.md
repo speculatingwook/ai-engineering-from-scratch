@@ -71,10 +71,10 @@ Sesame CSM(2025)은 비슷한 아이디어를 쓴다. Mimi 코덱 헤드를 단 
 | Sesame CSM-1B | 200 ms TTFA | context-conditioned TTS | Apache-2.0 |
 | GPT-4o Realtime | ~300 ms | closed, OpenAI API | commercial |
 | Gemini 2.5 Live | ~350 ms | closed, Google API | commercial |
+
 ```figure
 sp-fullduplex
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -13,10 +13,10 @@
 - 모델이 한 번의 왕복(round trip)으로 자가 교정(self-correct)할 수 있도록 정밀하고 json-pointer 형태의 오류 경로 반환하기.
 - 조용한 덮어쓰기(silent overwrite)가 프로덕션(production) 도구 카탈로그가 드리프트(drift)하는 방식이므로, 명시적 재정의(override) 없는 재등록 거부하기.
 - 재생 로그(replay log)에서 다시 실행할 수 있도록 검증기(validator)를 순수(pure)하게(I/O 없음, 시간 없음, 전역 없음) 유지하기.
+
 ```figure
 cf-registry-validate
 ```
-
 
 ## 왜 레지스트리가 도구보다 먼저인가 (Why the registry comes before the tool)
 

@@ -44,10 +44,10 @@ Atari에서의 DQN은 단일 하이퍼파라미터(hyperparameter) 세트를 가
 드롭인 교체이며, 일관되게 더 낫다. 기본으로 사용하라.
 
 **기타 개선(Rainbow, 2017):** 우선순위 재현(prioritized replay, 높은 TD-오차 전이를 더 많이 샘플), 듀얼링 아키텍처(dueling architecture, `V(s)`와 어드밴티지 헤드 분리), 노이지 네트워크(noisy networks, 학습된 탐험), n-스텝 리턴, 분포적 Q(distributional Q, C51/QR-DQN), 다중 스텝 부트스트래핑. 각각 몇 퍼센트를 더하며, 이득은 대략 가산적이다.
+
 ```figure
 f3-dqn-stability
 ```
-
 
 ## 직접 만들기 (Build It)
 

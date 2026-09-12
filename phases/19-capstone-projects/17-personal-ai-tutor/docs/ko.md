@@ -71,10 +71,10 @@ learner device
 - 사진 수학: 방정식 인식을 위한 dots.ocr 또는 PaliGemma 2
 - 안전: Llama Guard 4 + 커스텀 연령 적합 필터
 - 평가: Bloom 수준 문제 생성, 사전/사후 시험 하네스, 효능 연구 도구
+
 ```figure
 cf-tutor-loop
 ```
-
 
 ## 직접 만들기 (Build It)
 

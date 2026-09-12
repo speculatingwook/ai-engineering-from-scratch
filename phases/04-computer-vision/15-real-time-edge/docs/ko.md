@@ -101,10 +101,10 @@ FP32 가중치(weight)와 활성값(activation)을 INT8로 대체한다. 모델 
 | 30-80M | Swin-V2-Tiny | 스택이 윈도우 어텐션을 지원한다면 |
 
 특별히 그러지 않을 이유가 없는 한 이 모두를 INT8로 양자화하라.
+
 ```figure
 cnn-param-count
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -101,6 +101,8 @@ Scores = Q @ K^T    shape: (n, n)
 Each row: one token's attention over the entire sequence
 ```
 
+쿼리 하나가 키들을 훑어 가는 과정을 눈으로 따라가 보라. 각 행은 모든 토큰에 점수를 매기고, 소프트맥스가 그 점수를 가중치로 바꾸고, 문맥 벡터는 값들을 그 가중치로 섞은 결과다.
+
 ```figure
 attention-matrix
 ```
@@ -142,24 +144,17 @@ For token 1:
 
 ### 전체 파이프라인
 
-```
-                    +-------+
-  X (input)  ----->|  @ Wq  |-----> Q
-                    +-------+
-                    +-------+
-  X (input)  ----->|  @ Wk  |-----> K
-                    +-------+                     +----------+
-                    +-------+                     |          |
-  X (input)  ----->|  @ Wv  |-----> V ---------->| weighted |----> output
-                    +-------+          ^          |   sum    |
-                                       |          +----------+
-                              +--------+--------+
-                              |    softmax      |
-                              +---------+-------+
-                                        ^
-                              +---------+-------+
-                              | Q @ K^T / sqrt  |
-                              +-----------------+
+```mermaid
+flowchart LR
+  X["X (input)"] --> Q["Q = X · Wq"]
+  X --> K["K = X · Wk"]
+  X --> V["V = X · Wv"]
+  Q --> S["Q · Kᵀ / √dk"]
+  K --> S
+  S --> SM["softmax"]
+  SM --> WS["weighted sum"]
+  V --> WS
+  WS --> O["output"]
 ```
 
 한 줄로 된 공식:
@@ -167,10 +162,10 @@ For token 1:
 ```
 Attention(Q, K, V) = softmax( Q @ K^T / sqrt(dk) ) @ V
 ```
+
 ```figure
 softmax-attention-scaling
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -13,10 +13,10 @@
 - 임의의 UTF-8 입력을 정보 손실 없이 id로, 그리고 다시 원래대로 왕복(round-trip)시킨다.
 - 학습과 디코딩(decoding)에서 살아남도록 특수 토큰(special token)(`<|endoftext|>`, `<|pad|>`)을 예약하고 보호한다.
 - 바이트 수준 알파벳이 범용 토크나이저의 올바른 바닥인 이유를 추론한다.
+
 ```figure
 cap-bpe-merge
 ```
-
 
 ## 틀 (The frame)
 

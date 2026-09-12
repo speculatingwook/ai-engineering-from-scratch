@@ -18,10 +18,10 @@
 ## 개념 (The Concept)
 
 ![N-gram model: count, smooth, generate](../assets/ngram.svg)
+
 ```figure
 prediction-game
 ```
-
 
 **N-gram 확률:** `P(w_i | w_{i-n+1}, ..., w_{i-1})`. `n`을 고정한다(보통 트라이그램(trigram)은 3, 4-gram은 4). 카운트로부터 계산한다:
 
@@ -47,10 +47,10 @@ Kneser-Ney 통찰은 심오하다. "San Francisco"는 흔한 바이그램(bigram
 ```text
 perplexity = exp(- (1/N) * Σ log P(w_i | context_i))
 ```
+
 ```figure
 ngram-backoff
 ```
-
 
 ## 직접 만들기 (Build It)
 

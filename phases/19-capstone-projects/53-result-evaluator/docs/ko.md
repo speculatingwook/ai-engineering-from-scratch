@@ -45,10 +45,10 @@ elif direction == "lower_is_better":
 개선은 부호가 있다. 높을수록 좋은 지표에서 음의 개선은 후보가 더 나쁘다는 뜻이다. 판정 경로는 부호와 크기를 함께 읽는다.
 
 평평한 임계값(`improvement_threshold=0.02`, 2퍼센트)은 변화가 부를 만큼 충분히 큰지 결정한다. 그 아래에서는 p 값과 무관하게 판정이 "noise"다. 루프는 사용자가 측정할 수 없는 변화에는 관심이 없다.
+
 ```figure
 cg-paired-verdict
 ```
-
 
 ## 아키텍처 (Architecture)
 

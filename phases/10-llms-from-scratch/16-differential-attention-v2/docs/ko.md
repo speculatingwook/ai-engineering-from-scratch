@@ -94,10 +94,10 @@ V2는 또한 V1이 뺄셈을 안정화하는 데 쓴 헤드별 RMSNorm을 제거
 | YaRN / 긴 컨텍스트 스케일링 | 예 (정확히 DIFF가 가장 도움이 되는 곳) |
 | FlashAttention | V2에서 예 (V1에서는 아니오였음) |
 | 추측 디코딩(Speculative decoding) | 예 (어텐션 변경은 추측 디코딩 루프에 보이지 않음) |
+
 ```figure
 differential-attention
 ```
-
 
 ## 직접 만들기 (Build It)
 

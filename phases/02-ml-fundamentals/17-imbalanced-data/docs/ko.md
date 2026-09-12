@@ -210,10 +210,10 @@ flowchart TD
     M -->|No| N[Raise threshold or add features]
     M -->|Yes| O[Ship it]
 ```
+
 ```figure
 class-imbalance
 ```
-
 
 ## 직접 만들기 (Build It)
 

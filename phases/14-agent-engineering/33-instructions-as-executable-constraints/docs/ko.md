@@ -84,7 +84,6 @@ feature_list.json          # the backlog (Phase 14 · 36)
 wb-rule-checkoff
 ```
 
-
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 출하한다:

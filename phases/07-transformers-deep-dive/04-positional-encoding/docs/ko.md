@@ -72,10 +72,10 @@ attn_score[i, j] = (q_i · k_j) / √d  -  m_h · |i - j|
 | ALiBi | excellent | free | BLOOM, MPT, Baichuan |
 
 RoPE가 이긴 이유는 아키텍처를 바꾸지 않고 어텐션에 끼워지고, 상대 위치를 인코딩하며, 그 `base` 하이퍼파라미터(hyperparameter)가 장기 컨텍스트 파인튜닝(fine-tuning)을 위한 깔끔한 손잡이를 주기 때문이다.
+
 ```figure
 rope-explorer
 ```
-
 
 ## 직접 만들기 (Build It)
 

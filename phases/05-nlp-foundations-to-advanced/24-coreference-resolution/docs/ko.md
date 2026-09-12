@@ -49,10 +49,10 @@
 - 가교 조응(bridging anaphora)("그 바퀴들" → 앞서 언급된 자동차).
 - 중국어와 일본어 같은 언어에서의 영조응(zero anaphora).
 - 후방 조응(cataphora, 지시 대상 이전에 오는 대명사): "**그녀**가 걸어 들어왔을 때, Mary가 미소 지었다."
+
 ```figure
 coref-links
 ```
-
 
 ## 직접 만들기 (Build It)
 

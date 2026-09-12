@@ -111,10 +111,10 @@ L = L_rpn_cls + L_rpn_box + L_box_cls + L_box_reg + L_mask
 ```
 
 마스크는 이미 전체 이미지 해상도다. 28x28 헤드 출력은 내부적으로 업샘플되었다.
+
 ```figure
 cv3-roialign-sampling
 ```
-
 
 ## 직접 만들기 (Build It)
 

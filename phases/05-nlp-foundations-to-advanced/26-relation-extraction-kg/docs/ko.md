@@ -47,10 +47,10 @@
 - **Open IE.** 모든 동사 구문이 관계가 된다. 높은 재현율(recall). 낮은 정밀도. 쿼리하기 지저분하다.
 
 프로덕션(production) KG는 보통 둘을 섞는다. 발견에는 open IE를 쓴 다음, 메인 그래프에 병합하기 전에 관계를 닫힌 온톨로지로 표준화한다.
+
 ```figure
 relation-triples
 ```
-
 
 ## 직접 만들기 (Build It)
 

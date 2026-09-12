@@ -178,10 +178,10 @@ D_opt ~ C^0.5
 | Llama 3 | 70B | 15T | 심하게 과대 학습 |
 
 Llama 3는 의도적으로 Chinchilla 법칙을 위반한다. Meta는 더 많은 데이터로 과대 학습(overtraining)하는 것이 -- 연산 최적 비율을 훨씬 넘어 -- 추론(inference)에 더 나은 모델을 만든다는 것을 발견했다. 추가 학습 비용은 한 번 치러지지만, 더 작은 모델은 영원히 더 싸게 서빙된다. 이것은 때때로 "추론 최적(inference-optimal)" 스케일링 접근법이라 불리며, 2024년 이후 업계 표준이 되었다.
+
 ```figure
 l5-data-pipeline
 ```
-
 
 ## 직접 만들기 (Build It)
 

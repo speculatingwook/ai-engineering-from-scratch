@@ -72,10 +72,10 @@ EAGLE-2 트리 탐색에서는 검증자가 트리 토폴로지(topology)를 존
 | Lookahead | 드래프트 없음(Jacobi 반복) | 해당 없음 | 1.3-1.6배 | 없음 |
 
 2026년 프로덕션에서: vLLM과 SGLang은 가능하면 EAGLE-3을, 아니면 EAGLE-2를 기본으로 한다. TensorRT-LLM은 Meta와 NVIDIA 공개 모델에 대해 가장 빠른 Medusa 경로를 가진다. llama.cpp는 CPU 배포를 위해 바닐라 드래프트를 탑재한다.
+
 ```figure
 l5-spec-decode-eagle
 ```
-
 
 ## 직접 만들기 (Build It)
 

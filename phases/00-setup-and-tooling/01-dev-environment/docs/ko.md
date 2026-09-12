@@ -32,10 +32,10 @@ graph TD
 ```
 
 우리는 아래에서 위로(bottom-up) 설치한다. 각 층은 그 아래 층에 의존한다.
+
 ```figure
 s0-env-stack
 ```
-
 
 ## 직접 만들기 (Build It)
 

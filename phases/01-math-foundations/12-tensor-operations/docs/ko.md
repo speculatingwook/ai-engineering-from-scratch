@@ -100,10 +100,10 @@ graph LR
 ```
 
 핵심 패턴: `i,i->` (내적), `i,j->ij` (외적), `ii->` (대각합, trace), `ij->ji` (전치), `bij,bjk->bik` (배치 행렬 곱), `bhtd,bhsd->bhts` (어텐션 스코어).
+
 ```figure
 tensor-broadcast
 ```
-
 
 ## 직접 만들기 (Build It)
 

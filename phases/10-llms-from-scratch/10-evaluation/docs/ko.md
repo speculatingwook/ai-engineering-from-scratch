@@ -134,10 +134,10 @@ graph LR
 | BLEU/ROUGE | ~$0 | ~60% | 번역, 요약 |
 | LLM-as-judge | ~$0.01 | ~80% | 개방형 생성 |
 | 사람 평가 | $0.10-$2.00 | 해당 없음(이것이 정답) | 모호하고 고위험인 작업 |
+
 ```figure
 perplexity-loss
 ```
-
 
 ## 직접 만들기 (Build It)
 

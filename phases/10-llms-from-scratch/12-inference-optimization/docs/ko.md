@@ -242,10 +242,10 @@ ops:byte가 높으면(프리필, 큰 배치), 연산 천장에 부딪힌다. 메
 | 디코드, batch=1024 | ~1,024 | 연산 | 커널 융합, 텐서 병렬화(tensor parallelism) |
 
 A100의 교차점(crossover)은 ops:byte = 156 부근이다(312 TFLOPS / 2 TB/s). 156 미만이면 메모리 제약이다. 156 초과면 연산 제약이다. 연속 배칭은 반복당 더 많은 토큰을 채워 디코드를 이 교차점 쪽으로 민다.
+
 ```figure
 context-window-slide
 ```
-
 
 ## 직접 만들기 (Build It)
 

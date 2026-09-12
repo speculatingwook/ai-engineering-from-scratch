@@ -32,10 +32,10 @@
 **MFCC.** 로그 멜 스펙트로그램을 취해 DCT(type II)를 적용하고 처음 13개 계수를 유지한다. 특성을 비상관화(decorrelate)하고 더 압축한다. CNN/트랜스포머(Transformer)가 원시 로그 멜에서 따라잡은 2015년경까지 지배적인 특성이었다. 화자 인식(speaker recognition)(x-vectors, ECAPA)에서는 여전히 쓰인다.
 
 **해상도 트레이드(Resolution trade).** FFT가 클수록 = 더 나은 주파수 해상도지만 더 나쁜 시간 해상도다. 25 ms / 10 ms가 오디오 머신러닝의 기본값이고; 음악에는 50 ms / 12.5 ms; 과도 신호 검출(드럼 타격, 파열음)에는 5 ms / 2 ms를 쓴다.
+
 ```figure
 spectrogram-window
 ```
-
 
 ## 직접 만들기 (Build It)
 

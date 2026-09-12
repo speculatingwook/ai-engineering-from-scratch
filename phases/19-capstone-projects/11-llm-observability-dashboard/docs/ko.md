@@ -62,10 +62,10 @@ production apps:
 - 경보(Alerting): Prometheus Alertmanager -> Slack / PagerDuty
 - UI: Next.js 15 App Router + Recharts + server actions
 - 기본 지원 SDK: OpenAI, Anthropic, Google GenAI, LangChain, LlamaIndex, vLLM
+
 ```figure
 ce-otel-drift
 ```
-
 
 ## 직접 만들기 (Build It)
 

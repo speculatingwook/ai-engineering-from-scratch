@@ -163,10 +163,10 @@ flowchart TD
     Type -->|"Fine-tuning"| AdamW2["AdamW<br/>lr=2e-5, wd=0.01"]
     Type -->|"Don't know yet"| Default["Start with AdamW<br/>lr=3e-4, wd=0.01"]
 ```
+
 ```figure
 optimizer-trajectory
 ```
-
 
 ## 직접 만들기 (Build It)
 

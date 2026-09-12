@@ -59,10 +59,10 @@
 5. **평가(Evaluation): FID, CLIP score, IS, 인간 선호, 작업 정확도 중 무엇인가?** 각각 알려진 실패 모드가 있다(Lesson 14 참조).
 
 이 다섯 가지는 이 phase의 모든 레슨에서 다시 답하게 된다. 끝날 무렵이면 반사적으로 답하게 된다.
+
 ```figure
 autoencoder-bottleneck
 ```
-
 
 ## 직접 만들기 (Build It)
 

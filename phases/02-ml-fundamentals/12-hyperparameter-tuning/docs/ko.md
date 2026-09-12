@@ -244,10 +244,10 @@ print(f"Nested CV MSE: {-outer_scores.mean():.4f} +/- {outer_scores.std():.4f}")
 | XGBoost | learning_rate, max_depth, subsample, colsample | 베이지안, 100-200회 시도 + 조기 종료 | 중간 |
 
 **확신이 안 설 때:** 하이퍼파라미터 개수의 2배를 시도 횟수로 하는 랜덤 서치를 쓴다(예: 하이퍼파라미터 6개 = 최소 12회 이상의 시도). 50회의 시도를 하는 랜덤 서치가 정성껏 설계한 그리드 서치를 얼마나 자주 이기는지 보면 놀랄 것이다.
+
 ```figure
 k-fold-cv
 ```
-
 
 ## 직접 만들기 (Build It)
 

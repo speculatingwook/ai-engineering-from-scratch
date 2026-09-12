@@ -131,10 +131,10 @@ dL/db1 = dL/dz1
 ```
 
 모든 그래디언트는 손실에서부터 거꾸로 추적된 국소 도함수들의 곱이다. 역전파란 그게 전부다.
+
 ```figure
 backprop-vanishing
 ```
-
 
 ## 직접 만들기 (Build It)
 

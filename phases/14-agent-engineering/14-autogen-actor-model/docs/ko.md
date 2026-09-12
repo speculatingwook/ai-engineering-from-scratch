@@ -59,10 +59,10 @@ OpenTelemetry 지원이 내장되어 있다. 모든 메시지가 스팬(span)을
 ### 상태: 유지보수 모드
 
 2026년 초: AutoGen v0.7.x는 연구와 프로토타이핑에 안정적이다. Microsoft는 활발한 개발을 Microsoft Agent Framework(2025년 10월 1일 퍼블릭 프리뷰; 2026년 1분기 말 1.0 GA 목표)로 옮겼다. AutoGen 패턴은 앞으로 깔끔하게 포팅된다. 액터 모델이 그만큼 오래가는 아이디어이기 때문이다.
+
 ```figure
 actor-mailbox
 ```
-
 
 ## 직접 만들기 (Build It)
 

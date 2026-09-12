@@ -67,10 +67,10 @@ Meta의 **MusicGen**(2023, MIT)과 여러 파생물이 여기에 속한다. 텍�
 2. 생성당 라이선스를 갖춘 상업 API(Suno, Udio, ElevenLabs Music)를 사용한다.
 3. 소유하거나 라이선스받은 카탈로그로 학습한다(대부분의 기업이 결국 여기에 도달한다).
 4. 생성물을 워터마크(watermark) + 메타데이터로 태그한다.
+
 ```figure
 sp-codec-tokens
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -215,10 +215,10 @@ flowchart TD
     Task -->|"Multi-class classification"| Softmax["Use Softmax"]
     Task -->|"Regression"| Linear["Use Linear (no activation)"]
 ```
+
 ```figure
 softmax-temperature
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -52,10 +52,10 @@ min_G max_D  E_real[log D(x)] + E_fake[log(1 - D(G(z)))]
 | 2021 | StyleGAN3 | 앨리어스 없음(alias-free), 평행이동 등변(translation-equivariant): 2026년에도 여전히 얼굴의 황금 표준. |
 | 2022 | StyleGAN-XL | 조건부, 클래스 인지, 더 큰 규모. |
 | 2024 | R3GAN | 더 강한 정규화(regularization)로 재브랜딩; 트릭 없이 1024²에서 작동. |
+
 ```figure
 gan-minimax
 ```
-
 
 ## 직접 만들기 (Build It)
 

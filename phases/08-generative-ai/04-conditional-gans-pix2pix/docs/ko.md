@@ -39,10 +39,10 @@ L1 항은 학습을 안정화하고 G를 알려진 목표 쪽으로 민다. L1�
 Pix2Pix는 짝지어진 `(x, y)` 데이터가 필요하다. CycleGAN(Zhu et al., 2017)은 추가 손실(*순환 일관성(cycle consistency)* 손실)의 대가로 이 요구사항을 없앤다. 두 생성기 `G: X → Y`와 `F: Y → X`. `F(G(x)) ≈ x`와 `G(F(y)) ≈ y`가 되도록 학습시킨다. 이로써 짝지어진 예제 없이 말을 얼룩말로, 여름을 겨울로 변환할 수 있다.
 
 2026년에 짝 없는 이미지-이미지 변환은 대부분 CycleGAN이 아니라 확산(diffusion)(ControlNet, IP-Adapter)으로 이루어지지만, 순환 일관성 아이디어는 거의 모든 짝 없는 도메인 적응 논문에 살아남아 있다.
+
 ```figure
 gx-patchgan
 ```
-
 
 ## 직접 만들기 (Build It)
 

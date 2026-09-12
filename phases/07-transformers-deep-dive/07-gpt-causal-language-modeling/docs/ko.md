@@ -79,10 +79,10 @@ mask-derivation
 5. **Pre-norm + RoPE + SwiGLU.** 대규모에서의 안정적 학습.
 
 핵심 아키텍처는 GPT-2 이후 크게 바뀌지 않았다. 흥미로운 모든 것은 데이터, 규모, 사후 학습에서 일어났다.
+
 ```figure
 causal-mask
 ```
-
 
 ## 직접 만들기 (Build It)
 

@@ -79,10 +79,10 @@ EAGLE-3(2025)은 후보 연속에 대한 트리 탐색(tree search)을 추가했
 검증은 `N`개의 드래프트 토큰을 검증기에 한 번의 순방향 패스로 넣는다. 이는 검증기의 KV 캐시를 `N`개 항목만큼 늘린다. 일부 드래프트가 거부되면, 캐시를 수용된 접두사 길이로 롤백(roll back)해야 한다.
 
 프로덕션 구현(vLLM의 `--speculative-model`, TensorRT-LLM의 LookaheadDecoder)은 스크래치(scratch) KV 버퍼로 이를 처리한다. 먼저 쓰고, 수용 시 커밋(commit)한다. 개념적으로 어렵지는 않지만 까다롭다.
+
 ```figure
 draft-verify-tokens
 ```
-
 
 ## 직접 만들기 (Build It)
 

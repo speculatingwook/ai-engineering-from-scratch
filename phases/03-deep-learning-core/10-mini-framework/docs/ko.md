@@ -146,10 +146,10 @@ classDiagram
     Module <|-- Sequential
     Sequential *-- Module
 ```
+
 ```figure
 gradient-clipping
 ```
-
 
 ## 직접 만들기 (Build It)
 

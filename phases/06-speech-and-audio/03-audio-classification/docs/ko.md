@@ -48,10 +48,10 @@ ESC-50: 50개 클래스, 각 40개 클립: 균형 잡혀 있고 쉽다. UrbanSou
 | ESC-50 | 82% (AST) | 97.0% (BEATs-iter3) | BEATs paper (2024) |
 | AudioSet mAP | 0.485 (AST) | 0.548 (BEATs-iter3) | HEAR leaderboard 2026 |
 | Speech Commands v2 | 98% (CNN) | 99.0% (Audio-MAE) | HEAR v2 results |
+
 ```figure
 mfcc-pipeline
 ```
-
 
 ## 직접 만들기 (Build It)
 
