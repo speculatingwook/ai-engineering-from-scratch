@@ -4,7 +4,7 @@
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy percentile calculator and goodput reporter)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals)
 **Time:** ~60분
 
 ## 학습 목표 (Learning Objectives)

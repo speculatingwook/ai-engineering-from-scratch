@@ -3,8 +3,8 @@
 > 기업은 모든 개발자가 아무 MCP 서버나 설치하도록 둘 수 없다. 게이트웨이(gateway)는 인증, RBAC, 감사(audit), 속도 제한(rate limiting), 캐싱, 툴 포이즈닝(tool-poisoning) 탐지를 중앙집중화하고, 병합된 툴 표면(tool surface)을 단일 MCP 엔드포인트로 노출한다. 공식 MCP 레지스트리(Official MCP Registry)(Anthropic + GitHub + PulseMCP + Microsoft, 네임스페이스 검증)는 표준 업스트림(upstream)이다. 이 레슨은 게이트웨이가 어디에 들어맞는지를 짚고, 최소 구현을 따라가며, 2026년 벤더 지형을 개괄한다.
 
 **Type:** Learn
-**Languages:** Python (stdlib, minimal gateway)
-**Prerequisites:** Phase 13 · 15 (tool poisoning), Phase 13 · 16 (OAuth 2.1)
+**Languages:** Python
+**Prerequisites:** Phase 13 · 15 (security), Phase 13 · 16 (authorization)
 **Time:** ~45분
 
 ## 학습 목표 (Learning Objectives)

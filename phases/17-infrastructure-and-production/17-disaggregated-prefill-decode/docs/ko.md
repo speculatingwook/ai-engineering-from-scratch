@@ -4,7 +4,7 @@
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy disaggregated-vs-colocated simulator)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals), Phase 17 · 08 (Inference Metrics)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 17 · 08 (Inference Metrics)
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)

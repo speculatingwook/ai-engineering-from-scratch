@@ -3,7 +3,7 @@
 > 대부분의 MCP 서버는 멍청한 실행기다. 인자를 받고, 코드를 실행하고, 콘텐츠를 반환한다. 샘플링(sampling)은 서버가 방향을 뒤집게 한다. 서버가 클라이언트의 LLM에게 결정을 내려달라고 요청하는 것이다. 그래서 서버는 어떤 모델 자격 증명(credential)도 갖지 않고도 서버 호스팅 에이전트 루프(agent loop)를 굴린다. 2025-11-25에 병합된 SEP-1577은 샘플링 요청 안에 도구를 추가해 루프가 더 깊은 추론까지 담도록 했다. 드리프트(drift) 위험 참고: SEP-1577의 샘플링-내-도구 형태는 2026년 1분기까지 실험적이었으며 여전히 SDK API에서 자리를 잡아가는 중이다.
 
 **Type:** Build
-**Languages:** Python (stdlib, sampling harness)
+**Languages:** Python
 **Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 10 (resources and prompts)
 **Time:** ~75분
 
@@ -35,19 +35,19 @@
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 42,
-  "method": "sampling/createMessage",
+  "id": 1,
+  "method": "tools/call",
   "params": {
-    "messages": [{"role": "user", "content": {"type": "text", "text": "..."}}],
-    "systemPrompt": "...",
-    "includeContext": "none",
-    "modelPreferences": {
-      "costPriority": 0.3,
-      "speedPriority": 0.2,
-      "intelligencePriority": 0.5,
-      "hints": [{"name": "claude-3-5-sonnet"}]
-    },
-    "maxTokens": 1024
+    "name": "summarize_repo",
+    "arguments": {"audience": "developer"},
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {"sampling": {}},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "lesson-client",
+        "version": "1.0.0"
+      }
+    }
   }
 }
 ```

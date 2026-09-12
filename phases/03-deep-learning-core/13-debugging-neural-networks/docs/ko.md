@@ -2,7 +2,7 @@
 
 > 신경망(neural network)이 컴파일되었다. 실행되었다. 숫자를 하나 내놓았다. 그 숫자는 틀렸는데 아무것도 크래시하지 않았다. 가장 어려운 종류의 디버깅, 곧 오류 메시지가 없는 디버깅에 온 것을 환영한다.
 
-**Type:** Practice
+**Type:** Build
 **Languages:** Python, PyTorch
 **Prerequisites:** Phase 03 Lessons 01-10 (특히 역전파, 손실 함수, 옵티마이저)
 **Time:** ~90분

@@ -139,7 +139,7 @@ nvidia/cuda:12.4.1-runtime-ubuntu22.04
   Use for: running pre-built code
   Size: ~1.5 GB
 
-pytorch/pytorch:2.3.1-cuda12.4-cudnn9-runtime
+pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
   PyTorch pre-installed on top of CUDA.
   Use for: skipping the PyTorch install step
   Size: ~6 GB
@@ -175,9 +175,9 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel
 
 RUN python -m pip install --no-cache-dir \
-    torch==2.3.1 \
-    torchvision==0.18.1 \
-    torchaudio==2.3.1 \
+    torch==2.6.0+cu124 \
+    torchvision==0.21.0+cu124 \
+    torchaudio==2.6.0+cu124 \
     --index-url https://download.pytorch.org/whl/cu124
 
 RUN python -m pip install --no-cache-dir \

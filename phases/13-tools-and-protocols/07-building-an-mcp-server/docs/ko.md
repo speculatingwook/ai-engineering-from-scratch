@@ -3,8 +3,8 @@
 > 대부분의 MCP 튜토리얼은 stdio hello-world만 보여준다. 실제 서버는 tools와 resources와 prompts를 노출하고 능력 협상(capability negotiation)을 처리하며 구조화된 오류를 내보내고, SDK 전반에서 동일하게 동작한다. 이 레슨은 노트 서버를 종단 간(end-to-end)으로 만든다. stdlib stdio 전송(transport), JSON-RPC 디스패치(dispatch), 세 가지 서버 기본 요소(primitive), 그리고 졸업할 때 Python SDK의 FastMCP나 TypeScript SDK에 그대로 들어가는 순수 함수(pure-function) 스타일이다.
 
 **Type:** Build
-**Languages:** Python (stdlib, stdio MCP server)
-**Prerequisites:** Phase 13 · 06 (MCP fundamentals)
+**Languages:** Python, TypeScript
+**Prerequisites:** Phase 13, Lesson 06
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)
@@ -45,7 +45,7 @@ loop:
 ### `initialize` 구현
 
 ```python
-def initialize(params):
+def complete(payload):
     return {
         "protocolVersion": "2025-11-25",
         "capabilities": {

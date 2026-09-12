@@ -3,8 +3,8 @@
 > MCP 이전의 모든 통합은 일회성이었다. Model Context Protocol은 2024년 11월 Anthropic이 처음 출시했고 이제 Linux Foundation의 Agentic AI Foundation이 관리하며, 어떤 클라이언트든 어떤 서버와 대화할 수 있도록 탐색(discovery)과 호출을 표준화한다. 2025-11-25 명세는 여섯 가지 기본 요소(primitive)(서버 셋, 클라이언트 셋), 3단계 생명 주기(lifecycle), JSON-RPC 2.0 와이어 형식(wire format)에 이름을 붙인다. 이 셋을 익히면 이 phase의 나머지 MCP 챕터는 그냥 읽으면 된다.
 
 **Type:** Learn
-**Languages:** Python (stdlib, JSON-RPC parser)
-**Prerequisites:** Phase 13 · 01 through 05 (the tool interface and function calling)
+**Languages:** Python
+**Prerequisites:** Phase 13, Lessons 01 through 05
 **Time:** ~45분
 
 ## 학습 목표 (Learning Objectives)

@@ -3,8 +3,8 @@
 > stdio는 로컬에서만 동작하고 다른 곳에서는 동작하지 않는다. Streamable HTTP(2025-03-26)는 원격 표준이다. 기존 HTTP+SSE 트랜스포트는 더 이상 쓰이지 않으며 2026년 중반에 제거된다. 잘못된 트랜스포트를 고르면 마이그레이션 비용을 치르게 되고, 올바른 것을 고르면 세션 연속성(session continuity)과 DNS 리바인딩(DNS-rebinding) 방어를 갖춘 원격 호스팅 가능한 MCP 서버를 얻는다.
 
 **Type:** Learn
-**Languages:** Python (stdlib, Streamable HTTP endpoint skeleton)
-**Prerequisites:** Phase 13 · 07, 08 (MCP server and client)
+**Languages:** Python
+**Prerequisites:** Phase 13, Lessons 07 and 08
 **Time:** ~45분
 
 ## 학습 목표 (Learning Objectives)

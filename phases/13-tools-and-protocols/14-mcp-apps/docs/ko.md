@@ -3,7 +3,7 @@
 > 텍스트 전용 도구 출력은 에이전트가 보여줄 수 있는 것을 제한한다. MCP 앱(MCP Apps, SEP-1724, 2026년 1월 26일 공식화)은 도구가 샌드박스(sandbox) 처리된 상호작용형 HTML을 반환해 Claude Desktop, ChatGPT, Cursor, Goose, VS Code에서 인라인으로 렌더링되게 한다. 대시보드, 폼, 지도, 3D 장면을 모두 하나의 확장(extension)으로 띄운다. 이 레슨은 `ui://` 리소스 스킴, `text/html;profile=mcp-app` MIME, iframe 샌드박스 postMessage 프로토콜, 그리고 서버가 HTML을 렌더링하면서 따라오는 보안 표면을 따라간다.
 
 **Type:** Build
-**Languages:** Python (stdlib, UI resource emitter), HTML (sample app)
+**Languages:** Python
 **Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 10 (resources)
 **Time:** ~75분
 

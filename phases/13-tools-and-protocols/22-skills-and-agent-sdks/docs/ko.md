@@ -2,9 +2,9 @@
 
 > MCP는 "어떤 툴이 존재하는가"를 말한다. 스킬(skill)은 "태스크를 어떻게 하는가"를 말한다. 2026년 스택은 둘 다 계층화한다. Anthropic의 Agent Skills(오픈 표준, 2025년 12월)는 점진적 공개(progressive disclosure)를 갖춘 SKILL.md로 배포된다. OpenAI의 Apps SDK는 MCP에 위젯 메타데이터를 더한 것이다. AGENTS.md(현재 60,000개 이상의 레포에 있음)는 프로젝트 수준 에이전트 컨텍스트로 레포 루트에 자리한다. 이 레슨은 각각이 무엇을 다루는지 짚고, 여러 에이전트를 가로질러 이동하는 최소 SKILL.md + AGENTS.md 번들을 구축한다.
 
-**Type:** Learn
-**Languages:** Python (stdlib, SKILL.md parser and loader)
-**Prerequisites:** Phase 13 · 07 (MCP server)
+**Type:** Build
+**Languages:** Python (stdlib)
+**Prerequisites:** Phase 13 · 01 (The Tool Interface), Phase 13 · 05 (Tool Schema Design)
 **Time:** ~45분
 
 ## 학습 목표 (Learning Objectives)

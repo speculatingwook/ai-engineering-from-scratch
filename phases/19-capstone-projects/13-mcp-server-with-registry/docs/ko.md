@@ -131,7 +131,7 @@ response:    { "result": { "rows": [[1]] } }
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
-|------|-----------------|------------------------|
+|---|---|---|
 | StreamableHTTP | "2026 MCP 전송" | 무상태 HTTP + 스트리밍; 네트워크 서버에서 SSE + stdio를 대체 |
 | Capability manifest | "well-known 문서" | 도구 목록, 인증, 전송 URL을 담은 `.well-known/mcp-capabilities` |
 | OPA / Rego | "정책 엔진" | 외부 규칙에 대해 도구 호출을 인가하는 Open Policy Agent |

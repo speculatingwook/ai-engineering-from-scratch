@@ -3,8 +3,8 @@
 > 대부분의 MCP 콘텐츠는 서버 튜토리얼만 제공하고 클라이언트는 대충 넘긴다. 정작 까다로운 오케스트레이션(orchestration)이 자리 잡은 곳은 클라이언트 코드다. 프로세스 생성(process spawning), 능력 협상(capability negotiation), 여러 서버에 걸친 도구 목록 병합, sampling 콜백, 재연결(reconnection), 네임스페이스 충돌 해소가 모두 여기에 있다. 이 레슨은 서로 다른 세 MCP 서버를 모델이 쓸 하나의 평평한 도구 네임스페이스로 묶는 다중 서버(multi-server) 클라이언트를 만든다.
 
 **Type:** Build
-**Languages:** Python (stdlib, multi-server MCP client)
-**Prerequisites:** Phase 13 · 07 (building an MCP server)
+**Languages:** Python
+**Prerequisites:** Phase 13, Lesson 07
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)
@@ -126,7 +126,7 @@ Streamable HTTP는 `Mcp-Session-Id` 헤더를 사용한다. Stdio에는 세션 i
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 사람들이 하는 말 | 실제 의미 |
-|------|----------------|------------------------|
+|------|---------|
 | MCP 클라이언트(MCP client) | "에이전트 호스트" | 서버를 생성하고 도구 호출을 오케스트레이션하는 프로세스 |
 | 세션(Session) | "서버별 상태" | 능력, 도구 목록, 대기 중 요청 장부(bookkeeping) |
 | 병합된 네임스페이스(Merged namespace) | "하나의 도구 목록" | 모든 활성 서버에 걸친 평평한 도구 이름 집합 |

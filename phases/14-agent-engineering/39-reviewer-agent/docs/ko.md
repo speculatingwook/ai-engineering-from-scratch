@@ -126,8 +126,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI Agents SDK handoffs](https://platform.openai.com/docs/guides/agents-sdk/handoffs)
-- [Anthropic Claude Code subagents](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/sub-agents)
+- [OpenAI Agents SDK handoffs](https://openai.github.io/openai-agents-python/handoffs/)
+- [Anthropic Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/): 7-전문가 + 코디네이터 아키텍처, 30일간 131k 실행
 - [Agent-as-a-Judge: Evaluating Agents with Agents (OpenReview / ICLR)](https://openreview.net/forum?id=DeVm3YUnpj): DevAI 벤치마크, 366개의 계층적 솔루션 요구사항
 - [Adnan Masood, Rubric-Based Evaluations and LLM-as-a-Judge: Methodologies, Biases, Empirical Validation](https://medium.com/@adnanmasood/rubric-based-evals-llm-as-a-judge-methodologies-and-empirical-validation-in-domain-context-71936b989e80): 네 가지 편향과 완화책

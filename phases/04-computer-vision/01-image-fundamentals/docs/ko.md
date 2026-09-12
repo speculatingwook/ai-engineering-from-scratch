@@ -278,7 +278,7 @@ def rgb_to_hsv(rgb):
     h[bmax] = ((r[bmax] - g[bmax]) / delta[bmax]) + 4
     h = h * 60.0
 
-    s = np.where(cmax > 0, delta / cmax, 0)
+    s = np.divide(delta, cmax, out=np.zeros_like(delta), where=cmax > 0)
     v = cmax
     return np.stack([h, s, v], axis=-1)
 
@@ -342,7 +342,7 @@ def local_roughness(x):
     gx = np.diff(x.astype(float), axis=1)
     return float(np.abs(gy).mean() + np.abs(gx).mean())
 
-for name, out in [("nearest", nearest), ("bilinear", bilinear), ("bicubic", bicubic)]:
+for name, out in [("nearest", nearest), ("bilinear", bilinear)]:
     print(f"{name:>8}  shape={out.shape}  roughness={local_roughness(out):6.2f}")
 ```
 

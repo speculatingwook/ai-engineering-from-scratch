@@ -4,7 +4,7 @@
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy radix-tree cache + cache-aware scheduler)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals), Phase 14 (Agentic RAG)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 14 (Agentic RAG)
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)

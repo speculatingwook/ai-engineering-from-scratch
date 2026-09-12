@@ -4,7 +4,7 @@
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy KV-spill simulator)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals), Phase 17 · 06 (SGLang/RadixAttention)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 17 · 06 (SGLang/RadixAttention)
 **Time:** ~60분
 
 ## 학습 목표 (Learning Objectives)

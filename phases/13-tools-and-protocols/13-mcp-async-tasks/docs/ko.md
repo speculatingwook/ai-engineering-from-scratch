@@ -3,8 +3,8 @@
 > 실제 에이전트 작업은 수 분에서 수 시간이 걸린다. CI 실행, 딥 리서치 합성, 배치 내보내기가 그렇다. 동기(synchronous) 도구 호출은 연결을 끊거나 타임아웃되거나 UI를 막는다. 2025-11-25에 병합된 SEP-1686은 태스크(Task) 프리미티브(primitive)를 추가한다. 어떤 요청이든 태스크가 되도록 증강(augment)할 수 있고, 결과는 나중에 가져오거나 상태 알림(state notification)으로 스트리밍한다. 드리프트(drift) 위험을 짚어두자면, 태스크는 2026년 상반기까지 실험적이다. SDK 표면도 아직 사양을 중심으로 설계하는 중이다.
 
 **Type:** Build
-**Languages:** Python (stdlib, async task state machine)
-**Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 09 (transports)
+**Languages:** Python
+**Prerequisites:** Phase 13 · 09 (transports), Phase 13 · 11 (stateless MRTR), Phase 13 · 12 (elicitation)
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)

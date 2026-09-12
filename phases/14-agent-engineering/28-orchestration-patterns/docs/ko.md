@@ -52,7 +52,7 @@
 - 병렬 제안자(proposer) + 반복적 상호 비평(cross-critique)(Lesson 25).
 - 사실 오케스트레이션이라기보다는 검증(verification)에 가깝지만, 프레임워크에서 토폴로지 선택지로 등장한다.
 
-### CrewAI Crew vs Flow
+### 자율적인 크루와 결정적인 플로우
 
 CrewAI는 두 가지 배포(deployment) 모드를 공식화한다:
 

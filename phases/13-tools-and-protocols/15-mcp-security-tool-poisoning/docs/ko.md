@@ -3,7 +3,7 @@
 > 도구 설명(tool description)은 모델의 컨텍스트에 그대로 들어간다. 악의적 서버는 사용자가 결코 보지 못하는 숨겨진 지시를 심는다. Invariant Labs, Unit 42, 그리고 2026년 3월 발표된 arXiv 연구를 비롯한 2025-2026년 연구는 최전선 모델에서 공격 성공률 70퍼센트 이상을, 적응형 공격(adaptive attack) 상황의 최신 방어에서 약 85퍼센트를 측정했다. 이 레슨은 일곱 가지 구체적 공격 클래스를 명명하고 CI에서 실행할 수 있는 도구 오염 탐지기를 만든다.
 
 **Type:** Learn
-**Languages:** Python (stdlib, hash-pin + poisoning detector)
+**Languages:** Python
 **Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 08 (MCP client)
 **Time:** ~45분
 
@@ -125,7 +125,7 @@ tp-tool-poisoning
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 흔히 말하는 것 | 실제 의미 |
-|------|----------------|------------------------|
+|------|---------|
 | 도구 오염(Tool poisoning) | "주입된 설명" | 도구 설명 안의 숨겨진 지시 |
 | 러그 풀(Rug pull) | "조용한 업데이트 공격" | 서버가 첫 승인 후 설명을 변경 |
 | 도구 섀도잉(Tool shadowing) | "네임스페이스 하이재킹" | 악의적 서버가 무해한 것에서 도구 이름을 훔침 |

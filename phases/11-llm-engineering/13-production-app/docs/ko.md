@@ -143,7 +143,7 @@ Give up: return fallback response
 **폴백 모델 체인.** 주 모델을 사용할 수 없을 때는 체인을 통과한다.
 
 ```
-claude-sonnet-4-20250514 -> gpt-4o -> gpt-4o-mini -> cached response -> "Service temporarily unavailable"
+claude-sonnet-5 -> gpt-4o -> gpt-4o-mini -> cached response -> "Service temporarily unavailable"
 ```
 
 각 단계는 품질을 가용성과 교환한다. 사용자는 항상 무언가를 받는다.
@@ -300,7 +300,7 @@ from typing import AsyncGenerator
 
 
 class ModelName(Enum):
-    CLAUDE_SONNET = "claude-sonnet-4-20250514"
+    CLAUDE_SONNET = "claude-sonnet-5"
     GPT_4O = "gpt-4o"
     GPT_4O_MINI = "gpt-4o-mini"
 
@@ -311,7 +311,7 @@ MODEL_PRICING = {
     ModelName.GPT_4O_MINI: {"input": 0.15, "output": 0.60},
 }
 
-FALLBACK_CHAIN = [ModelName.CLAUDE_SONNET, ModelName.GPT_4O, ModelName.GPT_4O_MINI]
+FALLBACK_CHAIN = [PRIMARY_MODEL] + [m for m in ModelName if m is not PRIMARY_MODEL]
 
 
 @dataclass
@@ -1082,7 +1082,7 @@ if __name__ == "__main__":
 #         yield delta
 #
 #
-# async def call_anthropic(prompt, model="claude-sonnet-4-20250514"):
+# async def call_anthropic(prompt, model="claude-sonnet-5"):
 #     client = anthropic.AsyncAnthropic()
 #     async with client.messages.stream(
 #         model=model,

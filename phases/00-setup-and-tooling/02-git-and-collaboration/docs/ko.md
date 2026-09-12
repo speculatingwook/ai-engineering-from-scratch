@@ -76,7 +76,7 @@ git merge experiment/new-optimizer
 ### 4단계: 이 강의 저장소로 작업하기
 
 ```bash
-git clone https://github.com/rohitg00/ai-engineering-from-scratch.git
+git clone https://github.com/YOUR-USERNAME/ai-engineering-from-scratch.git
 cd ai-engineering-from-scratch
 
 git checkout -b my-progress

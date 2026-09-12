@@ -3,8 +3,8 @@
 > 도구(tool)가 MCP 관심의 90퍼센트를 가져간다. 나머지 두 서버 프리미티브(primitive)는 다른 문제를 푼다. 리소스(resource)는 읽기용 데이터를 노출하고, 프롬프트(prompt)는 재사용 가능한 템플릿을 슬래시 커맨드(slash-command)로 노출한다. 많은 서버는 읽기를 도구로 감싸는 대신 리소스를 써야 하고, 워크플로를 클라이언트 프롬프트에 하드코딩하는 대신 프롬프트를 써야 한다. 이 레슨은 그 결정 규칙을 명명하고 `resources/*`와 `prompts/*` 메시지를 따라간다.
 
 **Type:** Build
-**Languages:** Python (stdlib, resource + prompt handler)
-**Prerequisites:** Phase 13 · 07 (MCP server)
+**Languages:** Python
+**Prerequisites:** Phase 13, Lesson 07 (Building an MCP Server), Phase 13, Lesson 09 (MCP Transports)
 **Time:** ~45분
 
 ## 학습 목표 (Learning Objectives)

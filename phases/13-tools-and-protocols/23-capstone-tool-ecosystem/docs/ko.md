@@ -3,8 +3,8 @@
 > Phase 13은 모든 조각을 가르쳤다. 이 캡스톤(capstone)은 이를 하나의 프로덕션 형태 시스템으로 연결한다: 툴 + 리소스 + 프롬프트 + 태스크 + UI를 갖춘 MCP 서버, 엣지에서의 OAuth 2.1, RBAC 게이트웨이, 멀티 서버 클라이언트, A2A 하위 에이전트 호출, 컬렉터로 들어가는 OTel 추적, CI에서의 툴 포이즈닝(tool-poisoning) 탐지, 그리고 AGENTS.md + SKILL.md 번들. 끝까지 따라오면 모든 아키텍처 선택을 방어할 수 있다.
 
 **Type:** Build
-**Languages:** Python (stdlib, end-to-end ecosystem harness)
-**Prerequisites:** Phase 13 · 01 through 21
+**Languages:** Python (stdlib, in-process simulation)
+**Prerequisites:** Phase 13 · 01 through 22, using MCP revision `2026-07-28`
 **Time:** ~120분
 
 ## 학습 목표 (Learning Objectives)

@@ -19,7 +19,7 @@ Model Context Protocol은 그 행렬을 무너뜨린다. JSON-RPC 기반 명세 
 
 ## 개념 (The Concept)
 
-![MCP: one host, one server, three capabilities](../assets/mcp-architecture.svg)
+![MCP host, stateless request, and server primitives](../assets/mcp-architecture.svg)
 
 **세 가지 프리미티브.** MCP 서버는 정확히 세 가지를 노출한다.
 
@@ -168,7 +168,7 @@ lesson: 14
 tags: [llm-engineering, mcp, tool-use]
 ---
 
-Given a domain (internal API, database, file source) and the hosts that will mount the server, output:
+This lesson gives you the protocol model. Phase 13 turns four production boundaries into separate build-and-verify lessons:
 
 1. Primitive map. Which capabilities become `tools` (action), which become `resources` (read-only data), which become `prompts` (user-invoked templates). One line per primitive.
 2. Auth plan. Stdio (trusted local), streamable HTTP with API key, or OAuth 2.1 with PKCE. Pick and justify.
@@ -188,7 +188,7 @@ Refuse to ship a server that writes to disk or calls external APIs without an ap
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
-|------|-----------------|-----------------------|
+|------|-----------------|------------------------|
 | MCP | "LLM을 위한 도구 프로토콜" | 어떤 LLM 호스트에든 도구, 리소스, 프롬프트를 노출하기 위한 JSON-RPC 2.0 명세 |
 | 호스트(Host) | "Claude Desktop" | LLM 애플리케이션: 모델과 사용자 UI를 소유하고, 하나 이상의 클라이언트를 마운트한다 |
 | 클라이언트(Client) | "연결" | 정확히 하나의 서버와 JSON-RPC로 통신하는, 호스트 내부의 서버별 연결 |

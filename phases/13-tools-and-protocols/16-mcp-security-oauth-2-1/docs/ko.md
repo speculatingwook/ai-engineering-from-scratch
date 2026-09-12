@@ -3,8 +3,8 @@
 > 원격 MCP 서버는 인증(authentication)만이 아니라 인가(authorization)가 필요하다. 2025-11-25 사양은 OAuth 2.1 + PKCE + 리소스 표시자(resource indicator, RFC 8707) + 보호된 리소스 메타데이터(protected-resource metadata, RFC 9728)와 정렬된다. SEP-835는 403 WWW-Authenticate에 대한 단계 상승 인가(step-up authorization)와 함께 점진적 스코프 동의를 추가한다. 이 레슨은 단계 상승 플로(flow)를 상태 기계(state machine)로 구현해 모든 홉(hop)을 볼 수 있게 한다.
 
 **Type:** Build
-**Languages:** Python (stdlib, OAuth state machine simulator)
-**Prerequisites:** Phase 13 · 09 (transports), Phase 13 · 15 (security I)
+**Languages:** Python
+**Prerequisites:** Phase 13 · 09 (transports), Phase 13 · 15 (security)
 **Time:** ~75분
 
 ## 학습 목표 (Learning Objectives)
@@ -55,9 +55,9 @@ PKCE는 인가 코드 가로채기 공격을 막는다. 리소스 표시자는 �
 
 ```json
 {
-  "resource": "https://notes.example.com",
+  "resource": "https://notes.example.com/mcp",
   "authorization_servers": ["https://auth.example.com"],
-  "scopes_supported": ["notes:read", "notes:write", "notes:delete"]
+  "scopes_supported": ["notes:delete", "notes:read", "notes:write"]
 }
 ```
 
@@ -148,7 +148,7 @@ Phase 13 · 17은 엔터프라이즈 게이트웨이가 OAuth를 어떻게 처�
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 흔히 말하는 것 | 실제 의미 |
-|------|----------------|------------------------|
+|------|---------|
 | OAuth 2.1 | "현대 OAuth" | PKCE를 의무화하고 implicit 플로를 금지하는 통합 RFC |
 | PKCE | "소유 증명" | 인가 코드 가로채기를 막는 코드 검증자 + 챌린지 |
 | 리소스 표시자 | "토큰 대상" | 토큰을 한 서버에 고정하는 RFC 8707 `resource` 매개변수 |
