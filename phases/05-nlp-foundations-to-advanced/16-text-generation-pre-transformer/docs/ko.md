@@ -19,6 +19,22 @@
 
 ![N-gram model: count, smooth, generate](../assets/ngram.svg)
 
+### 맞히기 놀이
+
+이 기계 장치가 생기기 전에, 언어 모델이 무엇인지를 정의한 실험이 하나 있었다. 영어 문장의 다음 글자를 가린다. 누군가에게 한 번에 하나씩, 맞힐 때까지 추측하게 한다. 몇 번 만에 맞혔는지 적는다. 이것을 몇백 글자에 대해 되풀이한다.
+
+그 추측 횟수는 잡지식이 아니다. 그것은 원문을 손실 없이 다시 부호화한 것이다. 그 횟수 수열을 똑같은 방식으로 추측하는 두 번째 사람에게 건네면 모든 글자를 복원할 수 있다. 각 자리에서 어떤 추측이 먼저 오는지 정확히 알기 때문이다. 더 적은 기호로 다시 부호화할 수 있는 메시지는 기호 하나에 담는 정보가 더 적으므로, 이 추측 횟수 통계가 영어의 엔트로피에 천장을 씌운다.
+
+섀넌은 1951년에 이 실험을 돌려 이 분야를 여전히 지배하는 숫자를 얻었다. 기호 27개(글자 26개에 공백)로 이루어진 알파벳은 글자당 `log2(27) ≈ 4.75` 비트를 실어 나를 수 있다. 100글자의 맥락을 가진 사람은 글자당 0.6에서 1.3비트 사이에 떨어졌다. 영어는 대략 4분의 3이 정해진 수순이다. 모델이 배워야 할 구조가, 어떤 모델도 배울 수 없던 시절에 이미 측정된 것이다.
+
+그 뒤의 모든 언어 모델은 이 놀이를 기계로 하는 선수이며, 이 레슨의 모든 평가 수치는 그 놀이의 점수다.
+
+- **교차 엔트로피 손실**은 모델이 기호 하나에 필요로 하는 평균 비트 수다. 언어 모델을 학습시키는 일은 말 그대로 이 맞히기 놀이의 점수를 낮추는 일이다.
+- **당혹도(perplexity)**는 `2^bits`(또는 `e^nats`)다. 추측을 마친 뒤에도 모델 앞에 남아 있는 갈래 수를 뜻한다. 기호 27개를 고르게 추측하면 당혹도가 27이고, 글자당 1비트인 선수는 당혹도가 2다.
+- **맥락 길이는 선수의 기억력이다.** 3-gram 모델은 토큰 두 개의 기억으로 놀이를 한다. 트랜스포머는 같은 놀이를 토큰 10만 개로 한다. 규칙은 한 번도 바뀌지 않았고, 선수가 좋아졌을 뿐이다.
+
+단위 하나만 따라가면 된다. 이 놀이는 글자당 비트(`log2`)로 점수를 매기고, 아래의 n-gram 공식은 단어 토큰당 내트(자연로그)로 점수를 매긴다. 내트로 잰 당혹도 `e^H`는 비트로 잰 `2^H`와 같으므로, 두 관점은 단위만 다른 같은 측정이다.
+
 ```figure
 prediction-game
 ```
@@ -229,9 +245,11 @@ Refuse to report perplexity computed with different tokenization between systems
 | Backoff | 더 짧은 맥락으로 후퇴 | 트라이그램 카운트가 0이면 바이그램을 사용한다. Katz 백오프가 이를 공식화한다. |
 | Kneser-Ney | n-gram을 위한 최고의 스무딩 | 절대 할인 + 저차 모델을 위한 연속 확률. |
 | Continuation probability | KN 특화 | 원시 카운트가 아니라 `w`가 나타나는 맥락의 수로 가중된 `P(w)`. |
+| Entropy of text | 기호당 정보량 | 맥락이 주어졌을 때 다음 기호를 부호화하는 데 필요한 평균 비트 수. 최대 100글자의 맥락을 준 인쇄 영어에 대한 섀넌의 1951년 추정치는 글자당 0.6-1.3비트로, 어떤 모델도 존재하기 전에 측정됐다. |
 
 ## 더 읽을거리 (Further Reading)
 
+- [Shannon (1951). Prediction and Entropy of Printed English](https://www.princeton.edu/~wbialek/rome/refs/shannon_51.pdf) 모든 언어 모델이 여전히 최적화하는 목표를 정의한 맞히기 놀이 실험.
 - [Jurafsky and Martin: Speech and Language Processing, Chapter 3 (2026 draft)](https://web.stanford.edu/~jurafsky/slp3/3.pdf) n-gram LM과 스무딩에 대한 표준 해설.
 - [Chen and Goodman (1998). An Empirical Study of Smoothing Techniques for Language Modeling](https://dash.harvard.edu/handle/1/25104739): Kneser-Ney를 최고의 n-gram 스무더로 정착시킨 논문.
 - [Kneser and Ney (1995). Improved Backing-off for M-gram Language Modeling](https://ieeexplore.ieee.org/document/479394): 원래의 KN 논문.

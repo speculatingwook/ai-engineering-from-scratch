@@ -19,6 +19,24 @@
 
 ![Chatbot evolution: rule-based → retrieval → neural → agent](../assets/chatbot.svg)
 
+### 대본이 지배한 반세기, 1950-2001
+
+첫 패러다임은 5년이 아니라 50년을 갔다. 그 궤적을 알아야 하는 이유는, 그 안의 모든 시스템이 같은 기계이기 때문이다. 입력을 맞춰 보고, 정해진 응답을 내보내고, 상태를 조금 갱신한다. 그리고 그 기계에 50년 동안 규칙을 더해도 일반적인 경우는 끝내 나오지 않았다. 두 번째부터 네 번째 패러다임이 존재하는 이유가 바로 그 천장이다.
+
+**1950.** 튜링은 "기계가 생각할 수 있는가"를 비켜 가며 실행 가능한 질문으로 바꿔 놓는다. 심문자가 텔레타이프 너머의 기계와 사람을 구별할 수 없다면 그 철학적 물음은 무의미해진다. 분야에 이름이 붙기도 전에 대화가 그 분야의 기준이 된 것이다.
+
+**1956.** 이름이 도착한다. 다트머스의 여름 워크숍이 "인공지능"이라는 말을 만들면서, 지능의 모든 특징을 "원리상 기계가 흉내 낼 수 있을 만큼 정확하게 기술할 수 있다"는 추측을 내건다. 제안서는 상당한 진전에 두 달을 배정했다.
+
+**1966.** ELIZA가 1단계에서 여러분이 만들 되비추기 기법을 내놓는다. 분해 규칙이 입력에서 조각을 뽑아내고, 재조립 규칙이 그것을 질문으로 되돌려 준다. 패턴은 모두 합쳐 200개쯤, 상태도 이해도 전혀 없었는데도 사용자들은 거기에 속내를 털어놓았다. 바이첸바움은 그토록 적은 장치로 그런 일이 벌어진다는 사실에 남은 평생을 두려워하며 보냈다.
+
+**1972.** 편집증을 모형화하려고 스탠퍼드에서 만든 PARRY는 ELIZA에 없던 조각을 더한다. 내부 상태다. 두려움, 분노, 불신을 나타내는 수치 변수가 턴마다 갱신되며 다음에 어떤 대본이 나갈지를 정하므로, 같은 입력도 그때까지의 대화에 따라 다른 응답을 낳는다. 눈가림 기록 시험에서 정신과 의사들은 PARRY와 사람 환자를 우연 수준으로밖에 구별하지 못했다. 이것이 페르소나 조건화의 직계 조상이다. 부동소수점 세 개로 구현한 시스템 프롬프트인 셈이다. 같은 해에 두 봇은 ARPANET 위에서 서로를 향하게 됐다. 치료사 대본이 편집증 상태 기계를 면담한, 네트워크 위 최초의 봇 대 봇 대화였다.
+
+**1995.** ALICE는 패턴과 템플릿 쌍을 위한 XML 방언인 AIML로 ELIZA의 방식을 키운다. 손으로 쓴 범주가 대략 4만 개, 뢰브너상 3회 수상. 이것이 규칙 기반 시스템의 규모 법칙을 증명했다. 규칙을 더하면 적용 범위를 살 수 있지만 일반성은 결코 살 수 없다. 규칙 하나하나가 누군가 유지해야 하는 부채다.
+
+**2001.** SmarterChild는 그 방식을 3천만 명의 메신저 사용자 앞에 올려놓고, 날씨와 주가와 영화 시간표 같은 백엔드 조회를 템플릿에 끼워 넣는다. 눈을 가늘게 뜨고 보면 2001년 옷을 입은 도구 호출이다. 의도를 파싱하고, 서비스를 부르고, 그 결과를 답변으로 그려 낸다.
+
+50년, 하나의 기계 장치, 늘어나는 규칙 수. 이 패러다임이 끝난 것은 누가 그것을 반증해서가 아니다. 손으로 쓴 상태 기계의 유지 비용은 적용 범위에 비례해 늘어나는데, 사용자의 기대는 그들이 지난주에 본 무언가를 따라 늘어나기 때문이다.
+
 ```figure
 chatbot-lineage
 ```
@@ -236,7 +254,9 @@ Refuse to recommend a pure-LLM agent for any destructive action (payments, accou
 
 ## 더 읽을거리 (Further Reading)
 
+- [Turing (1950). Computing Machinery and Intelligence](https://academic.oup.com/mind/article/LIX/236/433/986238) 대화를 이 분야의 기준으로 만든 논문.
 - [Weizenbaum (1966). ELIZA: A Computer Program For the Study of Natural Language Communication](https://web.stanford.edu/class/cs124/p36-weizenabaum.pdf) 원래의 규칙 기반 챗봇 논문.
+- [Colby, Weber, Hilf (1971). Artificial Paranoia](https://doi.org/10.1016/0004-3702(71)90002-6) 최초의 상태를 가진 챗봇인 PARRY의 감정 변수 구조.
 - [Thoppilan et al. (2022). LaMDA: Language Models for Dialog Applications](https://arxiv.org/abs/2201.08239): LLM 에이전트가 장악하기 직전, Google의 후기 신경망 챗봇 논문.
 - [Yao et al. (2022). ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629): 에이전트 루프 패턴을 명명한 논문.
 - [Anthropic's guide on building effective agents](https://www.anthropic.com/research/building-effective-agents): 2026년에도 유효한 2024년 프로덕션 가이드.
