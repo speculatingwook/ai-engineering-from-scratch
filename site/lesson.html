@@ -3427,8 +3427,8 @@
         return window.AIFS_currentLang ? window.AIFS_currentLang() : 'en';
       }
 
-      // Korean field picker and UI label lookup, backed by site/i18n.js. Both
-      // fall back to English when the Korean layer is absent or has no entry.
+      // Translated field picker and UI label lookup, backed by site/i18n.js.
+      // Both fall back to English when that layer is absent or has no entry.
       function i18nPick(obj, field) {
         if (window.AIFSi18n && window.AIFSi18n.pick) return window.AIFSi18n.pick(obj, field);
         return (obj && obj[field] != null) ? obj[field] : '';

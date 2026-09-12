@@ -7,7 +7,7 @@
  * exists for that language. Every other language falls back to English labels.
  *
  * Adding a language here is one entry in UI keyed by its languages.json `code`.
- * Korean is the first one; the code below never names it.
+ * Korean is the first one; nothing below this comment names it.
  *
  * Data-driven content uses pick() against the per-language field suffix baked
  * into data.js by build.js (name → nameKo for 'ko'). A missing translated field

@@ -1,6 +1,6 @@
 (function () {
   // Language-aware field picker. Falls back to English when i18n is absent
-  // or the Korean field is missing.
+  // or the translated field is missing.
   function pick(obj, field) {
     if (window.AIFSi18n && window.AIFSi18n.pick) return window.AIFSi18n.pick(obj, field);
     return (obj && obj[field] != null) ? obj[field] : '';
