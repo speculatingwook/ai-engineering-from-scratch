@@ -1,166 +1,206 @@
-# MCP 기초: 기본 요소, 생명 주기, JSON-RPC 베이스
+# MCP 기초: 무상태 요청과 JSON-RPC (MCP Fundamentals: Stateless Requests and JSON-RPC)
 
-> MCP 이전의 모든 통합은 일회성이었다. Model Context Protocol은 2024년 11월 Anthropic이 처음 출시했고 이제 Linux Foundation의 Agentic AI Foundation이 관리하며, 어떤 클라이언트든 어떤 서버와 대화할 수 있도록 탐색(discovery)과 호출을 표준화한다. 2025-11-25 명세는 여섯 가지 기본 요소(primitive)(서버 셋, 클라이언트 셋), 3단계 생명 주기(lifecycle), JSON-RPC 2.0 와이어 형식(wire format)에 이름을 붙인다. 이 셋을 익히면 이 phase의 나머지 MCP 챕터는 그냥 읽으면 된다.
+> 요즘의 MCP에는 핸드셰이크도 없고 프로토콜 세션도 없다. 요청 하나하나가 스스로 해석되고 인가되고 라우팅되고 재시도될 수 있을 만큼의 메타데이터를 담고 있어야 한다.
 
 **Type:** Learn
 **Languages:** Python
 **Prerequisites:** Phase 13, Lessons 01 through 05
-**Time:** ~45분
+**Time:** ~55 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- 여섯 가지 MCP 기본 요소(서버의 tools, resources, prompts; 클라이언트의 roots, sampling, elicitation)를 모두 명명하고 각각 하나의 사용 사례를 들기.
-- 3단계 생명 주기(initialize, operation, shutdown)를 따라가며 각 단계에서 누가 어떤 메시지를 보내는지 진술하기.
-- JSON-RPC 2.0 요청, 응답, 알림(notification) 봉투(envelope)를 파싱하고 내보내기.
-- `initialize`에서의 능력 협상(capability negotiation)이 무엇이며 그것 없이는 무엇이 깨지는지 설명하기.
+- MCP의 서버 기본 요소와 클라이언트 쪽 기능을 구분한다.
+- MCP `2026-07-28`에 맞는 유효한 JSON-RPC 2.0 요청과 응답을 만든다.
+- 모든 요청에 프로토콜 판본과 클라이언트 역량, 클라이언트 신원을 붙인다.
+- 핸드셰이크 없이 `server/discover`를 쓰고 `UnsupportedProtocolVersionError`를 처리한다.
+- 독립적인 요청 하나가 검증에서 완료 결과까지 가는 길을 따라가 본다.
 
 ## 문제 (The Problem)
 
-MCP 이전에는 도구를 쓰는 모든 에이전트가 자신만의 프로토콜을 가졌다. Cursor는 MCP 형태이지만 호환되지 않는 도구 시스템을 썼다. Claude Desktop은 다른 것을 갖고 출시되었다. VS Code의 Copilot 확장은 세 번째 것을 썼다. "Postgres 쿼리" 도구를 만든 팀은 같은 도구를 세 번 작성했는데, 각각 다른 호스트의 API에 맞췄다. 재사용하려면 코드를 복사해야 했다.
+MCP 서버는 같은 프로세스나 HTTP 워커에서, 서로 다른 클라이언트가 서로 다른 역량을 선언한 요청 두 개를 연달아 받을 수 있다. 서버가 직전 요청이 선언한 내용을 기억하고 있으면, 엉뚱한 권한을 적용하거나 엉뚱한 형식으로 응답하게 된다.
 
-그 결과는 일회성 통합의 캄브리아기 대폭발이자, 생태계 속도의 천장이었다.
+MCP `2026-07-28`은 그 모호함을 없앤다. 프로토콜의 핵심이 무상태다. 서버는 지금 요청을 어떻게 처리할지를 연결의 이력이 아니라 지금 요청만 보고 정해야 한다.
 
-MCP는 와이어 형식을 표준화하여 이를 고친다. 단일 MCP 서버가 모든 MCP 클라이언트에서 동작한다. Claude Desktop, ChatGPT, Cursor, VS Code, Gemini, Goose, Zed, Windsurf, 2026년 4월까지 300개 이상의 클라이언트. 월 1.1억 SDK 다운로드. 1만 개 이상의 공개 서버. Linux Foundation이 2025년 12월 새로운 Agentic AI Foundation 아래에서 관리를 맡았다.
+이것이 머릿속 모델을 바꾼다. 예전 순서는 연결을 먼저 맺고, 핸드셰이크를 하고, 그다음에 연산을 하는 것이었다. 요즘 순서는 더 단순하다.
 
-이 phase에서 사용하는 명세 개정판은 **2025-11-25**다. 이 개정판은 비동기 Tasks(SEP-1686), URL 모드 elicitation(SEP-1036), 도구를 사용한 sampling(SEP-1577), 증분 스코프 동의(SEP-835), OAuth 2.1 리소스 지시자(resource-indicator) 의미론을 추가한다. Phase 13 · 09부터 16까지가 그 확장을 다룬다. 이 레슨은 베이스에서 멈춘다.
+1. 클라이언트가 스스로를 설명하는 요청을 보낸다.
+2. 서버가 그 요청의 판본과 역량을 검증한다.
+3. 서버가 그 메서드를 처리한다.
+4. 서버가 타입이 정해진 결과나 JSON-RPC 오류를 돌려준다.
+
+다음 요청은 같은 과정을 처음부터 되풀이한다.
 
 ## 개념 (The Concept)
 
-### 세 가지 서버 기본 요소
+### 서버의 기본 요소
 
-1. **Tools.** 호출 가능한 행동. Phase 13 · 01과 동일한 4단계 루프.
-2. **Resources.** 노출된 데이터. URI로 주소 지정 가능한 읽기 전용 콘텐츠. `file:///path`, `db://query/...`, 커스텀 스킴(scheme).
-3. **Prompts.** 재사용 가능한 템플릿. 호스트 UI의 슬래시 명령(slash-command). 서버가 템플릿을 공급하고, 클라이언트가 인자를 채운다.
+MCP 서버는 주요 기본 요소 세 가지를 노출한다.
 
-### 세 가지 클라이언트 기본 요소
+1. **도구(Tools)**는 모델이 통제하는 행동이며, `tools/list`로 찾고 `tools/call`로 호출한다.
+2. **자원(Resources)**은 URI로 주소를 매긴 데이터이며, `resources/list`로 찾고 `resources/read`로 가져온다.
+3. **프롬프트(Prompts)**는 다시 쓸 수 있는 템플릿이며, `prompts/list`로 찾고 `prompts/get`으로 채워 낸다.
 
-4. **Roots.** 서버가 건드리도록 허용된 URI의 집합. 클라이언트가 선언하고, 서버가 존중한다.
-5. **Sampling.** 서버가 클라이언트의 모델에게 완성(completion)을 수행하도록 요청한다. 서버 측 API 키 없이 서버가 호스팅하는 에이전트 루프를 가능하게 한다.
-6. **Elicitation.** 서버가 흐름 도중에 클라이언트의 사용자에게 구조화된 입력을 요청한다. 폼(form) 또는 URL(SEP-1036).
+루트와 샘플링, 로깅은 호환을 위해 `2026-07-28` 스키마에 남아 있지만 폐기 예정이다. 새로 만드는 구현이라면 루트는 명시적인 도구나 자원 입력으로, 샘플링은 모델 공급자의 API를 직접 불러서, 로깅은 stderr나 OpenTelemetry로 처리해야 한다. 사용자에게 되묻는 일은 여러 번 왕복하는 요청(Multi Round-Trip Request)으로 여전히 할 수 있다. 서버가 입력 요청을 돌려주면 클라이언트가 원래 연산을 다시 호출하는 방식이다. 요즘의 서버는 자기가 먼저 독립적인 JSON-RPC 요청을 시작하지 않는다.
 
-MCP의 모든 능력은 이 여섯 중 정확히 하나에 속한다. Phase 13 · 10부터 14까지가 각각을 깊이 다룬다.
+### JSON-RPC 봉투
 
-### 와이어 형식: JSON-RPC 2.0
+MCP는 JSON-RPC 2.0을 쓴다.
 
-모든 메시지는 다음 필드를 가진 JSON 객체다.
+- 요청: `{jsonrpc, id, method, params}`
+- 응답: `{jsonrpc, id, result}` 또는 `{jsonrpc, id, error}`
+- 알림: `id`가 없는 `{jsonrpc, method, params}`
 
-- 요청: `{jsonrpc: "2.0", id, method, params}`.
-- 응답: `{jsonrpc: "2.0", id, result | error}`.
-- 알림: `{jsonrpc: "2.0", method, params}`: `id` 없음, 응답이 기대되지 않음.
+요청의 `id`는 응답 하나를 짝지어 줄 뿐이다. 프로토콜 세션을 만들지 않는다.
 
-베이스 명세는 기본 요소별로 그룹화된 약 15개 메서드를 가진다. 중요한 것들:
+### 요청에 반드시 필요한 메타데이터
 
-- `initialize` / `initialized` (핸드셰이크)
-- `tools/list`, `tools/call`
-- `resources/list`, `resources/read`, `resources/subscribe`
-- `prompts/list`, `prompts/get`
-- `sampling/createMessage` (서버-대-클라이언트)
-- `notifications/tools/list_changed`, `notifications/resources/updated`, `notifications/progress`
-
-### 3단계 생명 주기
-
-**1단계: initialize.**
-
-클라이언트가 자신의 `capabilities`와 `clientInfo`와 함께 `initialize`를 보낸다. 서버는 자신의 `capabilities`, `serverInfo`, 그리고 자신이 구사하는 명세 버전으로 응답한다. 클라이언트는 응답을 소화하면 `notifications/initialized`를 보낸다. 이제부터는 협상된 능력에 따라 어느 쪽이든 요청을 보낼 수 있다.
-
-**2단계: operation.**
-
-양방향이다. 클라이언트는 탐색을 위해 `tools/list`를 호출한 뒤, 호출을 위해 `tools/call`을 호출한다. 서버는 그 능력을 선언했다면 `sampling/createMessage`를 보낼 수 있다. 서버는 자신의 도구 집합이 변형되면 `notifications/tools/list_changed`를 보낼 수 있다. 클라이언트는 사용자가 루트 스코프(root scope)를 바꾸면 `notifications/roots/list_changed`를 보낼 수 있다.
-
-**3단계: shutdown.**
-
-어느 쪽이든 전송(transport)을 닫는다. MCP에는 구조화된 종료 메서드가 없다. 전송(stdio 또는 Streamable HTTP, Phase 13 · 09)이 연결 종료 신호를 운반한다.
-
-### 능력 협상 (Capability negotiation)
-
-`initialize` 핸드셰이크의 `capabilities`가 계약이다. 서버의 예시:
+요즘의 모든 요청은 `params` 안에 `_meta` 객체를 담고 다닌다.
 
 ```json
 {
-  "tools": {"listChanged": true},
-  "resources": {"subscribe": true, "listChanged": true},
-  "prompts": {"listChanged": true}
+  "jsonrpc": "2.0",
+  "id": 7,
+  "method": "tools/list",
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "course-client",
+        "version": "1.0.0"
+      }
+    }
+  }
 }
 ```
 
-서버는 `tools/list_changed` 알림을 내보낼 수 있고 `resources/subscribe`를 지원한다고 선언한다. 클라이언트는 자신의 것을 선언하여 동의한다.
+프로토콜 판본과 클라이언트 역량은 필수다. 클라이언트 신원은 권장 사항이다. 그것은 표시와 디버깅을 위해 스스로 밝힌 정보이지 보안 자격 증명이 아니다.
+
+서버는 이 값들을 앞선 요청이나 stdio 프로세스, HTTP 연결, 전송 계층 헤더만 보고 짐작해서는 안 된다.
+
+### 완료 결과와 서버 신원
+
+요즘 방식의 성공 결과에는 모두 `resultType`이 들어 있다. 평범한 최종 결과는 `"complete"`를 쓴다. 서버는 결과 메타데이터에 자기 신원도 밝혀야 한다.
 
 ```json
 {
-  "roots": {"listChanged": true},
-  "sampling": {},
-  "elicitation": {}
+  "jsonrpc": "2.0",
+  "id": 7,
+  "result": {
+    "resultType": "complete",
+    "tools": [],
+    "ttlMs": 30000,
+    "cacheScope": "public",
+    "_meta": {
+      "io.modelcontextprotocol/serverInfo": {
+        "name": "notes-server",
+        "version": "1.0.0"
+      }
+    }
+  }
 }
 ```
 
-클라이언트가 `sampling`을 선언하지 않으면, 서버는 `sampling/createMessage`를 호출해서는 안 된다. 대칭적이다. 서버가 `resources.subscribe`를 선언하지 않으면, 클라이언트는 구독을 시도해서는 안 된다.
+`tools/list`와 `resources/list`, `prompts/list`, `resources/templates/list`, `resources/read`, `server/discover`는 캐시할 수 있는 결과다. 그래서 `ttlMs`와 `cacheScope`를 함께 담는다. 안전한 기본값은 `ttlMs: 0`과 `cacheScope: "private"`이다. 목록의 항목은 순서가 일정해야 한다. 그래야 같은 응답이 같은 캐시 키를 만들고, 모델이 보는 맥락도 흔들리지 않는다.
 
-이렇게 생태계 표류(drift)를 막는다. sampling을 지원하지 않는 클라이언트도 여전히 유효한 MCP 클라이언트이고, `sampling`을 호출하지 않는 서버도 여전히 유효한 MCP 서버다. 단지 그 기능을 함께 쓰지 않을 뿐이다.
+### 핸드셰이크 없는 탐색
 
-### 구조화된 콘텐츠와 오류 형태
+요즘의 서버는 모두 `server/discover`를 구현해야 한다. 클라이언트는 다른 메서드를 부르기 전에 이것을 불러 다음을 받아 올 수 있다.
 
-`tools/call`은 타입 지정 블록의 `content` 배열을 반환한다. `text`, `image`, `resource`. Phase 13 · 14는 그 목록에 MCP Apps(`ui://` 대화형 UI)를 추가한다.
+- `supportedVersions`
+- 서버의 `capabilities`
+- 선택적인 사용 안내 `instructions`
+- 결과 `_meta` 안의 서버 신원
+- 캐시 힌트
 
-오류는 JSON-RPC 오류 코드를 사용한다. 명세가 정의한 추가 사항: `-32002` "Resource not found", `-32603` "Internal error", 그리고 `error.data`로서의 MCP 전용 오류 데이터.
+탐색은 쓸모가 있지만 반드시 거쳐야 하는 관문은 아니다. `tools/list`를 먼저 보내도 된다. 그 요청 자체가 이미 프로토콜 판본과 역량을 담고 있기 때문이다.
 
-### 클라이언트 능력 대 도구 호출 세부 사항
+요청한 판본을 지원하지 않으면 서버는 JSON-RPC 코드 `-32022`와 함께 다음을 돌려준다.
 
-흔한 혼동: `capabilities.tools`는 클라이언트가 도구 목록 변경 알림을 지원하는지에 관한 것이다. 클라이언트가 특정 도구를 호출할 것인지는 능력 플래그가 아니라 그 모델이 주도하는 런타임 선택이다. 능력 플래그는 명세 수준의 계약이고, 모델의 선택은 이와 직교적(orthogonal)이다.
+```json
+{
+  "requested": "2027-01-01",
+  "supported": ["2026-07-28"]
+}
+```
 
-### 왜 REST가 아니라 JSON-RPC인가?
+클라이언트는 서로 지원하는 최신 판본을 골라, 새 JSON-RPC 요청 식별자로 다시 시도한다.
 
-JSON-RPC 2.0(2010)은 가벼운 양방향 프로토콜이다. REST는 클라이언트가 시작한다. MCP는 서버가 시작하는 메시지(sampling, 알림)가 필요했으므로, 대칭적인 요청/응답 형태를 가진 JSON-RPC가 자연스럽게 들어맞았다. JSON-RPC는 또한 HTTP의 요청 형태를 재발명하지 않고 stdio와 WebSocket/Streamable HTTP 위에서 깔끔하게 합성된다.
+### 요청 하나의 수명 주기
 
-## 라이브러리로 써보기 (Use It)
+요즘의 요청은 다음 순서로 따라가면 된다.
 
-`code/main.py`는 최소한의 JSON-RPC 2.0 파서와 이미터(emitter)를 제공한 뒤, `initialize` → `tools/list` → `tools/call` → `shutdown` 순서를 손으로 따라가며 모든 메시지를 출력한다. 실제 전송 없음. 그저 메시지 형태만. 각 봉투를 검증하려면 더 읽을거리에 링크된 명세와 비교하라.
+1. JSON-RPC 봉투 하나를 파싱한다.
+2. `jsonrpc`가 `"2.0"`인지, `id`가 있는지, `method`가 문자열인지, `params`가 객체인지 확인한다.
+3. `params._meta`에 판본 문자열과 역량 객체가 있어야 한다. 메타데이터가 없거나 형식이 잘못되었으면 `-32602`다.
+4. HTTP 경계에서는 판본과 메서드, 해당되는 이름 헤더를 본문과 비교한다. 어긋나면 두 판본 값 가운데 하나가 지원되지 않는 것이더라도 `-32020`이다.
+5. 서로 같다는 것이 확인된 뒤에, 맞춰진 판본이 지원되지 않으면 `-32022`로 물리친다.
+6. 필요한 역량을 확인하고, `method`로 경로를 정하고, 메서드별 인자를 검증한다.
+7. 핸들러가 돌기 전에 그 구체적인 연산에 대해 인증하고 인가한다.
+8. 서버 신원을 담은 완료 결과를 돌려준다.
+9. 요청 단위의 프로토콜 메타데이터를 잊는다.
 
-볼 것:
+이 순서를 지켜야 두 구성 요소가 서로 다른 호출을 해석하는 일이 생기지 않는다. 게이트웨이가 `Mcp-Name: notes.read`를 허가했는데 원본 서버가 `params.name: notes.delete`를 실행해서는 안 된다. 그리고 형식이 잘못된 입력과 헤더 혼선, 판본 협상, 역량 부족, 인가, 핸들러 실패가 각각 다른 근거로 남는다.
 
-- `initialize`는 능력을 양방향으로 선언한다. 응답은 `serverInfo`와 `protocolVersion: "2025-11-25"`를 가진다.
+stdin을 닫거나 HTTP 응답을 끝내면 전송 계층의 활동이 끝난다. 그렇다고 프로토콜 세션이 끝나는 것은 아니다. 요즘의 MCP에는 프로토콜 세션이 없기 때문이다.
+
+### 구판 호환은 명시적으로
+
+`2025-11-25`까지의 판본은 `initialize`와 `notifications/initialized`, 연결 단위 역량을 쓰고, 예전 Streamable HTTP에서는 선택적인 프로토콜 세션도 썼다. 두 시대를 모두 다루는 클라이언트가 옛 서버와 이야기할 때는 그 동작이 여전히 필요하다.
+
+두 시대를 갈라 두어라. 요즘 요청은 요청마다 실린 필수 메타데이터로 알아본다. 구판 연결은 문서로 정해 둔 대체 경로를 거쳤을 때만 고른다. `2026-07-28` 서버에 `initialize`를 기본값으로 보내지 마라.
+
+그래서 "무상태"라는 말도 시대마다 뜻이 다르다. `2026-07-28`에서는 프로토콜의 불변 조건이다. 평범한 요청은 모두 스스로 해석될 수 있고 MCP 세션은 존재하지 않는다. `2025-11-25`까지의 판본에서는 초기화와 합의된 역량이 연결에 속하므로, 호환 어댑터가 그 구판 연결 상태를 들고 있을 수 있다. 두 시대를 함께 다루는 구현은 느슨한 상태 기계 하나가 아니다. 무상태인 최신 핵심과, 그 옆에 격리된 구판 어댑터가 있고, 어느 파서를 돌릴지 정하는 명시적인 판단이 그 앞에 있다.
+
+두 뜻 어느 쪽도 오래 남는 애플리케이션 상태를 금지하지 않는다. 워크플로나 태스크, 초안은 공유 저장소에서 속을 들여다볼 수 없는 핸들 뒤에 살 수 있다. 클라이언트는 그 핸들을 평범한 입력으로 보내고, 모든 복제본이 그 사용을 인증하고 인가한다. 다만 사라진 세션을 대신하겠다고 프로토콜 맥락을 그 저장소에 흘려 넣어서는 안 된다.
+
 ```figure
 mcp-tool-call
 ```
 
-- `tools/list`는 `tools` 배열을 반환한다. 각 항목은 `name`, `description`, `inputSchema`를 가진다.
-- `tools/call`은 `params.name`과 `params.arguments`를 사용한다.
-- 응답 `content`는 `{type, text}` 블록의 배열이다.
+## 실제로 써 보기 (Use It)
 
-## 산출물 (Ship It)
+`code/main.py`는 프레임워크 없이 요즘 방식의 MCP 메시지를 만들고, 검증하고, 따라가고, 처리한다. 다음으로 실행한다.
 
-이 레슨은 `outputs/skill-mcp-handshake-tracer.md`를 만든다. MCP 클라이언트-서버 상호작용의 pcap 스타일 전사(transcript)가 주어지면, 이 스킬은 각 메시지에 어떤 기본 요소인지, 어떤 생명 주기 단계인지, 어떤 능력에 의존하는지 주석을 단다.
+```bash
+python3 code/main.py
+python3 -m unittest discover code/tests -v
+```
+
+출력에서 불변 조건 세 가지를 확인하라.
+
+- 모든 요청이 자기 `_meta` 필드를 되풀이해 담는다.
+- 성공한 결과는 모두 `resultType: "complete"`이고 서버 신원을 담고 있다.
+- 목록 결과의 순서가 일정하고 캐시 힌트가 명시되어 있다.
+
+## 결과물로 남기기 (Ship It)
+
+이 레슨은 `outputs/skill-mcp-handshake-tracer.md`를 남긴다. 파일 이름은 예전 그대로 두었지만, 그 내용은 이제 무상태 요청 추적기다. 메시지를 하나씩 따로 살펴보고, 구판 핸드셰이크 통신은 실제로 있을 때만 그렇게 표시한다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 돌려라. 능력 협상이 일어나는 줄을 식별하고, 서버가 `tools.listChanged`를 선언하지 않았다면 무엇이 바뀔지 기술하라.
-
-2. `notifications/progress`를 처리하도록 파서를 확장하라. 메시지 형태: `{method: "notifications/progress", params: {progressToken, progress, total}}`. 오래 걸리는 `tools/call`이 진행 중일 때 그것을 내보내고, 클라이언트 핸들러가 진행 막대(progress bar)를 표시할지 확인하라.
-
-3. MCP 2025-11-25 명세를 처음부터 끝까지 읽어라. 전체 문서는 약 80페이지다. 대부분의 서버가 필요로 하지 않는 능력 플래그 하나를 식별하라. 힌트: 리소스 구독과 관련 있다.
-
-4. 가상의 "cron job" 기능이 속할 기본 요소를 종이에 스케치하라. (힌트: 서버는 클라이언트가 예약된 시간에 그것을 호출하기를 원한다. 여섯 기본 요소 중 어느 것도 오늘날 들어맞지 않는다.) MCP의 2026년 로드맵에 이를 위한 초안 SEP가 있다.
-
-5. GitHub의 공개 MCP 서버에서 세션 로그 하나를 파싱하라. 요청 대 응답 대 알림 메시지를 세어라. 트래픽의 어느 비율이 생명 주기 대 operation인지 계산하라.
+1. 요청 하나의 프로토콜 판본을 `2027-01-01`로 바꿔라. 오류 코드가 `-32022`이고 데이터가 지원되는 판본을 알려 주는지 확인하라.
+2. 두 번째 요청에서 `io.modelcontextprotocol/clientCapabilities`를 지워라. 서버가 첫 번째 요청의 역량을 다시 쓰지 않는지 확인하라.
+3. 메모리 안의 도구 목록 순서를 뒤집어라. `tools/list`가 여전히 같은 순서를 돌려주는지 확인하라.
+4. `cacheScope`를 `public`에서 `private`으로 바꿔라. 각 경우에 어떤 인가 맥락이 그 응답을 다시 쓸 수 있는지 설명하라.
+5. `clientInfo`를 빼는 시험을 추가하라. 클라이언트 신원은 필수가 아니라 권장이므로 그 요청은 여전히 유효해야 한다.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 사람들이 하는 말 | 실제 의미 |
-|------|----------------|------------------------|
-| MCP | "Model Context Protocol" | 모델-대-도구 탐색과 호출을 위한 오픈 프로토콜 |
-| 서버 기본 요소(Server primitive) | "서버가 노출하는 것" | tools(행동), resources(데이터), prompts(템플릿) |
-| 클라이언트 기본 요소(Client primitive) | "클라이언트가 서버에게 쓰게 하는 것" | roots(스코프), sampling(LLM 콜백), elicitation(사용자 입력) |
-| JSON-RPC 2.0 | "와이어 형식" | 대칭적인 요청/응답/알림 봉투 |
-| `initialize` 핸드셰이크 | "능력 협상" | 첫 메시지 쌍. 서버와 클라이언트가 지원하는 기능을 선언한다 |
-| `tools/list` | "탐색(Discovery)" | 클라이언트가 서버에게 현재 도구 집합을 묻는다 |
-| `tools/call` | "호출(Invocation)" | 클라이언트가 서버에게 인자와 함께 도구를 실행하도록 요청한다 |
-| `notifications/*_changed` | "변형 이벤트" | 서버가 클라이언트에게 자신의 기본 요소 목록이 바뀌었다고 알린다 |
-| 콘텐츠 블록(Content block) | "타입 지정 결과" | 도구 결과 안의 `{type: "text" \| "image" \| "resource" \| "ui_resource"}` |
-| SEP | "Spec Evolution Proposal" | 이름 붙은 초안 제안(예: 비동기 Tasks를 위한 SEP-1686) |
+| 용어 | 뜻 |
+|------|---------|
+| Stateless protocol | 요청마다 그것을 해석하는 데 필요한 메타데이터를 스스로 담는 방식 |
+| Request metadata | `params._meta`에 담는 판본과 클라이언트 역량, 그리고 권장되는 클라이언트 신원 |
+| `server/discover` | 판본과 역량, 안내, 신원을 알려 주는 필수 서버 메서드 |
+| `resultType` | 요즘 방식의 성공 결과마다 붙는 갈래 값 |
+| Cacheable result | 필수 항목인 `ttlMs`와 `cacheScope` 힌트를 담은 결과 |
+| Protocol era | 요청마다 메타데이터를 싣는 최신 방식인지, 연결 단위로 초기화하는 구판 방식인지 |
+| Transport lifetime | 프로토콜 세션 상태가 아니라 프로세스와 연결, 응답 스트림의 수명 |
+| `-32022` | 요청한 판본과 지원되는 판본을 함께 알려 주는, 지원하지 않는 프로토콜 판본 오류 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol(Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) 표준 명세 문서
-- [Model Context Protocol(Architecture concepts](https://modelcontextprotocol.io/docs/concepts/architecture)) 여섯 기본 요소 멘탈 모델
-- [Anthropic(Introducing the Model Context Protocol](https://www.anthropic.com/news/model-context-protocol)) 2024년 11월 출시 게시물
-- [MCP blog(First MCP anniversary](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)) 1주년 회고와 2025-11-25 명세 변경
-- [WorkOS(MCP 2025-11-25 spec update](https://workos.com/blog/mcp-2025-11-25-spec-update)) SEP-1686, 1036, 1577, 835, 1724 요약
+- [MCP Architecture](https://modelcontextprotocol.io/specification/2026-07-28/architecture)
+- [MCP Base Protocol](https://modelcontextprotocol.io/specification/2026-07-28/basic)
+- [MCP Server Discovery](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
+- [MCP 2026-07-28 Changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog)

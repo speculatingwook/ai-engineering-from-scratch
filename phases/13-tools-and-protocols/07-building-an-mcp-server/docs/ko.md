@@ -1,178 +1,206 @@
-# MCP 서버 만들기: Python + TypeScript SDK
+# MCP 서버 만들기: 무상태 Python과 TypeScript (Building an MCP Server: Stateless Python and TypeScript)
 
-> 대부분의 MCP 튜토리얼은 stdio hello-world만 보여준다. 실제 서버는 tools와 resources와 prompts를 노출하고 능력 협상(capability negotiation)을 처리하며 구조화된 오류를 내보내고, SDK 전반에서 동일하게 동작한다. 이 레슨은 노트 서버를 종단 간(end-to-end)으로 만든다. stdlib stdio 전송(transport), JSON-RPC 디스패치(dispatch), 세 가지 서버 기본 요소(primitive), 그리고 졸업할 때 Python SDK의 FastMCP나 TypeScript SDK에 그대로 들어가는 순수 함수(pure-function) 스타일이다.
+> 요즘의 MCP 서버는 핸드셰이크를 기억하지 않는다. 요청마다 메타데이터를 검증하고, 핸들러 하나를 돌리고, 타입이 정해진 결과 하나를 돌려준다.
 
 **Type:** Build
 **Languages:** Python, TypeScript
 **Prerequisites:** Phase 13, Lesson 06
-**Time:** ~75분
+**Time:** ~85 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- `initialize`, `tools/list`, `tools/call`, `resources/list`, `resources/read`, `prompts/list`, `prompts/get` 메서드를 구현하기.
-- stdin에서 JSON-RPC 메시지를 읽고 stdout에 응답을 쓰는 디스패치 루프를 작성하기.
-- JSON-RPC 2.0 명세와 MCP의 추가 코드에 따라 구조화된 오류 응답을 내보내기.
-- 도구 로직을 다시 작성하지 않고 stdlib 구현을 FastMCP(Python SDK) 또는 TypeScript SDK로 졸업시키기.
+- MCP `2026-07-28`이 요구하는 `server/discover`를 구현한다.
+- 요청마다 프로토콜 판본과 클라이언트 역량을 검증한다.
+- 도구와 자원, 프롬프트를 순서가 일정한 목록으로 노출한다.
+- 알맞은 결과에 `resultType`과 서버 신원, 캐시 힌트를 담아 돌려준다.
+- 같은 무상태 계약을, 줄 단위로 구분되는 stdio 위에서 Python과 TypeScript로 각각 제공한다.
 
 ## 문제 (The Problem)
 
-원격 전송(Phase 13 · 09)이나 인증 계층(Phase 13 · 16)을 쓰기 전에, 깔끔한 로컬 서버가 필요하다. 로컬은 stdio를 뜻한다. 서버는 클라이언트가 자식 프로세스(child process)로 생성하며, 메시지는 줄바꿈으로 구분되어(newline-delimited) stdin/stdout 위로 흐른다.
+첫 메시지를 받고 클라이언트 역량을 저장해 두는 서버는 만들기는 쉽고 운영하기는 어렵다. 같은 프로세스가 여러 클라이언트를 차례로 받을 수 있다. 원격 요청은 다른 워커에 떨어질 수 있다. 낡은 역량 선언 하나가 인가 경계를 넘어 동작을 새어 나가게 만들 수 있다.
 
-2025-11-25 명세는 stdio 메시지가 명시적 `\n` 구분자를 가진 JSON 객체로 인코딩되도록 규정한다. 여기에는 SSE가 없다. SSE는 옛 원격 모드였고 2026년 중반에 제거되고 있다(Atlassian의 Rovo MCP 서버는 2026년 6월 30일에, Keboola는 2026년 4월 1일에 폐기했다). stdio에서는 줄당 하나의 JSON 객체가 와이어 형식(wire format)의 전부다.
+MCP `2026-07-28`은 요청 하나하나가 스스로를 설명하게 만들어서 그 문제의 프로토콜 쪽을 푼다. 애플리케이션은 여전히 오래 남는 메모나 작업, 명시적인 상태 핸들을 가질 수 있다. 가질 수 없는 것은, 이후 요청을 해석하는 방식을 바꾸는 숨은 프로토콜 상태다.
 
-노트 서버는 세 가지 서버 기본 요소를 모두 연습시키기 때문에 좋은 형태다. Tools는 변경(mutation)을 한다(`notes_create`). Resources는 데이터를 노출한다(`notes://{id}`). Prompts는 템플릿을 제공한다(`review_note`). 이 레슨의 형태는 어떤 도메인으로든 일반화된다.
+이 레슨에서는 메모 서버를 두 번 만든다. Python 판본과 TypeScript 판본 모두 프로토콜 핵심에는 표준 라이브러리만 쓴다. 둘은 같은 메서드를 노출하고 같은 통신 계약을 강제한다.
 
 ## 개념 (The Concept)
 
-### 디스패치 루프
+### 요즘의 처리 루프
 
+```text
+read one JSON-RPC line
+parse the envelope
+if it is a notification, do not respond
+validate params._meta for this request
+route by method
+wrap success with resultType and serverInfo
+write one JSON-RPC response line
+forget request-scoped metadata
 ```
-loop:
-  line = stdin.readline()
-  msg = json.loads(line)
-  if has id:
-    handle request -> write response
-  else:
-    handle notification -> no response
+
+stdio에 대한 세 가지 규칙은 여전히 중요하다.
+
+- 표준 출력에는 JSON-RPC 메시지만 쓴다. 진단 정보는 stderr로 보낸다.
+- 메시지는 줄바꿈으로 구분하고 응답마다 버퍼를 비운다.
+- stdin이 끝에 닿으면 곧바로 종료한다.
+
+프로세스의 수명은 전송 계층의 수명이다. 요즘 MCP의 세션이 아니다.
+
+### 요청 검증
+
+모든 요청에는 다음이 있어야 한다.
+
+```json
+{
+  "params": {
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "notes-client",
+        "version": "1.0.0"
+      }
+    }
+  }
+}
 ```
 
-세 가지 규칙:
+앞의 두 필드는 필수다. `clientInfo`는 권장 사항이다. 신원이 들어 있다면 그 형태는 검증하되, 그것을 인증으로 다루지는 마라.
 
-- JSON-RPC 봉투(envelope)가 아닌 어떤 것도 stdout에 출력하지 마라. 디버그 로그는 stderr로 간다.
-- 모든 요청은 반드시 동일한 `id`를 운반하는 응답과 짝지어져야 한다.
-- 알림(notification)에는 응답해서는 안 된다.
+판본을 지원하지 않으면 `requested`와 `supported`를 담아 코드 `-32022`를 돌려준다. 요청 메타데이터가 빠져 있으면 잘못된 파라미터이므로 코드 `-32602`다. 빠진 필드를 앞선 호출에서 가져다 채우지 마라.
 
-### `initialize` 구현
+### 탐색은 필수다
+
+요즘의 서버는 `server/discover`를 반드시 구현해야 한다. 완결된 탐색 결과에는 지원하는 최신 판본과 역량, 선택적인 안내, 캐시 힌트, 그리고 결과 `_meta` 안의 서버 신원이 들어간다.
+
+```json
+{
+  "resultType": "complete",
+  "supportedVersions": ["2026-07-28"],
+  "capabilities": {
+    "tools": {"listChanged": false},
+    "resources": {"listChanged": false, "subscribe": false},
+    "prompts": {"listChanged": false}
+  },
+  "ttlMs": 3600000,
+  "cacheScope": "public",
+  "_meta": {
+    "io.modelcontextprotocol/serverInfo": {
+      "name": "notes-server",
+      "version": "2.0.0"
+    }
+  }
+}
+```
+
+탐색이 서버를 열어 주는 열쇠는 아니다. 클라이언트는 탐색을 부르지 않고도 `tools/list`를 부를 수 있다. `tools/list`가 이미 같은 요청 메타데이터를 담고 있기 때문이다.
+
+### 도구
+
+`tools/list`는 순서가 일정한 도구 기술자 목록을 돌려준다. 순서가 안정되어 있어야 응답 캐싱이 잘 되고 모델이 보는 맥락도 흔들리지 않는다. 이 결과에는 `ttlMs`와 `cacheScope`도 반드시 들어간다.
+
+`tools/call`은 콘텐츠 블록과 `isError`를 돌려준다. JSON-RPC 봉투나 메서드 파라미터가 잘못되었을 때는 JSON-RPC 오류를 쓴다. 유효한 도구 호출이 실행되었는데 도구 자체가 실패했을 때는 `isError: true`를 쓴다.
+
+도구 주석은 여전히 힌트일 뿐 강제가 아니다.
+
+- `readOnlyHint`
+- `destructiveHint`
+- `idempotentHint`
+- `openWorldHint`
+
+호스트는 이것을 확인 절차와 화면 표시에 쓰면 된다. 실제 인가는 서버가 강제해야 한다.
+
+### 자원
+
+`resources/list`는 안정된 URI 기술자를 돌려준다. `resources/read`는 타입이 정해진 내용을 돌려준다. `2026-07-28`에서는 둘 다 캐시할 수 있으므로 둘 다 `ttlMs`와 `cacheScope`를 담는다.
+
+사용자별 메모 데이터에는 `cacheScope: "private"`을 쓴다. 공유 캐시가 인가 맥락을 넘어 비공개 응답을 다시 써서는 안 된다.
+
+요즘의 변경 알림은 `resources/subscribe`를 쓰지 않는다. 클라이언트가 `subscriptions/listen`을 열고 `resourceSubscriptions`나 목록 변경 범주를 요청한다. 그 흐름은 10번 레슨에서 만든다.
+
+### 프롬프트
+
+`prompts/list`는 캐시할 수 있고 순서가 일정하다. `prompts/get`은 이름이 붙은 프롬프트를 인자와 함께 채워 낸다. 채워진 프롬프트 결과는 완료 결과이지만, 캐시 힌트를 요구하는 목록이나 읽기 결과에는 속하지 않는다.
+
+### 성공 결과에는 모두 타입이 붙는다
+
+예제는 모든 성공에 감싸개 하나를 쓴다.
 
 ```python
 def complete(payload):
     return {
-        "protocolVersion": "2025-11-25",
-        "capabilities": {
-            "tools": {"listChanged": True},
-            "resources": {"listChanged": True, "subscribe": False},
-            "prompts": {"listChanged": False},
-        },
-        "serverInfo": {"name": "notes", "version": "1.0.0"},
+        "resultType": "complete",
+        **payload,
+        "_meta": {SERVER_INFO_KEY: SERVER_INFO},
     }
 ```
 
-지원하는 것만 선언하라. 클라이언트는 기능을 게이트하기 위해 능력 집합에 의존한다.
+목록과 읽기, 탐색 핸들러는 여기에 `ttlMs`와 `cacheScope`를 더한다. 감싸개를 한곳에 모아 두면 어떤 핸들러가 요즘 방식의 결과 필드를 조용히 빠뜨리는 일이 생기지 않는다.
 
-### `tools/list`와 `tools/call` 구현
+### 서버가 먼저 요청을 시작하지 않는다
 
-`tools/list`는 각 항목이 `name`, `description`, `inputSchema`를 가진 `{tools: [...]}`를 반환한다. `tools/call`은 `{name, arguments}`를 받아 `{content: [blocks], isError: bool}`를 반환한다.
+요즘의 서버는 클라이언트 요청과 관련된 알림이나, 클라이언트가 연 `subscriptions/listen` 스트림 위의 알림을 보낼 수 있다. 그러나 자기 JSON-RPC 요청을 먼저 보내서는 안 된다.
 
-콘텐츠 블록은 타입이 지정된다. 가장 흔한 것:
+핸들러에 샘플링이나 사용자 되묻기, 루트 입력이 필요하면 `input_required` 결과를 돌려준다. 클라이언트가 거기 담긴 입력 요청을 채워서, 새 요청 식별자로 원래 메서드를 다시 부른다. 여러 번 왕복하는 그 패턴은 11번 레슨에서 다룬다.
 
-```json
-{"type": "text", "text": "Found 2 notes"}
-{"type": "resource", "resource": {"uri": "notes://14", "text": "..."}}
-{"type": "image", "data": "<base64>", "mimeType": "image/png"}
-```
+### 구판 호환은 명시적으로
 
-도구 오류는 두 형태로 온다. 프로토콜 수준 오류(알 수 없는 메서드, 잘못된 params)는 JSON-RPC 오류다. 도구 수준 오류(유효한 호출이지만 도구가 실패함)는 `{content: [...], isError: true}`로 반환된다. 이렇게 하면 모델이 자신의 컨텍스트에서 실패를 보게 된다.
+두 시대를 함께 다루는 서버라면 `2025-11-25` 핸드셰이크를 분명히 분리된 구판 갈래에 구현할 수도 있다. 필수 최신 `_meta` 필드가 있으면 최신 동작을 고르고, `initialize`를 받으면 구판 동작을 고른다.
 
-### resources 구현
-
-Resources는 설계상 읽기 전용이다. `resources/list`는 매니페스트(manifest)를 반환하고, `resources/read`는 콘텐츠를 반환한다. URI는 `file://...`, `http://...`, 또는 `notes://` 같은 커스텀 스킴(scheme)일 수 있다.
-
-데이터를 도구 대신 리소스로 노출할 때:
-
-- 모델은 리소스를 "호출"하지 않는다. 클라이언트가 사용자 요청 시 컨텍스트에 주입할 수 있다.
-- 구독(subscription)은 리소스가 바뀔 때 서버가 업데이트를 푸시(push)하게 한다(Phase 13 · 10).
-- Phase 13 · 14는 대화형 리소스를 위해 이를 `ui://`로 확장한다.
-
-### prompts 구현
-
-Prompts는 이름 붙은 인자를 가진 템플릿이다. 호스트는 프롬프트를 슬래시 명령(slash-command)으로 드러낸다. `review_note` 프롬프트는 `note_id` 인자를 받아 클라이언트가 모델에 공급하는 다중 메시지 프롬프트 템플릿을 만들 수 있다.
-
-### Stdio 전송의 미묘함
-
-- 줄바꿈으로 구분된 JSON. 길이 접두사 프레이밍(length-prefixed framing) 없음.
-- 버퍼링하지 마라. 각 쓰기 후 `sys.stdout.flush()`.
-- 클라이언트가 수명을 제어한다. stdin이 닫히면(EOF) 깔끔하게 종료하라.
-- SIGPIPE를 조용히 처리하지 마라. 로깅하고 종료하라.
-
-### 주석 (Annotations)
-
-각 도구는 안전 속성을 기술하는 `annotations`를 운반할 수 있다.
-
-- `readOnlyHint: true`: 순수 읽기, 재시도해도 안전함.
-- `destructiveHint: true`: 되돌릴 수 없는 부수 효과. 클라이언트가 확인해야 함.
-- `idempotentHint: true`: 같은 입력이 같은 출력을 만듦.
-- `openWorldHint: true`: 외부 시스템과 상호작용함.
-
-클라이언트는 이를 사용해 UX(확인 대화상자, 상태 표시기)와 라우팅(routing)(Phase 13 · 17)을 결정한다.
-
-### 졸업 경로 (Graduation path)
-
-`code/main.py`의 stdlib 서버는 약 180줄이다. FastMCP(Python)는 같은 로직을 데코레이터 스타일로 붕괴시킨다.
-
-```python
-from fastmcp import FastMCP
-app = FastMCP("notes")
-
-@app.tool()
-def notes_search(query: str, limit: int = 10) -> list[dict]:
-    ...
-```
-
-TypeScript SDK도 등가의 형태를 가진다. 졸업 경로는 준비되면 그대로 들어간다(drop-in). 개념(능력, 디스패치, 콘텐츠 블록)은 동일하다.
+`2026-07-28` 요청을 구판 핸드셰이크 경로에 넣지 마라. 구판 초기화 결과에 최신 `resultType` 필드를 찍어 붙이지도 마라. 이 레슨의 코드는 불변 조건이 눈에 보이도록 일부러 최신 방식만 다룬다.
 
 ```figure
 t3-dispatch-loop
 ```
 
-## 라이브러리로 써보기 (Use It)
+## 실제로 써 보기 (Use It)
 
-`code/main.py`는 stdio 위에서 stdlib만으로 만든 완전한 노트 MCP 서버다. 세 도구(`notes_list`, `notes_search`, `notes_create`)에 대한 `initialize`, `tools/list`, `tools/call`, 각 노트에 대한 `resources/list`와 `resources/read`, 그리고 `review_note` 프롬프트를 처리한다. JSON-RPC 메시지를 파이프(pipe)로 흘려보내 구동할 수 있다.
+Python 서버의 정해진 만큼만 도는 데모와 테스트를 실행한다.
 
+```bash
+cd code
+python3 main.py --demo
+python3 -m unittest discover tests -v
 ```
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | python main.py
+
+TypeScript 판본은 TypeScript 실행기로 돌린다.
+
+```bash
+npx tsx main.ts --demo
 ```
 
-볼 것:
+데모는 `server/discover`를 보내고, 기본 요소를 각각 나열하고, 도구를 호출하고, 지원하지 않는 판본 오류를 보여 준다. 요즘 방식의 요청은 모두 메타데이터를 되풀이해 담는다. 성공한 결과는 모두 서버 신원을 담는다.
 
-- 디스패처는 메서드 이름을 키로 하는 `dict[str, Callable]`이다.
-- 모든 도구 실행기(executor)는 맨 문자열이 아니라 콘텐츠 블록 목록을 반환한다.
-- 실행기가 예외를 일으키면 `isError: true`가 설정된다.
+## 결과물로 남기기 (Ship It)
 
-## 산출물 (Ship It)
-
-이 레슨은 `outputs/skill-mcp-server-scaffolder.md`를 만든다. 도메인(노트, 티켓, 파일, 데이터베이스)이 주어지면, 이 스킬은 올바른 tools / resources / prompts 분할과 SDK 졸업 경로를 가진 MCP 서버를 스캐폴딩(scaffold)한다.
+이 레슨은 `outputs/skill-mcp-server-scaffolder.md`를 남긴다. 탐색 계약과 요청별 검증, 순서가 일정한 캐시 가능 목록, 그리고 선택적으로 격리된 구판 어댑터를 갖춘 최신 서버 설계를 만들어 낸다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 돌리고 손으로 만든 JSON-RPC 메시지로 구동하라. `notes_create`를 연습한 뒤, `resources/read`로 새 노트를 검색하라.
-
-2. `annotations: {destructiveHint: true}`를 가진 `notes_delete` 도구를 추가하라. 클라이언트가 확인 대화상자를 드러내는지 확인하라(이것은 실제 호스트가 필요하다. Claude Desktop이 동작한다).
-
-3. 노트가 수정될 때마다 서버가 `notifications/resources/updated`를 푸시하도록 `resources/subscribe`를 구현하라. 킵얼라이브(keepalive) 작업을 추가하라.
-
-4. 서버를 FastMCP로 포팅하라. Python 파일은 80줄 미만으로 줄어야 한다. 와이어 동작은 동일해야 한다. 같은 JSON-RPC 테스트 하니스(harness)로 검증하라.
-
-5. 명세의 `server/tools` 섹션을 읽고 이 레슨의 서버에 구현되지 않은 도구 정의의 필드 하나를 식별하라. (힌트: 여러 개가 있다. 하나를 골라 추가하라.)
+1. 요청 하나에서 역량을 지우고, 서버가 직전 요청의 선언을 다시 쓰지 않는다는 것을 증명하라.
+2. `TOOLS`와 `PROMPTS`, 메모를 넣는 순서를 뒤집어라. 모든 목록 결과가 그대로 안정되어 있는지 확인하라.
+3. 파괴적인 `notes_delete` 도구를 추가하고, 실행기 안에서 인가를 확인하도록 요구하라. `destructiveHint`는 사용자 경험을 위한 힌트로만 두어라.
+4. `resources/templates/list`를 `ttlMs`와 `cacheScope`, 일정한 순서와 함께 추가하라.
+5. `2025-11-25`용 구판 어댑터를 따로 만들어라. 그리고 최신 요청이 그쪽으로 들어가지 않는다는 것을 테스트로 증명하라.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 사람들이 하는 말 | 실제 의미 |
-|------|----------------|------------------------|
-| MCP 서버(MCP server) | "도구를 노출하는 것" | stdio나 HTTP 위로 MCP JSON-RPC를 구사하는 프로세스 |
-| stdio 전송(stdio transport) | "자식 프로세스 모델" | 서버가 클라이언트에 의해 생성됨. stdin/stdout으로 통신 |
-| 디스패처(Dispatcher) | "메서드 라우터" | JSON-RPC 메서드 이름에서 핸들러 함수로의 맵 |
-| 콘텐츠 블록(Content block) | "도구 결과 청크" | 도구 응답의 `content` 배열 속 타입 지정 요소 |
-| `isError` | "도구 수준 실패" | 도구가 실패했음을 알림. JSON-RPC 오류와 구별 |
-| 주석(Annotations) | "안전 힌트" | readOnly / destructive / idempotent / openWorld 플래그 |
-| FastMCP | "Python SDK" | MCP 프로토콜 위의 데코레이터 기반 상위 수준 프레임워크 |
-| 리소스 URI(Resource URI) | "주소 지정 가능한 데이터" | 리소스를 식별하는 `file://`, `db://`, 또는 커스텀 스킴 |
-| 프롬프트 템플릿(Prompt template) | "슬래시 명령 브리프" | 호스트 UI를 위한 인자 슬롯을 가진 서버 공급 템플릿 |
-| 능력 선언(Capability declaration) | "기능 토글" | `initialize`에서 선언되는 기본 요소별 플래그 |
+| 용어 | 뜻 |
+|------|---------|
+| Stateless server | 프로토콜 세션 기억 없이, 요청마다 그 자신의 메타데이터만으로 처리하는 서버 |
+| `server/discover` | 판본과 역량을 알리는, 요즘 방식의 필수 메서드 |
+| Complete result | `resultType: "complete"`인 요즘 방식의 성공 결과 |
+| Cacheable result | `ttlMs`와 `cacheScope`가 붙은 탐색·목록·자원 읽기 결과 |
+| Deterministic list | 같은 논리적 목록이 언제나 같은 항목 순서를 내놓는 것 |
+| Server identity | 결과 `_meta`에 담는, 권장되는 `io.modelcontextprotocol/serverInfo` |
+| Tool error | 유효한 도구 호출이 `isError: true`인 콘텐츠를 돌려주는 경우 |
+| Protocol error | 잘못된 JSON-RPC나 MCP 요청을 `error`로 돌려주는 경우 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol(Python SDK](https://github.com/modelcontextprotocol/python-sdk)) 레퍼런스 Python 구현
-- [Model Context Protocol(TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)) 병렬 TS 구현
-- [FastMCP(server framework](https://gofastmcp.com/)) MCP 서버를 위한 데코레이터 스타일 Python API
-- [MCP(Quickstart server guide](https://modelcontextprotocol.io/quickstart/server)) 어느 SDK든 사용하는 종단 간 튜토리얼
-- [MCP(Server tools spec](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)) tools/* 메시지에 대한 완전한 레퍼런스
+- [MCP Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/)
+- [MCP Server Discovery](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
+- [MCP Tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)
+- [MCP Resources](https://modelcontextprotocol.io/specification/2026-07-28/server/resources)
+- [MCP Prompts](https://modelcontextprotocol.io/specification/2026-07-28/server/prompts)
+- [MCP stdio Transport](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)

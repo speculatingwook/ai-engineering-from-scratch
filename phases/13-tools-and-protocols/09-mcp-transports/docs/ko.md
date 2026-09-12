@@ -1,148 +1,237 @@
-# MCP 트랜스포트: stdio vs Streamable HTTP vs SSE 마이그레이션
+# MCP 전송: stdio와 무상태 Streamable HTTP (MCP Transports: stdio and Stateless Streamable HTTP)
 
-> stdio는 로컬에서만 동작하고 다른 곳에서는 동작하지 않는다. Streamable HTTP(2025-03-26)는 원격 표준이다. 기존 HTTP+SSE 트랜스포트는 더 이상 쓰이지 않으며 2026년 중반에 제거된다. 잘못된 트랜스포트를 고르면 마이그레이션 비용을 치르게 되고, 올바른 것을 고르면 세션 연속성(session continuity)과 DNS 리바인딩(DNS-rebinding) 방어를 갖춘 원격 호스팅 가능한 MCP 서버를 얻는다.
+> 전송은 MCP 메시지를 실어 나른다. 빠져 있는 프로토콜 상태를 대신 채워 주지는 않는다. `2026-07-28`에서는 로컬 stdio와 원격 Streamable HTTP 둘 다 자기 자신을 설명하는 요청을 실어 나른다.
 
 **Type:** Learn
 **Languages:** Python
 **Prerequisites:** Phase 13, Lessons 07 and 08
-**Time:** ~45분
+**Time:** ~65 minutes
 
 ## 학습 목표 (Learning Objectives)
 
-- 배포 형태(로컬 vs 원격, 단일 프로세스 vs 플릿)에 따라 stdio와 Streamable HTTP 중에서 선택하기.
-- Streamable HTTP 단일 엔드포인트 패턴 구현하기: 요청에는 POST, 세션 스트림에는 GET.
-- DNS 리바인딩을 막기 위해 `Origin` 검증과 세션 id 의미론(semantics)을 강제하기.
-- 2026년 중반 제거 마감 전에 레거시 HTTP+SSE 서버를 Streamable HTTP로 마이그레이션하기.
+- 로컬 자식 프로세스에는 stdio를, 네트워크 서비스에는 Streamable HTTP를 고른다.
+- 단일 엔드포인트에 POST만 받는 현대 Streamable HTTP 계약을 구현한다.
+- MCP 버전, 메서드, 이름 헤더를 JSON-RPC 본문과 대조해 복제하고 검증한다.
+- 요청 범위 SSE와 오래 유지되는 `subscriptions/listen` 스트림을 각각 올바르게 전달한다.
+- 세션 기반 배포와 레거시 HTTP+SSE 배포를, 레거시 동작을 현대 방식인 것처럼 내세우지 않으면서 이전한다.
 
 ## 문제 (The Problem)
 
-최초의 MCP 원격 트랜스포트(2024-11)는 HTTP+SSE였다. 엔드포인트가 두 개로, 하나는 클라이언트의 POST용이고 다른 하나는 서버-투-클라이언트 스트림을 위한 Server-Sent-Events 채널이었다. 동작은 했다. 그러나 투박하기도 했다. 세션마다 엔드포인트 두 개, 일부 CDN 앞단에서 깨지는 캐시, 그리고 일부 WAF가 공격적으로 끊어버리는 장기 연결 SSE에 크게 의존했다.
+이전 Streamable HTTP 개정판은 프로토콜 협상을 연결 동작과 세션 동작에 섞어 두었다. 서버는 `Mcp-Session-Id`를 발급하고, 독립 GET 스트림을 열어 두고, 세션 종료용 DELETE를 받고, `Last-Event-ID`로 SSE를 이어받을 수 있었다.
 
-2025-03-26 사양(spec)은 이를 Streamable HTTP로 대체했다. 엔드포인트 하나에, 클라이언트 요청에는 POST, 세션 스트림 수립에는 GET을 쓰며, 둘 다 `Mcp-Session-Id` 헤더를 공유한다. 그 이후로 구축되거나 마이그레이션된 모든 서버는 Streamable HTTP를 쓴다. 기존 SSE 모드는 점차 폐기되는 추세다. Atlassian Rovo는 2026년 6월 30일에 제거했고, Keboola는 2026년 4월 1일에, 남은 대부분의 엔터프라이즈 서버는 2026년 말까지 제거한다.
+MCP `2026-07-28`은 그 장치들을 현대 전선에서 걷어냈다. 프로토콜 버전과 클라이언트 역량이 요청 본문에 실려 다니므로 모든 요청은 건강한 워커 아무 곳에나 떨어져도 된다. HTTP 헤더는 라우팅과 정책을 위해 선택된 필드를 복제하지만, 서버는 실행 전에 그 헤더를 본문과 대조해 검증한다.
 
-그리고 stdio는 여전히 로컬 서버에 중요하다. Claude Desktop, VS Code, 그리고 IDE 형태의 모든 클라이언트는 stdio로 서버를 띄운다. 올바른 멘탈 모델은 이렇다. "이 머신"에는 stdio, "네트워크 너머"에는 Streamable HTTP. 교차는 없다.
+그 결과 규모를 키우기도 쉬워지고 동작을 따져 보기도 쉬워진다. 동시에, 2025년 전송 방식을 현재 방식이라고 가르치는 서버는 잘못된 장애 모델과 보안 모델을 가르치고 있다는 뜻이기도 하다.
 
 ## 개념 (The Concept)
 
 ### stdio
 
-- 자식 프로세스(child-process) 트랜스포트. 클라이언트가 서버를 띄우고 stdin/stdout으로 통신한다.
-- 한 줄당 하나의 JSON 객체. 줄바꿈으로 구분된다.
-- 세션 id가 없다. 프로세스 정체성(identity)이 곧 세션이다.
-- 인증이 필요 없다(자식이 부모의 신뢰 경계를 상속한다).
-- 원격 서버에는 절대 쓰지 않는다. SSH나 socat으로 터널링해야 하는데, 그럴 거라면 Streamable HTTP를 쓰면 된다.
+stdio 바인딩은 클라이언트가 띄운 하위 프로세스를 위한 것이다.
 
-### Streamable HTTP
+- 클라이언트는 UTF-8 JSON-RPC 메시지 하나를 한 줄씩 stdin에 쓴다.
+- 서버는 UTF-8 JSON-RPC 메시지 하나를 한 줄씩 stdout에 쓴다.
+- 서버는 진단 정보를 stderr에 쓴다.
+- 서버는 stdin이 EOF에 닿으면 곧바로 종료한다.
+- 모든 현대 요청은 버전과 클라이언트 역량을 `params._meta`에 싣는다.
 
-단일 엔드포인트 `/mcp`(또는 임의의 경로). 세 가지 HTTP 메서드를 지원한다:
+프로세스는 여러 호출에 걸쳐 살아 있을 수 있지만, 그것이 현대 프로토콜 세션은 아니다. 프로세스가 예기치 않게 종료되면 처리 중이던 요청은 유실된다. 프로세스를 재시작하고, 다시 탐색하고, 목록을 다시 받고, 구독을 다시 열고, 안전한 작업을 새 요청 id로 재시도하라.
 
-- **POST /mcp.** 클라이언트가 JSON-RPC 메시지를 보낸다. 서버는 단일 JSON 응답으로 답하거나, 하나 이상의 응답으로 이루어진 SSE 스트림으로 답한다(배치 응답과 해당 요청에 관련된 알림(notification)에 유용하다).
-- **GET /mcp.** 클라이언트가 장기 연결 SSE 채널을 연다. 서버는 이를 서버-투-클라이언트 요청(샘플링(sampling), 알림, 유도(elicitation))에 사용한다.
-- **DELETE /mcp.** 클라이언트가 세션을 명시적으로 종료한다.
+### 2026-07-28의 Streamable HTTP (Streamable HTTP in 2026-07-28)
 
-세션은 서버가 첫 응답에 설정하고 클라이언트가 이후 모든 요청에서 되돌려 보내는 `Mcp-Session-Id` 헤더로 식별된다. 세션 id는 반드시 암호학적으로 무작위(128비트 이상)여야 한다. 클라이언트가 고른 id는 안전을 위해 거부된다.
+현대 서버는 `/mcp` 같은 MCP 엔드포인트를 하나만 노출하고 그곳에서 POST를 받는다.
 
-### 단일 엔드포인트 vs 두 개
+JSON-RPC 요청이나 알림은 하나하나가 새 HTTP POST다. 본문에는 JSON-RPC 메시지 하나가 담긴다. 클라이언트는 서버에 JSON-RPC 응답을 보내지 않는다.
 
-기존 사양의 두-엔드포인트 모드는 2026년에도 여전히 호출 가능하다. 사양이 이를 "레거시 호환(legacy compatible)"으로 선언한다. 그러나 모든 새 서버는 단일 엔드포인트여야 한다. 공식 SDK는 단일 엔드포인트를 내보낸다. 레거시 모드는 마이그레이션되지 않은 원격과 통신할 때만 쓴다.
+요청에 대해 서버는 둘 중 하나를 돌려준다.
 
-### `Origin` 검증과 DNS 리바인딩
+- JSON-RPC 응답 하나를 담은 `Content-Type: application/json`, 또는
+- 그 요청과 연관된 알림들에 이어 최종 JSON-RPC 응답이 오는 `Content-Type: text/event-stream`.
 
-브라우저는 (오늘날) MCP 클라이언트가 아니지만, 공격자는 브라우저가 `localhost:1234/mcp`로 POST하도록 유도하는 웹페이지를 만들 수 있다. 바로 그곳에서 사용자의 로컬 MCP 서버가 수신 대기 중이다. 서버가 `Origin`을 검사하지 않으면, `Origin: http://evil.com`은 유효한 교차 출처(cross-origin)이므로 브라우저의 동일 출처 정책(same-origin policy)이 막아주지 못한다.
+받아들인 알림에 대해서는 본문 없이 `202 Accepted`를 돌려준다.
 
-2025-11-25 사양은 서버가 `Origin`이 허용 목록(allowlist)에 없는 요청을 거부하도록 요구한다. 허용 목록에는 보통 MCP 클라이언트 호스트(`https://claude.ai`, `vscode-webview://*`)와 로컬 UI를 위한 localhost 변형들이 포함된다.
+클라이언트는 두 응답 형식을 모두 알린다.
 
-### 세션 id 생명주기
+```http
+Accept: application/json, text/event-stream
+```
 
-1. 클라이언트가 `Mcp-Session-Id` 없이 첫 요청을 보낸다.
-2. 서버가 무작위 id를 할당하고 응답 헤더에 `Mcp-Session-Id`를 설정한다.
-3. 클라이언트가 이후 모든 요청과 스트림용 `GET /mcp`에서 그 헤더를 되돌려 보낸다.
-4. 세션은 서버가 취소할 수 있다. 클라이언트는 이후 요청에서 404를 보고 다시 초기화해야 한다.
-5. 클라이언트는 깔끔한 종료를 위해 세션을 명시적으로 DELETE할 수 있다.
+### POST만 받는다는 말은 POST만 받는다는 뜻이다 (POST-only means POST-only)
 
-### 킵얼라이브(keepalive)와 재연결
+현대 Streamable HTTP에는 독립 GET 스트림도, DELETE 세션 엔드포인트도 없다.
 
-SSE 연결은 끊긴다. 클라이언트는 동일한 `Mcp-Session-Id`로 다시 GET하여 재수립한다. 서버는 반드시 단절 동안 놓친 이벤트를 (합리적인 윈도우까지) 큐에 저장하고, 클라이언트가 되돌려 보내는 `last-event-id` 헤더로 재생(replay)해야 한다.
+- `GET /mcp`는 `405 Method Not Allowed`를 돌려준다.
+- `DELETE /mcp`는 `405 Method Not Allowed`를 돌려준다.
+- `Mcp-Session-Id`는 무시되며 발급되지도 되돌려지지도 않는다.
+- `Last-Event-ID`는 현대 스트림이 이어받을 수 없으므로 무시된다.
 
-Phase 13 · 13은 태스크(Task)를 다루며, 이를 통해 장기 실행 작업이 전체 세션 재연결 이후에도 살아남을 수 있다.
+요청 범위 스트림이 최종 응답 전에 끊기면 클라이언트는 처리 중이던 그 요청을 잃은 것이다. 재시도가 안전하다면 새 JSON-RPC id로 새 요청을 낼 수 있다. 스트림을 이어받으려 해서는 안 된다.
 
-### 하위 호환성 프로브(probe)
+### Origin 검증 (Origin validation)
 
-기존 서버와 새 서버를 모두 지원하려는 클라이언트는 다음을 수행한다:
+서버는 DNS 리바인딩을 막기 위해 들어오는 연결의 `Origin`을 검증한다. 헤더가 있는데 명시적으로 허용된 값이 아니면 `403 Forbidden`을 돌려준다. 브라우저가 아닌 클라이언트는 `Origin`을 생략할 수 있고, 공식 전송 규칙도 이를 허용한다.
 
-1. `/mcp`에 POST한다.
-2. 응답이 JSON 또는 SSE를 동반한 `200 OK`이면, 이는 Streamable HTTP이다.
-3. 응답이 `Content-Type: text/event-stream`인 `200 OK`이고 보조 엔드포인트를 가리키는 `Location` 헤더가 있으면, 이는 레거시 HTTP+SSE이다. `Location`을 따라간다.
+로컬 서버는 모든 인터페이스가 아니라 `127.0.0.1`에 바인딩해야 한다. 네트워크 서비스에는 여전히 요청마다 인증과 인가가 필요하다. Origin 검증은 인증이 아니다.
 
-### Cloudflare, ngrok, 호스팅
+설정을 정규화한 뒤 origin을 정확히 일치 비교하라. `origin.startswith("https://trusted.example")` 같은 접두사 검사는 공격자가 조종하는 접미사를 받아들일 수 있어 안전하지 않다.
 
-2026년 프로덕션(production) 원격 MCP 서버는 Cloudflare Workers(그들의 MCP Agents SDK 사용), Vercel Functions, 또는 컨테이너화된 Node/Python에서 실행된다. 핵심은 이렇다. 호스팅이 SSE GET을 위한 장기 연결 HTTP 연결을 지원해야 한다. Vercel의 무료 티어는 10초로 제한되어 적합하지 않다. Cloudflare Workers는 무기한 스트림을 지원한다.
+### 필수 HTTP 메타데이터 헤더 (Required HTTP metadata headers)
+
+모든 현대 POST 요청에는 다음이 들어간다.
+
+```http
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: notes_search
+```
+
+헤더 규칙은 이렇다.
+
+- `MCP-Protocol-Version`은 필수이며 `params._meta.io.modelcontextprotocol/protocolVersion`과 같아야 한다.
+- `Mcp-Method`는 필수이며 JSON-RPC `method`와 같아야 한다.
+- `Mcp-Name`은 `tools/call`, `resources/read`, `prompts/get`에 필수다.
+- `Mcp-Name`은 `params.name`과 같고, `resources/read`에서는 `params.uri`와 같다.
+- 헤더 이름은 대소문자를 가리지 않지만 헤더 값은 대소문자를 가린다.
+
+안전하지 않거나 ASCII가 아닌 `Mcp-Name` 값은 정확히 이 UTF-8 Base64 표식을 쓴다.
+
+```text
+=?base64?{Base64EncodedValue}?=
+```
+
+서버는 그 값을 디코딩한 뒤에 본문과 비교한다.
+
+복제 헤더가 빠졌거나, 형식이 어긋났거나, 본문과 맞지 않으면 JSON-RPC 코드 `-32020`과 함께 HTTP `400`을 돌려준다. 헤더와 본문이 서로 같은 버전을 가리키는데 서버가 그 버전을 지원하지 않으면, `-32022`와 함께 HTTP `400`을 돌려주고 `{"supported":["2026-07-28"],"requested":"2027-01-01"}` 같은 정확한 오류 데이터를 싣는다.
+
+알 수 없는 현대 메서드는 JSON-RPC `-32601`과 함께 HTTP `404`를 돌려준다. 두 시대를 다루는 클라이언트는 이 JSON-RPC 본문으로 현대 오류와 레거시 엔드포인트 부재를 구별하므로 본문이 중요하다.
+
+### 요청 범위 SSE (Request-scoped SSE)
+
+서버는 오래 걸리는 요청 하나에 대해 SSE를 고를 수 있다.
+
+```text
+POST tools/call id=41
+  <- notifications/progress related to id=41
+  <- notifications/progress related to id=41
+  <- JSON-RPC response id=41
+stream closes
+```
+
+서버는 이 스트림에 독립적인 JSON-RPC 요청을 보내서는 안 된다. 샘플링, 유도, 루트 상호작용은 Multi Round-Trip Request 결과를 쓴다. 응답 스트림을 닫으면 그 요청은 취소된다.
+
+재생을 위해 SSE 이벤트 id를 붙이지 마라. `Last-Event-ID` 이어받기는 현대 개정판에 없다.
+
+### 오래 유지되는 변경 알림은 subscriptions/listen을 쓴다 (Long-lived changes use subscriptions/listen)
+
+변경 알림은 독립 GET이 아니라 클라이언트가 여는 요청을 쓴다.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "listen-1",
+  "method": "subscriptions/listen",
+  "params": {
+    "notifications": {
+      "toolsListChanged": true,
+      "resourceSubscriptions": ["notes://note-1"]
+    },
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {},
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "course-client",
+        "version": "1.0.0"
+      }
+    }
+  }
+}
+```
+
+이 POST의 응답은 오래 유지되는 SSE 스트림이다. 첫 프로토콜 메시지는 `notifications/subscriptions/acknowledged`다. 확인 응답과 모든 변경 알림, 그리고 최종 결과는 `_meta`에 listen 요청 id와 같은 `io.modelcontextprotocol/subscriptionId`를 싣는다. 서버는 연결 유지를 위해 SSE 주석을 내보낼 수 있다. 스트림이 끊기면 클라이언트는 새 요청 id로 `subscriptions/listen`을 다시 내고 영향을 받은 데이터를 다시 가져온다.
+
+`resources/subscribe`와 `resources/unsubscribe`는 레거시 시대에 속한다. 현대 연결에서는 쓰지 마라.
+
+### 명시적 애플리케이션 상태 (Explicit application state)
+
+프로토콜 세션을 없앴다고 해서 상태를 가진 작업 흐름이 금지되는 것은 아니다. 서버는 불투명한 상태 핸들을 발급해 평범한 도구 결과로 돌려줄 수 있다. 클라이언트는 이후 호출에서 그 핸들을 명시적인 인자로 넘긴다.
+
+핸들을 인증된 주체에 묶고, 추측할 수 없게 만들고, 만료시키고, 쓸 때마다 인가하라. 이렇게 하면 상태가 전송 계층의 고정 배정 뒤에 숨지 않고 애플리케이션 계층에서 눈에 보인다.
+
+복제본에 숨은 상태가 일으키는 장애는 기계적으로 이렇게 진행된다.
+
+1. 요청 A가 복제본 1에 닿아 그 프로세스 메모리 안에 초안을 만든다.
+2. 연결이 초안을 식별한다고 구현이 가정했기 때문에 응답은 초안 핸들을 돌려주지 않는다.
+3. 요청 B는 새로운 POST라서 복제본 2에 닿는다.
+4. 복제본 2에는 유효한 프로토콜 메타데이터가 있지만 그 초안을 지칭하거나 불러올 방법이 없어서, 작업 흐름이 실패하거나 엉뚱한 지역 객체를 읽는다.
+5. 고정 라우팅이 증상을 고친 것처럼 보이다가, 재시작이나 배포, 재스케줄, 장애 조치가 다음 요청을 옮기는 순간 무너진다.
+
+올바른 경계는 두 부분으로 나뉜다. 프로토콜 맥락은 요청마다 실려 다닌다. 오래 남아야 하는 애플리케이션 상태는 서버가 발급해 클라이언트에게 돌려준 핸들 아래에서 공유 저장소에 산다. 다음 호출이 그 핸들을 실어 보내면 어느 복제본이든 같은 레코드를 불러오고, 인가가 그 레코드를 인증된 주체와 테넌트에 묶는다. 복제본 메모리가 레코드를 캐시하는 것은 괜찮지만, 정확성을 위해 필요한 유일한 사본이 되어서는 안 된다.
+
+상태 장치는 수명에 맞춰 고르라. 요청 지역 변수는 호출 하나를 감당한다. 짧은 MRTR 연속 처리에는 무결성이 보호되는 `requestState`를 쓸 수 있다. 초안이나 오래 남는 작업에는 명시적 핸들에 더해 공유 영속성, 만료, 동시성 제어, 멱등성이 필요하다. 이 중 어느 것도 MCP 프로토콜 세션이 아니다.
+
+### HTTP의 두 시대 호환성 (HTTP dual-era compatibility)
+
+현대 서버와 레거시 서버를 모두 지원하는 클라이언트는 현대 POST를 먼저 시도한다. HTTP `400`, `404`, `405`를 받으면 본문을 살펴본다.
+
+- 인식 가능한 현대 JSON-RPC 오류는 서버가 현대 방식임을 증명한다. 요청을 고치거나 서버가 알린 버전으로 재시도하라. 등급을 낮추지 마라.
+- 빈 본문이나 알 수 없는 응답은 레거시 HTTP+SSE 서버라는 뜻일 수 있다. 그때만 옛 GET 엔드포인트를 시도하고 레거시 `endpoint` 이벤트를 기대하라.
+
+서버는 이전 기간 동안 두 시대를 함께 지원할 수 있다. 현대 메타데이터는 POST만 받는 현대 구현으로 보내고, 옛 클라이언트를 위해 레거시 엔드포인트를 따로 남겨 두면 된다. 레거시 GET, DELETE, 세션 id, 재생 동작을 `2026-07-28`의 일부인 것처럼 설명하지 마라.
 
 ```figure
 tp-transport-handshake
 ```
 
-### 게이트웨이 구성(composition)
+## 직접 해 보기 (Use It)
 
-게이트웨이(Phase 13 · 17)로 여러 MCP 서버를 앞단에서 묶으면, 게이트웨이는 세션 id를 다시 쓰고 업스트림을 다중화(multiplex)하는 단일 Streamable HTTP 엔드포인트가 된다. 도구는 게이트웨이 계층에서 병합되며, 클라이언트는 하나의 논리적 서버만 본다.
+`code/main.py`는 파이썬 표준 라이브러리만으로 유한하게 도는 현대 Streamable HTTP 서버를 구현한다. Origin과 복제 헤더를 검증하고, 사라진 세션 헤더를 무시하고, 평범한 호출에는 JSON을 돌려주며, 유한한 `subscriptions/listen` SSE 스트림을 보여 준다.
 
-### 트랜스포트 실패 모드
+```bash
+cd code
+python3 main.py --probe
+python3 -m unittest discover tests -v
+```
 
-- **stdio SIGPIPE.** 쓰기 도중 자식 프로세스가 죽으면 SIGPIPE가 발생한다. 서버는 깔끔하게 종료해야 한다. 클라이언트는 EOF를 감지하고 세션을 죽은 것으로 표시해야 한다.
-- **HTTP 502 / 504.** Cloudflare, nginx, 기타 프록시는 업스트림 실패 시 이를 내보낸다. Streamable HTTP 클라이언트는 짧은 백오프(backoff) 후 한 번 재시도해야 한다.
-- **SSE 연결 끊김.** TCP RST, 프록시 타임아웃, 또는 클라이언트 네트워크 변경이 스트림을 닫는다. 클라이언트는 `Mcp-Session-Id`와 선택적 `last-event-id`로 재연결하여 재개한다.
-- **세션 취소.** 서버가 세션 id를 무효화한다. 클라이언트는 다음 요청에서 404를 본다. 클라이언트는 다시 핸드셰이크해야 한다.
-- **시계 편차(clock skew).** 클라이언트의 리소스-TTL 계산이 서버와 어긋난다. 클라이언트는 서버 타임스탬프를 권위 있는 것으로 취급해야 한다.
+탐침은 다음을 확인한다.
 
-### Streamable HTTP를 우회할 때
+- 유효하지 않은 Origin이 거부된다,
+- 세션 id 없이 탐색이 성공한다,
+- `Mcp-Session-Id`와 `Last-Event-ID`가 무시된다,
+- 헤더 불일치가 `-32020`을 돌려준다,
+- 지원하지 않는 버전이 정확한 `supported`와 `requested` 데이터와 함께 `-32022`를 돌려준다,
+- id가 없는 알림을 받아들이면 본문 없이 HTTP `202`를 돌려준다,
+- GET과 DELETE가 `405`를 돌려준다,
+- `subscriptions/listen`은 확인 응답과 알림, 최종 결과가 모두 구독 id를 싣는 POST 응답 스트림이다.
 
-일부 기업은 자체 네트워크 내부에서 gRPC나 메시지 큐 트랜스포트 뒤에 MCP 서버를 배포한다. 이는 비표준이다. MCP 사양은 이를 공식적으로 정의하지 않는다. 게이트웨이는 내부적으로 gRPC를 쓰면서 MCP 클라이언트에게는 Streamable HTTP 표면을 노출할 수 있다. 외부 표면은 사양을 준수하게 유지하고, 변환은 게이트웨이가 담당하게 한다.
+## 결과물 (Ship It)
 
-## 라이브러리로 써보기 (Use It)
-
-`code/main.py`는 `http.server`(stdlib)로 최소한의 Streamable HTTP 엔드포인트를 구현한다. `/mcp`에서 POST, GET, DELETE를 처리하고, 첫 응답에 `Mcp-Session-Id`를 설정하며, `Origin`을 검증하고, 허용 목록에 없는 출처의 요청을 거부한다. 핸들러는 Lesson 07 노트 서버의 디스패치 로직을 재사용한다.
-
-살펴볼 것:
-
-- POST 핸들러는 JSON-RPC 본문을 읽고, 디스패치하고, JSON 응답을 쓴다(단일 응답 변형. SSE 변형도 구조적으로 유사하다).
-- `Origin` 검사는 기본 `http://evil.example` 프로브를 거부하지만 `http://localhost`는 허용한다.
-- 세션 id는 무작위 128비트 16진수 문자열이다. 서버는 세션별 상태를 메모리에 유지한다.
-
-## 산출물 (Ship It)
-
-이 레슨은 `outputs/skill-mcp-transport-migrator.md`를 만든다. HTTP+SSE(레거시) MCP 서버가 주어지면, 이 스킬은 세션 id 연속성, Origin 검사, 하위 호환 프로브 지원을 갖춘 Streamable HTTP로의 마이그레이션 계획을 생성한다.
+이 레슨은 `outputs/skill-mcp-transport-migrator.md`를 만든다. 현대 프로토콜 세션을 걷어내고, 헤더와 본문을 대조하는 검증을 넣고, 독립 GET을 `subscriptions/listen`으로 바꾸며, 레거시 다리는 눈에 보이게 분리해 둔다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행한다. `curl`로 `initialize`를 POST하고 `Mcp-Session-Id` 응답 헤더를 관찰한다. 그 헤더를 되돌려 보내는 두 번째 요청을 POST하고 세션 연속성을 확인한다.
-
-2. SSE 스트림을 여는 GET 핸들러를 추가한다. 5초마다 `notifications/progress` 이벤트를 하나씩 보낸다. 동일한 세션 id로 다시 GET하여 재연결하고 서버가 이를 수락하는지 확인한다.
-
-3. `last-event-id` 재생 로직을 구현한다. 재연결 시 해당 id 이후에 생성된 모든 이벤트를 재생한다.
-
-4. `Origin` 검증을 와일드카드 패턴(`https://*.example.com`)을 지원하도록 확장하고, `https://app.example.com`은 수락하지만 `https://evil.example.com.attacker.net`은 거부하는지 확인한다.
-
-5. 공식 레지스트리에서 레거시 HTTP+SSE 서버(여럿 있다)를 가져와 마이그레이션을 스케치한다. 엔드포인트 처리, 세션 id 생성, 헤더 의미론에서 무엇이 바뀌는가.
+1. POST에서 `Mcp-Method`를 빼라. HTTP `400`과 오류 `-32020`이 나오는지 확인하라.
+2. 헤더와 본문 버전을 모두 `2027-01-01`로 맞춰 보내라. HTTP `400`과 오류 `-32022`, 그리고 정확한 데이터 `{"supported":["2026-07-28"],"requested":"2027-01-01"}`가 나오는지 확인하라.
+3. ASCII가 아닌 리소스 URI에 대해 Base64 표식 `Mcp-Name`을 보내라. 디코딩한 값이 `params.uri`와 비교되는지 확인하라.
+4. 유한한 listen 스트림을 최종 응답 전에 끊어라. 새 JSON-RPC id로 다시 내고 도구를 다시 가져오라.
+5. ping 도구에 명시적 작업 흐름 핸들을 추가하라. 연결 고정 배정을 쓰지 않고 인가 주체에 묶어라.
 
 ## 핵심 용어 (Key Terms)
 
-| 용어 | 흔히 말하는 것 | 실제 의미 |
-|------|----------------|------------------------|
-| stdio 트랜스포트 | "로컬 자식 프로세스" | stdin/stdout 위의 JSON-RPC, 줄바꿈으로 구분됨 |
-| Streamable HTTP | "원격 트랜스포트" | 단일 엔드포인트 POST + GET + 선택적 SSE, 2025-03-26 사양 |
-| HTTP+SSE | "레거시" | 2026년 중반에 제거되는 두-엔드포인트 모델 |
-| `Mcp-Session-Id` | "세션 헤더" | 서버가 할당하고 이후 모든 요청에서 되돌려 보내는 무작위 id |
-| `Origin` 허용 목록 | "DNS 리바인딩 방어" | Origin이 승인되지 않은 요청을 거부 |
-| 단일 엔드포인트 | "하나의 URL" | `/mcp`가 모든 세션 작업에 대해 POST / GET / DELETE를 처리 |
-| `last-event-id` | "SSE 재생" | 이벤트를 놓치지 않고 끊긴 스트림을 재개하는 데 쓰는 헤더 |
-| 하위 호환 프로브 | "구식 vs 신식 탐지" | 트랜스포트를 자동 선택하는 클라이언트 응답 형태 검사 |
-| 장기 연결 HTTP | "SSE 스트리밍" | 서버가 하나의 TCP 연결에서 수 분 또는 수 시간 동안 이벤트를 푸시 |
-| 세션 취소 | "강제 재초기화" | 서버가 세션 id를 무효화. 클라이언트는 다시 핸드셰이크해야 함 |
+| 용어 | 뜻 |
+|------|---------|
+| stdio | 클라이언트가 띄운 하위 프로세스 위에서 줄 단위로 주고받는 JSON-RPC |
+| Streamable HTTP | 현대 메시지 하나하나가 새 POST가 되는 단일 엔드포인트 |
+| Request-scoped SSE | 연관된 알림과 최종 응답을 담은 POST 응답 스트림 |
+| `subscriptions/listen` | 신청한 변경 알림을 받기 위해 오래 유지하는 POST 요청 |
+| Header mismatch | 복제 헤더가 본문과 어긋날 때의 HTTP `400`과 JSON-RPC `-32020` |
+| Origin validation | 들어오는 연결에 대한 DNS 리바인딩 방어이며 인증이 아니다 |
+| Explicit state handle | 숨은 세션 상태 대신 평범한 인자로 넘기는 애플리케이션 토큰 |
+| Legacy bridge | 호환성만을 위해 남겨 둔, 분리된 이전 시대 동작 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP(Basic transports spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports)) stdio와 Streamable HTTP의 표준 레퍼런스
-- [MCP(Basic transports spec 2025-03-26](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports)) Streamable HTTP를 도입한 개정판
-- [Cloudflare(MCP transport](https://developers.cloudflare.com/agents/model-context-protocol/transport/)) Workers 호스팅 Streamable HTTP 패턴
-- [AWS(MCP transport mechanisms](https://builder.aws.com/content/35A0IphCeLvYzly9Sw40G1dVNzc/mcp-transport-mechanisms-stdio-vs-streamable-http)) 배포 형태별 비교
-- [Atlassian(HTTP+SSE deprecation notice](https://community.atlassian.com/forums/Atlassian-Remote-MCP-Server/HTTP-SSE-Deprecation-Notice/ba-p/3205484)) 구체적인 마이그레이션 마감 사례
+- [MCP Transport Overview](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+- [MCP stdio Transport](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)
+- [MCP Streamable HTTP](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http)
+- [MCP Subscriptions](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/subscriptions)
+- [MCP 2026-07-28 Changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog)
