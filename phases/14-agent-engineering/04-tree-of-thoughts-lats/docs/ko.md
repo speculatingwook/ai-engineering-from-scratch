@@ -50,10 +50,10 @@ LATS는 ToT, ReAct, Reflexion을 MCTS 아래 통합한다. LLM은 세 가지 역
 
 반복당 네 단계:
 
-1. **선택(Select)** — UCT(트리에 대한 상한 신뢰 구간, upper confidence bound for trees)를 사용하여 루트에서 리프(leaf)까지 보행.
-2. **확장(Expand)** — 정책을 통해 K개의 자식 생성.
-3. **시뮬레이션(Simulate)** — 정책을 사용하여 자식에서 롤아웃하고, 가치 함수(또는 환경 보상)로 리프를 채점.
-4. **역전파(Backpropagate)** — 경로를 따라 위로 방문 횟수와 가치 추정치를 갱신.
+1. **선택(Select)**: UCT(트리에 대한 상한 신뢰 구간, upper confidence bound for trees)를 사용하여 루트에서 리프(leaf)까지 보행.
+2. **확장(Expand)**: 정책을 통해 K개의 자식 생성.
+3. **시뮬레이션(Simulate)**: 정책을 사용하여 자식에서 롤아웃하고, 가치 함수(또는 환경 보상)로 리프를 채점.
+4. **역전파(Backpropagate)**: 경로를 따라 위로 방문 횟수와 가치 추정치를 갱신.
 
 UCT 공식: `Q(s, a) + c * sqrt(ln N(s) / N(s, a))`. 첫 항은 활용(exploitation)이고, 둘째는 탐험(exploration)이다. 작업별로 `c`를 조정하라.
 
@@ -95,7 +95,7 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-LangGraph는 ToT 스타일 탐험을 서브그래프 패턴으로 제공한다. LATS에 관한 LangChain 팀의 블로그(2024년 5월)가 참조 튜토리얼이다. LlamaIndex는 `TreeOfThoughts` 에이전트를 제공한다. 대부분의 2026년 프로덕션 에이전트에서 이 패턴은 `if task_complexity > threshold: use_search()` 게이트 뒤에 산다 — Lesson 05의 평가자-최적화기(evaluator-optimizer) 패턴 참고.
+LangGraph는 ToT 스타일 탐험을 서브그래프 패턴으로 제공한다. LATS에 관한 LangChain 팀의 블로그(2024년 5월)가 참조 튜토리얼이다. LlamaIndex는 `TreeOfThoughts` 에이전트를 제공한다. 대부분의 2026년 프로덕션 에이전트에서 이 패턴은 `if task_complexity > threshold: use_search()` 게이트 뒤에 산다. Lesson 05의 평가자-최적화기(evaluator-optimizer) 패턴 참고.
 
 ## 산출물 (Ship It)
 
@@ -113,8 +113,8 @@ LangGraph는 ToT 스타일 탐험을 서브그래프 패턴으로 제공한다. 
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
-| Tree of Thoughts | "분기하는 CoT" | Yao et al. — 자기 평가가 붙은 사고 노드의 트리 |
-| LATS | "LLM을 위한 MCTS" | Zhou et al. — ToT + ReAct + Reflexion을 MCTS 아래 통합 |
+| Tree of Thoughts | "분기하는 CoT" | Yao et al.: 자기 평가가 붙은 사고 노드의 트리 |
+| LATS | "LLM을 위한 MCTS" | Zhou et al.: ToT + ReAct + Reflexion을 MCTS 아래 통합 |
 | UCT | "상한 신뢰 구간" | 활용(Q)과 탐험(ln N / n)의 균형을 맞추는 선택 공식 |
 | 가치 함수(Value function) | "이 상태가 얼마나 좋은가" | 프롬프팅된 LLM 점수 또는 환경 보상; 역전파에 공급 |
 | 정책(Policy) | "행동 제안자" | ReAct 스타일 생성기; 후보 다음 사고/행동을 방출 |
@@ -124,7 +124,7 @@ LangGraph는 ToT 스타일 탐험을 서브그래프 패턴으로 제공한다. 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Yao et al., Tree of Thoughts (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601) — 표준 논문
-- [Zhou et al., LATS (arXiv:2310.04406)](https://arxiv.org/abs/2310.04406) — Reflexion 피드백을 갖춘 MCTS
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 탐색을 위한 서브그래프 패턴
-- [AlphaEvolve (arXiv:2506.13131)](https://arxiv.org/abs/2506.13131) — 프로그램적 평가자를 갖춘 진화적 탐색
+- [Yao et al., Tree of Thoughts (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601): 표준 논문
+- [Zhou et al., LATS (arXiv:2310.04406)](https://arxiv.org/abs/2310.04406): Reflexion 피드백을 갖춘 MCTS
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 탐색을 위한 서브그래프 패턴
+- [AlphaEvolve (arXiv:2506.13131)](https://arxiv.org/abs/2506.13131): 프로그램적 평가자를 갖춘 진화적 탐색

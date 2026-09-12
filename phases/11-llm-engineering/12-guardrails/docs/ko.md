@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 11 Lesson 01 (Prompt Engineering), Phase 11 Lesson 09 (Function Calling)
 **Time:** ~45분
-**Related:** Phase 11 · 14 (Model Context Protocol) — MCP의 리소스/도구 경계는 가드레일과 상호작용한다; 신뢰할 수 없는 리소스 콘텐츠는 지시가 아니라 데이터로 취급되어야 한다. Phase 18 (Ethics, Safety, Alignment)은 정책과 레드 티밍을 더 깊이 다룬다.
+**Related:** Phase 11 · 14 (Model Context Protocol): MCP의 리소스/도구 경계는 가드레일과 상호작용한다; 신뢰할 수 없는 리소스 콘텐츠는 지시가 아니라 데이터로 취급되어야 한다. Phase 18 (Ethics, Safety, Alignment)은 정책과 레드 티밍을 더 깊이 다룬다.
 
 ## 학습 목표 (Learning Objectives)
 

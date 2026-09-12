@@ -1,6 +1,6 @@
 # vLLM 서빙 내부 구조: PagedAttention, 연속 배칭(Continuous Batching), 청크 프리필(Chunked Prefill)
 
-> 2026년 vLLM의 지배력은 단일 트릭이 아니라 세 가지 복리적 기본값에 기반한다. PagedAttention은 항상 켜져 있다. 연속 배칭(continuous batching)은 디코드 반복 사이에 새 요청을 활성 배치(batch)에 주입한다. 청크 프리필(chunked prefill)은 긴 프롬프트를 잘게 썰어 디코드 토큰(token)이 결코 굶지 않게 한다. 셋 다 켜면 하나의 H100 SXM5에서 Llama 3.3 70B FP8이 동시 128에서 초당 2,200~2,400 토큰을 밀어낸다 — vLLM 자체 기본값보다 약 25% 위, 순진한 PyTorch 루프의 3~4배다. 이 레슨은 스케줄러와 어텐션 커널을 직접 도식화할 수 있는 수준에서 읽고, vLLM이 하는 방식으로 프리필과 디코드를 스케줄링하는 장난감 연속 배처를 `code/main.py`에서 만드는 것으로 끝맺는다.
+> 2026년 vLLM의 지배력은 단일 트릭이 아니라 세 가지 복리적 기본값에 기반한다. PagedAttention은 항상 켜져 있다. 연속 배칭(continuous batching)은 디코드 반복 사이에 새 요청을 활성 배치(batch)에 주입한다. 청크 프리필(chunked prefill)은 긴 프롬프트를 잘게 썰어 디코드 토큰(token)이 결코 굶지 않게 한다. 셋 다 켜면 하나의 H100 SXM5에서 Llama 3.3 70B FP8이 동시 128에서 초당 2,200~2,400 토큰을 밀어낸다. vLLM 자체 기본값보다 약 25% 위, 순진한 PyTorch 루프의 3~4배다. 이 레슨은 스케줄러와 어텐션 커널을 직접 도식화할 수 있는 수준에서 읽고, vLLM이 하는 방식으로 프리필과 디코드를 스케줄링하는 장난감 연속 배처를 `code/main.py`에서 만드는 것으로 끝맺는다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy continuous batching scheduler)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-순진한 PyTorch 서빙 루프는 한 번에 한 요청을 돌린다: 토크나이즈, 프리필, EOS까지 디코드, 반환. 사용자 한 명에는 이게 작동한다. 백 명에서는 인내심 있는 사람들의 대기열이 된다. 명백한 해법 — 정적 배칭(static batching) — 은 모든 요청을 윈도우 내 가장 긴 프롬프트에 맞춰 패딩(padding)하고, 모든 디코드를 가장 긴 예상 출력에 맞춰 패딩하며, 전체 배치를 가장 느린 시퀀스에서 멈춰 세운다. 결코 쓰지 않는 패딩에 비용을 내고, 빠른 요청은 느린 요청을 기다린다.
+순진한 PyTorch 서빙 루프는 한 번에 한 요청을 돌린다: 토크나이즈, 프리필, EOS까지 디코드, 반환. 사용자 한 명에는 이게 작동한다. 백 명에서는 인내심 있는 사람들의 대기열이 된다. 명백한 해법(정적 배칭(static batching))은 모든 요청을 윈도우 내 가장 긴 프롬프트에 맞춰 패딩(padding)하고, 모든 디코드를 가장 긴 예상 출력에 맞춰 패딩하며, 전체 배치를 가장 느린 시퀀스에서 멈춰 세운다. 결코 쓰지 않는 패딩에 비용을 내고, 빠른 요청은 느린 요청을 기다린다.
 
 vLLM은 세 문제를 한꺼번에 해결한다. PagedAttention은 고전적 연속(contiguous) 할당이 하는 방식으로 KV 캐시 단편화가 GPU 메모리의 60~80%를 먹는 것을 막는다. 연속 배칭은 각 디코드 반복 사이에 요청이 배치에 합류하고 떠나게 하여, 배치가 항상 실제 작업으로 가득 차게 한다. 청크 프리필은 32k 토큰 프롬프트를 디코드와 교차되는 약 512 토큰 슬라이스로 쪼개어, 긴 프롬프트가 GPU의 모든 디코드 토큰을 얼리지 않게 한다.
 
@@ -52,13 +52,13 @@ PagedAttention은 OS 가상 메모리에서 아이디어를 빌린다. KV 캐시
 
 ### 세 기본값은 상호작용한다
 
-세 기능 모두 서로를 가정한다. PagedAttention은 스케줄러에게 트레이드할 세밀한 KV 자원을 준다. 연속 배칭은 새 시퀀스를 받아들이는 것이 전역 재섞기를 강제하지 않도록 그 세밀한 자원을 필요로 한다. 청크 프리필은 같은 `RUNNING` 리스트에서 스케줄러가 내리는 결정이다 — 별도 시스템이 아니라 하나의 추가 스케줄러 정책일 뿐이다.
+세 기능 모두 서로를 가정한다. PagedAttention은 스케줄러에게 트레이드할 세밀한 KV 자원을 준다. 연속 배칭은 새 시퀀스를 받아들이는 것이 전역 재섞기를 강제하지 않도록 그 세밀한 자원을 필요로 한다. 청크 프리필은 같은 `RUNNING` 리스트에서 스케줄러가 내리는 결정이다. 별도 시스템이 아니라 하나의 추가 스케줄러 정책일 뿐이다.
 
 모든 플래그를 알 필요는 없다. 스케줄러가 무엇을 최적화하는지 알아야 한다: 청크 프리필 슬라이싱에 종속된, KV 블록 예산 하에서의 굿풋(goodput).
 
 ### 2026년 v0.18.0 함정
 
-vLLM v0.18.0에서는 `--enable-chunked-prefill`을 드래프트 모델(draft-model) 추측 디코딩(`--speculative-model`)과 결합할 수 없다. 문서화된 예외는 V1 스케줄러에서의 N-gram GPU 추측 디코딩이다. 릴리스 노트를 읽지 않고 모든 플래그를 켜는 팀은 부드러운 회귀(regression)가 아니라 시작 시 런타임 오류를 얻는다. 추측 디코딩 이득이 청크 프리필을 켤 만한 가치가 있었다면, 그 선택을 재고하라 — 2026년의 올바른 답은 종종 컴파일되지 않는 드래프트 모델 + 청크 프리필이 아니라 청크 프리필 없는 EAGLE-3다.
+vLLM v0.18.0에서는 `--enable-chunked-prefill`을 드래프트 모델(draft-model) 추측 디코딩(`--speculative-model`)과 결합할 수 없다. 문서화된 예외는 V1 스케줄러에서의 N-gram GPU 추측 디코딩이다. 릴리스 노트를 읽지 않고 모든 플래그를 켜는 팀은 부드러운 회귀(regression)가 아니라 시작 시 런타임 오류를 얻는다. 추측 디코딩 이득이 청크 프리필을 켤 만한 가치가 있었다면, 그 선택을 재고하라. 2026년의 올바른 답은 종종 컴파일되지 않는 드래프트 모델 + 청크 프리필이 아니라 청크 프리필 없는 EAGLE-3다.
 
 ### 기억해야 할 숫자
 
@@ -110,7 +110,7 @@ while True:
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행하라. 짧고 긴 요청이 섞인 워크로드에서 `STATIC`을 `CONTINUOUS`와 비교하라. 처리량 격차는 어디서 오는가 — 프리필 효율, 디코드 효율, 아니면 꼬리 지연 시간?
+1. `code/main.py`를 실행하라. 짧고 긴 요청이 섞인 워크로드에서 `STATIC`을 `CONTINUOUS`와 비교하라. 처리량 격차는 어디서 오는가: 프리필 효율, 디코드 효율, 아니면 꼬리 지연 시간?
 2. 장난감 스케줄러를 수정해 `--max-num-batched-tokens`를 추가하라. Llama 3.3 70B FP8을 돌리는 H100에 올바른 값은 무엇인가? (힌트: 그것은 순수 HBM이 아니라 KV 블록 크기와 빈 블록 수의 함수다.)
 3. vLLM v0.18.0 릴리스 노트를 다시 읽어라. 어느 플래그 조합이 상호 배타적인가? 나열하라.
 4. 평균 1,500 출력 토큰, 표준편차 600 토큰을 가진 1,000개 요청 트레이스에 대해, (a) 8192 최대에서 요청별 연속 할당, (b) 16 토큰 블록의 PagedAttention 하에서 KV 캐시 단편화 낭비를 계산하라.
@@ -132,8 +132,8 @@ while True:
 
 ## 더 읽을거리 (Further Reading)
 
-- [vLLM documentation — Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode/) — 청크 프리필과 추측 디코딩 호환성에 관한 공식 출처.
-- [vLLM Release Notes (NVIDIA)](https://docs.nvidia.com/deeplearning/frameworks/vllm-release-notes/index.html) — 2026년 릴리스 주기와 버전별 동작.
-- [vLLM Blog — PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html) — 할당자를 어떻게 생각해야 하는지를 여전히 정의하는 원본 글.
-- [PagedAttention paper (arXiv:2309.06180)](https://arxiv.org/abs/2309.06180) — 단편화 분석과 스케줄러 설계.
-- [Aleksa Gordic — Inside vLLM](https://www.aleksagordic.com/blog/vllm) — 플레임 그래프를 곁들인 상세한 V1 스케줄러 안내.
+- [vLLM documentation(Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode/)) 청크 프리필과 추측 디코딩 호환성에 관한 공식 출처.
+- [vLLM Release Notes (NVIDIA)](https://docs.nvidia.com/deeplearning/frameworks/vllm-release-notes/index.html): 2026년 릴리스 주기와 버전별 동작.
+- [vLLM Blog(PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html)) 할당자를 어떻게 생각해야 하는지를 여전히 정의하는 원본 글.
+- [PagedAttention paper (arXiv:2309.06180)](https://arxiv.org/abs/2309.06180): 단편화 분석과 스케줄러 설계.
+- [Aleksa Gordic(Inside vLLM](https://www.aleksagordic.com/blog/vllm)) 플레임 그래프를 곁들인 상세한 V1 스케줄러 안내.

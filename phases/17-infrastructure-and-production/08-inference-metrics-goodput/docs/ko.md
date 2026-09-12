@@ -1,4 +1,4 @@
-# 추론 지표(Inference Metrics) — TTFT, TPOT, ITL, 굿풋(Goodput), P99
+# 추론 지표(Inference Metrics): TTFT, TPOT, ITL, 굿풋(Goodput), P99
 
 > 추론(inference) 배포가 제대로 작동하는지는 네 가지 지표로 갈린다. TTFT는 프리필(prefill) + 큐 + 네트워크다. TPOT(ITL과 같다)는 토큰(token)당 메모리 바운드(memory-bound) 디코드(decode) 비용이다. 종단 간(end-to-end) 지연 시간은 TTFT에 TPOT 곱하기 출력 길이를 더한 값이다. 처리량(throughput)은 플릿(fleet) 전반에 걸쳐 집계한 초당 토큰이다. 그러나 제품에서 중요한 지표는 하나, 굿풋(goodput), 곧 모든 SLO를 동시에 충족한 요청의 비율이다. 굿풋이 낮은데 처리량이 높다면, 제때 사용자에게 닿지 못하는 토큰을 처리하고 있다는 뜻이다. 2026년 TRT-LLM에서 Llama-3.1-8B-Instruct의 참조 숫자는 평균 TTFT 162ms, 평균 TPOT 7.33ms, 평균 E2E 1,093ms다. 평균만 보고하지 말고 항상 P50, P90, P99를 보고하라. 그리고 측정 함정을 보라. GenAI-Perf는 ITL 계산에서 TTFT를 제외하고, LLMPerf는 포함한다. 같은 실행을 두고도 두 도구의 TPOT가 갈린다.
 
@@ -22,13 +22,13 @@
 
 ## 개념 (The Concept)
 
-### TTFT — 첫 토큰까지의 시간
+### TTFT: 첫 토큰까지의 시간
 
 `TTFT = queue_time + network_request + prefill_time`
 
 프롬프트가 길면 프리필이 지배한다. H100의 Llama-3.3-70B FP8에서 32k 프롬프트는 순수 프리필만 약 800ms 걸린다. 큐 시간은 부하 상태에서의 스케줄러 동작이고, 네트워크 요청은 TLS를 포함한 와이어 시간이다. TTFT는 무엇이든 스트리밍되어 돌아오기 전에 사용자가 겪는 지연 시간이다.
 
-### TPOT / ITL — 토큰 간 지연 시간
+### TPOT / ITL: 토큰 간 지연 시간
 
 하나의 양을 여러 이름으로 부른다. `TPOT`(time per output token, 출력 토큰당 시간), `ITL`(inter-token latency, 토큰 간 지연 시간), `토큰당 디코드 지연 시간`은 모두 같다. 첫 번째 이후 연속 스트리밍 토큰 사이의 시간이다.
 
@@ -48,7 +48,7 @@
 
 집계 지표다. 플릿 효율은 알려주지만 개별 요청의 건강은 알려주지 않는다.
 
-### 굿풋 — 실제로 신경 쓰는 지표
+### 굿풋: 실제로 신경 쓰는 지표
 
 `goodput = fraction of requests meeting (TTFT <= a) AND (TPOT <= b) AND (E2E <= c)`
 
@@ -62,7 +62,7 @@ LLM 지연 시간 분포는 오른쪽으로 치우쳐 있다. 긴 프리필 이�
 
 항상 세 쌍(P50, P90, P99)을 보고하라. 사용자 경험을 위해 최적화할 대상은 P99다.
 
-### 참조 숫자 — TRT-LLM의 Llama-3.1-8B-Instruct, 2026
+### 참조 숫자. TRT-LLM의 Llama-3.1-8B-Instruct, 2026
 
 - 평균 TTFT: 162ms
 - 평균 TPOT: 7.33ms
@@ -122,7 +122,7 @@ TTFT가 500ms이고 100개 출력 토큰을 총 700ms에 디코드한 요청이�
 |------|----------------|------------------------|
 | TTFT | "첫 토큰까지의 시간" | 큐 + 네트워크 + 프리필. 긴 프롬프트에서는 프리필이 지배 |
 | TPOT | "출력 토큰당 시간" | 첫 번째 이후 토큰당 메모리 바운드 디코드 비용 |
-| ITL | "토큰 간 지연 시간" | 대부분 도구에서 TPOT와 같음(전부는 아님 — GenAI-Perf 참조) |
+| ITL | "토큰 간 지연 시간" | 대부분 도구에서 TPOT와 같음(전부는 아님: GenAI-Perf 참조) |
 | E2E | "종단 간" | TTFT + TPOT * output_len. 위에 응답 측 네트워크 |
 | Throughput | "토큰/초" | 플릿 효율. 지연 시간 백분위수 없이는 쓸모없음 |
 | Goodput | "SLO 충족률" | 모든 SLO 제약을 동시에 충족하는 요청의 비율 |
@@ -132,9 +132,9 @@ TTFT가 500ms이고 100개 출력 토큰을 총 700ms에 디코드한 요청이�
 
 ## 더 읽을거리 (Further Reading)
 
-- [NVIDIA NIM — LLM Benchmarking Metrics](https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html) — TTFT, ITL, TPOT의 정전(canonical) 정의.
-- [Anyscale — LLM Serving Benchmarking Metrics](https://docs.anyscale.com/llm/serving/benchmarking/metrics) — 대안적 정의와 측정 레시피.
-- [BentoML — LLM Inference Metrics](https://bentoml.com/llm/inference-optimization/llm-inference-metrics) — 실제 배포에서의 응용 측정.
-- [LLMPerf](https://github.com/ray-project/llmperf) — Ray 기반 오픈소스 벤치마크.
-- [GenAI-Perf](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/client/src/c++/perf_analyzer/genai-perf/README.html) — NVIDIA의 벤치마크 도구.
-- [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/) — 업계에서 인정받는 굿풋 기반 벤치마크.
+- [NVIDIA NIM(LLM Benchmarking Metrics](https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html)) TTFT, ITL, TPOT의 정전(canonical) 정의.
+- [Anyscale(LLM Serving Benchmarking Metrics](https://docs.anyscale.com/llm/serving/benchmarking/metrics)) 대안적 정의와 측정 레시피.
+- [BentoML(LLM Inference Metrics](https://bentoml.com/llm/inference-optimization/llm-inference-metrics)) 실제 배포에서의 응용 측정.
+- [LLMPerf](https://github.com/ray-project/llmperf): Ray 기반 오픈소스 벤치마크.
+- [GenAI-Perf](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/client/src/c++/perf_analyzer/genai-perf/README.html): NVIDIA의 벤치마크 도구.
+- [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/): 업계에서 인정받는 굿풋 기반 벤치마크.

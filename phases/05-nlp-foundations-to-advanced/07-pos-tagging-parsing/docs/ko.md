@@ -142,7 +142,7 @@ def viterbi(tokens, transitions, emissions, tags, vocab, alpha=0.01):
     return [tags_list[j] for j in reversed(path)]
 ```
 
-브라운에서 바이그램 HMM은 약 93% 정확도에 도달한다. 85%에서 93%로 도약한 것은 대부분 전이 확률에서 온다 — 모델은 `DET NOUN`이 흔하고 `NOUN DET`이 드물다는 것을 학습한다.
+브라운에서 바이그램 HMM은 약 93% 정확도에 도달한다. 85%에서 93%로 도약한 것은 대부분 전이 확률에서 온다. 모델은 `DET NOUN`이 흔하고 `NOUN DET`이 드물다는 것을 학습한다.
 
 ### 3단계: 현대 태거가 이것을 이기는 이유
 
@@ -240,7 +240,7 @@ Refuse to recommend rolling your own parser. Building parsers from scratch is a 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jurafsky and Martin — Speech and Language Processing, chapters 8 and 18](https://web.stanford.edu/~jurafsky/slp3/) — 품사와 파싱에 대한 표준 교과서적 다룸.
-- [Universal Dependencies project](https://universaldependencies.org/) — 모든 다국어 파서가 쓰는 교차 언어 태그셋과 트리뱅크 모음.
-- [spaCy linguistic features guide](https://spacy.io/usage/linguistic-features) — `Token`에 노출된 모든 속성에 대한 실용 레퍼런스.
-- [Chen and Manning (2014). A Fast and Accurate Dependency Parser using Neural Networks](https://nlp.stanford.edu/pubs/emnlp2014-depparser.pdf) — 신경망 파서를 주류로 들여온 논문.
+- [Jurafsky and Martin(Speech and Language Processing, chapters 8 and 18](https://web.stanford.edu/~jurafsky/slp3/)) 품사와 파싱에 대한 표준 교과서적 다룸.
+- [Universal Dependencies project](https://universaldependencies.org/): 모든 다국어 파서가 쓰는 교차 언어 태그셋과 트리뱅크 모음.
+- [spaCy linguistic features guide](https://spacy.io/usage/linguistic-features): `Token`에 노출된 모든 속성에 대한 실용 레퍼런스.
+- [Chen and Manning (2014). A Fast and Accurate Dependency Parser using Neural Networks](https://nlp.stanford.edu/pubs/emnlp2014-depparser.pdf): 신경망 파서를 주류로 들여온 논문.

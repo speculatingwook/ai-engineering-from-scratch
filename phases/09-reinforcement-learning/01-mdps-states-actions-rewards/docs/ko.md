@@ -1,6 +1,6 @@
 # MDP, 상태, 행동, 보상 (MDPs, States, Actions & Rewards)
 
-> 마르코프 결정 과정(Markov Decision Process)은 다섯 가지로 이루어진다. 상태, 행동, 전이, 보상, 할인. 강화 학습(reinforcement learning)의 모든 것 — Q-러닝, PPO, DPO, GRPO — 이 형태 위에서 최적화한다. 한 번 익혀두면, 나머지 강화 학습을 공짜로 읽을 수 있다.
+> 마르코프 결정 과정(Markov Decision Process)은 다섯 가지로 이루어진다. 상태, 행동, 전이, 보상, 할인. 강화 학습(reinforcement learning)의 모든 것(Q-러닝, PPO, DPO, GRPO)이 형태 위에서 최적화한다. 한 번 익혀두면, 나머지 강화 학습을 공짜로 읽을 수 있다.
 
 **Type:** Learn
 **Languages:** Python
@@ -13,7 +13,7 @@
 
 지도 학습(supervised learning)은 `(x, y)` 쌍을 주고 함수를 맞추라고 한다. 강화 학습은 레이블(label)을 주지 않는다. 오직 상태의 흐름, 취한 행동, 그리고 스칼라(scalar) 보상만 준다. 그 수가 게임을 이겼는가? 그 재입고 결정이 돈을 아꼈는가? 그 거래가 이익을 냈는가? LLM이 방금 생성한 토큰(token)이 심판으로부터 더 높은 보상을 끌어냈는가?
 
-이 흐름을 형식화하기 전까지는 흐름으로부터 학습할 수 없다. "내가 본 것", "내가 한 것", "그다음 일어난 일", "그것이 얼마나 좋았는지" — 각각이 추론할 수 있는 대상이 되어야 한다. 그 형식화가 바로 마르코프 결정 과정(Markov Decision Process)이다. 이 단계의 모든 강화 학습 알고리즘은, 끝부분의 RLHF와 GRPO 루프까지 포함해, 이 형태 위에서 최적화한다.
+이 흐름을 형식화하기 전까지는 흐름으로부터 학습할 수 없다. "내가 본 것", "내가 한 것", "그다음 일어난 일", "그것이 얼마나 좋았는지". 각각이 추론할 수 있는 대상이 되어야 한다. 그 형식화가 바로 마르코프 결정 과정(Markov Decision Process)이다. 이 단계의 모든 강화 학습 알고리즘은, 끝부분의 RLHF와 GRPO 루프까지 포함해, 이 형태 위에서 최적화한다.
 
 ## 개념 (The Concept)
 
@@ -181,8 +181,8 @@ Refuse to ship any MDP where the state is non-Markovian without explicit mention
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutton & Barto (2018). Reinforcement Learning: An Introduction, 2nd ed.](http://incompleteideas.net/book/RLbook2020.pdf) — 교과서. 3장이 MDP와 벨만 방정식을 다루고, 1장이 이후 모든 레슨의 바탕이 되는 보상 가설(reward hypothesis)에 동기를 부여한다.
-- [Bellman (1957). Dynamic Programming](https://press.princeton.edu/books/paperback/9780691146683/dynamic-programming) — 벨만 방정식의 기원.
-- [OpenAI Spinning Up — Part 1: Key Concepts](https://spinningup.openai.com/en/latest/spinningup/rl_intro.html) — 심층 강화 학습 관점에서의 간결한 MDP 입문.
-- [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) — MDP와 정확 해법에 관한 운용 과학(operations-research) 레퍼런스.
-- [Littman (1996). Algorithms for Sequential Decision Making (PhD thesis)](https://www.cs.rutgers.edu/~mlittman/papers/thesis-main.pdf) — MDP를 동적 계획법의 특수화로 보는 가장 깔끔한 유도.
+- [Sutton & Barto (2018). Reinforcement Learning: An Introduction, 2nd ed.](http://incompleteideas.net/book/RLbook2020.pdf): 교과서. 3장이 MDP와 벨만 방정식을 다루고, 1장이 이후 모든 레슨의 바탕이 되는 보상 가설(reward hypothesis)에 동기를 부여한다.
+- [Bellman (1957). Dynamic Programming](https://press.princeton.edu/books/paperback/9780691146683/dynamic-programming): 벨만 방정식의 기원.
+- [OpenAI Spinning Up(Part 1: Key Concepts](https://spinningup.openai.com/en/latest/spinningup/rl_intro.html)) 심층 강화 학습 관점에서의 간결한 MDP 입문.
+- [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887): MDP와 정확 해법에 관한 운용 과학(operations-research) 레퍼런스.
+- [Littman (1996). Algorithms for Sequential Decision Making (PhD thesis)](https://www.cs.rutgers.edu/~mlittman/papers/thesis-main.pdf): MDP를 동적 계획법의 특수화로 보는 가장 깔끔한 유도.

@@ -1,4 +1,4 @@
-# Capstone 14 — 추측 디코딩 추론 서버 (Speculative-Decoding Inference Server)
+# Capstone 14: 추측 디코딩 추론 서버 (Speculative-Decoding Inference Server)
 
 > vLLM 0.7의 EAGLE-3은 실제 트래픽에서 2.5-3배 처리량(throughput)을 낸다. P-EAGLE(AWS 2026)은 병렬 추측(speculation)을 한층 더 밀어붙였다. SGLang의 SpecForge는 드래프트 헤드(draft head)를 대규모로 학습시켰다. Red Hat의 Speculators 허브는 흔한 오픈 모델용 정렬된(aligned) 드래프트를 공개했다. TensorRT-LLM은 NVIDIA에서 추측 디코딩(speculative decoding)을 일급(first-class)으로 만들었다. 2026 프로덕션(production) 서빙 스택은 EAGLE 계열 드래프트, FP8 또는 INT4 양자화(quantization), 그리고 큐 대기(queue-wait)에 대한 HPA를 갖춘 vLLM 또는 SGLang이다. 이 캡스톤(capstone)은 두 오픈 모델을 베이스라인(baseline) 대비 2.5배 이상의 처리량으로 서빙하고 완전한 꼬리 지연 시간(tail-latency) 보고서를 내는 것이다.
 
@@ -12,7 +12,7 @@
 
 추측 디코딩은 2026년에 일상재(commodity)가 되었다. EAGLE-3 드래프트 헤드는 타깃(target) 모델의 은닉 상태(hidden state)로 학습하고 N개 토큰을 앞서 예측한다. 타깃 모델은 단일 패스로 검증한다. 60-80%의 수용률(acceptance rate)은 종단 간(end-to-end) 처리량 2-3배로 환산된다. vLLM 0.7은 이것을 네이티브로 통합한다. SGLang + SpecForge는 학습 파이프라인을 제공한다. Red Hat의 Speculators는 Llama 3.3 70B, Qwen3-Coder-30B MoE, GPT-OSS-120B용 정렬된 드래프트를 공개한다.
 
-기술은 모델이 아니라 서빙 운영에 있다. 수용률은 트래픽 분포(ShareGPT 대 코드 대 도메인 데이터)에 따라 드리프트(drift)한다. 거부 시 꼬리 지연 시간은 추측이 없을 때보다 더 나쁘다 — 정상 상태(steady-state) 초당 토큰만이 아니라 여러 배치(batch) 크기에서의 p99를 보고해야 한다. Anthropic / OpenAI API 대비 100만 토큰당 비용이 신뢰성의 지렛대다.
+기술은 모델이 아니라 서빙 운영에 있다. 수용률은 트래픽 분포(ShareGPT 대 코드 대 도메인 데이터)에 따라 드리프트(drift)한다. 거부 시 꼬리 지연 시간은 추측이 없을 때보다 더 나쁘다. 정상 상태(steady-state) 초당 토큰만이 아니라 여러 배치(batch) 크기에서의 p99를 보고해야 한다. Anthropic / OpenAI API 대비 100만 토큰당 비용이 신뢰성의 지렛대다.
 
 ## 개념 (Concept)
 
@@ -128,11 +128,11 @@ $ curl https://infer.example.com/v1/chat/completions -d '{"messages":[...]}'
 
 ## 더 읽을거리 (Further Reading)
 
-- [vLLM EAGLE and P-EAGLE documentation](https://docs.vllm.ai) — 레퍼런스 서빙 스택
-- [P-EAGLE (AWS 2026)](https://aws.amazon.com/blogs/machine-learning/p-eagle-faster-llm-inference-with-parallel-speculative-decoding-in-vllm/) — 병렬 추측 디코딩 논문 + 통합
-- [SGLang SpecForge](https://github.com/sgl-project/SpecForge) — 드래프트 헤드 학습 파이프라인
-- [Red Hat Speculators](https://github.com/neuralmagic/speculators) — 정렬된 드래프트 허브
-- [TensorRT-LLM speculative decoding](https://nvidia.github.io/TensorRT-LLM/) — 벤더 대안
-- [Fireworks.ai serving architecture](https://fireworks.ai/blog) — 상용 레퍼런스
-- [EAGLE-3 paper (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840) — 방법 논문
-- [vLLM repository](https://github.com/vllm-project/vllm) — 코드와 벤치마크
+- [vLLM EAGLE and P-EAGLE documentation](https://docs.vllm.ai): 레퍼런스 서빙 스택
+- [P-EAGLE (AWS 2026)](https://aws.amazon.com/blogs/machine-learning/p-eagle-faster-llm-inference-with-parallel-speculative-decoding-in-vllm/): 병렬 추측 디코딩 논문 + 통합
+- [SGLang SpecForge](https://github.com/sgl-project/SpecForge): 드래프트 헤드 학습 파이프라인
+- [Red Hat Speculators](https://github.com/neuralmagic/speculators): 정렬된 드래프트 허브
+- [TensorRT-LLM speculative decoding](https://nvidia.github.io/TensorRT-LLM/): 벤더 대안
+- [Fireworks.ai serving architecture](https://fireworks.ai/blog): 상용 레퍼런스
+- [EAGLE-3 paper (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840): 방법 논문
+- [vLLM repository](https://github.com/vllm-project/vllm): 코드와 벤치마크

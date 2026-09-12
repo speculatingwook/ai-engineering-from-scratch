@@ -1,4 +1,4 @@
-# Capstone 08 — 규제 산업을 위한 프로덕션 RAG 챗봇
+# Capstone 08: 규제 산업을 위한 프로덕션 RAG 챗봇
 
 > Harvey, Glean, Mendable, LlamaCloud는 모두 2026년에 같은 프로덕션(production) 형태를 운영한다. docling 또는 Unstructured와, 시각 자료를 위한 ColPali로 수집한다. 하이브리드 검색(hybrid search). bge-reranker-v2-gemma로 재순위(re-rank). 60-80% 적중률(hit rate)의 프롬프트 캐싱(prompt caching)을 사용해 Claude Sonnet 4.7로 합성. Llama Guard 4와 NeMo Guardrails로 가드(guard). Langfuse와 Phoenix로 관찰. 200개 질문 골든 셋(golden set)에서 RAGAS로 등급 매기기. 규제 도메인(법률, 임상, 보험)에서 하나 만들면, 캡스톤(capstone)은 골든 셋, 레드팀(red team), 드리프트(drift) 대시보드를 통과해야 한다.
 
@@ -143,12 +143,12 @@ answer:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Harvey AI](https://www.harvey.ai) — 레퍼런스 법률 프로덕션 스택
-- [Glean enterprise search](https://www.glean.com) — 엔터프라이즈 규모의 레퍼런스 RAG
-- [Mendable documentation](https://mendable.ai) — 개발자 문서 RAG 레퍼런스
-- [LlamaCloud Parse + Index](https://docs.llamaindex.ai/en/stable/examples/llama_cloud/llama_parse/) — 매니지드 수집
-- [Anthropic prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) — 비용 레버 레퍼런스
-- [RAGAS 0.2 documentation](https://docs.ragas.io/) — 정전(canonical)에 해당하는 RAG 평가 프레임워크
-- [Arize Phoenix](https://github.com/Arize-ai/phoenix) — 레퍼런스 드리프트 관측성
-- [Llama Guard 4](https://ai.meta.com/research/publications/llama-guard-4/) — 2026 안전 분류기
-- [NeMo Guardrails v0.12](https://docs.nvidia.com/nemo-guardrails/) — 정책 레일 프레임워크
+- [Harvey AI](https://www.harvey.ai): 레퍼런스 법률 프로덕션 스택
+- [Glean enterprise search](https://www.glean.com): 엔터프라이즈 규모의 레퍼런스 RAG
+- [Mendable documentation](https://mendable.ai): 개발자 문서 RAG 레퍼런스
+- [LlamaCloud Parse + Index](https://docs.llamaindex.ai/en/stable/examples/llama_cloud/llama_parse/): 매니지드 수집
+- [Anthropic prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching): 비용 레버 레퍼런스
+- [RAGAS 0.2 documentation](https://docs.ragas.io/): 정전(canonical)에 해당하는 RAG 평가 프레임워크
+- [Arize Phoenix](https://github.com/Arize-ai/phoenix): 레퍼런스 드리프트 관측성
+- [Llama Guard 4](https://ai.meta.com/research/publications/llama-guard-4/): 2026 안전 분류기
+- [NeMo Guardrails v0.12](https://docs.nvidia.com/nemo-guardrails/): 정책 레일 프레임워크

@@ -1,4 +1,4 @@
-# Capstone 87 — 전 구간 안전 관문 (End-to-End Safety Gate)
+# Capstone 87: 전 구간 안전 관문 (End-to-End Safety Gate)
 
 > 생성 전, 생성 중, 생성 후. 세 개의 검문 지점과 하나의 판정, 그리고 요청마다 남는 감사 기록.
 

@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-원시 LLM API는 한 번의 왕복(round-trip)을 준다. 프로덕션 에이전트(agent)는 도구 실행, MCP 서버, 생명주기 후크, 서브에이전트 생성, 세션 영속성(persistence), 트레이스 전파가 필요하다. Claude Agent SDK는 이 형태를 라이브러리로 제공한다 — Claude Code가 사용하는 바로 그 하니스를, 커스텀 에이전트를 위해 노출한 것.
+원시 LLM API는 한 번의 왕복(round-trip)을 준다. 프로덕션 에이전트(agent)는 도구 실행, MCP 서버, 생명주기 후크, 서브에이전트 생성, 세션 영속성(persistence), 트레이스 전파가 필요하다. Claude Agent SDK는 이 형태를 라이브러리로 제공한다. Claude Code가 사용하는 바로 그 하니스를, 커스텀 에이전트를 위해 노출한 것.
 
 ## 개념 (The Concept)
 
@@ -42,11 +42,11 @@ Python SDK 최근 추가: 서브에이전트 트랜스크립트(transcript)를 �
 
 TypeScript와의 프로토콜 동등성:
 
-- `append(session_id, message)` — 턴을 추가한다.
-- `load(session_id)` — 대화를 복원한다.
-- `list_sessions()` — 열거한다.
-- `delete(session_id)` — 서브에이전트 세션으로 연쇄(cascade)된다.
-- `list_subkeys(session_id)` — 서브에이전트 키를 나열한다.
+- `append(session_id, message)`: 턴을 추가한다.
+- `load(session_id)`: 대화를 복원한다.
+- `list_sessions()`: 열거한다.
+- `delete(session_id)`: 서브에이전트 세션으로 연쇄(cascade)된다.
+- `list_subkeys(session_id)`: 서브에이전트 키를 나열한다.
 
 `--session-mirror`(CLI 플래그)는 디버깅을 위해 트랜스크립트가 스트리밍되는 대로 외부 파일에 미러링한다.
 
@@ -54,12 +54,12 @@ TypeScript와의 프로토콜 동등성:
 
 등록할 수 있는 생명주기 후크:
 
-- `PreToolUse`, `PostToolUse` — 도구 호출을 게이트(gate)하거나 감사한다.
-- `SessionStart`, `SessionEnd` — 설정하고 해체한다.
-- `UserPromptSubmit` — 모델이 보기 전에 사용자 입력에 대해 행동한다.
-- `PreCompact` — 컨텍스트 압축(compaction) 전에 실행한다.
-- `Stop` — 에이전트 종료 시 정리한다.
-- `Notification` — 사이드 채널(side-channel) 알림.
+- `PreToolUse`, `PostToolUse`: 도구 호출을 게이트(gate)하거나 감사한다.
+- `SessionStart`, `SessionEnd`: 설정하고 해체한다.
+- `UserPromptSubmit`: 모델이 보기 전에 사용자 입력에 대해 행동한다.
+- `PreCompact`: 컨텍스트 압축(compaction) 전에 실행한다.
+- `Stop`: 에이전트 종료 시 정리한다.
+- `Notification`: 사이드 채널(side-channel) 알림.
 
 후크는 pro-workflow(Phase 14 커리큘럼 참조)와 유사 시스템이 횡단(cross-cutting) 동작을 추가하는 방법이다.
 
@@ -82,7 +82,7 @@ TypeScript와의 프로토콜 동등성:
 `code/main.py`는 SDK 형태를 stdlib로 구현한다.
 
 - 내장 `read_file`, `write_file`, `list_dir`을 가진 `Tool`, `ToolRegistry`.
-- `Subagent` — 사설 컨텍스트, 격리된 실행, 반환되는 결과.
+- `Subagent`: 사설 컨텍스트, 격리된 실행, 반환되는 결과.
 - `SessionStore` — append, load, list, delete, list_subkeys.
 - `Hooks` — `pre_tool_use`, `post_tool_use`, `session_start`, `session_end`.
 - 데모: 메인 에이전트가 3개의 서브에이전트를 병렬로(각각 격리) 생성하고, 결과를 집계하며, 세션을 영속한다.
@@ -97,10 +97,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **Claude Agent SDK** — Claude Code 하니스 형태를 원하는 Claude 우선 제품용.
-- **Claude Managed Agents** — 호스팅 장기 실행 비동기 작업용.
-- **OpenAI Agents SDK**(Lesson 16) — OpenAI 우선 대응물용.
-- **LangGraph + 커스텀 도구** — 대신 그래프 형태의 상태 기계를 원할 때.
+- **Claude Agent SDK**: Claude Code 하니스 형태를 원하는 Claude 우선 제품용.
+- **Claude Managed Agents**: 호스팅 장기 실행 비동기 작업용.
+- **OpenAI Agents SDK**(Lesson 16): OpenAI 우선 대응물용.
+- **LangGraph + 커스텀 도구**: 대신 그래프 형태의 상태 기계를 원할 때.
 
 ## 산출물 (Ship It)
 
@@ -129,7 +129,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview) — Claude Code의 라이브러리 형태
-- [Anthropic, Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) — 프로덕션 패턴
-- [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) — 호스팅 대안
-- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) — 대응물
+- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview): Claude Code의 라이브러리 형태
+- [Anthropic, Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk): 프로덕션 패턴
+- [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview): 호스팅 대안
+- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/): 대응물

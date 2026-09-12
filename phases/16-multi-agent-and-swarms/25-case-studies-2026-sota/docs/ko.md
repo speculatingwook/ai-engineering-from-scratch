@@ -20,7 +20,7 @@
 핵심 측정 결과:
 
 - 내부 연구 평가에서 단일 에이전트 Opus 4 대비 **+90.2%** 개선.
-- **BrowseComp 분산의 80%**가 **토큰 사용량만으로** 설명됨 — 다중 에이전트가 이기는 이유는 대체로 각 서브에이전트가 신선한 컨텍스트 윈도우(context window)를 받기 때문이다.
+- **BrowseComp 분산의 80%**가 **토큰 사용량만으로** 설명됨: 다중 에이전트가 이기는 이유는 대체로 각 서브에이전트가 신선한 컨텍스트 윈도우(context window)를 받기 때문이다.
 - 단일 에이전트 대비 **쿼리당 15배 토큰**.
 - 에이전트가 장기 실행되고 상태를 가지므로 **레인보우 배포**.
 
@@ -39,7 +39,7 @@
 
 MetaGPT는 소프트웨어 엔지니어링 SOP를 역할 프롬프트(prompt)로 인코딩한다: 제품 관리자(Product Manager), 아키텍트(Architect), 프로젝트 관리자(Project Manager), 엔지니어(Engineer), QA 엔지니어(QA Engineer). 논문의 프레이밍: `Code = SOP(Team)`. 각 역할은 좁고 특화된 프롬프트를 가진다. 역할 간 핸드오프는 구조화된 산출물(PRD 문서, 아키텍처 문서, 코드)을 운반한다.
 
-ChatDev의 기여: **소통적 탈환각**. 에이전트들이 답하기 전에 구체사항을 요청한다 — 디자이너 에이전트가 UI를 스케치하기 전에 추측하는 대신 프로그래머에게 어떤 언어가 의도되었는지 묻는다. 논문은 이것이 다중 에이전트 파이프라인(pipeline)에서 환각을 측정 가능하게 줄인다고 보고한다.
+ChatDev의 기여: **소통적 탈환각**. 에이전트들이 답하기 전에 구체사항을 요청한다. 디자이너 에이전트가 UI를 스케치하기 전에 추측하는 대신 프로그래머에게 어떤 언어가 의도되었는지 묻는다. 논문은 이것이 다중 에이전트 파이프라인(pipeline)에서 환각을 측정 가능하게 줄인다고 보고한다.
 
 MacNet (arXiv:2406.07155)은 ChatDev를 **DAG를 통해 >1000 에이전트로** 확장한다. 각 DAG 노드는 역할 특화다. 간선은 핸드오프 계약을 인코딩한다. 라우팅(routing)이 명시적이고 오프라인 계산 가능하기 때문에 이 규모가 가능하다.
 
@@ -85,7 +85,7 @@ MacNet (arXiv:2406.07155)은 ChatDev를 **DAG를 통해 >1000 에이전트로** 
 | **LangGraph** (LangChain) | 프로덕션 선두 | 구조화된 그래프 + 체크포인팅 + 인간 개입(human-in-the-loop) | 프로덕션 권장 기본값 |
 | **CrewAI** | 프로덕션 선두 | Sequential/Hierarchical 프로세스를 가진 역할 기반 크루 | 역할 분해에 강함 |
 | **AG2** | 커뮤니티 유지보수 | GroupChat + 발화자 선택 | AutoGen v0.2 계승 |
-| **Microsoft AutoGen** | 유지보수 모드 (2026년 2월) | — | Microsoft Agent Framework RC로 병합 |
+| **Microsoft AutoGen** | 유지보수 모드 (2026년 2월) |: | Microsoft Agent Framework RC로 병합 |
 | **Microsoft Agent Framework** | RC (2026년 2월) | 오케스트레이션 패턴 + 엔터프라이즈 통합 | 신규 진입자. 주시 |
 | **OpenAI Agents SDK** | 프로덕션 | Swarm 후계자 | 도구 반환 핸드오프 패턴 |
 | **Google ADK** | 프로덕션 (2025년 4월) | A2A 네이티브 | Google Cloud 통합 |
@@ -116,7 +116,7 @@ MacNet (arXiv:2406.07155)은 ChatDev를 **DAG를 통해 >1000 에이전트로** 
 - **프레임워크가 수렴하고 있다.** MCP + A2A 지원은 기본 요건이다. 핸드오프 의미론이 남은 설계 선택이다.
 - **평가가 단단해지고 있다.** SWE-bench Pro, MARBLE, STRATUS 완화 벤치마크. Pro가 현재의 오염 저항적 현실 점검이다.
 - **프로덕션 실패율이 측정 가능하다**(Cemri 2025 MAST; 실제 MAS에서 41-86.7%). 이 분야는 "데모에서는 멋져 보임" 시대를 벗어났다.
-- **비용이 핵심 엔지니어링 제약이다.** 과제당 토큰 비용, 상호작용당 벽시계 시간, 레인보우 배포 오버헤드. 다중 에이전트는 정확도로 이기지만 비용으로 진다 — 그 거래가 비즈니스 결정이다.
+- **비용이 핵심 엔지니어링 제약이다.** 과제당 토큰 비용, 상호작용당 벽시계 시간, 레인보우 배포 오버헤드. 다중 에이전트는 정확도로 이기지만 비용으로 진다. 그 거래가 비즈니스 결정이다.
 - **규제는 배경 우려가 아니라 단기 입력이다.** 관할권이 개별 배포 주기보다 빠르게 움직이고 있다.
 
 ## 라이브러리로 써보기 (Use It)
@@ -158,11 +158,11 @@ MacNet (arXiv:2406.07155)은 ChatDev를 **DAG를 통해 >1000 에이전트로** 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) — 감독자-워커 프로덕션 참조
-- [MetaGPT — Meta Programming for Multi-Agent Collaborative Framework](https://arxiv.org/abs/2308.00352) — SOP 역할 분해
-- [ChatDev — Communicative Agents for Software Development](https://arxiv.org/abs/2307.07924) — 소통적 탈환각
-- [MacNet — scaling role-based agents to 1000+](https://arxiv.org/abs/2406.07155) — DAG 기반 확장
-- [OpenClaw on Wikipedia](https://en.wikipedia.org/wiki/OpenClaw) — 생태계 개요
+- [Anthropic(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 감독자-워커 프로덕션 참조
+- [MetaGPT(Meta Programming for Multi-Agent Collaborative Framework](https://arxiv.org/abs/2308.00352)) SOP 역할 분해
+- [ChatDev(Communicative Agents for Software Development](https://arxiv.org/abs/2307.07924)) 소통적 탈환각
+- [MacNet(scaling role-based agents to 1000+](https://arxiv.org/abs/2406.07155)) DAG 기반 확장
+- [OpenClaw on Wikipedia](https://en.wikipedia.org/wiki/OpenClaw): 생태계 개요
 - [WMAC 2026](https://multiagents.org/2026/) — AAAI 2026 Bridge Program Workshop on Multi-Agent Coordination
-- [LangGraph docs](https://docs.langchain.com/oss/python/langgraph/workflows-agents) — 프로덕션 선두
-- [CrewAI docs](https://docs.crewai.com/en/introduction) — 역할 기반 프레임워크
+- [LangGraph docs](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 프로덕션 선두
+- [CrewAI docs](https://docs.crewai.com/en/introduction): 역할 기반 프레임워크

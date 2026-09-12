@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-표준 소프트맥스 어텐션에는 규모가 커지면 운영상의 골칫거리로 변하는 수학적 속성이 있다. 쿼리 `q`에 대해, 어텐션 가중치(attention weight)는 `softmax(qK^T / sqrt(d))`다. 소프트맥스는 결코 정확한 0을 생산할 수 없다 — 일치하지 않는 모든 토큰이 어느 정도의 양의 질량(positive mass)을 받는다. 그 잔여 질량은 노이즈이며, 컨텍스트 길이에 따라 커진다. 128k 토큰에서, 일치하지 않는 각 토큰이 확률의 0.001%만 받더라도, 그중 127,999개가 합쳐지면 전체의 약 12%를 기여한다. 모델은 컨텍스트에 따라 커지는 노이즈 바닥을 우회하는 법을 배워야 한다.
+표준 소프트맥스 어텐션에는 규모가 커지면 운영상의 골칫거리로 변하는 수학적 속성이 있다. 쿼리 `q`에 대해, 어텐션 가중치(attention weight)는 `softmax(qK^T / sqrt(d))`다. 소프트맥스는 결코 정확한 0을 생산할 수 없다. 일치하지 않는 모든 토큰이 어느 정도의 양의 질량(positive mass)을 받는다. 그 잔여 질량은 노이즈이며, 컨텍스트 길이에 따라 커진다. 128k 토큰에서, 일치하지 않는 각 토큰이 확률의 0.001%만 받더라도, 그중 127,999개가 합쳐지면 전체의 약 12%를 기여한다. 모델은 컨텍스트에 따라 커지는 노이즈 바닥을 우회하는 법을 배워야 한다.
 
 경험적으로 이것은 어텐션 헤드(attention head) 간섭으로 나타난다. 긴 컨텍스트 RAG에서의 환각된 인용(hallucinated citation), 100k 토큰 검색 작업에서의 중간 분실(lost-in-the-middle) 실패, 그리고 32k를 넘는 건초 더미 속 바늘(needle-in-haystack) 벤치마크(benchmark)에서의 미묘한 정확도 저하. Differential Transformer 논문(arXiv:2410.05258, ICLR 2025)은 그 격차를 측정했다. DIFF Transformer는 같은 크기의 베이스라인보다 더 낮은 퍼플렉시티(perplexity), 더 높은 긴 컨텍스트 정확도, 더 적은 환각에 도달했다.
 
@@ -32,7 +32,7 @@ DIFF V1에는 그것을 프런티어 사전 학습 파이프라인(pipeline)에�
 w_i = exp(q . k_i / sqrt(d)) / sum_j exp(q . k_j / sqrt(d))
 ```
 
-어떤 `w_i`도 결코 0이 아니다. `k_i`가 `q`와 완전히 무관하면, 점수 `q . k_i`는 0이 아니다 — 분산 `||q||^2 / d`로 0 주위에서 요동친다. 소프트맥스 정규화 후, 각 무관한 토큰은 여전히 가중 합에 `O(1/N)`을 기여한다. 무관한 토큰의 총 기여는 `O((N-1)/N) = O(1)`이다 — 작은 양이 아니다.
+어떤 `w_i`도 결코 0이 아니다. `k_i`가 `q`와 완전히 무관하면, 점수 `q . k_i`는 0이 아니다. 분산 `||q||^2 / d`로 0 주위에서 요동친다. 소프트맥스 정규화 후, 각 무관한 토큰은 여전히 가중 합에 `O(1/N)`을 기여한다. 무관한 토큰의 총 기여는 `O((N-1)/N) = O(1)`이다. 작은 양이 아니다.
 
 모델이 원하는 것은 하드 top-k 같은 것이다. 일치하는 토큰에 높은 가중치, 그 외 모든 곳에 거의 0인 가중치. 소프트맥스는 그것을 직접 하기에는 너무 매끄럽다.
 
@@ -51,7 +51,7 @@ A_2 = softmax(Q_2 K_2^T / sqrt(d))
 DiffAttn = (A_1 - lambda * A_2) V
 ```
 
-뺄셈은 두 맵이 공유하는 어떤 노이즈 분포(distribution)든 상쇄한다. 두 맵이 127k개의 무관한 토큰에 대략 균등한 가중치를 가지면(무작위 초기화에서 그럴 것이다), 그것들은 상쇄된다. 신호 — 실제로 관련 있는 소수의 토큰에 뾰족한 가중치 — 는 두 맵에 같은 크기로 나타날 때만 상쇄되는데, 모델이 학습되고 나면 그렇지 않을 것이다.
+뺄셈은 두 맵이 공유하는 어떤 노이즈 분포(distribution)든 상쇄한다. 두 맵이 127k개의 무관한 토큰에 대략 균등한 가중치를 가지면(무작위 초기화에서 그럴 것이다), 그것들은 상쇄된다. 신호(실제로 관련 있는 소수의 토큰에 뾰족한 가중치)는 두 맵에 같은 크기로 나타날 때만 상쇄되는데, 모델이 학습되고 나면 그렇지 않을 것이다.
 
 `lambda`는 헤드별 학습 가능한 스칼라로, `lambda = exp(lambda_q1 dot lambda_k1) - exp(lambda_q2 dot lambda_k2) + lambda_init`로 매개변수화된다. 음수일 수 있다. `lambda_init`은 0.8 같은 작은 양수로 기본 설정된다.
 
@@ -113,7 +113,7 @@ def softmax(row):
 
 ### 2단계: Q, K를 두 절반으로 나누기
 
-V1 스타일: 헤드 차원을 절반으로. V2 스타일: 헤드 차원을 유지하고 헤드 수를 두 배로. 장난감 구현은 교육적 명료성을 위해 V1을 쓴다 — 수학은 동일하고, 기록(bookkeeping)만 다르다.
+V1 스타일: 헤드 차원을 절반으로. V2 스타일: 헤드 차원을 유지하고 헤드 수를 두 배로. 장난감 구현은 교육적 명료성을 위해 V1을 쓴다. 수학은 동일하고, 기록(bookkeeping)만 다르다.
 
 ### 3단계: 두 소프트맥스 분기 + 뺄셈
 
@@ -124,7 +124,7 @@ diff_weights = [[a1 - lam * a2 for a1, a2 in zip(r1, r2)] for r1, r2 in zip(A1, 
 out = [[sum(w * v[j] for w, v in zip(row, V)) for j in range(d_v)] for row in diff_weights]
 ```
 
-참고: 출력 가중치는 음수일 수 있다. 그것은 괜찮다 — 값 캐시는 여전히 부호 있는 기여를 처리한다. 후속 V 투영이 부호를 흡수한다.
+참고: 출력 가중치는 음수일 수 있다. 그것은 괜찮다. 값 캐시는 여전히 부호 있는 기여를 처리한다. 후속 V 투영이 부호를 흡수한다.
 
 ### 4단계: 노이즈 상쇄 측정
 
@@ -185,14 +185,14 @@ DIFF V2는 2026년 4월 기준으로 아직 모든 프로덕션 추론 서버에
 | DIFF V2 | "2026년 1월 수정" | KV 헤드는 유지하며 Q 헤드를 두 배로; 베이스라인 디코드 속도에 맞고 FlashAttention과 작동 |
 | 헤드별 RMSNorm(Per-head RMSNorm) | "V1 안정화기" | V1이 차분 후에 적용한 추가 정규화; V2는 후기 학습 불안정을 막기 위해 그것을 제거 |
 | 신호 대 잡음 비율(Signal-to-noise ratio) | "얼마나 많은 어텐션이 낭비되는지" | 참 신호 위치에 대한 가중치 대 무관한 위치에 대한 평균 가중치의 비율 |
-| 중간 분실(Lost in the middle) | "긴 컨텍스트 실패 모드" | 긴 컨텍스트 중간에 있는 문서에 대해 검색 정확도가 떨어지는 경험적 현상 — DIFF 어텐션이 이를 줄임 |
+| 중간 분실(Lost in the middle) | "긴 컨텍스트 실패 모드" | 긴 컨텍스트 중간에 있는 문서에 대해 검색 정확도가 떨어지는 경험적 현상: DIFF 어텐션이 이를 줄임 |
 | 산술 강도(Arithmetic intensity) | "적재한 바이트당 FLOPs" | KV 적재당 쿼리를 두 배로 하여 V2가 디코드에서 늘린 비율; 메모리 제약(memory-bound) 디코드에 중요 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Ye et al. — Differential Transformer (arXiv:2410.05258, ICLR 2025)](https://arxiv.org/abs/2410.05258) — 노이즈 상쇄 이론과 긴 컨텍스트 절제를 담은 원조 논문
-- [Microsoft unilm — Differential Transformer V2 (Hugging Face blog, January 2026)](https://huggingface.co/blog/microsoft/diff-attn-v2) — 프로덕션 스택 재작성, 베이스라인 디코드에 맞고 FlashAttention 호환
-- [Understanding Differential Transformer Unchains Pretrained Self-Attentions (arXiv:2505.16333)](https://arxiv.org/abs/2505.16333) — 왜 뺄셈이 사전 학습된 어텐션 구조를 복구하는지에 대한 이론적 분석
-- [Shared DIFF Transformer (arXiv:2501.17900)](https://arxiv.org/html/2501.17900) — 파라미터 공유 변형
-- [Vaswani et al. — Attention Is All You Need (arXiv:1706.03762)](https://arxiv.org/abs/1706.03762) — DIFF가 빼는 대상인 베이스라인 Transformer
-- [Liu et al. — Lost in the Middle (arXiv:2307.03172)](https://arxiv.org/abs/2307.03172) — DIFF 어텐션이 겨냥하는 긴 컨텍스트 벤치마크
+- [Ye et al.(Differential Transformer (arXiv:2410.05258, ICLR 2025)](https://arxiv.org/abs/2410.05258)) 노이즈 상쇄 이론과 긴 컨텍스트 절제를 담은 원조 논문
+- [Microsoft unilm(Differential Transformer V2 (Hugging Face blog, January 2026)](https://huggingface.co/blog/microsoft/diff-attn-v2)) 프로덕션 스택 재작성, 베이스라인 디코드에 맞고 FlashAttention 호환
+- [Understanding Differential Transformer Unchains Pretrained Self-Attentions (arXiv:2505.16333)](https://arxiv.org/abs/2505.16333): 왜 뺄셈이 사전 학습된 어텐션 구조를 복구하는지에 대한 이론적 분석
+- [Shared DIFF Transformer (arXiv:2501.17900)](https://arxiv.org/html/2501.17900): 파라미터 공유 변형
+- [Vaswani et al.(Attention Is All You Need (arXiv:1706.03762)](https://arxiv.org/abs/1706.03762)) DIFF가 빼는 대상인 베이스라인 Transformer
+- [Liu et al.(Lost in the Middle (arXiv:2307.03172)](https://arxiv.org/abs/2307.03172)) DIFF 어텐션이 겨냥하는 긴 컨텍스트 벤치마크

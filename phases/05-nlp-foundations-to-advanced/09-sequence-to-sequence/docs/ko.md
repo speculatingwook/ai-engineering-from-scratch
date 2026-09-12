@@ -17,7 +17,7 @@ seq2seq 아키텍처(Sutskever, Vinyals, Le, 2014)는 의도적으로 단순한 
 
 ## 개념 (The Concept)
 
-**인코더(Encoder).** 원문 문장을 읽는 RNN. 그 마지막 은닉 상태(hidden state)가 **맥락 벡터** — 전체 입력의 고정 크기 요약 — 다. 이론상으로는 원문에서 아무것도 잃지 않는다.
+**인코더(Encoder).** 원문 문장을 읽는 RNN. 그 마지막 은닉 상태(hidden state)가 **맥락 벡터**(전체 입력의 고정 크기 요약) 다. 이론상으로는 원문에서 아무것도 잃지 않는다.
 
 **디코더(Decoder).** 맥락 벡터로 초기화된 또 다른 RNN. 각 스텝에서 이전에 생성된 토큰을 입력으로 받아 목표 어휘에 대한 분포를 만든다. 샘플링이나 argmax로 다음 토큰을 고른다. 그것을 다시 넣는다. `<EOS>` 토큰이 나오거나 최대 길이에 도달할 때까지 반복한다.
 
@@ -50,7 +50,7 @@ class Encoder(nn.Module):
         return outputs, hidden
 ```
 
-`outputs`는 `[batch, seq_len, hidden_dim]` 형태다 — 입력 위치당 은닉 상태 하나. `hidden`은 `[1, batch, hidden_dim]` 형태다 — 마지막 스텝. 레슨 08은 "분류를 위해 outputs에 걸쳐 풀링하라"고 했다. 여기서는 마지막 은닉 상태를 맥락 벡터로 보관하고 스텝별 출력은 무시한다.
+`outputs`는 `[batch, seq_len, hidden_dim]` 형태다. 입력 위치당 은닉 상태 하나. `hidden`은 `[1, batch, hidden_dim]` 형태다. 마지막 스텝. 레슨 08은 "분류를 위해 outputs에 걸쳐 풀링하라"고 했다. 여기서는 마지막 은닉 상태를 맥락 벡터로 보관하고 스텝별 출력은 무시한다.
 
 ### 2단계: 디코더
 
@@ -207,7 +207,7 @@ Refuse to recommend training a seq2seq from scratch for under a million parallel
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutskever, Vinyals, Le (2014). Sequence to Sequence Learning with Neural Networks](https://arxiv.org/abs/1409.3215) — 원본 seq2seq 논문. 네 쪽.
-- [Cho et al. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation](https://arxiv.org/abs/1406.1078) — GRU와 인코더-디코더 구도를 도입.
-- [Bahdanau, Cho, Bengio (2014). Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) — 어텐션 논문. 이 레슨 직후에 읽어라.
-- [PyTorch NLP from Scratch tutorial](https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html) — 직접 만들 수 있는 seq2seq + 어텐션 코드.
+- [Sutskever, Vinyals, Le (2014). Sequence to Sequence Learning with Neural Networks](https://arxiv.org/abs/1409.3215): 원본 seq2seq 논문. 네 쪽.
+- [Cho et al. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation](https://arxiv.org/abs/1406.1078): GRU와 인코더-디코더 구도를 도입.
+- [Bahdanau, Cho, Bengio (2014). Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473): 어텐션 논문. 이 레슨 직후에 읽어라.
+- [PyTorch NLP from Scratch tutorial](https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html): 직접 만들 수 있는 seq2seq + 어텐션 코드.

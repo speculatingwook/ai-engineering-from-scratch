@@ -1,6 +1,6 @@
-# 보안 — 시크릿, API 키 순환, 감사 로그, 가드레일
+# 보안: 시크릿, API 키 순환, 감사 로그, 가드레일
 
-> 중앙집중식 볼트(vault)(HashiCorp Vault, AWS Secrets Manager, Azure Key Vault)를 통해 시크릿 난립(secret sprawl)을 제거하라. 자격 증명(credential)을 설정 파일, VCS 안의 env 파일, 스프레드시트에 절대 저장하지 마라. 정적 키 대신 IAM 역할(role)을 쓰고, CI/CD에는 OIDC를 쓴다. AI 게이트웨이(gateway) 패턴이 2026년의 해법이다: 앱 → 게이트웨이 → 모델 프로바이더(provider). 게이트웨이가 런타임에 볼트에서 자격 증명을 가져온다. 볼트에서 순환(rotate)하면 모든 앱이 몇 분 안에 받아간다 — 재배포(redeploy)도, "새 키 누가 가졌어"라는 슬랙 메시지도 없다. 순환 정책 ≤90일; 모든 커밋에서 TruffleHog / GitGuardian / Gitleaks로 스캔. 제로 트러스트(zero-trust): MFA, SSO, RBAC/ABAC, 단기 토큰(short-lived token), 디바이스 자세(device posture). PII 스크러빙(scrubbing)은 개체 인식(entity recognition)을 사용해 전달 전에 PHI/PII를 마스킹한다. 일관된 토큰화(consistent tokenization)(Mesh 방식)는 민감 값을 안정적인 자리표시자(placeholder)에 매핑하여 LLM이 코드/관계 의미를 보존하게 한다. 네트워크 이그레스(egress): LLM 서비스를 전용 VPC/VNet 서브넷에 두고 `api.openai.com`, `api.anthropic.com` 등만 화이트리스트(whitelist)하고, 그 외 모든 아웃바운드는 차단한다. 2026년 인시던트 동인: 손상된 CI/CD 자격 증명을 통한 Vercel 공급망 공격(supply-chain attack)이 수천 개 고객 배포에 걸쳐 env 변수를 유출했다.
+> 중앙집중식 볼트(vault)(HashiCorp Vault, AWS Secrets Manager, Azure Key Vault)를 통해 시크릿 난립(secret sprawl)을 제거하라. 자격 증명(credential)을 설정 파일, VCS 안의 env 파일, 스프레드시트에 절대 저장하지 마라. 정적 키 대신 IAM 역할(role)을 쓰고, CI/CD에는 OIDC를 쓴다. AI 게이트웨이(gateway) 패턴이 2026년의 해법이다: 앱 → 게이트웨이 → 모델 프로바이더(provider). 게이트웨이가 런타임에 볼트에서 자격 증명을 가져온다. 볼트에서 순환(rotate)하면 모든 앱이 몇 분 안에 받아간다. 재배포(redeploy)도, "새 키 누가 가졌어"라는 슬랙 메시지도 없다. 순환 정책 ≤90일; 모든 커밋에서 TruffleHog / GitGuardian / Gitleaks로 스캔. 제로 트러스트(zero-trust): MFA, SSO, RBAC/ABAC, 단기 토큰(short-lived token), 디바이스 자세(device posture). PII 스크러빙(scrubbing)은 개체 인식(entity recognition)을 사용해 전달 전에 PHI/PII를 마스킹한다. 일관된 토큰화(consistent tokenization)(Mesh 방식)는 민감 값을 안정적인 자리표시자(placeholder)에 매핑하여 LLM이 코드/관계 의미를 보존하게 한다. 네트워크 이그레스(egress): LLM 서비스를 전용 VPC/VNet 서브넷에 두고 `api.openai.com`, `api.anthropic.com` 등만 화이트리스트(whitelist)하고, 그 외 모든 아웃바운드는 차단한다. 2026년 인시던트 동인: 손상된 CI/CD 자격 증명을 통한 Vercel 공급망 공격(supply-chain attack)이 수천 개 고객 배포에 걸쳐 env 변수를 유출했다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy PII-scrubber + audit-log writer)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-인턴이 API 키가 든 `.env`를 커밋한다. 빠르게 삭제한다. 키는 이미 git 히스토리에 있다 — GitGuardian 스캔이 잡아내고, 순환 절차라고는 "팀에 슬랙하고, 40개 설정 파일을 갱신하고, 모든 서비스를 재배포한다"가 전부다. 8시간 후, 서비스의 절반은 라이브고 절반은 배포 윈도를 기다린다.
+인턴이 API 키가 든 `.env`를 커밋한다. 빠르게 삭제한다. 키는 이미 git 히스토리에 있다. GitGuardian 스캔이 잡아내고, 순환 절차라고는 "팀에 슬랙하고, 40개 설정 파일을 갱신하고, 모든 서비스를 재배포한다"가 전부다. 8시간 후, 서비스의 절반은 라이브고 절반은 배포 윈도를 기다린다.
 
 별개로, 사용자 프롬프트에 "내 SSN은 123-45-6789야"가 포함된다. 프롬프트가 OpenAI로 간다. BAA는 있지만 내부 정책은 전달 전에 PII를 마스킹하는 것이다. 하지 않았다.
 
@@ -40,9 +40,9 @@ LLM 서비스의 보안은 이 세 벡터를 모두 다뤄야 한다. 볼트 기
 
 ### 시크릿 스캔
 
-- **TruffleHog** — 커밋에 대한 정규식 + 엔트로피.
-- **GitGuardian** — 상용, 높은 정확도.
-- **Gitleaks** — OSS, CI에서 실행.
+- **TruffleHog**: 커밋에 대한 정규식 + 엔트로피.
+- **GitGuardian**: 상용, 높은 정확도.
+- **Gitleaks**: OSS, CI에서 실행.
 
 모든 커밋에서 실행한다. 새 시크릿이 탐지되면 PR을 차단한다.
 
@@ -52,7 +52,7 @@ LLM 서비스의 보안은 이 세 벡터를 모두 다뤄야 한다. 볼트 기
 - SAML/OIDC를 통한 SSO.
 - 세밀한 접근을 위한 RBAC(역할 기반) 또는 ABAC(속성 기반).
 - 단기 토큰(일이 아니라 시간 단위).
-- 디바이스 자세 — 디스크 암호화가 된 회사 기기만.
+- 디바이스 자세: 디스크 암호화가 된 회사 기기만.
 
 ### PII / PHI 스크러빙
 
@@ -115,7 +115,7 @@ LLM 서비스를 전용 서브넷에 둔다:
 
 1. `code/main.py`를 실행하라. 같은 SSN을 참조하는 두 프롬프트를 보내라. 둘 다 같은 자리표시자를 받는지 확인하라.
 2. OpenAI + Anthropic + Weaviate를 호출하는 vLLM-on-EKS 배포를 위한 네트워크 이그레스 정책을 설계하라.
-3. git 히스토리에서 키를 발견했다(2년 됨). 올바른 대응은 무엇인가 — 키 순환, 히스토리 스크럽, 아니면 둘 다? 정당화하라.
+3. git 히스토리에서 키를 발견했다(2년 됨). 올바른 대응은 무엇인가: 키 순환, 히스토리 스크럽, 아니면 둘 다? 정당화하라.
 4. 감사 로그가 하루 10GB씩 증가한다. 보관 계층(핫 30일, 웜 12개월, 콜드 6년)을 설계하라.
 5. 역토큰화(실제 값을 LLM 응답에 다시 대입)가 자리표시자를 보이게 유지하는 것 대비 복잡성을 감수할 가치가 있는지 논증하라.
 
@@ -125,7 +125,7 @@ LLM 서비스를 전용 서브넷에 둔다:
 |------|----------------|------------------------|
 | 볼트 (Vault) | "시크릿 저장소" | 중앙집중식 자격 증명 관리 서비스 |
 | IAM 역할 (IAM role) | "신원 기반 인증" | 앱이 맡는 역할; 단기 자격 증명을 반환 |
-| CI/CD용 OIDC (OIDC for CI/CD) | "클라우드 발급 토큰" | CI에 정적 키 없음 — OIDC를 통한 신원 |
+| CI/CD용 OIDC (OIDC for CI/CD) | "클라우드 발급 토큰" | CI에 정적 키 없음: OIDC를 통한 신원 |
 | TruffleHog / GitGuardian / Gitleaks | "시크릿 스캐너" | 커밋 시점 시크릿 탐지 |
 | RBAC / ABAC | "접근 제어" | 역할 기반 vs 속성 기반 |
 | PII 스크러빙 (PII scrubbing) | "데이터 마스킹" | 민감 개체 제거 또는 토큰화 |

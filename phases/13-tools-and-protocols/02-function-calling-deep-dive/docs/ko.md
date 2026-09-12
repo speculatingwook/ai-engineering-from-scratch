@@ -1,4 +1,4 @@
-# 함수 호출 심층 분석 — OpenAI, Anthropic, Gemini
+# 함수 호출 심층 분석: OpenAI, Anthropic, Gemini
 
 > 세 프런티어 제공자(frontier provider)는 2024년에 동일한 도구 호출 루프로 수렴했지만, 그 외의 모든 것에서는 갈라졌다. OpenAI는 `tools`와 `tool_calls`를 쓴다. Anthropic은 `tool_use`와 `tool_result` 블록을 쓴다. Gemini는 `functionDeclarations`와 고유 id 상관(correlation)을 쓴다. 이 레슨은 세 가지를 나란히 비교(diff)해, 한 제공자에서 출시한 코드를 다른 제공자로 포팅할 때 깨지지 않게 한다.
 
@@ -110,7 +110,7 @@ Tool(
 )
 ```
 
-세 개의 작은 함수가 이것을 세 제공자 형태로 번역한다. `code/main.py`의 하니스(harness)가 정확히 이것을 한 뒤, 가짜 도구 호출을 각 제공자의 응답 형태로 왕복(round-trip)시킨다. 네트워크는 필요 없다 — 이 레슨은 HTTP가 아니라 형태를 가르친다.
+세 개의 작은 함수가 이것을 세 제공자 형태로 번역한다. `code/main.py`의 하니스(harness)가 정확히 이것을 한 뒤, 가짜 도구 호출을 각 제공자의 응답 형태로 왕복(round-trip)시킨다. 네트워크는 필요 없다. 이 레슨은 HTTP가 아니라 형태를 가르친다.
 
 프로덕션 팀은 이 번역기를 `AbstractToolset`(Pydantic AI), `UniversalToolNode`(LangGraph), 또는 `BaseTool`(LlamaIndex)로 감싼다. Phase 13 · 17은 세 가지 중 어느 것 앞에서든 OpenAI 형태 API를 노출하는 게이트웨이를 출시한다.
 
@@ -157,10 +157,10 @@ Tool(
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Function calling guide](https://platform.openai.com/docs/guides/function-calling) — 엄격 모드와 병렬 호출을 포함한 표준 레퍼런스
-- [Anthropic — Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview) — `tool_use`와 `tool_result` 블록 의미론
-- [Google — Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling) — 병렬 호출, 고유 id, OpenAPI 부분집합
-- [Vertex AI — Function calling reference](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling) — Gemini의 엔터프라이즈 표면
-- [OpenAI — Structured outputs](https://platform.openai.com/docs/guides/structured-outputs) — 엄격 모드 스키마 강제 세부 사항
+- [OpenAI(Function calling guide](https://platform.openai.com/docs/guides/function-calling)) 엄격 모드와 병렬 호출을 포함한 표준 레퍼런스
+- [Anthropic(Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview)) `tool_use`와 `tool_result` 블록 의미론
+- [Google(Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling)) 병렬 호출, 고유 id, OpenAPI 부분집합
+- [Vertex AI(Function calling reference](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling)) Gemini의 엔터프라이즈 표면
+- [OpenAI(Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)) 엄격 모드 스키마 강제 세부 사항
 </content>
 </invoke>

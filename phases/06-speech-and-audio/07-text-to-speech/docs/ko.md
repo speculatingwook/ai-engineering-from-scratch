@@ -1,4 +1,4 @@
-# 텍스트 음성 변환(TTS) — Tacotron에서 F5와 Kokoro까지
+# 텍스트 음성 변환(TTS): Tacotron에서 F5와 Kokoro까지
 
 > ASR은 음성을 텍스트로 역변환한다; TTS는 텍스트를 음성으로 역변환한다. 2026년의 스택은 세 부분이다: 텍스트 → 토큰(token), 토큰 → 멜(mel), 멜 → 파형(waveform). 각 부분에는 노트북에 들어가는 기본 모델이 있다.
 
@@ -117,7 +117,7 @@ class HiFiGAN(nn.Module):
         return self.blocks(mel)  # -> waveform
 ```
 
-학습: 적대적(adversarial, 짧은 윈도우에 대한 판별기(discriminator)) + 멜 스펙트로그램 재구성 손실(reconstruction loss) + 특성 매칭 손실(feature-matching loss). 상품화됨 — `hifi-gan` 저장소나 nvidia-NeMo의 사전 학습된 체크포인트를 사용하라.
+학습: 적대적(adversarial, 짧은 윈도우에 대한 판별기(discriminator)) + 멜 스펙트로그램 재구성 손실(reconstruction loss) + 특성 매칭 손실(feature-matching loss). 상품화됨: `hifi-gan` 저장소나 nvidia-NeMo의 사전 학습된 체크포인트를 사용하라.
 
 ### 단계 5: 전체 파이프라인(의사코드)
 
@@ -176,8 +176,8 @@ soundfile.write("out.wav", wav, 24000)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Shen et al. (2017). Tacotron 2](https://arxiv.org/abs/1712.05884) — seq2seq 베이스라인.
-- [Kim, Kong, Son (2021). VITS](https://arxiv.org/abs/2106.06103) — 종단간 흐름 기반.
-- [Chen et al. (2024). F5-TTS](https://arxiv.org/abs/2410.06885) — 현재 오픈소스 SOTA.
-- [Kong, Kim, Bae (2020). HiFi-GAN](https://arxiv.org/abs/2010.05646) — 2026년에도 여전히 출하되는 보코더.
-- [Kokoro-82M on HuggingFace](https://huggingface.co/hexgrad/Kokoro-82M) — 2024년 CPU 친화적 영어 TTS.
+- [Shen et al. (2017). Tacotron 2](https://arxiv.org/abs/1712.05884): seq2seq 베이스라인.
+- [Kim, Kong, Son (2021). VITS](https://arxiv.org/abs/2106.06103): 종단간 흐름 기반.
+- [Chen et al. (2024). F5-TTS](https://arxiv.org/abs/2410.06885): 현재 오픈소스 SOTA.
+- [Kong, Kim, Bae (2020). HiFi-GAN](https://arxiv.org/abs/2010.05646): 2026년에도 여전히 출하되는 보코더.
+- [Kokoro-82M on HuggingFace](https://huggingface.co/hexgrad/Kokoro-82M): 2024년 CPU 친화적 영어 TTS.

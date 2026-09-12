@@ -1,6 +1,6 @@
 # 멀티 에이전트 프리미티브 모델 (The Multi-Agent Primitive Model)
 
-> 2026년에 출시되는 모든 멀티 에이전트(multi-agent) 프레임워크 — AutoGen, LangGraph, CrewAI, OpenAI Agents SDK, Microsoft Agent Framework — 는 4차원 설계 공간 속의 한 점이다. 네 개의 프리미티브(primitive), 그뿐이다: 에이전트(agent), 핸드오프(handoff), 공유 상태(shared state), 오케스트레이터(orchestrator). 이 레슨은 이들을 밑바닥부터 만들고, 네 가지 모두로 장난감 시스템을 돌린 다음, 모든 주요 프레임워크를 같은 축에 매핑하여 어떤 새 릴리스든 한 문단으로 읽을 수 있게 한다.
+> 2026년에 출시되는 모든 멀티 에이전트(multi-agent) 프레임워크(AutoGen, LangGraph, CrewAI, OpenAI Agents SDK, Microsoft Agent Framework)는 4차원 설계 공간 속의 한 점이다. 네 개의 프리미티브(primitive), 그뿐이다: 에이전트(agent), 핸드오프(handoff), 공유 상태(shared state), 오케스트레이터(orchestrator). 이 레슨은 이들을 밑바닥부터 만들고, 네 가지 모두로 장난감 시스템을 돌린 다음, 모든 주요 프레임워크를 같은 축에 매핑하여 어떤 새 릴리스든 한 문단으로 읽을 수 있게 한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib)
@@ -19,10 +19,10 @@
 
 ### 네 개의 프리미티브
 
-1. **에이전트(Agent)** — 시스템 프롬프트(system prompt)에 도구 목록을 더한 것. 무상태(stateless)다. 모든 실행은 그 시스템 프롬프트와 현재 메시지 이력에서 시작한다.
-2. **핸드오프(Handoff)** — 한 에이전트에서 다른 에이전트로의 구조화된 제어 이전. 기계적으로는, 새 에이전트를 반환하는 도구 호출이거나 조건을 따르는 그래프 간선(edge)이다.
-3. **공유 상태(Shared state)** — 둘 이상의 에이전트가 읽을(때로는 쓸) 수 있는 임의의 데이터 구조. 메시지 풀, 블랙보드, 키-값 저장소, 벡터 메모리.
-4. **오케스트레이터(Orchestrator)** — 다음에 누가 말할지 결정하는 주체. 선택지: 명시적 그래프(결정적), LLM 화자 선택기(soft), 마지막 화자의 핸드오프 호출(OpenAI Swarm), 또는 큐 위의 스케줄러(swarm 아키텍처).
+1. **에이전트(Agent)**: 시스템 프롬프트(system prompt)에 도구 목록을 더한 것. 무상태(stateless)다. 모든 실행은 그 시스템 프롬프트와 현재 메시지 이력에서 시작한다.
+2. **핸드오프(Handoff)**: 한 에이전트에서 다른 에이전트로의 구조화된 제어 이전. 기계적으로는, 새 에이전트를 반환하는 도구 호출이거나 조건을 따르는 그래프 간선(edge)이다.
+3. **공유 상태(Shared state)**: 둘 이상의 에이전트가 읽을(때로는 쓸) 수 있는 임의의 데이터 구조. 메시지 풀, 블랙보드, 키-값 저장소, 벡터 메모리.
+4. **오케스트레이터(Orchestrator)**: 다음에 누가 말할지 결정하는 주체. 선택지: 명시적 그래프(결정적), LLM 화자 선택기(soft), 마지막 화자의 핸드오프 호출(OpenAI Swarm), 또는 큐 위의 스케줄러(swarm 아키텍처).
 
 그것이 전체 설계 공간이다. 모든 프레임워크는 각 축마다 기본값을 고른다. 나머지는 표면 문법이다.
 
@@ -73,9 +73,9 @@ Handoff = (from_agent, to_agent, reason, payload)
 
 세 가지 구현이 지배적이다.
 
-- **함수 반환** — 도구가 다음 에이전트를 반환한다. 이것이 OpenAI Swarm 패턴이다. 에이전트가 자신의 도구 스키마에 라우팅을 담는다.
-- **그래프 간선** — LangGraph. 간선은 선언적이다. LLM이 값을 생성하고, 조건이 다음 노드를 선택한다.
-- **화자 선택** — AutoGen GroupChat. 선택기 함수(때로는 그 자체가 LLM 호출)가 풀을 읽고 다음에 누가 말할지 고른다.
+- **함수 반환**: 도구가 다음 에이전트를 반환한다. 이것이 OpenAI Swarm 패턴이다. 에이전트가 자신의 도구 스키마에 라우팅을 담는다.
+- **그래프 간선**: LangGraph. 간선은 선언적이다. LLM이 값을 생성하고, 조건이 다음 노드를 선택한다.
+- **화자 선택**: AutoGen GroupChat. 선택기 함수(때로는 그 자체가 LLM 호출)가 풀을 읽고 다음에 누가 말할지 고른다.
 
 #### 공유 상태 (Shared state)
 
@@ -95,32 +95,32 @@ Orchestrator = ({state, last_speaker}) -> next_agent
 
 네 가지 종류:
 
-- **정적(Static)** — 그래프가 빌드 시점에 고정됨(LangGraph 결정적, CrewAI Sequential).
-- **LLM 선택(LLM-selected)** — LLM이 풀을 읽고 다음 화자를 고름(AutoGen, CrewAI Hierarchical).
-- **핸드오프 주도(Handoff-driven)** — 현재 에이전트가 핸드오프 도구를 호출하여 결정함(Swarm).
-- **큐 주도(Queue-driven)** — 워커가 공유 큐에서 가져옴. 명시적 다음 화자 없음(swarm 아키텍처, Matrix).
+- **정적(Static)**: 그래프가 빌드 시점에 고정됨(LangGraph 결정적, CrewAI Sequential).
+- **LLM 선택(LLM-selected)**: LLM이 풀을 읽고 다음 화자를 고름(AutoGen, CrewAI Hierarchical).
+- **핸드오프 주도(Handoff-driven)**: 현재 에이전트가 핸드오프 도구를 호출하여 결정함(Swarm).
+- **큐 주도(Queue-driven)**: 워커가 공유 큐에서 가져옴. 명시적 다음 화자 없음(swarm 아키텍처, Matrix).
 
 ### 프레임워크 간에 무엇이 달라지는가
 
 프리미티브가 고정되면, 남은 설계 결정은 다음과 같다.
 
-- **메모리 전략** — 일시적(ephemeral) 대 지속적 체크포인팅(LangGraph 체크포인터).
-- **안전 경계** — 누가 핸드오프를 승인할 수 있는가(human-in-the-loop).
-- **비용 회계** — 에이전트별 토큰 예산.
-- **관측 가능성(observability)** — 핸드오프 추적, 재생(replay)을 위한 상태 지속.
+- **메모리 전략**: 일시적(ephemeral) 대 지속적 체크포인팅(LangGraph 체크포인터).
+- **안전 경계**: 누가 핸드오프를 승인할 수 있는가(human-in-the-loop).
+- **비용 회계**: 에이전트별 토큰 예산.
+- **관측 가능성(observability)**: 핸드오프 추적, 재생(replay)을 위한 상태 지속.
 
 모두 프리미티브 위에 구현 가능하다. 그중 어느 것도 새 프리미티브가 아니다.
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`는 약 150줄의 stdlib Python으로 네 프리미티브를 구현한다. 실제 LLM은 없다 — 각 에이전트는 스크립트된 정책(policy)이라서 초점이 조율 구조에 머무른다.
+`code/main.py`는 약 150줄의 stdlib Python으로 네 프리미티브를 구현한다. 실제 LLM은 없다. 각 에이전트는 스크립트된 정책(policy)이라서 초점이 조율 구조에 머무른다.
 
 이 파일은 다음을 내보낸다.
 
-- `Agent` — 이름, 시스템 프롬프트, 도구, 정책 함수의 데이터클래스.
-- `Handoff` — 새 에이전트를 반환하는 함수.
-- `SharedState` — 스레드 안전(thread-safe) 메시지 풀.
-- `Orchestrator` — 세 변형: `StaticOrchestrator`, `HandoffOrchestrator`, `LLMSelectorOrchestrator`(시뮬레이션).
+- `Agent`: 이름, 시스템 프롬프트, 도구, 정책 함수의 데이터클래스.
+- `Handoff`: 새 에이전트를 반환하는 함수.
+- `SharedState`: 스레드 안전(thread-safe) 메시지 풀.
+- `Orchestrator`: 세 변형: `StaticOrchestrator`, `HandoffOrchestrator`, `LLMSelectorOrchestrator`(시뮬레이션).
 
 데모는 동일한 세 에이전트 파이프라인(research → write → review)을 세 가지 오케스트레이터 타입 모두로 돌리고 끝에 메시지 풀을 출력한다. 출력이 오직 *누가 다음을 고르는가*에서만 다르다는 것을 볼 수 있다. 에이전트와 공유 상태는 실행 전반에 걸쳐 동일하다.
 
@@ -130,7 +130,7 @@ Orchestrator = ({state, last_speaker}) -> next_agent
 python3 code/main.py
 ```
 
-예상 출력: 세 번의 오케스트레이터 실행, 패턴당 하나씩. 각각은 최종 메시지 풀을 출력한다. 연구자가 일찍 끝났다고 결정하면 핸드오프 주도 실행은 더 적은 에이전트에 도달한다 — 그것이 LLM 라우팅 트레이드오프(tradeoff)의 축소판이다.
+예상 출력: 세 번의 오케스트레이터 실행, 패턴당 하나씩. 각각은 최종 메시지 풀을 출력한다. 연구자가 일찍 끝났다고 결정하면 핸드오프 주도 실행은 더 적은 에이전트에 도달한다. 그것이 LLM 라우팅 트레이드오프(tradeoff)의 축소판이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -138,7 +138,7 @@ python3 code/main.py
 
 ## 산출물 (Ship It)
 
-새 프레임워크를 채택하기 전에, 그것의 프리미티브 매핑을 작성하라. 작성할 수 없다면, 문서가 불완전하거나 프레임워크가 다섯 번째 프리미티브를 발명하고 있는 것이다(드물다 — 본 적 없는 공유 상태 종류가 있는지 확인하라).
+새 프레임워크를 채택하기 전에, 그것의 프리미티브 매핑을 작성하라. 작성할 수 없다면, 문서가 불완전하거나 프레임워크가 다섯 번째 프리미티브를 발명하고 있는 것이다(드물다. 본 적 없는 공유 상태 종류가 있는지 확인하라).
 
 매핑을 아키텍처 문서에 고정하라. 새 팀원이 합류하면 API 문서보다 먼저 매핑을 보내라. 프레임워크 버전이 바뀌면 체인지로그가 아니라 매핑을 비교하라.
 
@@ -165,8 +165,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI cookbook: Orchestrating Agents — Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) — 핸드오프 주도 오케스트레이션의 가장 명료한 설명
-- [AutoGen stable docs](https://microsoft.github.io/autogen/stable/) — GroupChat + 화자 선택은 LLM 선택 오케스트레이션의 레퍼런스다
-- [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents) — 그래프 간선 오케스트레이션과 리듀서 기반 공유 상태
-- [CrewAI introduction](https://docs.crewai.com/en/introduction) — 역할-목표-배경(role-goal-backstory) 에이전트, Sequential / Hierarchical 프로세스
-- [AG2 (community AutoGen continuation)](https://github.com/ag2ai/ag2) — 마이크로소프트가 v0.4를 유지보수로 옮긴 후의 살아있는 AutoGen v0.2 라인
+- [OpenAI cookbook: Orchestrating Agents(Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 핸드오프 주도 오케스트레이션의 가장 명료한 설명
+- [AutoGen stable docs](https://microsoft.github.io/autogen/stable/): GroupChat + 화자 선택은 LLM 선택 오케스트레이션의 레퍼런스다
+- [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 그래프 간선 오케스트레이션과 리듀서 기반 공유 상태
+- [CrewAI introduction](https://docs.crewai.com/en/introduction): 역할-목표-배경(role-goal-backstory) 에이전트, Sequential / Hierarchical 프로세스
+- [AG2 (community AutoGen continuation)](https://github.com/ag2ai/ag2): 마이크로소프트가 v0.4를 유지보수로 옮긴 후의 살아있는 AutoGen v0.2 라인

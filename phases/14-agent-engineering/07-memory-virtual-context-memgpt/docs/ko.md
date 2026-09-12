@@ -1,6 +1,6 @@
 # 메모리: 가상 컨텍스트(Virtual Context)와 MemGPT
 
-> 컨텍스트 윈도우(context window)는 유한하다. 대화, 문서, 도구 트레이스는 그렇지 않다. MemGPT(Packer et al., 2023)는 이를 OS 가상 메모리(virtual memory)로 틀 잡는다 — 메인 컨텍스트(main context)는 RAM, 외부 저장소는 디스크, 에이전트는 둘 사이를 페이징(paging)한다. 이것이 모든 2026년 메모리 시스템이 물려받는 패턴이다.
+> 컨텍스트 윈도우(context window)는 유한하다. 대화, 문서, 도구 트레이스는 그렇지 않다. MemGPT(Packer et al., 2023)는 이를 OS 가상 메모리(virtual memory)로 틀 잡는다. 메인 컨텍스트(main context)는 RAM, 외부 저장소는 디스크, 에이전트는 둘 사이를 페이징(paging)한다. 이것이 모든 2026년 메모리 시스템이 물려받는 패턴이다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -52,17 +52,17 @@ MemGPT는 메모리-인터럽트(memory-as-interrupt)를 도입한다: 대화 �
 
 표준 메모리 도구 표면:
 
-- `core_memory_append(section, text)` — 프롬프트의 지속 섹션에 쓰기.
-- `core_memory_replace(section, old, new)` — 지속 섹션 편집.
-- `archival_memory_insert(text)` — 검색 가능 외부 저장소에 쓰기.
-- `archival_memory_search(query, top_k)` — 외부 저장소에서 검색.
-- `conversation_search(query)` — 과거 턴 스캔.
+- `core_memory_append(section, text)`: 프롬프트의 지속 섹션에 쓰기.
+- `core_memory_replace(section, old, new)`: 지속 섹션 편집.
+- `archival_memory_insert(text)`: 검색 가능 외부 저장소에 쓰기.
+- `archival_memory_search(query, top_k)`: 외부 저장소에서 검색.
+- `conversation_search(query)`: 과거 턴 스캔.
 
 ### MemGPT가 끝나고 Letta가 시작하는 곳
 
 2024년 9월 MemGPT는 Letta가 됐다. 연구 저장소(`cpacker/MemGPT`)는 남아 있고, Letta는 설계를 확장한다:
 
-- 두 계층 대신 세 계층(core, recall, archival — Lesson 08).
+- 두 계층 대신 세 계층(core, recall, archival: Lesson 08).
 - `send_message`/하트비트(heartbeat) 패턴을 대체하는 네이티브 추론(Lesson 08).
 - 비동기 메모리 작업을 돌리는 수면 시간 에이전트(sleep-time agent)(Lesson 08).
 
@@ -78,8 +78,8 @@ MemGPT는 메모리-인터럽트(memory-as-interrupt)를 도입한다: 대화 �
 
 `code/main.py`는 MemGPT의 2계층 패턴을 stdlib로 구현한다:
 
-- `MainContext` — `core` 딕셔너리와 `messages` 리스트를 가진 고정 크기 프롬프트 버퍼; 상한 초과 시 가장 오래된 메시지를 자동 압축.
-- `ArchivalStore` — (id, text, tags, session, turn) 레코드의 인메모리 BM25 유사 저장소(토큰 중첩 채점).
+- `MainContext`: `core` 딕셔너리와 `messages` 리스트를 가진 고정 크기 프롬프트 버퍼; 상한 초과 시 가장 오래된 메시지를 자동 압축.
+- `ArchivalStore`: (id, text, tags, session, turn) 레코드의 인메모리 BM25 유사 저장소(토큰 중첩 채점).
 - MemGPT 표면에 매핑되는 다섯 메모리 도구.
 - archival을 사실로 채운 다음 `archival_memory_search`를 호출하여 질문에 답하는 스크립트된 에이전트.
 
@@ -89,18 +89,18 @@ MemGPT는 메모리-인터럽트(memory-as-interrupt)를 도입한다: 대화 �
 python3 code/main.py
 ```
 
-트레이스는 에이전트가 사실 세 개를 쓰고 메인 컨텍스트를 상한까지 채워(축출(eviction)을 강제), 그다음 archival에서 검색하여 후속 질문에 답하는 것을 보여준다 — 실제 LLM 없이 MemGPT 워크플로를 재현한다.
+트레이스는 에이전트가 사실 세 개를 쓰고 메인 컨텍스트를 상한까지 채워(축출(eviction)을 강제), 그다음 archival에서 검색하여 후속 질문에 답하는 것을 보여준다. 실제 LLM 없이 MemGPT 워크플로를 재현한다.
 
 ## 라이브러리로 써보기 (Use It)
 
 오늘날 모든 프로덕션 메모리 시스템은 MemGPT 변형이다:
 
-- **Letta** (Lesson 08) — 세 계층, 네이티브 추론, 수면 시간 연산.
-- **Mem0** (Lesson 09) — 채점 계층과 융합된 벡터 + KV + 그래프.
-- **OpenAI Assistants / Responses** — 스레드와 파일을 통한 관리형 메모리.
-- **Claude Agent SDK** — 스킬(skill)과 세션 저장소를 통한 장기 메모리.
+- **Letta** (Lesson 08): 세 계층, 네이티브 추론, 수면 시간 연산.
+- **Mem0** (Lesson 09): 채점 계층과 융합된 벡터 + KV + 그래프.
+- **OpenAI Assistants / Responses**: 스레드와 파일을 통한 관리형 메모리.
+- **Claude Agent SDK**: 스킬(skill)과 세션 저장소를 통한 장기 메모리.
 
-핵심 패턴이 아니라 운영 형태(셀프 호스팅, 관리형, 프레임워크 통합)로 하나를 골라라 — 핵심 패턴은 MemGPT다.
+핵심 패턴이 아니라 운영 형태(셀프 호스팅, 관리형, 프레임워크 통합)로 하나를 골라라. 핵심 패턴은 MemGPT다.
 
 ## 산출물 (Ship It)
 
@@ -119,7 +119,7 @@ python3 code/main.py
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
 | 가상 컨텍스트(Virtual context) | "무제한 메모리" | 페이지 인/아웃을 가진 메인(프롬프트) + 외부(검색 가능) 계층 |
-| 메인 컨텍스트(Main context) | "작업 메모리" | 프롬프트 — 고정 크기, 항상 보임 |
+| 메인 컨텍스트(Main context) | "작업 메모리" | 프롬프트: 고정 크기, 항상 보임 |
 | Archival 메모리 | "장기 저장소" | 외부 검색 가능 지속 저장소, 필요 시 검색됨 |
 | Core 메모리 | "지속 프롬프트 섹션" | 메인 컨텍스트 안에 고정된 이름 있는 섹션 |
 | 메모리 도구(Memory tool) | "메모리 API" | 에이전트가 외부 메모리를 읽고/쓰기 위해 발행하는 도구 호출 |
@@ -129,7 +129,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560) — OS에서 영감받은 가상 컨텍스트 논문
-- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks) — 3계층 진화
-- [Anthropic, Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — 컨텍스트를 예산으로 다루기
-- [Chhikara et al., Mem0 (arXiv:2504.19413)](https://arxiv.org/abs/2504.19413) — 이 패턴 위의 하이브리드 프로덕션 메모리
+- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560): OS에서 영감받은 가상 컨텍스트 논문
+- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks): 3계층 진화
+- [Anthropic, Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): 컨텍스트를 예산으로 다루기
+- [Chhikara et al., Mem0 (arXiv:2504.19413)](https://arxiv.org/abs/2504.19413): 이 패턴 위의 하이브리드 프로덕션 메모리

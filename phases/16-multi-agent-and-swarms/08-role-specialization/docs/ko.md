@@ -1,6 +1,6 @@
-# 역할 전문화 — 플래너, 비평가, 실행자, 검증자 (Role Specialization — Planner, Critic, Executor, Verifier)
+# 역할 전문화(플래너, 비평가, 실행자, 검증자 (Role Specialization) Planner, Critic, Executor, Verifier)
 
-> 2026년 가장 흔한 멀티 에이전트(multi-agent) 분해: 한 에이전트(agent)가 계획하고, 하나가 실행하고, 하나가 비평하거나 검증한다. MetaGPT(arXiv:2308.00352)는 이를 역할 프롬프트에 인코딩된 SOP로 형식화한다 — Product Manager, Architect, Project Manager, Engineer, QA Engineer — `Code = SOP(Team)`을 따른다. ChatDev(arXiv:2307.07924)는 디자이너, 프로그래머, 리뷰어, 테스터를 "communicative dehallucination"(에이전트가 누락된 세부사항을 명시적으로 요청)이 있는 "채팅 사슬(chat chain)"을 통해 연결한다. 검증자(verifier)는 하중을 지탱한다(load-bearing): Cemri et al.(MAST, arXiv:2503.13657)은 모든 멀티 에이전트 실패가 누락되거나 깨진 검증으로 추적될 수 있음을 보인다. PwC는 CrewAI의 구조화된 검증 루프로부터 7배 정확도 이득(10% → 70%)을 보고했다.
+> 2026년 가장 흔한 멀티 에이전트(multi-agent) 분해: 한 에이전트(agent)가 계획하고, 하나가 실행하고, 하나가 비평하거나 검증한다. MetaGPT(arXiv:2308.00352)는 이를 역할 프롬프트에 인코딩된 SOP로 형식화한다. Product Manager, Architect, Project Manager, Engineer, QA Engineer: `Code = SOP(Team)`을 따른다. ChatDev(arXiv:2307.07924)는 디자이너, 프로그래머, 리뷰어, 테스터를 "communicative dehallucination"(에이전트가 누락된 세부사항을 명시적으로 요청)이 있는 "채팅 사슬(chat chain)"을 통해 연결한다. 검증자(verifier)는 하중을 지탱한다(load-bearing): Cemri et al.(MAST, arXiv:2503.13657)은 모든 멀티 에이전트 실패가 누락되거나 깨진 검증으로 추적될 수 있음을 보인다. PwC는 CrewAI의 구조화된 검증 루프로부터 7배 정확도 이득(10% → 70%)을 보고했다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib)
@@ -11,7 +11,7 @@
 
 범용 멀티 에이전트 시스템은 범용 출력을 낳는다. 그룹 채팅에 있는 세 명의 코더는 같은 평범한 코드의 세 가지 변형을 작성한다. 더 많은 에이전트를 추가하고, 더 많은 라운드를 추가해도, 여전히 품질 문턱을 넘지 못한다.
 
-해법은 더 많은 에이전트가 아니라 — *다른* 에이전트다. 구별되는 역할을 할당하라. 비평가(critic)에게 플래너(planner)가 갖지 않은 도구를 주어라. 검증자에게 객관적 테스트 스위트를 주어라. 이제 시스템은 단순한 병렬 추측이 아니라, 근거에 기반한 교정을 갖춘 내부 불일치 구조가 된다.
+해법은 더 많은 에이전트가 아니라. *다른* 에이전트다. 구별되는 역할을 할당하라. 비평가(critic)에게 플래너(planner)가 갖지 않은 도구를 주어라. 검증자에게 객관적 테스트 스위트를 주어라. 이제 시스템은 단순한 병렬 추측이 아니라, 근거에 기반한 교정을 갖춘 내부 불일치 구조가 된다.
 
 ## 개념 (Concept)
 
@@ -37,7 +37,7 @@ MetaGPT(arXiv:2308.00352)는 소프트웨어 엔지니어링 SOP를 역할 프�
 - **Engineer**가 구현한다.
 - **QA Engineer**가 테스트를 실행한다.
 
-각 역할은 엄격한 입력/출력 스키마를 따른다. 역할 프롬프트는 역할이 *무엇인지*와 *무엇을 생산해야 하는지*를 말한다. `Code = SOP(Team)` 정식화 — 결정적 SOP가 LLM 팀을 예측 가능한 파이프라인으로 바꾼다.
+각 역할은 엄격한 입력/출력 스키마를 따른다. 역할 프롬프트는 역할이 *무엇인지*와 *무엇을 생산해야 하는지*를 말한다. `Code = SOP(Team)` 정식화: 결정적 SOP가 LLM 팀을 예측 가능한 파이프라인으로 바꾼다.
 
 ### ChatDev의 communicative dehallucination
 
@@ -47,7 +47,7 @@ ChatDev는 여기에 핵심 장치를 하나 더한다. 실행자가 계획에 �
 
 ### 왜 검증자가 가장 중요한가
 
-Cemri et al.(MAST)은 1642개의 멀티 에이전트 실행 실패를 추적했다. 21.3%는 검증 격차였다 — 시스템이 아무도 확인하지 않은 답을 출하했다. 나머지 79%는 종종 "조용히 실패했거나 결코 실행되지 않은 검사가 있었다"로 추적된다. 검증은 하중을 지탱하는 역할이다.
+Cemri et al.(MAST)은 1642개의 멀티 에이전트 실행 실패를 추적했다. 21.3%는 검증 격차였다. 시스템이 아무도 확인하지 않은 답을 출하했다. 나머지 79%는 종종 "조용히 실패했거나 결코 실행되지 않은 검사가 있었다"로 추적된다. 검증은 하중을 지탱하는 역할이다.
 
 PwC는 (CrewAI 배포, 2025) 구조화된 검증 루프를 추가하면 정확도가 10%에서 70%로 이동했다고 보고했다. 한 역할로부터 7배 이득.
 
@@ -64,10 +64,10 @@ PwC는 (CrewAI 배포, 2025) 구조화된 검증 루프를 추가하면 정확�
 
 ### 프레임워크 매핑
 
-- **CrewAI** — `Agent(role, goal, backstory)`가 교과서적 전문화 표면이다.
-- **LangGraph** — 노드가 전문화된 프롬프트를 가질 수 있다; 간선이 파이프라인을 강제한다.
-- **AutoGen** — GroupChat 안의 한 단어 이름을 가진 역할별 ConversableAgent.
-- **OpenAI Agents SDK** — 역할 전문화된 Agent 간의 핸드오프(handoff) 도구.
+- **CrewAI**: `Agent(role, goal, backstory)`가 교과서적 전문화 표면이다.
+- **LangGraph**: 노드가 전문화된 프롬프트를 가질 수 있다; 간선이 파이프라인을 강제한다.
+- **AutoGen**: GroupChat 안의 한 단어 이름을 가진 역할별 ConversableAgent.
+- **OpenAI Agents SDK**: 역할 전문화된 Agent 간의 핸드오프(handoff) 도구.
 
 ## 직접 만들기 (Build It)
 
@@ -106,7 +106,7 @@ python3 code/main.py
 2. 5번째 역할을 추가하라: 사용자 소망을 플래너가 쓸 수 있는 명세로 번역하는 "requirements analyst". 어떤 communicative dehallucination 요청이 그것으로 흘러 올라가야 하는가?
 3. MetaGPT 섹션 3("Agents")을 읽어라. MetaGPT의 5개 역할 각각의 입력/출력 스키마를 나열하라.
 4. ChatDev의 채팅 사슬 다이어그램(arXiv:2307.07924 Figure 3)을 읽어라. communicative dehallucination이 그렇지 않았다면 무한했을 루프를 어디서 깨는지 식별하라.
-5. PwC의 7배 정확도 이득은 검증 루프에서 왔다. 검증자를 추가해도 도움이 되지 않을 — 정확성의 결정적 검사가 불가능하거나 금지될 만큼 비싼 — 세 가지 작업을 가설로 세워라.
+5. PwC의 7배 정확도 이득은 검증 루프에서 왔다. 검증자를 추가해도 도움이 되지 않을(정확성의 결정적 검사가 불가능하거나 금지될 만큼 비싼) 세 가지 작업을 가설로 세워라.
 
 ## 핵심 용어 (Key Terms)
 
@@ -123,7 +123,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Hong et al. — MetaGPT: Meta Programming for Multi-Agent Collaboration](https://arxiv.org/abs/2308.00352) — SOP-as-역할-프롬프트 레퍼런스 논문
-- [Qian et al. — Communicative Agents for Software Development (ChatDev)](https://arxiv.org/abs/2307.07924) — 채팅 사슬 + communicative dehallucination
-- [Cemri et al. — Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) — MAST 분류 체계; 검증 격차가 실패의 21.3%
-- [CrewAI docs — Agent roles](https://docs.crewai.com/en/introduction) — 프로덕션 역할 명세 표면
+- [Hong et al.(MetaGPT: Meta Programming for Multi-Agent Collaboration](https://arxiv.org/abs/2308.00352)) SOP-as-역할-프롬프트 레퍼런스 논문
+- [Qian et al.(Communicative Agents for Software Development (ChatDev)](https://arxiv.org/abs/2307.07924)) 채팅 사슬 + communicative dehallucination
+- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계; 검증 격차가 실패의 21.3%
+- [CrewAI docs(Agent roles](https://docs.crewai.com/en/introduction)) 프로덕션 역할 명세 표면

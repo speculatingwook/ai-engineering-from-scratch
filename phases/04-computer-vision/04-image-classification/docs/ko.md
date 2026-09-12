@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-출고되는 모든 비전 작업은 어떤 수준에서 이미지 분류(classification)로 환원된다. 검출은 영역을 분류한다. 분할은 픽셀을 분류한다. 검색은 클래스 중심과의 유사도로 순위를 매긴다. 분류를 제대로 하는 것 — 데이터셋 루프, 증강 정책, 손실, 평가 — 은 이 단계의 다른 모든 작업으로 전이되는 기술이다.
+출고되는 모든 비전 작업은 어떤 수준에서 이미지 분류(classification)로 환원된다. 검출은 영역을 분류한다. 분할은 픽셀을 분류한다. 검색은 클래스 중심과의 유사도로 순위를 매긴다. 분류를 제대로 하는 것(데이터셋 루프, 증강 정책, 손실, 평가)은 이 단계의 다른 모든 작업으로 전이되는 기술이다.
 
 대부분의 분류 버그는 모델에 있지 않다. 파이프라인에 산다. 깨진 정규화(normalization), 섞이지 않은 학습 세트, 레이블을 왜곡하는 증강, 학습 데이터로 오염된 검증 분할, 30에폭(epoch) 이후 조용히 발산하는 학습률(learning rate). 올바른 설정이라면 CIFAR-10에서 93%를 칠 CNN이 깨진 설정에서는 흔히 70-75%를 기록하며, 그동안 손실 곡선은 내내 그럴듯해 보인다.
 
@@ -46,7 +46,7 @@ flowchart LR
     style H fill:#dcfce7,stroke:#16a34a
 ```
 
-이 루프의 모든 줄이 버그가 살 수 있는 곳이다. 교차 엔트로피(cross-entropy)는 소프트맥스 출력이 아니라 원시 로짓(logits)을 받으므로, 손실 전의 어떤 `model(x).softmax()`든 조용히 잘못된 그래디언트(gradient)를 계산한다. 증강은 입력에만 적용되고 레이블에는 적용되지 않는다 — 둘 다 섞는 mixup은 예외다. `optimizer.zero_grad()`는 스텝당 한 번 일어나야 한다. 이를 건너뛰면 그래디언트가 누적되어 미친 듯이 불안정한 학습률처럼 보인다. 이런 버그는 하나하나 에러를 던지지 않고 학습 곡선만 평탄하게 만든다.
+이 루프의 모든 줄이 버그가 살 수 있는 곳이다. 교차 엔트로피(cross-entropy)는 소프트맥스 출력이 아니라 원시 로짓(logits)을 받으므로, 손실 전의 어떤 `model(x).softmax()`든 조용히 잘못된 그래디언트(gradient)를 계산한다. 증강은 입력에만 적용되고 레이블에는 적용되지 않는다. 둘 다 섞는 mixup은 예외다. `optimizer.zero_grad()`는 스텝당 한 번 일어나야 한다. 이를 건너뛰면 그래디언트가 누적되어 미친 듯이 불안정한 학습률처럼 보인다. 이런 버그는 하나하나 에러를 던지지 않고 학습 곡선만 평탄하게 만든다.
 
 ### 교차 엔트로피, 로짓, 소프트맥스
 
@@ -63,7 +63,7 @@ CE(z, y) = -log( softmax(z)_y )
         = -z_y + log( sum_j exp(z_j) )
 ```
 
-오른쪽 형태가 수치적으로 안정적인 것이다(log-sum-exp). PyTorch의 `nn.CrossEntropyLoss`는 소프트맥스 + NLL을 한 연산으로 융합하며 원시 로짓을 직접 받는다. 소프트맥스를 직접 먼저 적용하는 것은 거의 항상 버그다 — log(softmax(softmax(z)))라는 무의미한 양을 계산하게 된다.
+오른쪽 형태가 수치적으로 안정적인 것이다(log-sum-exp). PyTorch의 `nn.CrossEntropyLoss`는 소프트맥스 + NLL을 한 연산으로 융합하며 원시 로짓을 직접 받는다. 소프트맥스를 직접 먼저 적용하는 것은 거의 항상 버그다. log(softmax(softmax(z)))라는 무의미한 양을 계산하게 된다.
 
 ### 증강이 통하는 이유
 
@@ -104,16 +104,16 @@ mixup의 사촌이다. `[0, 0, 1, 0, 0]`에 대해 학습하는 대신, 0.1 같�
 
 집계 정확도는 불균형을 숨긴다. 항상 다수 클래스를 예측하는 90-10 이진 분류기는 90%를 기록한다. 무슨 일이 일어나는지 실제로 알려주는 도구들은 다음과 같다.
 
-- **클래스별 정확도** — 클래스당 숫자 하나. 성능이 낮은 범주를 즉시 드러낸다.
-- **혼동 행렬** — 행 i 열 j = 실제 클래스 i가 클래스 j로 예측된 횟수인 C x C 격자. 대각선은 맞은 것, 비대각선은 모델이 어디서 헤매는지 보여준다.
-- **Top-1 / Top-5** — 올바른 클래스가 상위 1개 또는 상위 5개 예측에 있는지. "Norwich terrier" 대 "Norfolk terrier" 같은 클래스는 진짜로 모호하므로 ImageNet에서는 Top-5가 중요하다.
-- **보정 (ECE)** — 0.8 신뢰도 예측이 80%의 경우에 맞는가? 현대 신경망은 체계적으로 과신한다. 온도 스케일링이나 레이블 스무딩으로 고친다.
+- **클래스별 정확도**: 클래스당 숫자 하나. 성능이 낮은 범주를 즉시 드러낸다.
+- **혼동 행렬**: 행 i 열 j = 실제 클래스 i가 클래스 j로 예측된 횟수인 C x C 격자. 대각선은 맞은 것, 비대각선은 모델이 어디서 헤매는지 보여준다.
+- **Top-1 / Top-5**: 올바른 클래스가 상위 1개 또는 상위 5개 예측에 있는지. "Norwich terrier" 대 "Norfolk terrier" 같은 클래스는 진짜로 모호하므로 ImageNet에서는 Top-5가 중요하다.
+- **보정 (ECE)**: 0.8 신뢰도 예측이 80%의 경우에 맞는가? 현대 신경망은 체계적으로 과신한다. 온도 스케일링이나 레이블 스무딩으로 고친다.
 
 ## 직접 만들기 (Build It)
 
 ### 1단계: 결정론적 합성 데이터셋
 
-CIFAR-10은 디스크에 산다. 이 레슨을 재현 가능하고 빠르게 만들기 위해 CIFAR처럼 보이는 합성 데이터셋을 만든다 — 모델이 학습해야 할 클래스별 구조를 가진 32x32 RGB 이미지다. 정확히 같은 파이프라인이 실제 CIFAR-10에서도 변경 없이 동작한다.
+CIFAR-10은 디스크에 산다. 이 레슨을 재현 가능하고 빠르게 만들기 위해 CIFAR처럼 보이는 합성 데이터셋을 만든다. 모델이 학습해야 할 클래스별 구조를 가진 32x32 RGB 이미지다. 정확히 같은 파이프라인이 실제 CIFAR-10에서도 변경 없이 동작한다.
 
 ```python
 import numpy as np
@@ -285,11 +285,11 @@ def evaluate(model, loader, device, num_classes):
 
 학습 루프를 작성할 때마다 점검하는 다섯 가지 불변식:
 
-1. 학습 전에 `model.train()`, 평가 전에 `model.eval()` — 드롭아웃과 배치 정규화 동작을 전환한다.
+1. 학습 전에 `model.train()`, 평가 전에 `model.eval()`: 드롭아웃과 배치 정규화 동작을 전환한다.
 2. `.backward()` 전에 `.zero_grad()`.
 3. 지표를 누적할 때 `.item()`을 써서 아무것도 계산 그래프를 살려두지 않게 한다.
-4. 평가 중 `@torch.no_grad()` — 메모리와 시간을 아끼고 미묘한 사고를 막는다.
-5. 소프트맥스가 아니라 원시 로짓에 대한 argmax — 같은 결과, 연산 하나 줄임.
+4. 평가 중 `@torch.no_grad()`: 메모리와 시간을 아끼고 미묘한 사고를 막는다.
+5. 소프트맥스가 아니라 원시 로짓에 대한 argmax: 같은 결과, 연산 하나 줄임.
 
 ### 5단계: 합치기
 
@@ -385,19 +385,19 @@ train_ds = CIFAR10(root="./data", train=True,  download=True, transform=train_tf
 val_ds   = CIFAR10(root="./data", train=False, download=True, transform=eval_tf)
 ```
 
-주목할 두 가지: mean/std는 **데이터셋 특화**다 — ImageNet이 아니라 CIFAR-10 학습 세트에서 계산되었다 — 그리고 reflect 패드는 커뮤니티 기본 크롭 정책이다. 여기에 ImageNet 통계를 복붙하는 것은 누군가 모델을 프로파일링하기 전까지 아무도 잡지 못하는 약 1%의 정확도 누수다.
+주목할 두 가지: mean/std는 **데이터셋 특화**다. ImageNet이 아니라 CIFAR-10 학습 세트에서 계산되었다. 그리고 reflect 패드는 커뮤니티 기본 크롭 정책이다. 여기에 ImageNet 통계를 복붙하는 것은 누군가 모델을 프로파일링하기 전까지 아무도 잡지 못하는 약 1%의 정확도 누수다.
 
 ## 산출물 (Ship It)
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-classifier-pipeline-auditor.md` — 학습 스크립트에서 위의 다섯 불변식을 감사하고 첫 번째 위반을 드러내는 프롬프트.
-- `outputs/skill-classification-diagnostics.md` — 혼동 행렬과 클래스 이름 목록이 주어지면 클래스별 실패를 요약하고 가장 영향력 있는 단일 수정을 제안하는 스킬.
+- `outputs/prompt-classifier-pipeline-auditor.md`: 학습 스크립트에서 위의 다섯 불변식을 감사하고 첫 번째 위반을 드러내는 프롬프트.
+- `outputs/skill-classification-diagnostics.md`: 혼동 행렬과 클래스 이름 목록이 주어지면 클래스별 실패를 요약하고 가장 영향력 있는 단일 수정을 제안하는 스킬.
 
 ## 연습 문제 (Exercises)
 
 1. **(쉬움)** 합성 데이터셋에서 mixup이 있을 때와 없을 때 같은 모델을 다섯 에폭 학습시켜라. 둘 다에 대해 학습 손실과 검증 손실을 그려라. mixup이 있을 때 학습 손실은 더 높은데 검증 정확도는 비슷하거나 더 나은 이유를 설명하라.
-2. **(중간)** Cutout — 각 학습 이미지에서 무작위 8x8 정사각형을 0으로 만들기 — 을 구현하고, 증강 없음, hflip+crop, hflip+crop+cutout, hflip+crop+mixup 대비 절제 실험(ablation)을 돌려라. 각각의 검증 정확도를 보고하라.
+2. **(중간)** Cutout(각 학습 이미지에서 무작위 8x8 정사각형을 0으로 만들기)을 구현하고, 증강 없음, hflip+crop, hflip+crop+cutout, hflip+crop+mixup 대비 절제 실험(ablation)을 돌려라. 각각의 검증 정확도를 보고하라.
 3. **(어려움)** CIFAR-100 파이프라인(100클래스, 같은 입력 크기)을 만들고 ResNet-34 학습 실행을 발표된 정확도의 1% 이내로 재현하라. 추가: 세 학습률과 두 가중치 감쇠를 스윕하고, 로컬 CSV에 로깅하고, 최종 혼동 행렬 상위 혼동 표를 만들어라.
 
 ## 핵심 용어 (Key Terms)
@@ -415,7 +415,7 @@ val_ds   = CIFAR10(root="./data", train=False, download=True, transform=eval_tf)
 
 ## 더 읽을거리 (Further Reading)
 
-- [CS231n: Training Neural Networks](https://cs231n.github.io/neural-networks-3/) — 학습 파이프라인을 한 페이지로 다루는 여전히 가장 명료한 투어
-- [Bag of Tricks for Image Classification (He et al., 2019)](https://arxiv.org/abs/1812.01187) — 함께 ImageNet에서 ResNet 정확도에 3-4%를 더하는 모든 작은 트릭
-- [mixup: Beyond Empirical Risk Minimization (Zhang et al., 2017)](https://arxiv.org/abs/1710.09412) — 원조 mixup 논문. 이론 세 페이지에 설득력 있는 실험
-- [Why temperature scaling matters (Guo et al., 2017)](https://arxiv.org/abs/1706.04599) — 현대 신경망이 잘못 보정되어 있음을 증명하고 스칼라 파라미터 하나로 고친 논문
+- [CS231n: Training Neural Networks](https://cs231n.github.io/neural-networks-3/): 학습 파이프라인을 한 페이지로 다루는 여전히 가장 명료한 투어
+- [Bag of Tricks for Image Classification (He et al., 2019)](https://arxiv.org/abs/1812.01187): 함께 ImageNet에서 ResNet 정확도에 3-4%를 더하는 모든 작은 트릭
+- [mixup: Beyond Empirical Risk Minimization (Zhang et al., 2017)](https://arxiv.org/abs/1710.09412): 원조 mixup 논문. 이론 세 페이지에 설득력 있는 실험
+- [Why temperature scaling matters (Guo et al., 2017)](https://arxiv.org/abs/1706.04599): 현대 신경망이 잘못 보정되어 있음을 증명하고 스칼라 파라미터 하나로 고친 논문

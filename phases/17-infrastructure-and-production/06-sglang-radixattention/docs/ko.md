@@ -96,7 +96,7 @@ KV 재사용은 커널 트릭으로 구현할 수 있다. SGLang의 통찰은 �
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행하라. 같은 워크로드에서 FCFS와 캐시 인식을 비교하라. 델타는 어디서 오는가 — 프리필 절감, 디코드 절감, 아니면 큐 지연?
+1. `code/main.py`를 실행하라. 같은 워크로드에서 FCFS와 캐시 인식을 비교하라. 델타는 어디서 오는가: 프리필 절감, 디코드 절감, 아니면 큐 지연?
 2. 프롬프트가 `[system, tools, context]`를 무작위로 순열하도록 워크로드를 수정하라. 다시 돌려라. 히트율에 무슨 일이 일어나는가? 왜인가?
 3. Llama 3.1 8B에서 2,000 토큰 시스템 프롬프트를 하나의 라딕스 분기로 상주시키는 HBM 비용을 계산하라. 접두사 재사용 없는 16 시퀀스 배치의 비용과 비교하라.
 4. SGLang RadixAttention 논문을 읽어라. 접두사 중심 부하에서 트리 형태 LRU 축출이 블록 형태 LRU를 이기는 이유를 세 문장으로 설명하라.
@@ -117,8 +117,8 @@ KV 재사용은 커널 트릭으로 구현할 수 있다. SGLang의 통찰은 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [SGLang GitHub](https://github.com/sgl-project/sglang) — 소스와 문서.
-- [SGLang documentation](https://sgl-project.github.io/) — RadixAttention과 스케줄링 세부사항.
-- [SGLang paper — Efficiently Programming Large Language Models (arXiv:2312.07104)](https://arxiv.org/abs/2312.07104) — 설계 레퍼런스.
-- [LMSYS blog — SGLang with RadixAttention](https://www.lmsys.org/blog/2024-01-17-sglang/) — 벤치마크 숫자와 스케줄러 근거.
-- [vLLM — Prefix Caching](https://docs.vllm.ai/en/latest/features/prefix_caching.html) — 비교를 위한 vLLM 자체의 라딕스 유사 구현.
+- [SGLang GitHub](https://github.com/sgl-project/sglang): 소스와 문서.
+- [SGLang documentation](https://sgl-project.github.io/): RadixAttention과 스케줄링 세부사항.
+- [SGLang paper(Efficiently Programming Large Language Models (arXiv:2312.07104)](https://arxiv.org/abs/2312.07104)) 설계 레퍼런스.
+- [LMSYS blog(SGLang with RadixAttention](https://www.lmsys.org/blog/2024-01-17-sglang/)) 벤치마크 숫자와 스케줄러 근거.
+- [vLLM(Prefix Caching](https://docs.vllm.ai/en/latest/features/prefix_caching.html)) 비교를 위한 vLLM 자체의 라딕스 유사 구현.

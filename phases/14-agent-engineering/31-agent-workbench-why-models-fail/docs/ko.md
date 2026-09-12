@@ -79,13 +79,13 @@ flowchart LR
 
 이제 일곱 가지 워크벤치 표면을 그 원시 요소들에 매핑하라.
 
-- **지시(Instructions)** — 정책 + 함수 메타데이터. 규칙은 확인(함수)이다. 라우터(`AGENTS.md`)는 런타임의 시작에 부착된 정책이다.
-- **상태(State)** — 세션 영속성. 런타임이 매 스텝마다 읽는 키 기반(keyed) 스토어. 파일, KV, 또는 DB; 영속성 의미론(persistence semantics)이 중요하고, 저장 백엔드는 중요하지 않다.
-- **범위(Scope)** — 작업별 인가 정책. 허용/금지 글롭(glob)은 ACL이다. 필요한 승인은 권한 격자(permission lattice)다.
-- **피드백(Feedback)** — 큐에 기록되는 호출 로그. 모든 셸 호출은 하나의 기록으로, 지속적이고 재현 가능하다.
-- **검증(Verification)** — 함수. 입력에 대해 결정론적이다. 작업 종료 시 트리거된다. 닫힘 방향으로 실패한다(fails closed).
-- **리뷰(Review)** — 빌더 산출물에 대한 읽기 전용 인가(authz)와 리뷰 리포트에 대한 쓰기 전용 인가를 가진 별도의 워커.
-- **핸드오프(Handoff)** — 세션 종료 트리거가 방출하는 지속적 기록. 다음 세션의 시작 트리거가 그것을 읽는다.
+- **지시(Instructions)**: 정책 + 함수 메타데이터. 규칙은 확인(함수)이다. 라우터(`AGENTS.md`)는 런타임의 시작에 부착된 정책이다.
+- **상태(State)**: 세션 영속성. 런타임이 매 스텝마다 읽는 키 기반(keyed) 스토어. 파일, KV, 또는 DB; 영속성 의미론(persistence semantics)이 중요하고, 저장 백엔드는 중요하지 않다.
+- **범위(Scope)**: 작업별 인가 정책. 허용/금지 글롭(glob)은 ACL이다. 필요한 승인은 권한 격자(permission lattice)다.
+- **피드백(Feedback)**: 큐에 기록되는 호출 로그. 모든 셸 호출은 하나의 기록으로, 지속적이고 재현 가능하다.
+- **검증(Verification)**: 함수. 입력에 대해 결정론적이다. 작업 종료 시 트리거된다. 닫힘 방향으로 실패한다(fails closed).
+- **리뷰(Review)**: 빌더 산출물에 대한 읽기 전용 인가(authz)와 리뷰 리포트에 대한 쓰기 전용 인가를 가진 별도의 워커.
+- **핸드오프(Handoff)**: 세션 종료 트리거가 방출하는 지속적 기록. 다음 세션의 시작 트리거가 그것을 읽는다.
 
 에이전트 루프 자체가 워커다. 이벤트(사용자 메시지, 도구 결과, 타이머 틱)를 소비하고, 함수(모델, 그다음 모델이 고른 도구)를 호출하고, 기록(상태, 피드백)을 쓰고, 트리거(검증, 리뷰, 핸드오프)를 방출한다. 신비할 것 없다. 작업 처리기(job processor)와 동일한 모양이다.
 
@@ -95,13 +95,13 @@ flowchart LR
 
 | 벤더 또는 커뮤니티 패턴 | 그것이 실제로 무엇인지 |
 |------------------------------|--------------------|
-| Ralph Loop (Claude Code, Codex, agentic_harness 책) — 에이전트가 일찍 멈추려 할 때 원래 의도를 신선한 컨텍스트 윈도우(context window)에 다시 주입 | 깨끗한 컨텍스트로 작업을 재큐잉하는 트리거; 세션 영속성이 목표를 앞으로 운반 |
+| Ralph Loop (Claude Code, Codex, agentic_harness 책): 에이전트가 일찍 멈추려 할 때 원래 의도를 신선한 컨텍스트 윈도우(context window)에 다시 주입 | 깨끗한 컨텍스트로 작업을 재큐잉하는 트리거; 세션 영속성이 목표를 앞으로 운반 |
 | Plan / Execute / Verify (PEV) | 역할당 하나씩, 세 개의 워커가 상태와 단계 사이의 큐를 통해 통신 |
-| Harness-compute separation (OpenAI Agents SDK, 2026년 4월) — 제어 평면(control plane)을 실행 평면(execution plane)에서 분리 | 제어 평면 / 데이터 평면을 다시 말한 것. 에이전트라는 라벨보다 수십 년 앞섬 |
-| Open Agent Passport (OAP, 2026년 3월) — 실행 전에 선언적 정책에 대해 모든 도구 호출을 서명하고 감사 | 사전 액션 워커가 강제하는 인가 정책, 서명된 감사 큐 포함 |
-| Guides and Sensors (Birgitta Böckeler / Thoughtworks) — 피드포워드 규칙 + 피드백 관찰 가능성 | 인가 정책 + 검증 함수 + 관찰 가능성 트레이스 |
+| Harness-compute separation (OpenAI Agents SDK, 2026년 4월): 제어 평면(control plane)을 실행 평면(execution plane)에서 분리 | 제어 평면 / 데이터 평면을 다시 말한 것. 에이전트라는 라벨보다 수십 년 앞섬 |
+| Open Agent Passport (OAP, 2026년 3월): 실행 전에 선언적 정책에 대해 모든 도구 호출을 서명하고 감사 | 사전 액션 워커가 강제하는 인가 정책, 서명된 감사 큐 포함 |
+| Guides and Sensors (Birgitta Böckeler / Thoughtworks): 피드포워드 규칙 + 피드백 관찰 가능성 | 인가 정책 + 검증 함수 + 관찰 가능성 트레이스 |
 | Progressive compaction, 5단계 (Claude Code 역공학, 2026년 4월) | 세션 영속성을 예산 안에 유지하기 위해 크론처럼 실행되는 상태 관리 워커 |
-| Hooks / middleware (LangChain, Claude Code) — 모델과 도구 호출을 가로챔 | 런타임의 호출 경로를 감싼 트리거 + 함수 |
+| Hooks / middleware (LangChain, Claude Code): 모델과 도구 호출을 가로챔 | 런타임의 호출 경로를 감싼 트리거 + 함수 |
 | Skills as Markdown with progressive disclosure (Anthropic, Flue) | 함수 메타데이터가 적시에(just-in-time) 컨텍스트로 로드되는 함수 레지스트리 |
 | Sandbox agents (Codex, Sandcastle, Vercel Sandbox) | 컴퓨트 평면(compute plane): 격리된 파일 시스템, 네트워크, 라이프사이클을 가진 런타임 |
 | MCP servers | 능력 목록을 인가로 삼아, 안정적인 RPC를 통해 함수를 노출하는 워커 |
@@ -112,9 +112,9 @@ flowchart LR
 
 하니스가 모델을 능가한다는 주장에는 이제 그 뒤를 받치는 숫자가 있다. 알아둘 가치가 있는데, 그것이 또한 "그냥 더 똑똑한 모델을 기다려라"에 맞서는 유일하게 정직한 논거이기 때문이다.
 
-- Terminal Bench 2.0 — 동일한 모델에서, 하니스 변경만으로 코딩 에이전트가 상위 30위 바깥에서 5위로 이동했다(LangChain, *Anatomy of an Agent Harness*).
-- Vercel — 에이전트 도구의 80%를 삭제했다; 성공률이 80%에서 100%로 뛰었다(MongoDB).
-- Harvey — 하니스 최적화만으로 법률 에이전트의 정확도가 두 배 이상 올랐다(MongoDB).
+- Terminal Bench 2.0: 동일한 모델에서, 하니스 변경만으로 코딩 에이전트가 상위 30위 바깥에서 5위로 이동했다(LangChain, *Anatomy of an Agent Harness*).
+- Vercel: 에이전트 도구의 80%를 삭제했다; 성공률이 80%에서 100%로 뛰었다(MongoDB).
+- Harvey: 하니스 최적화만으로 법률 에이전트의 정확도가 두 배 이상 올랐다(MongoDB).
 - 엔터프라이즈 AI 에이전트 프로젝트의 88%가 프로덕션에 도달하지 못한다. 실패는 추론(reasoning)이 아니라 런타임 주위에 몰려 있다(preprints.org, *Harness Engineering for Language Agents*, 2026년 3월).
 - 세 개의 인기 있는 오픈소스 프레임워크를 가로지른 2025년 벤치마크(benchmark) 연구는 ~50% 작업 완료율을 보고했다; 긴 컨텍스트(long-context) WebAgent는 긴 컨텍스트 조건에서 40-50%에서 10% 미만으로 무너졌으며, 대부분 무한 루프와 목표 상실(goal loss) 때문이었다(2026년 초 여러 글에서 폭넓게 다뤄짐).
 
@@ -124,7 +124,7 @@ flowchart LR
 
 이 부분에서는 예의를 차릴 필요가 없다.
 
-- LangChain의 *Anatomy of an Agent Harness*는 열한 가지 구성 요소를 나열한다 — 프롬프트, 도구, 훅, 샌드박스, 오케스트레이션, 메모리, 스킬, 서브에이전트, 그리고 런타임의 "멍청한 루프(dumb loop)". 큐, 배포 단위로서의 워커, 트리거 의미론, 별도의 관심사로서의 세션 영속성, 또는 인가 정책을 이름 짓지 않는다. 하니스를 배포하는 시스템이 아니라 구성하는 객체로 취급한다.
+- LangChain의 *Anatomy of an Agent Harness*는 열한 가지 구성 요소를 나열한다. 프롬프트, 도구, 훅, 샌드박스, 오케스트레이션, 메모리, 스킬, 서브에이전트, 그리고 런타임의 "멍청한 루프(dumb loop)". 큐, 배포 단위로서의 워커, 트리거 의미론, 별도의 관심사로서의 세션 영속성, 또는 인가 정책을 이름 짓지 않는다. 하니스를 배포하는 시스템이 아니라 구성하는 객체로 취급한다.
 - Addy Osmani의 *Agent Harness Engineering*은 `Agent = Model + Harness`라는 프레이밍과 래칫(ratchet) 패턴에 도달하지만, 하니스가 무엇으로 만들어지는지를 말하는 데까지는 이르지 못한다. 명세(spec)가 아니라 입장(stance)으로 읽힌다.
 - Anthropic과 OpenAI는 표면에 대해 가장 깊이 들어가지만 자신들의 런타임 안에 머문다. 2026년 4월 Agents SDK의 "harness-compute separation" 발표는 제어 평면 / 데이터 평면 분리를 명시적으로 지지한 첫 벤더 글이다. 그것은 새로운 아이디어가 아니라 원시적인 아이디어다.
 - agentic_harness 책은 하니스를 구성 객체(config object)로 취급하며(Jaymin West의 *Agentic Engineering*, 6장), 그 안에서 가장 강력한 문장은 "하니스는 에이전트 시스템에서 일차적인 보안 경계다"이다. 그것은 그저 인가 정책을 다시 말한 것이다.
@@ -188,40 +188,40 @@ python3 code/main.py
 
 벤더 프레이밍:
 
-- [Addy Osmani, Agent Harness Engineering](https://addyosmani.com/blog/agent-harness-engineering/) — `Agent = Model + Harness`와 래칫 패턴; 인프라에 대해서는 얄팍함
-- [LangChain, The Anatomy of an Agent Harness](https://blog.langchain.com/the-anatomy-of-an-agent-harness/) — 열한 가지 구성 요소: 프롬프트, 도구, 훅, 오케스트레이션, 샌드박스, 메모리, 스킬, 서브에이전트, 런타임; 큐, 배포, 인가는 누락
-- [OpenAI, Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) — 자신들의 런타임 주위 표면에 대한 Codex 팀의 견해
-- [OpenAI, Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/) — 함수 호출에 대한 `while`로 환원된 에이전트 루프
-- [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) — 특정 런타임 안의 장기 지평(long-horizon) 표면
-- [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps) — 적용된 설계 노트
-- [LangChain Deep Agents harness capabilities](https://docs.langchain.com/oss/python/deepagents/harness) — 런타임 구성 표면
+- [Addy Osmani, Agent Harness Engineering](https://addyosmani.com/blog/agent-harness-engineering/): `Agent = Model + Harness`와 래칫 패턴; 인프라에 대해서는 얄팍함
+- [LangChain, The Anatomy of an Agent Harness](https://blog.langchain.com/the-anatomy-of-an-agent-harness/): 열한 가지 구성 요소: 프롬프트, 도구, 훅, 오케스트레이션, 샌드박스, 메모리, 스킬, 서브에이전트, 런타임; 큐, 배포, 인가는 누락
+- [OpenAI, Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/): 자신들의 런타임 주위 표면에 대한 Codex 팀의 견해
+- [OpenAI, Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/): 함수 호출에 대한 `while`로 환원된 에이전트 루프
+- [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): 특정 런타임 안의 장기 지평(long-horizon) 표면
+- [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps): 적용된 설계 노트
+- [LangChain Deep Agents harness capabilities](https://docs.langchain.com/oss/python/deepagents/harness): 런타임 구성 표면
 
 쓸 만한 세부가 있는 실무자 글:
 
-- [Martin Fowler / Birgitta Böckeler, Harness engineering for coding agent users](https://martinfowler.com/articles/harness-engineering.html) — 가이드(피드포워드) + 센서(피드백); 가장 깔끔한 제어 이론(control-theory) 프레이밍
-- [HumanLayer, Skill Issue: Harness Engineering for Coding Agents](https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents) — "모델 문제가 아니라 구성 문제다"
-- [MongoDB, The Agent Harness: Why the LLM Is the Smallest Part of Your Agent System](https://www.mongodb.com/company/blog/technical/agent-harness-why-llm-is-smallest-part-of-your-agent-system) — 영수증: Vercel 80%에서 100%, Harvey 2배 정확도, Terminal Bench 상위 30위에서 상위 5위
-- [Augment Code, Harness Engineering for AI Coding Agents](https://www.augmentcode.com/guides/harness-engineering-ai-coding-agents) — 제약 우선(constraint-first) 워크스루
-- [Sequoia podcast, Harrison Chase on Context Engineering Long-Horizon Agents](https://sequoiacap.com/podcast/context-engineering-our-way-to-long-horizon-agents-langchains-harrison-chase/) — 모델 관심사보다 런타임 관심사
+- [Martin Fowler / Birgitta Böckeler, Harness engineering for coding agent users](https://martinfowler.com/articles/harness-engineering.html): 가이드(피드포워드) + 센서(피드백); 가장 깔끔한 제어 이론(control-theory) 프레이밍
+- [HumanLayer, Skill Issue: Harness Engineering for Coding Agents](https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents): "모델 문제가 아니라 구성 문제다"
+- [MongoDB, The Agent Harness: Why the LLM Is the Smallest Part of Your Agent System](https://www.mongodb.com/company/blog/technical/agent-harness-why-llm-is-smallest-part-of-your-agent-system): 영수증: Vercel 80%에서 100%, Harvey 2배 정확도, Terminal Bench 상위 30위에서 상위 5위
+- [Augment Code, Harness Engineering for AI Coding Agents](https://www.augmentcode.com/guides/harness-engineering-ai-coding-agents): 제약 우선(constraint-first) 워크스루
+- [Sequoia podcast, Harrison Chase on Context Engineering Long-Horizon Agents](https://sequoiacap.com/podcast/context-engineering-our-way-to-long-horizon-agents-langchains-harrison-chase/): 모델 관심사보다 런타임 관심사
 
 책, 논문, 참조 구현:
 
-- [Jaymin West, Agentic Engineering — Chapter 6: Harnesses](https://www.jayminwest.com/agentic-engineering-book/6-harnesses) — 책 분량의 다룸, 하니스를 일차적 보안 경계로 취급
-- [preprints.org, Harness Engineering for Language Agents (March 2026)](https://www.preprints.org/manuscript/202603.1756) — 제어 / 행위성(agency) / 런타임으로서의 학술적 프레이밍
-- [walkinglabs/awesome-harness-engineering](https://github.com/walkinglabs/awesome-harness-engineering) — 컨텍스트, 평가, 관찰 가능성, 오케스트레이션을 가로지르는 큐레이션된 읽기 목록
-- [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) — 대체 큐레이션 목록(도구, 평가, 메모리, MCP, 권한)
-- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) — Redis 기반 메모리와 평가 스위트를 갖춘 프로덕션 준비 참조 구현
-- [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) — 내장 개인 에이전트를 갖춘 오픈 에이전트 하니스
+- [Jaymin West, Agentic Engineering(Chapter 6: Harnesses](https://www.jayminwest.com/agentic-engineering-book/6-harnesses)) 책 분량의 다룸, 하니스를 일차적 보안 경계로 취급
+- [preprints.org, Harness Engineering for Language Agents (March 2026)](https://www.preprints.org/manuscript/202603.1756): 제어 / 행위성(agency) / 런타임으로서의 학술적 프레이밍
+- [walkinglabs/awesome-harness-engineering](https://github.com/walkinglabs/awesome-harness-engineering): 컨텍스트, 평가, 관찰 가능성, 오케스트레이션을 가로지르는 큐레이션된 읽기 목록
+- [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering): 대체 큐레이션 목록(도구, 평가, 메모리, MCP, 권한)
+- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness): Redis 기반 메모리와 평가 스위트를 갖춘 프로덕션 준비 참조 구현
+- [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness): 내장 개인 에이전트를 갖춘 오픈 에이전트 하니스
 
 합의가 아니라 의견 차이 때문에 읽을 가치가 있는 Hacker News 스레드:
 
 - [HN: Effective harnesses for long-running agents](https://news.ycombinator.com/item?id=46081704)
 - [HN: Improving 15 LLMs at Coding in One Afternoon. Only the Harness Changed](https://news.ycombinator.com/item?id=46988596)
-- [HN: The agent harness belongs outside the sandbox](https://news.ycombinator.com/item?id=47990675) — 별도 평면으로서의 인가를 주장
+- [HN: The agent harness belongs outside the sandbox](https://news.ycombinator.com/item?id=47990675): 별도 평면으로서의 인가를 주장
 
 이 커리큘럼 내부의 상호 참조:
 
-- Phase 14 · 23 — OpenTelemetry GenAI 관례: 센서 문헌이 가리키는 관찰 가능성 계층
-- Phase 14 · 26 — 일곱 가지 표면이 흡수하도록 설계된 실패 모드를 목록화함
-- Phase 14 · 27 — 인가 정책 원시 요소에 위치하는 프롬프트 인젝션(prompt injection) 방어
-- Phase 14 · 29 — 프로덕션 런타임(큐, 이벤트, 크론): 이 레슨의 원시 요소가 배포에서 사는 곳
+- Phase 14 · 23: OpenTelemetry GenAI 관례: 센서 문헌이 가리키는 관찰 가능성 계층
+- Phase 14 · 26: 일곱 가지 표면이 흡수하도록 설계된 실패 모드를 목록화함
+- Phase 14 · 27: 인가 정책 원시 요소에 위치하는 프롬프트 인젝션(prompt injection) 방어
+- Phase 14 · 29: 프로덕션 런타임(큐, 이벤트, 크론): 이 레슨의 원시 요소가 배포에서 사는 곳

@@ -28,7 +28,7 @@ DeepSeek-V3(2024년 12월)는 MTP를 각 예측 깊이에서 인과 체인을 �
 
 ### 순차적 MTP 레시피
 
-DeepSeek-V3는 본 모델 위에 `D`개의 MTP 모듈을 추가한다. 각 모듈 `k`(`k = 1..D`)는 깊이 `k`의 토큰을 예측한다 — 즉, 위치 `i`까지의 접두사(prefix)가 주어졌을 때 `t_{i+k}`를 예측한다.
+DeepSeek-V3는 본 모델 위에 `D`개의 MTP 모듈을 추가한다. 각 모듈 `k`(`k = 1..D`)는 깊이 `k`의 토큰을 예측한다. 즉, 위치 `i`까지의 접두사(prefix)가 주어졌을 때 `t_{i+k}`를 예측한다.
 
 모듈 `k`는 다음으로 구성된다:
 
@@ -62,7 +62,7 @@ L_k = CE(logits_{i+k}, t_{i+k})
 L_MTP = (lambda / D) * sum_{k=1..D} L_k
 ```
 
-`lambda`는 작은 가중 인자다 — DeepSeek-V3는 학습의 첫 10% 동안 0.3, 그 이후로는 0.1을 사용한다. 총 학습 손실은 `L_main + L_MTP`다.
+`lambda`는 작은 가중 인자다. DeepSeek-V3는 학습의 첫 10% 동안 0.3, 그 이후로는 0.1을 사용한다. 총 학습 손실은 `L_main + L_MTP`다.
 
 ### 왜 병렬이 아니라 순차적인가
 
@@ -83,7 +83,7 @@ DeepSeek-V3의 순차적 설계는 `h_i^(k-1)`와 실제 다음 토큰 임베딩
   - 투영 `M_k`: `(2h) * h = 2h^2`.
   - 트랜스포머 블록 `T_k`: 어텐션(MHA의 경우 `4h^2`) 더하기 MLP(비율 8/3의 SwiGLU의 경우 보통 `8h^2`). 블록당 약 `12h^2`.
 
-모듈당 총 추가량: `~14h^2`. DeepSeek-V3의 `h = 7168`, D = 1 모듈의 경우: 장부상으로 `~14 * 7168^2 = ~720M` 파라미터다. DeepSeek-V3는 14B를 보고한다 — 차이는 대부분 MTP 모듈의 전문가(expert) 층 역시 MoE이기 때문이다.
+모듈당 총 추가량: `~14h^2`. DeepSeek-V3의 `h = 7168`, D = 1 모듈의 경우: 장부상으로 `~14 * 7168^2 = ~720M` 파라미터다. DeepSeek-V3는 14B를 보고한다. 차이는 대부분 MTP 모듈의 전문가(expert) 층 역시 MoE이기 때문이다.
 
 ### 추측 디코딩의 보상
 
@@ -111,7 +111,7 @@ EAGLE는 사전 학습 이후에 작은 드래프트 모델을 별도로 학습�
 
 ### 1단계: 공유 임베딩 테이블
 
-단일 `vocab_size x hidden` 테이블이 본 모델 그리고 모든 깊이의 모든 MTP 모듈에 의해 사용된다. 두 번째 복사본이 아니라 — 말 그대로 동일한 텐서(tensor)다.
+단일 `vocab_size x hidden` 테이블이 본 모델 그리고 모든 깊이의 모든 MTP 모듈에 의해 사용된다. 두 번째 복사본이 아니라. 말 그대로 동일한 텐서(tensor)다.
 
 ### 2단계: 깊이별 결합
 
@@ -193,8 +193,8 @@ MTP는 DeepSeek-V3(2024년 12월)와 DeepSeek-R1 시리즈에 통합되어 있�
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI — DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437) — 결합 손실 식과 추론 시 1.8배 속도 향상을 포함한 전체 순차적 MTP 설명(2.2절)
-- [Gloeckle et al. — Better & Faster Large Language Models via Multi-token Prediction (arXiv:2404.19737)](https://arxiv.org/abs/2404.19737) — DeepSeek의 설계가 개선한 병렬 MTP 베이스라인
-- [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3) — 총 685B(본 모델 671B + MTP 14B), 배포(deployment) 메모
-- [Leviathan et al. — Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192) — MTP가 들어맞는 추측 디코딩 프레임워크
-- [Li et al. — EAGLE-3 (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840) — EAGLE의 2025년 드래프트 아키텍처, MTP가 경쟁하는 상대
+- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437)) 결합 손실 식과 추론 시 1.8배 속도 향상을 포함한 전체 순차적 MTP 설명(2.2절)
+- [Gloeckle et al.(Better & Faster Large Language Models via Multi-token Prediction (arXiv:2404.19737)](https://arxiv.org/abs/2404.19737)) DeepSeek의 설계가 개선한 병렬 MTP 베이스라인
+- [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3): 총 685B(본 모델 671B + MTP 14B), 배포(deployment) 메모
+- [Leviathan et al.(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192)) MTP가 들어맞는 추측 디코딩 프레임워크
+- [Li et al.(EAGLE-3 (arXiv:2503.01840)](https://arxiv.org/abs/2503.01840)) EAGLE의 2025년 드래프트 아키텍처, MTP가 경쟁하는 상대

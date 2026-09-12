@@ -1,6 +1,6 @@
 # 슈퍼바이저 / 오케스트레이터-워커 패턴 (Supervisor / Orchestrator-Worker Pattern)
 
-> 하나의 리드(lead) 에이전트(agent)가 계획하고 위임하며; 전문화된 워커(worker)들이 병렬 컨텍스트에서 실행하고 보고한다. 이것이 Anthropic의 Research 시스템(리드로서 Claude Opus 4, 서브에이전트(subagent)로서 Sonnet 4) 뒤에 있는 패턴으로, 내부 연구 평가에서 단일 에이전트 Opus 4 대비 +90.2%로 측정되었다. Anthropic의 엔지니어링 포스트는 BrowseComp에서의 분산(variance)의 80%가 토큰(token) 사용량만으로 설명된다고 보고한다 — 멀티 에이전트(multi-agent)가 이기는 것은 주로 각 서브에이전트가 신선한 컨텍스트 윈도우(context window)를 받기 때문이다. 이 레슨은 프리미티브(primitive)로부터 슈퍼바이저 패턴을 만들고, 프로덕션(production) 배포(deployment)에서 나온 2026년 엔지니어링 교훈을 다룬다.
+> 하나의 리드(lead) 에이전트(agent)가 계획하고 위임하며; 전문화된 워커(worker)들이 병렬 컨텍스트에서 실행하고 보고한다. 이것이 Anthropic의 Research 시스템(리드로서 Claude Opus 4, 서브에이전트(subagent)로서 Sonnet 4) 뒤에 있는 패턴으로, 내부 연구 평가에서 단일 에이전트 Opus 4 대비 +90.2%로 측정되었다. Anthropic의 엔지니어링 포스트는 BrowseComp에서의 분산(variance)의 80%가 토큰(token) 사용량만으로 설명된다고 보고한다. 멀티 에이전트(multi-agent)가 이기는 것은 주로 각 서브에이전트가 신선한 컨텍스트 윈도우(context window)를 받기 때문이다. 이 레슨은 프리미티브(primitive)로부터 슈퍼바이저 패턴을 만들고, 프로덕션(production) 배포(deployment)에서 나온 2026년 엔지니어링 교훈을 다룬다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib, `threading`)
@@ -11,7 +11,7 @@
 
 연구(research)는 단일 에이전트 시스템이 실패하는 전형적인 작업이다. "2023년과 2026년 사이에 멀티 에이전트 시스템에서 무엇이 바뀌었는가?"라고 물었다고 하자. 단일 에이전트는 다섯 편의 논문을 순차적으로 읽고 그 텍스트로 컨텍스트의 절반을 채운 다음, 그 모두를 함께 추론해야 한다. 다섯 번째에 도달할 즈음이면 첫 논문을 잊는다. 병렬화할 수 없다.
 
-슈퍼바이저(supervisor) 패턴이 이를 고친다. 하나의 리드 에이전트가 검색을 계획하고 각 하위 질문을 워커에게 위임한 뒤 종합한다. 각 워커는 좁은 질문 하나를 위해 자신만의 200k 토큰 윈도우를 받는다. 리드는 원본 논문을 결코 보지 않는다 — 오직 워커 요약만 본다.
+슈퍼바이저(supervisor) 패턴이 이를 고친다. 하나의 리드 에이전트가 검색을 계획하고 각 하위 질문을 워커에게 위임한 뒤 종합한다. 각 워커는 좁은 질문 하나를 위해 자신만의 200k 토큰 윈도우를 받는다. 리드는 원본 논문을 결코 보지 않는다. 오직 워커 요약만 본다.
 
 Anthropic의 프로덕션 Research 시스템은 단일 Opus 4 대비 내부 연구 평가에서 +90.2%를 보고한다. 같은 포스트는 BrowseComp 분산의 80%가 *토큰 사용량만으로* 설명된다고 언급한다. 서브에이전트당 신선한 컨텍스트가 주된 메커니즘이다.
 
@@ -72,7 +72,7 @@ LangGraph는 원래 고수준 `create_supervisor` 헬퍼를 가진 `langgraph-su
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`는 `threading`을 사용해 세 병렬 워커의 슈퍼바이저를 구현한다. 리드가 질의를 하위 질문으로 분해하고, 워커들이 각 하위 질문에서 동시에 실행되고, 리드가 종합한다. 실제 LLM은 없다 — 워커들은 페치-앤-요약(fetch-and-summarize)을 시뮬레이션하도록 스크립트되어 있다.
+`code/main.py`는 `threading`을 사용해 세 병렬 워커의 슈퍼바이저를 구현한다. 리드가 질의를 하위 질문으로 분해하고, 워커들이 각 하위 질문에서 동시에 실행되고, 리드가 종합한다. 실제 LLM은 없다. 워커들은 페치-앤-요약(fetch-and-summarize)을 시뮬레이션하도록 스크립트되어 있다.
 
 핵심 구조:
 
@@ -125,7 +125,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic engineering — How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) — 슈퍼바이저 패턴의 프로덕션 레퍼런스
-- [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents) — 도구 호출 슈퍼바이저가 이제 권장 형태다
-- [LangGraph supervisor reference](https://reference.langchain.com/python/langgraph-supervisor) — 레거시 헬퍼, 2026년 프로덕션에서 여전히 사용됨
-- [OpenAI cookbook — Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) — 핸드오프 기반 슈퍼바이저 변형
+- [Anthropic engineering(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 슈퍼바이저 패턴의 프로덕션 레퍼런스
+- [LangGraph workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 도구 호출 슈퍼바이저가 이제 권장 형태다
+- [LangGraph supervisor reference](https://reference.langchain.com/python/langgraph-supervisor): 레거시 헬퍼, 2026년 프로덕션에서 여전히 사용됨
+- [OpenAI cookbook(Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 핸드오프 기반 슈퍼바이저 변형

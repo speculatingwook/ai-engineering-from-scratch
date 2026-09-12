@@ -28,7 +28,7 @@
 
 프레임워크: LangGraph `create_supervisor`, Anthropic orchestrator-workers, CrewAI Hierarchical Process.
 
-**2026년 LangChain 권장 사항:** `create_supervisor`보다는 직접 도구 호출을 통해 슈퍼비전을 수행하라. 더 세밀한 컨텍스트 엔지니어링(context engineering) 제어를 제공한다 — 각 전문가가 정확히 무엇을 보는지 직접 결정하기 때문이다.
+**2026년 LangChain 권장 사항:** `create_supervisor`보다는 직접 도구 호출을 통해 슈퍼비전을 수행하라. 더 세밀한 컨텍스트 엔지니어링(context engineering) 제어를 제공한다. 각 전문가가 정확히 무엇을 보는지 직접 결정하기 때문이다.
 
 ### 스웜/피어 투 피어(Swarm / peer-to-peer)
 
@@ -67,11 +67,11 @@ CrewAI는 두 가지 배포(deployment) 모드를 공식화한다:
 
 결정 순서:
 
-1. 단일 에이전트 + 워크플로 패턴(Lesson 12) — 여기서 시작하라.
-2. 슈퍼바이저-워커 — 전문가가 2~4명일 때.
-3. 스웜 — 추론의 명확성보다 지연 시간이 더 중요할 때.
-4. 계층형 — 슈퍼바이저 컨텍스트 예산이 실패할 때만.
-5. 토론 — 비용보다 정확도가 더 중요할 때.
+1. 단일 에이전트 + 워크플로 패턴(Lesson 12): 여기서 시작하라.
+2. 슈퍼바이저-워커: 전문가가 2~4명일 때.
+3. 스웜: 추론의 명확성보다 지연 시간이 더 중요할 때.
+4. 계층형: 슈퍼바이저 컨텍스트 예산이 실패할 때만.
+5. 토론: 비용보다 정확도가 더 중요할 때.
 
 ### 이 패턴이 잘못되는 지점
 
@@ -83,10 +83,10 @@ CrewAI는 두 가지 배포(deployment) 모드를 공식화한다:
 
 `code/main.py`는 스크립트화된 LLM을 대상으로 네 가지 패턴을 모두 stdlib로 구현한다:
 
-- `Supervisor` — 중앙 라우터.
-- `Swarm` — 직접 핸드오프를 사용하는 피어 투 피어.
-- `Hierarchical` — 슈퍼바이저의 슈퍼바이저.
-- `Debate` — 병렬 제안자 + 비평.
+- `Supervisor`: 중앙 라우터.
+- `Swarm`: 직접 핸드오프를 사용하는 피어 투 피어.
+- `Hierarchical`: 슈퍼바이저의 슈퍼바이저.
+- `Debate`: 병렬 제안자 + 비평.
 
 각 패턴은 동일한 세 가지 의도(intent) 작업(환불 / 버그 / 영업)을 처리한다. 트레이스(trace)의 모양이 다르다.
 
@@ -131,7 +131,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 다섯 가지 패턴 + 에이전트 vs 워크플로
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 슈퍼바이저, 스웜, 계층형
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 다섯 가지 패턴 + 에이전트 vs 워크플로
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 슈퍼바이저, 스웜, 계층형
 - [CrewAI docs](https://docs.crewai.com/en/introduction) — Crew vs Flow
-- [Du et al., Society of Minds (arXiv:2305.14325)](https://arxiv.org/abs/2305.14325) — 토론 패턴
+- [Du et al., Society of Minds (arXiv:2305.14325)](https://arxiv.org/abs/2305.14325): 토론 패턴

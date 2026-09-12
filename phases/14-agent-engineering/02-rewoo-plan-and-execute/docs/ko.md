@@ -44,7 +44,7 @@ ReAct에서 작업자 3이 실패하면 루프는 스트림 도중에 에러를 
 
 ### 계획기 증류 (Planner distillation)
 
-논문의 두 번째 결과: 계획기가 관찰을 보지 않기 때문에, 175B 교사(teacher)의 계획기 출력으로 7B 모델을 파인튜닝(fine-tuning)할 수 있다. 작은 모델이 계획을 처리하고, 추론(inference) 시에는 큰 모델이 필요 없다. 이는 이제 표준이다 — 많은 2026년 프로덕션 에이전트가 작은 계획기와 큰 실행기 또는 그 반대를 사용한다.
+논문의 두 번째 결과: 계획기가 관찰을 보지 않기 때문에, 175B 교사(teacher)의 계획기 출력으로 7B 모델을 파인튜닝(fine-tuning)할 수 있다. 작은 모델이 계획을 처리하고, 추론(inference) 시에는 큰 모델이 필요 없다. 이는 이제 표준이다. 많은 2026년 프로덕션 에이전트가 작은 계획기와 큰 실행기 또는 그 반대를 사용한다.
 
 ### Plan-and-Execute (LangChain, 2023)
 
@@ -70,10 +70,10 @@ Anthropic의 2024년 12월 지침: 가장 단순한 것부터 시작하라. 작�
 
 `code/main.py`는 장난감 ReWOO를 구현한다:
 
-- `Planner` — 프롬프트로부터 계획 DAG를 방출하는 스크립트된 정책.
-- `Worker` — 레지스트리를 통해 각 노드의 도구 호출을 디스패치.
-- `Solver` — 증거를 읽고 최종 답을 생성하는 스크립트된 조합.
-- 의존성 해결 — `#E1` 같은 참조가 앞선 작업자 출력으로 치환됨.
+- `Planner`: 프롬프트로부터 계획 DAG를 방출하는 스크립트된 정책.
+- `Worker`: 레지스트리를 통해 각 노드의 도구 호출을 디스패치.
+- `Solver`: 증거를 읽고 최종 답을 생성하는 스크립트된 조합.
+- 의존성 해결: `#E1` 같은 참조가 앞선 작업자 출력으로 치환됨.
 
 데모는 두 단계 계획으로 "프랑스 수도의 인구는 백만 단위로 반올림하면 얼마인가?"에 답한다: (1) 수도를 조회, (2) 인구를 조회, 그다음 해결.
 
@@ -83,7 +83,7 @@ Anthropic의 2024년 12월 지침: 가장 단순한 것부터 시작하라. 작�
 python3 code/main.py
 ```
 
-트레이스는 먼저 전체 계획을, 그다음 작업자 결과를, 그다음 해결기 조합을 보여준다. 토큰 수(대략적인 문자 수를 출력함)를 ReAct 스타일의 번갈아 도는 실행과 비교하라 — 이런 종류의 구조화된 작업에서는 ReWOO가 이긴다.
+트레이스는 먼저 전체 계획을, 그다음 작업자 결과를, 그다음 해결기 조합을 보여준다. 토큰 수(대략적인 문자 수를 출력함)를 ReAct 스타일의 번갈아 도는 실행과 비교하라. 이런 종류의 구조화된 작업에서는 ReWOO가 이긴다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -97,7 +97,7 @@ LangGraph는 Plan-and-Execute를 레시피로 제공한다(ReAct에는 `create_r
 
 1. 독립적인 계획 노드들에 대해 작업자 실행을 병렬화하라. 병렬 그룹 2개를 가진 6노드 DAG에서 무엇을 얻는가?
 2. 어느 작업자든 에러를 반환하면 발동하는 재계획기 노드를 추가하라. ReWOO를 Plan-and-Execute로 만드는 가장 작은 변경은 무엇인가?
-3. `Planner`를 작은 모델(7B급)로 교체하고 `Solver`는 프런티어(frontier) 모델에 유지하라. 종단 간(end-to-end) 품질을 비교하라 — 이 분리가 어디서 실패하는가?
+3. `Planner`를 작은 모델(7B급)로 교체하고 `Solver`는 프런티어(frontier) 모델에 유지하라. 종단 간(end-to-end) 품질을 비교하라. 이 분리가 어디서 실패하는가?
 4. ReWOO 논문의 계획기 증류에 관한 4절을 읽어라. 175B -> 7B 결과를 개념적으로 재현하라: 어떤 학습 데이터가 필요하며, 계획 품질을 어떻게 채점하는가?
 5. 장난감을 Plan-and-Act의 트래젝토리 형태로 이식하라: 계획은 DAG가 아니라 시퀀스다. 어떤 트레이드오프가 바뀌는가?
 
@@ -105,7 +105,7 @@ LangGraph는 Plan-and-Execute를 레시피로 제공한다(ReAct에는 `create_r
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
-| ReWOO | "관찰 없는 추론" | 계획하고, 증거를 병렬로 가져오고, 해결 — 계획 프롬프트에 관찰 없음 |
+| ReWOO | "관찰 없는 추론" | 계획하고, 증거를 병렬로 가져오고, 해결: 계획 프롬프트에 관찰 없음 |
 | Plan-and-Execute | "LangChain의 plan-execute 패턴" | 실행 후 선택적 재계획기 노드를 가진 ReWOO |
 | Plan-and-Act | "확장된 plan-execute" | 장기 지평 작업을 위한 합성 계획 학습 데이터를 갖춘 명시적 계획기/실행기 분리 |
 | 증거 참조(Evidence reference) | "#E1, #E2, ..." | 디스패치 시점에 이전 작업자 출력으로 치환되는 계획 노드 자리표시자 |
@@ -115,7 +115,7 @@ LangGraph는 Plan-and-Execute를 레시피로 제공한다(ReAct에는 `create_r
 
 ## 더 읽을거리 (Further Reading)
 
-- [Xu et al., ReWOO: Decoupling Reasoning from Observations (arXiv:2305.18323)](https://arxiv.org/abs/2305.18323) — 표준 논문
-- [Erdogan et al., Plan-and-Act (arXiv:2503.09572)](https://arxiv.org/abs/2503.09572) — 합성 계획을 갖춘 확장된 계획기-실행기
-- [LangGraph Plan-and-Execute tutorial](https://docs.langchain.com/oss/python/langgraph/overview) — 프레임워크 레시피
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 작동하는 가장 단순한 패턴을 고르기
+- [Xu et al., ReWOO: Decoupling Reasoning from Observations (arXiv:2305.18323)](https://arxiv.org/abs/2305.18323): 표준 논문
+- [Erdogan et al., Plan-and-Act (arXiv:2503.09572)](https://arxiv.org/abs/2503.09572): 합성 계획을 갖춘 확장된 계획기-실행기
+- [LangGraph Plan-and-Execute tutorial](https://docs.langchain.com/oss/python/langgraph/overview): 프레임워크 레시피
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 작동하는 가장 단순한 패턴을 고르기

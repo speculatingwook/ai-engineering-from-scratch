@@ -1,4 +1,4 @@
-# Capstone 83 — 프롬프트 인젝션 탐지기 (Prompt Injection Detector)
+# Capstone 83: 프롬프트 인젝션 탐지기 (Prompt Injection Detector)
 
 > 탐지기는 프롬프트를 받아 확신도와 범주를 돌려주는 함수다. 그 밖의 것은 느낌에 지나지 않는다.
 

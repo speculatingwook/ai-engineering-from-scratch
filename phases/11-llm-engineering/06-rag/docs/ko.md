@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 10 (LLMs from Scratch), Phase 11 Lessons 01-05
 **Time:** ~90분
-**Related:** Phase 5 · 23 (Chunking Strategies for RAG) — 여섯 가지 청킹 알고리즘과 각각이 이기는 경우. Phase 5 · 22 (Embedding Models Deep Dive) — 임베더 고르기. Phase 11 · 07 (Advanced RAG) — 하이브리드 검색, 재순위화, 쿼리 변환.
+**Related:** Phase 5 · 23 (Chunking Strategies for RAG): 여섯 가지 청킹 알고리즘과 각각이 이기는 경우. Phase 5 · 22 (Embedding Models Deep Dive): 임베더 고르기. Phase 11 · 07 (Advanced RAG): 하이브리드 검색, 재순위화, 쿼리 변환.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -73,7 +73,7 @@ graph LR
 
 임베딩 모델은 텍스트를 밀집 벡터(dense vector)로 변환한다. 유사한 텍스트는 이 고차원 공간에서 가까이 있는 벡터를 만든다. "How do I reset my password?"와 "I need to change my password"는 공유하는 단어가 거의 없음에도 거의 동일한 벡터를 만든다. "The cat sat on the mat"은 매우 다른 벡터를 만든다.
 
-흔한 임베딩 모델(2026년 라인업 — 전체 분석은 Phase 5 · 22 참조):
+흔한 임베딩 모델(2026년 라인업: 전체 분석은 Phase 5 · 22 참조):
 
 | Model | Dimensions | Provider | Notes |
 |-------|-----------|----------|-------|
@@ -365,7 +365,7 @@ def generate(prompt):
     return response.content[0].text
 ```
 
-파이프라인은 같다. 임베딩 함수를 교체하라. 생성 함수를 교체하라. 검색 로직, 청킹, 프롬프트 구성 — 어느 모델을 쓰든 모두 동일하다.
+파이프라인은 같다. 임베딩 함수를 교체하라. 생성 함수를 교체하라. 검색 로직, 청킹, 프롬프트 구성: 어느 모델을 쓰든 모두 동일하다.
 
 대규모 벡터 저장의 경우, 무차별 검색을 적절한 벡터 데이터베이스로 교체하라:
 

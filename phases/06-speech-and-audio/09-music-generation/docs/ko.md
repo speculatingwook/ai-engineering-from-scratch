@@ -1,4 +1,4 @@
-# 음악 생성 — MusicGen, Stable Audio, Suno, 그리고 라이선싱 지진
+# 음악 생성: MusicGen, Stable Audio, Suno, 그리고 라이선싱 지진
 
 > 2026년 음악 생성: Suno v5와 Udio v4가 상업적으로 지배하고; MusicGen, Stable Audio Open, ACE-Step이 오픈소스를 이끈다. 기술적 문제는 대부분 해결되었다. 법적 문제(Warner Music 5억 달러 합의, UMG 합의)가 2025-2026년에 이 분야를 재편했다.
 
@@ -31,7 +31,7 @@ Meta의 **MusicGen**(2023, MIT)과 여러 파생물이 여기에 속한다. 텍�
 
 **AudioLDM / AudioLDM2**: T2I 스타일 잠재 확산을 통한 텍스트-오디오 변환, 음악, 음향 효과, 음성으로 일반화됨.
 
-### 하이브리드(프로덕션) — Suno, Udio, Lyria
+### 하이브리드(프로덕션): Suno, Udio, Lyria
 
 닫힌 가중치(closed weights). 아마도 AR 코덱 LM + 전용 보이스 / 드럼 / 멜로디 헤드를 갖춘 확산 기반 보코더(vocoder). Suno v5(2026)는 ELO 1293 품질 선두다. Udio v4는 인페인팅 + 스템 분리(베이스, 드럼, 보컬을 개별 다운로드)를 추가한다.
 
@@ -131,7 +131,7 @@ music = musicgen.generate([description], duration=30)
 
 ## 2026년에도 여전히 출시되는 함정들 (Pitfalls that still ship in 2026)
 
-- **저작권 세탁 프롬프트.** "Taylor Swift 스타일의 노래" — 상업용 Suno/Udio는 이제 이를 필터링하지만 오픈 모델은 그러지 않는다. 자체 필터 목록을 따로 두라.
+- **저작권 세탁 프롬프트.** "Taylor Swift 스타일의 노래": 상업용 Suno/Udio는 이제 이를 필터링하지만 오픈 모델은 그러지 않는다. 자체 필터 목록을 따로 두라.
 - **30초 넘는 반복 / 드리프트.** AR 모델은 루핑한다. 여러 생성물을 크로스페이드(crossfade)하거나, 구조적 일관성을 위해 ACE-Step을 사용하라.
 - **템포 드리프트.** 모델이 BPM에서 벗어난다. 프롬프트에 BPM 태그를 쓰고 librosa의 `beat_track`으로 후처리 필터링하라.
 - **보컬 명료도.** Suno는 탁월하다; 오픈 모델은 흔히 단어에서 뭉개진다. 가사가 중요하면 상업 API를 쓰거나 파인튜닝(fine-tuning)하라.
@@ -143,7 +143,7 @@ music = musicgen.generate([description], duration=30)
 
 ## 연습 문제 (Exercises)
 
-1. **쉬움.** `code/main.py`를 실행하라. "생성적" 코드 진행 + 드럼 패턴을 ASCII 기호로 만든다 — 음악 생성 만화다. 원한다면 아무 MIDI 렌더러로 재생해 보라.
+1. **쉬움.** `code/main.py`를 실행하라. "생성적" 코드 진행 + 드럼 패턴을 ASCII 기호로 만든다. 음악 생성 만화다. 원한다면 아무 MIDI 렌더러로 재생해 보라.
 2. **중간.** `audiocraft`를 설치하고, MusicGen-small로 4개 장르 프롬프트에 걸쳐 10초짜리 클립을 생성하고, 참조 장르 세트에 대한 FAD를 측정하라.
 3. **어려움.** ACE-Step(또는 MusicGen-melody)을 사용해 서로 다른 음색 프롬프트로 같은 곡조의 세 변형을 생성하라. 정렬을 검증하기 위해 프롬프트에 대한 CLAP 유사도를 계산하라.
 
@@ -160,9 +160,9 @@ music = musicgen.generate([description], duration=30)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Copet et al. (2023). MusicGen](https://arxiv.org/abs/2306.05284) — 오픈 자기회귀 벤치마크.
-- [Evans et al. (2024). Stable Audio Open](https://arxiv.org/abs/2407.14358) — 사운드 디자인 기본.
-- [ACE-Step](https://github.com/ace-step/ACE-Step) — 오픈 4B 완성곡 생성기, 2026년 4월.
-- [Suno v5 platform docs](https://suno.com) — 상업적 품질 선두.
-- [AudioLDM2](https://arxiv.org/abs/2308.05734) — 음악 + 음향 효과를 위한 잠재 확산.
-- [WMG-Suno settlement coverage](https://www.musicbusinessworldwide.com/suno-warner-music-settlement/) — 2025년 11월 선례.
+- [Copet et al. (2023). MusicGen](https://arxiv.org/abs/2306.05284): 오픈 자기회귀 벤치마크.
+- [Evans et al. (2024). Stable Audio Open](https://arxiv.org/abs/2407.14358): 사운드 디자인 기본.
+- [ACE-Step](https://github.com/ace-step/ACE-Step): 오픈 4B 완성곡 생성기, 2026년 4월.
+- [Suno v5 platform docs](https://suno.com): 상업적 품질 선두.
+- [AudioLDM2](https://arxiv.org/abs/2308.05734): 음악 + 음향 효과를 위한 잠재 확산.
+- [WMG-Suno settlement coverage](https://www.musicbusinessworldwide.com/suno-warner-music-settlement/): 2025년 11월 선례.

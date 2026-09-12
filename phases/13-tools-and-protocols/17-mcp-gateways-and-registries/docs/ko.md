@@ -1,4 +1,4 @@
-# MCP 게이트웨이와 레지스트리 — 엔터프라이즈 컨트롤 플레인
+# MCP 게이트웨이와 레지스트리: 엔터프라이즈 컨트롤 플레인
 
 > 기업은 모든 개발자가 아무 MCP 서버나 설치하도록 둘 수 없다. 게이트웨이(gateway)는 인증, RBAC, 감사(audit), 속도 제한(rate limiting), 캐싱, 툴 포이즈닝(tool-poisoning) 탐지를 중앙집중화하고, 병합된 툴 표면(tool surface)을 단일 MCP 엔드포인트로 노출한다. 공식 MCP 레지스트리(Official MCP Registry)(Anthropic + GitHub + PulseMCP + Microsoft, 네임스페이스 검증)는 표준 업스트림(upstream)이다. 이 레슨은 게이트웨이가 어디에 들어맞는지를 짚고, 최소 구현을 따라가며, 2026년 벤더 지형을 개괄한다.
 
@@ -26,7 +26,7 @@
 4. 게이트웨이가 정책을 적용하면서 호출을 백엔드 서버로 라우팅(routing)한다.
 5. 모든 호출이 감사를 위해 로깅된다.
 
-Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry, Envoy AI Gateway — 모두 2025-2026년에 게이트웨이 또는 게이트웨이 기능을 출시했다.
+Cloudflare MCP Portals, Kong AI Gateway, IBM ContextForge, MintMCP, TrueFoundry, Envoy AI Gateway: 모두 2025-2026년에 게이트웨이 또는 게이트웨이 기능을 출시했다.
 
 한편, 공식 MCP 레지스트리는 표준 업스트림으로 출범했다. 큐레이션되고, 네임스페이스가 검증되며, 역방향 DNS(reverse-DNS) 이름이 붙은 서버들을 게이트웨이가 가져올 수 있는 출처다. 메타레지스트리(Glama, MCPMarket, MCP.so, Smithery, LobeHub)는 여러 출처에 걸쳐 서버를 집계한다.
 
@@ -136,8 +136,8 @@ Phase 17(프로덕션 인프라)에서 게이트웨이 운영을 더 깊이 다�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Official MCP Registry](https://registry.modelcontextprotocol.io/) — 표준 업스트림, 네임스페이스 검증됨
-- [Cloudflare — Enterprise MCP](https://blog.cloudflare.com/enterprise-mcp/) — OAuth와 정책을 갖춘 게이트웨이 패턴
-- [agentic-community — MCP gateway registry](https://github.com/agentic-community/mcp-gateway-registry) — 오픈소스 레퍼런스 게이트웨이
-- [TrueFoundry — What is an MCP gateway?](https://www.truefoundry.com/blog/what-is-mcp-gateway) — 기능 비교 글
-- [IBM — MCP context forge](https://github.com/IBM/mcp-context-forge) — IBM의 엔터프라이즈 게이트웨이
+- [Official MCP Registry](https://registry.modelcontextprotocol.io/): 표준 업스트림, 네임스페이스 검증됨
+- [Cloudflare(Enterprise MCP](https://blog.cloudflare.com/enterprise-mcp/)) OAuth와 정책을 갖춘 게이트웨이 패턴
+- [agentic-community(MCP gateway registry](https://github.com/agentic-community/mcp-gateway-registry)) 오픈소스 레퍼런스 게이트웨이
+- [TrueFoundry(What is an MCP gateway?](https://www.truefoundry.com/blog/what-is-mcp-gateway)) 기능 비교 글
+- [IBM(MCP context forge](https://github.com/IBM/mcp-context-forge)) IBM의 엔터프라이즈 게이트웨이

@@ -1,4 +1,4 @@
-# 구조화된 출력 — JSON Schema, Pydantic, Zod, 제약 디코딩
+# 구조화된 출력: JSON Schema, Pydantic, Zod, 제약 디코딩
 
 > "모델에게 JSON을 반환해 달라고 정중히 부탁하기"는 프런티어 모델(frontier model)에서도 5~15퍼센트 실패한다. 구조화된 출력(structured output)은 제약 디코딩(constrained decoding)으로 그 간극을 메운다. 스키마를 위반하는 토큰은 애초에 모델이 내보내지 못하도록 막힌다. OpenAI의 엄격 모드(strict mode), Anthropic의 스키마 타입 도구 사용, Gemini의 `responseSchema`, Pydantic AI의 `output_type`, Zod의 `.parse`는 같은 아이디어의 다섯 가지 표면 형태다. 이 레슨에서는 모든 프로덕션 추출 파이프라인(extraction pipeline)에 쓸 스키마 검증기(validator)와 엄격 모드 계약을 직접 만든다.
 
@@ -11,7 +11,7 @@
 
 - 올바른 제약(enum, min/max, required, pattern)을 사용해 추출 대상의 JSON Schema 2020-12를 작성하기.
 - 엄격 모드와 제약 디코딩이 "생성 후 검증"과 다른 보장을 주는 이유를 설명하기.
-- 세 가지 실패 양상 — 파싱 오류, 스키마 위반, 모델 거부(refusal) — 을 구분하기.
+- 세 가지 실패 양상(파싱 오류, 스키마 위반, 모델 거부(refusal))을 구분하기.
 - 타입이 지정된 수리와 타입이 지정된 거부 처리를 갖춘 추출 파이프라인을 출시하기.
 
 ## 문제 (The Problem)
@@ -20,7 +20,7 @@
 
 **접근법 1: JSON을 프롬프트한다.** "customer, line_items, total_usd 필드를 가진 JSON으로 답하라." 프런티어 모델에서 85~95퍼센트 동작한다. 실패하는 방식은 여섯 가지다. 빠진 중괄호, 끝에 붙은 쉼표(trailing comma), 잘못된 타입, 환각된 필드, 토큰 한도에서 잘림, "Here is your JSON:" 같은 새어 나온 산문.
 
-**접근법 2: 생성 후 검증한다.** 자유롭게 생성하고 파싱한 뒤 스키마에 대해 검증하고, 실패하면 재시도한다. 신뢰할 수 있지만 비싸다 — 재시도마다 비용을 치르고, 잘림(truncation) 버그는 발생할 때마다 한 턴(turn)씩 더 잡아먹는다.
+**접근법 2: 생성 후 검증한다.** 자유롭게 생성하고 파싱한 뒤 스키마에 대해 검증하고, 실패하면 재시도한다. 신뢰할 수 있지만 비싸다. 재시도마다 비용을 치르고, 잘림(truncation) 버그는 발생할 때마다 한 턴(turn)씩 더 잡아먹는다.
 
 **접근법 3: 제약 디코딩.** 제공자가 디코드 시점에 스키마를 강제한다. 유효하지 않은 토큰은 샘플링 분포(sampling distribution)에서 마스킹된다. 출력은 파싱과 검증이 보장된다. 실패는 한 양상으로 좁혀진다. 입력이 스키마에 맞지 않는다고 모델이 판단하는 거부(refusal)다.
 
@@ -36,7 +36,7 @@
 
 ## 개념 (The Concept)
 
-### JSON Schema 2020-12 — 공통어(lingua franca)
+### JSON Schema 2020-12: 공통어(lingua franca)
 
 모든 제공자가 JSON Schema 2020-12를 받아들인다. 가장 많이 쓰는 구문은 다음과 같다.
 
@@ -144,8 +144,8 @@ generate -> parse -> validate -> if fail, inject error and retry, max 3x
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Structured outputs](https://platform.openai.com/docs/guides/structured-outputs) — 엄격 모드, 거부, 스키마 요구 사항
-- [OpenAI — Introducing structured outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) — 디코딩 보장을 설명하는 2024년 8월 출시 게시물
-- [Pydantic AI — Output](https://ai.pydantic.dev/output/) — 각 제공자로 직렬화되는 타입 지정 output_type 바인딩
-- [JSON Schema — 2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes) — 표준 명세
-- [Microsoft — Structured outputs in Azure OpenAI](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs) — 엔터프라이즈 배포 노트와 엄격 모드 주의 사항
+- [OpenAI(Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)) 엄격 모드, 거부, 스키마 요구 사항
+- [OpenAI(Introducing structured outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/)) 디코딩 보장을 설명하는 2024년 8월 출시 게시물
+- [Pydantic AI(Output](https://ai.pydantic.dev/output/)) 각 제공자로 직렬화되는 타입 지정 output_type 바인딩
+- [JSON Schema(2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes)) 표준 명세
+- [Microsoft(Structured outputs in Azure OpenAI](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs)) 엔터프라이즈 배포 노트와 엄격 모드 주의 사항

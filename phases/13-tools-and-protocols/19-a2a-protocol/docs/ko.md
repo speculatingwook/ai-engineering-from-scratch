@@ -1,6 +1,6 @@
-# A2A — 에이전트 간(Agent-to-Agent) 프로토콜
+# A2A: 에이전트 간(Agent-to-Agent) 프로토콜
 
-> MCP는 에이전트-툴(agent-to-tool)이다. A2A(Agent2Agent)는 에이전트 간(agent-to-agent)이다 — 서로 다른 프레임워크 위에 구축된 불투명한(opaque) 에이전트들이 협업하게 하는 오픈 프로토콜이다. 2025년 4월 Google이 공개했고, 2025년 6월 Linux Foundation에 기증되었으며, AWS, Cisco, Microsoft, Salesforce, SAP, ServiceNow를 포함한 150곳 이상의 지지자와 함께 2026년 4월 v1.0에 도달했다. IBM의 ACP를 흡수했고 AP2 결제 확장을 추가했다. 이 레슨은 에이전트 카드(Agent Card), 태스크(Task) 수명 주기, 그리고 두 가지 전송 바인딩(transport binding)을 살펴본다.
+> MCP는 에이전트-툴(agent-to-tool)이다. A2A(Agent2Agent)는 에이전트 간(agent-to-agent)이다. 서로 다른 프레임워크 위에 구축된 불투명한(opaque) 에이전트들이 협업하게 하는 오픈 프로토콜이다. 2025년 4월 Google이 공개했고, 2025년 6월 Linux Foundation에 기증되었으며, AWS, Cisco, Microsoft, Salesforce, SAP, ServiceNow를 포함한 150곳 이상의 지지자와 함께 2026년 4월 v1.0에 도달했다. IBM의 ACP를 흡수했고 AP2 결제 확장을 추가했다. 이 레슨은 에이전트 카드(Agent Card), 태스크(Task) 수명 주기, 그리고 두 가지 전송 바인딩(transport binding)을 살펴본다.
 
 **Type:** Build
 **Languages:** Python (stdlib, Agent Card + Task harness)
@@ -71,9 +71,9 @@ submitted -> working -> completed | failed | canceled | rejected
 
 메시지는 하나 이상의 파트를 운반한다:
 
-- `text` — 일반 콘텐츠.
-- `file` — mimeType을 가진 base64 블롭(blob).
-- `data` — 타입이 지정된 JSON 페이로드(호출되는 에이전트를 위한 구조화된 입력).
+- `text`: 일반 콘텐츠.
+- `file`: mimeType을 가진 base64 블롭(blob).
+- `data`: 타입이 지정된 JSON 페이로드(호출되는 에이전트를 위한 구조화된 입력).
 
 예시:
 
@@ -111,7 +111,7 @@ submitted -> working -> completed | failed | canceled | rejected
 
 ### 불투명성 보존 (Opacity preservation)
 
-핵심 설계 원칙: 호출되는 에이전트의 내부 상태는 불투명하다. 호출자는 태스크 상태와 아티팩트를 본다. 호출되는 에이전트의 사고 사슬(chain-of-thought), 그것의 툴 호출, 하위 에이전트 위임 — 모두 보이지 않는다. 이는 툴 호출이 투명한 MCP와 다르다.
+핵심 설계 원칙: 호출되는 에이전트의 내부 상태는 불투명하다. 호출자는 태스크 상태와 아티팩트를 본다. 호출되는 에이전트의 사고 사슬(chain-of-thought), 그것의 툴 호출, 하위 에이전트 위임: 모두 보이지 않는다. 이는 툴 호출이 투명한 MCP와 다르다.
 
 근거: A2A는 경쟁자들이 내부를 드러내지 않고 협업하게 한다. 호출자는 그 에이전트가 서비스를 어떻게 구현하는지 알지 못한 채 "이 고객 서비스 에이전트를 호출"하는 것일 수 있다.
 
@@ -160,7 +160,7 @@ submitted -> working -> completed | failed | canceled | rejected
 
 3. 태스크 스트리밍을 구현하라: 작성 에이전트가 SSE를 통해 세 개의 점진적 아티팩트 청크를 방출하고 호출자가 그것들을 누적한다.
 
-4. MCP 서버를 감싸는 A2A 에이전트를 설계하라. 각 MCP 툴을 A2A 스킬에 매핑하라. 트레이드오프(trade-off)를 기록하라 — 어떤 불투명성이 사라지는가?
+4. MCP 서버를 감싸는 A2A 에이전트를 설계하라. 각 MCP 툴을 A2A 스킬에 매핑하라. 트레이드오프(trade-off)를 기록하라. 어떤 불투명성이 사라지는가?
 
 5. A2A v1.0 발표를 읽고 2026년 4월 기준 어떤 프레임워크에서도 아직 구현되지 않은 기능 하나를 식별하라. (힌트: 멀티홉(multi-hop) 태스크 위임과 관련 있다.)
 
@@ -181,8 +181,8 @@ submitted -> working -> completed | failed | canceled | rejected
 
 ## 더 읽을거리 (Further Reading)
 
-- [a2a-protocol.org](https://a2a-protocol.org/latest/) — 표준 A2A 명세
-- [a2aproject/A2A — GitHub](https://github.com/a2aproject/A2A) — 레퍼런스 구현과 SDK
-- [Linux Foundation — A2A launch press release](https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents) — 2025년 6월 거버넌스 이전
-- [Google Cloud — A2A protocol upgrade](https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade) — 로드맵과 파트너 모멘텀
-- [Google Dev — A2A 1.0 milestone](https://discuss.google.dev/t/the-a2a-1-0-milestone-ensuring-and-testing-backward-compatibility/352258) — v1.0 릴리스 노트와 하위 호환성 지침
+- [a2a-protocol.org](https://a2a-protocol.org/latest/): 표준 A2A 명세
+- [a2aproject/A2A(GitHub](https://github.com/a2aproject/A2A)) 레퍼런스 구현과 SDK
+- [Linux Foundation(A2A launch press release](https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents)) 2025년 6월 거버넌스 이전
+- [Google Cloud(A2A protocol upgrade](https://cloud.google.com/blog/products/ai-machine-learning/agent2agent-protocol-is-getting-an-upgrade)) 로드맵과 파트너 모멘텀
+- [Google Dev(A2A 1.0 milestone](https://discuss.google.dev/t/the-a2a-1-0-milestone-ensuring-and-testing-backward-compatibility/352258)) v1.0 릴리스 노트와 하위 호환성 지침

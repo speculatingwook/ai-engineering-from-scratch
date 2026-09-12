@@ -65,7 +65,7 @@
 
 - **핸드오프 표류(drift).** Agent A가 Agent B로 핸드오프하고 B가 다시 A로 핸드오프한다. 홉(hop) 카운터를 추가하라.
 - **가드레일 우회.** 도구 가드레일은 함수 도구에서만 발화한다. 내장 도구(파일 리더, 웹 페치)는 별도의 정책이 필요하다.
-- **과잉 트레이싱.** 스팬 안의 민감한 콘텐츠. OTel GenAI 콘텐츠 캡처 규칙(Lesson 23)과 짝지어라 — 외부에 저장하고 ID로 참조하라.
+- **과잉 트레이싱.** 스팬 안의 민감한 콘텐츠. OTel GenAI 콘텐츠 캡처 규칙(Lesson 23)과 짝지어라. 외부에 저장하고 ID로 참조하라.
 
 ## 직접 만들기 (Build It)
 
@@ -86,10 +86,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **OpenAI Agents SDK** — OpenAI 우선 제품용.
-- **Claude Agent SDK**(Lesson 17) — Claude 우선 제품용.
-- **LangGraph**(Lesson 13) — 명시적 상태와 내구성 있는 재개를 원할 때.
-- **커스텀** — 정확한 제어(음성, 멀티 프로바이더, 연합 배포)가 필요할 때.
+- **OpenAI Agents SDK**: OpenAI 우선 제품용.
+- **Claude Agent SDK**(Lesson 17): Claude 우선 제품용.
+- **LangGraph**(Lesson 13): 명시적 상태와 내구성 있는 재개를 원할 때.
+- **커스텀**: 정확한 제어(음성, 멀티 프로바이더, 연합 배포)가 필요할 때.
 
 ## 산출물 (Ship It)
 
@@ -98,7 +98,7 @@ python3 code/main.py
 ## 연습 문제 (Exercises)
 
 1. 핸드오프 홉 카운터를 추가하라: N번 전송 후 거부한다. 동작을 추적하라.
-2. `nest_handoff_history`를 옵션으로 구현하라 — 전송 전에 이전 메시지들을 하나의 요약으로 압축한다.
+2. `nest_handoff_history`를 옵션으로 구현하라. 전송 전에 이전 메시지들을 하나의 요약으로 압축한다.
 3. 블로킹 출력 가드레일을 작성하라. 그것을 발동시킬 프롬프트와 통과하는 프롬프트에서 지연 시간을 비교하라.
 4. `add_trace_processor`를 JSON 로거에 배선하라. 스팬당 어떤 형태를 방출하는가?
 5. SDK 문서를 읽어라. stdlib 토이를 `openai-agents-python`으로 포팅하라. 무엇을 잘못 모델링했는가?
@@ -118,7 +118,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/) — 원시 요소, 핸드오프, 가드레일, 트레이싱
-- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview) — Claude 풍의 대응물
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 애초에 언제 핸드오프에 손을 뻗을 것인가
-- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — Agents SDK 스팬이 매핑되는 표준
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): 원시 요소, 핸드오프, 가드레일, 트레이싱
+- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview): Claude 풍의 대응물
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 애초에 언제 핸드오프에 손을 뻗을 것인가
+- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/): Agents SDK 스팬이 매핑되는 표준

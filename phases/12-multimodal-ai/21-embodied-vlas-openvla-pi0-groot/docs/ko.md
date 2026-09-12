@@ -1,6 +1,6 @@
 # 체화된 VLA: RT-2, OpenVLA, π0, GR00T
 
-> 모델이 웹사이트에서 레시피를 읽고 주방 로봇으로 실행한 최초의 사례는 RT-2(Google DeepMind, 2023년 7월)였다. RT-2는 행동(action)을 텍스트 토큰(token)으로 이산화하고, 웹 데이터와 로봇 행동 데이터로 VLM을 공동 파인튜닝(co-fine-tuning)했으며, 웹 규모의 비전-언어 지식이 로봇 제어로 전이된다는 것을 입증했다. OpenVLA(2024년 6월)는 오픈 7B 기준을 출하했다. Physical Intelligence의 π0 시리즈(2024~2025)는 흐름 매칭(flow-matching) 행동 전문가를 더했다. NVIDIA의 GR00T N1(2025년 3월)은 휴머노이드 로봇을 위한 이중 시스템(System 1 / System 2) 제어를 대규모로 제공했다. VLA 프리미티브 — 비전-언어-행동, 보고 읽고 행동하는 단일 모델 — 는 이 단계의 이해 모델과 Phase 15의 자율 시스템을 잇는 다리다.
+> 모델이 웹사이트에서 레시피를 읽고 주방 로봇으로 실행한 최초의 사례는 RT-2(Google DeepMind, 2023년 7월)였다. RT-2는 행동(action)을 텍스트 토큰(token)으로 이산화하고, 웹 데이터와 로봇 행동 데이터로 VLM을 공동 파인튜닝(co-fine-tuning)했으며, 웹 규모의 비전-언어 지식이 로봇 제어로 전이된다는 것을 입증했다. OpenVLA(2024년 6월)는 오픈 7B 기준을 출하했다. Physical Intelligence의 π0 시리즈(2024~2025)는 흐름 매칭(flow-matching) 행동 전문가를 더했다. NVIDIA의 GR00T N1(2025년 3월)은 휴머노이드 로봇을 위한 이중 시스템(System 1 / System 2) 제어를 대규모로 제공했다. VLA 프리미티브(비전-언어-행동, 보고 읽고 행동하는 단일 모델)는 이 단계의 이해 모델과 Phase 15의 자율 시스템을 잇는 다리다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, action tokenizer + VLA inference skeleton)
@@ -40,7 +40,7 @@ PaLM-X VLM을 혼합 데이터로 공동 파인튜닝한다:
 
 RT-2 논문에서 추론(inference)은 VLM 자기회귀 디코드(autoregressive decode)에 묶여 3~5 Hz다.
 
-### OpenVLA — 오픈 7B 기준
+### OpenVLA: 오픈 7B 기준
 
 OpenVLA(Kim et al., 2024년 6월)는 오픈 가중치(weight) RT-2 등가물이다. 7B Llama 백본, DINOv2 + SigLIP 이중 비전 인코더(encoder), 256개 빈에 대한 행동 토큰화.
 
@@ -48,9 +48,9 @@ Open X-Embodiment(22개 로봇에 걸친 97만 개 궤적)로 학습되었다. �
 
 추론: 양자화를 사용한 A100에서 4~5 Hz. 느린 조작에는 충분히 빠르지만, 고빈도 제어에는 그렇지 않다.
 
-### FAST 토크나이저 — 더 빠른 행동 디코드
+### FAST 토크나이저: 더 빠른 행동 디코드
 
-Pertsch et al.(2024)은 이산 빈 토큰화가 비효율적임을 보였다 — 대부분의 행동이 빈 공간의 작은 영역에 모인다. FAST(Frequency-domain Action Sequence Tokenizer)는 DCT로 행동 시퀀스를 압축하고 계수를 양자화한다.
+Pertsch et al.(2024)은 이산 빈 토큰화가 비효율적임을 보였다. 대부분의 행동이 빈 공간의 작은 영역에 모인다. FAST(Frequency-domain Action Sequence Tokenizer)는 DCT로 행동 시퀀스를 압축하고 계수를 양자화한다.
 
 30스텝 행동 궤적은 300개의 이산 빈 토큰 대신 약 10개의 FAST 토큰이 된다. 품질 손실 없이 추론이 3~5배 빨라진다.
 
@@ -66,7 +66,7 @@ Physical Intelligence의 π0(Black et al., 2024년 10월)은 이산 행동 토�
 
 π0.5와 π0-FAST는 점진적 업그레이드다. π0-FAST는 FAST 토큰화와 흐름 매칭을 결합한다.
 
-### GR00T N1 — 휴머노이드를 위한 이중 시스템
+### GR00T N1: 휴머노이드를 위한 이중 시스템
 
 NVIDIA의 GR00T N1(2025년 3월)은 휴머노이드 로봇(30+ DOF, 전신)을 위해 만들어졌다:
 

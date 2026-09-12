@@ -30,7 +30,7 @@ Wang et al. 2022("Self-Consistency Improves Chain of Thought Reasoning")는 같�
 
 N개 샘플을 N개의 *서로 다른* 에이전트로 대체한다. 다른 베이스 모델(Claude, GPT, Llama), 다른 프롬프트, 다른 도구 접근. 이점: 상관되지 않은 오류. 비용: 다른 에이전트는 비용이 다르다. 조정하는 오버헤드가 더해진다.
 
-이질적 토론에 대한 정전(canonical) 2026 명칭은 **A-HMAD** — 적대적 이질 멀티 에이전트 토론(Adversarial Heterogeneous Multi-Agent Debate)이다. 보편적으로 채택되지는 않았지만, 논문들이 "서로 다른 모델이 토론하여 단일 문화 붕괴로 인한 상관 오류를 줄인다"는 의미로 이 용어를 쓴다.
+이질적 토론에 대한 정전(canonical) 2026 명칭은 **A-HMAD**: 적대적 이질 멀티 에이전트 토론(Adversarial Heterogeneous Multi-Agent Debate)이다. 보편적으로 채택되지는 않았지만, 논문들이 "서로 다른 모델이 토론하여 단일 문화 붕괴로 인한 상관 오류를 줄인다"는 의미로 이 용어를 쓴다.
 
 ### 네 가지 토폴로지
 
@@ -101,10 +101,10 @@ Sibyl 프레임워크(Minsky-LLM 문헌에서 인용)는 "배심"을 형식화�
 
 `code/main.py`는 다음을 구현한다.
 
-- `run_star(agents, hub, question)` — 허브가 각 워커를 폴링(poll)하고 집계한다.
-- `run_chain(agents, question)` — 순차적 정제.
-- `run_tree(root, children, question)` — 깊이 2 집계를 동반한 계층적.
-- `run_graph(agents, question, rounds)` — 전체 대 전체 토론, 한정된 라운드.
+- `run_star(agents, hub, question)`: 허브가 각 워커를 폴링(poll)하고 집계한다.
+- `run_chain(agents, question)`: 순차적 정제.
+- `run_tree(root, children, question)`: 깊이 2 집계를 동반한 계층적.
+- `run_graph(agents, question, rounds)`: 전체 대 전체 토론, 한정된 라운드.
 - 스크립트된 이질성 다이얼: 각 에이전트가 자신의 체계적 오류를 나타내는 `error_bias`를 가진다.
 - 각 토폴로지를 N=3, 5, 7에서 실행하고 (accuracy, total_tokens, wallclock_simulated)를 보고하는 측정 하니스(harness).
 
@@ -154,9 +154,9 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Wang et al. — Self-Consistency Improves Chain of Thought Reasoning](https://arxiv.org/abs/2203.11171) — 단일 모델 베이스라인
-- [Du et al. — Improving Factuality and Reasoning via Multiagent Debate](https://arxiv.org/abs/2305.14325) — 에이전트와 라운드 둘 다 독립적으로 중요하다
-- [MultiAgentBench / MARBLE](https://arxiv.org/abs/2503.01935) — 연구에는 그래프, 파이프라인에는 체인이 최선임을 보이는 토폴로지 벤치마크
-- [Should we be going MAD?](https://arxiv.org/abs/2311.17371) — MAD 전략 서베이. MAD가 동일 예산에서 종종 자기 일관성에 진다는 것을 발견
-- [AgentVerse (ICLR 2024)](https://proceedings.iclr.cc/paper_files/paper/2024/file/578e65cdee35d00c708d4c64bce32971-Paper-Conference.pdf) — 자원과 동조 창발 패턴
-- [MARBLE repo](https://github.com/ulab-uiuc/MARBLE) — 레퍼런스 벤치마크 구현
+- [Wang et al.(Self-Consistency Improves Chain of Thought Reasoning](https://arxiv.org/abs/2203.11171)) 단일 모델 베이스라인
+- [Du et al.(Improving Factuality and Reasoning via Multiagent Debate](https://arxiv.org/abs/2305.14325)) 에이전트와 라운드 둘 다 독립적으로 중요하다
+- [MultiAgentBench / MARBLE](https://arxiv.org/abs/2503.01935): 연구에는 그래프, 파이프라인에는 체인이 최선임을 보이는 토폴로지 벤치마크
+- [Should we be going MAD?](https://arxiv.org/abs/2311.17371): MAD 전략 서베이. MAD가 동일 예산에서 종종 자기 일관성에 진다는 것을 발견
+- [AgentVerse (ICLR 2024)](https://proceedings.iclr.cc/paper_files/paper/2024/file/578e65cdee35d00c708d4c64bce32971-Paper-Conference.pdf): 자원과 동조 창발 패턴
+- [MARBLE repo](https://github.com/ulab-uiuc/MARBLE): 레퍼런스 벤치마크 구현

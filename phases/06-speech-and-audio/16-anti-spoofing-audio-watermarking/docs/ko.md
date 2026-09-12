@@ -1,4 +1,4 @@
-# 음성 안티 스푸핑 & 오디오 워터마킹(Voice Anti-Spoofing & Audio Watermarking) — ASVspoof 5, AudioSeal, WaveVerify
+# 음성 안티 스푸핑 & 오디오 워터마킹(Voice Anti-Spoofing & Audio Watermarking): ASVspoof 5, AudioSeal, WaveVerify
 
 > 음성 복제(voice cloning)는 방어보다 빠르게 출시되었다. 2026년 프로덕션(production) 음성 시스템에는 두 가지가 필요하다. 진짜 대 가짜 음성을 분류하는 탐지기(AASIST, RawNet2)와, 압축과 편집을 견디는 워터마크(AudioSeal). 둘 다 출시하거나, 음성 복제를 출시하지 마라.
 
@@ -19,20 +19,20 @@
 
 ## 개념 (The Concept)
 
-![안티 스푸핑 vs 워터마킹 vs 출처 — 세 가지 방어 계층](../assets/spoofing-watermark.svg)
+![안티 스푸핑 vs 워터마킹 vs 출처: 세 가지 방어 계층](../assets/spoofing-watermark.svg)
 
-### ASVspoof 5 — 2024-2025년 벤치마크
+### ASVspoof 5: 2024-2025년 벤치마크
 
 이전 판들로부터의 가장 큰 변화:
 
-- **크라우드소싱 데이터**(스튜디오 클린이 아님) — 현실적 조건.
+- **크라우드소싱 데이터**(스튜디오 클린이 아님): 현실적 조건.
 - **약 2000명의 화자**(이전 약 100명 대비).
 - **32개의 공격 알고리즘.** TTS + 음성 변환 + 적대적 섭동.
 - **두 트랙.** 대응책(Countermeasure, CM) 단독 탐지. 생체 시스템을 위한 스푸핑 강인 ASV(Spoofing-robust ASV, SASV).
 
 ASVspoof 5에서의 최신 기술(state-of-the-art): 약 7.23% EER. 더 오래된 ASVspoof 2019 LA에서: 0.42% EER. 실세계 배포: 야생 클립에서 5-10% EER를 예상하라.
 
-### AASIST와 RawNet2 — 탐지 모델 계열
+### AASIST와 RawNet2: 탐지 모델 계열
 
 **AASIST** (2021, 2026년까지 갱신됨). 스펙트럴 특성에 대한 그래프 어텐션(graph-attention). ASVspoof 5 대응책 과제에서 현재 SOTA.
 
@@ -40,7 +40,7 @@ ASVspoof 5에서의 최신 기술(state-of-the-art): 약 7.23% EER. 더 오래�
 
 **NeXt-TDNN + SSL 특성.** 2025년 변형: ECAPA 스타일 + WavLM 특성 + 포컬 손실(focal loss). ASVspoof 2019 LA에서 0.42% EER를 달성한다.
 
-### AudioSeal — 2024년 워터마크 기본값
+### AudioSeal: 2024년 워터마크 기본값
 
 Meta의 **AudioSeal** (2024년 1월, v0.2 2024년 12월). 핵심 설계:
 
@@ -114,7 +114,7 @@ result, decoded_payload = detector.detect_watermark(watermarked, sample_rate=160
 # decoded_payload: 16 bits; match against embedded payload
 ```
 
-### 3단계: 평가 — EER
+### 3단계: 평가: EER
 
 ```python
 def eer(real_scores, fake_scores):
@@ -168,7 +168,7 @@ def safe_tts(text, voice, clone_reference=None):
 
 1. **쉬움.** `code/main.py`를 실행한다. 합성 오디오에 대한 장난감 탐지기 + 장난감 워터마크 삽입/탐지.
 2. **보통.** `audioseal`을 설치하고 TTS 출력에 16비트 페이로드를 심은 뒤 다시 디코딩한다. 잡음으로 오디오를 손상시키고 비트 복구 정확도를 측정한다.
-3. **어려움.** ASVspoof 2019 LA에서 RawNet2 또는 AASIST를 파인튜닝한다. EER를 측정한다. F5-TTS로 생성된 클립의 홀드아웃(held-out) 셋에서 테스트한다 — OOD 탐지가 어떻게 저하되는지 본다.
+3. **어려움.** ASVspoof 2019 LA에서 RawNet2 또는 AASIST를 파인튜닝한다. EER를 측정한다. F5-TTS로 생성된 클립의 홀드아웃(held-out) 셋에서 테스트한다. OOD 탐지가 어떻게 저하되는지 본다.
 
 ## 핵심 용어 (Key Terms)
 
@@ -184,9 +184,9 @@ def safe_tts(text, voice, clone_reference=None):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Todisco et al. (2024). ASVspoof 5](https://dl.acm.org/doi/10.1016/j.csl.2025.101825) — 현재 벤치마크.
-- [Defossez et al. (2024). AudioSeal](https://arxiv.org/abs/2401.17264) — 워터마크 기본값.
-- [Chen et al. (2025). WaveVerify](https://arxiv.org/abs/2507.21150) — 시간적 공격용 MoE 탐지기.
-- [Jung et al. (2022). AASIST](https://arxiv.org/abs/2110.01200) — SOTA 탐지 백본.
-- [AudioMarkBench (2024)](https://proceedings.neurips.cc/paper_files/paper/2024/file/5d9b7775296a641a1913ab6b4425d5e8-Paper-Datasets_and_Benchmarks_Track.pdf) — 강인성 평가.
-- [C2PA specification](https://c2pa.org/specifications/specifications/) — 출처 매니페스트 형식.
+- [Todisco et al. (2024). ASVspoof 5](https://dl.acm.org/doi/10.1016/j.csl.2025.101825): 현재 벤치마크.
+- [Defossez et al. (2024). AudioSeal](https://arxiv.org/abs/2401.17264): 워터마크 기본값.
+- [Chen et al. (2025). WaveVerify](https://arxiv.org/abs/2507.21150): 시간적 공격용 MoE 탐지기.
+- [Jung et al. (2022). AASIST](https://arxiv.org/abs/2110.01200): SOTA 탐지 백본.
+- [AudioMarkBench (2024)](https://proceedings.neurips.cc/paper_files/paper/2024/file/5d9b7775296a641a1913ab6b4425d5e8-Paper-Datasets_and_Benchmarks_Track.pdf): 강인성 평가.
+- [C2PA specification](https://c2pa.org/specifications/specifications/): 출처 매니페스트 형식.

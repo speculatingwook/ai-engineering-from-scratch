@@ -1,4 +1,4 @@
-# T5, BART — 인코더-디코더 모델(Encoder-Decoder Models)
+# T5, BART: 인코더-디코더 모델(Encoder-Decoder Models)
 
 > 인코더(encoder)는 이해한다. 디코더(decoder)는 생성한다. 둘을 다시 합치면 입력 → 출력 과제를 위해 만들어진 모델을 얻는다. 번역, 요약, 재작성, 전사(transcribe).
 
@@ -51,7 +51,7 @@ target tokens ─▶ decoder block                   │
 
 결정적으로, 인코더는 입력당 한 번 실행된다. 디코더는 자기회귀(autoregressive)적으로 실행되지만 매 스텝 *같은* 인코더 출력에 크로스 어텐션한다. 인코더 출력을 캐싱하면 긴 입력에서 공짜로 속도가 빨라진다.
 
-### T5 사전 학습 — 스팬 손상
+### T5 사전 학습: 스팬 손상
 
 입력의 무작위 스팬(평균 길이 3 토큰, 총 15%)을 고른다. 각 스팬을 고유한 센티넬(sentinel)로 교체한다: `<extra_id_0>`, `<extra_id_1>` 등. 디코더는 센티넬 접두사와 함께 손상된 스팬만 출력한다.
 
@@ -62,7 +62,7 @@ target: <extra_id_0> brown <extra_id_1> over the lazy
 
 전체 시퀀스를 예측하는 것보다 저렴한 신호다. T5 논문의 절제 실험에서 MLM(BERT) 및 prefix-LM(UniLM)과 경쟁력 있었다.
 
-### BART 사전 학습 — 다중 잡음 제거
+### BART 사전 학습: 다중 잡음 제거
 
 BART는 다섯 가지 잡음 함수를 시도한다.
 
@@ -84,7 +84,7 @@ GPT와 같은 자기회귀 생성이다. greedy / 빔(beam) / top-p 샘플링(sa
 |------|------------------|-----|
 | 번역 | 보통 그렇다 | 명확한 소스 시퀀스. 고정된 출력 분포. 빔 서치가 동작 |
 | 음성-투-텍스트 | 그렇다 (Whisper) | 입력 모달리티가 출력과 다름. 인코더가 오디오 특성을 형성 |
-| 챗 / 추론 | 아니다, 디코더 전용 | 지속적 "입력" 없음 — 대화가 곧 시퀀스 |
+| 챗 / 추론 | 아니다, 디코더 전용 | 지속적 "입력" 없음: 대화가 곧 시퀀스 |
 | 코드 완성 | 보통 아니다 | 긴 컨텍스트의 디코더 전용이 이김. Qwen 2.5 Coder 같은 코드 모델은 디코더 전용 |
 | 요약 | 둘 다 동작 | BART, PEGASUS가 초기 디코더 전용 베이스라인을 이김. 현대 디코더 전용 LLM이 이를 맞춤 |
 | 구조화된 추출 | 둘 다 | "텍스트 → 텍스트"가 어떤 출력 형식이든 흡수하므로 T5가 깔끔함 |
@@ -93,7 +93,7 @@ GPT와 같은 자기회귀 생성이다. greedy / 빔(beam) / top-p 샘플링(sa
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`를 참조하라. 장난감 코퍼스에 대해 T5 스타일 스팬 손상을 구현한다 — 이 레슨에서 가장 유용한 단일 조각이다. 이후의 모든 인코더-디코더 사전 학습 레시피에 등장하기 때문이다.
+`code/main.py`를 참조하라. 장난감 코퍼스에 대해 T5 스타일 스팬 손상을 구현한다. 이 레슨에서 가장 유용한 단일 조각이다. 이후의 모든 인코더-디코더 사전 학습 레시피에 등장하기 때문이다.
 
 ### 1단계: 스팬 손상
 
@@ -160,5 +160,5 @@ T5의 트릭: 과제 이름이 입력 텍스트에 들어간다. 각 과제가 �
 - [Raffel et al. (2019). Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683) — T5.
 - [Lewis et al. (2019). BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension](https://arxiv.org/abs/1910.13461) — BART.
 - [Chung et al. (2022). Scaling Instruction-Finetuned Language Models](https://arxiv.org/abs/2210.11416) — Flan-T5.
-- [Radford et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356) — Whisper, 정전적 2026년 인코더-디코더.
-- [HuggingFace `modeling_t5.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/t5/modeling_t5.py) — 레퍼런스 구현.
+- [Radford et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356): Whisper, 정전적 2026년 인코더-디코더.
+- [HuggingFace `modeling_t5.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/t5/modeling_t5.py): 레퍼런스 구현.

@@ -1,4 +1,4 @@
-# 프로덕션에서의 MCP 인증 — iii 프리미티브 위에서 DCR, JWKS 회전, 오디언스 고정 토큰
+# 프로덕션에서의 MCP 인증: iii 프리미티브 위에서 DCR, JWKS 회전, 오디언스 고정 토큰
 
 > 레슨 16은 OAuth 2.1 상태 머신(state machine)을 메모리에 세웠다. 2026년에는 실제 조직에 출하하는 모든 MCP 서버가 프로덕션(production) 인증 뒤에 자리한다. 동적 클라이언트 등록(dynamic client registration)(RFC 7591), 인가 서버 메타데이터 디스커버리(RFC 8414), 새벽 3시의 토큰 검증을 깨뜨리지 않는 JWKS 회전, 혼동된 대리자(confused-deputy) 재사용을 거부하는 오디언스 고정(audience-pinned) 토큰이 그것이다. 이 레슨은 이 모든 것을 iii 프리미티브로 연결한다. HTTP와 cron을 위한 `iii.registerTrigger`, 인증 로직을 위한 `iii.registerFunction`, 캐시된 키를 위한 `state::set/get`을 엮어, 인증 표면이 엔진의 다른 모든 워크로드처럼 관찰 가능하고 재시작 가능하며 재생 가능하도록 만든다.
 
@@ -13,7 +13,7 @@
 - MCP 클라이언트가 관리자 개입 없이 등록되도록 RFC 7591 동적 클라이언트 등록 구현하기.
 - 서명 검증이 키 롤오버(roll-over)에서 살아남도록 cron 트리거로 JWKS 키를 캐싱하고 회전하기.
 - RFC 8707 리소스 인디케이터(resource indicator)로 토큰을 단일 MCP 리소스에 고정하고 혼동된 대리자 재사용을 거부하기.
-- 모든 엔드포인트와 백그라운드 작업을 iii 프리미티브로 연결하기 — HTTP 트리거, cron 트리거, 명명된 함수, `state::*` 읽기 — 그래서 단 한 번의 재시작이 인증 표면을 재구축한다.
+- 모든 엔드포인트와 백그라운드 작업을 iii 프리미티브로 연결하기(HTTP 트리거, cron 트리거, 명명된 함수, `state::*` 읽기) 그래서 단 한 번의 재시작이 인증 표면을 재구축한다.
 - IdP 역량 매트릭스를 읽고, IdP가 MCP의 인증 프로파일(profile)을 만족하지 못할 때 배포를 거부하기.
 
 ## 문제 (The Problem)
@@ -30,7 +30,7 @@
 
 ## 개념 (The Concept)
 
-### RFC 8414 — OAuth 인가 서버 메타데이터
+### RFC 8414: OAuth 인가 서버 메타데이터
 
 `/.well-known/oauth-authorization-server`에 있는 문서가 클라이언트에 필요한 모든 것을 기술한다:
 
@@ -60,7 +60,7 @@ MCP를 위해 IdP를 신뢰하기 전에 검증하는 계약:
 
 이 중 하나라도 빠지면, MCP 서버는 이 IdP에 대한 배포를 거부한다. 잘못된 것은 코드가 아니라 배포 매니페스트다.
 
-### RFC 9728 (복습) — 보호된 리소스 메타데이터
+### RFC 9728 (복습): 보호된 리소스 메타데이터
 
 레슨 16이 RFC 9728을 다뤘다. 프로덕션에서의 차이: 이 문서는 클라이언트가 *이* MCP 서버가 신뢰하는 인가 서버를 찾기 위해 보는 유일한 곳이다. 단일 MCP 서버가 여러 IdP의 토큰을 받아들일 수 있다(직원용 하나, 파트너용 하나). RFC 9728은 그 집합을 선언하고, RFC 8414는 각 IdP가 무엇을 지원하는지 문서화한다.
 
@@ -74,7 +74,7 @@ MCP를 위해 IdP를 신뢰하기 전에 검증하는 계약:
 }
 ```
 
-### RFC 7591 — 동적 클라이언트 등록
+### RFC 7591: 동적 클라이언트 등록
 
 DCR이 없으면, 모든 MCP 클라이언트(Cursor, Claude Desktop, 커스텀 에이전트)는 IdP 관리자와의 대역 외 교환이 필요하다. DCR이 있으면, 클라이언트는 다음을 게시한다:
 
@@ -115,11 +115,11 @@ Content-Type: application/json
 - `software_statement`(클라이언트를 보증하는 서명된 JWT)는 일부 엔터프라이즈 IdP에서 요구된다. 레슨의 목(mock)은 이를 건너뛰고, 프로덕션은 localhost 리다이렉트 URI가 아닌 곳에서 온 서명되지 않은 등록을 거부하는 검증 단계를 연결한다.
 - `registration_access_token`은 평문이 아니라 해시로 저장해야 한다. 이 토큰을 도난당하면 공격자가 클라이언트의 리다이렉트 URI를 다시 쓸 수 있다.
 
-### RFC 8707 (복습) — 리소스 인디케이터
+### RFC 8707 (복습): 리소스 인디케이터
 
 레슨 16이 형태를 확립했다. 프로덕션 규칙: 모든 토큰 요청이 `resource=<canonical-mcp-url>`을 포함하고, MCP 서버는 모든 호출에서 `token.aud`가 자신의 리소스 URL과 일치하는지 검증한다. MCP 서버가 `https://notes.example.com/mcp`에서 도달 가능하다면, 표준 URL은 `https://notes.example.com`이다. 경로 컴포넌트는 제외되어 단일 서버가 하나의 오디언스 아래 여러 경로를 호스팅한다.
 
-### RFC 7636 (복습) — PKCE
+### RFC 7636 (복습): PKCE
 
 PKCE는 OAuth 2.1에서 필수다. 레슨의 인가 코드(authorization-code) 흐름은 항상 `code_challenge`와 `code_verifier`를 운반한다. 서버는 검증자(verifier)가 없거나 저장된 챌린지로 해시되지 않는 검증자를 가진 토큰 요청을 모두 거부한다.
 
@@ -231,8 +231,8 @@ if not result["valid"]:
 서버 B의 검증자:
 
 1. JWT를 디코드하고, `kid`로 JWKS를 가져와 서명을 검증한다.
-2. `iss`를 자신의 보호된 리소스 메타데이터의 `authorization_servers`와 대조한다. (통과 — 동일한 IdP.)
-3. `aud == "https://tasks.example.com"`을 확인한다. (실패 — 토큰의 `aud`는 `https://notes.example.com`이다.)
+2. `iss`를 자신의 보호된 리소스 메타데이터의 `authorization_servers`와 대조한다. (통과: 동일한 IdP.)
+3. `aud == "https://tasks.example.com"`을 확인한다. (실패: 토큰의 `aud`는 `https://notes.example.com`이다.)
 4. `WWW-Authenticate: Bearer error="invalid_token", error_description="audience mismatch"`와 함께 401을 반환한다.
 
 오디언스 클레임은 프로토콜 계층에서 이 공격에 대한 유일한 방어다. 성능을 위해 이를 건너뛰는 것이 가장 흔한 프로덕션 실수다. 검증자는 세션 시작 시점뿐 아니라 모든 요청에서 실행되어야 한다.
@@ -241,7 +241,7 @@ if not result["valid"]:
 
 - **오래된 JWKS.** 검증자가 키 회전 후 유효한 토큰을 거부한다. 해결책은 위의 cron+폴백 패턴이다. 갱신 작업 없이 JWKS를 절대 캐시하지 말라.
 - **누락된 `aud` 클레임.** 일부 IdP는 토큰 요청에 `resource`가 없으면 기본적으로 `aud`를 생략한다. 검증자는 `aud`가 누락된 토큰을 거부해야 하며, 부재를 와일드카드로 취급해서는 안 된다.
-- **스코프 업그레이드 레이스.** 동일 사용자에 대한 두 개의 동시 스텝업(step-up) 흐름이 둘 다 성공해 서로 다른 스코프를 가진 두 개의 액세스 토큰을 만들 수 있다. 검증자는 "사용자의 현재 스코프"를 조회하지 말고 요청에 제시된 토큰을 사용해야 한다 — 전자는 TOCTOU 윈도우를 만든다.
+- **스코프 업그레이드 레이스.** 동일 사용자에 대한 두 개의 동시 스텝업(step-up) 흐름이 둘 다 성공해 서로 다른 스코프를 가진 두 개의 액세스 토큰을 만들 수 있다. 검증자는 "사용자의 현재 스코프"를 조회하지 말고 요청에 제시된 토큰을 사용해야 한다. 전자는 TOCTOU 윈도우를 만든다.
 - **등록 토큰 도난.** 유출된 `registration_access_token`은 공격자가 리다이렉트 URI를 다시 쓰게 한다. 저장 시 해시하고, 모든 업데이트에서 클라이언트가 평문을 제시하도록 요구하고, 의심 시 회전하라.
 - **`iss` 미고정.** 임의의 `iss`를 받아들이는 검증자는 공격자가 자신의 인가 서버를 세우고, 대상 오디언스용 클라이언트를 등록하고, 토큰을 발급하게 한다. 보호된 리소스 메타데이터의 `authorization_servers` 목록이 허용 목록(allow-list)이다; 이를 강제하라.
 
@@ -294,10 +294,10 @@ if not result["valid"]:
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Authorization spec (2025-11-25)](https://modelcontextprotocol.io/specification/draft/basic/authorization) — 이 레슨이 구현하는 MCP 인증 프로파일
-- [RFC 8414 — OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414) — 디스커버리 계약
+- [MCP(Authorization spec (2025-11-25)](https://modelcontextprotocol.io/specification/draft/basic/authorization))이 레슨이 구현하는 MCP 인증 프로파일
+- [RFC 8414(OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)) 디스커버리 계약
 - [RFC 7591 — OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591) — DCR
-- [RFC 7636 — Proof Key for Code Exchange (PKCE)](https://datatracker.ietf.org/doc/html/rfc7636) — 퍼블릭 클라이언트 소유 증명
-- [RFC 8707 — Resource Indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707) — 오디언스 고정
-- [RFC 9728 — OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728) — 리소스 서버 디스커버리
-- [OAuth 2.1 draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1) — 통합된 OAuth 기반
+- [RFC 7636(Proof Key for Code Exchange (PKCE)](https://datatracker.ietf.org/doc/html/rfc7636)) 퍼블릭 클라이언트 소유 증명
+- [RFC 8707(Resource Indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707)) 오디언스 고정
+- [RFC 9728(OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728)) 리소스 서버 디스커버리
+- [OAuth 2.1 draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1): 통합된 OAuth 기반

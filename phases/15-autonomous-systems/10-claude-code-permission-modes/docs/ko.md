@@ -1,6 +1,6 @@
 # 자율 에이전트로서의 Claude Code: 권한 모드와 Auto Mode
 
-> Claude Code는 일곱 가지 권한 모드(permission mode)를 노출한다. "plan"은 모든 액션 전에 묻고, "default"는 위험한 것만 묻고, "acceptEdits"는 파일 쓰기를 자동 승인하되 셸 실행은 여전히 확인하며, "bypassPermissions"는 모든 것을 승인한다. Auto Mode(2026년 3월 24일)는 액션별 승인을 2단계 병렬 안전 분류기(classifier)로 대체한다. 단일 토큰(token) 빠른 검사가 모든 액션에서 돌고, 플래그된(flagged) 액션은 사고의 사슬(chain-of-thought) 심층 검토를 촉발한다. 액션 예산은 `max_turns`와 `max_budget_usd`로 강제된다. Auto Mode는 리서치 프리뷰(research preview)로 출시되었다 — Anthropic은 분류기만으로는 충분하지 않다고 명시적으로 밝혔다.
+> Claude Code는 일곱 가지 권한 모드(permission mode)를 노출한다. "plan"은 모든 액션 전에 묻고, "default"는 위험한 것만 묻고, "acceptEdits"는 파일 쓰기를 자동 승인하되 셸 실행은 여전히 확인하며, "bypassPermissions"는 모든 것을 승인한다. Auto Mode(2026년 3월 24일)는 액션별 승인을 2단계 병렬 안전 분류기(classifier)로 대체한다. 단일 토큰(token) 빠른 검사가 모든 액션에서 돌고, 플래그된(flagged) 액션은 사고의 사슬(chain-of-thought) 심층 검토를 촉발한다. 액션 예산은 `max_turns`와 `max_budget_usd`로 강제된다. Auto Mode는 리서치 프리뷰(research preview)로 출시되었다. Anthropic은 분류기만으로는 충분하지 않다고 명시적으로 밝혔다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, two-stage classifier simulator)
@@ -35,19 +35,19 @@ Claude Code의 권한 시스템은 Anthropic의 답이다. "자율 / 비자율"�
 
 Auto Mode(2026년 3월 24일 출시)는 액션별 승인을 모델에 위임하는 최초의 권한 모드다. 구조:
 
-1. **1단계 — 단일 토큰 분류기.** 제안된 모든 액션에서 돈다. 저렴하다. "safe" 또는 "flag"를 반환한다. 승인된 액션이 큐에서 대기하지 않도록 메인 에이전트 루프와 병렬로 돌게끔 설계되었다.
-2. **2단계 — 보조 정책/안전 검토.** 플래그된 액션에서만 돈다. 그 액션, 세션의 현재 상태, 선언된 과제에 대해 집중적인 정책 및 안전 평가를 수행한다. 신뢰도가 낮으면 사용자 HITL(human-in-the-loop)로 격상한다.
+1. **1단계: 단일 토큰 분류기.** 제안된 모든 액션에서 돈다. 저렴하다. "safe" 또는 "flag"를 반환한다. 승인된 액션이 큐에서 대기하지 않도록 메인 에이전트 루프와 병렬로 돌게끔 설계되었다.
+2. **2단계: 보조 정책/안전 검토.** 플래그된 액션에서만 돈다. 그 액션, 세션의 현재 상태, 선언된 과제에 대해 집중적인 정책 및 안전 평가를 수행한다. 신뢰도가 낮으면 사용자 HITL(human-in-the-loop)로 격상한다.
 
 예산 통제는 분류기 옆에 자리한다:
 
-- `max_turns` — 한 세션 내 총 반복 횟수.
-- `max_budget_usd` — 세션을 중단시키는 달러 상한.
+- `max_turns`: 한 세션 내 총 반복 횟수.
+- `max_budget_usd`: 세션을 중단시키는 달러 상한.
 - 도구별 액션 횟수 제한(예: `WebFetch` 호출 N회 이하 등).
 
 ### 시스템이 잡는 것
 
 - 주입된 명령이 알려진 위험 액션 형태에 매핑되는, 도구 입력으로의 직접적 프롬프트 주입(prompt injection).
-- 반복적 도구 루프 — 분류기는 액션 N+1이 액션 N과 거의 동일함을, 다섯 번 연속으로 볼 수 있다.
+- 반복적 도구 루프: 분류기는 액션 N+1이 액션 N과 거의 동일함을, 다섯 번 연속으로 볼 수 있다.
 - 다른 면에서는 파일 편집만 하는 세션에서 명백히 범위 밖인 셸 명령.
 
 ### 시스템이 놓칠 수 있는 것
@@ -102,8 +102,8 @@ Anthropic은 Auto Mode를 리서치 프리뷰로 출시했다. 문서는 분류�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop) — 권한 모드, 예산, 액션 형식.
-- [Anthropic — Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) — 관리형 서비스 실행 모델.
-- [Anthropic — Claude Code product page](https://www.anthropic.com/product/claude-code) — 기능 표면과 Auto Mode 발표.
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — 분류기 판단을 형성하는 이유 기반 층.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 장기 지평 권한 설계에 대한 내부 관점.
+- [Anthropic(How the agent loop works](https://code.claude.com/docs/en/agent-sdk/agent-loop)) 권한 모드, 예산, 액션 형식.
+- [Anthropic(Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)) 관리형 서비스 실행 모델.
+- [Anthropic(Claude Code product page](https://www.anthropic.com/product/claude-code)) 기능 표면과 Auto Mode 발표.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 분류기 판단을 형성하는 이유 기반 층.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 권한 설계에 대한 내부 관점.

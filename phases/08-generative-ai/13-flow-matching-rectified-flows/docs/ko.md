@@ -66,11 +66,11 @@ x_{t-Δt} = x_t - Δt · v_θ(x_t, t)
 
 세 가지 이유다.
 
-1. **시뮬레이션 없는 학습** — 학습 중 ODE 전개가 없어 구현이 자명하다.
-2. **더 나은 손실 기하** — 곧은 경로는 일관된 신호 대 잡음비(SNR)를 갖는 반면, DDPM ε-손실은 스케줄 가장자리에서 SNR이 나쁘다.
-3. **더 빠른 추론** — SDXL-Turbo 품질에서 4-8스텝, 일관성 증류로 1스텝.
+1. **시뮬레이션 없는 학습**: 학습 중 ODE 전개가 없어 구현이 자명하다.
+2. **더 나은 손실 기하**: 곧은 경로는 일관된 신호 대 잡음비(SNR)를 갖는 반면, DDPM ε-손실은 스케줄 가장자리에서 SNR이 나쁘다.
+3. **더 빠른 추론**: SDXL-Turbo 품질에서 4-8스텝, 일관성 증류로 1스텝.
 
-## 플로 매칭 대 DDPM — 정확한 연결
+## 플로 매칭 대 DDPM: 정확한 연결
 
 가우시안 조건부 경로를 쓰는 플로 매칭은 *특정 노이즈 스케줄을 가진* 디퓨전이다. `x_t = α(t) x_0 + σ(t) x_1` 스케줄을 고르면 플로 매칭은 `v = α'·x_0 - σ'·x_1`를 가진 스트라토노비치(Stratonovich) 재정식화된 디퓨전을 복원한다. 가우시안 경로에 대해 둘은 대수적으로 동등하다.
 
@@ -167,10 +167,10 @@ def sample(net, num_steps):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Liu, Gong, Liu (2022). Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow](https://arxiv.org/abs/2209.03003) — 정류 흐름.
-- [Lipman et al. (2023). Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747) — 플로 매칭.
-- [Esser et al. (2024). Scaling Rectified Flow Transformers for High-Resolution Image Synthesis](https://arxiv.org/abs/2403.03206) — SD3, 대규모 정류 흐름.
-- [Albergo, Vanden-Eijnden (2023). Stochastic Interpolants](https://arxiv.org/abs/2303.08797) — FM + 디퓨전을 포괄하는 일반 프레임워크.
-- [Song et al. (2023). Consistency Models](https://arxiv.org/abs/2303.01469) — 디퓨전 / 흐름의 1스텝 증류.
-- [Sauer et al. (2023). Adversarial Diffusion Distillation (SDXL-Turbo)](https://arxiv.org/abs/2311.17042) — 터보 변종.
-- [Black Forest Labs (2024). Flux.1 models](https://blackforestlabs.ai/announcing-black-forest-labs/) — 프로덕션의 플로 매칭.
+- [Liu, Gong, Liu (2022). Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow](https://arxiv.org/abs/2209.03003): 정류 흐름.
+- [Lipman et al. (2023). Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747): 플로 매칭.
+- [Esser et al. (2024). Scaling Rectified Flow Transformers for High-Resolution Image Synthesis](https://arxiv.org/abs/2403.03206): SD3, 대규모 정류 흐름.
+- [Albergo, Vanden-Eijnden (2023). Stochastic Interpolants](https://arxiv.org/abs/2303.08797): FM + 디퓨전을 포괄하는 일반 프레임워크.
+- [Song et al. (2023). Consistency Models](https://arxiv.org/abs/2303.01469): 디퓨전 / 흐름의 1스텝 증류.
+- [Sauer et al. (2023). Adversarial Diffusion Distillation (SDXL-Turbo)](https://arxiv.org/abs/2311.17042): 터보 변종.
+- [Black Forest Labs (2024). Flux.1 models](https://blackforestlabs.ai/announcing-black-forest-labs/): 프로덕션의 플로 매칭.

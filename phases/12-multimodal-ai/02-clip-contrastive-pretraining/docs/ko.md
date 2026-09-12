@@ -149,9 +149,9 @@ CLIP 계열 모델은 ImageNet 제로샷에서 76% 부근에서 멈춘다(CLIP-G
 
 ## 더 읽을거리 (Further Reading)
 
-- [Radford et al. — Learning Transferable Visual Models From Natural Language Supervision (arXiv:2103.00020)](https://arxiv.org/abs/2103.00020) — CLIP 논문.
+- [Radford et al.(Learning Transferable Visual Models From Natural Language Supervision (arXiv:2103.00020)](https://arxiv.org/abs/2103.00020)) CLIP 논문.
 - [Zhai et al. — Sigmoid Loss for Language Image Pre-Training (arXiv:2303.15343)](https://arxiv.org/abs/2303.15343) — SigLIP.
-- [Tschannen et al. — SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) — 다국어 + NaFlex.
-- [Jia et al. — ALIGN (arXiv:2102.05918)](https://arxiv.org/abs/2102.05918) — 잡음 섞인 웹 데이터로 스케일링.
-- [Cherti et al. — Reproducible scaling laws for contrastive language-image learning (arXiv:2212.07143)](https://arxiv.org/abs/2212.07143) — OpenCLIP 스케일링 법칙.
+- [Tschannen et al.(SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786)) 다국어 + NaFlex.
+- [Jia et al.(ALIGN (arXiv:2102.05918)](https://arxiv.org/abs/2102.05918)) 잡음 섞인 웹 데이터로 스케일링.
+- [Cherti et al.(Reproducible scaling laws for contrastive language-image learning (arXiv:2212.07143)](https://arxiv.org/abs/2212.07143)) OpenCLIP 스케일링 법칙.
 </content>

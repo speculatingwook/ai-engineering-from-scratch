@@ -1,4 +1,4 @@
-# MCP 기초 — 기본 요소, 생명 주기, JSON-RPC 베이스
+# MCP 기초: 기본 요소, 생명 주기, JSON-RPC 베이스
 
 > MCP 이전의 모든 통합은 일회성이었다. Model Context Protocol은 2024년 11월 Anthropic이 처음 출시했고 이제 Linux Foundation의 Agentic AI Foundation이 관리하며, 어떤 클라이언트든 어떤 서버와 대화할 수 있도록 탐색(discovery)과 호출을 표준화한다. 2025-11-25 명세는 여섯 가지 기본 요소(primitive)(서버 셋, 클라이언트 셋), 3단계 생명 주기(lifecycle), JSON-RPC 2.0 와이어 형식(wire format)에 이름을 붙인다. 이 셋을 익히면 이 phase의 나머지 MCP 챕터는 그냥 읽으면 된다.
 
@@ -46,7 +46,7 @@ MCP의 모든 능력은 이 여섯 중 정확히 하나에 속한다. Phase 13 �
 
 - 요청: `{jsonrpc: "2.0", id, method, params}`.
 - 응답: `{jsonrpc: "2.0", id, result | error}`.
-- 알림: `{jsonrpc: "2.0", method, params}` — `id` 없음, 응답이 기대되지 않음.
+- 알림: `{jsonrpc: "2.0", method, params}`: `id` 없음, 응답이 기대되지 않음.
 
 베이스 명세는 기본 요소별로 그룹화된 약 15개 메서드를 가진다. 중요한 것들:
 
@@ -132,7 +132,7 @@ JSON-RPC 2.0(2010)은 가벼운 양방향 프로토콜이다. REST는 클라이�
 
 2. `notifications/progress`를 처리하도록 파서를 확장하라. 메시지 형태: `{method: "notifications/progress", params: {progressToken, progress, total}}`. 오래 걸리는 `tools/call`이 진행 중일 때 그것을 내보내고, 클라이언트 핸들러가 진행 막대(progress bar)를 표시할지 확인하라.
 
-3. MCP 2025-11-25 명세를 처음부터 끝까지 읽어라 — 전체 문서는 약 80페이지다. 대부분의 서버가 필요로 하지 않는 능력 플래그 하나를 식별하라. 힌트: 리소스 구독과 관련 있다.
+3. MCP 2025-11-25 명세를 처음부터 끝까지 읽어라. 전체 문서는 약 80페이지다. 대부분의 서버가 필요로 하지 않는 능력 플래그 하나를 식별하라. 힌트: 리소스 구독과 관련 있다.
 
 4. 가상의 "cron job" 기능이 속할 기본 요소를 종이에 스케치하라. (힌트: 서버는 클라이언트가 예약된 시간에 그것을 호출하기를 원한다. 여섯 기본 요소 중 어느 것도 오늘날 들어맞지 않는다.) MCP의 2026년 로드맵에 이를 위한 초안 SEP가 있다.
 
@@ -155,8 +155,8 @@ JSON-RPC 2.0(2010)은 가벼운 양방향 프로토콜이다. REST는 클라이�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol — Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) — 표준 명세 문서
-- [Model Context Protocol — Architecture concepts](https://modelcontextprotocol.io/docs/concepts/architecture) — 여섯 기본 요소 멘탈 모델
-- [Anthropic — Introducing the Model Context Protocol](https://www.anthropic.com/news/model-context-protocol) — 2024년 11월 출시 게시물
-- [MCP blog — First MCP anniversary](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/) — 1주년 회고와 2025-11-25 명세 변경
-- [WorkOS — MCP 2025-11-25 spec update](https://workos.com/blog/mcp-2025-11-25-spec-update) — SEP-1686, 1036, 1577, 835, 1724 요약
+- [Model Context Protocol(Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) 표준 명세 문서
+- [Model Context Protocol(Architecture concepts](https://modelcontextprotocol.io/docs/concepts/architecture)) 여섯 기본 요소 멘탈 모델
+- [Anthropic(Introducing the Model Context Protocol](https://www.anthropic.com/news/model-context-protocol)) 2024년 11월 출시 게시물
+- [MCP blog(First MCP anniversary](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)) 1주년 회고와 2025-11-25 명세 변경
+- [WorkOS(MCP 2025-11-25 spec update](https://workos.com/blog/mcp-2025-11-25-spec-update)) SEP-1686, 1036, 1577, 835, 1724 요약

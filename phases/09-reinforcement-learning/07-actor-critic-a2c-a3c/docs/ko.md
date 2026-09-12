@@ -1,4 +1,4 @@
-# 액터-크리틱 — A2C와 A3C (Actor-Critic — A2C and A3C)
+# 액터-크리틱(A2C와 A3C (Actor-Critic) A2C and A3C)
 
 > REINFORCE는 노이즈가 심하다. `V̂(s)`를 학습하는 크리틱(critic)을 추가하고 리턴에서 이 값을 빼면, 기댓값은 그대로지만 분산은 훨씬 낮은 어드밴티지(advantage)를 얻는다. 이것이 액터-크리틱(actor-critic)이다. A2C는 동기적으로 실행하고, A3C는 스레드에 걸쳐 실행한다. 둘 다 모든 현대 심층 강화 학습(reinforcement learning) 방법의 사고 모델이다.
 
@@ -11,7 +11,7 @@
 
 바닐라 REINFORCE는 작동하지만 분산이 끔찍하다. 몬테카를로(Monte Carlo) 리턴 `G_t`는 에피소드마다 10배까지 출렁인다. 이 노이즈에 `∇ log π`를 곱하고 평균을 내면, DQN 갱신 몇 번이면 끝낼 정책 이동을 수천 에피소드에 걸쳐서야 해내는 그래디언트(gradient) 추정기가 나온다.
 
-분산은 원본 리턴을 사용하는 데서 온다. 베이스라인(baseline) `b(s_t)` — 학습된 가치를 포함한 임의의 상태 함수 — 를 빼면, 기댓값은 변하지 않고 분산은 떨어진다. 가장 다루기 쉬운 최선의 베이스라인은 `V̂(s_t)`다. 이제 `∇ log π`에 곱해지는 양은 *어드밴티지*다:
+분산은 원본 리턴을 사용하는 데서 온다. 베이스라인(baseline) `b(s_t)`(학습된 가치를 포함한 임의의 상태 함수)를 빼면, 기댓값은 변하지 않고 분산은 떨어진다. 가장 다루기 쉬운 최선의 베이스라인은 `V̂(s_t)`다. 이제 `∇ log π`에 곱해지는 양은 *어드밴티지*다:
 
 `A(s, a) = G - V̂(s)`
 
@@ -41,11 +41,11 @@
 
 `A_t^{GAE} = Σ_{l=0}^{∞} (γλ)^l δ_{t+l}`
 
-`λ ∈ [0, 1]`로. `λ = 0`은 TD(저분산, 고편향)다. `λ = 1`은 MC(고분산, 불편)다. `λ = 0.95`가 2026년 기본값이다 — 편향/분산 다이얼이 원하는 곳에 올 때까지 조정하라.
+`λ ∈ [0, 1]`로. `λ = 0`은 TD(저분산, 고편향)다. `λ = 1`은 MC(고분산, 불편)다. `λ = 0.95`가 2026년 기본값이다. 편향/분산 다이얼이 원하는 곳에 올 때까지 조정하라.
 
 **A2C: 동기 어드밴티지 액터-크리틱.** `N`개의 병렬 환경에 걸쳐 `T`스텝을 수집한다. 각 스텝에 대해 어드밴티지를 계산한다. 결합된 배치(batch)에서 액터와 크리틱을 갱신한다. 반복한다. A3C의 더 단순하고 더 확장 가능한 형제다.
 
-**A3C: 비동기 어드밴티지 액터-크리틱.** Mnih et al. (2016). `N`개의 워커(worker) 스레드를 생성하고, 각각 환경을 실행한다. 각 워커는 자신의 롤아웃에서 국소적으로 그래디언트를 계산한 뒤, 공유 파라미터 서버에 비동기적으로 적용한다. 재현 버퍼(replay buffer)가 필요 없다 — 워커들은 서로 다른 궤적을 실행함으로써 비상관화된다. A3C는 CPU에서 대규모로 학습할 수 있음을 증명했다. 2026년에는 GPU 기반 A2C(배치된 병렬 환경)가 지배적인데, GPU가 큰 배치를 원하기 때문이다.
+**A3C: 비동기 어드밴티지 액터-크리틱.** Mnih et al. (2016). `N`개의 워커(worker) 스레드를 생성하고, 각각 환경을 실행한다. 각 워커는 자신의 롤아웃에서 국소적으로 그래디언트를 계산한 뒤, 공유 파라미터 서버에 비동기적으로 적용한다. 재현 버퍼(replay buffer)가 필요 없다. 워커들은 서로 다른 궤적을 실행함으로써 비상관화된다. A3C는 CPU에서 대규모로 학습할 수 있음을 증명했다. 2026년에는 GPU 기반 A2C(배치된 병렬 환경)가 지배적인데, GPU가 큰 배치를 원하기 때문이다.
 
 **결합 손실.**
 
@@ -110,7 +110,7 @@ for step_i, (x, a, _r, probs) in enumerate(traj):
 
 ### 4단계: 병렬화 (A3C 대 A2C)
 
-- **A3C:** `N`개의 스레드를 띄운다. 각각 자신의 환경과 자신의 순방향 패스(forward pass)를 실행한다. 주기적으로 그래디언트 갱신을 공유 마스터에 푸시한다. 마스터에 락이 없다 — 경쟁(race)은 괜찮으며, 그저 노이즈를 더할 뿐이다.
+- **A3C:** `N`개의 스레드를 띄운다. 각각 자신의 환경과 자신의 순방향 패스(forward pass)를 실행한다. 주기적으로 그래디언트 갱신을 공유 마스터에 푸시한다. 마스터에 락이 없다. 경쟁(race)은 괜찮으며, 그저 노이즈를 더할 뿐이다.
 - **A2C:** 단일 프로세스에서 `N`개의 환경 인스턴스를 실행하고, 관측을 `[N, obs_dim]` 배치로 쌓고, 배치된 순방향 패스, 배치된 역방향 패스(backward pass). 더 높은 GPU 활용, 결정론적, 추론하기 더 쉬움. 2026년의 기본값.
 
 우리 장난감 코드는 명료성을 위해 단일 스레드다; 배치된 A2C로 다시 쓰는 것은 numpy 세 줄이다.
@@ -133,7 +133,7 @@ A2C/A3C가 2026년에 최종 선택이 되는 경우는 드물지만, 이후의 
 | PPO | A2C + 다중 에폭(epoch) 갱신을 위한 클리핑된 중요도 비율 |
 | IMPALA | A3C + V-trace 오프-폴리시 보정 |
 | SAC (Phase 9 · 07) | 소프트-가치 크리틱을 가진 오프-폴리시 A2C (다음 레슨) |
-| GRPO (Phase 9 · 12) | 크리틱 없는 A2C — 그룹 상대 어드밴티지 |
+| GRPO (Phase 9 · 12) | 크리틱 없는 A2C: 그룹 상대 어드밴티지 |
 | DPO | 선호도-순위 손실로 압축된 A2C, 샘플링 없음 |
 | AlphaStar / OpenAI Five | 리그 학습 + 모방 사전 학습(pretraining)을 가진 A2C |
 
@@ -185,9 +185,9 @@ Refuse single-worker A2C on environments with horizon > 1000 (too on-policy, too
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mnih et al. (2016). Asynchronous Methods for Deep Reinforcement Learning](https://arxiv.org/abs/1602.01783) — A3C, 원조 비동기 액터-크리틱 논문.
+- [Mnih et al. (2016). Asynchronous Methods for Deep Reinforcement Learning](https://arxiv.org/abs/1602.01783): A3C, 원조 비동기 액터-크리틱 논문.
 - [Schulman et al. (2016). High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438) — GAE.
-- [Sutton & Barto (2018). Ch. 13 — Actor-Critic Methods](http://incompleteideas.net/book/RLbook2020.pdf) — 기초; 크리틱이 신경망일 때 함수 근사에 관한 9장과 짝지어 읽어라.
-- [Espeholt et al. (2018). IMPALA](https://arxiv.org/abs/1802.01561) — V-trace 오프-폴리시 보정을 가진 확장 가능한 분산 액터-크리틱.
-- [OpenAI Baselines / Stable-Baselines3](https://stable-baselines3.readthedocs.io/) — 읽을 가치가 있는 프로덕션 A2C/PPO 구현.
-- [Konda & Tsitsiklis (2000). Actor-Critic Algorithms](https://papers.nips.cc/paper/1786-actor-critic-algorithms) — 두-시간척도 액터-크리틱 분해의 기초적 수렴 결과.
+- [Sutton & Barto (2018). Ch. 13(Actor-Critic Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 기초; 크리틱이 신경망일 때 함수 근사에 관한 9장과 짝지어 읽어라.
+- [Espeholt et al. (2018). IMPALA](https://arxiv.org/abs/1802.01561): V-trace 오프-폴리시 보정을 가진 확장 가능한 분산 액터-크리틱.
+- [OpenAI Baselines / Stable-Baselines3](https://stable-baselines3.readthedocs.io/): 읽을 가치가 있는 프로덕션 A2C/PPO 구현.
+- [Konda & Tsitsiklis (2000). Actor-Critic Algorithms](https://papers.nips.cc/paper/1786-actor-critic-algorithms): 두-시간척도 액터-크리틱 분해의 기초적 수렴 결과.

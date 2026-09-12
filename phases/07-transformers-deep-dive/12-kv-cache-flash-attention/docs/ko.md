@@ -9,9 +9,9 @@
 
 ## 문제 (The Problem)
 
-순진한 자기회귀(autoregressive) 디코더(decoder)는 `N`개의 토큰(token)을 생성하는 데 `O(N²)`의 일을 한다: 각 스텝에서 전체 접두사(prefix)를 두고 어텐션(attention)을 다시 계산한다. 4K 토큰 응답이라면 1,600만 번의 어텐션 연산이고, 대부분이 중복이다. 접두사 토큰의 모든 은닉 상태(hidden state)는 한 번 계산되면 결정론적이다 — 새 토큰의 쿼리(query)를 그 이전 모든 것의 캐시된 키(key)와 값(value)에 대해 돌리기만 하면 된다.
+순진한 자기회귀(autoregressive) 디코더(decoder)는 `N`개의 토큰(token)을 생성하는 데 `O(N²)`의 일을 한다: 각 스텝에서 전체 접두사(prefix)를 두고 어텐션(attention)을 다시 계산한다. 4K 토큰 응답이라면 1,600만 번의 어텐션 연산이고, 대부분이 중복이다. 접두사 토큰의 모든 은닉 상태(hidden state)는 한 번 계산되면 결정론적이다. 새 토큰의 쿼리(query)를 그 이전 모든 것의 캐시된 키(key)와 값(value)에 대해 돌리기만 하면 된다.
 
-게다가 어텐션 자체가 많은 데이터를 옮긴다. 표준 어텐션은 N×N 점수 행렬(matrix), N×d softmax 출력, N×d 최종 출력을 실체화한다 — HBM에 대한 읽기와 쓰기가 너무 많다. N≥2K에서 어텐션은 FLOP에 묶이기 전에 메모리에 묶인다. 고전적 어텐션 커널(kernel)은 현대 GPU를 4~10배 적게 활용한다.
+게다가 어텐션 자체가 많은 데이터를 옮긴다. 표준 어텐션은 N×N 점수 행렬(matrix), N×d softmax 출력, N×d 최종 출력을 실체화한다. HBM에 대한 읽기와 쓰기가 너무 많다. N≥2K에서 어텐션은 FLOP에 묶이기 전에 메모리에 묶인다. 고전적 어텐션 커널(kernel)은 현대 GPU를 4~10배 적게 활용한다.
 
 둘 다 Dao et al.에서 나온 두 가지 최적화가 프런티어(frontier) 추론을 "느림"에서 "빠름"으로 밀어 올렸다:
 
@@ -53,7 +53,7 @@ per 32K context = 10.4 GB
 
 **GQA가 KV 캐시의 승리다.** 64개 헤드의 MHA였다면 32 GB가 될 것이다. MLA는 더 깊이 압축한다.
 
-### Flash Attention — 타일링 트릭
+### Flash Attention: 타일링 트릭
 
 표준 어텐션:
 
@@ -78,9 +78,9 @@ for each block of Q (tile size ~128 × 128):
     write O_tile to HBM
 ```
 
-타일당 HBM 왕복 한 번. 전체 메모리 풋프린트(footprint)가 `O(N²)`에서 `O(N)`으로 떨어진다. 역방향 패스(backward pass)는 일부 값을 저장하는 대신 순방향 패스(forward pass)에서 재계산한다 — 또 하나의 메모리 승리.
+타일당 HBM 왕복 한 번. 전체 메모리 풋프린트(footprint)가 `O(N²)`에서 `O(N)`으로 떨어진다. 역방향 패스(backward pass)는 일부 값을 저장하는 대신 순방향 패스(forward pass)에서 재계산한다. 또 하나의 메모리 승리.
 
-**수치적 트릭.** 러닝 softmax는 타일에 걸쳐 `(max, sum)`을 유지해 최종 정규화(normalization)가 정확하다. 근사가 아니다 — Flash Attention은 표준 어텐션과 비트 단위로 동일한 출력을 계산한다(fp16 비결합성(non-associativity)은 제외).
+**수치적 트릭.** 러닝 softmax는 타일에 걸쳐 `(max, sum)`을 유지해 최종 정규화(normalization)가 정확하다. 근사가 아니다. Flash Attention은 표준 어텐션과 비트 단위로 동일한 출력을 계산한다(fp16 비결합성(non-associativity)은 제외).
 
 **버전 진화:**
 
@@ -93,7 +93,7 @@ for each block of Q (tile size ~128 × 128):
 
 Flash 4는 출시 시점에 순방향 패스 전용이다. 학습은 여전히 Flash 3를 쓴다. Flash 4의 GQA와 가변 길이(varlen) 지원은 대기 중이다(2026년 중반).
 
-### 추측 디코딩(speculative decoding) — 또 다른 지연 시간 승리
+### 추측 디코딩(speculative decoding): 또 다른 지연 시간 승리
 
 저렴한 모델이 N개의 토큰을 제안한다. 큰 모델이 N개 모두를 병렬로 검증한다. 검증이 k개의 토큰을 받아들이면, k개의 생성에 대해 큰 모델의 순방향 패스 1번을 치른 셈이다. 코드와 산문에서 일반적으로 k=3~5.
 
@@ -108,7 +108,7 @@ Flash 4는 출시 시점에 순방향 패스 전용이다. 학습은 여전히 F
 
 연속 배칭(Orca에서 처음 출시, 현재 vLLM, TensorRT-LLM, SGLang에 탑재): 오래된 시퀀스가 끝나자마자 새 요청을 배치에 끼워 넣는다. 일반적인 채팅 워크로드에서 5~10배 처리량(throughput) 향상.
 
-### PagedAttention — 가상 메모리로서의 KV 캐시
+### PagedAttention: 가상 메모리로서의 KV 캐시
 
 vLLM의 대표 기능이다. KV 캐시는 16토큰 블록 단위로 할당되고, 페이지 테이블(page table)이 논리적 위치를 물리적 블록에 매핑한다. 병렬 샘플(빔 서치(beam search), 병렬 샘플링) 간에 KV를 공유하고, 프롬프트 캐싱(prompt caching)을 위해 접두사를 핫스왑(hot-swap)하며, 메모리를 조각 모음(defragment)할 수 있게 한다. 순진한 연속 할당 대비 4배 처리량 향상.
 
@@ -190,7 +190,7 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
     --kv-cache-dtype fp8
 ```
 
-요청 간 접두사 캐싱은 2026년의 큰 승리다 — 같은 시스템 프롬프트, 퓨샷(few-shot) 예시, 또는 긴 컨텍스트 문서가 호출 간에 KV를 재사용한다. 반복되는 도구 프롬프트가 있는 에이전트(agent) 워크로드의 경우, 접두사 캐싱은 흔히 5배 처리량 향상을 낸다.
+요청 간 접두사 캐싱은 2026년의 큰 승리다. 같은 시스템 프롬프트, 퓨샷(few-shot) 예시, 또는 긴 컨텍스트 문서가 호출 간에 KV를 재사용한다. 반복되는 도구 프롬프트가 있는 에이전트(agent) 워크로드의 경우, 접두사 캐싱은 흔히 5배 처리량 향상을 낸다.
 
 ## 산출물 (Ship It)
 
@@ -220,9 +220,9 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 - [Dao et al. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://arxiv.org/abs/2205.14135) — Flash 1.
 - [Dao (2023). FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning](https://arxiv.org/abs/2307.08691) — Flash 2.
 - [Shah et al. (2024). FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision](https://arxiv.org/abs/2407.08608) — Flash 3.
-- [FlashAttention-4 release notes (Dao-AILab, 2026)](https://github.com/Dao-AILab/flash-attention) — Blackwell 5단계 파이프라인과 소프트웨어-exp2 트릭; 이 레슨이 언급하는 순방향 전용 출시 주의사항은 repo README에서 읽어라.
-- [Kwon et al. (2023). Efficient Memory Management for Large Language Model Serving with PagedAttention](https://arxiv.org/abs/2309.06180) — vLLM 논문.
-- [Leviathan et al. (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192) — 추측 디코딩.
-- [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077) — 레슨이 인용하는 통합 드래프트 접근에 대한 EAGLE-1/2 논문.
-- [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774) — EAGLE과 함께 언급된 Medusa 접근.
-- [vLLM docs — PagedAttention](https://docs.vllm.ai/en/latest/design/kernel/paged_attention.html) — 16토큰 블록과 페이지 테이블 설계에 대한 표준 심층 해설.
+- [FlashAttention-4 release notes (Dao-AILab, 2026)](https://github.com/Dao-AILab/flash-attention): Blackwell 5단계 파이프라인과 소프트웨어-exp2 트릭; 이 레슨이 언급하는 순방향 전용 출시 주의사항은 repo README에서 읽어라.
+- [Kwon et al. (2023). Efficient Memory Management for Large Language Model Serving with PagedAttention](https://arxiv.org/abs/2309.06180): vLLM 논문.
+- [Leviathan et al. (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192): 추측 디코딩.
+- [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077): 레슨이 인용하는 통합 드래프트 접근에 대한 EAGLE-1/2 논문.
+- [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774): EAGLE과 함께 언급된 Medusa 접근.
+- [vLLM docs(PagedAttention](https://docs.vllm.ai/en/latest/design/kernel/paged_attention.html)) 16토큰 블록과 페이지 테이블 설계에 대한 표준 심층 해설.

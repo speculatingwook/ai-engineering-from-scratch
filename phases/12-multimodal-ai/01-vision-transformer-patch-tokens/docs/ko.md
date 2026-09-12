@@ -145,9 +145,9 @@ total       ≈ 86M
 
 ## 더 읽을거리 (Further Reading)
 
-- [Dosovitskiy et al. — An Image is Worth 16x16 Words (arXiv:2010.11929)](https://arxiv.org/abs/2010.11929) — 원조 ViT.
-- [He et al. — Masked Autoencoders Are Scalable Vision Learners (arXiv:2111.06377)](https://arxiv.org/abs/2111.06377) — MAE, 자기 지도 사전 학습.
-- [Oquab et al. — DINOv2 (arXiv:2304.07193)](https://arxiv.org/abs/2304.07193) — 대규모 자기 증류, 레이블 없음.
-- [Darcet et al. — Vision Transformers Need Registers (arXiv:2309.16588)](https://arxiv.org/abs/2309.16588) — 레지스터 토큰과 아티팩트 분석.
-- [Tschannen et al. — SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786) — 2026년 기본 비전 타워.
-- [Zhai et al. — Scaling Vision Transformers (arXiv:2106.04560)](https://arxiv.org/abs/2106.04560) — 경험적 스케일링 법칙.
+- [Dosovitskiy et al.(An Image is Worth 16x16 Words (arXiv:2010.11929)](https://arxiv.org/abs/2010.11929)) 원조 ViT.
+- [He et al.(Masked Autoencoders Are Scalable Vision Learners (arXiv:2111.06377)](https://arxiv.org/abs/2111.06377)) MAE, 자기 지도 사전 학습.
+- [Oquab et al.(DINOv2 (arXiv:2304.07193)](https://arxiv.org/abs/2304.07193)) 대규모 자기 증류, 레이블 없음.
+- [Darcet et al.(Vision Transformers Need Registers (arXiv:2309.16588)](https://arxiv.org/abs/2309.16588)) 레지스터 토큰과 아티팩트 분석.
+- [Tschannen et al.(SigLIP 2 (arXiv:2502.14786)](https://arxiv.org/abs/2502.14786)) 2026년 기본 비전 타워.
+- [Zhai et al.(Scaling Vision Transformers (arXiv:2106.04560)](https://arxiv.org/abs/2106.04560)) 경험적 스케일링 법칙.

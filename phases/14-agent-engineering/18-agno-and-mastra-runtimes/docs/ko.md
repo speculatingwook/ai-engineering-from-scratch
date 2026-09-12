@@ -10,7 +10,7 @@
 ## 학습 목표 (Learning Objectives)
 
 - Agno의 성능 목표와 그것이 언제 중요한지 식별하기.
-- Mastra의 세 가지 원시 요소(primitive) — Agents, Tools, Workflows — 와 지원되는 서버 어댑터의 이름을 대기.
+- Mastra의 세 가지 원시 요소(primitive)(Agents, Tools, Workflows)와 지원되는 서버 어댑터의 이름을 대기.
 - 무상태 세션 한정(session-scoped) FastAPI 백엔드가 왜 권장되는 Agno 프로덕션 경로인지 설명하기.
 - 주어진 스택(stack)에 대해 Agno 대 Mastra를 고르기(Python 우선 대 TypeScript 우선).
 
@@ -23,7 +23,7 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 ### Agno
 
 - Python 런타임, 이전 명칭 Phi-data.
-- "그래프도, 체인도, 복잡한 패턴도 없다 — 그저 순수한 python."
+- "그래프도, 체인도, 복잡한 패턴도 없다. 그저 순수한 python."
 - 문서상 성능 목표: ~2μs 에이전트 인스턴스화, 에이전트당 ~3.75 KiB 메모리, ~23개 모델 제공자.
 - 프로덕션 경로: 무상태 세션 한정 FastAPI 백엔드. 각 요청이 새 에이전트를 시작하고, 세션 상태는 DB에 산다.
 - 네이티브 멀티모달(텍스트, 이미지, 오디오, 비디오, 파일)과 에이전틱(agentic) RAG.
@@ -34,7 +34,7 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 
 - TypeScript, Vercel AI SDK 위에 구축됨.
 - 세 가지 원시 요소: **Agents**, **Tools**(Zod 타입), **Workflows**.
-- 통합 모델 라우터(Unified Model Router) — 94개 제공자에 걸친 3,300개 이상의 모델(2026년 3월).
+- 통합 모델 라우터(Unified Model Router): 94개 제공자에 걸친 3,300개 이상의 모델(2026년 3월).
 - 복합 스토리지: 메모리, 워크플로, 관측 가능성(observability)을 서로 다른 백엔드로; 대규모 관측 가능성에는 ClickHouse 권장.
 - Apache 2.0이며, `ee/` 디렉터리는 소스 공개(source-available) 엔터프라이즈 라이선스 하에 있다.
 - Express, Hono, Fastify, Koa를 위한 서버 어댑터; 일급(first-class) Next.js와 Astro 통합.
@@ -51,10 +51,10 @@ LangGraph, AutoGen, CrewAI는 프레임워크가 무겁다. "그냥 에이전트
 
 ### 각각을 언제 고를 것인가
 
-- **Agno** — Python 백엔드, 다수의 단명 에이전트, 강한 성능 요구, FastAPI 매장(shop).
-- **Mastra** — TypeScript 백엔드, Next.js / Vercel 배포, 통합 멀티 프로바이더 모델 라우팅, Zod 타입 도구.
-- **LangGraph**(Lesson 13) — 내구성 있는 상태와 명시적 그래프 추론이 원시 속도보다 더 중요할 때.
-- **OpenAI / Claude Agent SDK** — 제공자의 제품화된 형태를 원할 때(Lesson 16-17).
+- **Agno**: Python 백엔드, 다수의 단명 에이전트, 강한 성능 요구, FastAPI 매장(shop).
+- **Mastra**: TypeScript 백엔드, Next.js / Vercel 배포, 통합 멀티 프로바이더 모델 라우팅, Zod 타입 도구.
+- **LangGraph**(Lesson 13): 내구성 있는 상태와 명시적 그래프 추론이 원시 속도보다 더 중요할 때.
+- **OpenAI / Claude Agent SDK**: 제공자의 제품화된 형태를 원할 때(Lesson 16-17).
 
 ### 이 패턴이 잘못되는 지점
 
@@ -76,8 +76,8 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **Agno** — 속도와 FastAPI 형태가 필요한 Python 백엔드.
-- **Mastra** — 다수의 제공자와 워크플로 원시 요소를 가진 TypeScript 백엔드.
+- **Agno**: 속도와 FastAPI 형태가 필요한 Python 백엔드.
+- **Mastra**: 다수의 제공자와 워크플로 원시 요소를 가진 TypeScript 백엔드.
 - 둘 다 일급 관측 가능성 후크를 제공한다. 둘 다 Langfuse와 통합된다.
 
 ## 산출물 (Ship It)
@@ -105,7 +105,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Agno Agent Framework docs](https://www.agno.com/agent-framework) — 성능 목표, FastAPI 통합
-- [Mastra docs](https://mastra.ai/docs) — 원시 요소, 서버 어댑터, Model Router
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 상태 보존 그래프 대안
-- [Comet Opik](https://www.comet.com/site/products/opik/) — Mastra 통합이 인용하는 관측 가능성 비교
+- [Agno Agent Framework docs](https://www.agno.com/agent-framework): 성능 목표, FastAPI 통합
+- [Mastra docs](https://mastra.ai/docs): 원시 요소, 서버 어댑터, Model Router
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 상태 보존 그래프 대안
+- [Comet Opik](https://www.comet.com/site/products/opik/): Mastra 통합이 인용하는 관측 가능성 비교

@@ -118,10 +118,10 @@ python3 code/main.py
 
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [GitHub Actions, composite actions for setup](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
-- [microservices.io, GenAI dev platform: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html) — 초기화로서의 pre-commit + CI 확인
-- [Augment Code, How to Build Your AGENTS.md (2026)](https://www.augmentcode.com/guides/how-to-build-agents-md) — 초기화 기대치
-- [Codex Blog, Codex CLI Context Compaction](https://codex.danielvaughan.com/2026/03/31/codex-cli-context-compaction-architecture/) — 압축 인식(compaction-aware) 초기화로서의 세션 시작
-- Phase 14 · 33 — 이 스크립트가 가능하게 하는 규칙 집합
-- Phase 14 · 34 — 이 스크립트가 시드하는 상태 파일
-- Phase 14 · 38 — 초기화 스크립트가 공급하는 검증 게이트
-- Phase 14 · 40 — 초기화 리포트의 마지막으로 알려진 정상을 소비하는 핸드오프
+- [microservices.io, GenAI dev platform: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html): 초기화로서의 pre-commit + CI 확인
+- [Augment Code, How to Build Your AGENTS.md (2026)](https://www.augmentcode.com/guides/how-to-build-agents-md): 초기화 기대치
+- [Codex Blog, Codex CLI Context Compaction](https://codex.danielvaughan.com/2026/03/31/codex-cli-context-compaction-architecture/): 압축 인식(compaction-aware) 초기화로서의 세션 시작
+- Phase 14 · 33: 이 스크립트가 가능하게 하는 규칙 집합
+- Phase 14 · 34: 이 스크립트가 시드하는 상태 파일
+- Phase 14 · 38: 초기화 스크립트가 공급하는 검증 게이트
+- Phase 14 · 40: 초기화 리포트의 마지막으로 알려진 정상을 소비하는 핸드오프

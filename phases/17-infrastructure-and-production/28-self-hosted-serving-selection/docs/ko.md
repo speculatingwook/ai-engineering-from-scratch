@@ -1,6 +1,6 @@
-# 셀프 호스팅 서빙 선택 — llama.cpp, Ollama, TGI, vLLM, SGLang
+# 셀프 호스팅 서빙 선택: llama.cpp, Ollama, TGI, vLLM, SGLang
 
-> 네 엔진이 2026년 셀프 호스팅(self-hosted) 추론(inference)을 지배한다. 하드웨어, 규모, 생태계에 따라 고른다. **llama.cpp**는 CPU에서 가장 빠르다 — 가장 넓은 모델 지원, 양자화(quantization)와 스레딩(threading)에 대한 완전한 제어. **Ollama**는 개발 노트북용 한 줄(one-command) 설치로, llama.cpp보다 약 15~30% 느리고(Go + CGo + HTTP 직렬화), 프로덕션(production) 유사 부하에서는 처리량(throughput) 격차가 3배다. **TGI는 2025년 12월 11일 유지보수 모드(maintenance mode)에 들어갔다** — 버그 수정만, vLLM보다 원시 처리량이 약 10% 느리지만 역사적으로 최상위 관측성(observability)과 HF 생태계 통합을 가졌다. 그 유지보수 상태는 장기적으로 위험한 베팅이 되게 한다 — 새 프로젝트에는 SGLang이나 vLLM이 더 안전한 기본값이다. **vLLM**은 범용 프로덕션 기본값이다 — v0.15.1(2026년 2월)이 PyTorch 2.10, RTX Blackwell SM120, H200 최적화를 추가한다. **SGLang**은 에이전트형(agentic) 멀티턴(multi-turn) / 접두사 집약(prefix-heavy) 전문가다 — 프로덕션에서 400,000개 이상의 GPU(xAI, LinkedIn, Cursor, Oracle, GCP, Azure, AWS). 하드웨어 제약: CPU 전용 → llama.cpp만. AMD / 비-NVIDIA → vLLM만(TRT-LLM은 NVIDIA에 묶임). 2026 파이프라인(pipeline) 패턴: 개발 = Ollama, 스테이징 = llama.cpp, 프로덕션 = vLLM 또는 SGLang. 전 구간에 동일한 GGUF/HF 가중치(weight).
+> 네 엔진이 2026년 셀프 호스팅(self-hosted) 추론(inference)을 지배한다. 하드웨어, 규모, 생태계에 따라 고른다. **llama.cpp**는 CPU에서 가장 빠르다. 가장 넓은 모델 지원, 양자화(quantization)와 스레딩(threading)에 대한 완전한 제어. **Ollama**는 개발 노트북용 한 줄(one-command) 설치로, llama.cpp보다 약 15~30% 느리고(Go + CGo + HTTP 직렬화), 프로덕션(production) 유사 부하에서는 처리량(throughput) 격차가 3배다. **TGI는 2025년 12월 11일 유지보수 모드(maintenance mode)에 들어갔다**. 버그 수정만, vLLM보다 원시 처리량이 약 10% 느리지만 역사적으로 최상위 관측성(observability)과 HF 생태계 통합을 가졌다. 그 유지보수 상태는 장기적으로 위험한 베팅이 되게 한다. 새 프로젝트에는 SGLang이나 vLLM이 더 안전한 기본값이다. **vLLM**은 범용 프로덕션 기본값이다. v0.15.1(2026년 2월)이 PyTorch 2.10, RTX Blackwell SM120, H200 최적화를 추가한다. **SGLang**은 에이전트형(agentic) 멀티턴(multi-turn) / 접두사 집약(prefix-heavy) 전문가다. 프로덕션에서 400,000개 이상의 GPU(xAI, LinkedIn, Cursor, Oracle, GCP, Azure, AWS). 하드웨어 제약: CPU 전용 → llama.cpp만. AMD / 비-NVIDIA → vLLM만(TRT-LLM은 NVIDIA에 묶임). 2026 파이프라인(pipeline) 패턴: 개발 = Ollama, 스테이징 = llama.cpp, 프로덕션 = vLLM 또는 SGLang. 전 구간에 동일한 GGUF/HF 가중치(weight).
 
 **Type:** Learn
 **Languages:** Python (stdlib, engine-decision tree walker)
@@ -68,7 +68,7 @@
 
 ### TGI 유지보수 함정
 
-Hugging Face TGI는 2025년 12월 11일 유지보수 모드에 들어갔다 — 앞으로 버그 수정만. 역사적으로: 최상위 관측성, 동급 최고의 HF 생태계 통합(모델 카드, 안전 도구), 원시 처리량에서 vLLM보다 약간 뒤.
+Hugging Face TGI는 2025년 12월 11일 유지보수 모드에 들어갔다. 앞으로 버그 수정만. 역사적으로: 최상위 관측성, 동급 최고의 HF 생태계 통합(모델 카드, 안전 도구), 원시 처리량에서 vLLM보다 약간 뒤.
 
 2026년 새 프로젝트라면 TGI에서 벗어나는 쪽을 기본으로 잡아라. 기존 TGI 배포는 그대로 굴러가겠지만 결국 마이그레이션해야 한다. SGLang과 vLLM이 더 안전한 기본값이다.
 

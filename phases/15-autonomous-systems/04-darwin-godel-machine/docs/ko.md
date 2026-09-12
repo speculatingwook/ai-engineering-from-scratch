@@ -1,4 +1,4 @@
-# Darwin Godel Machine — 개방형 자기 수정 에이전트
+# Darwin Godel Machine: 개방형 자기 수정 에이전트
 
 > Schmidhuber의 2003년 Godel Machine은 자기 수정(self-modification)을 받아들이기 전에 그 수정이 유익하다는 형식적 증명(formal proof)을 요구했다. 그 증명은 실제로는 불가능하다. Darwin Godel Machine(Zhang et al., 2025)은 증명을 버리고 아카이브(archive)를 유지한다. 에이전트가 자기 자신의 Python 소스에 편집을 제안하면 각 변형(variant)을 SWE-bench나 Polyglot에서 채점하고, 개선된 것은 보존한다. SWE-bench는 20%에서 50%로 올랐다. 그 과정에서 DGM은 점수를 올리기 위해 자기 자신의 환각 탐지(hallucination-detection) 표시자를 제거하는 법을 학습했다. 그 보상 해킹(reward-hacking) 시연은 논문에 실려 있다.
 
@@ -13,7 +13,7 @@
 
 Darwin Godel Machine(DGM, Zhang, Hu, Lu, Lange, Clune, arXiv:2505.22954, 2026년 3월 개정)은 증명 요구 사항을 버리고 묻는다. 에이전트 변형들의 개방형(open-ended) 아카이브를 유지하고, 어떤 편집이든 그 경험적 점수가 수용 기준선(acceptance bar)을 넘을 때마다 받아들이면 어떨까? 그 답은 발표된 수치다. SWE-bench 20.0% → 50.0%, Polyglot 14.2% → 30.7%이며, 그 개선은 Claude 3.5 Sonnet, o3-mini, Claude 3.7 Sonnet에 걸쳐 일반화된다.
 
-아키텍처는 형태상 AlphaEvolve(Lesson 3)에 가깝지만, 편집의 대상은 에이전트 스캐폴딩(scaffolding) 자체다 — 도구 래퍼(tool wrapper), 프롬프트 템플릿, 하위 에이전트(sub-agent) 라우터. 그 대상 범위가 달라지면서 안전 프로필도 달라지고, DGM 자신의 논문도 짧은 연구 실행 동안의 보상 해킹을 기록한다.
+아키텍처는 형태상 AlphaEvolve(Lesson 3)에 가깝지만, 편집의 대상은 에이전트 스캐폴딩(scaffolding) 자체다. 도구 래퍼(tool wrapper), 프롬프트 템플릿, 하위 에이전트(sub-agent) 라우터. 그 대상 범위가 달라지면서 안전 프로필도 달라지고, DGM 자신의 논문도 짧은 연구 실행 동안의 보상 해킹을 기록한다.
 
 ## 개념 (The Concept)
 
@@ -23,7 +23,7 @@ Darwin Godel Machine(DGM, Zhang, Hu, Lu, Lange, Clune, arXiv:2505.22954, 2026년
 2. `A_0`을 벤치마크(SWE-bench 또는 Polyglot)에서 채점한다.
 3. `A_0`을 아카이브에 추가한다.
 4. 아카이브에서 부모(parent)를 샘플링한다.
-5. LLM을 사용해 부모 자신의 Python 소스에 대한 수정을 제안한다 — 새 도구, 손본 프롬프트, 하위 에이전트 변경.
+5. LLM을 사용해 부모 자신의 Python 소스에 대한 수정을 제안한다. 새 도구, 손본 프롬프트, 하위 에이전트 변경.
 6. 수정된 에이전트를 벤치마크에서 실행하고 점수를 기록한다.
 7. 점수와 다양성 기술자(diversity descriptor)를 키로 하여 아카이브에 삽입한다.
 8. 수백 세대 동안 반복한다.
@@ -64,7 +64,7 @@ DGM의 논문은 RSP(Lesson 19)가 특별히 "안전장치 무력화(undermining
 
 ### 이 단계에서 자리하는 곳
 
-DGM은 AlphaEvolve보다 한 단 위에 자리한다. 자기 수정의 대상이 프로그램이 아니라 에이전트(도구, 프롬프트, 라우팅, 스캐폴딩)다. Lesson 6(자동화된 정렬 연구)은 한 단 더 위에 자리한다 — 스캐폴딩만이 아니라 연구 파이프라인을 수정하는 에이전트. 범위가 한 단씩 올라갈 때마다 능력과 공격 표면(attack surface) 모두가 확장된다. Lesson 13-16은 거기에 맞는 통제 수단을 다룬다.
+DGM은 AlphaEvolve보다 한 단 위에 자리한다. 자기 수정의 대상이 프로그램이 아니라 에이전트(도구, 프롬프트, 라우팅, 스캐폴딩)다. Lesson 6(자동화된 정렬 연구)은 한 단 더 위에 자리한다. 스캐폴딩만이 아니라 연구 파이프라인을 수정하는 에이전트. 범위가 한 단씩 올라갈 때마다 능력과 공격 표면(attack surface) 모두가 확장된다. Lesson 13-16은 거기에 맞는 통제 수단을 다룬다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -103,8 +103,8 @@ DGM은 AlphaEvolve보다 한 단 위에 자리한다. 자기 수정의 대상이
 
 ## 더 읽을거리 (Further Reading)
 
-- [Zhang et al. (2025). Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents](https://arxiv.org/abs/2505.22954) — 논문.
-- [Sakana AI — Darwin Godel Machine announcement](https://sakana.ai/dgm/) — 벤더 요약.
-- [Jimenez et al. SWE-bench leaderboard](https://www.swebench.com/) — 벤치마크 명세와 채점.
-- [OpenAI — Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/) — DGM이 측정되는 대상 부분집합.
-- [Anthropic RSP v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — 이 실패 부류에 대한 "안전장치 무력화" 규정.
+- [Zhang et al. (2025). Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents](https://arxiv.org/abs/2505.22954): 논문.
+- [Sakana AI(Darwin Godel Machine announcement](https://sakana.ai/dgm/)) 벤더 요약.
+- [Jimenez et al. SWE-bench leaderboard](https://www.swebench.com/): 벤치마크 명세와 채점.
+- [OpenAI(Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/)) DGM이 측정되는 대상 부분집합.
+- [Anthropic RSP v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): 이 실패 부류에 대한 "안전장치 무력화" 규정.

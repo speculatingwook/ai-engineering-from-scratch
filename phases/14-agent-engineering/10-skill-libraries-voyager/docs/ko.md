@@ -9,7 +9,7 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- Voyager의 세 구성 요소 — 자동 커리큘럼(automatic curriculum), 스킬 라이브러리(skill library), 반복 프롬프팅(iterative prompting) — 의 이름을 대고 각각의 역할을 설명하기.
+- Voyager의 세 구성 요소(자동 커리큘럼(automatic curriculum), 스킬 라이브러리(skill library), 반복 프롬프팅(iterative prompting))의 이름을 대고 각각의 역할을 설명하기.
 - Voyager가 왜 행동 공간(action space)을 원시 명령어(primitive command)가 아닌 코드로 만드는지 설명하기.
 - 등록, 검색, 조합, 실패 기반 정제를 갖춘 stdlib 스킬 라이브러리 구현하기.
 - Voyager의 패턴을 2026년 Claude Agent SDK 스킬과 skillkit 생태계에 매핑하기.
@@ -78,7 +78,7 @@ Voyager의 피드백 루프:
 
 ### 커리큘럼과 탐색
 
-Voyager의 커리큘럼 모듈은 에이전트가 가진 것과 아직 하지 않은 것을 바탕으로 "호숫가에 대피소를 지어라" 같은 작업을 제안한다. 제안자는 환경 상태와 스킬 인벤토리를 사용해 현재 능력보다 약간 위에 있는 작업 — 탐색의 최적 지점(sweet spot) — 을 고른다.
+Voyager의 커리큘럼 모듈은 에이전트가 가진 것과 아직 하지 않은 것을 바탕으로 "호숫가에 대피소를 지어라" 같은 작업을 제안한다. 제안자는 환경 상태와 스킬 인벤토리를 사용해 현재 능력보다 약간 위에 있는 작업(탐색의 최적 지점(sweet spot))을 고른다.
 
 프로덕션 에이전트에서 이는 "무엇이 빠졌는가" 연산자에 해당한다. 현재 스킬 라이브러리와 도메인이 주어졌을 때, 우리가 아직 다루지 않는 스킬은 무엇인가? 팀들은 보통 이를 커리큘럼 리뷰로 수동 구현한다.
 
@@ -92,8 +92,8 @@ Voyager의 커리큘럼 모듈은 에이전트가 가진 것과 아직 하지 �
 
 `code/main.py`는 stdlib 스킬 라이브러리를 구현한다.
 
-- `Skill` — 이름, 설명, 코드(문자열로), 버전, 태그, 의존성.
-- `SkillLibrary` — 등록(register), 검색(search, 토큰 겹침), 조합(compose, 의존성의 위상 정렬(topological sort)), 정제(refine, 업데이트 시 버전 올림).
+- `Skill`: 이름, 설명, 코드(문자열로), 버전, 태그, 의존성.
+- `SkillLibrary`: 등록(register), 검색(search, 토큰 겹침), 조합(compose, 의존성의 위상 정렬(topological sort)), 정제(refine, 업데이트 시 버전 올림).
 - 세 개의 원시 스킬을 등록하고, 네 번째를 조합하며, 실패를 마주치고, 정제하는 스크립트된 에이전트.
 
 실행:
@@ -102,14 +102,14 @@ Voyager의 커리큘럼 모듈은 에이전트가 가진 것과 아직 하지 �
 python3 code/main.py
 ```
 
-트레이스는 라이브러리 쓰기, 검색, 조합, 실패한 실행, v2 정제 — Voyager의 루프 전체 — 를 보여준다.
+트레이스는 라이브러리 쓰기, 검색, 조합, 실패한 실행, v2 정제(Voyager의 루프 전체)를 보여준다.
 
 ## 라이브러리로 써보기 (Use It)
 
-- **Claude Agent SDK 스킬**(Anthropic) — 2026년 레퍼런스: 각 스킬은 설명, 코드, 지시문을 갖고, 에이전트 세션 중에 필요할 때 로드된다.
-- **skillkit**(npm: skillkit) — 32개 이상의 AI 코딩 에이전트를 위한 교차 에이전트 스킬 관리.
-- **커스텀 스킬 라이브러리** — 도메인 특화(데이터 에이전트를 위한 SQL 스킬, 인프라 에이전트를 위한 Terraform 스킬). Voyager 패턴은 축소되어도 적용된다.
-- **OpenAI Agents SDK `tools`** — 낮은 쪽 끝에서; 각 도구가 가벼운 스킬이다.
+- **Claude Agent SDK 스킬**(Anthropic): 2026년 레퍼런스: 각 스킬은 설명, 코드, 지시문을 갖고, 에이전트 세션 중에 필요할 때 로드된다.
+- **skillkit**(npm: skillkit): 32개 이상의 AI 코딩 에이전트를 위한 교차 에이전트 스킬 관리.
+- **커스텀 스킬 라이브러리**: 도메인 특화(데이터 에이전트를 위한 SQL 스킬, 인프라 에이전트를 위한 Terraform 스킬). Voyager 패턴은 축소되어도 적용된다.
+- **OpenAI Agents SDK `tools`**: 낮은 쪽 끝에서; 각 도구가 가벼운 스킬이다.
 
 ## 산출물 (Ship It)
 
@@ -137,7 +137,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Wang et al., Voyager (arXiv:2305.16291)](https://arxiv.org/abs/2305.16291) — 원조 스킬 라이브러리 논문
-- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview) — 2026년 제품화로서의 스킬
-- [Anthropic, Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) — 실전에서의 스킬과 서브에이전트
-- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651) — Voyager 밑에 있는 정제 루프
+- [Wang et al., Voyager (arXiv:2305.16291)](https://arxiv.org/abs/2305.16291): 원조 스킬 라이브러리 논문
+- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview): 2026년 제품화로서의 스킬
+- [Anthropic, Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk): 실전에서의 스킬과 서브에이전트
+- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651): Voyager 밑에 있는 정제 루프

@@ -1,6 +1,6 @@
-# LLM 평가(LLM Evaluation) — RAGAS, DeepEval, G-Eval
+# LLM 평가(LLM Evaluation): RAGAS, DeepEval, G-Eval
 
-> 정확 일치(exact-match)와 F1은 의미적 동등성을 놓친다. 사람 검토는 확장되지 않는다. LLM을 심판으로 쓰는 것(LLM-as-judge)이 프로덕션(production)의 답이다 — 그 숫자를 신뢰할 만큼 충분한 보정(calibration)과 함께라면.
+> 정확 일치(exact-match)와 F1은 의미적 동등성을 놓친다. 사람 검토는 확장되지 않는다. LLM을 심판으로 쓰는 것(LLM-as-judge)이 프로덕션(production)의 답이다. 그 숫자를 신뢰할 만큼 충분한 보정(calibration)과 함께라면.
 
 **Type:** Build
 **Languages:** Python

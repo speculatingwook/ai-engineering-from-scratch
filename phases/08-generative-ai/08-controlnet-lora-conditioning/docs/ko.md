@@ -4,7 +4,7 @@
 
 **Type:** Build
 **Languages:** Python
-**Prerequisites:** Phase 8 · 07 (Latent Diffusion), Phase 10 (LLMs from Scratch — LoRA 기반)
+**Prerequisites:** Phase 8 · 07 (Latent Diffusion), Phase 10 (LLMs from Scratch: LoRA 기반)
 **Time:** ~75분
 
 ## 문제 (The Problem)
@@ -13,7 +13,7 @@
 
 모든 신호(포즈, 깊이, canny, 분할)마다 밑바닥부터 새 조건부 모델을 학습하는 것은 엄두를 낼 수 없다. 대신 2.6B 파라미터 SDXL 백본(backbone)은 동결한 채로 두고, 조건화를 읽는 작은 측면 네트워크를 붙여 백본의 중간 특성(feature)을 살짝 밀게 하면 된다. 이것이 ControlNet이다.
 
-전체 모델을 재학습하지 않고 모델에게 새 개념(내 얼굴, 내 제품, 내 스타일)을 가르치고 싶을 때도 있다. 이때 필요한 것은 100배 작은 델타(delta)다. 이것이 LoRA — 기존 어텐션(attention) 가중치(weight)에 끼워 넣는 저랭크 어댑터(low-rank adapter) — 다.
+전체 모델을 재학습하지 않고 모델에게 새 개념(내 얼굴, 내 제품, 내 스타일)을 가르치고 싶을 때도 있다. 이때 필요한 것은 100배 작은 델타(delta)다. 이것이 LoRA(기존 어텐션(attention) 가중치(weight)에 끼워 넣는 저랭크 어댑터(low-rank adapter)) 다.
 
 ControlNet + LoRA + 텍스트 = 2026년 실무자의 도구상자다. 대부분의 프로덕션(production) 이미지 파이프라인은 SDXL / SD3 / Flux 기저 위에 2-5개의 LoRA, 1-3개의 ControlNet, 그리고 IP-Adapter를 쌓는다.
 
@@ -23,13 +23,13 @@ ControlNet + LoRA + 텍스트 = 2026년 실무자의 도구상자다. 대부분�
 
 ### ControlNet (Zhang et al., 2023)
 
-사전 학습된 SD를 가져온다. U-Net의 인코더 절반을 *복제*한다. 원본을 동결한다. 복제본이 추가 조건화 입력(가장자리, 깊이, 포즈)을 받도록 학습시킨다. *제로 합성곱(zero-convolution)* 스킵 연결(skip connection)(0으로 초기화된 1×1 합성곱 — 무연산으로 시작해 델타를 학습)로 복제본을 원본의 디코더 절반에 다시 연결한다.
+사전 학습된 SD를 가져온다. U-Net의 인코더 절반을 *복제*한다. 원본을 동결한다. 복제본이 추가 조건화 입력(가장자리, 깊이, 포즈)을 받도록 학습시킨다. *제로 합성곱(zero-convolution)* 스킵 연결(skip connection)(0으로 초기화된 1×1 합성곱: 무연산으로 시작해 델타를 학습)로 복제본을 원본의 디코더 절반에 다시 연결한다.
 
 ```
 SD U-Net decoder:   ... ← orig_enc_features + zero_conv(controlnet_enc(condition))
 ```
 
-제로 합성곱 초기화는 ControlNet이 항등으로 시작함을 뜻한다 — 학습 전에도 해가 없다. 표준 확산 손실(loss)로 100만 개의 (프롬프트, 조건, 이미지) 삼중쌍에서 학습한다.
+제로 합성곱 초기화는 ControlNet이 항등으로 시작함을 뜻한다. 학습 전에도 해가 없다. 표준 확산 손실(loss)로 100만 개의 (프롬프트, 조건, 이미지) 삼중쌍에서 학습한다.
 
 모달리티별 ControlNet은 작은 측면 모델(SDXL용 약 360M, SD 1.5용 약 70M)로 제공된다. 추론(inference) 시 이들을 조합할 수 있다.
 
@@ -45,7 +45,7 @@ features += weight_a * control_a(depth) + weight_b * control_b(pose)
 W' = W + ΔW,  ΔW = B @ A,  A ∈ R^{r×d},  B ∈ R^{d×r}
 ```
 
-여기서 `r << d`다. 랭크 4-16이 어텐션에 표준이고, 랭크 64-128은 무거운 파인튜닝용이다. 새 파라미터 수: `d²` 대신 `2 · d · r`. `d=640`, `r=16`인 SDXL 어텐션의 경우: 어댑터당 410k 대신 20k 파라미터 — 20배 감소. 모델 전체에서: LoRA는 보통 기저 5GB 대비 20-200MB다.
+여기서 `r << d`다. 랭크 4-16이 어텐션에 표준이고, 랭크 64-128은 무거운 파인튜닝용이다. 새 파라미터 수: `d²` 대신 `2 · d · r`. `d=640`, `r=16`인 SDXL 어텐션의 경우: 어댑터당 410k 대신 20k 파라미터: 20배 감소. 모델 전체에서: LoRA는 보통 기저 5GB 대비 20-200MB다.
 
 추론 시 LoRA를 스케일할 수 있다: `W' = W + α · B @ A`. `α = 0.5-1.5`가 보통이다. 여러 LoRA는 가산적으로 쌓인다(비선형적으로 상호작용한다는 통상적 주의사항과 함께).
 
@@ -90,7 +90,7 @@ gated = gate * side_out  # gate initialized to 0
 h = base(x) + gated
 ```
 
-스텝 0에서 출력은 기저와 동일하다. 초기 학습은 `gate`를 천천히 갱신한다 — 파국적 표류 없음.
+스텝 0에서 출력은 기저와 동일하다. 초기 학습은 `gate`를 천천히 갱신한다. 파국적 표류 없음.
 
 ## 함정 (Pitfalls)
 
@@ -140,7 +140,7 @@ h = base(x) + gated
 
 실제 텍스트-이미지 SaaS는 같은 기저 체크포인트 위에서 수백 개의 LoRA와 십여 개의 ControlNet을 서빙한다. 서빙 문제는 LLM 멀티테넌시(multi-tenancy)와 많이 닮았다(프로덕션 문헌은 연속 배칭(continuous batching)과 LoRAX / S-LoRA 아래에서 LLM 사례를 다룬다).
 
-- **LoRA를 핫스왑(hot-swap)하고, 병합하지 마라.** `W' = W + α·B·A`를 기저에 병합하면 스텝당 추론이 약 3-5% 빨라지지만 `α`와 기저를 동결한다. LoRA를 랭크-r 델타로 VRAM에 핫 상태로 유지하라; diffusers는 요청별 활성화를 위해 `pipe.load_lora_weights()` + `pipe.set_adapters([...], adapter_weights=[...])`를 노출한다. 교체 비용은 `2 · d · r · num_layers` 가중치 — MB 규모, 1초 미만.
+- **LoRA를 핫스왑(hot-swap)하고, 병합하지 마라.** `W' = W + α·B·A`를 기저에 병합하면 스텝당 추론이 약 3-5% 빨라지지만 `α`와 기저를 동결한다. LoRA를 랭크-r 델타로 VRAM에 핫 상태로 유지하라; diffusers는 요청별 활성화를 위해 `pipe.load_lora_weights()` + `pipe.set_adapters([...], adapter_weights=[...])`를 노출한다. 교체 비용은 `2 · d · r · num_layers` 가중치: MB 규모, 1초 미만.
 - **두 번째 어텐션 차선으로서의 ControlNet.** 복제된 인코더는 기저와 병렬로 돌아간다. 각각 가중치 1.0인 두 ControlNet = 스텝당 한 번의 병합 패스가 아니라 두 번의 추가 순방향 패스(forward pass). 배치 크기 여유가 이차적으로 떨어진다. 활성 ControlNet당 약 1.5배 스텝 비용을 예산으로 잡아라.
 - **양자화된 LoRA도.** 기저를 양자화했다면(Lesson 07, 8GB에서의 Flux 참조), LoRA 델타도 8비트나 4비트로 깔끔하게 양자화된다. QLoRA 스타일 로딩은 메모리를 터뜨리지 않고 4비트 Flux 기저 위에 5-10개의 LoRA를 쌓을 수 있게 한다.
 
@@ -149,8 +149,8 @@ Flux 특화: Niels의 Flux-on-8GB 노트북은 기저를 4비트로 양자화한
 ## 더 읽을거리 (Further Reading)
 
 - [Zhang, Rao, Agrawala (2023). Adding Conditional Control to Text-to-Image Diffusion Models](https://arxiv.org/abs/2302.05543) — ControlNet.
-- [Hu et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) — LoRA(원래 LLM용; 확산으로 이식됨).
+- [Hu et al. (2021). LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685): LoRA(원래 LLM용; 확산으로 이식됨).
 - [Ye et al. (2023). IP-Adapter: Text Compatible Image Prompt Adapter](https://arxiv.org/abs/2308.06721) — IP-Adapter.
-- [Mou et al. (2023). T2I-Adapter: Learning Adapters to Dig Out More Controllable Ability](https://arxiv.org/abs/2302.08453) — ControlNet의 더 가벼운 대안.
+- [Mou et al. (2023). T2I-Adapter: Learning Adapters to Dig Out More Controllable Ability](https://arxiv.org/abs/2302.08453): ControlNet의 더 가벼운 대안.
 - [Ruiz et al. (2023). DreamBooth: Fine Tuning Text-to-Image Diffusion Models for Subject-Driven Generation](https://arxiv.org/abs/2208.12242) — DreamBooth.
-- [HuggingFace Diffusers — ControlNet / LoRA / IP-Adapter docs](https://huggingface.co/docs/diffusers/training/controlnet) — 레퍼런스 파이프라인.
+- [HuggingFace Diffusers(ControlNet / LoRA / IP-Adapter docs](https://huggingface.co/docs/diffusers/training/controlnet)) 레퍼런스 파이프라인.

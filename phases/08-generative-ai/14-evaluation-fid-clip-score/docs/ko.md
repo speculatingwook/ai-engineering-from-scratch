@@ -21,7 +21,7 @@
 
 ![FID, CLIP, and preference: three axes, different failure modes](../assets/evaluation.svg)
 
-### FID — 샘플 품질
+### FID: 샘플 품질
 
 Heusel et al. (2017). 단계는 다음과 같다.
 
@@ -36,7 +36,7 @@ Heusel et al. (2017). 단계는 다음과 같다.
 - **Inception 의존적.** Inception-v3는 ImageNet으로 학습되었다. ImageNet에서 먼 도메인(얼굴, 예술, 텍스트 이미지)은 무의미한 FID를 만든다. 도메인 특화 특성 추출기를 쓰라.
 - **게이밍.** Inception 사전 확률(prior)에 과적합(overfitting)하면 시각적 품질 향상 없이 낮은 FID를 얻는다. CMMD(아래)로 이를 이겨라.
 
-### CLIP 점수 — 프롬프트 준수
+### CLIP 점수: 프롬프트 준수
 
 Radford et al. (2021). 생성된 이미지 + 프롬프트에 대해:
 
@@ -53,7 +53,7 @@ clip_score = cos_sim( CLIP_image(x_gen), CLIP_text(prompt) )
 
 CMMD(Jayasumana et al., 2024)는 이 중 일부를 고친다. Inception 대신 CLIP 특성을, 프레셰 대신 최대 평균 불일치(maximum-mean discrepancy)를 쓴다. 미묘한 품질 차이를 탐지하는 데 더 낫다.
 
-### 인간 선호 — 그라운드 트루스
+### 인간 선호: 그라운드 트루스
 
 프롬프트 풀을 고른다. 모델 A와 모델 B로 생성한다. 인간(또는 강한 LLM 판정자)에게 쌍을 보여준다. 승리를 Elo나 브래들리-테리(Bradley-Terry) 점수로 집계한다. 벤치마크(benchmark):
 
@@ -83,7 +83,7 @@ CMMD(Jayasumana et al., 2024)는 이 중 일부를 고친다. Inception 대신 C
 
 `code/main.py`는 합성 "특성 벡터"(Inception 특성의 대역으로 4차원 벡터를 쓴다)에 대해 FID, CLIP 점수 유사물, Elo 집계를 구현한다. 다음을 본다.
 
-- 작은 N과 큰 N에서의 FID 계산 — 그 편향.
+- 작은 N과 큰 N에서의 FID 계산: 그 편향.
 - 특성 풀 간 코사인 유사도로서의 "CLIP 점수".
 - 합성 선호 스트림으로부터의 Elo 갱신 규칙.
 
@@ -174,10 +174,10 @@ CI / 회귀 게이트용: PR마다 500 샘플 부분집합에 FID + CLIP 점수�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Heusel et al. (2017). GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium (FID)](https://arxiv.org/abs/1706.08500) — FID 논문.
+- [Heusel et al. (2017). GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium (FID)](https://arxiv.org/abs/1706.08500): FID 논문.
 - [Jayasumana et al. (2024). Rethinking FID: Towards a Better Evaluation Metric for Image Generation (CMMD)](https://arxiv.org/abs/2401.09603) — CMMD.
 - [Radford et al. (2021). Learning Transferable Visual Models from Natural Language Supervision (CLIP)](https://arxiv.org/abs/2103.00020) — CLIP.
 - [Wu et al. (2023). HPSv2: A Comprehensive Human Preference Score](https://arxiv.org/abs/2306.09341) — HPSv2.
 - [Xu et al. (2023). ImageReward: Learning and Evaluating Human Preferences for Text-to-Image Generation](https://arxiv.org/abs/2304.05977) — ImageReward.
 - [Yu et al. (2023). Scaling Autoregressive Models for Content-Rich Text-to-Image Generation (Parti + PartiPrompts)](https://arxiv.org/abs/2206.10789) — PartiPrompts.
-- [Stein et al. (2023). Exposing flaws of generative model evaluation metrics](https://arxiv.org/abs/2306.04675) — 실패 양상 조사.
+- [Stein et al. (2023). Exposing flaws of generative model evaluation metrics](https://arxiv.org/abs/2306.04675): 실패 양상 조사.

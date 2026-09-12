@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-10년 동안 합성곱(convolution)은 컴퓨터 비전의 동의어였다. CNN은 강력한 귀납적 편향(inductive bias) — 국소성(locality), 평행 이동 등변성(translation equivariance) — 을 가졌고, 누구도 이를 대체할 수 있다고 생각하지 않았다. 그러다 Dosovitskiy et al. (2020)이, 합성곱 기계 장치가 전혀 없이 평탄화된(flattened) 이미지 패치에 적용된 평범한 트랜스포머가 규모에서 최고의 CNN과 맞먹거나 능가함을 보여줬다.
+10년 동안 합성곱(convolution)은 컴퓨터 비전의 동의어였다. CNN은 강력한 귀납적 편향(inductive bias)(국소성(locality), 평행 이동 등변성(translation equivariance))을 가졌고, 누구도 이를 대체할 수 있다고 생각하지 않았다. 그러다 Dosovitskiy et al. (2020)이, 합성곱 기계 장치가 전혀 없이 평탄화된(flattened) 이미지 패치에 적용된 평범한 트랜스포머가 규모에서 최고의 CNN과 맞먹거나 능가함을 보여줬다.
 
-함정은 "규모에서"였다. ImageNet-1k의 ViT는 ResNet에 졌다. ImageNet-21k나 JFT-300M에 사전 학습한 뒤 ImageNet-1k에 파인튜닝한 ViT는 ResNet을 이겼다. 결론은 트랜스포머가 유용한 사전 지식을 결여하고 있지만 충분한 데이터로 이를 학습한다는 것이었다. 후속 연구(DeiT, MAE, DINO)는 올바른 학습 레시피 — 강력한 증강(augmentation), 자기 지도(self-supervised) 사전 학습, 증류(distillation) — 가 있으면 ViT도 작은 데이터에서 잘 학습됨을 보여줬다.
+함정은 "규모에서"였다. ImageNet-1k의 ViT는 ResNet에 졌다. ImageNet-21k나 JFT-300M에 사전 학습한 뒤 ImageNet-1k에 파인튜닝한 ViT는 ResNet을 이겼다. 결론은 트랜스포머가 유용한 사전 지식을 결여하고 있지만 충분한 데이터로 이를 학습한다는 것이었다. 후속 연구(DeiT, MAE, DINO)는 올바른 학습 레시피(강력한 증강(augmentation), 자기 지도(self-supervised) 사전 학습, 증류(distillation))가 있으면 ViT도 작은 데이터에서 잘 학습됨을 보여줬다.
 
 2026년 기준으로 순수 CNN은 여전히 엣지(edge) 기기에서 경쟁력이 있지만(ConvNeXt가 가장 강력하다), 트랜스포머는 그 외의 모든 것을 지배한다: 분할(Mask2Former, SegFormer), 검출(DETR, RT-DETR), 멀티모달(multimodal)(CLIP, SigLIP), 비디오(VideoMAE, VJEPA). 알아둘 것은 ViT 블록 구조다.
 
@@ -114,8 +114,8 @@ ViT-B/16은 이런 블록을 12개 쌓고, 각각 12개의 어텐션 헤드를 �
 
 ### Swin 대 ConvNeXt
 
-- **Swin**(Liu et al., 2021) — 윈도우 기반 어텐션. 각 블록은 국소 윈도우 안에서 어텐션하고, 번갈아 오는 블록이 윈도우를 이동시켜 윈도우들에 걸쳐 정보를 섞는다. 어텐션 연산자를 유지하면서 CNN 같은 국소성 사전 지식을 되살린다.
-- **ConvNeXt**(Liu et al., 2022) — Swin의 아키텍처 선택(깊이별 합성곱(depthwise conv), LayerNorm, GELU, 역병목(inverted bottleneck))에 맞춰 재설계된 CNN. 격차가 "어텐션 대 합성곱"이 아니라 "현대 학습 레시피 + 아키텍처"임을 보여줬다.
+- **Swin**(Liu et al., 2021): 윈도우 기반 어텐션. 각 블록은 국소 윈도우 안에서 어텐션하고, 번갈아 오는 블록이 윈도우를 이동시켜 윈도우들에 걸쳐 정보를 섞는다. 어텐션 연산자를 유지하면서 CNN 같은 국소성 사전 지식을 되살린다.
+- **ConvNeXt**(Liu et al., 2022): Swin의 아키텍처 선택(깊이별 합성곱(depthwise conv), LayerNorm, GELU, 역병목(inverted bottleneck))에 맞춰 재설계된 CNN. 격차가 "어텐션 대 합성곱"이 아니라 "현대 학습 레시피 + 아키텍처"임을 보여줬다.
 
 2026년에는 ConvNeXt-V2와 Swin-V2 모두 프로덕션(production) 등급이다. 올바른 선택은 추론(inference) 스택(ConvNeXt가 엣지에서 더 잘 컴파일된다)과 사전 학습 말뭉치(corpus)에 달려 있다.
 
@@ -211,9 +211,9 @@ print(f"output: {vit(x).shape}")
 print(f"params: {sum(p.numel() for p in vit.parameters()):,}")
 ```
 
-약 2.8M개 파라미터 — CPU에서 다룰 수 있는 작은 ViT. 실제 ViT-B는 86M이다. `dim=768, depth=12, num_heads=12`로 한 동일한 클래스 정의.
+약 2.8M개 파라미터: CPU에서 다룰 수 있는 작은 ViT. 실제 ViT-B는 86M이다. `dim=768, depth=12, num_heads=12`로 한 동일한 클래스 정의.
 
-### Step 4: 정상 동작 확인 — 단일 이미지 추론
+### Step 4: 정상 동작 확인: 단일 이미지 추론
 
 ```python
 logits = vit(torch.randn(1, 3, 64, 64))
@@ -241,8 +241,8 @@ model = timm.create_model("vit_base_patch16_224", pretrained=True, num_classes=1
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-vit-vs-cnn-picker.md` — 데이터셋 크기, 연산, 추론 스택에 기반해 ViT, ConvNeXt, Swin 중에서 골라주는 프롬프트(prompt).
-- `outputs/skill-vit-patch-and-pos-embed-inspector.md` — ViT의 패치 임베딩과 위치 임베딩 형태가 모델의 기대 시퀀스 길이와 일치하는지 검증해, 가장 흔한 이식(porting) 버그를 잡는 스킬.
+- `outputs/prompt-vit-vs-cnn-picker.md`: 데이터셋 크기, 연산, 추론 스택에 기반해 ViT, ConvNeXt, Swin 중에서 골라주는 프롬프트(prompt).
+- `outputs/skill-vit-patch-and-pos-embed-inspector.md`: ViT의 패치 임베딩과 위치 임베딩 형태가 모델의 기대 시퀀스 길이와 일치하는지 검증해, 가장 흔한 이식(porting) 버그를 잡는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -265,7 +265,7 @@ model = timm.create_model("vit_base_patch16_224", pretrained=True, num_classes=1
 
 ## 더 읽을거리 (Further Reading)
 
-- [An Image is Worth 16x16 Words (Dosovitskiy et al., 2020)](https://arxiv.org/abs/2010.11929) — ViT 논문
-- [DeiT: Data-efficient Image Transformers (Touvron et al., 2020)](https://arxiv.org/abs/2012.12877) — ImageNet-1k만으로 ViT를 학습시키는 방법
-- [Masked Autoencoders are Scalable Vision Learners (He et al., 2022)](https://arxiv.org/abs/2111.06377) — MAE 사전 학습
-- [timm documentation](https://huggingface.co/docs/timm) — 프로덕션에서 쓸 모든 비전 트랜스포머의 레퍼런스
+- [An Image is Worth 16x16 Words (Dosovitskiy et al., 2020)](https://arxiv.org/abs/2010.11929): ViT 논문
+- [DeiT: Data-efficient Image Transformers (Touvron et al., 2020)](https://arxiv.org/abs/2012.12877): ImageNet-1k만으로 ViT를 학습시키는 방법
+- [Masked Autoencoders are Scalable Vision Learners (He et al., 2022)](https://arxiv.org/abs/2111.06377): MAE 사전 학습
+- [timm documentation](https://huggingface.co/docs/timm): 프로덕션에서 쓸 모든 비전 트랜스포머의 레퍼런스

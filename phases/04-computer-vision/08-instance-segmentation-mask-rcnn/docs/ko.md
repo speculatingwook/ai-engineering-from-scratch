@@ -1,4 +1,4 @@
-# 인스턴스 분할(Instance Segmentation) — Mask R-CNN
+# 인스턴스 분할(Instance Segmentation): Mask R-CNN
 
 > Faster R-CNN 검출기에 작은 마스크 분기를 더하면 인스턴스 분할(instance segmentation)이 된다. 어려운 부분은 RoIAlign이며, 보기보다 더 어렵다.
 
@@ -47,15 +47,15 @@ flowchart LR
 
 이해해야 할 다섯 조각:
 
-1. **백본** — ImageNet에서 학습된 ResNet-50 또는 ResNet-101. 스트라이드 4, 8, 16, 32에서 특성 맵의 위계를 만든다.
-2. **FPN (Feature Pyramid Network)** — 모든 레벨에 의미가 풍부한 특성의 C개 채널을 주는 하향식 + 측면 연결. 검출은 객체 크기에 맞는 FPN 레벨에 질의한다.
-3. **RPN (Region Proposal Network)** — 모든 앵커(anchor) 위치에서 "여기 객체가 있는가?"와 "박스를 어떻게 정제하는가?"를 예측하는 작은 합성곱(convolution) 헤드. 이미지당 약 1000개의 제안을 만든다.
-4. **RoIAlign** — 임의의 FPN 레벨의 임의의 박스에서 고정 크기(예: 7x7) 특성 패치를 샘플링한다. 양선형 샘플링, 양자화 없음.
-5. **헤드** — 박스를 정제하고 클래스를 고르는 2층 박스 헤드, 그리고 각 제안에 대해 `28x28` 이진 마스크를 출력하는 작은 합성곱 헤드.
+1. **백본**: ImageNet에서 학습된 ResNet-50 또는 ResNet-101. 스트라이드 4, 8, 16, 32에서 특성 맵의 위계를 만든다.
+2. **FPN (Feature Pyramid Network)**: 모든 레벨에 의미가 풍부한 특성의 C개 채널을 주는 하향식 + 측면 연결. 검출은 객체 크기에 맞는 FPN 레벨에 질의한다.
+3. **RPN (Region Proposal Network)**: 모든 앵커(anchor) 위치에서 "여기 객체가 있는가?"와 "박스를 어떻게 정제하는가?"를 예측하는 작은 합성곱(convolution) 헤드. 이미지당 약 1000개의 제안을 만든다.
+4. **RoIAlign**: 임의의 FPN 레벨의 임의의 박스에서 고정 크기(예: 7x7) 특성 패치를 샘플링한다. 양선형 샘플링, 양자화 없음.
+5. **헤드**: 박스를 정제하고 클래스를 고르는 2층 박스 헤드, 그리고 각 제안에 대해 `28x28` 이진 마스크를 출력하는 작은 합성곱 헤드.
 
 ### 왜 RoIPool이 아니라 RoIAlign인가
 
-원조 Fast R-CNN은 RoIPool을 썼는데, 이는 제안 박스를 격자로 나누고, 각 셀에서 최대 특성을 취하고, 모든 좌표를 정수로 반올림한다. 이 반올림 탓에 특성 맵이 입력 픽셀 좌표에서 최대 특성 맵 픽셀 하나만큼 어긋난다 — 224x224 이미지에서는 작지만, 특성 맵이 스트라이드 32일 때는 파국적이다.
+원조 Fast R-CNN은 RoIPool을 썼는데, 이는 제안 박스를 격자로 나누고, 각 셀에서 최대 특성을 취하고, 모든 좌표를 정수로 반올림한다. 이 반올림 탓에 특성 맵이 입력 픽셀 좌표에서 최대 특성 맵 픽셀 하나만큼 어긋난다. 224x224 이미지에서는 작지만, 특성 맵이 스트라이드 32일 때는 파국적이다.
 
 ```
 RoIPool:
@@ -70,11 +70,11 @@ RoIAlign:
   no rounding anywhere
 ```
 
-RoIAlign은 COCO에서 마스크 AP를 공짜로 3-4점 끌어올린다. 위치 지정에 신경 쓰는 모든 검출기가 이제 RoIAlign을 쓴다 — YOLOv7 seg, RT-DETR, Mask2Former 마찬가지다.
+RoIAlign은 COCO에서 마스크 AP를 공짜로 3-4점 끌어올린다. 위치 지정에 신경 쓰는 모든 검출기가 이제 RoIAlign을 쓴다. YOLOv7 seg, RT-DETR, Mask2Former 마찬가지다.
 
 ### 한 문단으로 보는 RPN
 
-특성 맵의 모든 위치에서, 서로 다른 크기와 형태의 K개 앵커 박스를 둔다. 각 앵커에 대한 객체성(objectness) 점수와 앵커를 더 잘 맞는 박스로 바꾸는 회귀 오프셋을 예측한다. 점수로 상위 약 1,000개 박스를 유지하고, IoU 0.7에서 NMS를 적용하고, 생존자를 헤드에 건넨다. RPN은 자체 미니 손실(loss)로 학습된다 — Lesson 6의 YOLO 손실과 같은 구조이며, 단지 클래스가 둘(객체 / 비객체)일 뿐이다.
+특성 맵의 모든 위치에서, 서로 다른 크기와 형태의 K개 앵커 박스를 둔다. 각 앵커에 대한 객체성(objectness) 점수와 앵커를 더 잘 맞는 박스로 바꾸는 회귀 오프셋을 예측한다. 점수로 상위 약 1,000개 박스를 유지하고, IoU 0.7에서 NMS를 적용하고, 생존자를 헤드에 건넨다. RPN은 자체 미니 손실(loss)로 학습된다. Lesson 6의 YOLO 손실과 같은 구조이며, 단지 클래스가 둘(객체 / 비객체)일 뿐이다.
 
 ### 마스크 헤드
 
@@ -90,10 +90,10 @@ Mask R-CNN의 손실은 네 가지를 함께 더한 것이다.
 L = L_rpn_cls + L_rpn_box + L_box_cls + L_box_reg + L_mask
 ```
 
-- `L_rpn_cls`, `L_rpn_box` — RPN 제안에 대한 객체성 + 박스 회귀.
-- `L_box_cls` — 헤드 분류기에서 (C+1)개 클래스(배경 포함)에 대한 교차 엔트로피(cross-entropy).
-- `L_box_reg` — 헤드의 박스 정제에 대한 smooth L1.
-- `L_mask` — 28x28 마스크 출력에 대한 픽셀별 이진 교차 엔트로피.
+- `L_rpn_cls`, `L_rpn_box`: RPN 제안에 대한 객체성 + 박스 회귀.
+- `L_box_cls`: 헤드 분류기에서 (C+1)개 클래스(배경 포함)에 대한 교차 엔트로피(cross-entropy).
+- `L_box_reg`: 헤드의 박스 정제에 대한 smooth L1.
+- `L_mask`: 28x28 마스크 출력에 대한 픽셀별 이진 교차 엔트로피.
 
 각 손실에는 자체 기본 가중치가 있다. torchvision 구현은 이를 생성자 인자로 노출한다.
 
@@ -244,7 +244,7 @@ print(f"trainable after freeze: {trainable:,}")
 
 ## 라이브러리로 써보기 (Use It)
 
-torchvision의 Mask R-CNN 전체 학습 루프는 40줄이며 작업 간에 의미 있게 바뀌지 않는다 — 데이터셋을 바꾸고 진행하라.
+torchvision의 Mask R-CNN 전체 학습 루프는 40줄이며 작업 간에 의미 있게 바뀌지 않는다. 데이터셋을 바꾸고 진행하라.
 
 ```python
 def train_step(model, images, targets, optimizer):
@@ -265,8 +265,8 @@ def train_step(model, images, targets, optimizer):
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-instance-vs-semantic-router.md` — 세 질문을 묻고 인스턴스 대 의미 대 파놉틱(panoptic)과 시작할 정확한 모델을 고르는 프롬프트(prompt).
-- `outputs/skill-mask-rcnn-head-swapper.md` — 새 `num_classes`가 주어지면 임의의 torchvision 검출 모델에서 헤드를 교체하는 10줄의 코드를 생성하는 스킬.
+- `outputs/prompt-instance-vs-semantic-router.md`: 세 질문을 묻고 인스턴스 대 의미 대 파놉틱(panoptic)과 시작할 정확한 모델을 고르는 프롬프트(prompt).
+- `outputs/skill-mask-rcnn-head-swapper.md`: 새 `num_classes`가 주어지면 임의의 torchvision 검출 모델에서 헤드를 교체하는 10줄의 코드를 생성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -289,7 +289,7 @@ def train_step(model, images, targets, optimizer):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mask R-CNN (He et al., 2017)](https://arxiv.org/abs/1703.06870) — 논문. RoIAlign에 관한 3절이 핵심 읽을거리다
-- [FPN: Feature Pyramid Networks (Lin et al., 2017)](https://arxiv.org/abs/1612.03144) — FPN 논문. 모든 현대 검출기가 그것을 쓴다
-- [torchvision Mask R-CNN tutorial](https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html) — 파인튜닝 루프의 참고 자료
-- [Detectron2 model zoo](https://github.com/facebookresearch/detectron2/blob/main/MODEL_ZOO.md) — 거의 모든 검출 및 분할 변종에 대해 학습된 가중치를 가진 프로덕션 구현
+- [Mask R-CNN (He et al., 2017)](https://arxiv.org/abs/1703.06870): 논문. RoIAlign에 관한 3절이 핵심 읽을거리다
+- [FPN: Feature Pyramid Networks (Lin et al., 2017)](https://arxiv.org/abs/1612.03144): FPN 논문. 모든 현대 검출기가 그것을 쓴다
+- [torchvision Mask R-CNN tutorial](https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html): 파인튜닝 루프의 참고 자료
+- [Detectron2 model zoo](https://github.com/facebookresearch/detectron2/blob/main/MODEL_ZOO.md): 거의 모든 검출 및 분할 변종에 대해 학습된 가중치를 가진 프로덕션 구현

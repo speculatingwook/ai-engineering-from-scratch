@@ -40,8 +40,8 @@ Core는 MemGPT의 core다. Recall은 축출된 꼬리를 가진 대화 버퍼다
 
 블록은 core 계층의 타입이 있고, 지속적이며, 편집 가능한 섹션이다. 원래 MemGPT 논문은 두 가지를 정의했다:
 
-- **Human 블록** — 사용자에 관한 사실(이름, 역할, 선호, 목표).
-- **Persona 블록** — 에이전트의 자기 개념(정체성, 어조, 제약).
+- **Human 블록**: 사용자에 관한 사실(이름, 역할, 선호, 목표).
+- **Persona 블록**: 에이전트의 자기 개념(정체성, 어조, 제약).
 
 Letta는 임의의 사용자 정의 블록으로 일반화한다: 현재 목표를 위한 `Task` 블록, 코드베이스 사실을 위한 `Project` 블록, 강한 제약을 위한 `Safety` 블록. 각 블록은 `id`, `label`, `value`, `limit`(문자 상한), `description`(모델이 언제 편집할지 알도록)을 가진다.
 
@@ -50,7 +50,7 @@ Letta는 임의의 사용자 정의 블록으로 일반화한다: 현재 목표�
 - `block_append(label, text)`
 - `block_replace(label, old, new)`
 - `block_read(label)`
-- `block_summarize(label)` — 한계에 가까운 블록을 압축.
+- `block_summarize(label)`: 한계에 가까운 블록을 압축.
 
 ### 수면 시간 연산
 
@@ -79,8 +79,8 @@ Letta V1(`letta_v1_agent`, 2026)은 `send_message`/하트비트(heartbeat)와 �
 `code/main.py`는 다음을 구현한다:
 
 - `Block` — id, label, value, limit, description.
-- `BlockStore` — CRUD + `near_limit(label)` 헬퍼.
-- 두 스크립트된 에이전트 — `PrimaryAgent`는 턴을 제공하고, `SleepTimeAgent`는 턴 사이에 통합.
+- `BlockStore`: CRUD + `near_limit(label)` 헬퍼.
+- 두 스크립트된 에이전트: `PrimaryAgent`는 턴을 제공하고, `SleepTimeAgent`는 턴 사이에 통합.
 - 블록 쓰기를 가진 세 턴 대화에, 블록을 요약하고 낡은 사실을 무효화하는 수면 시간 패스를 더한 트레이스.
 
 실행:
@@ -94,7 +94,7 @@ python3 code/main.py
 ## 라이브러리로 써보기 (Use It)
 
 - 참조 구현을 위한 **Letta** (letta.com). 셀프 호스팅 또는 관리형 클라우드.
-- 블록 형태 지식으로서의 **Claude Agent SDK 스킬(skills)** — 스킬은 에이전트가 필요 시 로드하는 이름 있고, 버전 관리되고, 검색 가능한 지시 블록이다.
+- 블록 형태 지식으로서의 **Claude Agent SDK 스킬(skills)**: 스킬은 에이전트가 필요 시 로드하는 이름 있고, 버전 관리되고, 검색 가능한 지시 블록이다.
 - 저장소 백엔드를 통제하고 싶은 팀을 위한 **커스텀 빌드**. 나중에 마이그레이션할 수 있도록 Letta API 계약을 사용하라.
 
 ## 산출물 (Ship It)
@@ -124,7 +124,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks) — 블록 패턴
-- [Letta, Sleep-time Compute blog](https://www.letta.com/blog/sleep-time-compute) — 비동기 통합
-- [Letta, Rearchitecting the Agent Loop](https://www.letta.com/blog/letta-v1-agent) — 네이티브 추론 재작성
-- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560) — 기원
+- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks): 블록 패턴
+- [Letta, Sleep-time Compute blog](https://www.letta.com/blog/sleep-time-compute): 비동기 통합
+- [Letta, Rearchitecting the Agent Loop](https://www.letta.com/blog/letta-v1-agent): 네이티브 추론 재작성
+- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560): 기원

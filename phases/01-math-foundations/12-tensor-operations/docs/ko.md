@@ -18,7 +18,7 @@
 
 트랜스포머(transformer)를 만든다고 하자. 순방향 패스(forward pass)는 깔끔해 보인다. 실행하면 이런 에러가 나온다. `RuntimeError: mat1 and mat2 shapes cannot be multiplied (32x768 and 512x768)`. shape를 노려본다. transpose를 시도한다. 이제는 `Expected 4D input (got 3D input)`이라고 한다. unsqueeze를 추가한다. 그러자 다른 무언가가 깨진다.
 
-shape 에러는 딥러닝 코드에서 가장 흔한 버그다. 개념적으로는 어렵지 않다 — 각 연산에는 shape 계약(contract)이 있다 — 하지만 빠르게 불어난다. 트랜스포머에는 수십 개의 reshape, transpose, 브로드캐스트가 연쇄적으로 엮여 있다. 축(axis) 하나만 잘못되어도 에러가 연쇄적으로 퍼진다. 더 곤란한 경우는 아예 에러를 던지지 않는 shape 실수다. 잘못된 차원을 따라 브로드캐스트하거나 잘못된 축을 따라 합산하면서 조용히 쓰레기 값을 만들어낸다.
+shape 에러는 딥러닝 코드에서 가장 흔한 버그다. 개념적으로는 어렵지 않다. 각 연산에는 shape 계약(contract)이 있다. 하지만 빠르게 불어난다. 트랜스포머에는 수십 개의 reshape, transpose, 브로드캐스트가 연쇄적으로 엮여 있다. 축(axis) 하나만 잘못되어도 에러가 연쇄적으로 퍼진다. 더 곤란한 경우는 아예 에러를 던지지 않는 shape 실수다. 잘못된 차원을 따라 브로드캐스트하거나 잘못된 축을 따라 합산하면서 조용히 쓰레기 값을 만들어낸다.
 
 행렬(matrix)은 두 집합 사이의 쌍별(pairwise) 관계를 다룬다. 실제 데이터는 2차원에 들어맞지 않는다. 224x224 크기의 RGB 이미지 32개로 이루어진 배치는 4D 텐서다. `(32, 3, 224, 224)`. 헤드 12개를 쓰는 셀프 어텐션(self-attention)도 4D다. `(batch, heads, seq_len, head_dim)`. 차원 개수에 상관없이 일반화되며, 모든 차원에 걸쳐 깔끔하게 합성되는 연산을 가진 자료 구조가 필요하다. 그 구조가 바로 텐서다. 텐서 연산을 통달하면 shape 에러는 사소하게 디버깅할 수 있게 된다.
 
@@ -74,7 +74,7 @@ graph LR
     end
 ```
 
-transpose는 데이터를 옮기지 않는다. 스트라이드를 맞바꿔서 텐서를 **비연속(non-contiguous)** 상태로 만든다 — 한 행의 원소들이 더 이상 메모리에서 인접하지 않게 된다.
+transpose는 데이터를 옮기지 않는다. 스트라이드를 맞바꿔서 텐서를 **비연속(non-contiguous)** 상태로 만든다. 한 행의 원소들이 더 이상 메모리에서 인접하지 않게 된다.
 
 ### 브로드캐스팅 규칙
 
@@ -141,7 +141,7 @@ class Tensor:
         return tuple(strides)
 ```
 
-shape `(3, 4)`의 경우 스트라이드는 `(4, 1)`이다 — 한 행을 나아가려면 4개 원소를 건너뛰고, 한 열을 나아가려면 1개 원소를 건너뛴다.
+shape `(3, 4)`의 경우 스트라이드는 `(4, 1)`이다. 한 행을 나아가려면 4개 원소를 건너뛰고, 한 열을 나아가려면 1개 원소를 건너뛴다.
 
 ### 2단계: Reshape, squeeze, unsqueeze
 
@@ -153,7 +153,7 @@ r = t.reshape((3, 4))
 r = t.reshape((-1, 3))
 ```
 
-squeeze는 크기가 1인 축을 제거한다. unsqueeze는 하나를 삽입한다. unsqueeze는 브로드캐스팅에 결정적으로 중요하다 — 편향(bias) 벡터 `(D,)`를 배치 `(B, T, D)`에 더하려면 `(1, 1, D)`로 unsqueeze해야 한다.
+squeeze는 크기가 1인 축을 제거한다. unsqueeze는 하나를 삽입한다. unsqueeze는 브로드캐스팅에 결정적으로 중요하다. 편향(bias) 벡터 `(D,)`를 배치 `(B, T, D)`에 더하려면 `(1, 1, D)`로 unsqueeze해야 한다.
 
 ```python
 t = Tensor(list(range(6)), shape=(1, 3, 1, 2))
@@ -174,7 +174,7 @@ t4d = Tensor(list(range(24)), shape=(1, 2, 3, 4))
 perm = t4d.permute((0, 2, 3, 1))
 ```
 
-transpose나 permute 이후 텐서는 메모리상에서 비연속 상태가 된다. PyTorch에서 `view`는 비연속 텐서에 대해 실패한다 — `reshape`를 쓰거나 먼저 `.contiguous()`를 호출하라.
+transpose나 permute 이후 텐서는 메모리상에서 비연속 상태가 된다. PyTorch에서 `view`는 비연속 텐서에 대해 실패한다. `reshape`를 쓰거나 먼저 `.contiguous()`를 호출하라.
 
 ### 4단계: 원소별 연산과 리덕션
 

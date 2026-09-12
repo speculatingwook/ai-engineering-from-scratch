@@ -1,4 +1,4 @@
-# 이미지 생성(Image Generation) — GAN
+# 이미지 생성(Image Generation): GAN
 
 > GAN은 고정된 게임 안의 두 신경망(neural network)이다. 하나는 그리고, 하나는 비평한다. 그림이 비평가를 속일 때까지 둘은 함께 나아진다.
 
@@ -20,7 +20,7 @@
 
 표준 손실 함수(MSE, 교차 엔트로피)는 "이 샘플이 실제 분포에서 왔는가"를 측정할 수 없다. 픽셀별 오차를 최소화하면 사실적인 샘플이 아니라 흐릿한 평균이 나온다. 돌파구는 손실을 학습하는 것이었다. 실제와 가짜를 구별하는 일을 하는 두 번째 신경망을 학습시키고, 그 판단을 사용해 생성자를 밀어붙인다.
 
-GAN(Goodfellow et al., 2014)이 그 틀을 정의했다. 2018년 무렵 StyleGAN은 사진과 구별할 수 없는 1024x1024 얼굴을 만들고 있었다. 이후 확산 모델(diffusion model)이 품질과 제어 가능성에서 왕좌를 차지했지만, 확산을 실용적으로 만드는 모든 트릭 — 정규화(normalization) 선택, 잠재 공간(latent space), 특성 손실 — 은 먼저 GAN에서 이해되었다.
+GAN(Goodfellow et al., 2014)이 그 틀을 정의했다. 2018년 무렵 StyleGAN은 사진과 구별할 수 없는 1024x1024 얼굴을 만들고 있었다. 이후 확산 모델(diffusion model)이 품질과 제어 가능성에서 왕좌를 차지했지만, 확산을 실용적으로 만드는 모든 트릭(정규화(normalization) 선택, 잠재 공간(latent space), 특성 손실)은 먼저 GAN에서 이해되었다.
 
 ## 개념 (The Concept)
 
@@ -49,7 +49,7 @@ G는 D가 틀리기를 원한다. D는 맞기를 원한다. 형식적으로:
 min_G max_D  E_x[log D(x)] + E_z[log(1 - D(G(z)))]
 ```
 
-오른쪽에서 왼쪽으로 읽으면: D는 실제(`log D(real)`)와 가짜(`log (1 - D(fake))`) 이미지에 대한 정확도(accuracy)를 최대화하고 있다. G는 가짜에 대한 D의 정확도를 최소화하고 있다 — `D(G(z))`가 높기를 원한다.
+오른쪽에서 왼쪽으로 읽으면: D는 실제(`log D(real)`)와 가짜(`log (1 - D(fake))`) 이미지에 대한 정확도(accuracy)를 최대화하고 있다. G는 가짜에 대한 D의 정확도를 최소화하고 있다. `D(G(z))`가 높기를 원한다.
 
 Goodfellow는 이 미니맥스가 `p_G = p_data`이고, D가 어디서나 0.5를 출력하며, 생성된 분포와 실제 분포 사이의 옌센-섀넌(Jensen-Shannon) 발산이 0인 전역 평형을 가짐을 증명했다. 어려운 부분은 거기에 도달하는 것이다.
 
@@ -97,10 +97,10 @@ flowchart LR
 
 GAN은 정답이 없는데, 어떻게 작동하는지 아는가?
 
-- **샘플 검사** — 모든 에폭(epoch) 끝에 그냥 64개 샘플을 본다. 타협 불가.
-- **FID (Fréchet Inception Distance)** — 실제 집합과 생성 집합의 Inception-v3 특성 분포 사이의 거리. 낮을수록 좋다. 커뮤니티 표준.
-- **Inception Score** — 더 오래되고 더 취약하다. FID를 선호하라.
-- **생성 모델을 위한 정밀도/재현율** — 품질(정밀도)과 커버리지(재현율)를 별도로 측정한다. FID 단독보다 정보량이 많다.
+- **샘플 검사**: 모든 에폭(epoch) 끝에 그냥 64개 샘플을 본다. 타협 불가.
+- **FID (Fréchet Inception Distance)**: 실제 집합과 생성 집합의 Inception-v3 특성 분포 사이의 거리. 낮을수록 좋다. 커뮤니티 표준.
+- **Inception Score**: 더 오래되고 더 취약하다. FID를 선호하라.
+- **생성 모델을 위한 정밀도/재현율**: 품질(정밀도)과 커버리지(재현율)를 별도로 측정한다. FID 단독보다 정보량이 많다.
 
 작은 합성 데이터 실행에는 샘플 검사로 충분하다.
 
@@ -230,7 +230,7 @@ for epoch in range(10):
     print(f"epoch {epoch}  D {ld:.3f}  G {lg:.3f}")
 ```
 
-`Adam(lr=2e-4, betas=(0.5, 0.999))`은 DCGAN 기본값이다 — 낮은 beta1은 모멘텀 항이 적대적 게임을 너무 많이 안정화하지 못하게 한다.
+`Adam(lr=2e-4, betas=(0.5, 0.999))`은 DCGAN 기본값이다. 낮은 beta1은 모멘텀 항이 적대적 게임을 너무 많이 안정화하지 못하게 한다.
 
 ### 5단계: 샘플링
 
@@ -280,8 +280,8 @@ def build_sn_discriminator(img_channels=3, feat=64):
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-gan-training-triage.md` — 학습 곡선 설명을 읽고 실패 모드(모드 붕괴, D 완승, 진동)와 권장되는 단일 수정을 고르는 프롬프트(prompt).
-- `outputs/skill-dcgan-scaffold.md` — `z_dim`, 목표 `image_size`, `num_channels`로부터 학습 루프와 샘플 저장기를 포함한 DCGAN 골격을 작성하는 스킬.
+- `outputs/prompt-gan-training-triage.md`: 학습 곡선 설명을 읽고 실패 모드(모드 붕괴, D 완승, 진동)와 권장되는 단일 수정을 고르는 프롬프트(prompt).
+- `outputs/skill-dcgan-scaffold.md`: `z_dim`, 목표 `image_size`, `num_channels`로부터 학습 루프와 샘플 저장기를 포함한 DCGAN 골격을 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -304,7 +304,7 @@ def build_sn_discriminator(img_channels=3, feat=64):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Generative Adversarial Networks (Goodfellow et al., 2014)](https://arxiv.org/abs/1406.2661) — 모든 것을 시작한 논문
-- [DCGAN (Radford, Metz, Chintala, 2015)](https://arxiv.org/abs/1511.06434) — GAN을 학습 가능하게 만든 아키텍처 규칙
-- [Spectral Normalization for GANs (Miyato et al., 2018)](https://arxiv.org/abs/1802.05957) — 가장 유용한 단일 안정화 트릭
-- [StyleGAN3 (Karras et al., 2021)](https://arxiv.org/abs/2106.12423) — SOTA GAN. 지난 10년의 모든 트릭의 베스트 앨범처럼 읽힌다
+- [Generative Adversarial Networks (Goodfellow et al., 2014)](https://arxiv.org/abs/1406.2661): 모든 것을 시작한 논문
+- [DCGAN (Radford, Metz, Chintala, 2015)](https://arxiv.org/abs/1511.06434): GAN을 학습 가능하게 만든 아키텍처 규칙
+- [Spectral Normalization for GANs (Miyato et al., 2018)](https://arxiv.org/abs/1802.05957): 가장 유용한 단일 안정화 트릭
+- [StyleGAN3 (Karras et al., 2021)](https://arxiv.org/abs/2106.12423): SOTA GAN. 지난 10년의 모든 트릭의 베스트 앨범처럼 읽힌다

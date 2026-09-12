@@ -1,4 +1,4 @@
-# 확산 모델 — 밑바닥부터 만드는 DDPM (Diffusion Models — DDPM from Scratch)
+# 확산 모델(밑바닥부터 만드는 DDPM (Diffusion Models) DDPM from Scratch)
 
 > Ho, Jain, Abbeel (2020)은 이 분야에 두고두고 쓰일 레시피를 남겼다. 천 번의 작은 스텝에 걸쳐 잡음으로 데이터를 파괴하라. 하나의 신경망(neural network)이 그 잡음을 예측하도록 학습시켜라. 추론(inference)에서 그 과정을 역전시켜라. 오늘날 모든 주류 이미지, 비디오, 3D, 음악 모델이 이 루프 위에서 돌아가며, 위에 흐름 매칭(flow matching)이나 일관성(consistency) 트릭이 얹혀 있을 수도 있다.
 
@@ -11,13 +11,13 @@
 
 목표는 `p_data(x)`의 샘플러(sampler)다. GAN은 종종 발산하는 미니맥스(minimax) 게임을 한다. VAE는 가우시안 디코더(decoder)에서 흐릿한 샘플을 만든다. 정작 필요한 것은 (a) 단일하고 안정적인 손실(loss)(안장점도, 미니맥스도 없음)이고, (b) `log p(x)`의 하한(lower bound)이며(그래서 가능도(likelihood)를 가짐), (c) SOTA 품질에 맞는 샘플을 주는 학습 목적함수다.
 
-Sohl-Dickstein et al. (2015)은 이론적 답을 갖고 있었다: 가우시안 잡음을 점진적으로 더하는 마르코프 연쇄(Markov chain) `q(x_t | x_{t-1})`를 정의하고, 잡음을 제거하도록 역방향 연쇄 `p_θ(x_{t-1} | x_t)`를 학습시킨다. Ho, Jain, Abbeel (2020)은 손실이 한 줄로 단순화될 수 있음을 보였고 — 잡음을 예측하라 — 수학을 정리했다. 2020년에 이것은 호기심거리였다. 2021년에는 최첨단 샘플을 만들었다. 2022년에는 Stable Diffusion이 되었다. 2026년에는 토대(substrate)다.
+Sohl-Dickstein et al. (2015)은 이론적 답을 갖고 있었다: 가우시안 잡음을 점진적으로 더하는 마르코프 연쇄(Markov chain) `q(x_t | x_{t-1})`를 정의하고, 잡음을 제거하도록 역방향 연쇄 `p_θ(x_{t-1} | x_t)`를 학습시킨다. Ho, Jain, Abbeel (2020)은 손실이 한 줄로 단순화될 수 있음을 보였고(잡음을 예측하라) 수학을 정리했다. 2020년에 이것은 호기심거리였다. 2021년에는 최첨단 샘플을 만들었다. 2022년에는 Stable Diffusion이 되었다. 2026년에는 토대(substrate)다.
 
 ## 개념 (The Concept)
 
 ![DDPM: 순방향 잡음, 역방향 잡음 제거](../assets/ddpm.svg)
 
-**순방향 과정 `q`.** `T`개의 작은 스텝에서 가우시안 잡음을 더한다. 닫힌 형태 — 수학이 다루기 쉬운 이유 — 는 누적 스텝도 가우시안이라는 점이다.
+**순방향 과정 `q`.** `T`개의 작은 스텝에서 가우시안 잡음을 더한다. 닫힌 형태(수학이 다루기 쉬운 이유)는 누적 스텝도 가우시안이라는 점이다.
 
 ```
 q(x_t | x_0) = N( sqrt(α̅_t) · x_0,  (1 - α̅_t) · I )
@@ -31,7 +31,7 @@ q(x_t | x_0) = N( sqrt(α̅_t) · x_0,  (1 - α̅_t) · I )
 x_{t-1} = (1 / sqrt(α_t)) · ( x_t - (β_t / sqrt(1 - α̅_t)) · ε_θ(x_t, t) )  +  σ_t · z
 ```
 
-여기서 `σ_t`는 `sqrt(β_t)`이거나 학습된 분산이다. 이 식은 보기 흉하지만 그저 대수일 뿐이다 — 사후 분포(posterior) `q(x_{t-1} | x_t, x_0)`가 주어졌을 때 `x_{t-1}`을 풀고, `x_0`을 그 잡음 예측 추정값으로 대체한 것이다.
+여기서 `σ_t`는 `sqrt(β_t)`이거나 학습된 분산이다. 이 식은 보기 흉하지만 그저 대수일 뿐이다. 사후 분포(posterior) `q(x_{t-1} | x_t, x_0)`가 주어졌을 때 `x_{t-1}`을 풀고, `x_0`을 그 잡음 예측 추정값으로 대체한 것이다.
 
 **학습 손실.**
 
@@ -47,9 +47,9 @@ L_simple = E_{x_0, t, ε} [ || ε - ε_θ( sqrt(α̅_t) · x_0 + sqrt(1 - α̅_t
 
 세 가지 직관:
 
-1. **잡음 제거는 쉽고; 생성은 어렵다.** `t=T`에서 데이터는 순수 잡음이다 — 네트워크는 사소한 문제를 풀면 된다. `t=0`에서 네트워크는 픽셀 몇 개만 정리하면 된다. 중간 `t`에서는 문제가 어렵지만, 네트워크는 모든 잡음 수준에서 같은 가중치(weight)를 통해 흐르는 많은 그래디언트(gradient)를 갖는다.
+1. **잡음 제거는 쉽고; 생성은 어렵다.** `t=T`에서 데이터는 순수 잡음이다. 네트워크는 사소한 문제를 풀면 된다. `t=0`에서 네트워크는 픽셀 몇 개만 정리하면 된다. 중간 `t`에서는 문제가 어렵지만, 네트워크는 모든 잡음 수준에서 같은 가중치(weight)를 통해 흐르는 많은 그래디언트(gradient)를 갖는다.
 
-2. **변장한 점수 매칭(score matching).** Vincent (2011)은 잡음을 예측하는 것이 `∇_x log q(x_t | x_0)`, 즉 *점수(score)*를 추정하는 것과 동등함을 증명했다. 역방향 SDE는 이 점수를 사용해 밀도(density) 그래디언트를 따라 올라간다 — 고확률 영역을 향한 안내된 무작위 보행이다.
+2. **변장한 점수 매칭(score matching).** Vincent (2011)은 잡음을 예측하는 것이 `∇_x log q(x_t | x_0)`, 즉 *점수(score)*를 추정하는 것과 동등함을 증명했다. 역방향 SDE는 이 점수를 사용해 밀도(density) 그래디언트를 따라 올라간다. 고확률 영역을 향한 안내된 무작위 보행이다.
 
 3. **ELBO가 단순 MSE로 줄어든다.** 전체 변분 하한(variational lower bound)에는 타임스텝당 KL 항이 있다. DDPM의 매개변수화로 그 KL 항들은 특정 계수를 가진 잡음 예측에 대한 MSE로 단순화된다; Ho는 그 계수를 버렸고("simple" 손실이라 부름) 품질이 *향상되었다*.
 
@@ -162,7 +162,7 @@ def sample(model, alpha_bars, T, rng):
 
 ## 프로덕션 노트: 확산 추론은 스텝 수 문제다 (Production note: diffusion inference is a step-count problem)
 
-DDPM 논문은 T=1000 역방향 스텝을 돌린다. 아무도 프로덕션에서 그것을 출시하지 않는다. 모든 실제 추론 스택은 세 전략 중 하나를 고른다 — 그리고 각각은 "지연 시간이 어디서 오는가"라는 프로덕션 프레이밍에 깔끔하게 대응된다.
+DDPM 논문은 T=1000 역방향 스텝을 돌린다. 아무도 프로덕션에서 그것을 출시하지 않는다. 모든 실제 추론 스택은 세 전략 중 하나를 고른다. 그리고 각각은 "지연 시간이 어디서 오는가"라는 프로덕션 프레이밍에 깔끔하게 대응된다.
 
 1. **더 빠른 샘플러, 같은 모델.** DDIM(20-50 스텝), DPM-Solver++(10-20), UniPC(8-16). 역방향 루프의 드롭인(drop-in) 교체; 학습된 `ε_θ` 가중치는 건드리지 않는다. 지연 시간을 20-50배 줄인다.
 2. **증류(Distillation).** 학생(student)이 더 적은 스텝으로 교사(teacher)를 맞추도록 학습시킨다: 점진적 증류(Progressive Distillation)(2 → 1), 일관성 모델(Consistency Models)(임의 → 1-4), LCM, SDXL-Turbo, SD3-Turbo. 지연 시간을 추가로 5-10배 줄이며, 재학습이 필요하다.
@@ -172,10 +172,10 @@ DDPM 논문은 T=1000 역방향 스텝을 돌린다. 아무도 프로덕션에�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sohl-Dickstein et al. (2015). Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585) — 시대를 앞선 확산 논문.
+- [Sohl-Dickstein et al. (2015). Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585): 시대를 앞선 확산 논문.
 - [Ho, Jain, Abbeel (2020). Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) — DDPM.
-- [Song, Meng, Ermon (2021). Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502) — DDIM, 더 적은 스텝.
-- [Nichol & Dhariwal (2021). Improved DDPM](https://arxiv.org/abs/2102.09672) — 코사인 스케줄, 학습된 분산.
-- [Dhariwal & Nichol (2021). Diffusion Models Beat GANs on Image Synthesis](https://arxiv.org/abs/2105.05233) — 분류기 안내.
+- [Song, Meng, Ermon (2021). Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502): DDIM, 더 적은 스텝.
+- [Nichol & Dhariwal (2021). Improved DDPM](https://arxiv.org/abs/2102.09672): 코사인 스케줄, 학습된 분산.
+- [Dhariwal & Nichol (2021). Diffusion Models Beat GANs on Image Synthesis](https://arxiv.org/abs/2105.05233): 분류기 안내.
 - [Ho & Salimans (2022). Classifier-Free Diffusion Guidance](https://arxiv.org/abs/2207.12598) — CFG.
-- [Karras et al. (2022). Elucidating the Design Space of Diffusion-Based Generative Models (EDM)](https://arxiv.org/abs/2206.00364) — 통일된 표기, 가장 깔끔한 레시피.
+- [Karras et al. (2022). Elucidating the Design Space of Diffusion-Based Generative Models (EDM)](https://arxiv.org/abs/2206.00364): 통일된 표기, 가장 깔끔한 레시피.

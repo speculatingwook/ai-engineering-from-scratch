@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-수학 과외 앱을 만든다고 하자. 프롬프트는 "Solve this word problem"이라고만 한다. GPT-5는 표준 초등 수학 벤치마크인 GSM8K에서 94%의 정답률을 보인다. 이미 정점에 올랐다고 생각하기 쉽다. 아니다 — 사고 연쇄는 여전히 3-4점을 더한다.
+수학 과외 앱을 만든다고 하자. 프롬프트는 "Solve this word problem"이라고만 한다. GPT-5는 표준 초등 수학 벤치마크인 GSM8K에서 94%의 정답률을 보인다. 이미 정점에 올랐다고 생각하기 쉽다. 아니다. 사고 연쇄는 여전히 3-4점을 더한다.
 
-다섯 단어 — "Let's think step by step" — 를 더하면 정확도가 91%로 뛴다. 풀이 예시 몇 개를 더하면 95%에 도달한다. 같은 모델. 같은 온도. 같은 API 비용. 유일한 차이는 모델에게 연습장을 줬다는 것이다.
+다섯 단어("Let's think step by step")를 더하면 정확도가 91%로 뛴다. 풀이 예시 몇 개를 더하면 95%에 도달한다. 같은 모델. 같은 온도. 같은 API 비용. 유일한 차이는 모델에게 연습장을 줬다는 것이다.
 
 이것은 잔재주가 아니다. 추론이 작동하는 방식이다. 인간은 다단계 문제를 한 번의 정신적 도약으로 풀지 않는다. 트랜스포머(transformer)도 그렇지 않다. 모델에게 중간 토큰(token)을 생성하도록 강제하면, 그 토큰들은 다음 토큰을 위한 맥락의 일부가 된다. 각 추론 단계가 다음 단계에 입력으로 들어간다. 모델은 말 그대로 답에 이르는 길을 계산해낸다.
 
@@ -97,7 +97,7 @@ graph LR
 | Llama 4 70B | 80% | 89% | 94% |
 | DeepSeek-V3.1 | 89% | 94% | 96% |
 
-**추론 모델에 대한 주의.** OpenAI의 o 시리즈(o3, o4-mini)와 DeepSeek-R1 같은 모델은 답을 내보내기 전에 내부적으로 사고 연쇄를 실행한다. 추론 모델에 "Let's think step by step"을 더하는 것은 중복이며 때로는 역효과를 낸다 — 이미 그것을 했기 때문이다.
+**추론 모델에 대한 주의.** OpenAI의 o 시리즈(o3, o4-mini)와 DeepSeek-R1 같은 모델은 답을 내보내기 전에 내부적으로 사고 연쇄를 실행한다. 추론 모델에 "Let's think step by step"을 더하는 것은 중복이며 때로는 역효과를 낸다. 이미 그것을 했기 때문이다.
 
 CoT의 두 가지 변형:
 
@@ -136,7 +136,7 @@ graph TD
     style V fill:#1a1a2e,stroke:#51cf66,color:#fff
 ```
 
-자기 일관성은 원래 PaLM 540B 실험에서 N=40으로 GSM8K 정확도를 56.5%(단일 CoT)에서 74.4%로 높였다. GPT-5에서는 기본 정확도가 이미 포화(saturation)되어 있어 향상이 작다(97%에서 98%). 이 기법은 기본 CoT 정확도가 60-85%인 모델에서 가장 빛난다 — 단일 경로 오류가 잦지만 체계적이지는 않은 최적 지점이다. 추론 모델(o 시리즈, R1)의 경우 자기 일관성은 내장된 내부 샘플링에 포섭된다.
+자기 일관성은 원래 PaLM 540B 실험에서 N=40으로 GSM8K 정확도를 56.5%(단일 CoT)에서 74.4%로 높였다. GPT-5에서는 기본 정확도가 이미 포화(saturation)되어 있어 향상이 작다(97%에서 98%). 이 기법은 기본 CoT 정확도가 60-85%인 모델에서 가장 빛난다. 단일 경로 오류가 잦지만 체계적이지는 않은 최적 지점이다. 추론 모델(o 시리즈, R1)의 경우 자기 일관성은 내장된 내부 샘플링에 포섭된다.
 
 트레이드오프(trade-off): N개의 샘플은 N배의 API 비용과 지연 시간(latency)을 뜻한다. 실제로는 N=5가 이점의 대부분을 포착한다. N=3은 의미 있는 투표를 위한 최소값이다. 대부분의 작업에서 N > 10은 수확이 체감한다.
 
@@ -191,7 +191,7 @@ ToT에는 세 가지 구성 요소가 있다:
 
 Game of 24 작업(산술을 사용해 숫자 4개를 결합해 24를 만들기)에서 표준 프롬프팅을 쓴 GPT-4는 문제의 7.3%를 푼다. CoT로는 4.0%다(여기서는 탐색 공간이 넓어 CoT가 오히려 해롭다). ToT로는 74%다.
 
-ToT는 비싸다. 트리의 각 노드는 LLM 호출을 필요로 한다. 분기 계수 3, 깊이 3의 트리는 최대 39번의 LLM 호출을 필요로 한다. 탐색 공간이 크지만 평가 가능한 문제에만 사용하라 — 계획 수립, 퍼즐 풀이, 제약이 있는 창의적 문제 해결.
+ToT는 비싸다. 트리의 각 노드는 LLM 호출을 필요로 한다. 분기 계수 3, 깊이 3의 트리는 최대 39번의 LLM 호출을 필요로 한다. 탐색 공간이 크지만 평가 가능한 문제에만 사용하라. 계획 수립, 퍼즐 풀이, 제약이 있는 창의적 문제 해결.
 
 ### ReAct: 생각하기 + 행동하기 (ReAct: Thinking + Doing)
 
@@ -222,7 +222,7 @@ graph LR
     style F fill:#1a1a2e,stroke:#51cf66,color:#fff
 ```
 
-ReAct는 추론을 실제 데이터에 근거시킬 수 있기 때문에 지식 집약적 작업에서 순수 CoT를 능가한다. HotpotQA(다중 홉 질의응답)에서 GPT-4를 쓴 ReAct는 CoT 단독의 29.4%에 비해 35.1%의 정확 일치(exact match)를 달성한다. 진짜 힘은 관찰(observation)이 추론 오류를 교정한다는 데 있다 — 모델은 실행 중간에 계획을 갱신할 수 있다.
+ReAct는 추론을 실제 데이터에 근거시킬 수 있기 때문에 지식 집약적 작업에서 순수 CoT를 능가한다. HotpotQA(다중 홉 질의응답)에서 GPT-4를 쓴 ReAct는 CoT 단독의 29.4%에 비해 35.1%의 정확 일치(exact match)를 달성한다. 진짜 힘은 관찰(observation)이 추론 오류를 교정한다는 데 있다. 모델은 실행 중간에 계획을 갱신할 수 있다.
 
 ReAct는 현대 AI 에이전트(agent)의 기초다. 모든 에이전트 프레임워크(LangChain, CrewAI, AutoGen)는 Thought-Action-Observation 루프의 어떤 변형을 구현한다. 완전한 에이전트는 Phase 14에서 만들 것이다. 이 레슨은 프롬프팅 패턴을 다룬다.
 
@@ -426,7 +426,7 @@ def tree_of_thought_solve(question, client, model, breadth=3, depth=3):
     return extract_answer(best_thought), best_thought
 ```
 
-평가자 자체가 LLM 호출이다. 모델에게 묻는다: "On a scale of 0.0 to 1.0, how promising is this reasoning path for solving the problem?" 이것이 ToT의 핵심 통찰이다 — 모델이 자기 자신의 부분 해를 평가한다.
+평가자 자체가 LLM 호출이다. 모델에게 묻는다: "On a scale of 0.0 to 1.0, how promising is this reasoning path for solving the problem?" 이것이 ToT의 핵심 통찰이다. 모델이 자기 자신의 부분 해를 평가한다.
 
 ### 5단계: 전체 파이프라인
 
@@ -449,7 +449,7 @@ def solve_with_escalation(question, examples, client, model):
     return tot_answer, "tree_of_thought", None
 ```
 
-에스컬레이션 로직: 저렴한 것(단일 CoT)을 먼저 시도한다. 자기 일관성 신뢰도가 0.8 미만이면(5개 샘플 중 4개 미만이 일치), ToT로 에스컬레이션한다. 이것은 비용과 정확도의 균형을 맞춘다 — 대부분의 문제는 저렴하게 풀리고, 어려운 문제는 더 많은 연산을 받는다.
+에스컬레이션 로직: 저렴한 것(단일 CoT)을 먼저 시도한다. 자기 일관성 신뢰도가 0.8 미만이면(5개 샘플 중 4개 미만이 일치), ToT로 에스컬레이션한다. 이것은 비용과 정확도의 균형을 맞춘다. 대부분의 문제는 저렴하게 풀리고, 어려운 문제는 더 많은 연산을 받는다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -571,6 +571,6 @@ result = dspy.majority(
 - [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) -- Yao et al. 2022. 현대 AI 에이전트의 기초. 3절이 Thought-Action-Observation 루프를 설명한다.
 - [Large Language Models are Zero-Shot Reasoners](https://arxiv.org/abs/2205.11916) -- Kojima et al. 2022. "Let's think step by step" 논문. 그 단순함에 비해 놀랍도록 효과적이다.
 - [DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines](https://arxiv.org/abs/2310.03714) -- Khattab et al. 2023. 프롬프팅을 컴파일 문제로 취급한다. 손수 하는 프롬프트 엔지니어링을 넘어서고 싶다면 읽어라.
-- [OpenAI — Reasoning models guide](https://platform.openai.com/docs/guides/reasoning) -- 사고 연쇄가 프롬프트 수준의 잔재주 대신 토큰당 가격이 매겨지는 내부 "reasoning" 모드가 되는 시점에 대한 벤더 가이드.
+- [OpenAI: Reasoning models guide](https://platform.openai.com/docs/guides/reasoning) -- 사고 연쇄가 프롬프트 수준의 잔재주 대신 토큰당 가격이 매겨지는 내부 "reasoning" 모드가 되는 시점에 대한 벤더 가이드.
 - [Lightman et al., "Let's Verify Step by Step" (2023)](https://arxiv.org/abs/2305.20050) -- 연쇄의 각 단계를 채점하는 프로세스 보상 모델(process reward model, PRM); 결과만 보는 보상을 능가하는 추론 감독 신호.
 - [Snell et al., "Scaling LLM Test-Time Compute Optimally" (2024)](https://arxiv.org/abs/2408.03314) -- CoT 길이, 자기 일관성 샘플링, MCTS에 대한 체계적 연구; 정확도가 지연 시간보다 더 중요할 때 "think step by step"이 향하는 곳.

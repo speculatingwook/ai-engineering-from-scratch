@@ -1,4 +1,4 @@
-# 완전한 비전 파이프라인 만들기 — 캡스톤 (Capstone)
+# 완전한 비전 파이프라인 만들기: 캡스톤 (Capstone)
 
 > 프로덕션 비전 시스템은 데이터 계약(data contract)으로 꿰맨 모델과 규칙의 연쇄다. 부품들은 이미 이 페이즈 안에 있다. 캡스톤은 그 부품들을 처음부터 끝까지 엮는다.
 
@@ -79,11 +79,11 @@ PipelineResult(
 
 ### 실패 모드
 
-- **빈 검출(Empty detections)** — 빈 리스트를 반환하라, 죽지 마라. 로그를 남겨라.
-- **경계 밖 박스(Out-of-bounds boxes)** — 크롭 전에 이미지 크기로 클램프(clamp)하라.
-- **작은 크롭(Tiny crops)** — 분류기의 최소 입력보다 작은 박스는 분류를 건너뛰어라.
-- **손상된 업로드(Corrupt upload)** — 500이 아니라 특정 오류 코드와 함께 400으로 응답하라.
-- **모델 로드 실패(Model load failure)** — 첫 요청이 아니라 서비스 시작 시점에 실패하라.
+- **빈 검출(Empty detections)**: 빈 리스트를 반환하라, 죽지 마라. 로그를 남겨라.
+- **경계 밖 박스(Out-of-bounds boxes)**: 크롭 전에 이미지 크기로 클램프(clamp)하라.
+- **작은 크롭(Tiny crops)**: 분류기의 최소 입력보다 작은 박스는 분류를 건너뛰어라.
+- **손상된 업로드(Corrupt upload)**: 500이 아니라 특정 오류 코드와 함께 400으로 응답하라.
+- **모델 로드 실패(Model load failure)**: 첫 요청이 아니라 서비스 시작 시점에 실패하라.
 
 프로덕션 파이프라인은 실패를 숨기는 일반적 `try/except`를 쓰지 않고 이 각각을 처리한다. 모든 실패는 명명된 코드와 응답을 얻는다.
 
@@ -308,11 +308,11 @@ CPU에서의 전형적인 출력은 전처리 약 3ms, 검출 300~500ms, 분류 
 
 프로덕션 템플릿은 여기에 다음을 더해 같은 구조로 수렴한다.
 
-- **모델 버전 관리(Model versioning)** — 응답에 항상 모델 이름과 가중치(weight) 해시를 로그하라.
-- **요청별 추적 ID(Per-request trace IDs)** — 느린 응답을 단계와 연관 지을 수 있도록 모든 요청의 모든 단계 타이밍을 로그하라.
-- **폴백 경로(Fallback path)** — 분류기가 타임아웃되면 전체 요청을 실패시키지 말고 분류 없이 검출만 반환하라.
-- **안전 필터(Safety filters)** — NSFW / PII 필터를 분류 후, 응답이 서비스를 떠나기 전에 실행하라.
-- **배치 엔드포인트(Batch endpoint)** — 대량 처리를 위해 이미지 URL 리스트를 받는 `/detect_batch`.
+- **모델 버전 관리(Model versioning)**: 응답에 항상 모델 이름과 가중치(weight) 해시를 로그하라.
+- **요청별 추적 ID(Per-request trace IDs)**: 느린 응답을 단계와 연관 지을 수 있도록 모든 요청의 모든 단계 타이밍을 로그하라.
+- **폴백 경로(Fallback path)**: 분류기가 타임아웃되면 전체 요청을 실패시키지 말고 분류 없이 검출만 반환하라.
+- **안전 필터(Safety filters)**: NSFW / PII 필터를 분류 후, 응답이 서비스를 떠나기 전에 실행하라.
+- **배치 엔드포인트(Batch endpoint)**: 대량 처리를 위해 이미지 URL 리스트를 받는 `/detect_batch`.
 
 프로덕션 서빙에서는 `torchserve`, `Triton Inference Server`, `BentoML`이 배치 처리, 버전 관리, 메트릭, 헬스 체크(health check)를 기본으로 처리한다. `FastAPI`를 직접 실행하는 방식은 프로토타입과 소규모 제품에 적절하다.
 
@@ -320,8 +320,8 @@ CPU에서의 전형적인 출력은 전처리 약 3ms, 검출 300~500ms, 분류 
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-vision-service-shape-reviewer.md` — 비전 서비스의 코드를 계약/응답 형태 위반에 대해 검토하고 첫 번째로 깨지는 버그를 짚어주는 프롬프트(prompt).
-- `outputs/skill-pipeline-budget-planner.md` — 목표 지연 시간과 처리량이 주어졌을 때 모든 파이프라인 단계에 시간 예산을 할당하고 어느 단계가 먼저 예산을 놓칠지 표시하는 스킬.
+- `outputs/prompt-vision-service-shape-reviewer.md`: 비전 서비스의 코드를 계약/응답 형태 위반에 대해 검토하고 첫 번째로 깨지는 버그를 짚어주는 프롬프트(prompt).
+- `outputs/skill-pipeline-budget-planner.md`: 목표 지연 시간과 처리량이 주어졌을 때 모든 파이프라인 단계에 시간 예산을 할당하고 어느 단계가 먼저 예산을 놓칠지 표시하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -344,7 +344,7 @@ CPU에서의 전형적인 출력은 전처리 약 3ms, 검출 300~500ms, 분류 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Full Stack Deep Learning — Deploying Models](https://fullstackdeeplearning.com/course/2022/lecture-5-deployment/) — 프로덕션 ML 배포의 표준 개요
-- [BentoML docs](https://docs.bentoml.com) — 배치 처리, 버전 관리, 메트릭을 갖춘 서빙 프레임워크
-- [torchserve docs](https://pytorch.org/serve/) — PyTorch의 공식 서빙 라이브러리
-- [NVIDIA Triton Inference Server](https://developer.nvidia.com/triton-inference-server) — 배치 처리와 다중 모델 지원을 갖춘 고처리량 서빙
+- [Full Stack Deep Learning(Deploying Models](https://fullstackdeeplearning.com/course/2022/lecture-5-deployment/)) 프로덕션 ML 배포의 표준 개요
+- [BentoML docs](https://docs.bentoml.com): 배치 처리, 버전 관리, 메트릭을 갖춘 서빙 프레임워크
+- [torchserve docs](https://pytorch.org/serve/): PyTorch의 공식 서빙 라이브러리
+- [NVIDIA Triton Inference Server](https://developer.nvidia.com/triton-inference-server): 배치 처리와 다중 모델 지원을 갖춘 고처리량 서빙

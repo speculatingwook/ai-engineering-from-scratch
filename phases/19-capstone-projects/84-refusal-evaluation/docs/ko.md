@@ -1,4 +1,4 @@
-# Capstone 84 — 거절 평가 (Refusal Evaluation)
+# Capstone 84: 거절 평가 (Refusal Evaluation)
 
 > 무해한 프롬프트에 대한 유용성과 유해한 프롬프트에 대한 거절은 하나의 지표가 아니라 서로 다른 두 지표다. 둘 다 측정해야 한다.
 

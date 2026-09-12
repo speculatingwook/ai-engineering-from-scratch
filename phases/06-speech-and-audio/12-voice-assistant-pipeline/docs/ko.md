@@ -1,4 +1,4 @@
-# 음성 비서 파이프라인 만들기(Build a Voice Assistant Pipeline) — Phase 6 캡스톤
+# 음성 비서 파이프라인 만들기(Build a Voice Assistant Pipeline): Phase 6 캡스톤
 
 > 레슨 01-11의 모든 것을 하나로 엮는다. 듣고, 추론하고, 다시 말하는 음성 비서를 만든다. 2026년에 이것은 연구 문제가 아니라 이미 해결된 엔지니어링 문제다. 다만 통합 세부사항이 출시 여부를 가른다.
 
@@ -169,9 +169,9 @@ while True:
 
 ## 더 읽을거리 (Further Reading)
 
-- [LiveKit — voice agent quickstart](https://docs.livekit.io/agents/) — 프로덕션급 레퍼런스.
-- [Pipecat — voice agent examples](https://github.com/pipecat-ai/pipecat) — DIY 친화적 프레임워크.
-- [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) — 매니지드 음성 네이티브 경로.
-- [Kyutai Moshi](https://github.com/kyutai-labs/moshi) — 풀 듀플렉스 레퍼런스 (레슨 15).
-- [Porcupine wake-word](https://picovoice.ai/products/porcupine/) — 웨이크 워드 게이팅.
-- [Anthropic — tool use guide](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) — LLM 함수 호출.
+- [LiveKit(voice agent quickstart](https://docs.livekit.io/agents/)) 프로덕션급 레퍼런스.
+- [Pipecat(voice agent examples](https://github.com/pipecat-ai/pipecat)) DIY 친화적 프레임워크.
+- [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime): 매니지드 음성 네이티브 경로.
+- [Kyutai Moshi](https://github.com/kyutai-labs/moshi): 풀 듀플렉스 레퍼런스 (레슨 15).
+- [Porcupine wake-word](https://picovoice.ai/products/porcupine/): 웨이크 워드 게이팅.
+- [Anthropic(tool use guide](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)) LLM 함수 호출.

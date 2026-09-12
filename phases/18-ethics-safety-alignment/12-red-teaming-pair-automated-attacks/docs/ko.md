@@ -1,6 +1,6 @@
 # 레드팀: PAIR와 자동화된 공격 (Red-Teaming: PAIR and Automated Attacks)
 
-> Chao, Robey, Dobriban, Hassani, Pappas, Wong(NeurIPS 2023, arXiv:2310.08419). PAIR — Prompt Automatic Iterative Refinement — 는 대표적인 자동화 블랙박스(black-box) 탈옥(jailbreak)이다. 레드팀(red-team) 시스템 프롬프트(system prompt)를 가진 공격자 LLM이 대상 LLM에 대한 탈옥을 반복적으로 제안하며, 시도와 응답을 자신의 채팅 기록에 인컨텍스트(in-context) 피드백으로 누적한다. PAIR는 보통 20번의 쿼리 안에 성공하며, 이는 GCG(Zou 외의 토큰 수준 그래디언트 탐색)보다 수십에서 수백 배 더 효율적이고 화이트박스(white-box) 접근을 요구하지 않는다. PAIR는 이제 GCG, AutoDAN, TAP, Persuasive Adversarial Prompt와 함께 JailbreakBench(arXiv:2404.01318)와 HarmBench의 표준 베이스라인(baseline)이다.
+> Chao, Robey, Dobriban, Hassani, Pappas, Wong(NeurIPS 2023, arXiv:2310.08419). PAIR(Prompt Automatic Iterative Refinement)는 대표적인 자동화 블랙박스(black-box) 탈옥(jailbreak)이다. 레드팀(red-team) 시스템 프롬프트(system prompt)를 가진 공격자 LLM이 대상 LLM에 대한 탈옥을 반복적으로 제안하며, 시도와 응답을 자신의 채팅 기록에 인컨텍스트(in-context) 피드백으로 누적한다. PAIR는 보통 20번의 쿼리 안에 성공하며, 이는 GCG(Zou 외의 토큰 수준 그래디언트 탐색)보다 수십에서 수백 배 더 효율적이고 화이트박스(white-box) 접근을 요구하지 않는다. PAIR는 이제 GCG, AutoDAN, TAP, Persuasive Adversarial Prompt와 함께 JailbreakBench(arXiv:2404.01318)와 HarmBench의 표준 베이스라인(baseline)이다.
 
 **Type:** Build
 **Languages:** Python (stdlib, mock PAIR loop against a toy target)
@@ -34,7 +34,7 @@
 2. A가 새로운 프롬프트 p_k를 내놓는다.
 3. p_k를 T에 제출하고; 응답 r_k를 받는다.
 4. J가 목표에 대해 (p_k, r_k)에 점수를 매긴다.
-5. 점수가 임계값 이상이면 — 중단한다. 탈옥을 찾았다.
+5. 점수가 임계값 이상이면: 중단한다. 탈옥을 찾았다.
 6. 아니면 (p_k, r_k)를 A의 기록에 추가하고; 계속한다.
 
 경험적 결과(NeurIPS 2023): GPT-3.5-turbo, Llama-2-7B-chat에 대해 50% 이상의 공격 성공률; 성공까지의 평균 쿼리 수는 10-20 범위.
@@ -47,8 +47,8 @@ GCG(Zou 외 2023)는 그래디언트(gradient)로 적대적 토큰 접미사(suf
 
 - **GCG (Zou 외 2023, arXiv:2307.15043).** 적대적 접미사를 위한 토큰 수준 그래디언트 탐색. 화이트박스, 전이 가능, 읽을 수 없는 문자열을 만든다.
 - **AutoDAN (Liu 외 2023).** 계층적 목적 함수로 안내되는 프롬프트에 대한 진화적 탐색.
-- **TAP (Mehrotra 외 2024).** 가지치기를 동반한 공격 트리(tree-of-attacks with pruning) — 여러 PAIR 방식의 롤아웃(rollout)으로 분기한다.
-- **PAP (Zeng 외 2024).** Persuasive Adversarial Prompts — 인간의 설득 기법을 프롬프트 템플릿으로 인코딩한다.
+- **TAP (Mehrotra 외 2024).** 가지치기를 동반한 공격 트리(tree-of-attacks with pruning): 여러 PAIR 방식의 롤아웃(rollout)으로 분기한다.
+- **PAP (Zeng 외 2024).** Persuasive Adversarial Prompts: 인간의 설득 기법을 프롬프트 템플릿으로 인코딩한다.
 
 ### JailbreakBench와 HarmBench
 
@@ -101,7 +101,7 @@ Lesson 12는 자동화 공격의 토대다. Lesson 13(다중샷 탈옥, Many-Sho
 
 ## 더 읽을거리 (Further Reading)
 
-- [Chao et al. — Jailbreaking Black Box LLMs in Twenty Queries (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) — PAIR 논문, NeurIPS 2023
-- [Zou et al. — Universal and Transferable Adversarial Attacks on Aligned LLMs (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043) — GCG 논문
-- [Chao et al. — JailbreakBench (arXiv:2404.01318)](https://arxiv.org/abs/2404.01318) — 표준화된 평가
-- [Mazeika et al. — HarmBench (ICML 2024)](https://arxiv.org/abs/2402.04249) — 더 넓은 평가
+- [Chao et al.(Jailbreaking Black Box LLMs in Twenty Queries (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419)) PAIR 논문, NeurIPS 2023
+- [Zou et al.(Universal and Transferable Adversarial Attacks on Aligned LLMs (arXiv:2307.15043)](https://arxiv.org/abs/2307.15043)) GCG 논문
+- [Chao et al.(JailbreakBench (arXiv:2404.01318)](https://arxiv.org/abs/2404.01318)) 표준화된 평가
+- [Mazeika et al.(HarmBench (ICML 2024)](https://arxiv.org/abs/2402.04249)) 더 넓은 평가

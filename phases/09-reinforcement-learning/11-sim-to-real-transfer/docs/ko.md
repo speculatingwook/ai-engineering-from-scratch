@@ -143,11 +143,11 @@ Refuse to deploy without (a) a zero-shot sim-variant test, (b) a safety shield, 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Tobin et al. (2017). Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World](https://arxiv.org/abs/1703.06907) — 원조 DR 논문(로보틱스용 비전).
-- [Peng et al. (2018). Sim-to-Real Transfer of Robotic Control with Dynamics Randomization](https://arxiv.org/abs/1710.06537) — 동역학을 위한 DR, 사족 보행.
-- [OpenAI et al. (2019). Solving Rubik's Cube with a Robot Hand](https://arxiv.org/abs/1910.07113) — Dactyl, 대규모 ADR.
-- [Miki et al. (2022). Learning robust perceptive locomotion for quadrupedal robots in the wild](https://www.science.org/doi/10.1126/scirobotics.abk2822) — ANYmal을 위한 교사-학생.
-- [Makoviychuk et al. (2021). Isaac Gym: High Performance GPU Based Physics Simulation for Robot Learning](https://arxiv.org/abs/2108.10470) — 2025–2026 배포를 이끄는 대규모 병렬 시뮬레이션.
-- [Akkaya et al. (2019). Automatic Domain Randomization](https://arxiv.org/abs/1910.07113) — ADR 커리큘럼 방법.
-- [Sutton & Barto (2018). Ch. 8 — Planning and Learning with Tabular Methods](http://incompleteideas.net/book/RLbook2020.pdf) — 현대 시뮬레이션-실제 파이프라인을 떠받치는 Dyna 틀(계획 + 롤아웃에 모델 사용).
-- [Zhao, Queralta & Westerlund (2020). Sim-to-Real Transfer in Deep Reinforcement Learning for Robotics: a Survey](https://arxiv.org/abs/2009.13303) — 벤치마크 결과와 함께하는 시뮬레이션-실제 방법의 분류법.
+- [Tobin et al. (2017). Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World](https://arxiv.org/abs/1703.06907): 원조 DR 논문(로보틱스용 비전).
+- [Peng et al. (2018). Sim-to-Real Transfer of Robotic Control with Dynamics Randomization](https://arxiv.org/abs/1710.06537): 동역학을 위한 DR, 사족 보행.
+- [OpenAI et al. (2019). Solving Rubik's Cube with a Robot Hand](https://arxiv.org/abs/1910.07113): Dactyl, 대규모 ADR.
+- [Miki et al. (2022). Learning robust perceptive locomotion for quadrupedal robots in the wild](https://www.science.org/doi/10.1126/scirobotics.abk2822): ANYmal을 위한 교사-학생.
+- [Makoviychuk et al. (2021). Isaac Gym: High Performance GPU Based Physics Simulation for Robot Learning](https://arxiv.org/abs/2108.10470): 2025–2026 배포를 이끄는 대규모 병렬 시뮬레이션.
+- [Akkaya et al. (2019). Automatic Domain Randomization](https://arxiv.org/abs/1910.07113): ADR 커리큘럼 방법.
+- [Sutton & Barto (2018). Ch. 8(Planning and Learning with Tabular Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 현대 시뮬레이션-실제 파이프라인을 떠받치는 Dyna 틀(계획 + 롤아웃에 모델 사용).
+- [Zhao, Queralta & Westerlund (2020). Sim-to-Real Transfer in Deep Reinforcement Learning for Robotics: a Survey](https://arxiv.org/abs/2009.13303): 벤치마크 결과와 함께하는 시뮬레이션-실제 방법의 분류법.

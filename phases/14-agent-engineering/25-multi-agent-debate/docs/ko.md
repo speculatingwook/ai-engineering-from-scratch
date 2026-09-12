@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-Self-Refine(Lesson 05)는 하나의 모델이 자신을 비평하는 것이다 — 집단사고(groupthink)의 위험이 있다. CRITIC(Lesson 05)은 비평을 외부 도구에 그라운딩한다 — 항상 가용한 것은 아니다. 토론은 세 번째 모드를 도입한다: 다수의 인스턴스, 교차 비평, 의견 불일치에 의한 수렴.
+Self-Refine(Lesson 05)는 하나의 모델이 자신을 비평하는 것이다. 집단사고(groupthink)의 위험이 있다. CRITIC(Lesson 05)은 비평을 외부 도구에 그라운딩한다. 항상 가용한 것은 아니다. 토론은 세 번째 모드를 도입한다: 다수의 인스턴스, 교차 비평, 의견 불일치에 의한 수렴.
 
 ## 개념 (The Concept)
 
@@ -43,7 +43,7 @@ Self-Refine(Lesson 05)는 하나의 모델이 자신을 비평하는 것이다 �
 ### 토론이 도움이 될 때
 
 - **사실성.** N개의 독립 제안, 교차 검사가 환각을 줄인다.
-- **규칙 준수.** 체스 수의 유효성 — 한 모델이 규칙을 놓치면 다른 모델이 잡아낸다.
+- **규칙 준수.** 체스 수의 유효성: 한 모델이 규칙을 놓치면 다른 모델이 잡아낸다.
 - **개방형 추론.** 다수의 틀이 올바른 답으로 좁혀 들어간다.
 
 ### 토론이 해로울 때
@@ -54,10 +54,10 @@ Self-Refine(Lesson 05)는 하나의 모델이 자신을 비평하는 것이다 �
 
 ### 2026년 실용적 구현체
 
-- **Anthropic 오케스트레이터-워커(orchestrator-workers)**(Lesson 12) — 종합(synthesis) 단계를 갖춘 토론의 한 변형.
-- **LangGraph 슈퍼바이저(supervisor)**(Lesson 13) — 중앙 라우터 + 전문가 에이전트가 토론을 노드로 구현할 수 있다.
-- **OpenAI Agents SDK**(Lesson 16) — 에이전트가 반복적 비평을 위해 서로 핸드오프(handoff)한다.
-- **멀티 에이전트 평가** — 평가 신호를 위해 토론 + 평가자-최적화자(evaluator-optimizer)를 짝지음.
+- **Anthropic 오케스트레이터-워커(orchestrator-workers)**(Lesson 12): 종합(synthesis) 단계를 갖춘 토론의 한 변형.
+- **LangGraph 슈퍼바이저(supervisor)**(Lesson 13): 중앙 라우터 + 전문가 에이전트가 토론을 노드로 구현할 수 있다.
+- **OpenAI Agents SDK**(Lesson 16): 에이전트가 반복적 비평을 위해 서로 핸드오프(handoff)한다.
+- **멀티 에이전트 평가**: 평가 신호를 위해 토론 + 평가자-최적화자(evaluator-optimizer)를 짝지음.
 
 ### 이 패턴이 잘못되는 지점
 
@@ -113,7 +113,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Du et al., Society of Minds (arXiv:2305.14325)](https://arxiv.org/abs/2305.14325) — 정규 멀티 에이전트 토론
-- [Sparse Communication Topology (arXiv:2406.11776)](https://arxiv.org/abs/2406.11776) — 희소 토폴로지 결과
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 토론 변형으로서의 오케스트레이터-워커
-- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651) — 단일 모델 자기 비평 대응물
+- [Du et al., Society of Minds (arXiv:2305.14325)](https://arxiv.org/abs/2305.14325): 정규 멀티 에이전트 토론
+- [Sparse Communication Topology (arXiv:2406.11776)](https://arxiv.org/abs/2406.11776): 희소 토폴로지 결과
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 토론 변형으로서의 오케스트레이터-워커
+- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651): 단일 모델 자기 비평 대응물

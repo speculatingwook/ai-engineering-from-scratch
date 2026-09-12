@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-단일 셀프 어텐션(self-attention) 헤드는 하나의 어텐션 행렬(matrix)을 계산한다. 그 행렬은 한 종류의 관계를 포착한다 — 보통 주어진 학습 신호의 손실(loss)을 최소화하는 관계다. 데이터에 주어-동사 일치, 상호 참조(co-reference), 장거리 담화, 구문 청킹이 모두 뒤엉켜 있다면, 단일 헤드는 그것들을 하나의 소프트맥스(soft-max) 분포로 뭉개버리고 신호의 절반을 잃는다.
+단일 셀프 어텐션(self-attention) 헤드는 하나의 어텐션 행렬(matrix)을 계산한다. 그 행렬은 한 종류의 관계를 포착한다. 보통 주어진 학습 신호의 손실(loss)을 최소화하는 관계다. 데이터에 주어-동사 일치, 상호 참조(co-reference), 장거리 담화, 구문 청킹이 모두 뒤엉켜 있다면, 단일 헤드는 그것들을 하나의 소프트맥스(soft-max) 분포로 뭉개버리고 신호의 절반을 잃는다.
 
 2017년 Vaswani 논문의 해법: 여러 어텐션 함수를 병렬로, 각각 자체 Q, K, V 투영(projection)을 가지고 실행한 뒤 출력을 이어 붙인다. 각 헤드는 차원 `d_model / n_heads`의 더 작은 부분 공간에서 동작한다. 전체 파라미터(parameter)는 그대로다. 표현력은 올라간다.
 
@@ -36,7 +36,7 @@
 | Grouped-query (GQA) | N | G (e.g. N/8) | Llama 2 70B, Llama 3+, Qwen 2+, Mistral |
 | Multi-head latent (MLA) | N | compressed to low-rank | DeepSeek-V2, V3 |
 
-GQA는 거의 완전한 품질을 유지하면서 KV 캐시(cache) 메모리를 `N/G`배 줄이기 때문에 현대의 기본값이다. MLA는 한 걸음 더 나아가 K/V를 잠재(latent) 공간으로 압축한 뒤 계산 시점에 되투영한다 — FLOPs를 들이고, 훨씬 더 많은 메모리를 아낀다.
+GQA는 거의 완전한 품질을 유지하면서 KV 캐시(cache) 메모리를 `N/G`배 줄이기 때문에 현대의 기본값이다. MLA는 한 걸음 더 나아가 K/V를 잠재(latent) 공간으로 압축한 뒤 계산 시점에 되투영한다. FLOPs를 들이고, 훨씬 더 많은 메모리를 아낀다.
 
 ## 직접 만들기 (Build It)
 
@@ -89,11 +89,11 @@ def gqa_project(X, W, n_kv_heads, n_heads):
     return np.repeat(kv, repeat, axis=0)      # (n_heads, n, d_head)
 ```
 
-추론(inference) 시 KV 캐시에 `n_heads`개가 아닌 `n_kv_heads`개 사본만 살아 있으므로 메모리를 아낀다. Llama 3 70B는 64개 쿼리 헤드와 8개 KV 헤드를 쓴다 — 캐시가 8배 축소된다.
+추론(inference) 시 KV 캐시에 `n_heads`개가 아닌 `n_kv_heads`개 사본만 살아 있으므로 메모리를 아낀다. Llama 3 70B는 64개 쿼리 헤드와 8개 KV 헤드를 쓴다. 캐시가 8배 축소된다.
 
 ### 4단계: 각 헤드가 학습한 것을 탐침하기
 
-4개 헤드로 짧은 문장에 MHA를 실행한다. 각 헤드에 대해 `(N, N)` 어텐션 행렬을 출력한다. 무작위 초기화로도 서로 다른 헤드가 서로 다른 구조를 골라내는 것을 볼 수 있다 — 일부는 신호, 일부는 부분 공간의 회전 대칭성(symmetry) 때문이다.
+4개 헤드로 짧은 문장에 MHA를 실행한다. 각 헤드에 대해 `(N, N)` 어텐션 행렬을 출력한다. 무작위 초기화로도 서로 다른 헤드가 서로 다른 구조를 골라내는 것을 볼 수 있다. 일부는 신호, 일부는 부분 공간의 회전 대칭성(symmetry) 때문이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -152,8 +152,8 @@ out = scaled_dot_product_attention(q, k, v, is_causal=True, enable_gqa=True)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Vaswani et al. (2017). Attention Is All You Need §3.2.2](https://arxiv.org/abs/1706.03762) — 원조 멀티헤드 사양.
-- [Shazeer (2019). Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150) — MQA 논문.
-- [Ainslie et al. (2023). GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints](https://arxiv.org/abs/2305.13245) — 학습 후 MHA를 GQA로 변환하는 법.
-- [DeepSeek-AI (2024). DeepSeek-V2 Technical Report](https://arxiv.org/abs/2405.04434) — MLA와 그것이 캐시 메모리에서 MHA/GQA를 이기는 이유.
-- [Olsson et al. (2022). In-context Learning and Induction Heads](https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html) — 헤드가 실제로 하는 일에 대한 기계론적 관점.
+- [Vaswani et al. (2017). Attention Is All You Need §3.2.2](https://arxiv.org/abs/1706.03762): 원조 멀티헤드 사양.
+- [Shazeer (2019). Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150): MQA 논문.
+- [Ainslie et al. (2023). GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints](https://arxiv.org/abs/2305.13245): 학습 후 MHA를 GQA로 변환하는 법.
+- [DeepSeek-AI (2024). DeepSeek-V2 Technical Report](https://arxiv.org/abs/2405.04434): MLA와 그것이 캐시 메모리에서 MHA/GQA를 이기는 이유.
+- [Olsson et al. (2022). In-context Learning and Induction Heads](https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html): 헤드가 실제로 하는 일에 대한 기계론적 관점.

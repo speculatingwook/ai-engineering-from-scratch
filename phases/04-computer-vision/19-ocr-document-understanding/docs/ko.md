@@ -1,6 +1,6 @@
 # OCR와 문서 이해 (OCR & Document Understanding)
 
-> OCR은 세 단계 파이프라인이다 — 텍스트 박스를 검출하고, 문자를 인식하고, 그다음 레이아웃을 잡는다. 모든 현대 OCR 시스템은 이 단계들을 재배열하거나 병합한다.
+> OCR은 세 단계 파이프라인이다. 텍스트 박스를 검출하고, 문자를 인식하고, 그다음 레이아웃을 잡는다. 모든 현대 OCR 시스템은 이 단계들을 재배열하거나 병합한다.
 
 **Type:** Learn + Use
 **Languages:** Python
@@ -12,7 +12,7 @@
 - 고전적 OCR 파이프라인(검출 -> 인식 -> 레이아웃)과 현대의 종단 간(end-to-end) 대안(Donut, Qwen-VL-OCR)을 추적하기
 - 시퀀스-투-시퀀스(sequence-to-sequence) OCR 학습을 위한 CTC(Connectionist Temporal Classification) 손실(loss) 구현하기
 - 학습 없이 프로덕션(production) 문서 파싱(parsing)을 위해 PaddleOCR이나 EasyOCR 사용하기
-- OCR, 레이아웃 파싱(layout parsing), 문서 이해(document understanding)를 구별하고 — 작업별로 올바른 도구를 고르기
+- OCR, 레이아웃 파싱(layout parsing), 문서 이해(document understanding)를 구별하고: 작업별로 올바른 도구를 고르기
 
 ## 문제 (The Problem)
 
@@ -62,10 +62,10 @@ CTC는 2015년에 CRNN이 작동한 이유이며, 2026년에도 여전히 대부
 
 ### 현대의 종단 간 모델
 
-- **Donut**(Kim et al., 2022) — ViT 인코더(encoder) + 텍스트 디코더(decoder). 이미지를 읽고 JSON을 직접 내보낸다. 텍스트 검출기도, 레이아웃 모듈도 없다.
-- **TrOCR** — 줄 수준 OCR을 위한 ViT + 트랜스포머(transformer) 디코더.
-- **Qwen-VL-OCR / InternVL** — OCR 작업에 파인튜닝(fine-tune)된 완전한 비전-언어 모델. 2026년 복잡한 문서에서 최고의 정확도.
-- **PaddleOCR** — 성숙한 프로덕션 패키지의 고전적 DB + CRNN 파이프라인. 여전히 오픈소스의 일꾼.
+- **Donut**(Kim et al., 2022): ViT 인코더(encoder) + 텍스트 디코더(decoder). 이미지를 읽고 JSON을 직접 내보낸다. 텍스트 검출기도, 레이아웃 모듈도 없다.
+- **TrOCR**: 줄 수준 OCR을 위한 ViT + 트랜스포머(transformer) 디코더.
+- **Qwen-VL-OCR / InternVL**: OCR 작업에 파인튜닝(fine-tune)된 완전한 비전-언어 모델. 2026년 복잡한 문서에서 최고의 정확도.
+- **PaddleOCR**: 성숙한 프로덕션 패키지의 고전적 DB + CRNN 파이프라인. 여전히 오픈소스의 일꾼.
 
 종단 간 모델은 더 많은 데이터와 연산이 필요하지만 다단계 파이프라인의 오차 누적(error accumulation)을 건너뛴다.
 
@@ -77,10 +77,10 @@ CTC는 2015년에 CRNN이 작동한 이유이며, 2026년에도 여전히 대부
 
 ### 평가 지표
 
-- **문자 오류율(Character Error Rate, CER)** — 레벤슈타인 거리(Levenshtein distance) / 참조의 길이. 낮을수록 좋다. 프로덕션 목표: 깨끗한 스캔에서 < 2%.
-- **단어 오류율(Word Error Rate, WER)** — 단어 수준에서 동일.
-- **구조화된 필드의 F1** — 키-값 작업용. `{invoice_total: 42.50}`이 올바르게 나타나는지 측정한다.
-- **JSON에 대한 편집 거리(Edit distance on JSON)** — 종단 간 문서 파싱용. Donut 논문이 정규화된 트리 편집 거리(normalised tree edit distance)를 도입했다.
+- **문자 오류율(Character Error Rate, CER)**: 레벤슈타인 거리(Levenshtein distance) / 참조의 길이. 낮을수록 좋다. 프로덕션 목표: 깨끗한 스캔에서 < 2%.
+- **단어 오류율(Word Error Rate, WER)**: 단어 수준에서 동일.
+- **구조화된 필드의 F1**: 키-값 작업용. `{invoice_total: 42.50}`이 올바르게 나타나는지 측정한다.
+- **JSON에 대한 편집 거리(Edit distance on JSON)**: 종단 간 문서 파싱용. Donut 논문이 정규화된 트리 편집 거리(normalised tree edit distance)를 도입했다.
 
 ## 직접 만들기 (Build It)
 
@@ -213,9 +213,9 @@ for step in range(200):
 
 세 가지 프로덕션 경로:
 
-- **PaddleOCR** — 성숙하고, 빠르고, 다국어. 한 줄 사용: `paddleocr.PaddleOCR(lang="en").ocr(image_path)`.
-- **EasyOCR** — Python 네이티브, 다국어, PyTorch 백본(backbone).
-- **Tesseract** — 고전적. 모델이 어려워할 때 오래된 스캔 문서에 여전히 유용하다.
+- **PaddleOCR**: 성숙하고, 빠르고, 다국어. 한 줄 사용: `paddleocr.PaddleOCR(lang="en").ocr(image_path)`.
+- **EasyOCR**: Python 네이티브, 다국어, PyTorch 백본(backbone).
+- **Tesseract**: 고전적. 모델이 어려워할 때 오래된 스캔 문서에 여전히 유용하다.
 
 종단 간 문서 파싱에는, Donut이나 VLM을 쓴다:
 
@@ -232,8 +232,8 @@ model = VisionEncoderDecoderModel.from_pretrained("naver-clova-ix/donut-base-fin
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-ocr-stack-picker.md` — 문서 유형, 언어, 구조가 주어졌을 때 Tesseract / PaddleOCR / Donut / VLM-OCR을 골라주는 프롬프트(prompt).
-- `outputs/skill-ctc-decoder.md` — 길이 정규화(length normalisation)를 포함해 밑바닥부터 그리디 및 빔 서치 CTC 디코더를 작성하는 스킬.
+- `outputs/prompt-ocr-stack-picker.md`: 문서 유형, 언어, 구조가 주어졌을 때 Tesseract / PaddleOCR / Donut / VLM-OCR을 골라주는 프롬프트(prompt).
+- `outputs/skill-ctc-decoder.md`: 길이 정규화(length normalisation)를 포함해 밑바닥부터 그리디 및 빔 서치 CTC 디코더를 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -256,7 +256,7 @@ model = VisionEncoderDecoderModel.from_pretrained("naver-clova-ix/donut-base-fin
 
 ## 더 읽을거리 (Further Reading)
 
-- [CRNN (Shi et al., 2015)](https://arxiv.org/abs/1507.05717) — 원조 CNN+RNN+CTC 아키텍처
-- [CTC (Graves et al., 2006)](https://www.cs.toronto.edu/~graves/icml_2006.pdf) — 원조 CTC 논문. 알고리즘적 아이디어가 빽빽하게 들어차 있다
-- [Donut (Kim et al., 2022)](https://arxiv.org/abs/2111.15664) — OCR 없는 문서 이해 트랜스포머
-- [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) — 오픈소스 프로덕션 OCR 스택
+- [CRNN (Shi et al., 2015)](https://arxiv.org/abs/1507.05717): 원조 CNN+RNN+CTC 아키텍처
+- [CTC (Graves et al., 2006)](https://www.cs.toronto.edu/~graves/icml_2006.pdf): 원조 CTC 논문. 알고리즘적 아이디어가 빽빽하게 들어차 있다
+- [Donut (Kim et al., 2022)](https://arxiv.org/abs/2111.15664): OCR 없는 문서 이해 트랜스포머
+- [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR): 오픈소스 프로덕션 OCR 스택

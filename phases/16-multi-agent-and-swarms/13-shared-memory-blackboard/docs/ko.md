@@ -55,7 +55,7 @@ agent-C ──pub────▶ │                  │ ──▶ agent-F (sub
 1. A가 페이지를 가져와 공유 상태에 메시지를 쓴다: "이 연구는 42% 정확도 향상을 보고한다."
 2. 가져온 페이지는 실제로 "4.2% 향상"이라고 했다. A가 소수점을 환각했다.
 3. B가 공유 상태를 읽고 쓴다: "큰 42% 정확도 향상이 보고됨 (출처: A)."
-4. C가 공유 상태를 읽고 쓴다: "도입 권장 — 42% 향상은 혁신적이다."
+4. C가 공유 상태를 읽고 쓴다: "도입 권장: 42% 향상은 혁신적이다."
 5. 최종 보고서는 존재한 적 없는 42%라는 수치를 인용한다.
 
 어떤 에이전트도 충돌하지 않았다. 어떤 테스트도 실패하지 않았다. 시스템은 "작동했다." 환각은 공유 상태를 통해 한 에이전트의 컨텍스트에서 모든 하류 에이전트의 추론으로 건너갔다.
@@ -105,11 +105,11 @@ agent-C ──pub────▶ │                  │ ──▶ agent-F (sub
 
 `code/main.py`는 두 토폴로지를 stdlib 파이썬으로 구현하며, 장난감 오염 공격과 세 가지 완화책을 더한다.
 
-- `MessagePool` — 전체 읽기가 가능한 스레드 안전(thread-safe) 추가 전용 로그.
-- `Blackboard` — 에이전트별 구독을 동반한 토픽 키 기반 pub/sub.
-- `ProvenanceEntry` — 모든 쓰기가 (writer, timestamp, prompt_hash, source_uri)를 기록한다.
-- `PoisoningScenario` — 에이전트 A가 소수점을 환각하는 세 에이전트 연구 작업을 실행한다. 최종 보고서를 출력한다.
-- `Verifier` — 출처를 다시 가져와 불일치를 표시하는 읽기 전용 에이전트. 검증자가 있는 상태로 동일한 시나리오를 실행한다.
+- `MessagePool`: 전체 읽기가 가능한 스레드 안전(thread-safe) 추가 전용 로그.
+- `Blackboard`: 에이전트별 구독을 동반한 토픽 키 기반 pub/sub.
+- `ProvenanceEntry`: 모든 쓰기가 (writer, timestamp, prompt_hash, source_uri)를 기록한다.
+- `PoisoningScenario`: 에이전트 A가 소수점을 환각하는 세 에이전트 연구 작업을 실행한다. 최종 보고서를 출력한다.
+- `Verifier`: 출처를 다시 가져와 불일치를 표시하는 읽기 전용 에이전트. 검증자가 있는 상태로 동일한 시나리오를 실행한다.
 
 실행:
 
@@ -158,8 +158,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Cemri et al. — Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) — MAST 분류 체계. 메모리 오염은 조정 실패 하위 계열이다
-- [CA-MCP — Context-Aware Multi-Server MCP](https://arxiv.org/abs/2601.11595) — 조정된 MCP 서버를 위한 Shared Context Store
-- [Matrix — decentralized multi-agent framework](https://arxiv.org/abs/2511.21686) — 중앙 오케스트레이터 없는 메시지 큐 기반 블랙보드
-- [LangGraph state and reducers](https://docs.langchain.com/oss/python/langgraph/workflows-agents) — 프로덕션의 에이전트별 프로젝션 패턴
-- [Anthropic — How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) — 프로덕션 배포에서 얻은 출처와 검증 노트
+- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계. 메모리 오염은 조정 실패 하위 계열이다
+- [CA-MCP(Context-Aware Multi-Server MCP](https://arxiv.org/abs/2601.11595)) 조정된 MCP 서버를 위한 Shared Context Store
+- [Matrix(decentralized multi-agent framework](https://arxiv.org/abs/2511.21686)) 중앙 오케스트레이터 없는 메시지 큐 기반 블랙보드
+- [LangGraph state and reducers](https://docs.langchain.com/oss/python/langgraph/workflows-agents): 프로덕션의 에이전트별 프로젝션 패턴
+- [Anthropic(How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 프로덕션 배포에서 얻은 출처와 검증 노트

@@ -1,4 +1,4 @@
-# 3D 비전 — 포인트 클라우드와 NeRF (Point Clouds & NeRFs)
+# 3D 비전: 포인트 클라우드와 NeRF (Point Clouds & NeRFs)
 
 > 3D 비전에는 두 가지 형태가 있다. 포인트 클라우드(point cloud)는 센서의 원시 출력이다. NeRF는 학습된 체적 필드(volumetric field)다. 둘 다 "공간의 어디에 무엇이 있는가"에 답한다.
 
@@ -39,8 +39,8 @@ cloud = [
 
 격자도, 연결성도 없다. 두 속성이 이것을 신경망에게 어렵게 만든다:
 
-- **순열 불변성(Permutation invariance)** — 출력은 점의 순서에 의존해서는 안 된다.
-- **가변 N** — 단일 모델이 서로 다른 크기의 클라우드를 처리해야 한다.
+- **순열 불변성(Permutation invariance)**: 출력은 점의 순서에 의존해서는 안 된다.
+- **가변 N**: 단일 모델이 서로 다른 크기의 클라우드를 처리해야 한다.
 
 PointNet(Qi et al., 2017)은 하나의 아이디어로 둘 다 해결했다: 모든 점에 공유 MLP를 적용한 뒤, 대칭 함수(max pool)로 집계한다. 결과는 순서에 의존하지 않는 고정 크기 벡터(vector)다.
 
@@ -83,7 +83,7 @@ To render a pixel (u, v) of a new view:
   5. The sum is the rendered pixel colour
 ```
 
-손실(loss)은 렌더링된 픽셀을 학습 사진의 정답(ground-truth) 픽셀과 비교한다. 렌더링 단계를 통한 역전파(backpropagation)가 MLP를 업데이트한다. 3D 정답도, 명시적 기하도 없다 — 장면은 MLP 가중치(weight)에 저장된다.
+손실(loss)은 렌더링된 픽셀을 학습 사진의 정답(ground-truth) 픽셀과 비교한다. 렌더링 단계를 통한 역전파(backpropagation)가 MLP를 업데이트한다. 3D 정답도, 명시적 기하도 없다. 장면은 MLP 가중치(weight)에 저장된다.
 
 ### NeRF의 위치 인코딩 (Positional encoding)
 
@@ -104,25 +104,25 @@ T_i  = exp(- sum_{j<i} sigma_j * delta_j)
 delta_i = t_{i+1} - t_i
 ```
 
-`T_i`는 투과율(transmittance)이다 — 점 i까지 얼마나 많은 빛이 살아남는지. `(1 - exp(-sigma_i * delta_i))`는 점 i에서의 불투명도(opacity)다. `c_i`는 색상이다. 최종 픽셀은 광선을 따라가는 가중합이다.
+`T_i`는 투과율(transmittance)이다. 점 i까지 얼마나 많은 빛이 살아남는지. `(1 - exp(-sigma_i * delta_i))`는 점 i에서의 불투명도(opacity)다. `c_i`는 색상이다. 최종 픽셀은 광선을 따라가는 가중합이다.
 
 ### NeRF를 대체한 것
 
 순수 NeRF는 학습이 느리고(수 시간) 렌더링이 느리다(이미지당 수 초). 그 이후의 계보:
 
-- **Instant-NGP**(2022) — 해시-격자(hash-grid) 인코딩이 MLP의 위치 입력을 대체한다. 수 초 만에 학습된다.
-- **Mip-NeRF 360** — 경계가 없는 장면과 안티앨리어싱(anti-aliasing)을 처리한다.
-- **3D 가우시안 스플래팅(3D Gaussian Splatting)**(2023) — 체적 필드를 수백만 개의 3D 가우시안으로 대체한다. 수 분 만에 학습되고, 실시간으로 렌더링된다. 현재의 프로덕션(production) 기본값.
+- **Instant-NGP**(2022): 해시-격자(hash-grid) 인코딩이 MLP의 위치 입력을 대체한다. 수 초 만에 학습된다.
+- **Mip-NeRF 360**: 경계가 없는 장면과 안티앨리어싱(anti-aliasing)을 처리한다.
+- **3D 가우시안 스플래팅(3D Gaussian Splatting)**(2023): 체적 필드를 수백만 개의 3D 가우시안으로 대체한다. 수 분 만에 학습되고, 실시간으로 렌더링된다. 현재의 프로덕션(production) 기본값.
 
 2026년의 거의 모든 실제 NeRF 제품은 사실 3D 가우시안 스플래팅이다. 정신적 모델(mental model)은 여전히 NeRF다.
 
 ### 데이터셋과 벤치마크
 
-- **ShapeNet** — 3D CAD 모델을 포인트 클라우드로 한 분류(classification)와 분할(segmentation).
-- **ScanNet** — 분할을 위한 실제 실내 스캔.
-- **KITTI** — 자율 주행을 위한 실외 LIDAR 포인트 클라우드.
-- **NeRF Synthetic** / **Blended MVS** — 뷰 합성(view synthesis)을 위한 포즈 이미지 데이터셋(dataset).
-- **Mip-NeRF 360** 데이터셋 — 경계가 없는 실제 장면.
+- **ShapeNet**: 3D CAD 모델을 포인트 클라우드로 한 분류(classification)와 분할(segmentation).
+- **ScanNet**: 분할을 위한 실제 실내 스캔.
+- **KITTI**: 자율 주행을 위한 실외 LIDAR 포인트 클라우드.
+- **NeRF Synthetic** / **Blended MVS**: 뷰 합성(view synthesis)을 위한 포즈 이미지 데이터셋(dataset).
+- **Mip-NeRF 360** 데이터셋: 경계가 없는 실제 장면.
 
 ## 직접 만들기 (Build It)
 
@@ -258,9 +258,9 @@ print(f"depth:           {depth.item():.2f}")
 
 실제 작업을 위해서:
 
-- `nerfstudio`(Tancik et al.) — NeRF / Instant-NGP / 가우시안 스플래팅을 위한 현재의 레퍼런스 라이브러리. 명령줄 + 웹 뷰어.
-- `pytorch3d`(Meta) — 미분 가능 렌더링(differentiable rendering), 포인트 클라우드 유틸리티, 메시 연산.
-- `open3d` — 포인트 클라우드 처리, 정합(registration), 시각화.
+- `nerfstudio`(Tancik et al.): NeRF / Instant-NGP / 가우시안 스플래팅을 위한 현재의 레퍼런스 라이브러리. 명령줄 + 웹 뷰어.
+- `pytorch3d`(Meta): 미분 가능 렌더링(differentiable rendering), 포인트 클라우드 유틸리티, 메시 연산.
+- `open3d`: 포인트 클라우드 처리, 정합(registration), 시각화.
 
 배포(deployment)를 위해서는, 3D 가우시안 스플래팅이 순수 NeRF를 대체로 대체했다. 100배 빠르게 렌더링하기 때문이다. 재구성 품질은 비슷하다.
 
@@ -268,8 +268,8 @@ print(f"depth:           {depth.item():.2f}")
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-3d-task-router.md` — 작업과 입력 데이터에 기반해 올바른 3D 표현(포인트 클라우드, 메시, 복셀, NeRF, 가우시안 스플랫)으로 라우팅하는 프롬프트(prompt).
-- `outputs/skill-point-cloud-loader.md` — 올바른 정규화(normalisation), 중심 맞추기, 점 샘플링을 갖춰 .ply / .pcd / .xyz 파일을 위한 PyTorch `Dataset`을 작성하는 스킬.
+- `outputs/prompt-3d-task-router.md`: 작업과 입력 데이터에 기반해 올바른 3D 표현(포인트 클라우드, 메시, 복셀, NeRF, 가우시안 스플랫)으로 라우팅하는 프롬프트(prompt).
+- `outputs/skill-point-cloud-loader.md`: 올바른 정규화(normalisation), 중심 맞추기, 점 샘플링을 갖춰 .ply / .pcd / .xyz 파일을 위한 PyTorch `Dataset`을 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -292,7 +292,7 @@ print(f"depth:           {depth.item():.2f}")
 
 ## 더 읽을거리 (Further Reading)
 
-- [PointNet (Qi et al., 2017)](https://arxiv.org/abs/1612.00593) — 순열 불변 분류기
-- [NeRF (Mildenhall et al., 2020)](https://arxiv.org/abs/2003.08934) — 사진으로부터의 3D 재구성을 신경망 문제로 만든 논문
-- [Instant-NGP (Müller et al., 2022)](https://arxiv.org/abs/2201.05989) — 해시 격자, 1000배 속도 향상
-- [3D Gaussian Splatting (Kerbl et al., 2023)](https://arxiv.org/abs/2308.04079) — 프로덕션에서 NeRF를 대체한 아키텍처
+- [PointNet (Qi et al., 2017)](https://arxiv.org/abs/1612.00593): 순열 불변 분류기
+- [NeRF (Mildenhall et al., 2020)](https://arxiv.org/abs/2003.08934): 사진으로부터의 3D 재구성을 신경망 문제로 만든 논문
+- [Instant-NGP (Müller et al., 2022)](https://arxiv.org/abs/2201.05989): 해시 격자, 1000배 속도 향상
+- [3D Gaussian Splatting (Kerbl et al., 2023)](https://arxiv.org/abs/2308.04079): 프로덕션에서 NeRF를 대체한 아키텍처

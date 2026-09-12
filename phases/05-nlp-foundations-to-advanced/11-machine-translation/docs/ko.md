@@ -188,7 +188,7 @@ Refuse to ship a translation without a language-ID check on output. Refuse to ev
 
 ## 더 읽을거리 (Further Reading)
 
-- [Costa-jussà et al. (2022). No Language Left Behind: Scaling Human-Centered Machine Translation](https://arxiv.org/abs/2207.04672) — NLLB 논문.
-- [Post (2018). A Call for Clarity in Reporting BLEU Scores](https://aclanthology.org/W18-6319/) — 왜 `sacrebleu`가 BLEU를 보고하는 유일하게 올바른 방법인지.
-- [Popović (2015). chrF: character n-gram F-score for automatic MT evaluation](https://aclanthology.org/W15-3049/) — chrF 논문.
-- [Hugging Face MT guide](https://huggingface.co/docs/transformers/tasks/translation) — 실전 파인튜닝 안내.
+- [Costa-jussà et al. (2022). No Language Left Behind: Scaling Human-Centered Machine Translation](https://arxiv.org/abs/2207.04672): NLLB 논문.
+- [Post (2018). A Call for Clarity in Reporting BLEU Scores](https://aclanthology.org/W18-6319/): 왜 `sacrebleu`가 BLEU를 보고하는 유일하게 올바른 방법인지.
+- [Popović (2015). chrF: character n-gram F-score for automatic MT evaluation](https://aclanthology.org/W15-3049/): chrF 논문.
+- [Hugging Face MT guide](https://huggingface.co/docs/transformers/tasks/translation): 실전 파인튜닝 안내.

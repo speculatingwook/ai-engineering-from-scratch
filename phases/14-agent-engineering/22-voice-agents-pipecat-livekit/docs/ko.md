@@ -25,8 +25,8 @@
 - Python 프레임 기반 파이프라인 프레임워크.
 - `Frame` → `FrameProcessor` 체인.
 - 두 가지 흐름 방향:
-  - **DOWNSTREAM** — 소스 → 싱크(오디오 입력, TTS 출력).
-  - **UPSTREAM** — 피드백과 제어(취소, 지표, 끼어들기(barge-in)).
+  - **DOWNSTREAM**: 소스 → 싱크(오디오 입력, TTS 출력).
+  - **UPSTREAM**: 피드백과 제어(취소, 지표, 끼어들기(barge-in)).
 - `PipelineTask`는 이벤트(`on_pipeline_started`, `on_pipeline_finished`, `on_idle_timeout`)와 지표/추적/RTVI를 위한 옵저버로 라이프사이클을 관리한다.
 
 전형적인 파이프라인:
@@ -44,8 +44,8 @@ Pipecat Flows는 구조화된 대화(상태 기계)를 추가한다. Pipecat Clo
 - WebRTC를 통해 AI 모델을 사용자에게 연결한다.
 - 핵심 개념: `Agent`, `AgentSession`, `entrypoint`, `AgentServer`.
 - 두 가지 음성 에이전트 클래스:
-  - **MultimodalAgent** — OpenAI Realtime 또는 동등물을 통한 직접 오디오.
-  - **VoicePipelineAgent** — STT → LLM → TTS 캐스케이드; 텍스트 수준 제어를 제공.
+  - **MultimodalAgent**: OpenAI Realtime 또는 동등물을 통한 직접 오디오.
+  - **VoicePipelineAgent**: STT → LLM → TTS 캐스케이드; 텍스트 수준 제어를 제공.
 - 트랜스포머(transformer) 모델을 통한 시맨틱 턴 감지(semantic turn detection).
 - 네이티브 MCP 통합.
 - SIP를 통한 전화망.
@@ -91,7 +91,7 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- 완전한 제어에는 **Pipecat** — 맞춤 프로세서, Python 우선, 플러그형 제공자.
+- 완전한 제어에는 **Pipecat**: 맞춤 프로세서, Python 우선, 플러그형 제공자.
 - WebRTC 우선 배포와 전화망에는 **LiveKit Agents**.
 - WebRTC 팀 없는 호스팅형 음성 에이전트에는 **Vapi / Retell**.
 - 직접 오디오 입력/오디오 출력(MultimodalAgent)에는 **OpenAI Realtime / Gemini Live**.
@@ -104,7 +104,7 @@ python3 code/main.py
 
 1. 장난감 파이프라인에 지표 옵저버를 추가하라: 초당 단계별 프레임 수를 세어라. 지연 시간이 어디에 쌓이는가?
 2. 신뢰도 게이트 STT를 구현하라: 임계값 미만이면 "다시 말씀해 주시겠어요?"를 요청하라.
-3. 시맨틱 턴 감지를 추가하라: 단순 규칙 — 전사가 "?"로 끝나면 턴의 끝.
+3. 시맨틱 턴 감지를 추가하라: 단순 규칙: 전사가 "?"로 끝나면 턴의 끝.
 4. Pipecat의 트랜스포트 문서를 읽어라. stdlib 트랜스포트를 SmallWebRTCTransport 설정(스텁)으로 교체하라.
 5. 같은 쿼리에 대해 OpenAI Realtime 대 STT+LLM+TTS 캐스케이드를 측정하라. 텍스트 수준 제어가 짊어지는 지연 시간 비용은 얼마인가?
 
@@ -123,7 +123,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Pipecat docs](https://docs.pipecat.ai/getting-started/introduction) — 프레임 기반 파이프라인, 프로세서, 트랜스포트
-- [LiveKit Agents docs](https://docs.livekit.io/agents/) — WebRTC + 음성 프리미티브
-- [Vapi](https://vapi.ai/) — 관리형 음성 플랫폼
-- [Retell AI](https://www.retellai.com/) — 관리형 음성, 지연 시간 벤치마크
+- [Pipecat docs](https://docs.pipecat.ai/getting-started/introduction): 프레임 기반 파이프라인, 프로세서, 트랜스포트
+- [LiveKit Agents docs](https://docs.livekit.io/agents/): WebRTC + 음성 프리미티브
+- [Vapi](https://vapi.ai/): 관리형 음성 플랫폼
+- [Retell AI](https://www.retellai.com/): 관리형 음성, 지연 시간 벤치마크

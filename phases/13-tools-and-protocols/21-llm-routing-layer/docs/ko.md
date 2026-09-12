@@ -1,4 +1,4 @@
-# LLM 라우팅 계층 — LiteLLM, OpenRouter, Portkey
+# LLM 라우팅 계층: LiteLLM, OpenRouter, Portkey
 
 > 제공자 종속(provider lock-in)은 비싸다. 툴 호출 워크로드마다 적합한 모델이 다르다. 라우팅 게이트웨이(routing gateway)는 하나의 API 표면, 재시도, 페일오버(failover), 비용 추적, 가드레일(guardrail)을 제공한다. 2026년에는 세 가지 원형(archetype)이 지배한다: LiteLLM(오픈소스 셀프 호스팅), OpenRouter(매니지드 SaaS), Portkey(프로덕션 등급, 2026년 3월 오픈소스화). 이 레슨은 결정 기준을 명명하고 stdlib 라우팅 게이트웨이를 살펴본다.
 
@@ -143,8 +143,8 @@ LiteLLM은 SRE 팀이 있고 데이터 주권(data sovereignty)을 원할 때 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [LiteLLM — docs](https://docs.litellm.ai/) — 셀프 호스팅 라우팅 게이트웨이
-- [OpenRouter — quickstart](https://openrouter.ai/docs/quickstart) — 매니지드 라우팅 SaaS
-- [Portkey — docs](https://portkey.ai/docs) — 가드레일이 있는 프로덕션 라우팅
-- [TrueFoundry — LiteLLM vs OpenRouter](https://www.truefoundry.com/blog/litellm-vs-openrouter) — 결정 가이드
-- [Relayplane — LLM gateway comparison 2026](https://relayplane.com/blog/llm-gateway-comparison-2026) — 벤더 개관
+- [LiteLLM(docs](https://docs.litellm.ai/)) 셀프 호스팅 라우팅 게이트웨이
+- [OpenRouter(quickstart](https://openrouter.ai/docs/quickstart)) 매니지드 라우팅 SaaS
+- [Portkey(docs](https://portkey.ai/docs)) 가드레일이 있는 프로덕션 라우팅
+- [TrueFoundry(LiteLLM vs OpenRouter](https://www.truefoundry.com/blog/litellm-vs-openrouter)) 결정 가이드
+- [Relayplane(LLM gateway comparison 2026](https://relayplane.com/blog/llm-gateway-comparison-2026)) 벤더 개관

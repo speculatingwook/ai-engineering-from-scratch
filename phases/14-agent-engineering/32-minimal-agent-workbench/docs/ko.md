@@ -120,12 +120,12 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [agents.md — the open spec](https://agents.md/) — Cursor, Codex, Claude Code, Copilot, Gemini, OpenCode가 채택
-- [Augment Code, A good AGENTS.md is a model upgrade. A bad one is worse than no docs at all](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) — 측정된 품질 도약
-- [Blake Crosley, AGENTS.md Patterns: What Actually Changes Agent Behavior](https://blakecrosley.com/blog/agents-md-patterns) — 경험적으로 무엇이 작동하고 무엇이 안 되는지
-- [Datadog Frontend, Steering AI Agents in Monorepos with AGENTS.md](https://dev.to/datadog-frontend-dev/steering-ai-agents-in-monorepos-with-agentsmd-13g0) — 실전에서의 중첩 우선순위
-- [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) — 여섯 도구 전반의 단일 출처 생성
-- [The Prompt Shelf, AGENTS.md Best Practices: Structure, Scope, and Real Examples](https://thepromptshelf.dev/blog/agents-md-best-practices/) — 리뷰에서 살아남는 섹션 순서
+- [agents.md(the open spec](https://agents.md/)) Cursor, Codex, Claude Code, Copilot, Gemini, OpenCode가 채택
+- [Augment Code, A good AGENTS.md is a model upgrade. A bad one is worse than no docs at all](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files): 측정된 품질 도약
+- [Blake Crosley, AGENTS.md Patterns: What Actually Changes Agent Behavior](https://blakecrosley.com/blog/agents-md-patterns): 경험적으로 무엇이 작동하고 무엇이 안 되는지
+- [Datadog Frontend, Steering AI Agents in Monorepos with AGENTS.md](https://dev.to/datadog-frontend-dev/steering-ai-agents-in-monorepos-with-agentsmd-13g0): 실전에서의 중첩 우선순위
+- [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills): 여섯 도구 전반의 단일 출처 생성
+- [The Prompt Shelf, AGENTS.md Best Practices: Structure, Scope, and Real Examples](https://thepromptshelf.dev/blog/agents-md-best-practices/): 리뷰에서 살아남는 섹션 순서
 - [Anthropic, Claude Code subagents and session store](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/sub-agents)
-- Phase 14 · 31 — 이 최소가 흡수하는 실패 모드
-- Phase 14 · 34 — 이 레슨이 미리 보여주는 지속적 상태 스키마
+- Phase 14 · 31: 이 최소가 흡수하는 실패 모드
+- Phase 14 · 34: 이 레슨이 미리 보여주는 지속적 상태 스키마

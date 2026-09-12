@@ -1,6 +1,6 @@
 # Async and Hogwild! Inference
 
-> 추측 디코딩(speculative decoding, Phase 10 · 15)은 하나의 시퀀스 안에서 토큰을 병렬화한다. 다중 에이전트(agent) 프레임워크는 시퀀스 전체에 걸쳐 병렬화하지만 명시적 조율(투표, 하위 과제 분할)을 강제한다. Hogwild! Inference(Rodionov et al., arXiv:2504.06261)는 다른 무언가를 한다: 동일한 LLM의 N개 인스턴스를 공유 키-값 캐시(shared key-value cache)에 대해 병렬로 실행한다. 각 워커(worker)는 다른 모든 워커가 생성한 토큰을 즉시 본다. 현대의 추론(reasoning) 모델 — QwQ, DeepSeek-R1 — 은 어떤 파인튜닝(fine-tuning)도 없이 그 공유 캐시를 통해 스스로 조율할 수 있다. 이 접근은 실험적이지만, 추측 디코딩과 직교(orthogonal)하는 완전히 새로운 추론 병렬화 축을 연다. 이 레슨은 stdlib Python으로 2워커 Hogwild! 시뮬레이터를 구현하고, 공유 캐시 협업이 기존 모델의 추론 능력에서 어떻게 창발하는지를 설명한다.
+> 추측 디코딩(speculative decoding, Phase 10 · 15)은 하나의 시퀀스 안에서 토큰을 병렬화한다. 다중 에이전트(agent) 프레임워크는 시퀀스 전체에 걸쳐 병렬화하지만 명시적 조율(투표, 하위 과제 분할)을 강제한다. Hogwild! Inference(Rodionov et al., arXiv:2504.06261)는 다른 무언가를 한다: 동일한 LLM의 N개 인스턴스를 공유 키-값 캐시(shared key-value cache)에 대해 병렬로 실행한다. 각 워커(worker)는 다른 모든 워커가 생성한 토큰을 즉시 본다. 현대의 추론(reasoning) 모델(QwQ, DeepSeek-R1)은 어떤 파인튜닝(fine-tuning)도 없이 그 공유 캐시를 통해 스스로 조율할 수 있다. 이 접근은 실험적이지만, 추측 디코딩과 직교(orthogonal)하는 완전히 새로운 추론 병렬화 축을 연다. 이 레슨은 stdlib Python으로 2워커 Hogwild! 시뮬레이터를 구현하고, 공유 캐시 협업이 기존 모델의 추론 능력에서 어떻게 창발하는지를 설명한다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -16,15 +16,15 @@
 
 ## 문제 (The Problem)
 
-현대 LLM은 긴 추론 사슬을 생성하여 어려운 문제를 푼다 — 5000 토큰의 단계별 논리가 흔하고, 깊은 수학 문제에서는 수만 토큰이 발생한다. 70B 모델에서 35 tokens/sec 디코드일 때, 50k 토큰은 24분이다. 모델은 인터랙티브하지 않다.
+현대 LLM은 긴 추론 사슬을 생성하여 어려운 문제를 푼다. 5000 토큰의 단계별 논리가 흔하고, 깊은 수학 문제에서는 수만 토큰이 발생한다. 70B 모델에서 35 tokens/sec 디코드일 때, 50k 토큰은 24분이다. 모델은 인터랙티브하지 않다.
 
 추측 디코딩(Phase 10 · 15)은 하나의 시퀀스 안에서 병렬화하여 3~5배 속도 향상을 준다. 그 너머로는 자기회귀(autoregressive) 디코딩의 순차적 의존성이 단단한 천장이다. 모든 새 토큰은 앞선 모든 토큰에 의존한다.
 
 명백한 질문: 시퀀스에 걸쳐 병렬화할 수 있을까? 동일한 모델의 여러 복사본을 같은 문제에 실행하고, 협력하게 하고, 일을 나누게 할 수 있을까?
 
-이전 연구: 투표 앙상블(N개 모델 실행, 다수 답 채택), tree-of-thought(추론 경로를 분기하고 재결합), 다중 에이전트 프레임워크(각 에이전트에 하위 과제 배정, 조율자 사용). 이들은 모두 특정 과제 영역에서 도움이 된다. 또한 모두 명시적 조율 기계장치 — 투표 규칙, 분기-가지치기 로직, 에이전트 간 메시징 프로토콜 — 를 도입한다.
+이전 연구: 투표 앙상블(N개 모델 실행, 다수 답 채택), tree-of-thought(추론 경로를 분기하고 재결합), 다중 에이전트 프레임워크(각 에이전트에 하위 과제 배정, 조율자 사용). 이들은 모두 특정 과제 영역에서 도움이 된다. 또한 모두 명시적 조율 기계장치(투표 규칙, 분기-가지치기 로직, 에이전트 간 메시징 프로토콜)를 도입한다.
 
-Hogwild! Inference는 다른 접근을 취한다. N개 워커가 단일 KV 캐시를 공유한다. 각 워커는 다른 모든 워커가 생성한 토큰을 자기 자신의 컨텍스트인 양 즉시 본다. 워커들은 — 어떤 학습이나 파인튜닝도 없이 — 일을 나누는 법을 알아낸다. 현대 추론 모델(QwQ, DeepSeek-R1, Claude 계열 추론 모드)은 공유 캐시를 읽고 "워커 2가 이미 기저 사례를 처리한 것을 보니, 나는 귀납 단계를 작업하겠다" 같은 말을 할 수 있다.
+Hogwild! Inference는 다른 접근을 취한다. N개 워커가 단일 KV 캐시를 공유한다. 각 워커는 다른 모든 워커가 생성한 토큰을 자기 자신의 컨텍스트인 양 즉시 본다. 워커들은(어떤 학습이나 파인튜닝도 없이) 일을 나누는 법을 알아낸다. 현대 추론 모델(QwQ, DeepSeek-R1, Claude 계열 추론 모드)은 공유 캐시를 읽고 "워커 2가 이미 기저 사례를 처리한 것을 보니, 나는 귀납 단계를 작업하겠다" 같은 말을 할 수 있다.
 
 속도 향상은 워크로드에 의존적이며 2026년 4월 기준 실험적이다. 그러나 그 아이디어는 새로운 추론 병렬화 축을 열기 때문에 알아둘 가치가 있다.
 
@@ -34,7 +34,7 @@ Hogwild! Inference는 다른 접근을 취한다. N개 워커가 단일 KV 캐�
 
 N개의 워커 프로세스를 초기화하며, 모두 동일한 LLM을 실행한다. 워커별 KV 캐시 대신, 하나의 공유 캐시를 유지한다. 워커 `i`가 토큰 `t_j`를 생성하면, 그 토큰은 다음 위치에서 공유 캐시에 기록된다. 워커 `k`가 다음 단계를 밟을 때는, 캐시의 현재 상태(지금까지 N개 워커 전부가 생성한 모든 것을 포함)를 읽는다.
 
-단계 시점에 워커들은 토큰을 기록하려고 경쟁한다. 워커별 위치 인덱스는 없다 — 캐시는 하나의 커지는 시퀀스다. 순서는 기록 도착 시간으로 결정된다.
+단계 시점에 워커들은 토큰을 기록하려고 경쟁한다. 워커별 위치 인덱스는 없다. 캐시는 하나의 커지는 시퀀스다. 순서는 기록 도착 시간으로 결정된다.
 
 ### 조율이 창발하는 이유
 
@@ -55,7 +55,7 @@ Hogwild! 논문(Rodionov et al., 2025)은 다음과 같은 관찰을 보고한�
 
 ### RoPE가 이를 다루기 쉽게 만든다
 
-회전 위치 임베딩(Rotary Position Embeddings, RoPE, Su et al. 2021)은 Q와 K 벡터에서의 회전을 통해 위치 정보를 인코딩한다. 위치가 구워 넣어진 오프셋(offset)이 아니라 회전이기 때문에, 토큰의 위치는 KV 캐시 항목을 재계산하지 않고 이동될 수 있다. 워커 `i`가 위치 `p`에서 공유 캐시에 기록하면, 그 위치를 읽는 다른 워커들은 캐시된 항목을 직접 쓸 수 있다 — 재회전이 필요 없다.
+회전 위치 임베딩(Rotary Position Embeddings, RoPE, Su et al. 2021)은 Q와 K 벡터에서의 회전을 통해 위치 정보를 인코딩한다. 위치가 구워 넣어진 오프셋(offset)이 아니라 회전이기 때문에, 토큰의 위치는 KV 캐시 항목을 재계산하지 않고 이동될 수 있다. 워커 `i`가 위치 `p`에서 공유 캐시에 기록하면, 그 위치를 읽는 다른 워커들은 캐시된 항목을 직접 쓸 수 있다. 재회전이 필요 없다.
 
 학습된 위치나 절대 위치 모델에서는, Hogwild!가 모든 동시 기록마다 캐시 무효화를 요구한다. RoPE는 캐시를 안정적으로 유지하게 한다.
 
@@ -186,9 +186,9 @@ N워커 Hogwild! 시간, 조율이 공짜라면: `T_serial * ((1 - p) + p / N)`.
 
 ## 더 읽을거리 (Further Reading)
 
-- [Rodionov et al. — Hogwild! Inference: Parallel LLM Generation via Concurrent Attention (arXiv:2504.06261)](https://arxiv.org/abs/2504.06261) — Hogwild! 논문, QwQ와 DeepSeek-R1에 대한 예비 평가
-- [Recht, Re, Wright, Niu — Hogwild!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent (arXiv:1106.5730, NeurIPS 2011)](https://arxiv.org/abs/1106.5730) — 원래 Hogwild!, 이름의 기원
-- [Su et al. — RoFormer: Enhanced Transformer with Rotary Position Embedding (arXiv:2104.09864)](https://arxiv.org/abs/2104.09864) — RoPE, 공유 캐시 추론을 다루기 쉽게 만드는 속성
-- [Yao et al. — Tree of Thoughts: Deliberate Problem Solving with Large Language Models (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601) — Hogwild!가 직교하여 자리 잡는 tree-of-thought 추론 전략
-- [Leviathan et al. — Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192) — 추측 디코딩, Hogwild!가 조합되는 시퀀스 내 병렬성
-- [Hogwild! reference PyTorch implementation](https://github.com/eqimp/hogwild_llm) — 논문 실험의 유일한 진실 공급원
+- [Rodionov et al.(Hogwild! Inference: Parallel LLM Generation via Concurrent Attention (arXiv:2504.06261)](https://arxiv.org/abs/2504.06261)) Hogwild! 논문, QwQ와 DeepSeek-R1에 대한 예비 평가
+- [Recht, Re, Wright, Niu(Hogwild!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent (arXiv:1106.5730, NeurIPS 2011)](https://arxiv.org/abs/1106.5730)) 원래 Hogwild!, 이름의 기원
+- [Su et al.(RoFormer: Enhanced Transformer with Rotary Position Embedding (arXiv:2104.09864)](https://arxiv.org/abs/2104.09864)) RoPE, 공유 캐시 추론을 다루기 쉽게 만드는 속성
+- [Yao et al.(Tree of Thoughts: Deliberate Problem Solving with Large Language Models (arXiv:2305.10601)](https://arxiv.org/abs/2305.10601)) Hogwild!가 직교하여 자리 잡는 tree-of-thought 추론 전략
+- [Leviathan et al.(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192)](https://arxiv.org/abs/2211.17192)) 추측 디코딩, Hogwild!가 조합되는 시퀀스 내 병렬성
+- [Hogwild! reference PyTorch implementation](https://github.com/eqimp/hogwild_llm): 논문 실험의 유일한 진실 공급원

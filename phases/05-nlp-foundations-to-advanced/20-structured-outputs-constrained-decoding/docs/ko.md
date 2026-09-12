@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-분류기(classifier)가 LLM에 프롬프트(prompt)한다: "Return one of {positive, negative, neutral}." 모델은 "The sentiment is positive — this review is overwhelmingly favorable because the customer explicitly states that they ..."를 반환한다. 파서(parser)가 충돌한다. 분류기의 F1이 0.0이다.
+분류기(classifier)가 LLM에 프롬프트(prompt)한다: "Return one of {positive, negative, neutral}." 모델은 "The sentiment is positive: this review is overwhelmingly favorable because the customer explicitly states that they ..."를 반환한다. 파서(parser)가 충돌한다. 분류기의 F1이 0.0이다.
 
 자유 형식 생성은 계약이 아니다. 제안이다. 프로덕션 시스템은 계약이 필요하다.
 
@@ -36,7 +36,7 @@
 
 ### 직관에 반하는 결과
 
-제약 디코딩은 종종 제약 없는 생성보다 *더 빠르다*. 두 가지 이유. 첫째, 다음 토큰 탐색 공간을 줄인다. 둘째, 영리한 구현은 강제된 토큰의 경우 토큰 생성을 완전히 건너뛴다(`{"name": "` 같은 골격(scaffolding) — 모든 바이트가 결정되어 있다).
+제약 디코딩은 종종 제약 없는 생성보다 *더 빠르다*. 두 가지 이유. 첫째, 다음 토큰 탐색 공간을 줄인다. 둘째, 영리한 구현은 강제된 토큰의 경우 토큰 생성을 완전히 건너뛴다(`{"name": "` 같은 골격(scaffolding): 모든 바이트가 결정되어 있다).
 
 ### 당신에게 비용을 치르게 하는 함정
 
@@ -208,15 +208,15 @@ Refuse any design that puts `answer` or `decision` before reasoning fields. Refu
 | Logit processor | 제약을 거는 것 | 함수: `(logits, state) -> masked_logits`. |
 | FSM | 유한 상태 기계 | 컴파일된 문법 표현. O(1) 유효 다음 토큰 조회. |
 | CFG | 문맥 자유 문법 | 재귀를 다루는 문법. FSM보다 느리지만 더 표현력이 있다. |
-| Schema field order | 중요한가? | 그렇다 — 첫 필드가 전념한다. 항상 추론을 답 앞에 두라. |
+| Schema field order | 중요한가? | 그렇다. 첫 필드가 전념한다. 항상 추론을 답 앞에 두라. |
 | Guided decoding | vLLM이 부르는 이름 | 같은 개념, 추론 서버에 통합됨. |
 | JSON mode | OpenAI의 초기 버전 | JSON 구문을 보장. 스키마 일치는 보장하지 *않음*. |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Willard, Louf (2023). Efficient Guided Generation for LLMs](https://arxiv.org/abs/2307.09702) — Outlines 논문.
-- [XGrammar paper (2024)](https://arxiv.org/abs/2411.15100) — 빠른 CFG 기반 제약 디코딩.
-- [vLLM — Structured Outputs](https://docs.vllm.ai/en/latest/features/structured_outputs.html) — 추론 서버 통합.
-- [OpenAI — Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs) — API 레퍼런스 + 주의점.
-- [Instructor library](https://python.useinstructor.com/) — 프로바이더 전반에 걸친 Pydantic + 재시도.
-- [JSONSchemaBench (2025)](https://arxiv.org/abs/2501.10868) — 6개 제약 디코딩 프레임워크 벤치마킹.
+- [Willard, Louf (2023). Efficient Guided Generation for LLMs](https://arxiv.org/abs/2307.09702): Outlines 논문.
+- [XGrammar paper (2024)](https://arxiv.org/abs/2411.15100): 빠른 CFG 기반 제약 디코딩.
+- [vLLM(Structured Outputs](https://docs.vllm.ai/en/latest/features/structured_outputs.html)) 추론 서버 통합.
+- [OpenAI(Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs)) API 레퍼런스 + 주의점.
+- [Instructor library](https://python.useinstructor.com/): 프로바이더 전반에 걸친 Pydantic + 재시도.
+- [JSONSchemaBench (2025)](https://arxiv.org/abs/2501.10868): 6개 제약 디코딩 프레임워크 벤치마킹.

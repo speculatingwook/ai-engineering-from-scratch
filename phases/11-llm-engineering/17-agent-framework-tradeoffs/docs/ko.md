@@ -1,4 +1,4 @@
-# 에이전트 프레임워크 트레이드오프 — LangGraph vs CrewAI vs AutoGen vs Agno (Agent Framework Tradeoffs)
+# 에이전트 프레임워크 트레이드오프: LangGraph vs CrewAI vs AutoGen vs Agno (Agent Framework Tradeoffs)
 
 > 모든 프레임워크는 같은 데모(연구 에이전트가 리포트를 작성한다)를 팔고 같은 버그(상태 스키마가 오케스트레이션 계층과 싸운다)를 숨긴다. 추상화가 내 문제의 형태와 맞아떨어지는 프레임워크를 골라라. 나머지는 모두 두 번 작성하게 되는 글루(glue)다.
 
@@ -23,10 +23,10 @@ LLM 호출이 하나 이상 필요한 작업이 있다고 하자. 연구 워크�
 
 | 프레임워크 | 핵심 추상화 | 최적 적합 | 최악 적합 |
 |-----------|------------------|----------|-----------|
-| **LangGraph** | `StateGraph` — 타입 지정된 상태, 노드, 조건부 간선, 체크포인터. | 명시적 상태와 인간 참여 인터럽트를 가진 워크플로; 시간 여행 디버깅이 필요한 프로덕션 에이전트. | 토폴로지가 알려지지 않은 느슨한, 역할 주도 브레인스토밍. |
-| **CrewAI** | `Crew` — 역할(목표, 배경 이야기), 작업, 프로세스(순차 또는 계층). | 짧은 선형/계층 계획을 가진 롤플레잉 또는 페르소나 주도 워크플로. | crew의 턴 기록을 넘어서는 상태가 있는 모든 것; 복잡한 분기. |
-| **AutoGen** | `ConversableAgent` 쌍 — 종료 조건까지 턴을 주고받으며 말하는 둘 이상의 에이전트. | 사고가 채팅에서 창발하는 다중 에이전트 *대화*(교사-학생, 제안자-비평가, 행위자-리뷰어). | 알려진 DAG를 가진 결정론적 워크플로; 재시작 전반에 걸친 영속 상태가 필요한 모든 것. |
-| **Agno** | `Agent` — 단일 LLM + 도구 + 메모리, 팀으로 조합 가능. | 빨리 만드는 단일 에이전트와 경량 팀; 강력한 다중 모달리티와 내장 저장소 드라이버. | 커스텀 리듀서(reducer)를 가진 깊고 명시적으로 분기된 그래프. |
+| **LangGraph** | `StateGraph`: 타입 지정된 상태, 노드, 조건부 간선, 체크포인터. | 명시적 상태와 인간 참여 인터럽트를 가진 워크플로; 시간 여행 디버깅이 필요한 프로덕션 에이전트. | 토폴로지가 알려지지 않은 느슨한, 역할 주도 브레인스토밍. |
+| **CrewAI** | `Crew`: 역할(목표, 배경 이야기), 작업, 프로세스(순차 또는 계층). | 짧은 선형/계층 계획을 가진 롤플레잉 또는 페르소나 주도 워크플로. | crew의 턴 기록을 넘어서는 상태가 있는 모든 것; 복잡한 분기. |
+| **AutoGen** | `ConversableAgent` 쌍: 종료 조건까지 턴을 주고받으며 말하는 둘 이상의 에이전트. | 사고가 채팅에서 창발하는 다중 에이전트 *대화*(교사-학생, 제안자-비평가, 행위자-리뷰어). | 알려진 DAG를 가진 결정론적 워크플로; 재시작 전반에 걸친 영속 상태가 필요한 모든 것. |
+| **Agno** | `Agent`: 단일 LLM + 도구 + 메모리, 팀으로 조합 가능. | 빨리 만드는 단일 에이전트와 경량 팀; 강력한 다중 모달리티와 내장 저장소 드라이버. | 커스텀 리듀서(reducer)를 가진 깊고 명시적으로 분기된 그래프. |
 
 ### "추상화"가 실제로 의미하는 것 (What "abstraction" actually means)
 
@@ -44,23 +44,23 @@ LLM 호출이 하나 이상 필요한 작업이 있다고 하자. 연구 워크�
 - **LangGraph.** 타입 지정된 상태(`TypedDict` 또는 Pydantic 모델), 필드별 리듀서, 일급 체크포인터(SQLite/Postgres/Redis). 재개, 인터럽트, 시간 여행이 공짜다. *(Phase 11 · 16을 보라.)*
 - **CrewAI.** 상태는 `context` 필드를 통해 작업 사이에 문자열로 흐르거나, `output_pydantic`을 통해 구조화된다. 기본으로는 crew별 영속 저장소가 없다. crew가 재시작을 견뎌야 한다면 직접 덧붙여야 한다.
 - **AutoGen.** 상태는 채팅 기록과 사용자 정의 `context`다. 대화 트랜스크립트는 영속화되지만, 임의의 워크플로 상태는 어댑터를 직접 작성하지 않는 한 영속화되지 않는다.
-- **Agno.** `storage=`를 통해 `Agent`에 부착된 내장 저장소 드라이버(SQLite, Postgres, Mongo, Redis, DynamoDB) — 대화 세션과 사용자 메모리가 자동으로 영속화된다. 전체 그래프 체크포인터가 아니라 세션 저장소다.
+- **Agno.** `storage=`를 통해 `Agent`에 부착된 내장 저장소 드라이버(SQLite, Postgres, Mongo, Redis, DynamoDB): 대화 세션과 사용자 메모리가 자동으로 영속화된다. 전체 그래프 체크포인터가 아니라 세션 저장소다.
 
 ### 분기 질문 (The branching question)
 
 모든 비자명한 에이전트는 분기한다. 누가 분기를 결정하는지가 중요하다.
 
-- **LangGraph** — 개발자가 조건부 간선을 통해 결정한다. 라우팅은 이름 붙은 분기를 가진 Python 함수다. 분기는 컴파일된 그래프에서 일급이고, 체크포인터가 어느 분기를 택했는지 기록한다.
-- **CrewAI** — 계층 모드에서는 매니저가 결정하고, 순차 모드에서는 빌드 시점에 개발자가 결정한다. 라우팅은 작업 목록에 암시적이다. 매니저의 프롬프트(prompt) 밖에는 일급 "if"가 없다.
-- **AutoGen** — 에이전트들이 채팅을 통해 결정한다. 분기는 다음에 누가 말하는지에서 창발한다. `GroupChatManager`가 다음 화자를 선택한다. `speaker_selection_method`를 손으로 작성할 수 있지만 기본은 LLM 주도다.
-- **Agno** — 에이전트가 다음에 어느 도구를 호출할지로 결정한다. 팀은 코디네이터/라우터/협력자 모드를 가지며, 그 너머의 분기는 개발자의 책임이다.
+- **LangGraph**: 개발자가 조건부 간선을 통해 결정한다. 라우팅은 이름 붙은 분기를 가진 Python 함수다. 분기는 컴파일된 그래프에서 일급이고, 체크포인터가 어느 분기를 택했는지 기록한다.
+- **CrewAI**: 계층 모드에서는 매니저가 결정하고, 순차 모드에서는 빌드 시점에 개발자가 결정한다. 라우팅은 작업 목록에 암시적이다. 매니저의 프롬프트(prompt) 밖에는 일급 "if"가 없다.
+- **AutoGen**: 에이전트들이 채팅을 통해 결정한다. 분기는 다음에 누가 말하는지에서 창발한다. `GroupChatManager`가 다음 화자를 선택한다. `speaker_selection_method`를 손으로 작성할 수 있지만 기본은 LLM 주도다.
+- **Agno**: 에이전트가 다음에 어느 도구를 호출할지로 결정한다. 팀은 코디네이터/라우터/협력자 모드를 가지며, 그 너머의 분기는 개발자의 책임이다.
 
 ### 관측성 질문 (The observability question)
 
-- **LangGraph** — LangSmith 또는 어떤 OTel 익스포터를 통한 OpenTelemetry. 모든 노드 전이가 트레이스 스팬이고, 체크포인트는 재생 가능한 트레이스를 겸한다. LangSmith가 일급 옵션이며 Langfuse/Phoenix도 어댑터를 가진다.
-- **CrewAI** — 2025년 후반 이후 일급 OpenTelemetry; Langfuse, Phoenix, Opik, AgentOps와의 통합.
-- **AutoGen** — `autogen-core`를 통한 OpenTelemetry 통합; AgentOps와 Opik이 커넥터를 가진다. 트레이싱 입도는 노드별이 아니라 에이전트 메시지별이다.
-- **Agno** — 내장 `monitoring=True` 플래그에 OpenTelemetry 익스포터를 더한다. 세션 트레이스를 위해 Langfuse와 긴밀하게 통합된다.
+- **LangGraph**: LangSmith 또는 어떤 OTel 익스포터를 통한 OpenTelemetry. 모든 노드 전이가 트레이스 스팬이고, 체크포인트는 재생 가능한 트레이스를 겸한다. LangSmith가 일급 옵션이며 Langfuse/Phoenix도 어댑터를 가진다.
+- **CrewAI**: 2025년 후반 이후 일급 OpenTelemetry; Langfuse, Phoenix, Opik, AgentOps와의 통합.
+- **AutoGen**: `autogen-core`를 통한 OpenTelemetry 통합; AgentOps와 Opik이 커넥터를 가진다. 트레이싱 입도는 노드별이 아니라 에이전트 메시지별이다.
+- **Agno**: 내장 `monitoring=True` 플래그에 OpenTelemetry 익스포터를 더한다. 세션 트레이스를 위해 Langfuse와 긴밀하게 통합된다.
 
 ### 비용과 지연 시간 (Cost and latency)
 
@@ -102,7 +102,7 @@ LLM 호출이 하나 이상 필요한 작업이 있다고 하자. 연구 워크�
 
 ## 연습 문제 (Exercises)
 
-1. **쉬움.** 같은 작업 — "Anthropic의 본사를 연구하고, 200단어 브리프를 쓰고, 출처를 인용하라" — 을 가져와 LangGraph(네 노드: plan, search, write, cite)와 CrewAI(세 역할: researcher, writer, editor)에서 구현하라. 실행당 토큰 비용과 코드 줄 수를 보고하라.
+1. **쉬움.** 같은 작업("Anthropic의 본사를 연구하고, 200단어 브리프를 쓰고, 출처를 인용하라")을 가져와 LangGraph(네 노드: plan, search, write, cite)와 CrewAI(세 역할: researcher, writer, editor)에서 구현하라. 실행당 토큰 비용과 코드 줄 수를 보고하라.
 2. **중간.** 같은 작업을 AutoGen(researcher ↔ writer 채팅, editor가 `GroupChat`을 통해 합류)과 Agno(`search_tools`와 `write_tools`를 가진 단일 에이전트, 더하기 세션 저장소)에서 구축하라. 네 구현을 (a) 실행당 비용, (b) 크래시 후 재개 능력, (c) write 단계 전에 인간 승인을 주입하는 능력에 대해 순위 매겨라.
 3. **어려움.** 짧은 문제 설명(JSON: `{has_typed_state, has_roles, has_dialogue, has_parallel_fanout, needs_resume}`)을 받아 한 문장 정당화와 함께 추천을 반환하는 결정 트리 스크립트 `pick_framework.py`를 구축하라. 직접 설계한 여섯 가지 사례에서 검증하라.
 
@@ -121,15 +121,15 @@ LLM 호출이 하나 이상 필요한 작업이 있다고 하자. 연구 워크�
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangGraph documentation](https://langchain-ai.github.io/langgraph/) — StateGraph, 체크포인터, 인터럽트, 시간 여행
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/): StateGraph, 체크포인터, 인터럽트, 시간 여행
 - [CrewAI documentation](https://docs.crewai.com/) — Crews, Flows, Agents, Tasks, Processes
-- [AutoGen documentation](https://microsoft.github.io/autogen/) — ConversableAgent, GroupChat, 팀, 도구
-- [Agno documentation](https://docs.agno.com/) — Agent, Team, Workflow, 저장소, 메모리
-- [Anthropic — Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) — 프레임워크 비종속적 패턴 라이브러리(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-옵티마이저)
-- [Yao et al., "ReAct: Synergizing Reasoning and Acting" (ICLR 2023)](https://arxiv.org/abs/2210.03629) — 모든 프레임워크가 꾸며내는 루프
-- [Wu et al., "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation" (2023)](https://arxiv.org/abs/2308.08155) — AutoGen의 설계 논문
-- [Park et al., "Generative Agents: Interactive Simulacra of Human Behavior" (UIST 2023)](https://arxiv.org/abs/2304.03442) — CrewAI 스타일 페르소나 스택이 기반하는 롤플레이 토대
-- Phase 11 · 16 (LangGraph) — 이 레슨이 벤치마킹하는 프레임워크
-- Phase 11 · 19 (Reflexion) — LangGraph에는 깔끔하게 매핑되지만 CrewAI에는 어색하게 매핑되는 패턴
-- Phase 11 · 22 (Production observability) — 당신이 고른 프레임워크가 무엇이든 계측하는 방법
+- [AutoGen documentation](https://microsoft.github.io/autogen/): ConversableAgent, GroupChat, 팀, 도구
+- [Agno documentation](https://docs.agno.com/): Agent, Team, Workflow, 저장소, 메모리
+- [Anthropic(Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents)) 프레임워크 비종속적 패턴 라이브러리(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-옵티마이저)
+- [Yao et al., "ReAct: Synergizing Reasoning and Acting" (ICLR 2023)](https://arxiv.org/abs/2210.03629): 모든 프레임워크가 꾸며내는 루프
+- [Wu et al., "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation" (2023)](https://arxiv.org/abs/2308.08155): AutoGen의 설계 논문
+- [Park et al., "Generative Agents: Interactive Simulacra of Human Behavior" (UIST 2023)](https://arxiv.org/abs/2304.03442): CrewAI 스타일 페르소나 스택이 기반하는 롤플레이 토대
+- Phase 11 · 16 (LangGraph): 이 레슨이 벤치마킹하는 프레임워크
+- Phase 11 · 19 (Reflexion): LangGraph에는 깔끔하게 매핑되지만 CrewAI에는 어색하게 매핑되는 패턴
+- Phase 11 · 22 (Production observability): 당신이 고른 프레임워크가 무엇이든 계측하는 방법
 </content>

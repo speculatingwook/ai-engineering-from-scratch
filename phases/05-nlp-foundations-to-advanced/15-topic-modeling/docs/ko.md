@@ -174,7 +174,7 @@ Refuse BERTopic on documents longer than the embedding model's context window wi
 
 ## 더 읽을거리 (Further Reading)
 
-- [Blei, Ng, Jordan (2003). Latent Dirichlet Allocation](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf) — LDA 논문.
-- [Grootendorst (2022). BERTopic: Neural topic modeling with a class-based TF-IDF procedure](https://arxiv.org/abs/2203.05794) — BERTopic 논문.
-- [Röder, Both, Hinneburg (2015). Exploring the Space of Topic Coherence Measures](https://svn.aksw.org/papers/2015/WSDM_Topic_Evaluation/public.pdf) — c_v와 그 동료들을 소개한 논문.
-- [BERTopic documentation](https://maartengr.github.io/BERTopic/) — 프로덕션 레퍼런스. 훌륭한 예제들.
+- [Blei, Ng, Jordan (2003). Latent Dirichlet Allocation](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf): LDA 논문.
+- [Grootendorst (2022). BERTopic: Neural topic modeling with a class-based TF-IDF procedure](https://arxiv.org/abs/2203.05794): BERTopic 논문.
+- [Röder, Both, Hinneburg (2015). Exploring the Space of Topic Coherence Measures](https://svn.aksw.org/papers/2015/WSDM_Topic_Evaluation/public.pdf): c_v와 그 동료들을 소개한 논문.
+- [BERTopic documentation](https://maartengr.github.io/BERTopic/): 프로덕션 레퍼런스. 훌륭한 예제들.

@@ -1,6 +1,6 @@
-# 오디오-언어 모델(Audio-Language Models) — Qwen2.5-Omni, Audio Flamingo, GPT-4o Audio
+# 오디오-언어 모델(Audio-Language Models): Qwen2.5-Omni, Audio Flamingo, GPT-4o Audio
 
-> 2026년의 오디오-언어 모델은 음성 + 환경음 + 음악을 두루 추론한다. Qwen2.5-Omni-7B는 MMAU-Pro에서 GPT-4o Audio와 맞먹는다. Audio Flamingo Next는 LongAudioBench에서 Gemini 2.5 Pro를 능가한다. 오픈과 클로즈드 사이의 격차는 사실상 사라졌다 — 모두가 무작위에 가까운 성능을 보이는 다중 오디오(multi-audio) 과제만 빼면.
+> 2026년의 오디오-언어 모델은 음성 + 환경음 + 음악을 두루 추론한다. Qwen2.5-Omni-7B는 MMAU-Pro에서 GPT-4o Audio와 맞먹는다. Audio Flamingo Next는 LongAudioBench에서 Gemini 2.5 Pro를 능가한다. 오픈과 클로즈드 사이의 격차는 사실상 사라졌다. 모두가 무작위에 가까운 성능을 보이는 다중 오디오(multi-audio) 과제만 빼면.
 
 **Type:** Learn
 **Languages:** Python
@@ -11,8 +11,8 @@
 
 5초짜리 오디오가 있다. 개가 짖고, 누군가 "멈춰!"라고 외치고, 그다음 정적이 흐른다. 유용한 질문은 여러 축에 걸쳐 있다.
 
-- **전사(Transcription).** "무슨 말을 했는가?" — ASR의 영역이다.
-- **의미 추론(Semantic reasoning).** "그 사람은 위험에 처해 있는가?" — 짖는 소리 + 외침 + 정적을 종합적으로 이해해야 한다.
+- **전사(Transcription).** "무슨 말을 했는가?": ASR의 영역이다.
+- **의미 추론(Semantic reasoning).** "그 사람은 위험에 처해 있는가?": 짖는 소리 + 외침 + 정적을 종합적으로 이해해야 한다.
 - **음악 추론(Music reasoning).** "어떤 악기가 멜로디를 연주하는가?"
 - **긴 오디오 검색(Long-audio retrieval).** "이 90분짜리 강의에서 강사가 경사 하강법(gradient descent)을 설명한 부분은 어디인가?"
 
@@ -178,9 +178,9 @@ print(f"Accuracy: {correct / len(mmau['test']):.3f}")
 
 ## 더 읽을거리 (Further Reading)
 
-- [Chu et al. (2024). Qwen2-Audio](https://arxiv.org/abs/2407.10759) — 레퍼런스 아키텍처.
-- [Alibaba (2025). Qwen2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B) — 음성 입력-음성 출력.
-- [NVIDIA (2025). Audio Flamingo 3](https://arxiv.org/abs/2507.08128) — 오픈 진영의 긴 오디오 선두주자.
+- [Chu et al. (2024). Qwen2-Audio](https://arxiv.org/abs/2407.10759): 레퍼런스 아키텍처.
+- [Alibaba (2025). Qwen2.5-Omni](https://huggingface.co/Qwen/Qwen2.5-Omni-7B): 음성 입력-음성 출력.
+- [NVIDIA (2025). Audio Flamingo 3](https://arxiv.org/abs/2507.08128): 오픈 진영의 긴 오디오 선두주자.
 - [NVIDIA (2026). Audio Flamingo Next](https://arxiv.org/abs/2604.10905) — LongAudioBench SOTA.
-- [Tang et al. (2023). SALMONN](https://arxiv.org/abs/2310.13289) — 듀얼 인코더의 선구자.
-- [MMAU-Pro leaderboard](https://mmaubenchmark.github.io/) — 2026년 실시간 순위.
+- [Tang et al. (2023). SALMONN](https://arxiv.org/abs/2310.13289): 듀얼 인코더의 선구자.
+- [MMAU-Pro leaderboard](https://mmaubenchmark.github.io/): 2026년 실시간 순위.

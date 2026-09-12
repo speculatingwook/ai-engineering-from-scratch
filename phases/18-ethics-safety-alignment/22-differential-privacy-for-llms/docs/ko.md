@@ -1,6 +1,6 @@
 # LLM을 위한 차등 프라이버시
 
-> DP-SGD는 여전히 표준이다 — 노이즈를 주입한 그래디언트(gradient) 갱신이 형식적인 (epsilon, delta) 보장을 제공한다. 계산, 메모리, 효용(utility) 측면의 오버헤드는 상당하다. 파라미터 효율적(parameter-efficient) DP 파인튜닝(fine-tuning)(LoRA + DP-SGD)이 2025년의 일반적인 구성이다(ACM 2025). 긴장 관계에 있는 두 가지 증거 묶음이 있다. 카나리(canary) 기반 멤버십 추론(membership inference)(Duan et al., 2024)은 언어 모델에 대해 제한적인 성공만을 보고한다. 학습 데이터 추출(training-data extraction)(Carlini et al., 2021; Nasr et al., 2025)은 상당한 양의 축자적(verbatim) 암기를 복원한다. 해소(arXiv:2503.06808, 2025년 3월): 그 간극은 무엇을 측정하는가에 있다 — 삽입된 카나리 대 "가장 추출 가능한" 데이터. 새로운 카나리 설계는 섀도 모델(shadow model) 없이 손실 기반(loss-based) MIA를 가능하게 하며, 현실적인 DP 보장을 가진 실제 데이터로 학습된 LLM에 대한 최초의 비자명한 DP 감사(audit)를 산출한다. 대안들: PMixED(arXiv:2403.15638) — 다음 토큰(next-token) 분포에 대한 전문가 혼합(mixture of experts)을 통한 추론 시점(inference time)의 사적 예측(private prediction). DP 합성 데이터(synthetic data) 생성(Google Research 2024). 새로 떠오르는 공격: LLM 피드백을 통한 차등 프라이버시 역전(Differential Privacy Reversal via LLM Feedback) — 신뢰도 점수(confidence score) 누출.
+> DP-SGD는 여전히 표준이다. 노이즈를 주입한 그래디언트(gradient) 갱신이 형식적인 (epsilon, delta) 보장을 제공한다. 계산, 메모리, 효용(utility) 측면의 오버헤드는 상당하다. 파라미터 효율적(parameter-efficient) DP 파인튜닝(fine-tuning)(LoRA + DP-SGD)이 2025년의 일반적인 구성이다(ACM 2025). 긴장 관계에 있는 두 가지 증거 묶음이 있다. 카나리(canary) 기반 멤버십 추론(membership inference)(Duan et al., 2024)은 언어 모델에 대해 제한적인 성공만을 보고한다. 학습 데이터 추출(training-data extraction)(Carlini et al., 2021; Nasr et al., 2025)은 상당한 양의 축자적(verbatim) 암기를 복원한다. 해소(arXiv:2503.06808, 2025년 3월): 그 간극은 무엇을 측정하는가에 있다. 삽입된 카나리 대 "가장 추출 가능한" 데이터. 새로운 카나리 설계는 섀도 모델(shadow model) 없이 손실 기반(loss-based) MIA를 가능하게 하며, 현실적인 DP 보장을 가진 실제 데이터로 학습된 LLM에 대한 최초의 비자명한 DP 감사(audit)를 산출한다. 대안들: PMixED(arXiv:2403.15638): 다음 토큰(next-token) 분포에 대한 전문가 혼합(mixture of experts)을 통한 추론 시점(inference time)의 사적 예측(private prediction). DP 합성 데이터(synthetic data) 생성(Google Research 2024). 새로 떠오르는 공격: LLM 피드백을 통한 차등 프라이버시 역전(Differential Privacy Reversal via LLM Feedback): 신뢰도 점수(confidence score) 누출.
 
 **Type:** Build
 **Languages:** Python (stdlib, DP-SGD noise-injection and ε-δ accountant demonstration)
@@ -104,8 +104,8 @@ Abadi et al. 2016. 표준 레시피:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Abadi et al. — DP-SGD (arXiv:1607.00133)](https://arxiv.org/abs/1607.00133) — 표준 DP 학습 알고리즘
-- [Carlini et al. — Extracting Training Data (arXiv:2012.07805)](https://arxiv.org/abs/2012.07805) — 표준적인 추출 논문
-- [Duan et al. — Canary MIA on LLMs (arXiv:2402.07841, 2024)](https://arxiv.org/abs/2402.07841) — 제한적 성공의 MIA
-- [Kowalczyk et al. — Auditing DP for LLMs (arXiv:2503.06808, March 2025)](https://arxiv.org/abs/2503.06808) — 긴장 관계의 해소
-- [PMixED (arXiv:2403.15638)](https://arxiv.org/abs/2403.15638) — 추론 시점의 사적 예측
+- [Abadi et al.(DP-SGD (arXiv:1607.00133)](https://arxiv.org/abs/1607.00133)) 표준 DP 학습 알고리즘
+- [Carlini et al.(Extracting Training Data (arXiv:2012.07805)](https://arxiv.org/abs/2012.07805)) 표준적인 추출 논문
+- [Duan et al.(Canary MIA on LLMs (arXiv:2402.07841, 2024)](https://arxiv.org/abs/2402.07841)) 제한적 성공의 MIA
+- [Kowalczyk et al.(Auditing DP for LLMs (arXiv:2503.06808, March 2025)](https://arxiv.org/abs/2503.06808)) 긴장 관계의 해소
+- [PMixED (arXiv:2403.15638)](https://arxiv.org/abs/2403.15638): 추론 시점의 사적 예측

@@ -1,6 +1,6 @@
-# 엣지 추론(Edge Inference) — Apple Neural Engine, Qualcomm Hexagon, WebGPU/WebLLM, Jetson
+# 엣지 추론(Edge Inference): Apple Neural Engine, Qualcomm Hexagon, WebGPU/WebLLM, Jetson
 
-> 핵심 엣지 제약은 연산이 아니라 메모리 대역폭(memory bandwidth)이다. 모바일 DRAM은 50-90 GB/s에 머무는 반면, 데이터센터 HBM3는 2-3 TB/s를 넘긴다 — 30-50배 차이다. 디코드(decode)는 메모리 바운드(memory-bound)이므로 이 차이가 결정적이다. 2026년 지형은 네 갈래로 나뉜다. Apple M4/A18 Neural Engine은 통합 메모리(unified memory, CPU↔NPU 복사 없음)와 함께 38 TOPS로 정점을 찍는다. Qualcomm Snapdragon X Elite / 8 Gen 4 Hexagon은 45 TOPS에 도달한다. WebGPU + WebLLM은 M3 Max에서 Llama 3.1 8B(Q4)를 ~41 tok/s로 실행한다(대략 네이티브의 70-80%). GitHub 스타 17.6k, OpenAI 호환 API, 모바일 커버리지 ~70-75%. NVIDIA Jetson Orin Nano Super(8GB)는 Llama 3.2 3B / Phi-3에 들어맞고, AGX Orin은 vLLM을 통해 gpt-oss-20b를 ~40 tok/s로 실행하며, Jetson T4000(JetPack 7.1)은 AGX Orin의 2배다. TensorRT Edge-LLM은 EAGLE-3, NVFP4, 청크드 프리필(chunked prefill)을 지원한다 — CES 2026에서 Bosch, ThunderSoft, MediaTek가 시연했다.
+> 핵심 엣지 제약은 연산이 아니라 메모리 대역폭(memory bandwidth)이다. 모바일 DRAM은 50-90 GB/s에 머무는 반면, 데이터센터 HBM3는 2-3 TB/s를 넘긴다. 30-50배 차이다. 디코드(decode)는 메모리 바운드(memory-bound)이므로 이 차이가 결정적이다. 2026년 지형은 네 갈래로 나뉜다. Apple M4/A18 Neural Engine은 통합 메모리(unified memory, CPU↔NPU 복사 없음)와 함께 38 TOPS로 정점을 찍는다. Qualcomm Snapdragon X Elite / 8 Gen 4 Hexagon은 45 TOPS에 도달한다. WebGPU + WebLLM은 M3 Max에서 Llama 3.1 8B(Q4)를 ~41 tok/s로 실행한다(대략 네이티브의 70-80%). GitHub 스타 17.6k, OpenAI 호환 API, 모바일 커버리지 ~70-75%. NVIDIA Jetson Orin Nano Super(8GB)는 Llama 3.2 3B / Phi-3에 들어맞고, AGX Orin은 vLLM을 통해 gpt-oss-20b를 ~40 tok/s로 실행하며, Jetson T4000(JetPack 7.1)은 AGX Orin의 2배다. TensorRT Edge-LLM은 EAGLE-3, NVFP4, 청크드 프리필(chunked prefill)을 지원한다. CES 2026에서 Bosch, ThunderSoft, MediaTek가 시연했다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy bandwidth-bound decode simulator)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-한 고객이 온디바이스 챗봇을 원한다: 음성 우선, 기본적으로 프라이빗, 오프라인 동작. MacBook Pro M3 Max에서 Llama 3.1 8B Q4는 ~55 tok/s로 돌아간다 — 괜찮다. iPhone 16 Pro에서 같은 모델은 3 tok/s로 돌아간다 — 괜찮지 않다. Snapdragon 8 Gen 3을 쓰는 중급 안드로이드에서는 7 tok/s. Chrome Android v121+에서 WebGPU를 통해 브라우저에서는 기기에 따라 4-8 tok/s.
+한 고객이 온디바이스 챗봇을 원한다: 음성 우선, 기본적으로 프라이빗, 오프라인 동작. MacBook Pro M3 Max에서 Llama 3.1 8B Q4는 ~55 tok/s로 돌아간다. 괜찮다. iPhone 16 Pro에서 같은 모델은 3 tok/s로 돌아간다. 괜찮지 않다. Snapdragon 8 Gen 3을 쓰는 중급 안드로이드에서는 7 tok/s. Chrome Android v121+에서 WebGPU를 통해 브라우저에서는 기기에 따라 4-8 tok/s.
 
 처리량 편차는 포팅(porting) 문제가 아니다. 대역폭 격차 × 양자화 형식 × NPU가 유저 스페이스(user-space)에서 접근 가능한지의 곱이다. 2026년 엣지 추론은 네 가지 다른 해법을 가진 네 가지 다른 문제다.
 
@@ -24,13 +24,13 @@
 
 ### 대역폭이 진짜 천장이다
 
-디코드는 매 토큰마다 가중치 전체 집합을 읽는다. Q4의 7B 모델 하나는 3.5 GB다. 50 GB/s로 3.5 GB를 읽으면 70ms가 걸린다 — 이론적 천장은 ~14 tok/s. 90 GB/s(고급 모바일 DRAM)에서는 천장이 ~25 tok/s로 이동한다. 이 수치 아래에서는 어떤 연산도 도움이 되지 않는다.
+디코드는 매 토큰마다 가중치 전체 집합을 읽는다. Q4의 7B 모델 하나는 3.5 GB다. 50 GB/s로 3.5 GB를 읽으면 70ms가 걸린다. 이론적 천장은 ~14 tok/s. 90 GB/s(고급 모바일 DRAM)에서는 천장이 ~25 tok/s로 이동한다. 이 수치 아래에서는 어떤 연산도 도움이 되지 않는다.
 
-3 TB/s의 데이터센터 HBM3는 같은 3.5 GB를 1.2ms에 처리한다 — 천장은 830 tok/s. 같은 모델, 같은 가중치. 다른 메모리 서브시스템.
+3 TB/s의 데이터센터 HBM3는 같은 3.5 GB를 1.2ms에 처리한다. 천장은 830 tok/s. 같은 모델, 같은 가중치. 다른 메모리 서브시스템.
 
 ### Apple Neural Engine (M4 / A18)
 
-- 최대 38 TOPS. 통합 메모리(CPU와 ANE가 같은 풀을 공유) — 복사 오버헤드 없음.
+- 최대 38 TOPS. 통합 메모리(CPU와 ANE가 같은 풀을 공유): 복사 오버헤드 없음.
 - Core ML + `.mlmodel` 컴파일 모델로 접근하거나, PyTorch를 통한 Metal Performance Shaders(MPS)로 접근.
 - Llama.cpp Metal 백엔드는 ANE를 직접 쓰지 않고 MPS를 사용한다. 네이티브 ANE는 Core ML 변환이 필요하다.
 - 2026년 iOS 앱의 최선의 실용 경로: INT4 가중치 + FP16 활성값을 쓰는 Core ML.
@@ -49,7 +49,7 @@
 ### WebGPU + WebLLM
 
 - WebGPU 컴퓨트 셰이더(compute shader)를 통해 브라우저에서 모델 실행. 설치 불필요.
-- M3 Max에서 Llama 3.1 8B Q4를 ~41 tok/s — 같은 백엔드를 통해 대략 네이티브의 70-80%.
+- M3 Max에서 Llama 3.1 8B Q4를 ~41 tok/s: 같은 백엔드를 통해 대략 네이티브의 70-80%.
 - WebLLM GitHub 스타 17.6k. OpenAI 호환 JS API. Apache 2.0.
 - 2026년 커버리지: Chrome Android v121+, Safari iOS 26 GA, Firefox Android는 여전히 따라잡는 중. 전체 모바일 커버리지 ~70-75%.
 
@@ -58,7 +58,7 @@
 - Orin Nano Super(8GB): Llama 3.2 3B, Phi-3가 좋은 tok/s로 들어맞음.
 - AGX Orin: vLLM을 통해 gpt-oss-20b를 ~40 tok/s로 실행.
 - Thor / T4000(JetPack 7.1): AGX Orin의 2배 성능, EAGLE-3과 NVFP4 지원.
-- TensorRT Edge-LLM(2026)은 EAGLE-3 추측 디코딩(speculative decoding), NVFP4 가중치, 청크드 프리필을 지원한다 — 데이터센터 최적화를 엣지로 포팅한 것.
+- TensorRT Edge-LLM(2026)은 EAGLE-3 추측 디코딩(speculative decoding), NVFP4 가중치, 청크드 프리필을 지원한다. 데이터센터 최적화를 엣지로 포팅한 것.
 
 ### 타깃별 양자화 선택
 
@@ -97,8 +97,8 @@ Llama 3.1의 128K 컨텍스트는 데이터센터 기능이다. RAM 8 GB 폰에�
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행하라. Snapdragon 8 Gen 3(~77 GB/s 대역폭)에서 Q4의 7B 모델에 대해 디코드 천장을 계산하라. 관측된 6-8 tok/s와 비교하라 — 런타임이 효율적인가?
-2. 안드로이드의 WebGPU는 Chrome v121+를 요구한다. 구형 브라우저를 위한 폴백(fallback)을 설계하라 — 같은 OpenAI 호환 API를 통한 서버 사이드.
+1. `code/main.py`를 실행하라. Snapdragon 8 Gen 3(~77 GB/s 대역폭)에서 Q4의 7B 모델에 대해 디코드 천장을 계산하라. 관측된 6-8 tok/s와 비교하라. 런타임이 효율적인가?
+2. 안드로이드의 WebGPU는 Chrome v121+를 요구한다. 구형 브라우저를 위한 폴백(fallback)을 설계하라. 같은 OpenAI 호환 API를 통한 서버 사이드.
 3. iOS 앱에서 4K 컨텍스트 스트리밍이 필요하다. iPhone 16에서 활성 메모리 4 GB 미만으로 유지하게 해주는 모델/형식 조합은 무엇인가?
 4. Jetson AGX Orin은 gpt-oss-20b를 40 tok/s로 실행한다. Jetson Nano는 3B만 들어맞는다. 제품이 둘 다 타깃으로 한다면, 추론 스택을 어떻게 통일할 것인가?
 5. "WebLLM이 2026년에 프로덕션 준비가 되었는지"를 논하라. 커버리지, 성능, 그리고 Firefox Android 격차를 인용하라.
@@ -120,9 +120,9 @@ Llama 3.1의 128K 컨텍스트는 데이터센터 기능이다. RAM 8 GB 폰에�
 
 ## 더 읽을거리 (Further Reading)
 
-- [On-Device LLMs State of the Union 2026](https://v-chandra.github.io/on-device-llms/) — 지형과 벤치마크.
+- [On-Device LLMs State of the Union 2026](https://v-chandra.github.io/on-device-llms/): 지형과 벤치마크.
 - [NVIDIA Jetson Edge AI](https://developer.nvidia.com/blog/getting-started-with-edge-ai-on-nvidia-jetson-llms-vlms-and-foundation-models-for-robotics/) — Orin / AGX / Thor.
-- [NVIDIA TensorRT Edge-LLM](https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm/) — 2026년 엣지 포팅 발표.
-- [WebLLM (arXiv:2412.15803)](https://arxiv.org/html/2412.15803v2) — 설계와 벤치마크.
-- [Apple Core ML](https://developer.apple.com/documentation/coreml) — ANE 네이티브 변환.
-- [Qualcomm AI Hub](https://aihub.qualcomm.com/) — Hexagon용 사전 변환 모델.
+- [NVIDIA TensorRT Edge-LLM](https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm/): 2026년 엣지 포팅 발표.
+- [WebLLM (arXiv:2412.15803)](https://arxiv.org/html/2412.15803v2): 설계와 벤치마크.
+- [Apple Core ML](https://developer.apple.com/documentation/coreml): ANE 네이티브 변환.
+- [Qualcomm AI Hub](https://aihub.qualcomm.com/): Hexagon용 사전 변환 모델.

@@ -42,7 +42,7 @@
 [current user message]   <-- never cache (different every time)
 ```
 
-순서를 어기면 — 사용자 메시지를 시스템 프롬프트 위에 두거나, 동적 검색을 few-shot 사이에 끼워넣으면 — 캐시가 절대 히트하지 않는다.
+순서를 어기면(사용자 메시지를 시스템 프롬프트 위에 두거나, 동적 검색을 few-shot 사이에 끼워넣으면) 캐시가 절대 히트하지 않는다.
 
 ### 손익분기 계산 (The break-even calculation)
 
@@ -163,7 +163,7 @@ Gemini는 캐시가 살아 있는 동안 토큰·시간당 저장소 비용을 �
 
 - **상단의 동적 타임스탬프.** 시스템 프롬프트 상단의 `"Current time: 2026-04-22 15:30:02"`. 모든 요청이 미스다. 타임스탬프를 캐시 브레이크포인트 아래로 옮겨라.
 - **도구 재정렬.** 도구를 안정적인 순서로 직렬화하라. 배포 사이의 딕셔너리 재배치는 모든 히트를 깨뜨린다.
-- **자유 텍스트 근접 중복.** "You are helpful." 대 "You are a helpful assistant." — 1바이트 차이가 완전한 미스다.
+- **자유 텍스트 근접 중복.** "You are helpful." 대 "You are a helpful assistant.": 1바이트 차이가 완전한 미스다.
 - **너무 작은 블록.** Anthropic은 1,024토큰 하한(Haiku는 2,048)을 강제한다. 더 작은 블록은 조용히 캐시되지 않는다.
 - **눈먼 비용 대시보드.** "입력 토큰"을 캐시됨과 캐시 안 됨으로 분리하라. 그러지 않으면 트래픽 감소가 캐시 승리처럼 보인다.
 
@@ -227,12 +227,12 @@ Refuse to ship a cache plan that places a dynamic field above the breakpoint. Re
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) — `cache_control`, 1시간 TTL, 손익분기 표
-- [OpenAI — Prompt caching](https://platform.openai.com/docs/guides/prompt-caching) — 자동 프리픽스 매칭
-- [Google — Context caching](https://ai.google.dev/gemini-api/docs/caching) — `CachedContent` API와 저장소 가격
-- [Anthropic engineering — Prompt caching for long-context workloads](https://www.anthropic.com/news/prompt-caching) — 지연 시간 수치가 담긴 원래 출시 게시물
-- Phase 11 · 05 (Context Engineering) — 캐시가 안착할 수 있도록 프롬프트를 어디서 자를지
-- Phase 11 · 11 (Caching and Cost) — 프롬프트 캐싱을 사용자 메시지에 대한 시맨틱 캐시와 짝지으라
-- [Pope et al., "Efficiently Scaling Transformer Inference" (2022)](https://arxiv.org/abs/2211.05102) — 프롬프트 캐싱이 사용자에게 노출하는 KV 캐시 메모리 모델; 캐시된 프리픽스를 다시 읽는 것이 다시 계산하는 것보다 ~10배 싼 이유를 설명한다
-- [Agrawal et al., "SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills" (2023)](https://arxiv.org/abs/2308.16369) — 프리필은 프롬프트 캐싱이 단축하는 단계다; 이 논문은 캐시 히트 시 TTFT가 극적으로 떨어지는 반면 TPOT는 영향받지 않는 이유를 설명한다
-- [Leviathan et al., "Fast Inference from Transformers via Speculative Decoding" (2023)](https://arxiv.org/abs/2211.17192) — 프롬프트 캐싱은 추론 비용 곡선을 굽히는 레버로서 추측적 디코딩, Flash Attention, MQA/GQA와 나란히 위치한다; 나머지 셋은 이것을 읽으라
+- [Anthropic(Prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)) `cache_control`, 1시간 TTL, 손익분기 표
+- [OpenAI(Prompt caching](https://platform.openai.com/docs/guides/prompt-caching)) 자동 프리픽스 매칭
+- [Google(Context caching](https://ai.google.dev/gemini-api/docs/caching)) `CachedContent` API와 저장소 가격
+- [Anthropic engineering(Prompt caching for long-context workloads](https://www.anthropic.com/news/prompt-caching)) 지연 시간 수치가 담긴 원래 출시 게시물
+- Phase 11 · 05 (Context Engineering): 캐시가 안착할 수 있도록 프롬프트를 어디서 자를지
+- Phase 11 · 11 (Caching and Cost): 프롬프트 캐싱을 사용자 메시지에 대한 시맨틱 캐시와 짝지으라
+- [Pope et al., "Efficiently Scaling Transformer Inference" (2022)](https://arxiv.org/abs/2211.05102): 프롬프트 캐싱이 사용자에게 노출하는 KV 캐시 메모리 모델; 캐시된 프리픽스를 다시 읽는 것이 다시 계산하는 것보다 ~10배 싼 이유를 설명한다
+- [Agrawal et al., "SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills" (2023)](https://arxiv.org/abs/2308.16369): 프리필은 프롬프트 캐싱이 단축하는 단계다; 이 논문은 캐시 히트 시 TTFT가 극적으로 떨어지는 반면 TPOT는 영향받지 않는 이유를 설명한다
+- [Leviathan et al., "Fast Inference from Transformers via Speculative Decoding" (2023)](https://arxiv.org/abs/2211.17192): 프롬프트 캐싱은 추론 비용 곡선을 굽히는 레버로서 추측적 디코딩, Flash Attention, MQA/GQA와 나란히 위치한다; 나머지 셋은 이것을 읽으라

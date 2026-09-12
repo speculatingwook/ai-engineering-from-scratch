@@ -1,4 +1,4 @@
-# 음성 인식(ASR) — CTC, RNN-T, 어텐션
+# 음성 인식(ASR): CTC, RNN-T, 어텐션
 
 > 음성 인식(speech recognition)은 매 타임스텝(timestep)마다 오디오를 분류하는 작업이고, 여기에 영어와 침묵을 아는 시퀀스 모델(sequence model)을 이어 붙인 것이다. 이를 해내는 방법은 CTC, RNN-T, 어텐션(attention) 세 가지다. 하나를 고르고 왜 그런지 이해하라.
 
@@ -25,13 +25,13 @@
 
 **CTC 직관.** 인코더가 `V+1`개 토큰(V개 문자 + blank)에 대한 `T`개의 프레임 수준 분포를 출력하게 한다. 길이 `U < T`인 타깃 문자열 `y`에 대해, `y`로 합쳐지는 모든 프레임 정렬(alignment)이 인정된다. CTC 손실(loss)은 그러한 모든 정렬을 합산한다. 추론: 프레임별 argmax, 반복 합치기, blank 제거.
 
-장점: 비자기회귀적, 스트리밍 가능, 룩어헤드(lookahead) 없음. 단점: *조건부 독립성 가정(conditional independence assumption)* — 각 프레임 예측이 서로 독립적이라 내부 언어 모델(language model)이 없다. 빔 서치(beam search)나 얕은 융합(shallow fusion)을 통한 외부 LM으로 해결한다.
+장점: 비자기회귀적, 스트리밍 가능, 룩어헤드(lookahead) 없음. 단점: *조건부 독립성 가정(conditional independence assumption)*: 각 프레임 예측이 서로 독립적이라 내부 언어 모델(language model)이 없다. 빔 서치(beam search)나 얕은 융합(shallow fusion)을 통한 외부 LM으로 해결한다.
 
 **RNN-T 직관.** 토큰 이력을 임베딩하는 *예측기(predictor)* 네트워크와, 예측기 상태를 인코더 프레임과 결합해 `V+1`(여기서 `+1`은 null / 비방출(no-emit))에 대한 결합 분포(joint distribution)로 만드는 *결합기(joiner)*를 추가한다. CTC가 무시한 조건부 의존성을 명시적으로 모델링한다. 각 스텝이 과거 프레임과 과거 토큰에만 조건화되므로 스트리밍 가능하다.
 
 장점: 스트리밍 가능 + 내부 LM. 단점: 학습이 더 복잡하고 메모리를 많이 먹는다(3D 손실 격자(loss lattice)); RNN-T 손실 커널은 그 자체로 하나의 라이브러리 범주다.
 
-**어텐션 인코더-디코더.** 로그 멜(log-mel) 프레임에 대한 인코더(6-32개 트랜스포머(Transformer) 층). 디코더(6-32개 트랜스포머 층)가 인코더 출력에 크로스 어텐션해 토큰을 자기회귀적으로 생성한다. 정렬 제약이 없다 — 어텐션은 오디오의 어디든 볼 수 있다. 어텐션을 제한하지 않는 한 스트리밍은 불가능하다(청크 단위 Whisper-Streaming, 2024).
+**어텐션 인코더-디코더.** 로그 멜(log-mel) 프레임에 대한 인코더(6-32개 트랜스포머(Transformer) 층). 디코더(6-32개 트랜스포머 층)가 인코더 출력에 크로스 어텐션해 토큰을 자기회귀적으로 생성한다. 정렬 제약이 없다. 어텐션은 오디오의 어디든 볼 수 있다. 어텐션을 제한하지 않는 한 스트리밍은 불가능하다(청크 단위 Whisper-Streaming, 2024).
 
 장점: 오프라인 ASR에서 최고 품질, 표준 seq2seq 도구로 학습하기 쉬움. 단점: 자기회귀 지연 시간(latency)이 출력 길이에 비례한다; 엔지니어링 없이는 스트리밍 불가.
 
@@ -174,8 +174,8 @@ for chunk in streaming_audio():
 
 ## 더 읽을거리 (Further Reading)
 
-- [Graves et al. (2006). Connectionist Temporal Classification](https://www.cs.toronto.edu/~graves/icml_2006.pdf) — CTC 논문.
-- [Graves (2012). Sequence Transduction with RNNs](https://arxiv.org/abs/1211.3711) — RNN-T 논문.
-- [Radford et al. / OpenAI (2022). Whisper: Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356) — 2022년의 정전 격 논문; 2024년 v3-turbo 확장.
-- [NVIDIA NeMo — Parakeet-TDT card](https://huggingface.co/nvidia/parakeet-tdt-1.1b) — 2026년 Open ASR Leaderboard 선두.
-- [Hugging Face — Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard) — 25개 이상 모델에 걸친 라이브 벤치마크.
+- [Graves et al. (2006). Connectionist Temporal Classification](https://www.cs.toronto.edu/~graves/icml_2006.pdf): CTC 논문.
+- [Graves (2012). Sequence Transduction with RNNs](https://arxiv.org/abs/1211.3711): RNN-T 논문.
+- [Radford et al. / OpenAI (2022). Whisper: Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356): 2022년의 정전 격 논문; 2024년 v3-turbo 확장.
+- [NVIDIA NeMo(Parakeet-TDT card](https://huggingface.co/nvidia/parakeet-tdt-1.1b)) 2026년 Open ASR Leaderboard 선두.
+- [Hugging Face(Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard)) 25개 이상 모델에 걸친 라이브 벤치마크.

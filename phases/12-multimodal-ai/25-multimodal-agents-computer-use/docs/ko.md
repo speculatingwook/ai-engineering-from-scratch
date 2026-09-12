@@ -1,6 +1,6 @@
 # 멀티모달 에이전트와 컴퓨터 사용 (캡스톤)
 
-> 2026년 프런티어 제품은 스크린샷을 읽고, 버튼을 클릭하고, 웹 UI를 탐색하고, 양식을 채우고, 워크플로를 종단간으로 완수하는 멀티모달 에이전트(agent)다. SeeClick과 CogAgent(2024)는 GUI 그라운딩 프리미티브를 입증했다. Ferret-UI는 모바일을 더했다. ChartAgent는 차트를 위한 시각 도구 사용을 도입했다. VisualWebArena와 AgentVista(2026)는 프런티어가 쫓는 벤치마크(benchmark)다 — 심지어 Gemini 3 Pro와 Claude Opus 4.7도 AgentVista의 어려운 과제에서 약 30%를 기록한다. 이 캡스톤은 Phase 12의 모든 가닥을 한데 모은다: 지각(고해상도 VLM), 추론(도구 사용 LLM), 그라운딩(좌표 출력), 장기 시야 메모리, 그리고 평가.
+> 2026년 프런티어 제품은 스크린샷을 읽고, 버튼을 클릭하고, 웹 UI를 탐색하고, 양식을 채우고, 워크플로를 종단간으로 완수하는 멀티모달 에이전트(agent)다. SeeClick과 CogAgent(2024)는 GUI 그라운딩 프리미티브를 입증했다. Ferret-UI는 모바일을 더했다. ChartAgent는 차트를 위한 시각 도구 사용을 도입했다. VisualWebArena와 AgentVista(2026)는 프런티어가 쫓는 벤치마크(benchmark)다. 심지어 Gemini 3 Pro와 Claude Opus 4.7도 AgentVista의 어려운 과제에서 약 30%를 기록한다. 이 캡스톤은 Phase 12의 모든 가닥을 한데 모은다: 지각(고해상도 VLM), 추론(도구 사용 LLM), 그라운딩(좌표 출력), 장기 시야 메모리, 그리고 평가.
 
 **Type:** Capstone
 **Languages:** Python (stdlib, action schema + agent loop skeleton)
@@ -31,7 +31,7 @@
 
 ## 개념 (The Concept)
 
-### GUI 그라운딩 — 프리미티브
+### GUI 그라운딩: 프리미티브
 
 GUI 그라운딩은 이렇다: 스크린샷과 자연어 지시가 주어지면, 클릭할 (x, y) 좌표(또는 기타 행동)를 출력한다.
 

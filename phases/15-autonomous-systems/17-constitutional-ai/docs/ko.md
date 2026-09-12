@@ -13,7 +13,7 @@
 
 규칙 기반 정렬(rule-based alignment, RBA): 허용되지 않는 모든 것을 나열한다. 검사하기 빠르고, 감사하기 쉽지만, 최신 상태를 유지하기 불가능하며, 예상하지 못한 유사 사례에서 종종 과도하게 거부한다. 이유 기반 정렬(reason-based alignment, 2026 Claude Constitution): 원칙을 인코딩하고 모델이 추론하게 한다. 처음 보는 사례 전반에 걸쳐 확장되지만, 감사하기 더 어렵고, 실패 모드는 규칙을 놓치는 것이 아니라 원칙을 잘못 적용하는 것이다.
 
-2026 Constitution은 명시적으로 중간 입장을 취한다. 하드코딩된 금지 — 그 잘못됨이 맥락에 의존하지 않는 것들(생물무기 증강, CSAM) — 은 RBA다. 운영자나 사용자의 지시와 무관하게 절대 안 된다. 그 외 모든 것은 4단계 위계 안에서 이유 기반이다. 안전과 인간 감독 지원이 첫째, 윤리가 둘째, Anthropic이 선언한 가이드라인이 셋째, 유용성이 마지막이다. 운영자는 소프트코딩 영역 안에서 기본값을 조정할 수 있지만 하드코딩된 금지는 건드릴 수 없다.
+2026 Constitution은 명시적으로 중간 입장을 취한다. 하드코딩된 금지. 그 잘못됨이 맥락에 의존하지 않는 것들, 즉 생물무기 증강과 CSAM은 RBA다. 운영자나 사용자의 지시와 무관하게 절대 안 된다. 그 외 모든 것은 4단계 위계 안에서 이유 기반이다. 안전과 인간 감독 지원이 첫째, 윤리가 둘째, Anthropic이 선언한 가이드라인이 셋째, 유용성이 마지막이다. 운영자는 소프트코딩 영역 안에서 기본값을 조정할 수 있지만 하드코딩된 금지는 건드릴 수 없다.
 
 ## 개념 (The Concept)
 
@@ -24,7 +24,7 @@
 3. **Anthropic 가이드라인.** Anthropic이 중요하다고 결정한 운영 규범: 제품 범위, 상호작용 패턴, 언제 어떤 도구를 사용할지.
 4. **유용성.** 최하위. 더 높은 우선순위들 안에서 가능한 한 유용하라.
 
-단계들이 충돌하면 더 높은 쪽이 이긴다. 이것은 Unix 우선순위나 네트워크 QoS와 동일한 형태다 — 이 프레이밍은 어느 한 축에서의 최선 행동이 아니라 예측 가능한 해소를 만들어내기 위한 것이다.
+단계들이 충돌하면 더 높은 쪽이 이긴다. 이것은 Unix 우선순위나 네트워크 QoS와 동일한 형태다. 이 프레이밍은 어느 한 축에서의 최선 행동이 아니라 예측 가능한 해소를 만들어내기 위한 것이다.
 
 ### 하드코딩된 금지 vs 소프트코딩된 기본값
 
@@ -114,8 +114,8 @@ Anthropic은 2023년에 기업이 작성한 헌법과 공중 입력(미국 응�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — 79쪽 CC0 문서.
-- [Bai et al. — Constitutional AI: Harmlessness from AI Feedback](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback) — 2022년 원본.
-- [Anthropic — Collective Constitutional AI (2023)](https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input) — 참여형 실험.
-- [Anthropic — Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — RSP 스택에서 헌법이 위치하는 곳.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 장기 지평 배포에서 헌법의 역할.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 79쪽 CC0 문서.
+- [Bai et al.(Constitutional AI: Harmlessness from AI Feedback](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback)) 2022년 원본.
+- [Anthropic(Collective Constitutional AI (2023)](https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input)) 참여형 실험.
+- [Anthropic(Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) RSP 스택에서 헌법이 위치하는 곳.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 배포에서 헌법의 역할.

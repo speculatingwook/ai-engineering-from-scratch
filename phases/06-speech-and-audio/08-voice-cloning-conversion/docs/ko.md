@@ -35,7 +35,7 @@
 - **인식-합성(Recognition-synthesis).** ASR 유사 모델을 돌려 내용 표현(예: 부드러운 음소 사후확률, PPG)을 추출하고, 타깃 화자 임베딩으로 재합성한다. 언어와 억양에 견고하다. KNN-VC(2023), Diff-HierVC(2023)가 사용한다.
 - **분리(Disentanglement).** 병목(bottleneck)에서 잠재 공간(latent space)의 내용, 화자, 운율을 분리하는 오토인코더(autoencoder)를 학습한다. 추론 시 화자 임베딩을 교체한다. 더 낮은 품질이지만 더 빠르다. AutoVC(2019), VITS-VC 변형이 사용한다.
 
-**신경 코덱(neural codec) 기반 복제(2024년 이후).** VALL-E, VALL-E 2, NaturalSpeech 3, VoiceBox — 오디오를 SoundStream / EnCodec의 이산 토큰(discrete token)으로 취급하고, 코덱 토큰에 대한 대형 자기회귀(autoregressive) 또는 흐름 매칭(flow-matching) 모델을 학습한다. 짧은 프롬프트(prompt)에서 ElevenLabs에 필적하는 품질.
+**신경 코덱(neural codec) 기반 복제(2024년 이후).** VALL-E, VALL-E 2, NaturalSpeech 3, VoiceBox: 오디오를 SoundStream / EnCodec의 이산 토큰(discrete token)으로 취급하고, 코덱 토큰에 대한 대형 자기회귀(autoregressive) 또는 흐름 매칭(flow-matching) 모델을 학습한다. 짧은 프롬프트(prompt)에서 ElevenLabs에 필적하는 품질.
 
 ### 윤리 부분, 부가물이 아니다
 
@@ -163,9 +163,9 @@ def cloned_inference(text, ref_audio, consent_record):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Chen et al. (2024). F5-TTS](https://arxiv.org/abs/2410.06885) — 오픈소스 SOTA 제로샷 복제.
-- [Baevski et al. / Microsoft (2023). VALL-E](https://arxiv.org/abs/2301.02111) 및 [VALL-E 2 (2024)](https://arxiv.org/abs/2406.05370) — 신경 코덱 TTS.
-- [Qian et al. (2019). AutoVC](https://arxiv.org/abs/1905.05879) — 분리 기반 음성 변환.
-- [Baas, Waubert de Puiseau, Kamper (2023). KNN-VC](https://arxiv.org/abs/2305.18975) — 검색 기반 VC.
-- [SilentCipher (2024) — Audio Watermarking](https://github.com/sony/silentcipher) — 프로덕션 준비된 32비트 오디오 워터마크.
-- [ASVspoof 2025 results](https://www.asvspoof.org/) — 검출기 대 합성기 군비 경쟁, 2026년 업데이트.
+- [Chen et al. (2024). F5-TTS](https://arxiv.org/abs/2410.06885): 오픈소스 SOTA 제로샷 복제.
+- [Baevski et al. / Microsoft (2023). VALL-E](https://arxiv.org/abs/2301.02111) 및 [VALL-E 2 (2024)](https://arxiv.org/abs/2406.05370): 신경 코덱 TTS.
+- [Qian et al. (2019). AutoVC](https://arxiv.org/abs/1905.05879): 분리 기반 음성 변환.
+- [Baas, Waubert de Puiseau, Kamper (2023). KNN-VC](https://arxiv.org/abs/2305.18975): 검색 기반 VC.
+- [SilentCipher (2024)(Audio Watermarking](https://github.com/sony/silentcipher)) 프로덕션 준비된 32비트 오디오 워터마크.
+- [ASVspoof 2025 results](https://www.asvspoof.org/): 검출기 대 합성기 군비 경쟁, 2026년 업데이트.

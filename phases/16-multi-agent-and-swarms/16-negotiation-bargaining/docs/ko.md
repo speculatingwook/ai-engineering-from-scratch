@@ -68,7 +68,7 @@ Large-Scale Autonomous Negotiation Competition(arXiv:2503.06416)은 많은 LLM �
 
 엔지니어링 요점: 비공개 스크래치패드 맥락(context)을 공개 메시지 맥락에서 분리하라. 선택 사항이 아니다.
 
-### Bhattacharya et al. 2025 — 모델 순위
+### Bhattacharya et al. 2025: 모델 순위
 
 Harvard Negotiation Project 지표(원칙 협상, BATNA 존중, 이해관계 호혜성)에서:
 
@@ -106,10 +106,10 @@ NeurIPS 2024(https://proceedings.neurips.cc/paper_files/paper/2024/file/984dd3db
 
 `code/main.py`는 다음을 구현한다.
 
-- `ContractNetManager`, `ContractNetTask`, `Bid` — 매니저 + 입찰자, cfp 브로드캐스트, 제안 수집, 수여.
-- `og_narrator_bargain(state, rng)` — OG-Narrator 구매자: 중간점을 향한 결정론적 제우텐 스타일 양보.
-- `seller_response(state, rng)` — 결정론적 판매자 역제안 정책(두 스타일 모두의 구조적 정답).
-- `naive_llm_bargain(state, rng)` — 전부 LLM인 흥정가를 시뮬레이션한다: 높은 분산으로 가격을 고르며, 종종 ZOPA 밖이다.
+- `ContractNetManager`, `ContractNetTask`, `Bid`: 매니저 + 입찰자, cfp 브로드캐스트, 제안 수집, 수여.
+- `og_narrator_bargain(state, rng)`: OG-Narrator 구매자: 중간점을 향한 결정론적 제우텐 스타일 양보.
+- `seller_response(state, rng)`: 결정론적 판매자 역제안 정책(두 스타일 모두의 구조적 정답).
+- `naive_llm_bargain(state, rng)`: 전부 LLM인 흥정가를 시뮬레이션한다: 높은 분산으로 가격을 고르며, 종종 ZOPA 밖이다.
 - 측정: 시도마다 새로 샘플링한 유보 가격으로 1000회 시도에 걸친 거래 성사율.
 
 실행:
@@ -158,8 +158,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [NegotiationArena](https://arxiv.org/abs/2402.05863) — 벤치마크. 페르소나 조작과 착취 발견
-- [Measuring Bargaining Abilities of Language Models](https://arxiv.org/abs/2402.15813) — OG-Narrator와 구매자가 판매자보다 어렵다는 결과
-- [Large-Scale Autonomous Negotiation Competition](https://arxiv.org/abs/2503.06416) — ~18만 건의 협상. 사고 사슬 은폐가 이긴다
-- [LLM-Stakeholders Interactive Negotiation (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/file/984dd3db213db2d1454a163b65b84d08-Paper-Datasets_and_Benchmarks_Track.pdf) — 비밀 효용을 가진 다자 채점 게임
-- [Smith 1980 — The Contract Net Protocol](https://ieeexplore.ieee.org/document/1675516) — 고전적 메커니즘, IEEE Transactions on Computers
+- [NegotiationArena](https://arxiv.org/abs/2402.05863): 벤치마크. 페르소나 조작과 착취 발견
+- [Measuring Bargaining Abilities of Language Models](https://arxiv.org/abs/2402.15813): OG-Narrator와 구매자가 판매자보다 어렵다는 결과
+- [Large-Scale Autonomous Negotiation Competition](https://arxiv.org/abs/2503.06416): ~18만 건의 협상. 사고 사슬 은폐가 이긴다
+- [LLM-Stakeholders Interactive Negotiation (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/file/984dd3db213db2d1454a163b65b84d08-Paper-Datasets_and_Benchmarks_Track.pdf): 비밀 효용을 가진 다자 채점 게임
+- [Smith 1980(The Contract Net Protocol](https://ieeexplore.ieee.org/document/1675516)) 고전적 메커니즘, IEEE Transactions on Computers

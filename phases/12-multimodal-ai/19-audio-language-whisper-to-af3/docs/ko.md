@@ -1,6 +1,6 @@
 # 오디오-언어 모델: Whisper에서 Audio Flamingo 3까지의 궤적
 
-> Whisper(Radford et al., 2022년 12월)는 음성 인식을 정리했다 — 68만 시간의 약지도(weakly-supervised) 다국어 음성, 단순한 인코더-디코더 트랜스포머(transformer), 이후 모든 ASR 출시가 인용할 수밖에 없게 만든 벤치마크(benchmark)다. 하지만 인식은 추론이 아니다. "이 녹음에 어떤 악기가 있는가" "화자가 어떤 감정을 표현하는가" "3분 지점에서 무슨 일이 일어났는가"를 묻는 것은 전사(transcription)가 아니라 오디오 이해를 요구한다. Qwen-Audio, SALMONN, LTU, 그리고 NVIDIA의 Audio Flamingo 3(AF3, 2025년 7월)는 그 스택을 점진적으로 쌓아 올렸다. Whisper급 인코더를 유지하고, Q-former를 덧붙이고, 오디오-텍스트 인스트럭션 데이터로 학습하고, 사고 연쇄(chain-of-thought) 추론을 더했다. 이 레슨은 그 궤적을 따라간다.
+> Whisper(Radford et al., 2022년 12월)는 음성 인식을 정리했다. 68만 시간의 약지도(weakly-supervised) 다국어 음성, 단순한 인코더-디코더 트랜스포머(transformer), 이후 모든 ASR 출시가 인용할 수밖에 없게 만든 벤치마크(benchmark)다. 하지만 인식은 추론이 아니다. "이 녹음에 어떤 악기가 있는가" "화자가 어떤 감정을 표현하는가" "3분 지점에서 무슨 일이 일어났는가"를 묻는 것은 전사(transcription)가 아니라 오디오 이해를 요구한다. Qwen-Audio, SALMONN, LTU, 그리고 NVIDIA의 Audio Flamingo 3(AF3, 2025년 7월)는 그 스택을 점진적으로 쌓아 올렸다. Whisper급 인코더를 유지하고, Q-former를 덧붙이고, 오디오-텍스트 인스트럭션 데이터로 학습하고, 사고 연쇄(chain-of-thought) 추론을 더했다. 이 레슨은 그 궤적을 따라간다.
 
 **Type:** Build
 **Languages:** Python (stdlib, log-Mel spectrogram + audio Q-former skeleton)
@@ -62,13 +62,13 @@ BLIP-2의 시각 Q-former와 동일한 패턴이다. 고정된 수의 학습 가
 
 학습 정렬(alignment) 단계: Q-former 단독, 오디오-텍스트 쌍(AudioCaps, Clotho)에 대한 대조(contrastive) + 캡셔닝 손실(loss). 인스트럭션 단계: 종단간, LLM 동결 해제, 인스트럭션 데이터로 학습.
 
-### 궤적 — SALMONN, Qwen-Audio, AF3
+### 궤적: SALMONN, Qwen-Audio, AF3
 
 SALMONN(Tang et al., 2023): Whisper + BEATs + Q-former + LLaMA. 진지한 추론 능력을 갖춘 최초의 오픈 오디오-LLM. MMAU 벤치마크에서 종합 약 0.55를 기록한다.
 
 Qwen-Audio(Chu et al., 2023): 유사한 아키텍처, 더 풍부한 데이터셋(dataset)으로 학습, 다중 턴 대화에 맞춰 튜닝. MMAU 약 0.60.
 
-LTU — Listen, Think, Understand(Gong et al., 2023): 명시적 추론 데이터, 오디오 클립에 대한 사고 연쇄에 초점. 더 작지만 더 집중되어 있다.
+LTU: Listen, Think, Understand(Gong et al., 2023): 명시적 추론 데이터, 오디오 클립에 대한 사고 연쇄에 초점. 더 작지만 더 집중되어 있다.
 
 Audio Flamingo 3(Goel et al., 2025년 7월): 현재의 오픈 SOTA. 8B LLM 백본(Qwen2 7B), BEATs를 연결한 Whisper-large 인코더, 64-쿼리 Q-former, 100만 개 이상의 오디오-텍스트 인스트럭션 쌍으로 학습. MMAU 0.72, 일부 하위 과제에서 독점(proprietary) 프런티어와 대등하다.
 
@@ -98,7 +98,7 @@ AF3은 또한 오디오를 위한 온디맨드 사고 연쇄(on-demand chain-of-
 
 캐스케이드는 더 저렴하고 더 단순하다. 종단간은 더 유능하다.
 
-### MMAU — 오디오 추론 벤치마크
+### MMAU: 오디오 추론 벤치마크
 
 MMAU(Massive Multimodal Audio Understanding)는 2024~2025년 오디오 추론 벤치마크다:
 

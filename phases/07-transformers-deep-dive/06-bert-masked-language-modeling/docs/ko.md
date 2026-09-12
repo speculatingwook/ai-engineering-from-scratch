@@ -1,6 +1,6 @@
-# BERT — 마스킹된 언어 모델링(Masked Language Modeling)
+# BERT: 마스킹된 언어 모델링(Masked Language Modeling)
 
-> GPT는 다음 단어를 예측한다. BERT는 빠진 단어를 예측한다. 한 문장의 차이 — 그리고 임베딩(embedding) 모양의 모든 것의 반세기.
+> GPT는 다음 단어를 예측한다. BERT는 빠진 단어를 예측한다. 한 문장의 차이: 그리고 임베딩(embedding) 모양의 모든 것의 반세기.
 
 **Type:** Build
 **Languages:** Python
@@ -9,13 +9,13 @@
 
 ## 문제 (The Problem)
 
-2018년에는 모든 NLP 과제 — 감성, NER, QA, 함의(entailment) — 가 각자의 레이블된 데이터로 자체 모델을 밑바닥부터 학습(training)했다. 파인튜닝(fine-tuning)할 수 있는 사전 학습된 "영어 이해" 체크포인트가 없었다. ELMo(2018)는 양방향 LSTM으로 맥락적 임베딩을 사전 학습할 수 있음을 보였다. 도움은 됐지만 일반화하지는 못했다.
+2018년에는 모든 NLP 과제(감성, NER, QA, 함의(entailment))가 각자의 레이블된 데이터로 자체 모델을 밑바닥부터 학습(training)했다. 파인튜닝(fine-tuning)할 수 있는 사전 학습된 "영어 이해" 체크포인트가 없었다. ELMo(2018)는 양방향 LSTM으로 맥락적 임베딩을 사전 학습할 수 있음을 보였다. 도움은 됐지만 일반화하지는 못했다.
 
 BERT(Devlin et al. 2018)는 이렇게 물었다. 트랜스포머(transformer) 인코더(encoder)를 가져와 인터넷의 모든 문장으로 학습하고, 양쪽 맥락에서 빠진 단어를 예측하도록 강제하면 어떨까? 그다음 하류 과제에 헤드 하나만 파인튜닝한다. 파라미터(parameter) 효율성이 그야말로 새로운 발견이었다.
 
 그 결과: 18개월 만에 BERT와 그 변형들(RoBERTa, ALBERT, ELECTRA)이 존재하는 모든 NLP 리더보드를 지배했다. 2020년에는 지구상의 모든 검색 엔진, 콘텐츠 모더레이션 파이프라인, 의미 검색 시스템 안에 BERT가 들어 있었다.
 
-2026년에 인코더 전용 모델은 여전히 분류(classification), 검색, 구조화된 추출에 올바른 도구다 — 토큰(token)당 디코더(decoder)보다 5-10배 빠르게 동작하고, 그 임베딩은 모든 현대 검색 스택의 중추다. ModernBERT(2024년 12월)는 Flash Attention + RoPE + GeGLU로 아키텍처를 8K 컨텍스트까지 밀어붙였다.
+2026년에 인코더 전용 모델은 여전히 분류(classification), 검색, 구조화된 추출에 올바른 도구다. 토큰(token)당 디코더(decoder)보다 5-10배 빠르게 동작하고, 그 임베딩은 모든 현대 검색 스택의 중추다. ModernBERT(2024년 12월)는 Flash Attention + RoPE + GeGLU로 아키텍처를 8K 컨텍스트까지 밀어붙였다.
 
 ## 개념 (The Concept)
 
@@ -44,7 +44,7 @@ target: the  quick brown fox jumps  over  the lazy dog
 
 왜 항상 `[MASK]`가 아닌가? `[MASK]`는 추론(inference) 시점에는 결코 나타나지 않기 때문이다. 마스킹된 위치의 100%에서 `[MASK]`를 기대하도록 모델을 학습하면 사전 학습과 파인튜닝 사이에 분포 이동(distribution shift)이 생긴다. 10% 무작위 + 10% 변경 없음을 섞어 모델이 한쪽으로 치우치지 않게 한다.
 
-### 다음 문장 예측(Next Sentence Prediction, NSP) — 그리고 왜 버려졌는가
+### 다음 문장 예측(Next Sentence Prediction, NSP): 그리고 왜 버려졌는가
 
 원래 BERT는 NSP로도 학습했다. 두 문장 A와 B가 주어지면 B가 A 뒤에 오는지 예측한다. RoBERTa(2019)는 이를 절제(ablate)해 NSP가 도움은커녕 해가 된다는 사실을 보였다. 현대 인코더는 이 과제를 건너뛴다.
 
@@ -77,7 +77,7 @@ target: the  quick brown fox jumps  over  the lazy dog
 
 ### 1단계: 마스킹 로직
 
-`code/main.py`를 참조하라. `create_mlm_batch` 함수는 토큰 ID 목록, 어휘(vocab) 크기, 마스크 확률을 받는다. 입력 ID(마스크 적용됨)와 레이블(마스킹된 위치에만, 그 외에는 -100 — PyTorch의 무시 인덱스 관례)을 반환한다.
+`code/main.py`를 참조하라. `create_mlm_batch` 함수는 토큰 ID 목록, 어휘(vocab) 크기, 마스크 확률을 받는다. 입력 ID(마스크 적용됨)와 레이블(마스킹된 위치에만, 그 외에는 -100: PyTorch의 무시 인덱스 관례)을 반환한다.
 
 ```python
 def create_mlm_batch(tokens, vocab_size, mask_prob=0.15, rng=None):
@@ -97,7 +97,7 @@ def create_mlm_batch(tokens, vocab_size, mask_prob=0.15, rng=None):
 
 ### 2단계: 작은 코퍼스에 MLM 예측 실행하기
 
-20개 단어 어휘, 200개 문장에 2층 인코더 + MLM 헤드를 학습한다. 그래디언트(gradient) 없음 — 순방향 패스 온전성 검사를 한다. 전체 학습에는 PyTorch가 필요하다.
+20개 단어 어휘, 200개 문장에 2층 인코더 + MLM 헤드를 학습한다. 그래디언트(gradient) 없음: 순방향 패스 온전성 검사를 한다. 전체 학습에는 PyTorch가 필요하다.
 
 ### 3단계: 마스크 유형 비교하기
 
@@ -134,14 +134,14 @@ out = model(**inputs).last_hidden_state   # (1, N, 768)
 
 1. **쉬움.** `code/main.py`를 실행하고 10,000개 토큰에 걸친 마스크 분포를 출력한다. 약 15%가 선택되고, 그중 약 80%가 `[MASK]`가 되는지 확인한다.
 2. **보통.** 전체 단어 마스킹(whole-word masking)을 구현한다: 한 단어가 하위 단어(subword)로 토큰화되면, 모든 하위 단어를 함께 마스킹하거나 아무것도 마스킹하지 않는다. 이것이 500문장 코퍼스에서 MLM 정확도를 개선하는지 측정한다.
-3. **어려움.** 공개 데이터셋의 문장 10,000개로 작은(2층, d=64) BERT를 학습한다. SST-2 감성을 위해 `[CLS]` 토큰을 파인튜닝한다. 동일 파라미터에서 디코더 전용 베이스라인과 비교한다 — 어느 쪽이 이기는가?
+3. **어려움.** 공개 데이터셋의 문장 10,000개로 작은(2층, d=64) BERT를 학습한다. SST-2 감성을 위해 `[CLS]` 토큰을 파인튜닝한다. 동일 파라미터에서 디코더 전용 베이스라인과 비교한다. 어느 쪽이 이기는가?
 
 ## 핵심 용어 (Key Terms)
 
 | 용어 | 사람들이 하는 말 | 실제 의미 |
 |------|-----------------|-----------------------|
 | MLM | "마스킹된 언어 모델링" | 학습 신호: 토큰의 15%를 무작위로 `[MASK]`로 교체하고 원본을 예측. |
-| Bidirectional | "양쪽을 봄" | 인코더 어텐션에 인과 마스크가 없음 — 모든 위치가 다른 모든 위치를 봄. |
+| Bidirectional | "양쪽을 봄" | 인코더 어텐션에 인과 마스크가 없음: 모든 위치가 다른 모든 위치를 봄. |
 | `[CLS]` | "풀러(pooler) 토큰" | 모든 시퀀스 앞에 붙는 특수 토큰. 그 최종 임베딩이 문장 수준 표현으로 쓰임. |
 | `[SEP]` | "세그먼트 구분자" | 쌍 시퀀스(예: query/doc, 문장 A/B)를 구분. |
 | NSP | "다음 문장 예측" | BERT의 두 번째 사전 학습 과제. RoBERTa에서 쓸모없음이 드러나 2019년 이후 버려짐. |
@@ -151,8 +151,8 @@ out = model(**inputs).last_hidden_state   # (1, N, 768)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Devlin et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805) — 원조 논문.
-- [Liu et al. (2019). RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692) — BERT를 제대로 학습하는 법. NSP를 죽임.
-- [Clark et al. (2020). ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators](https://arxiv.org/abs/2003.10555) — 교체된 토큰 탐지가 동일 계산에서 MLM을 이김.
-- [Warner et al. (2024). Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder](https://arxiv.org/abs/2412.13663) — ModernBERT 논문.
-- [HuggingFace `modeling_bert.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/bert/modeling_bert.py) — 정전적 인코더 레퍼런스.
+- [Devlin et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805): 원조 논문.
+- [Liu et al. (2019). RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692): BERT를 제대로 학습하는 법. NSP를 죽임.
+- [Clark et al. (2020). ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators](https://arxiv.org/abs/2003.10555): 교체된 토큰 탐지가 동일 계산에서 MLM을 이김.
+- [Warner et al. (2024). Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder](https://arxiv.org/abs/2412.13663): ModernBERT 논문.
+- [HuggingFace `modeling_bert.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/bert/modeling_bert.py): 정전적 인코더 레퍼런스.

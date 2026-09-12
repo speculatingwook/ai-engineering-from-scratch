@@ -34,7 +34,7 @@ Idefics2(Laurençon et al., 2024)는 축들에 이름을 붙였다:
 4. 학습 데이터. 캡션 쌍(CC3M, LAION), 인터리브(interleaved)(OBELICS, MMC4), 명령어(LLaVA-Instruct, ShareGPT4V, PixMo, Cauldron).
 5. 해상도 스케줄. 고정 224/336/448, AnyRes, 네이티브 동적(native dynamic). 학습 중 점증하거나 일정함.
 
-모든 프로덕션(production) VLM은 각 축에서 선택을 한다. MMMU 점수 분산의 대부분은 축 1, 4, 5로 설명된다 — 어떤 커넥터를 골랐는지가 아니다.
+모든 프로덕션(production) VLM은 각 축에서 선택을 한다. MMMU 점수 분산의 대부분은 축 1, 4, 5로 설명된다. 어떤 커넥터를 골랐는지가 아니다.
 
 ### 축 1: 인코더 > 커넥터 (Axis 1: encoder > connector)
 
@@ -54,15 +54,15 @@ Q-Former 대 MLP는 품질 문제가 아니라 비용 문제다: Q-Former는 이
 
 ### 축 3: LLM 크기가 천장을 정한다 (Axis 3: LLM size sets the ceiling)
 
-LLM을 7B에서 13B로 두 배 늘리면 모든 VLM 논문에서 MMMU가 안정적으로 2-4점 늘어난다. 70B에서는 대부분의 벤치마크가 포화(saturation)된다. VLM의 멀티모달(multimodal) 추론 천장은 LLM의 텍스트 추론 천장이다 — 시각 인코더는 그것에 먹일 수만 있지, 대신 추론해 줄 수는 없다.
+LLM을 7B에서 13B로 두 배 늘리면 모든 VLM 논문에서 MMMU가 안정적으로 2-4점 늘어난다. 70B에서는 대부분의 벤치마크가 포화(saturation)된다. VLM의 멀티모달(multimodal) 추론 천장은 LLM의 텍스트 추론 천장이다. 시각 인코더는 그것에 먹일 수만 있지, 대신 추론해 줄 수는 없다.
 
 이것이 Qwen2.5-VL-72B와 Claude Opus 4.7이 MMMU-Pro와 ScreenSpot-Pro를 압도하는 이유다: 언어 뇌가 거대하다. 7B VLM은 영리한 커넥터 설계로 70B VLM을 대체할 수 없다.
 
-### 축 4: 데이터 — 상세한 사람 캡션이 증류를 이긴다 (Axis 4: data — detailed human captions beat distillation)
+### 축 4: 데이터(상세한 사람 캡션이 증류를 이긴다 (Axis 4: data) detailed human captions beat distillation)
 
 Molmo + PixMo(Deitke et al., 2024)는 모두가 읽어야 할 2024년 결과다. Allen AI는 사람 주석자(annotator)에게 1-3분짜리 밀집 음성-텍스트(speech-to-text) 패스로 이미지를 묘사하게 하여, 71만 2천 개의 밀집 캡션 이미지를 산출했다. 학습 데이터 어디에도 GPT-4V 증류는 없다.
 
-Molmo-72B는 11개 벤치마크 중 11개에서 Llama-3.2-90B-Vision을 이겼다. 그 차이는 아키텍처가 아니다 — 캡션 품질이다. 상세한 사람 캡션은 짧은 웹 캡션보다 이미지당 5-10배 많은 정보를 담고, GPT-4V 증류가 환각(hallucinate)하는 곳에서 사실에 기반한 채로 머문다.
+Molmo-72B는 11개 벤치마크 중 11개에서 Llama-3.2-90B-Vision을 이겼다. 그 차이는 아키텍처가 아니다. 캡션 품질이다. 상세한 사람 캡션은 짧은 웹 캡션보다 이미지당 5-10배 많은 정보를 담고, GPT-4V 증류가 환각(hallucinate)하는 곳에서 사실에 기반한 채로 머문다.
 
 ShareGPT4V(Chen et al., 2023)와 Cauldron(Idefics2)은 혼합된 사람 + GPT-4V 캡션으로 같은 전략을 따랐다. 추세는 명확하다: 2026년 프런티어에는 캡션 밀도 > 캡션 양 > 증류의 편리함.
 
@@ -76,7 +76,7 @@ Cambrian-1은 해상도 대 토큰 트레이드오프(trade-off)를 돌렸다: �
 
 ### Prismatic 통제 비교 (The Prismatic controlled comparison)
 
-Prismatic VLMs(Karamcheti et al., 2024)는 모든 축을 통제한 논문이다. 같은 13B LLM, 같은 명령어 데이터, 같은 평가 — 한 번에 한 축만 변한다. 결과:
+Prismatic VLMs(Karamcheti et al., 2024)는 모든 축을 통제한 논문이다. 같은 13B LLM, 같은 명령어 데이터, 같은 평가: 한 번에 한 축만 변한다. 결과:
 
 - 이미지당 시각 토큰 개수가 분산의 약 60%를 설명한다.
 - 인코더 선택이 약 20%를 설명한다.

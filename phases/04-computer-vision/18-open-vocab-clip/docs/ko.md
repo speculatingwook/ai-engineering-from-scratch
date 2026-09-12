@@ -1,4 +1,4 @@
-# 오픈 보캐뷸러리 비전 — CLIP (Open-Vocabulary Vision)
+# 오픈 보캐뷸러리 비전: CLIP (Open-Vocabulary Vision)
 
 > 이미지 인코더와 텍스트 인코더를 함께 학습시켜 일치하는 (이미지, 캡션) 쌍이 공유 공간에서 같은 지점에 모이게 하라. 비결은 이것뿐이다.
 
@@ -12,7 +12,7 @@
 - CLIP의 두 타워(two-tower) 아키텍처와 대조(contrastive) 학습 목적을 설명하기
 - 어떤 작업별 학습 없이 제로샷(zero-shot) 분류를 위해 사전 학습된 CLIP(또는 SigLIP) 사용하기
 - 제로샷 분류를 밑바닥부터 구현하기: 클래스 프롬프트(prompt)를 인코딩하고, 코사인 유사도(cosine similarity)를 계산하고, argmax를 취하기
-- CLIP, SigLIP, OpenCLIP, LLaVA/LLaMA-vision 모델을 구별하기 — 2026년에 각각이 무엇을 위한 것인지
+- CLIP, SigLIP, OpenCLIP, LLaVA/LLaMA-vision 모델을 구별하기: 2026년에 각각이 무엇을 위한 것인지
 
 ## 문제 (The Problem)
 
@@ -79,12 +79,12 @@ y_ij = +1 if matching, -1 otherwise
 
 ### 2026년에 CLIP 스타일 모델이 쓰이는 곳
 
-- **제로샷 분류** — 직접 사용.
-- **이미지 검색** — 모든 이미지를 한 번 인코딩하고, 추론 시점에 쿼리를 임베딩한다.
-- **텍스트 조건 검출** — Grounding DINO, OWL-ViT가 검출기 주위에 CLIP 텍스트 타워를 감싼다.
-- **텍스트 조건 분할** — CLIPSeg. SAM은 CLIP을 통해 텍스트 프롬프트 입력을 사용한다.
-- **VLM** — LLaVA, Qwen-VL, InternVL이 CLIP 계열 비전 인코더를 LLM에 연결한다.
-- **텍스트-투-이미지 생성** — Stable Diffusion, DALL-E 3이 CLIP 텍스트 임베딩에 조건화한다.
+- **제로샷 분류**: 직접 사용.
+- **이미지 검색**: 모든 이미지를 한 번 인코딩하고, 추론 시점에 쿼리를 임베딩한다.
+- **텍스트 조건 검출**: Grounding DINO, OWL-ViT가 검출기 주위에 CLIP 텍스트 타워를 감싼다.
+- **텍스트 조건 분할**: CLIPSeg. SAM은 CLIP을 통해 텍스트 프롬프트 입력을 사용한다.
+- **VLM**: LLaVA, Qwen-VL, InternVL이 CLIP 계열 비전 인코더를 LLM에 연결한다.
+- **텍스트-투-이미지 생성**: Stable Diffusion, DALL-E 3이 CLIP 텍스트 임베딩에 조건화한다.
 
 공유 임베딩 공간이 갖춰지면 모든 비전+언어 작업이 거리 계산으로 귀결된다.
 
@@ -193,8 +193,8 @@ SigLIP은 더 새롭고 작은 규모에서 더 잘 학습되어 새 작업에�
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-zero-shot-class-picker.md` — 클래스 목록과 도메인이 주어졌을 때 제로샷 CLIP을 위한 클래스 템플릿을 설계하는 프롬프트.
-- `outputs/skill-image-text-retriever.md` — 어떤 CLIP 체크포인트로든 이미지 임베딩 인덱스를 구축하고, 텍스트로 쿼리하기와 이미지로 쿼리하기를 지원하는 스킬.
+- `outputs/prompt-zero-shot-class-picker.md`: 클래스 목록과 도메인이 주어졌을 때 제로샷 CLIP을 위한 클래스 템플릿을 설계하는 프롬프트.
+- `outputs/skill-image-text-retriever.md`: 어떤 CLIP 체크포인트로든 이미지 임베딩 인덱스를 구축하고, 텍스트로 쿼리하기와 이미지로 쿼리하기를 지원하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -219,5 +219,5 @@ SigLIP은 더 새롭고 작은 규모에서 더 잘 학습되어 새 작업에�
 
 - [CLIP: Learning Transferable Visual Models from Natural Language Supervision (Radford et al., 2021)](https://arxiv.org/abs/2103.00020)
 - [SigLIP: Sigmoid Loss for Language-Image Pre-Training (Zhai et al., 2023)](https://arxiv.org/abs/2303.15343)
-- [OpenCLIP](https://github.com/mlfoundations/open_clip) — 커뮤니티 코드베이스
-- [DINOv2 vs CLIP vs MAE: a features comparison](https://huggingface.co/blog/dinov2) — 나란히 놓은 사용 사례가 있는 HF 가이드
+- [OpenCLIP](https://github.com/mlfoundations/open_clip): 커뮤니티 코드베이스
+- [DINOv2 vs CLIP vs MAE: a features comparison](https://huggingface.co/blog/dinov2): 나란히 놓은 사용 사례가 있는 HF 가이드

@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 11 Lesson 01 (Prompt Engineering), Lesson 09 (Function Calling)
 **Time:** ~45분
-**Related:** Phase 5 · 27 (LLM Evaluation — RAGAS, DeepEval, G-Eval)는 프레임워크 수준의 개념(NLI 기반 충실성, 심판 보정, RAG 4종)을 다룬다. Phase 5 · 28 (Long-Context Evaluation)은 컨텍스트 길이 회귀를 위한 NIAH / RULER / LongBench / MRCR를 다룬다. 이 레슨은 LLM 엔지니어링 특화 요소에 초점을 맞춘다: CI/CD 통합, 비용 게이팅된 평가 실행, 회귀 대시보드.
+**Related:** Phase 5 · 27 (LLM Evaluation: RAGAS, DeepEval, G-Eval)는 프레임워크 수준의 개념(NLI 기반 충실성, 심판 보정, RAG 4종)을 다룬다. Phase 5 · 28 (Long-Context Evaluation)은 컨텍스트 길이 회귀를 위한 NIAH / RULER / LongBench / MRCR를 다룬다. 이 레슨은 LLM 엔지니어링 특화 요소에 초점을 맞춘다: CI/CD 통합, 비용 게이팅된 평가 실행, 회귀 대시보드.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -59,7 +59,7 @@ graph TD
 
 **자동 지표(Automated metrics)**는 알고리즘을 사용해 출력 텍스트를 참조 답변과 비교한다. BLEU는 n-그램 겹침을 측정한다(원래는 기계 번역용). ROUGE는 참조 n-그램의 재현율을 측정한다(원래는 요약용). BERTScore는 BERT 임베딩(embedding)을 사용해 의미적 유사도를 측정한다. 이것들은 빠르고 저렴하다 -- 수초 만에 1만 개의 출력을 채점할 수 있다. 하지만 미묘함을 놓친다. 두 답변이 단어 겹침이 전혀 없으면서 둘 다 정답일 수 있다. 한 답변이 높은 ROUGE를 받으면서도 맥락상 완전히 틀릴 수 있다.
 
-**LLM-as-judge**는 강력한 모델(GPT-5, Claude Opus 4.7, Gemini 3 Pro)을 사용해 루브릭에 대해 출력을 채점한다. 이는 문자열 지표가 놓치는 의미적 품질 -- 관련성, 정확성, 유용성, 안전성 -- 을 포착한다. 비용이 든다(GPT-5-mini로 심판 호출 1,000건당 ~$8, Claude Opus 4.7로 ~$25). 하지만 잘 설계된 루브릭에서는 인간 판단과 82-88% 상관한다 — 보정 레시피는 Phase 5 · 27을 보라.
+**LLM-as-judge**는 강력한 모델(GPT-5, Claude Opus 4.7, Gemini 3 Pro)을 사용해 루브릭에 대해 출력을 채점한다. 이는 문자열 지표가 놓치는 의미적 품질 -- 관련성, 정확성, 유용성, 안전성 -- 을 포착한다. 비용이 든다(GPT-5-mini로 심판 호출 1,000건당 ~$8, Claude Opus 4.7로 ~$25). 하지만 잘 설계된 루브릭에서는 인간 판단과 82-88% 상관한다. 보정 레시피는 Phase 5 · 27을 보라.
 
 **인간 평가(Human evaluation)**는 골드 스탠더드이지만 가장 느리고 가장 비싸다. 모든 커밋마다 돌리지 말고, 자동 평가를 보정할 때만 아껴 쓰라.
 

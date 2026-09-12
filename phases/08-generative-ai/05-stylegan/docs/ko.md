@@ -98,7 +98,7 @@ def add_noise(x, sigma, rng):
 | 얼굴 교체 / 재연(reenactment) | StyleGAN + 인코더 + 블렌딩 |
 | 아바타 파이프라인 | 저데이터 파인튜닝을 위한 ADA 적용 StyleGAN3 |
 | 소수 이미지로부터의 도메인 적응 | 매핑 네트워크 동결, 합성 파인튜닝 |
-| 멀티모달 또는 텍스트 조건 생성 | 하지 마라 — 확산을 써라 |
+| 멀티모달 또는 텍스트 조건 생성 | 하지 마라. 확산을 써라 |
 
 답이 "사람 얼굴 사진"인 제품급 데모에서, StyleGAN은 추론 비용(단일 순방향 패스(forward pass), 4090에서 10ms 미만)과 동일한 품질 기준에서의 선명도로 확산을 이긴다.
 
@@ -127,7 +127,7 @@ def add_noise(x, sigma, rng):
 
 ## 프로덕션 노트: 왜 StyleGAN이 2026년에도 여전히 출시되는가 (Production note: why StyleGAN still ships in 2026)
 
-4090에서 StyleGAN3은 1024² FFHQ 얼굴을 10 ms 미만에 생성한다 — `num_steps = 1`, VAE 디코드 없음, 교차 어텐션(cross-attention) 패스 없음. 프로덕션 관점에서 이것은 모든 이미지 생성기의 바닥(floor) 지연 시간(latency)이다. 같은 해상도에서 50스텝 SDXL + VAE-디코드 파이프라인은 약 3초다. **300배 격차**이며, 좁은 도메인 제품(아바타 서비스, 신분증 문서 파이프라인, 스톡 얼굴 생성)에서는 총소유비용(TCO)으로 앞선다.
+4090에서 StyleGAN3은 1024² FFHQ 얼굴을 10 ms 미만에 생성한다. `num_steps = 1`, VAE 디코드 없음, 교차 어텐션(cross-attention) 패스 없음. 프로덕션 관점에서 이것은 모든 이미지 생성기의 바닥(floor) 지연 시간(latency)이다. 같은 해상도에서 50스텝 SDXL + VAE-디코드 파이프라인은 약 3초다. **300배 격차**이며, 좁은 도메인 제품(아바타 서비스, 신분증 문서 파이프라인, 스톡 얼굴 생성)에서는 총소유비용(TCO)으로 앞선다.
 
 두 가지 운영상 결과:
 
@@ -139,6 +139,6 @@ def add_noise(x, sigma, rng):
 - [Karras et al. (2019). A Style-Based Generator Architecture for GANs](https://arxiv.org/abs/1812.04948) — StyleGAN.
 - [Karras et al. (2020). Analyzing and Improving the Image Quality of StyleGAN](https://arxiv.org/abs/1912.04958) — StyleGAN2.
 - [Karras et al. (2021). Alias-Free Generative Adversarial Networks](https://arxiv.org/abs/2106.12423) — StyleGAN3.
-- [Tov et al. (2021). Designing an Encoder for StyleGAN Image Manipulation](https://arxiv.org/abs/2102.02766) — e4e 역변환.
+- [Tov et al. (2021). Designing an Encoder for StyleGAN Image Manipulation](https://arxiv.org/abs/2102.02766): e4e 역변환.
 - [Sauer et al. (2022). StyleGAN-XL: Scaling StyleGAN to Large Diverse Datasets](https://arxiv.org/abs/2202.00273) — StyleGAN-XL.
-- [Huang et al. (2024). R3GAN: The GAN is dead; long live the GAN!](https://arxiv.org/abs/2501.05441) — 현대적 최소 GAN 레시피.
+- [Huang et al. (2024). R3GAN: The GAN is dead; long live the GAN!](https://arxiv.org/abs/2501.05441): 현대적 최소 GAN 레시피.

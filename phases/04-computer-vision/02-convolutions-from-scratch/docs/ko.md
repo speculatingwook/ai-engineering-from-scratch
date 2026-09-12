@@ -68,7 +68,7 @@ The kernel slides across every valid 3 x 3 window. Output Y is 3 x 3:
  ... and so on
 ```
 
-그 하나의 공식 — **공유 가중치, 국소성, 슬라이딩 윈도우** — 이 아이디어의 전부다. 나머지는 모두 부기(bookkeeping)다.
+그 하나의 공식(**공유 가중치, 국소성, 슬라이딩 윈도우**)이 아이디어의 전부다. 나머지는 모두 부기(bookkeeping)다.
 
 ### 출력 크기 공식
 
@@ -88,7 +88,7 @@ H_out = floor( (H - K + 2P) / S ) + 1
 | 2x2 풀링 | 32 | 2 | 0 | 2 | 16 |
 | 큰 수용 영역 | 32 | 7 | 3 | 2 | 16 |
 
-"Same 패딩"이란 `S == 1`일 때 `H_out == H`가 되도록 P를 고르는 것을 뜻한다. 홀수 K에 대해서는 P = (K - 1) / 2이다. 3x3 커널이 지배적인 이유가 여기 있다 — 중심을 가지면서 가장 작은 홀수 커널이기 때문이다.
+"Same 패딩"이란 `S == 1`일 때 `H_out == H`가 되도록 P를 고르는 것을 뜻한다. 홀수 K에 대해서는 P = (K - 1) / 2이다. 3x3 커널이 지배적인 이유가 여기 있다. 중심을 가지면서 가장 작은 홀수 커널이기 때문이다.
 
 ### 패딩 (Padding)
 
@@ -110,7 +110,7 @@ Zero padding (P = 1) on a 5 x 5 input:
 
 ### 스트라이드 (Stride)
 
-스트라이드는 미끄러짐의 보폭이다. `stride=1`이 기본값이다. `stride=2`는 공간 차원을 절반으로 줄이며, 별도의 풀링 층 없이 CNN 내부에서 다운샘플하는 고전적 방법이다 — 모든 현대 아키텍처(ResNet, ConvNeXt, MobileNet)는 어딘가에서 max-pool 대신 스트라이드 합성곱을 쓴다.
+스트라이드는 미끄러짐의 보폭이다. `stride=1`이 기본값이다. `stride=2`는 공간 차원을 절반으로 줄이며, 별도의 풀링 층 없이 CNN 내부에서 다운샘플하는 고전적 방법이다. 모든 현대 아키텍처(ResNet, ConvNeXt, MobileNet)는 어딘가에서 max-pool 대신 스트라이드 합성곱을 쓴다.
 
 ```
 Stride 1 on a 5 x 5 input, 3 x 3 kernel:
@@ -207,7 +207,7 @@ print(pad2d(x, 1))
 
 ### 2단계: 중첩 루프로 만드는 2D 합성곱
 
-참조 구현 — 느리지만 모호함이 없다. 이것이 `torch.nn.functional.conv2d`가 원리적으로 하는 일이다.
+참조 구현: 느리지만 모호함이 없다. 이것이 `torch.nn.functional.conv2d`가 원리적으로 하는 일이다.
 
 ```python
 def conv2d_naive(x, w, b=None, stride=1, padding=0):
@@ -311,7 +311,7 @@ y_im2col = conv2d_im2col(x, w, b, padding=1)
 print(f"max abs diff: {np.max(np.abs(y_naive - y_im2col)):.2e}")
 ```
 
-`max abs diff`는 `1e-5` 정도여야 한다 — 그 차이는 버그가 아니라 부동소수점 누적 순서 탓이다.
+`max abs diff`는 `1e-5` 정도여야 한다. 그 차이는 버그가 아니라 부동소수점 누적 순서 탓이다.
 
 ### 6단계: 직접 설계한 커널 모음
 
@@ -332,7 +332,7 @@ def apply_kernel(img2d, kernel):
     return conv2d_im2col(x, w, padding=1)[0]
 ```
 
-임의의 그레이스케일 이미지에 적용하면, 블러는 부드럽게, 샤픈은 가장자리를 또렷하게, 소벨-x는 수직 가장자리를, 소벨-y는 수평 가장자리를 켠다. 이것들이 바로 AlexNet과 VGG의 *첫* 번째 학습된 합성곱 층이 결국 학습하게 된 패턴이다 — 좋은 이미지 모델은 나중에 어떤 작업이 오든 가장자리와 덩어리(blob) 검출기가 필요하기 때문이다.
+임의의 그레이스케일 이미지에 적용하면, 블러는 부드럽게, 샤픈은 가장자리를 또렷하게, 소벨-x는 수직 가장자리를, 소벨-y는 수평 가장자리를 켠다. 이것들이 바로 AlexNet과 VGG의 *첫* 번째 학습된 합성곱 층이 결국 학습하게 된 패턴이다. 좋은 이미지 모델은 나중에 어떤 작업이 오든 가장자리와 덩어리(blob) 검출기가 필요하기 때문이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -360,8 +360,8 @@ print(f"output shape: {tuple(y.shape)}")
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-cnn-architect.md` — 입력 크기, 파라미터 예산, 목표 수용 영역이 주어지면 단계마다 올바른 K/S/P를 가진 `Conv2d` 층 스택을 설계하는 프롬프트.
-- `outputs/skill-conv-shape-calculator.md` — 신경망 명세를 층마다 따라가며 모든 블록의 출력 형태, 수용 영역, 파라미터 수를 반환하는 스킬.
+- `outputs/prompt-cnn-architect.md`: 입력 크기, 파라미터 예산, 목표 수용 영역이 주어지면 단계마다 올바른 K/S/P를 가진 `Conv2d` 층 스택을 설계하는 프롬프트.
+- `outputs/skill-conv-shape-calculator.md`: 신경망 명세를 층마다 따라가며 모든 블록의 출력 형태, 수용 영역, 파라미터 수를 반환하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -378,13 +378,13 @@ print(f"output shape: {tuple(y.shape)}")
 | 스트라이드(Stride) | "얼마나 멀리 점프하는가" | 연속된 커널 배치 사이의 보폭. 스트라이드 2는 각 공간 차원을 절반으로 줄인다 |
 | 패딩(Padding) | "가장자리의 0" | 커널이 경계 픽셀에 중심을 둘 수 있도록 입력 둘레에 더해진 추가 값. `same` 패딩은 출력 크기를 입력 크기와 같게 유지한다 |
 | 수용 영역(Receptive field) | "뉴런이 얼마나 보는가" | 주어진 출력 활성값이 의존하는 원본 입력의 패치. 깊이와 스트라이드에 따라 커진다 |
-| im2col | "GEMM 트릭" | 모든 수용 윈도우를 열로 재배열하여 합성곱을 하나의 큰 행렬 곱으로 만드는 것 — 모든 빠른 합성곱 커널의 핵심 |
+| im2col | "GEMM 트릭" | 모든 수용 윈도우를 열로 재배열하여 합성곱을 하나의 큰 행렬 곱으로 만드는 것: 모든 빠른 합성곱 커널의 핵심 |
 | 깊이별 합성곱(Depthwise conv) | "채널당 커널 하나" | `groups == C_in`인 합성곱으로, 각 출력 채널을 자신에 대응하는 입력 채널만으로 계산한다. MobileNet과 ConvNeXt의 근간 |
 | 평행이동 등변성(Translation equivariance) | "들어가는 이동, 나오는 이동" | 입력을 k 픽셀 이동시키면 출력이 k 픽셀 이동하는 속성. 공유 가중치와 함께 공짜로 따라온다 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [A guide to convolution arithmetic for deep learning (Dumoulin & Visin, 2016)](https://arxiv.org/abs/1603.07285) — 모든 강좌가 조용히 베끼는 패딩/스트라이드/팽창(dilation)의 결정적 다이어그램
-- [CS231n: Convolutional Neural Networks for Visual Recognition](https://cs231n.github.io/convolutional-networks/) — 원조 im2col 설명을 포함한 정전적 강의 노트
-- [The Annotated ConvNet (fast.ai)](https://nbviewer.org/github/fastai/fastbook/blob/master/13_convolutions.ipynb) — 수동 합성곱에서 학습된 숫자 분류기까지 걸어가는 노트북
-- [Receptive Field Arithmetic for CNNs (Dang Ha The Hien)](https://distill.pub/2019/computing-receptive-fields/) — 수용 영역 계산을 논문 수준으로 다루는 대화형 해설
+- [A guide to convolution arithmetic for deep learning (Dumoulin & Visin, 2016)](https://arxiv.org/abs/1603.07285): 모든 강좌가 조용히 베끼는 패딩/스트라이드/팽창(dilation)의 결정적 다이어그램
+- [CS231n: Convolutional Neural Networks for Visual Recognition](https://cs231n.github.io/convolutional-networks/): 원조 im2col 설명을 포함한 정전적 강의 노트
+- [The Annotated ConvNet (fast.ai)](https://nbviewer.org/github/fastai/fastbook/blob/master/13_convolutions.ipynb): 수동 합성곱에서 학습된 숫자 분류기까지 걸어가는 노트북
+- [Receptive Field Arithmetic for CNNs (Dang Ha The Hien)](https://distill.pub/2019/computing-receptive-fields/): 수용 영역 계산을 논문 수준으로 다루는 대화형 해설

@@ -1,4 +1,4 @@
-# LangGraph — 에이전트를 위한 상태 기계 (State Machines for Agents)
+# LangGraph: 에이전트를 위한 상태 기계 (State Machines for Agents)
 
 > 손으로 작성한 ReAct 루프는 `while True`다. LangGraph로 작성한 ReAct 루프는 체크포인트하고, 중단하고, 분기하고, 시간 여행할 수 있는 그래프다. 에이전트(agent)는 바뀌지 않았다. 그 주변의 하니스가 바뀌었다.
 
@@ -11,7 +11,7 @@
 
 함수 호출(function calling) 에이전트를 출시한다고 하자. 세 턴 동안 동작하다가 무언가 잘못된다. 모델이 500을 반환하는 도구를 시도하거나, 사용자가 작업 도중에 마음을 바꾸거나, 에이전트가 사람의 승인 없이 주문을 환불하기로 결정한다. `while True:` 루프에는 후크가 없다. 일시 정지할 수도, 되감을 수도, "모델이 다른 도구를 골랐다면 어땠을까"로 분기할 수도 없다. 데모 너머로 출시하는 순간, 에이전트는 동작했거나 안 했거나인 블랙박스가 된다.
 
-다음 단계는 보고 나면 명백하다. 에이전트는 이미 상태 기계(state machine)다 — 시스템 프롬프트(prompt) 더하기 메시지 기록 더하기 보류 중인 도구 호출 더하기 다음 액션. 상태 기계를 명시적으로 만들라: "모델이 생각한다," "도구가 실행된다," "사람이 승인한다"를 위한 노드, 그리고 그들 사이의 조건부 전이를 위한 간선. 그래프가 명시적이 되면, 하니스는 네 가지를 공짜로 얻는다: 체크포인팅(단계 사이 상태 저장), 인터럽트(사람을 위해 일시 정지), 스트리밍(토큰과 중간 이벤트 스트리밍), 시간 여행(이전 상태로 되감아 다른 분기 시도).
+다음 단계는 보고 나면 명백하다. 에이전트는 이미 상태 기계(state machine)다. 시스템 프롬프트(prompt) 더하기 메시지 기록 더하기 보류 중인 도구 호출 더하기 다음 액션. 상태 기계를 명시적으로 만들라: "모델이 생각한다," "도구가 실행된다," "사람이 승인한다"를 위한 노드, 그리고 그들 사이의 조건부 전이를 위한 간선. 그래프가 명시적이 되면, 하니스는 네 가지를 공짜로 얻는다: 체크포인팅(단계 사이 상태 저장), 인터럽트(사람을 위해 일시 정지), 스트리밍(토큰과 중간 이벤트 스트리밍), 시간 여행(이전 상태로 되감아 다른 분기 시도).
 
 LangGraph는 이 추상화를 출시하는 라이브러리다. LangChain적 의미의 에이전트 프레임워크("여기 AgentExecutor가 있으니, 행운을 빈다")가 아니라, 일급(first-class) 상태와 일급 영속성, 일급 인터럽트를 가진 그래프 런타임이다. 에이전트 루프는 손으로 작성하는 것이 아니라 그리는 것이다.
 
@@ -21,7 +21,7 @@ LangGraph는 이 추상화를 출시하는 라이브러리다. LangChain적 의�
 
 `StateGraph`에는 세 가지가 있다.
 
-1. **상태(State).** 그래프를 통해 흐르는 타입 지정된 dict(TypedDict 또는 Pydantic 모델). 모든 노드는 전체 상태를 받고 부분 업데이트를 반환하며, LangGraph는 필드별 *리듀서(reducer)*를 사용해 이를 병합한다 — 누적되어야 하는 리스트에는 `operator.add`, 기본적으로는 덮어쓰기.
+1. **상태(State).** 그래프를 통해 흐르는 타입 지정된 dict(TypedDict 또는 Pydantic 모델). 모든 노드는 전체 상태를 받고 부분 업데이트를 반환하며, LangGraph는 필드별 *리듀서(reducer)*를 사용해 이를 병합한다. 누적되어야 하는 리스트에는 `operator.add`, 기본적으로는 덮어쓰기.
 2. **노드(Nodes).** Python 함수 `state -> partial_state`. 각각은 별개의 단계다: "모델 호출," "도구 실행," "요약."
 3. **간선(Edges).** 노드 사이의 전이. 정적 간선은 한 곳으로 간다. 조건부 간선은 라우터 함수 `state -> next_node_name`을 받아 그래프가 모델 출력에 따라 분기할 수 있게 한다.
 
@@ -45,8 +45,8 @@ LangGraph는 이 추상화를 출시하는 라이브러리다. LangChain적 의�
 
 프로덕션 ReAct 에이전트는 네 노드와 두 간선이다:
 
-1. `agent` — 현재 메시지 기록으로 LLM을 호출한다. 어시스턴트 메시지(tool_calls를 포함할 수 있음)를 반환한다.
-2. `tools` — 마지막 어시스턴트 메시지의 모든 tool_calls를 실행하고, 도구 결과를 도구 메시지로 추가한다.
+1. `agent`: 현재 메시지 기록으로 LLM을 호출한다. 어시스턴트 메시지(tool_calls를 포함할 수 있음)를 반환한다.
+2. `tools`: 마지막 어시스턴트 메시지의 모든 tool_calls를 실행하고, 도구 결과를 도구 메시지로 추가한다.
 3. `agent`로부터의 조건부 간선으로, 마지막 메시지에 tool_calls가 있으면 `tools`로, 아니면 `END`로 라우팅한다.
 4. `tools`에서 `agent`로 돌아가는 정적 간선.
 
@@ -168,7 +168,7 @@ LangGraph에 손을 뻗기 전에 60초 설계를 하라.
 1. **노드 이름 짓기.** 별개의 결정이나 부수 효과(side effect)가 있는 액션은 모두 노드다. "에이전트가 생각한다," "도구가 실행된다," "리뷰어가 승인한다," "응답이 스트리밍된다." 이것들을 나열할 수 없다면 작업이 아직 에이전트 형태가 아니다.
 2. **상태 선언하기.** 모든 리스트 필드에 리듀서를 가진 최소 TypedDict를 둔다. 모든 것을 `messages`에 쑤셔넣지 말고, 작업별 필드(작업 중인 `plan`, `budget` 카운터, `retrieved_docs` 리스트)를 최상위로 끌어올려라.
 3. **간선 그리기.** 다음 단계가 모델 출력에 의존하지 않는 한 정적. 모든 조건부 간선은 이름 붙은 분기를 가진 라우터 함수가 필요하다.
-4. **체크포인터를 미리 선택하기.** 테스트는 `MemorySaver`, 그 외 모든 것은 Postgres/Redis/SQLite. 하나 없이 출시하지 마라 — 체크포인터가 없으면 재개도, 인터럽트도, 시간 여행도 없다.
+4. **체크포인터를 미리 선택하기.** 테스트는 `MemorySaver`, 그 외 모든 것은 Postgres/Redis/SQLite. 하나 없이 출시하지 마라. 체크포인터가 없으면 재개도, 인터럽트도, 시간 여행도 없다.
 5. **인터럽트를 도구 실행 후가 아니라 전에 결정하기.** 승인은 해를 끼치기 전에 취소할 수 있도록 부수 효과가 있는 노드로 들어가는 간선에 두고, 검증은 나쁜 호출을 싸게 거부할 수 있도록 모델에서 나가는 간선에 둔다.
 6. **기본적으로 스트리밍하기.** UI에는 `mode="updates"`, 모델 노드 내부의 토큰 수준 스트리밍에는 `mode="messages"`, 평가 중 전체 스냅샷에는 `mode="values"`.
 
@@ -195,12 +195,12 @@ LangGraph에 손을 뻗기 전에 60초 설계를 하라.
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangGraph documentation](https://langchain-ai.github.io/langgraph/) — StateGraph, 리듀서, 체크포인터, 인터럽트에 관한 표준 레퍼런스
-- [LangGraph concepts: state, reducers, checkpointers](https://langchain-ai.github.io/langgraph/concepts/low_level/) — 이 레슨이 사용하는 멘탈 모델, 출처에서 직접
-- [LangGraph Persistence and Checkpoints](https://langchain-ai.github.io/langgraph/concepts/persistence/) — Postgres/SQLite/Redis 저장소, 체크포인트 네임스페이스, 스레드 ID에 관한 세부사항
-- [LangGraph Human-in-the-loop](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/) — `interrupt_before`, `interrupt_after`, `Command(resume=...)`, 그리고 상태 편집 패턴
-- [Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models" (ICLR 2023)](https://arxiv.org/abs/2210.03629) — 모든 LangGraph 에이전트가 구현하는 패턴; 추론 트레이스 근거를 위해 읽으라
-- [Anthropic — Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) — 어떤 그래프 형태(체인, 라우터, 오케스트레이터-워커, 평가자-옵티마이저)를 언제 선호할지
-- Phase 11 · 09 (Function Calling) — 모든 LangGraph 에이전트 노드가 재사용하는 도구 호출 프리미티브
-- Phase 11 · 14 (Model Context Protocol) — MCP 어댑터를 통해 LangGraph `ToolNode`에 플러그인되는 외부 도구 발견
-- Phase 11 · 17 (Agent framework tradeoffs) — CrewAI, AutoGen, Agno 대신 LangGraph를 언제 선택할지
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/): StateGraph, 리듀서, 체크포인터, 인터럽트에 관한 표준 레퍼런스
+- [LangGraph concepts: state, reducers, checkpointers](https://langchain-ai.github.io/langgraph/concepts/low_level/): 이 레슨이 사용하는 멘탈 모델, 출처에서 직접
+- [LangGraph Persistence and Checkpoints](https://langchain-ai.github.io/langgraph/concepts/persistence/): Postgres/SQLite/Redis 저장소, 체크포인트 네임스페이스, 스레드 ID에 관한 세부사항
+- [LangGraph Human-in-the-loop](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/): `interrupt_before`, `interrupt_after`, `Command(resume=...)`, 그리고 상태 편집 패턴
+- [Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models" (ICLR 2023)](https://arxiv.org/abs/2210.03629): 모든 LangGraph 에이전트가 구현하는 패턴; 추론 트레이스 근거를 위해 읽으라
+- [Anthropic(Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents)) 어떤 그래프 형태(체인, 라우터, 오케스트레이터-워커, 평가자-옵티마이저)를 언제 선호할지
+- Phase 11 · 09 (Function Calling): 모든 LangGraph 에이전트 노드가 재사용하는 도구 호출 프리미티브
+- Phase 11 · 14 (Model Context Protocol): MCP 어댑터를 통해 LangGraph `ToolNode`에 플러그인되는 외부 도구 발견
+- Phase 11 · 17 (Agent framework tradeoffs): CrewAI, AutoGen, Agno 대신 LangGraph를 언제 선택할지

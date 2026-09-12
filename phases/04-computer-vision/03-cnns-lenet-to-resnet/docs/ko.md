@@ -1,4 +1,4 @@
-# CNN — LeNet에서 ResNet까지
+# CNN: LeNet에서 ResNet까지
 
 > 지난 30년간의 모든 주요 CNN은 동일한 합성곱–비선형성–다운샘플 레시피에 새로운 아이디어 하나를 덧붙인 것이다. 그 아이디어들을 순서대로 배우라.
 
@@ -359,12 +359,12 @@ r18.fc = nn.Linear(r18.fc.in_features, 10)
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-backbone-selector.md` — 작업, 데이터셋(dataset) 크기, 연산 예산이 주어지면 올바른 CNN 계열(LeNet/VGG/ResNet/MobileNet/ConvNeXt)을 고르는 프롬프트.
-- `outputs/skill-residual-block-reviewer.md` — PyTorch 모듈을 읽고 스킵 연결 실수(스트라이드 변경 시 누락된 shortcut, shortcut 활성화 순서, 덧셈 대비 BN 위치)를 표시하는 스킬.
+- `outputs/prompt-backbone-selector.md`: 작업, 데이터셋(dataset) 크기, 연산 예산이 주어지면 올바른 CNN 계열(LeNet/VGG/ResNet/MobileNet/ConvNeXt)을 고르는 프롬프트.
+- `outputs/skill-residual-block-reviewer.md`: PyTorch 모듈을 읽고 스킵 연결 실수(스트라이드 변경 시 누락된 shortcut, shortcut 활성화 순서, 덧셈 대비 BN 위치)를 표시하는 스킬.
 
 ## 연습 문제 (Exercises)
 
-1. **(쉬움)** `TinyResNet`의 파라미터를 층마다 손으로 세어라. `sum(p.numel() for p in net.parameters())`와 비교하라. 파라미터 예산의 대부분은 어디로 가는가 — 합성곱, BN, 아니면 분류기 헤드?
+1. **(쉬움)** `TinyResNet`의 파라미터를 층마다 손으로 세어라. `sum(p.numel() for p in net.parameters())`와 비교하라. 파라미터 예산의 대부분은 어디로 가는가: 합성곱, BN, 아니면 분류기 헤드?
 2. **(중간)** Bottleneck 블록(스킵을 동반한 1x1 -> 3x3 -> 1x1)을 구현하고, 그것을 사용해 CIFAR를 위한 ResNet-50 스타일 신경망을 만들어라. `TinyResNet`과 파라미터를 비교하라.
 3. **(어려움)** `BasicBlock`에서 스킵 연결을 제거하고, 34블록짜리 "plain" 신경망과 34블록짜리 ResNet을 CIFAR-10에서 각각 10에폭 학습시켜라. 둘 다에 대해 에폭 대비 학습 손실을 그려라. 깊은 plain 신경망이 그 더 얕은 쌍둥이보다 높은 손실로 수렴하는 He et al. Figure 1 결과를 재현하라.
 
@@ -383,7 +383,7 @@ r18.fc = nn.Linear(r18.fc.in_features, 10)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Deep Residual Learning for Image Recognition (He et al., 2015)](https://arxiv.org/abs/1512.03385) — ResNet 논문. 모든 그림이 공부할 가치가 있다
-- [Very Deep Convolutional Networks (Simonyan & Zisserman, 2014)](https://arxiv.org/abs/1409.1556) — VGG 논문. "왜 3x3인가"에 대한 여전히 최고의 참고 자료
-- [ImageNet Classification with Deep CNNs (Krizhevsky et al., 2012)](https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html) — AlexNet. 수작업 특성 시대를 끝낸 논문
-- [Going Deeper with Convolutions (Szegedy et al., 2014)](https://arxiv.org/abs/1409.4842) — Inception v1. 비전 트랜스포머에서도 여전히 나타나는 병렬 필터 아이디어
+- [Deep Residual Learning for Image Recognition (He et al., 2015)](https://arxiv.org/abs/1512.03385): ResNet 논문. 모든 그림이 공부할 가치가 있다
+- [Very Deep Convolutional Networks (Simonyan & Zisserman, 2014)](https://arxiv.org/abs/1409.1556): VGG 논문. "왜 3x3인가"에 대한 여전히 최고의 참고 자료
+- [ImageNet Classification with Deep CNNs (Krizhevsky et al., 2012)](https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html): AlexNet. 수작업 특성 시대를 끝낸 논문
+- [Going Deeper with Convolutions (Szegedy et al., 2014)](https://arxiv.org/abs/1409.4842): Inception v1. 비전 트랜스포머에서도 여전히 나타나는 병렬 필터 아이디어

@@ -39,7 +39,7 @@ input = concat([ noisy_latent (4ch), encoded_image (4ch), mask (1ch) ], dim=chan
 
 SD-Inpaint, SDXL-Inpaint, Flux-Fill는 모두 이 9채널(또는 그에 준하는) 입력을 사용한다. Diffusers의 `StableDiffusionInpaintPipeline`, `FluxFillPipeline`.
 
-### SDEdit (Meng et al., 2022) — 무료 편집
+### SDEdit (Meng et al., 2022): 무료 편집
 
 원본 이미지에 어떤 중간 시점 `t`까지 노이즈를 추가한 다음, 새 프롬프트(prompt)로 `t`에서 0까지 역방향 체인을 실행한다. 재학습이 필요 없다. 시작 `t`를 어떻게 고르느냐가 충실도와 창의적 자유 사이의 트레이드오프(trade-off)를 결정한다.
 
@@ -147,10 +147,10 @@ SAM(Meta의 Segment Anything, 2023) + 디퓨전 인페인트는 2026년의 배�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Lugmayr et al. (2022). RePaint: Inpainting using Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2201.09865) — 학습 불필요 인페인팅.
+- [Lugmayr et al. (2022). RePaint: Inpainting using Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2201.09865): 학습 불필요 인페인팅.
 - [Meng et al. (2022). SDEdit: Guided Image Synthesis and Editing with Stochastic Differential Equations](https://arxiv.org/abs/2108.01073) — SDEdit.
-- [Brooks, Holynski, Efros (2023). InstructPix2Pix](https://arxiv.org/abs/2211.09800) — 텍스트 지시 편집.
-- [Kirillov et al. (2023). Segment Anything](https://arxiv.org/abs/2304.02643) — SAM, 마스크 소스.
-- [Ravi et al. (2024). SAM 2: Segment Anything in Images and Videos](https://arxiv.org/abs/2408.00714) — 영상 SAM.
-- [Hertz et al. (2022). Prompt-to-Prompt Image Editing with Cross-Attention Control](https://arxiv.org/abs/2208.01626) — 어텐션 수준 편집.
-- [Black Forest Labs (2024). Flux.1-Fill and Flux.1-Kontext](https://blackforestlabs.ai/flux-1-tools/) — 2024년 도구.
+- [Brooks, Holynski, Efros (2023). InstructPix2Pix](https://arxiv.org/abs/2211.09800): 텍스트 지시 편집.
+- [Kirillov et al. (2023). Segment Anything](https://arxiv.org/abs/2304.02643): SAM, 마스크 소스.
+- [Ravi et al. (2024). SAM 2: Segment Anything in Images and Videos](https://arxiv.org/abs/2408.00714): 영상 SAM.
+- [Hertz et al. (2022). Prompt-to-Prompt Image Editing with Cross-Attention Control](https://arxiv.org/abs/2208.01626): 어텐션 수준 편집.
+- [Black Forest Labs (2024). Flux.1-Fill and Flux.1-Kontext](https://blackforestlabs.ai/flux-1-tools/): 2024년 도구.

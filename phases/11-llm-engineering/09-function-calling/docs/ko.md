@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 11 Lesson 03 (Structured Outputs)
 **Time:** ~75분
-**Related:** Phase 11 · 14 (Model Context Protocol) — 도구가 여러 호스트에 걸쳐 공유될 때, 인라인 함수 호출에서 MCP 서버로 졸업한다. 이 레슨은 인라인 경우를 다룬다; MCP는 프로토콜 경우를 다룬다.
+**Related:** Phase 11 · 14 (Model Context Protocol): 도구가 여러 호스트에 걸쳐 공유될 때, 인라인 함수 호출에서 MCP 서버로 졸업한다. 이 레슨은 인라인 경우를 다룬다; MCP는 프로토콜 경우를 다룬다.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -98,7 +98,7 @@ sequenceDiagram
 | Google (Gemini 3) | `function_declarations` | `functionCall` | Yes | `function_calling_config` |
 | Open-weight (Llama 4, Qwen3, DeepSeek-V3) | Native `tools` on Llama 4; Hermes or ChatML on others | Mixed | Model-dependent | Prompt-based or `tool_choice` if supported |
 
-2026년까지 세 비공개 프로바이더는 거의 동일한 JSON-Schema 기반 형식으로 수렴했다. Llama 4는 OpenAI의 형태와 일치하는 네이티브 `tools` 필드를 갖고 출시된다. 오픈웨이트 파인튜닝(fine-tuning)은 여전히 제각각이다 — Hermes 형식(NousResearch)이 서드파티 파인튜닝에 가장 흔하다. 여러 호스트가 도구를 공유한다면 인라인 함수 호출보다 MCP(Phase 11 · 14)를 택하라. 서버가 모든 호스트에 동일하기 때문이다.
+2026년까지 세 비공개 프로바이더는 거의 동일한 JSON-Schema 기반 형식으로 수렴했다. Llama 4는 OpenAI의 형태와 일치하는 네이티브 `tools` 필드를 갖고 출시된다. 오픈웨이트 파인튜닝(fine-tuning)은 여전히 제각각이다. Hermes 형식(NousResearch)이 서드파티 파인튜닝에 가장 흔하다. 여러 호스트가 도구를 공유한다면 인라인 함수 호출보다 MCP(Phase 11 · 14)를 택하라. 서버가 모든 호스트에 동일하기 때문이다.
 
 ### 도구 선택: 자동, 필수, 특정 (Tool Choice: Auto, Required, Specific)
 
@@ -713,4 +713,4 @@ MCP는 도구 구현을 도구 소비로부터 분리한다. Postgres 서버는 
 - [Patil et al., 2023 -- "Gorilla: Large Language Model Connected with Massive APIs"](https://arxiv.org/abs/2305.15334) -- 환각 감소와 함께 1,645개 API에 걸쳐 정확한 API 호출을 위해 LLM을 파인튜닝하기
 - [Berkeley Function Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html) -- GPT-4o, Claude, Gemini, 오픈 모델에 걸쳐 함수 호출 정확도를 비교하는 실시간 벤치마크
 - [Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models" (ICLR 2023)](https://arxiv.org/abs/2210.03629) -- 모든 도구 호출 주위의 외부 에이전트 루프인 Thought-Action-Observation 루프; 이 레슨이 끝나는 곳에서, Phase 14가 이어받는다
-- [Anthropic — Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) -- 단일 도구 사용 원시 요소로부터 만들어진 다섯 가지 조합 가능한 패턴(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-최적화자)
+- [Anthropic: Building effective agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) -- 단일 도구 사용 원시 요소로부터 만들어진 다섯 가지 조합 가능한 패턴(프롬프트 체이닝, 라우팅, 병렬화, 오케스트레이터-워커, 평가자-최적화자)

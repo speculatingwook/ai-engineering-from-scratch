@@ -90,9 +90,9 @@ Park et al.은 다음을 명시적으로 문서화한다.
 
 `code/main.py`는 스크립트된 에이전트 정책(실제 LLM 없음)으로 세 구성요소를 stdlib 파이썬으로 구현한다. 데모는 발렌타인 파티 창발을 축소판으로 재현한다.
 
-- `MemoryStream` — 최신성/중요도/관련성 검색을 동반한 추가 전용 로그.
-- `reflect(stream)` — 최근 고중요도 메모리에 대한 스크립트된 반성.
-- `plan(agent_state)` — 현재 신념에 기반한 하루 수준과 시간 수준 계획.
+- `MemoryStream`: 최신성/중요도/관련성 검색을 동반한 추가 전용 로그.
+- `reflect(stream)`: 최근 고중요도 메모리에 대한 스크립트된 반성.
+- `plan(agent_state)`: 현재 신념에 기반한 하루 수준과 시간 수준 계획.
 - 시나리오: 에이전트 5개. 에이전트 1이 "오후 5시에 파티를 연다"로 시작한다. 시뮬레이션된 틱(tick)에 걸쳐 초대가 퍼지고 에이전트들이 모인다.
 
 실행:
@@ -140,7 +140,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Park et al. — Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442) — 레퍼런스 아키텍처
-- [UIST '23 paper page](https://dl.acm.org/doi/10.1145/3586183.3606763) — 출판 장소
-- [Smallville code release](https://github.com/joonspk-research/generative_agents) — 레퍼런스 파이썬 구현
-- [Hayes-Roth 1985 — A Blackboard Architecture for Control](https://www.sciencedirect.com/science/article/abs/pii/0004370285900639) — 구조화 메모리 에이전트의 선행 기술
+- [Park et al.(Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442)) 레퍼런스 아키텍처
+- [UIST '23 paper page](https://dl.acm.org/doi/10.1145/3586183.3606763): 출판 장소
+- [Smallville code release](https://github.com/joonspk-research/generative_agents): 레퍼런스 파이썬 구현
+- [Hayes-Roth 1985(A Blackboard Architecture for Control](https://www.sciencedirect.com/science/article/abs/pii/0004370285900639)) 구조화 메모리 에이전트의 선행 기술

@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 11 Lesson 09 (Function Calling)
 **Time:** ~45분
-**Related:** Phase 11 · 15 (Prompt Caching) — 이 레슨은 애플리케이션 계층 캐싱(시맨틱 캐시, 정확 해시 캐시, 모델 라우팅)을 다룬다. Lesson 15는 프로바이더 계층 프롬프트(prompt) 캐싱(Anthropic cache_control, OpenAI 자동, Gemini CachedContent)을 다룬다. 50-95% 비용 절감을 위해 둘을 결합하라.
+**Related:** Phase 11 · 15 (Prompt Caching): 이 레슨은 애플리케이션 계층 캐싱(시맨틱 캐시, 정확 해시 캐시, 모델 라우팅)을 다룬다. Lesson 15는 프로바이더 계층 프롬프트(prompt) 캐싱(Anthropic cache_control, OpenAI 자동, Gemini CachedContent)을 다룬다. 50-95% 비용 절감을 위해 둘을 결합하라.
 
 ## 학습 목표 (Learning Objectives)
 

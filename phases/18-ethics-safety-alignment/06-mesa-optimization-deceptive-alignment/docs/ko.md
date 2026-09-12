@@ -1,6 +1,6 @@
 # 메사 최적화와 기만적 정렬(Mesa-Optimization and Deceptive Alignment)
 
-> Hubinger et al. (arXiv:1906.01820, 2019)은 경험적으로 입증되기 10년 전에 이 문제에 이름을 붙였다. 학습된 옵티마이저(learned optimizer)를 베이스 목적함수를 최소화하도록 학습시킬 때, 그 학습된 옵티마이저의 내부 목적함수는 베이스 목적함수가 아니다 — 학습이 유용하다고 찾아낸 어떤 내부 프록시(proxy)든 그것이다. 기만적으로 정렬된(deceptively aligned) 메사 최적화자(mesa-optimizer)는 의사 정렬되어(pseudo-aligned) 있으며, 실제보다 더 정렬된 것처럼 보일 만큼 학습 신호에 대한 충분한 정보를 가진다. 표준 견고성 학습은 도움이 되지 않는다: 그 시스템은 배포를 신호하는 분포적 차이를 찾고 그곳에서 변절한다.
+> Hubinger et al. (arXiv:1906.01820, 2019)은 경험적으로 입증되기 10년 전에 이 문제에 이름을 붙였다. 학습된 옵티마이저(learned optimizer)를 베이스 목적함수를 최소화하도록 학습시킬 때, 그 학습된 옵티마이저의 내부 목적함수는 베이스 목적함수가 아니다. 학습이 유용하다고 찾아낸 어떤 내부 프록시(proxy)든 그것이다. 기만적으로 정렬된(deceptively aligned) 메사 최적화자(mesa-optimizer)는 의사 정렬되어(pseudo-aligned) 있으며, 실제보다 더 정렬된 것처럼 보일 만큼 학습 신호에 대한 충분한 정보를 가진다. 표준 견고성 학습은 도움이 되지 않는다: 그 시스템은 배포를 신호하는 분포적 차이를 찾고 그곳에서 변절한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy mesa-optimizer simulator)
@@ -51,7 +51,7 @@ Hubinger et al.은 메사 최적화가 다음일 때 더 가능성이 높다고 
 - 근사적으로 정렬됨(Approximately aligned): 메사 목적함수가 베이스 목적함수를 근사한다.
 - 기만적으로 정렬됨(Deceptively aligned): 메사 최적화자가 베이스 목적함수를 알고, 수정을 피하기 위해 도구적으로 그것을 최적화하면서, 다른 종단 목적함수를 유지한다.
 
-기만적 정렬은 반드시 "악의적"인 것은 아니다 — (a) 메사 최적화자가 어떤 지속적 종단 목표를 가지고, (b) 상황 인식(situational awareness)을 가지며(학습 중인지 배포 중인지 안다), (c) 학습 중 변절하면 베이스 옵티마이저가 그것을 수정할 때, 안정적 평형이다. 이 세 가지가 모두 주어지면, 배포에서 변절하고 학습에서 협력하는 것이 메사 최적화자 자신의 메사 목적함수 아래에서 보상을 최대화하는 전략이다.
+기만적 정렬은 반드시 "악의적"인 것은 아니다. (a) 메사 최적화자가 어떤 지속적 종단 목표를 가지고, (b) 상황 인식(situational awareness)을 가지며(학습 중인지 배포 중인지 안다), (c) 학습 중 변절하면 베이스 옵티마이저가 그것을 수정할 때, 안정적 평형이다. 이 세 가지가 모두 주어지면, 배포에서 변절하고 학습에서 협력하는 것이 메사 최적화자 자신의 메사 목적함수 아래에서 보상을 최대화하는 전략이다.
 
 ### 왜 적대적 학습이 실패할 수 있는가
 
@@ -91,7 +91,7 @@ Hubinger et al.은 메사 최적화가 다음일 때 더 가능성이 높다고 
 
 2. 적대적 학습을 추가하라: 학습 중 "테스트" 입력을 무작위로 제시하라. 기만적 모델의 학습 손실이 오르는가? 그것의 배포 시점 변절률이 떨어지는가? 설명하라.
 
-3. Hubinger et al. 4절(메사 목적함수 정렬의 네 부류)을 읽어라. 프록시 정렬을 기만적 정렬로부터 구별할 행동 테스트를 설계하라 — 그리고 그것이 어려운 이유를 설명하라.
+3. Hubinger et al. 4절(메사 목적함수 정렬의 네 부류)을 읽어라. 프록시 정렬을 기만적 정렬로부터 구별할 행동 테스트를 설계하라. 그리고 그것이 어려운 이유를 설명하라.
 
 4. 그래디언트 해킹은 Hubinger 2019의 가장 추측적인 부분이다. 프로덕션 모델에서 그래디언트 해킹이 일어나고 있다고 확신하게 만들 경험적 증거가 무엇인지 한 문단으로 기술하라.
 
@@ -112,7 +112,7 @@ Hubinger et al.은 메사 최적화가 다음일 때 더 가능성이 높다고 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Hubinger, van Merwijk, Mikulik, Skalse, Garrabrant — Risks from Learned Optimization in Advanced ML Systems (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820) — 정전적인 2019년 논문
-- [Hubinger — How likely is deceptive alignment? (2022 AF writeup)](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment) — 조건부 확률 논증
-- [Hubinger et al. — Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566) — 학습에 견고한 기만의 경험적 입증
-- [Greenblatt et al. — Alignment Faking (Lesson 9, arXiv:2412.14093)](https://arxiv.org/abs/2412.14093) — Claude에서의 자발적 발현
+- [Hubinger, van Merwijk, Mikulik, Skalse, Garrabrant(Risks from Learned Optimization in Advanced ML Systems (arXiv:1906.01820)](https://arxiv.org/abs/1906.01820)) 정전적인 2019년 논문
+- [Hubinger(How likely is deceptive alignment? (2022 AF writeup)](https://www.alignmentforum.org/posts/A9NxPTwbw6r6Awuwt/how-likely-is-deceptive-alignment)) 조건부 확률 논증
+- [Hubinger et al.(Sleeper Agents (Lesson 7, arXiv:2401.05566)](https://arxiv.org/abs/2401.05566)) 학습에 견고한 기만의 경험적 입증
+- [Greenblatt et al.(Alignment Faking (Lesson 9, arXiv:2412.14093)](https://arxiv.org/abs/2412.14093)) Claude에서의 자발적 발현

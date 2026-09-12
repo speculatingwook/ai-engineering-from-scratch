@@ -1,4 +1,4 @@
-# Capstone 11 — LLM 관측성 및 평가 대시보드 (LLM Observability & Eval Dashboard)
+# Capstone 11: LLM 관측성 및 평가 대시보드 (LLM Observability & Eval Dashboard)
 
 > Langfuse는 오픈 코어(open-core)로 전환했다. Arize Phoenix는 2026 GenAI semconv 매핑을 발표했다. Helicone과 Braintrust는 둘 다 사용자별 비용 귀속(per-user cost attribution)에 더욱 집중했다. Traceloop의 OpenLLMetry는 사실상의 SDK 계측(instrumentation) 표준이 되었다. 프로덕션(production)의 형태는 트레이스(trace)용 ClickHouse, 메타데이터용 Postgres, UI용 Next.js, 그리고 샘플링된 트레이스 위에서 돌아가는 작은 평가 작업(eval job) 군단(DeepEval, RAGAS, LLM-judge)이다. 셀프 호스팅(self-hosted)으로 하나를 만들고, 최소 네 개의 SDK 계열에서 데이터를 수집(ingest)하며, 주입된 회귀(regression)를 5분 이내에 잡아내는 것을 시연한다.
 
@@ -133,11 +133,11 @@ $ curl -X POST https://my-otel-collector/v1/traces -d @trace.json
 
 ## 더 읽을거리 (Further Reading)
 
-- [Langfuse](https://github.com/langfuse/langfuse) — 레퍼런스 오픈 코어 관측성 플랫폼
-- [Arize Phoenix](https://github.com/Arize-ai/phoenix) — 강력한 드리프트 지원을 갖춘 대안 레퍼런스
-- [OpenLLMetry (Traceloop)](https://github.com/traceloop/openllmetry) — 자동 계측 SDK 계열
-- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — 수집 스키마
-- [Helicone](https://www.helicone.ai) — 대안 호스팅형 관측성
-- [Braintrust](https://www.braintrust.dev) — 대안 평가 우선(eval-first) 플랫폼
-- [ClickHouse documentation](https://clickhouse.com/docs) — 컬럼형 스팬 저장소
-- [DeepEval](https://github.com/confident-ai/deepeval) — evaluator 라이브러리
+- [Langfuse](https://github.com/langfuse/langfuse): 레퍼런스 오픈 코어 관측성 플랫폼
+- [Arize Phoenix](https://github.com/Arize-ai/phoenix): 강력한 드리프트 지원을 갖춘 대안 레퍼런스
+- [OpenLLMetry (Traceloop)](https://github.com/traceloop/openllmetry): 자동 계측 SDK 계열
+- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/): 수집 스키마
+- [Helicone](https://www.helicone.ai): 대안 호스팅형 관측성
+- [Braintrust](https://www.braintrust.dev): 대안 평가 우선(eval-first) 플랫폼
+- [ClickHouse documentation](https://clickhouse.com/docs): 컬럼형 스팬 저장소
+- [DeepEval](https://github.com/confident-ai/deepeval): evaluator 라이브러리

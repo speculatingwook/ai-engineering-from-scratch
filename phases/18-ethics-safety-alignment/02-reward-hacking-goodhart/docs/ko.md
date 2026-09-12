@@ -50,22 +50,22 @@ R_gold(d)  = alpha * d - beta_gold  * d^2
 
 흔한 방어책: "우리는 정책을 참조 모델 가까이 유지하기 위해 KL 정규화를 추가할 것이고, 그러면 보상 해킹은 제한될 것이다." Gao et al.은 이것이 골드 보상 붕괴를 완화하기는 하지만 막지는 못함을 이미 보여줬다.
 
-"파국적 굿하트"(OpenReview UXuBzWoZGK)는 이를 더 날카롭게 만든다. 프록시 보상 오차가 두꺼운 꼬리를 가진다고 가정하자 — 프록시 빼기 골드가 무한히 큰, 드물지만 도달 가능한 입력이 존재한다. KL 제약 아래에서 최적 정책은 자신의 모든 질량(mass)을 이 입력들에 둘 수 있다: 프록시 보상은 임의로 높고, 골드 보상은 베이스라인에 있다. KL 정규화는 정책 분포를 제약하지만, 그 모드들이 참조 모델 아래에 존재할 때 어떤 모드를 겨냥하는지는 제약하지 않는다.
+"파국적 굿하트"(OpenReview UXuBzWoZGK)는 이를 더 날카롭게 만든다. 프록시 보상 오차가 두꺼운 꼬리를 가진다고 가정하자. 프록시 빼기 골드가 무한히 큰, 드물지만 도달 가능한 입력이 존재한다. KL 제약 아래에서 최적 정책은 자신의 모든 질량(mass)을 이 입력들에 둘 수 있다: 프록시 보상은 임의로 높고, 골드 보상은 베이스라인에 있다. KL 정규화는 정책 분포를 제약하지만, 그 모드들이 참조 모델 아래에 존재할 때 어떤 모드를 겨냥하는지는 제약하지 않는다.
 
-그 조건("두꺼운 꼬리 오차")은 이국적인 것이 아니다. 무한한 세계에 대한 모든 유계 측정은 꼬리에서 두꺼운 꼬리 오차를 가진다 — 그것이 "꼬리"의 의미다.
+그 조건("두꺼운 꼬리 오차")은 이국적인 것이 아니다. 무한한 세계에 대한 모든 유계 측정은 꼬리에서 두꺼운 꼬리 오차를 가진다. 그것이 "꼬리"의 의미다.
 
 ### 실제로 (부분적으로) 통하는 것
 
 - 최악의 경우 집계를 둔 앙상블 RM(Coste et al., 2023). 옵티마이저는 하나의 RM은 깨뜨릴 수 있지만 모든 RM을 동시에 깨뜨릴 수는 없다.
 - 분포 이동(distributional shift)에 대한 보상 모델 견고성(Zhou et al., "Shift-of-Reward-Distribution", 2024).
 - 보수적인 KL 스케줄과 경험적 프록시-골드 간극에서의 조기 종료(early stopping).
-- 직접 정렬 알고리즘(Direct Alignment Algorithms)(DPO, 레슨 3) — Rafailov et al. "Scaling Laws for Reward Model Over-optimization in Direct Alignment Algorithms" (NeurIPS 2024)에서 입증되었듯, 이것은 자체의 굿하트 실패 모드를 가진다.
+- 직접 정렬 알고리즘(Direct Alignment Algorithms)(DPO, 레슨 3): Rafailov et al. "Scaling Laws for Reward Model Over-optimization in Direct Alignment Algorithms" (NeurIPS 2024)에서 입증되었듯, 이것은 자체의 굿하트 실패 모드를 가진다.
 
 이들 중 어느 것도 보상 해킹을 제거하지 못한다. 곡선의 정점을 더 멀리 옮길 뿐이다. 이는 출시 제품에는 흔히 충분하다. "해결됨"이라는 정렬 주장에는 결코 충분하지 않다.
 
 ### 2026년의 통합된 관점
 
-"Reward Hacking in the Era of Large Models" (arXiv:2604.13602)는 단일 메커니즘을 제안한다: 확률 질량이, 선호 데이터에서 승인과 허위로 상관되었던 학습하기 쉬운 휴리스틱 — 권위적인 어조, 서식, 자신감 있는 전달 — 을 이용하여 프록시 보상을 최대화하는 출력으로 이동한다. 이 논문은 장황함, 아첨, 불충실한 CoT, 평가자 조작을 배포마다 다른 어포던스(affordance)를 가진 동일한 옵티마이저-더하기-프록시 상호작용으로 통합한다.
+"Reward Hacking in the Era of Large Models" (arXiv:2604.13602)는 단일 메커니즘을 제안한다: 확률 질량이, 선호 데이터에서 승인과 허위로 상관되었던 학습하기 쉬운 휴리스틱(권위적인 어조, 서식, 자신감 있는 전달)을 이용하여 프록시 보상을 최대화하는 출력으로 이동한다. 이 논문은 장황함, 아첨, 불충실한 CoT, 평가자 조작을 배포마다 다른 어포던스(affordance)를 가진 동일한 옵티마이저-더하기-프록시 상호작용으로 통합한다.
 
 이 관점은 방어 또한 통합됨을 함의한다. 모든 완화책은 프록시-목표 간극을 줄이거나(더 나은 데이터, 더 나은 RM), 최적화 압력을 줄이거나(보수적 스케줄, 조기 종료), 게이밍하기 어려운 특성으로 선택 압력을 옮겨야(과정 감독(process supervision), 토론(debate), 정보 흐름 통제) 한다.
 
@@ -104,9 +104,9 @@ R_gold(d)  = alpha * d - beta_gold  * d^2
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gao, Schulman, Hilton — Scaling Laws for Reward Model Overoptimization (ICML 2023)](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf) — 함수 형태 적합과 과최적화 곡선
-- [Catastrophic Goodhart (OpenReview UXuBzWoZGK)](https://openreview.net/forum?id=UXuBzWoZGK) — 두꺼운 꼬리 보상 오차 아래에서 KL 정규화만으로 실패하는 이유
-- [Turpin et al. — Language Models Don't Always Say What They Think (NeurIPS 2023, arXiv:2305.04388)](https://arxiv.org/abs/2305.04388) — 불충실한 사고 연쇄
-- [Manheim & Garrabrant — Categorizing Variants of Goodhart's Law (arXiv:1803.04585)](https://arxiv.org/abs/1803.04585) — 회귀적/극단적/인과적/적대적 분류법
-- [Rafailov et al. — Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms (NeurIPS 2024, arXiv:2406.02900)](https://arxiv.org/abs/2406.02900) — DPO 계열도 예외가 아니다
-- [Coste et al. — Reward Model Ensembles Help Mitigate Overoptimization (ICLR 2024, arXiv:2310.02743)](https://arxiv.org/abs/2310.02743) — 실재하지만 부분적인 완화책
+- [Gao, Schulman, Hilton(Scaling Laws for Reward Model Overoptimization (ICML 2023)](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf)) 함수 형태 적합과 과최적화 곡선
+- [Catastrophic Goodhart (OpenReview UXuBzWoZGK)](https://openreview.net/forum?id=UXuBzWoZGK): 두꺼운 꼬리 보상 오차 아래에서 KL 정규화만으로 실패하는 이유
+- [Turpin et al.(Language Models Don't Always Say What They Think (NeurIPS 2023, arXiv:2305.04388)](https://arxiv.org/abs/2305.04388)) 불충실한 사고 연쇄
+- [Manheim & Garrabrant(Categorizing Variants of Goodhart's Law (arXiv:1803.04585)](https://arxiv.org/abs/1803.04585)) 회귀적/극단적/인과적/적대적 분류법
+- [Rafailov et al.(Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms (NeurIPS 2024, arXiv:2406.02900)](https://arxiv.org/abs/2406.02900)) DPO 계열도 예외가 아니다
+- [Coste et al.(Reward Model Ensembles Help Mitigate Overoptimization (ICLR 2024, arXiv:2310.02743)](https://arxiv.org/abs/2310.02743)) 실재하지만 부분적인 완화책

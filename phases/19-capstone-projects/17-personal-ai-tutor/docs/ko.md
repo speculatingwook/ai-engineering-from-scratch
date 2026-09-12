@@ -1,4 +1,4 @@
-# Capstone 17 — 개인 AI 튜터 (Personal AI Tutor: Adaptive, Multimodal, with Memory)
+# Capstone 17: 개인 AI 튜터 (Personal AI Tutor: Adaptive, Multimodal, with Memory)
 
 > Khanmigo(Khan Academy), Duolingo Max, Google LearnLM / Gemini for Education, Quizlet Q-Chat, 그리고 Synthesis Tutor는 모두 2026년에 적응형(adaptive) 멀티모달(multimodal) 튜터링을 대규모로 출하했다. 공통 형태는 소크라테스식(Socratic) 정책(절대 답을 그냥 던지지 않음), 모든 상호작용 후 갱신되는 학습자 모델(learner model)(베이지안 지식 추적(Bayesian knowledge tracing) 스타일), 음성 + 텍스트 + 사진 수학(photo-math) 입력, 커리큘럼 그래프(curriculum graph) 검색, 간격 반복(spaced-repetition) 스케줄링, 연령 적합 콘텐츠를 위한 강한 안전 필터다. 이 캡스톤(capstone)은 과목 특화 튜터(K-12 대수 또는 입문 Python)를 출하하고, 학습자 10명과 2주간의 효능 연구(efficacy study)를 실행하며, 콘텐츠 안전 감사(content-safety audit)를 통과하는 것이다.
 
@@ -145,11 +145,11 @@ learner: "6"
 
 ## 더 읽을거리 (Further Reading)
 
-- [Khanmigo (Khan Academy)](https://www.khanmigo.ai) — 레퍼런스 소비자 K-12 튜터
-- [Duolingo Max](https://blog.duolingo.com/duolingo-max/) — 레퍼런스 언어 학습 튜터
-- [Google LearnLM / Gemini for Education](https://blog.google/technology/google-deepmind/learnlm) — 호스팅형 레퍼런스 모델
-- [Quizlet Q-Chat](https://quizlet.com) — 대안 레퍼런스
-- [Synthesis Tutor](https://www.synthesis.com) — 스타트업 레퍼런스
-- [FSRS algorithm](https://github.com/open-spaced-repetition/fsrs4anki) — 간격 반복 스케줄러
-- [Bayesian Knowledge Tracing](https://en.wikipedia.org/wiki/Bayesian_knowledge_tracing) — 학습자 모델 고전
-- [LiveKit Agents](https://github.com/livekit/agents) — 음성 스택
+- [Khanmigo (Khan Academy)](https://www.khanmigo.ai): 레퍼런스 소비자 K-12 튜터
+- [Duolingo Max](https://blog.duolingo.com/duolingo-max/): 레퍼런스 언어 학습 튜터
+- [Google LearnLM / Gemini for Education](https://blog.google/technology/google-deepmind/learnlm): 호스팅형 레퍼런스 모델
+- [Quizlet Q-Chat](https://quizlet.com): 대안 레퍼런스
+- [Synthesis Tutor](https://www.synthesis.com): 스타트업 레퍼런스
+- [FSRS algorithm](https://github.com/open-spaced-repetition/fsrs4anki): 간격 반복 스케줄러
+- [Bayesian Knowledge Tracing](https://en.wikipedia.org/wiki/Bayesian_knowledge_tracing): 학습자 모델 고전
+- [LiveKit Agents](https://github.com/livekit/agents): 음성 스택

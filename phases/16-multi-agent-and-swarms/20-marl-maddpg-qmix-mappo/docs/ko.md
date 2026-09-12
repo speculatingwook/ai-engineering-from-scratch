@@ -1,6 +1,6 @@
 # MARL — MADDPG, QMIX, MAPPO
 
-> 2026년에도 LLM 에이전트(agent) 시스템에 여전히 영향을 주는, 다중 에이전트(multi-agent) 협응의 강화 학습(reinforcement learning) 유산이다. **MADDPG** (Lowe et al., NeurIPS 2017, arXiv:1706.02275)는 중앙 집중 학습, 분산 실행(Centralized Training, Decentralized Execution, CTDE)을 도입했다. 각 비평자(critic)는 학습 중 모든 에이전트의 상태와 행동을 본다. 테스트 시에는 지역 행위자(actor)만 실행된다. 협력, 경쟁, 혼합 환경에서 작동한다. **QMIX** (Rashid et al., ICML 2018, arXiv:1803.11485)는 단조 혼합 신경망(monotonic mixing network)을 갖춘 가치 분해(value-decomposition)다. 에이전트별 Q가 결합되어 결합 Q(joint Q)가 되므로 `argmax`가 깔끔하게 분배된다 — StarCraft Multi-Agent Challenge(SMAC)에서 지배적이다. **MAPPO** (Yu et al., NeurIPS 2022, arXiv:2103.01955)는 중앙 집중 가치 함수를 갖춘 PPO다. 최소한의 튜닝으로 입자 세계(particle-world), SMAC, Google Research Football, Hanabi에서 "놀랍도록 효과적"이다. 이 세 알고리즘은 분산적으로 행동해야 하는 에이전트 팀이 정책을 학습하는 토대다. MAPPO는 **2026년 협력 MARL 기본 베이스라인(baseline)**이다. 이 레슨은 작은 격자 세계(grid-world) 장난감에서 각각을 만들고, LLM 에이전트 학습에 손대기 전에 세 아이디어를 근육 기억에 새긴다.
+> 2026년에도 LLM 에이전트(agent) 시스템에 여전히 영향을 주는, 다중 에이전트(multi-agent) 협응의 강화 학습(reinforcement learning) 유산이다. **MADDPG** (Lowe et al., NeurIPS 2017, arXiv:1706.02275)는 중앙 집중 학습, 분산 실행(Centralized Training, Decentralized Execution, CTDE)을 도입했다. 각 비평자(critic)는 학습 중 모든 에이전트의 상태와 행동을 본다. 테스트 시에는 지역 행위자(actor)만 실행된다. 협력, 경쟁, 혼합 환경에서 작동한다. **QMIX** (Rashid et al., ICML 2018, arXiv:1803.11485)는 단조 혼합 신경망(monotonic mixing network)을 갖춘 가치 분해(value-decomposition)다. 에이전트별 Q가 결합되어 결합 Q(joint Q)가 되므로 `argmax`가 깔끔하게 분배된다. StarCraft Multi-Agent Challenge(SMAC)에서 지배적이다. **MAPPO** (Yu et al., NeurIPS 2022, arXiv:2103.01955)는 중앙 집중 가치 함수를 갖춘 PPO다. 최소한의 튜닝으로 입자 세계(particle-world), SMAC, Google Research Football, Hanabi에서 "놀랍도록 효과적"이다. 이 세 알고리즘은 분산적으로 행동해야 하는 에이전트 팀이 정책을 학습하는 토대다. MAPPO는 **2026년 협력 MARL 기본 베이스라인(baseline)**이다. 이 레슨은 작은 격자 세계(grid-world) 장난감에서 각각을 만들고, LLM 에이전트 학습에 손대기 전에 세 아이디어를 근육 기억에 새긴다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, small NumPy-free implementations)
@@ -11,7 +11,7 @@
 
 LLM 에이전트 시스템은 점점 더 에이전트 간 협응을 위한 정책을 학습한다. 언제 양보할지, 언제 행동할지, 어떤 동료를 호출할지. 그런 정책을 어떻게 학습하는지 알려주는 문헌은 다중 에이전트 강화 학습(Multi-Agent Reinforcement Learning, MARL)이며, LLM 물결보다 앞서 등장했고, 지배적인 알고리즘은 몇 가지로 좁혀진다.
 
-패턴 어휘 없이 MARL 논문을 읽는 것은 고통스럽다. 중앙 집중 학습과 분산 실행(CTDE), 가치 분해, 중앙 집중 비평자는 유행어가 아니다 — 특정 문제에 대한 특정 답이다.
+패턴 어휘 없이 MARL 논문을 읽는 것은 고통스럽다. 중앙 집중 학습과 분산 실행(CTDE), 가치 분해, 중앙 집중 비평자는 유행어가 아니다. 특정 문제에 대한 특정 답이다.
 
 - 독립 RL(각 에이전트가 홀로 학습)은 각 에이전트의 관점에서 비정상적(non-stationary)이다. 나쁘다.
 - 중앙 집중 RL(한 에이전트가 모두를 제어)은 확장되지 않고 실행 제약을 위반한다.
@@ -27,7 +27,7 @@ LLM 에이전트 시스템은 점점 더 에이전트 간 협응을 위한 정�
 
 환경마다 행동/관찰 유형이 다르므로, 알고리즘은 그에 맞게 고른다.
 
-### MADDPG (2017) — CTDE 패턴
+### MADDPG (2017): CTDE 패턴
 
 각 에이전트 `i`에는 자신의 관찰을 행동으로 매핑하는 행위자 `mu_i(o_i)`가 있다. 또한 각 에이전트에는 학습 중 모든 관찰과 모든 행동을 보는 비평자 `Q_i(x, a_1, ..., a_n)`가 있다. 행위자는 비평자의 평가에 대한 정책 그래디언트(policy gradient)로 갱신된다.
 
@@ -40,7 +40,7 @@ CTDE인 이유: 학습 시에는 모두의 행동을 알므로, 그것을 이용
 
 실패 모드: 비평자가 N개의 에이전트에 따라 커진다(입력이 모든 행동을 포함). 근사 없이는 약 10개 에이전트를 넘어 확장되지 않는다.
 
-### QMIX (2018) — 가치 분해
+### QMIX (2018): 가치 분해
 
 협력 전용. 전역 보상은 에이전트별 Q값의 단조 함수의 합이다.
 
@@ -50,11 +50,11 @@ Q_tot(tau, a) = f(Q_1(tau_1, a_1), ..., Q_n(tau_n, a_n)),   df/dQ_i >= 0
 
 단조성은 `argmax_a Q_tot`가 각 에이전트가 독립적으로 `argmax_{a_i} Q_i`를 선택함으로써 계산될 수 있음을 보장한다. 이것이 바로 분산 실행에 필요한 속성이다. 학습 시에는 혼합 신경망이 에이전트별 Q로부터 `Q_tot`을 만든다.
 
-QMIX가 SMAC에서 이기는 이유: 협력적 StarCraft 미세 관리는 동질적 에이전트, 지역 관찰, 전역 보상을 가진다 — 가치 분해에 완벽하게 들어맞는다.
+QMIX가 SMAC에서 이기는 이유: 협력적 StarCraft 미세 관리는 동질적 에이전트, 지역 관찰, 전역 보상을 가진다. 가치 분해에 완벽하게 들어맞는다.
 
 실패 모드: 단조성 제약은 제한적이다. 일부 과제는 단조 분해 불가능한 보상 구조를 가진다(한 에이전트가 팀을 위해 희생). 확장(QTRAN, QPLEX)이 이를 완화한다.
 
-### MAPPO (2022) — 간과된 기본값
+### MAPPO (2022): 간과된 기본값
 
 다중 에이전트 PPO: 중앙 집중 가치 함수를 갖춘 PPO. 각 에이전트는 자신의 정책을 둔다. 모든 에이전트는 전체 상태를 보는 가치 함수를 공유한다(또는 에이전트별로 둔다). Yu et al. 2022는 MAPPO를 다섯 개 벤치마크에서 MADDPG, QMIX, 그리고 그 확장들과 비교 평가했고 다음을 발견했다.
 
@@ -81,7 +81,7 @@ QMIX가 SMAC에서 이기는 이유: 협력적 StarCraft 미세 관리는 동질
 - *설계* 중에는 전체 팀 가시성을 가정한다.
 - *런타임*에는 분산 실행을 강제한다. 각 에이전트는 `o_i`만 본다.
 
-이 패턴은 에이전트별 상태를 명시적으로 유지하고 부분 관찰 가능성을 미리 생각하도록 강제한다. 많은 프로덕션 다중 에이전트 시스템은 어디서나 공유 상태를 암묵적으로 가정한다 — CTDE 규율이 그것을 방지한다.
+이 패턴은 에이전트별 상태를 명시적으로 유지하고 부분 관찰 가능성을 미리 생각하도록 강제한다. 많은 프로덕션 다중 에이전트 시스템은 어디서나 공유 상태를 암묵적으로 가정한다. CTDE 규율이 그것을 방지한다.
 
 ### 비정상성 문제
 
@@ -102,10 +102,10 @@ LLM 에이전트 시스템에서 비정상성은 "내 에이전트가 지난달�
 `code/main.py`는 세 가지 패턴 시연을 구현하며, 모두 작은 2 에이전트 협력 격자 세계에서 이루어진다.
 
 - 환경: 4x4 격자 위의 2개 에이전트, 하나의 보상 알갱이. 어느 에이전트든 알갱이에 도달하면 보상 = 1이고 과제가 끝난다.
-- `IndependentAgents` — 각 에이전트가 다른 에이전트를 환경으로 취급한다. 베이스라인.
-- `MADDPGStyle` — 중앙 집중 비평자가 결합 가치를 계산한다. 행위자 정책이 그것으로부터 갱신된다. 스크립트화된 정책 개선.
-- `QMIXStyle` — 단조 혼합기를 갖춘 가치 분해.
-- `MAPPOStyle` — 중앙 집중 가치 함수. 정책이 공유 베이스라인에 대해 갱신된다.
+- `IndependentAgents`: 각 에이전트가 다른 에이전트를 환경으로 취급한다. 베이스라인.
+- `MADDPGStyle`: 중앙 집중 비평자가 결합 가치를 계산한다. 행위자 정책이 그것으로부터 갱신된다. 스크립트화된 정책 개선.
+- `QMIXStyle`: 단조 혼합기를 갖춘 가치 분해.
+- `MAPPOStyle`: 중앙 집중 가치 함수. 정책이 공유 베이스라인에 대해 갱신된다.
 
 네 가지 모두 같은 에피소드를 실행하고 목표까지의 평균 스텝을 보고한다. CTDE 변형들은 독립 베이스라인보다 짧은 경로로 수렴(convergence)한다.
 
@@ -158,5 +158,5 @@ python3 code/main.py
 - [Lowe et al. — Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/abs/1706.02275) — MADDPG; NeurIPS 2017
 - [Rashid et al. — QMIX: Monotonic Value Function Factorisation for Deep Multi-Agent Reinforcement Learning](https://arxiv.org/abs/1803.11485) — QMIX; ICML 2018
 - [Yu et al. — The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games](https://arxiv.org/abs/2103.01955) — MAPPO; NeurIPS 2022
-- [BAIR blog post on MAPPO](https://bair.berkeley.edu/blog/2021/07/14/mappo/) — MAPPO 결과의 읽기 쉬운 정리
+- [BAIR blog post on MAPPO](https://bair.berkeley.edu/blog/2021/07/14/mappo/): MAPPO 결과의 읽기 쉬운 정리
 - [SMAC repository](https://github.com/oxwhirl/smac) — StarCraft Multi-Agent Challenge

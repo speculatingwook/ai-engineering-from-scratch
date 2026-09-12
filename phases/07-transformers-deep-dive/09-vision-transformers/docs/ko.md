@@ -11,7 +11,7 @@
 
 2020년 이전에 컴퓨터 비전(computer vision)은 곧 합성곱(convolution)을 의미했다. ImageNet과 COCO, 각종 검출(detection) 벤치마크(benchmark)의 모든 SOTA는 CNN 백본(backbone)을 사용했다. 트랜스포머는 언어를 위한 것이었다.
 
-Dosovitskiy et al. (2020) — "An Image is Worth 16x16 Words" — 는 합성곱을 완전히 버릴 수 있음을 보였다. 이미지를 고정 크기 패치로 잘라, 각 패치를 임베딩(embedding)으로 선형 사영(linear projection)한 뒤, 그 시퀀스(sequence)를 평범한 트랜스포머 인코더(encoder)에 넣는다. 충분한 규모(ImageNet-21k 사전 학습(pretraining) 이상)에서 ViT는 ResNet 기반 모델(model)에 필적하거나 능가한다.
+Dosovitskiy et al. (2020)("An Image is Worth 16x16 Words")는 합성곱을 완전히 버릴 수 있음을 보였다. 이미지를 고정 크기 패치로 잘라, 각 패치를 임베딩(embedding)으로 선형 사영(linear projection)한 뒤, 그 시퀀스(sequence)를 평범한 트랜스포머 인코더(encoder)에 넣는다. 충분한 규모(ImageNet-21k 사전 학습(pretraining) 이상)에서 ViT는 ResNet 기반 모델(model)에 필적하거나 능가한다.
 
 ViT는 2026년의 더 넓은 패턴, 즉 "하나의 아키텍처, 여러 모달리티(modality)"의 출발점이었다. Whisper는 오디오를 토큰화(tokenize)한다. ViT는 이미지를 토큰화한다. 로보틱스를 위한 액션 토큰(action token). 비디오를 위한 픽셀 토큰(pixel token). 트랜스포머는 상관하지 않는다. 시퀀스를 넣어 주면 학습(training)한다.
 
@@ -21,7 +21,7 @@ ViT는 2026년의 더 넓은 패턴, 즉 "하나의 아키텍처, 여러 모달�
 
 ![Image → patches → tokens → transformer](../assets/vit.svg)
 
-### 1단계 — 패치화(patchify)
+### 1단계: 패치화(patchify)
 
 `H × W × C` 이미지를 `N × (P·P·C)`개의 평탄화된 패치 시퀀스로 분할한다. 일반적인 설정: `224 × 224` 이미지, `16 × 16` 패치 → 각각 768개 값을 가진 196개의 패치.
 
@@ -31,21 +31,21 @@ image (224, 224, 3) → 14 × 14 grid of 16x16x3 patches → 196 vectors of leng
 
 패치 크기가 핵심 조절 손잡이다. 작은 패치 = 더 많은 토큰, 더 좋은 해상도, 어텐션(attention)의 이차 비용. 큰 패치 = 더 거칠지만 더 저렴하다.
 
-### 2단계 — 선형 임베딩(linear embedding)
+### 2단계: 선형 임베딩(linear embedding)
 
 학습된 행렬(matrix) 하나가 각 평탄화된 패치를 `d_model`로 사영한다. 커널 크기 `P`, 스트라이드(stride) `P`의 합성곱과 동등하다. PyTorch에서는 말 그대로 `nn.Conv2d(C, d_model, kernel_size=P, stride=P)`, 즉 2줄짜리 구현이다.
 
-### 3단계 — `[CLS]` 토큰 앞에 붙이기, 위치 임베딩(positional embedding) 더하기
+### 3단계: `[CLS]` 토큰 앞에 붙이기, 위치 임베딩(positional embedding) 더하기
 
 - 학습 가능한 `[CLS]` 토큰을 앞에 붙인다. 이 토큰의 최종 은닉 상태(hidden state)가 분류(classification)에 쓰이는 이미지 표현(representation)이다.
 - 학습 가능한 위치 임베딩(ViT 원본) 또는 사인파(sinusoidal) 2D(이후 변형들)를 더한다.
 - 2024년 이후에는 RoPE가 위치 표현을 위해 2D로 확장되었고, 명시적 임베딩 없이 쓰이기도 한다.
 
-### 4단계 — 표준 트랜스포머 인코더
+### 4단계: 표준 트랜스포머 인코더
 
 `LayerNorm → Self-Attention → + → LayerNorm → MLP → +` 블록 L개를 쌓는다. BERT와 동일하다. 비전 전용 층(layer)은 없다. 이것이 이 논문의 교육적 핵심 메시지다.
 
-### 5단계 — 헤드(head)
+### 5단계: 헤드(head)
 
 분류의 경우: `[CLS]` 은닉 상태 → 선형 → softmax. DINOv2나 SAM의 경우: `[CLS]`를 버리고 패치 임베딩을 직접 사용한다.
 
@@ -127,7 +127,7 @@ cls_emb = out[:, 0]                       # image representation
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** `code/main.py`를 실행하라. 패치 개수가 `(H/P) * (W/P)`와 같고, 평탄화된 패치 차원이 `P*P*C`와 같은지 확인하라.
-2. **중간.** 2D 사인파 위치 임베딩을 구현하라 — 각 패치의 `row`와 `col`에 대해 두 개의 독립적인 사인파 코드를 만들어 이어 붙인다. 이를 작은 PyTorch ViT에 넣어 CIFAR-10에서 학습 가능한 위치 임베딩과 정확도를 비교하라.
+2. **중간.** 2D 사인파 위치 임베딩을 구현하라. 각 패치의 `row`와 `col`에 대해 두 개의 독립적인 사인파 코드를 만들어 이어 붙인다. 이를 작은 PyTorch ViT에 넣어 CIFAR-10에서 학습 가능한 위치 임베딩과 정확도를 비교하라.
 3. **어려움.** 3층 ViT(PyTorch)를 만들고, 4×4 패치로 MNIST 이미지 1,000장에 대해 학습시켜라. 테스트 정확도를 측정하라. 이제 같은 1,000장에 대해 DINOv2 사전 학습을 추가하라(단순화: 마스킹된 패치로부터 패치 임베딩을 예측하도록 인코더만 학습). 정확도가 향상되는가?
 
 ## 핵심 용어 (Key Terms)
@@ -145,10 +145,10 @@ cls_emb = out[:, 0]                       # image representation
 
 ## 더 읽을거리 (Further Reading)
 
-- [Dosovitskiy et al. (2020). An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929) — ViT 논문.
+- [Dosovitskiy et al. (2020). An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929): ViT 논문.
 - [Touvron et al. (2021). Training data-efficient image transformers & distillation through attention](https://arxiv.org/abs/2012.12877) — DeiT.
 - [Liu et al. (2021). Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030) — Swin.
 - [Oquab et al. (2023). DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193) — DINOv2.
-- [Darcet et al. (2023). Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588) — DINOv2를 위한 레지스터 토큰 해결책.
+- [Darcet et al. (2023). Vision Transformers Need Registers](https://arxiv.org/abs/2309.16588): DINOv2를 위한 레지스터 토큰 해결책.
 </content>
 </invoke>

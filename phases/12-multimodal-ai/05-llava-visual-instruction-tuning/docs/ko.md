@@ -124,7 +124,7 @@ LLaVA-1.5-7B 분해:
 - Llama-7B: 70억.
 - 총합: 73억 파라미터. 2단계 중 학습 가능: 전체 70억 + 투영기 2200만.
 
-2단계 학습 비용: 8xA100에서 약 20시간. 이것이 핵심 수치다 — 하루, 한 노드, 재현 가능. 그래서 LLaVA가 퍼졌다.
+2단계 학습 비용: 8xA100에서 약 20시간. 이것이 핵심 수치다. 하루, 한 노드, 재현 가능. 그래서 LLaVA가 퍼졌다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -142,7 +142,7 @@ LLaVA-1.5-7B 분해:
 
 1. `1024 → 4096 → 4096`인 2층 MLP 투영기의 학습 가능 파라미터 개수를 계산하라. GELU와 편향(bias)을 쓰면, LLaVA-13B의 어느 비율을 차지하는가?
 
-2. "거부" 사례에 대한 LLaVA 프롬프트를 구성하라 — 이미지에 사적인 개인이 담겨 있다. 예상되는 어시스턴트 응답을 작성하라. 왜 LLaVA가 이것을 제로샷(zero-shot)으로 거부해야 하는가, 그리고 그 거부를 강화하려면 어떤 학습 데이터가 필요한가?
+2. "거부" 사례에 대한 LLaVA 프롬프트를 구성하라. 이미지에 사적인 개인이 담겨 있다. 예상되는 어시스턴트 응답을 작성하라. 왜 LLaVA가 이것을 제로샷(zero-shot)으로 거부해야 하는가, 그리고 그 거부를 강화하려면 어떤 학습 데이터가 필요한가?
 
 3. LLaVA-NeXT 블로그의 AnyRes 절을 읽어라. AnyRes에서 1344x672 이미지의 시각 토큰 개수를 계산하라. 336x336에서의 기본 576토큰과 비교하라.
 
@@ -167,8 +167,8 @@ LLaVA-1.5-7B 분해:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Liu et al. — Visual Instruction Tuning (arXiv:2304.08485)](https://arxiv.org/abs/2304.08485) — LLaVA 논문.
+- [Liu et al.(Visual Instruction Tuning (arXiv:2304.08485)](https://arxiv.org/abs/2304.08485)) LLaVA 논문.
 - [Liu et al. — Improved Baselines with Visual Instruction Tuning (arXiv:2310.03744)](https://arxiv.org/abs/2310.03744) — LLaVA-1.5.
-- [Chen et al. — ShareGPT4V (arXiv:2311.12793)](https://arxiv.org/abs/2311.12793) — 밀집 캡션 데이터셋.
-- [Karamcheti et al. — Prismatic VLMs (arXiv:2402.07865)](https://arxiv.org/abs/2402.07865) — 설계 공간 절제 연구.
-- [Li et al. — LLaVA-OneVision (arXiv:2408.03326)](https://arxiv.org/abs/2408.03326) — 통합된 단일 이미지, 멀티 이미지, 비디오.
+- [Chen et al.(ShareGPT4V (arXiv:2311.12793)](https://arxiv.org/abs/2311.12793)) 밀집 캡션 데이터셋.
+- [Karamcheti et al.(Prismatic VLMs (arXiv:2402.07865)](https://arxiv.org/abs/2402.07865)) 설계 공간 절제 연구.
+- [Li et al.(LLaVA-OneVision (arXiv:2408.03326)](https://arxiv.org/abs/2408.03326)) 통합된 단일 이미지, 멀티 이미지, 비디오.

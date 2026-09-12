@@ -1,6 +1,6 @@
-# Capstone 07 — 종단 간 파인튜닝 파이프라인 (Data to SFT to DPO to Serve)
+# Capstone 07: 종단 간 파인튜닝 파이프라인 (Data to SFT to DPO to Serve)
 
-> 직접 모은 데이터로 학습하고, 직접 정한 선호로 DPO 정렬하고, 양자화(quantize)하고, 추측 디코딩(speculative-decode)하고, 측정 가능한 100만 토큰당 $로 서빙하는 8B 모델. 2026년의 오픈 스택은 Axolotl v0.8, TRL 0.15, 반복(iteration)을 위한 Unsloth, 양자화를 위한 GPTQ/AWQ/GGUF, 서빙을 위한 EAGLE-3를 갖춘 vLLM 0.7이다. 캡스톤(capstone)은 전체 파이프라인을 재현 가능하게 실행하고 — YAML 입력, 서빙되는 엔드포인트 출력 — 2026 Model Openness Framework 하에서 모델 카드(model card)를 발행하는 것이다.
+> 직접 모은 데이터로 학습하고, 직접 정한 선호로 DPO 정렬하고, 양자화(quantize)하고, 추측 디코딩(speculative-decode)하고, 측정 가능한 100만 토큰당 $로 서빙하는 8B 모델. 2026년의 오픈 스택은 Axolotl v0.8, TRL 0.15, 반복(iteration)을 위한 Unsloth, 양자화를 위한 GPTQ/AWQ/GGUF, 서빙을 위한 EAGLE-3를 갖춘 vLLM 0.7이다. 캡스톤(capstone)은 전체 파이프라인을 재현 가능하게 실행하고(YAML 입력, 서빙되는 엔드포인트 출력) 2026 Model Openness Framework 하에서 모델 카드(model card)를 발행하는 것이다.
 
 **Type:** Capstone
 **Languages:** Python (pipeline), YAML (configs), Bash (scripts)
@@ -10,9 +10,9 @@
 
 ## 문제 (Problem)
 
-2026년의 진지한 모든 AI 팀은 파인튜닝(fine-tuning) 파이프라인을 손닿는 곳에 둔다. 프런티어 베이스 모델을 출시해서가 아니라, 다운스트림 적응 — 도메인 SFT, 레이블링된 선호에 대한 DPO, 추측 디코딩을 위한 증류된 드래프트(draft), EAGLE-3로의 서빙 — 이 측정 가능한 성과가 나오는 곳이기 때문이다. Axolotl v0.8은 멀티 GPU SFT 설정을 처리한다. TRL 0.15는 DPO와 GRPO를 처리한다. Unsloth는 빠른 단일 GPU 반복을 가능하게 한다. EAGLE-3를 갖춘 vLLM 0.7은 품질 손실 없이 디코드 처리량(throughput)을 2-3배 끌어올린다. 도구는 작동한다. 기교는 YAML, 데이터 위생, 그리고 평가 규율에 있다.
+2026년의 진지한 모든 AI 팀은 파인튜닝(fine-tuning) 파이프라인을 손닿는 곳에 둔다. 프런티어 베이스 모델을 출시해서가 아니라, 다운스트림 적응(도메인 SFT, 레이블링된 선호에 대한 DPO, 추측 디코딩을 위한 증류된 드래프트(draft), EAGLE-3로의 서빙)이 측정 가능한 성과가 나오는 곳이기 때문이다. Axolotl v0.8은 멀티 GPU SFT 설정을 처리한다. TRL 0.15는 DPO와 GRPO를 처리한다. Unsloth는 빠른 단일 GPU 반복을 가능하게 한다. EAGLE-3를 갖춘 vLLM 0.7은 품질 손실 없이 디코드 처리량(throughput)을 2-3배 끌어올린다. 도구는 작동한다. 기교는 YAML, 데이터 위생, 그리고 평가 규율에 있다.
 
-8B 베이스(Llama 3.3, Qwen3, 또는 Gemma 3)를 작업별 데이터로 SFT한 뒤 DPO를 거치게 하고, 서빙을 위해 양자화하고, lm-evaluation-harness, RewardBench-2, MT-Bench-v2, MMLU-Pro에 대해 이득을 측정한다. 2026 Model Openness Framework 하에서 모델 카드를 만든다. 핵심은 재현성이다 — 한 명령이 전체 파이프라인을 처음부터 끝까지 재실행한다.
+8B 베이스(Llama 3.3, Qwen3, 또는 Gemma 3)를 작업별 데이터로 SFT한 뒤 DPO를 거치게 하고, 서빙을 위해 양자화하고, lm-evaluation-harness, RewardBench-2, MT-Bench-v2, MMLU-Pro에 대해 이득을 측정한다. 2026 Model Openness Framework 하에서 모델 카드를 만든다. 핵심은 재현성이다. 한 명령이 전체 파이프라인을 처음부터 끝까지 재실행한다.
 
 ## 개념 (Concept)
 
@@ -138,11 +138,11 @@ $ ./pipeline.sh config/llama3.3-8b-domainX.yaml
 
 ## 더 읽을거리 (Further Reading)
 
-- [Axolotl documentation](https://axolotl-ai-cloud.github.io/axolotl/) — 레퍼런스 SFT / DPO 트레이너
-- [TRL documentation](https://huggingface.co/docs/trl) — DPO 및 GRPO 레퍼런스 구현
-- [Unsloth](https://github.com/unslothai/unsloth) — 단일 GPU 반복 레퍼런스
-- [DeepSeek R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948) — GRPO 방법론
-- [vLLM + EAGLE-3 documentation](https://docs.vllm.ai) — 레퍼런스 서빙 스택
-- [SGLang SpecForge](https://github.com/sgl-project/SpecForge) — 대안 추측 디코딩 트레이너
-- [Model Openness Framework 2026](https://isocpp.org/) — 오픈 출시 등급 표준
-- [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) — 정전(canonical)에 해당하는 평가 러너
+- [Axolotl documentation](https://axolotl-ai-cloud.github.io/axolotl/): 레퍼런스 SFT / DPO 트레이너
+- [TRL documentation](https://huggingface.co/docs/trl): DPO 및 GRPO 레퍼런스 구현
+- [Unsloth](https://github.com/unslothai/unsloth): 단일 GPU 반복 레퍼런스
+- [DeepSeek R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948): GRPO 방법론
+- [vLLM + EAGLE-3 documentation](https://docs.vllm.ai): 레퍼런스 서빙 스택
+- [SGLang SpecForge](https://github.com/sgl-project/SpecForge): 대안 추측 디코딩 트레이너
+- [Model Openness Framework 2026](https://isocpp.org/): 오픈 출시 등급 표준
+- [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness): 정전(canonical)에 해당하는 평가 러너

@@ -1,6 +1,6 @@
-# 모더레이션 시스템 — OpenAI, Perspective, Llama Guard
+# 모더레이션 시스템: OpenAI, Perspective, Llama Guard
 
-> 프로덕션 모더레이션(moderation) 시스템은 레슨 12-16에서 정의된 안전 정책을 실제로 작동시킨다. OpenAI Moderation API: GPT-4o를 기반으로 한 `omni-moderation-latest`(2024)는 텍스트 + 이미지를 한 번의 호출로 분류한다. 이전 버전보다 다국어 테스트 세트에서 42% 더 우수하다. 응답 스키마(schema)는 13개의 범주 불리언(boolean)을 반환한다 — harassment, harassment/threatening, hate, hate/threatening, illicit, illicit/violent, self-harm, self-harm/intent, self-harm/instructions, sexual, sexual/minors, violence, violence/graphic. 대부분의 개발자에게 무료다. 계층화된 패턴: 입력 모더레이션(생성 전), 출력 모더레이션(생성 후), 맞춤 모더레이션(도메인 규칙). 비동기 병렬 호출이 지연 시간(latency)을 숨긴다. 플래그(flag) 시 자리표시자 응답. Llama Guard 3/4(레슨 16): 14개 MLCommons 위해(hazard), Code Interpreter Abuse, 8개 언어(v3), 다중 이미지(v4). Perspective API(Google Jigsaw): LLM-as-moderator 물결에 앞선 유해성(toxicity) 점수화. 주로 단일 차원 유해성에 severe-toxicity/insult/profanity 변형. 콘텐츠 모더레이션 연구의 베이스라인(baseline). 폐기 예정: Azure Content Moderator는 2024년 2월 폐기 예정 처리, 2027년 2월 퇴역, Azure AI Content Safety로 대체.
+> 프로덕션 모더레이션(moderation) 시스템은 레슨 12-16에서 정의된 안전 정책을 실제로 작동시킨다. OpenAI Moderation API: GPT-4o를 기반으로 한 `omni-moderation-latest`(2024)는 텍스트 + 이미지를 한 번의 호출로 분류한다. 이전 버전보다 다국어 테스트 세트에서 42% 더 우수하다. 응답 스키마(schema)는 13개의 범주 불리언(boolean)을 반환한다. harassment, harassment/threatening, hate, hate/threatening, illicit, illicit/violent, self-harm, self-harm/intent, self-harm/instructions, sexual, sexual/minors, violence, violence/graphic. 대부분의 개발자에게 무료다. 계층화된 패턴: 입력 모더레이션(생성 전), 출력 모더레이션(생성 후), 맞춤 모더레이션(도메인 규칙). 비동기 병렬 호출이 지연 시간(latency)을 숨긴다. 플래그(flag) 시 자리표시자 응답. Llama Guard 3/4(레슨 16): 14개 MLCommons 위해(hazard), Code Interpreter Abuse, 8개 언어(v3), 다중 이미지(v4). Perspective API(Google Jigsaw): LLM-as-moderator 물결에 앞선 유해성(toxicity) 점수화. 주로 단일 차원 유해성에 severe-toxicity/insult/profanity 변형. 콘텐츠 모더레이션 연구의 베이스라인(baseline). 폐기 예정: Azure Content Moderator는 2024년 2월 폐기 예정 처리, 2027년 2월 퇴역, Azure AI Content Safety로 대체.
 
 **Type:** Build
 **Languages:** Python (stdlib, three-layer moderation harness)
@@ -56,7 +56,7 @@ API가 안정적이고 문서화도 잘 되어 있으며 수년간의 보정(cal
 2. **출력 모더레이션.** 전달 전에 모델의 출력을 분류한다. 플래그되면 거부 응답으로 교체한다. 지연 시간: 생성 후 분류기 호출 한 번.
 3. **맞춤 모더레이션.** 도메인 특정 규칙(정규식, 허용 목록, 비즈니스 정책). 입력 또는 출력 중 어느 쪽에서든 실행된다.
 
-세 계층은 설계상 순차적이다: 입력 모더레이션이 생성 전에 완료되어야 하고, 출력 모더레이션은 생성 후에 실행된다. 병렬성은 한 계층 내에서 적용된다 — 동일한 텍스트에 대해 여러 분류기(예: OpenAI Moderation + Llama Guard + Perspective)를 동시에 실행하면 분류기별 지연 시간을 숨긴다. 선택적 최적화로, 입력 모더레이션이 완료되고 토큰-1 스트리밍(streaming)이 연기되는 동안 자리표시자 응답("잠시만요, 확인 중...")을 보여줄 수 있다. 플래그 동작은 구성 가능하다: 거부, 정화(sanitize), 사람 검토로 격상.
+세 계층은 설계상 순차적이다: 입력 모더레이션이 생성 전에 완료되어야 하고, 출력 모더레이션은 생성 후에 실행된다. 병렬성은 한 계층 내에서 적용된다. 동일한 텍스트에 대해 여러 분류기(예: OpenAI Moderation + Llama Guard + Perspective)를 동시에 실행하면 분류기별 지연 시간을 숨긴다. 선택적 최적화로, 입력 모더레이션이 완료되고 토큰-1 스트리밍(streaming)이 연기되는 동안 자리표시자 응답("잠시만요, 확인 중...")을 보여줄 수 있다. 플래그 동작은 구성 가능하다: 거부, 정화(sanitize), 사람 검토로 격상.
 
 ### 실패 모드
 
@@ -108,7 +108,7 @@ Azure Content Moderator: 2024년 2월 폐기 예정 처리, 2027년 2월 퇴역.
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI Moderation API docs](https://platform.openai.com/docs/api-reference/moderations) — omni-moderation 엔드포인트
-- [Meta PurpleLlama + Llama Guard](https://github.com/meta-llama/PurpleLlama) — Llama Guard 저장소
-- [Google Jigsaw Perspective API](https://perspectiveapi.com/) — 유해성 점수화
-- [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/) — Azure 대체물
+- [OpenAI Moderation API docs](https://platform.openai.com/docs/api-reference/moderations): omni-moderation 엔드포인트
+- [Meta PurpleLlama + Llama Guard](https://github.com/meta-llama/PurpleLlama): Llama Guard 저장소
+- [Google Jigsaw Perspective API](https://perspectiveapi.com/): 유해성 점수화
+- [Azure AI Content Safety](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/): Azure 대체물

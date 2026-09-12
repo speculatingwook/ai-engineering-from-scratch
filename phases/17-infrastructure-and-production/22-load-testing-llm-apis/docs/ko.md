@@ -1,6 +1,6 @@
-# LLM API 부하 테스트 — k6와 Locust가 거짓말하는 이유
+# LLM API 부하 테스트: k6와 Locust가 거짓말하는 이유
 
-> 전통적인 부하 테스터(load tester)는 스트리밍 응답, 가변 출력 길이, 토큰(token) 수준 지표, GPU 포화(saturation)를 위해 설계되지 않았다. 함정 두 가지가 대부분의 팀을 무너뜨린다. GIL 함정: Locust의 토큰 수준 측정은 Python GIL 아래에서 토큰화(tokenization)를 실행하는데, 이는 높은 동시성에서 요청 생성과 경쟁한다. 그러면 토큰화 백로그(backlog)가 보고되는 토큰 간 지연 시간(inter-token latency)을 부풀린다 — 병목은 서버가 아니라 클라이언트 쪽이다. 프롬프트 균일성 함정: 루프 안의 동일한 프롬프트는 토큰 분포의 한 점만 테스트한다. 실제 트래픽은 가변 길이와 다양한 접두사 일치(prefix match)를 가진다. LLMPerf는 `--mean-input-tokens` + `--stddev-input-tokens`로 이를 해결한다. 2026년 도구 매핑: LLM 특화(GenAI-Perf, LLMPerf, LLM-Locust, guidellm)는 토큰 수준 정확도용. **k6 v2026.1.0** + **k6 Operator 1.0 GA(2025년 9월)** — 스트리밍 인지(streaming-aware), TestRun/PrivateLoadZone CRD를 통한 Kubernetes 네이티브 분산, CI/CD 게이트(gate)에 최적. Vegeta는 Go 기반 고정 속도(constant-rate) 포화용. Locust 2.43.3은 스트리밍을 위해서는 LLM-Locust 확장과 함께만 쓴다. 부하 패턴: 정상 상태(steady-state), 램프(ramp), 스파이크(spike)(오토스케일링 테스트), 소크(soak)(메모리 누수).
+> 전통적인 부하 테스터(load tester)는 스트리밍 응답, 가변 출력 길이, 토큰(token) 수준 지표, GPU 포화(saturation)를 위해 설계되지 않았다. 함정 두 가지가 대부분의 팀을 무너뜨린다. GIL 함정: Locust의 토큰 수준 측정은 Python GIL 아래에서 토큰화(tokenization)를 실행하는데, 이는 높은 동시성에서 요청 생성과 경쟁한다. 그러면 토큰화 백로그(backlog)가 보고되는 토큰 간 지연 시간(inter-token latency)을 부풀린다. 병목은 서버가 아니라 클라이언트 쪽이다. 프롬프트 균일성 함정: 루프 안의 동일한 프롬프트는 토큰 분포의 한 점만 테스트한다. 실제 트래픽은 가변 길이와 다양한 접두사 일치(prefix match)를 가진다. LLMPerf는 `--mean-input-tokens` + `--stddev-input-tokens`로 이를 해결한다. 2026년 도구 매핑: LLM 특화(GenAI-Perf, LLMPerf, LLM-Locust, guidellm)는 토큰 수준 정확도용. **k6 v2026.1.0** + **k6 Operator 1.0 GA(2025년 9월)**: 스트리밍 인지(streaming-aware), TestRun/PrivateLoadZone CRD를 통한 Kubernetes 네이티브 분산, CI/CD 게이트(gate)에 최적. Vegeta는 Go 기반 고정 속도(constant-rate) 포화용. Locust 2.43.3은 스트리밍을 위해서는 LLM-Locust 확장과 함께만 쓴다. 부하 패턴: 정상 상태(steady-state), 램프(ramp), 스파이크(spike)(오토스케일링 테스트), 소크(soak)(메모리 누수).
 
 **Type:** Build
 **Languages:** Python (stdlib, toy realistic-prompt generator + latency collector)
@@ -16,9 +16,9 @@
 
 ## 문제 (The Problem)
 
-LLM 엔드포인트를 동시 사용자 500명으로 k6 테스트했다. 버텼다. 배포했다. 프로덕션에서 실제 사용자 200명에 서비스가 무너졌다 — P99 TTFT가 폭발하고, GPU가 고정되었다.
+LLM 엔드포인트를 동시 사용자 500명으로 k6 테스트했다. 버텼다. 배포했다. 프로덕션에서 실제 사용자 200명에 서비스가 무너졌다. P99 TTFT가 폭발하고, GPU가 고정되었다.
 
-두 가지 일이 일어났다. 첫째, k6는 동일한 프롬프트 500개를 보냈다 — 요청 병합(request-coalescing)과 접두사 캐싱(prefix caching) 덕분에 실제로는 하나를 처리하면서도 500개의 동시 디코드(decode)를 처리하는 것처럼 보였다. 둘째, k6는 사용자 눈에 보이는 방식으로 스트리밍 응답의 토큰 간 지연 시간을 추적하지 않는다. 다양한 간격으로 도착하는 토큰 500개가 아니라 하나의 HTTP 연결을 볼 뿐이다.
+두 가지 일이 일어났다. 첫째, k6는 동일한 프롬프트 500개를 보냈다. 요청 병합(request-coalescing)과 접두사 캐싱(prefix caching) 덕분에 실제로는 하나를 처리하면서도 500개의 동시 디코드(decode)를 처리하는 것처럼 보였다. 둘째, k6는 사용자 눈에 보이는 방식으로 스트리밍 응답의 토큰 간 지연 시간을 추적하지 않는다. 다양한 간격으로 도착하는 토큰 500개가 아니라 하나의 HTTP 연결을 볼 뿐이다.
 
 LLM의 부하 테스트는 그 자체로 하나의 분야다.
 
@@ -32,35 +32,35 @@ Locust는 Python을 사용하며 GIL 아래에서 클라이언트 측 토큰화�
 
 ### 프롬프트 균일성 함정
 
-알려진 모든 부하 테스터는 프롬프트 하나를 설정하게 한다. 1만 회 반복 루프 테스트에서는 정확히 같은 프롬프트가 매번 전송된다. 서버는 매번 같은 접두사를 본다 — 접두사 캐시 적중(prefix cache hit)이 100%에 가까워지고, 처리량(throughput)이 훌륭해 보인다.
+알려진 모든 부하 테스터는 프롬프트 하나를 설정하게 한다. 1만 회 반복 루프 테스트에서는 정확히 같은 프롬프트가 매번 전송된다. 서버는 매번 같은 접두사를 본다. 접두사 캐시 적중(prefix cache hit)이 100%에 가까워지고, 처리량(throughput)이 훌륭해 보인다.
 
-해결: 프롬프트 분포에서 샘플링한다. LLMPerf는 `--mean-input-tokens 500 --stddev-input-tokens 150`을 쓴다 — 다양한 길이, 다양한 내용.
+해결: 프롬프트 분포에서 샘플링한다. LLMPerf는 `--mean-input-tokens 500 --stddev-input-tokens 150`을 쓴다. 다양한 길이, 다양한 내용.
 
 ### 네 가지 부하 패턴
 
-1. **정상 상태(Steady-state)** — 30~60분 동안 일정한 RPS. 잡아내는 것: 베이스라인(baseline) 성능 회귀(regression).
-2. **램프(Ramp)** — 15분에 걸쳐 RPS를 0에서 목표까지 선형 증가. 잡아내는 것: 용량 분기점(capacity breakpoint), 워밍업 이상.
-3. **스파이크(Spike)** — 갑작스러운 3~10배 RPS를 2분간, 그다음 복귀. 잡아내는 것: 오토스케일링 지연, 큐 포화(queue saturation), 콜드 스타트(cold-start) 영향.
-4. **소크(Soak)** — 4~8시간 정상 상태. 잡아내는 것: 메모리 누수, 커넥션 풀(connection-pool) 드리프트, 관측성(observability) 오버플로.
+1. **정상 상태(Steady-state)**: 30~60분 동안 일정한 RPS. 잡아내는 것: 베이스라인(baseline) 성능 회귀(regression).
+2. **램프(Ramp)**: 15분에 걸쳐 RPS를 0에서 목표까지 선형 증가. 잡아내는 것: 용량 분기점(capacity breakpoint), 워밍업 이상.
+3. **스파이크(Spike)**: 갑작스러운 3~10배 RPS를 2분간, 그다음 복귀. 잡아내는 것: 오토스케일링 지연, 큐 포화(queue saturation), 콜드 스타트(cold-start) 영향.
+4. **소크(Soak)**: 4~8시간 정상 상태. 잡아내는 것: 메모리 누수, 커넥션 풀(connection-pool) 드리프트, 관측성(observability) 오버플로.
 
 ### 2026 도구 매핑
 
-**LLMPerf**(Anyscale) — Python이지만 Rust 기반 토큰화. 평균/표준편차 프롬프트. 스트리밍 인지. 성능 실행의 최선 기본값.
+**LLMPerf**(Anyscale): Python이지만 Rust 기반 토큰화. 평균/표준편차 프롬프트. 스트리밍 인지. 성능 실행의 최선 기본값.
 
-**NVIDIA GenAI-Perf** — NVIDIA의 레퍼런스. Triton 클라이언트를 사용하며 지표 커버리지가 포괄적이다. 단, 그것의 ITL은 TTFT를 제외하고 LLMPerf의 것은 포함한다. 두 도구는 같은 서버에 대해 다른 TPOT를 낸다.
+**NVIDIA GenAI-Perf**: NVIDIA의 레퍼런스. Triton 클라이언트를 사용하며 지표 커버리지가 포괄적이다. 단, 그것의 ITL은 TTFT를 제외하고 LLMPerf의 것은 포함한다. 두 도구는 같은 서버에 대해 다른 TPOT를 낸다.
 
-**LLM-Locust**(TrueFoundry) — GIL 함정을 고치는 Locust 확장. 익숙한 Locust DSL + 스트리밍 지표.
+**LLM-Locust**(TrueFoundry): GIL 함정을 고치는 Locust 확장. 익숙한 Locust DSL + 스트리밍 지표.
 
-**guidellm** — 대규모 합성(synthetic) 벤치마킹.
+**guidellm**: 대규모 합성(synthetic) 벤치마킹.
 
 **k6 v2026.1.0** + **k6 Operator 1.0 GA(2025년 9월)**:
 - k6 자체(Go, 컴파일, GIL 없음)가 스트리밍 인지 지표를 추가했다.
 - k6 Operator는 Kubernetes 네이티브 분산 테스트를 위해 TestRun / PrivateLoadZone CRD를 사용한다.
 - CI/CD 게이트와 SLA 테스트에 최적.
 
-**Vegeta** — Go, k6보다 단순. 고정 속도 HTTP 포화. LLM 인지는 아니지만 게이트웨이(gateway) / 속도 제한(rate-limit) 테스트에 좋다.
+**Vegeta**: Go, k6보다 단순. 고정 속도 HTTP 포화. LLM 인지는 아니지만 게이트웨이(gateway) / 속도 제한(rate-limit) 테스트에 좋다.
 
-**Locust 2.43.3 기본(stock)** — LLM에 대해 GIL 함정이 있다. LLM-Locust 확장과 함께만 쓴다.
+**Locust 2.43.3 기본(stock)**: LLM에 대해 GIL 함정이 있다. LLM-Locust 확장과 함께만 쓴다.
 
 ### CI에서의 SLA 게이트
 
@@ -92,7 +92,7 @@ PR에서 k6를 다음과 같이 실행한다.
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행하라. 균일 분포 vs 현실적 분포를 비교하라 — 격차는 어디에 있는가?
+1. `code/main.py`를 실행하라. 균일 분포 vs 현실적 분포를 비교하라. 격차는 어디에 있는가?
 2. CI 게이트를 위한 k6 스크립트를 작성하라: 동시 100에서 TTFT P95 < 800ms, 실행 시간 5분.
 3. 소크 테스트가 시간당 50MB씩 메모리가 증가함을 보인다. 세 가지 원인과 그중에서 가려내기 위한 계측(instrumentation)을 명명하라.
 4. 10 RPS에서 100 RPS로 스파이크 테스트. Karpenter + vLLM production-stack이 갖춰져 있다면(Phase 17 · 03 + 18) 예상 복구 시간은 얼마인가?

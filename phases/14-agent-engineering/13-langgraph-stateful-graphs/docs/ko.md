@@ -31,7 +31,7 @@ LangGraph의 설계상 답: 상태는 일급(first-class) 타입 객체이고, �
 - **간선(Edges).** 노드 사이의 조건부 또는 직접 전이.
 - **진입과 종료(Entry and exit).** `START`와 `END` 센티널(sentinel) 노드가 경계를 표시한다.
 
-예: `classify`, `refund`, `bug`, `sales`, `done` 노드를 가진 에이전트 — 그래프로서의 라우팅 워크플로.
+예: `classify`, `refund`, `bug`, `sales`, `done` 노드를 가진 에이전트: 그래프로서의 라우팅 워크플로.
 
 ### 내구성 있는 실행
 
@@ -49,7 +49,7 @@ LangGraph 문서는 중요한 프로덕션 사용자로 Klarna, Uber, J.P. Morga
 
 ### 메모리
 
-단기(short-term, 한 실행 안에서 — 상태 안의 대화 기록)와 장기(long-term, 실행에 걸쳐 — 체크포인터와 별도의 장기 저장소를 통해 영속). LangGraph는 외부 메모리 시스템(Mem0, 커스텀)과 도구로 연동한다.
+단기(short-term, 한 실행 안에서(상태 안의 대화 기록)와 장기(long-term, 실행에 걸쳐) 체크포인터와 별도의 장기 저장소를 통해 영속). LangGraph는 외부 메모리 시스템(Mem0, 커스텀)과 도구로 연동한다.
 
 ### 세 가지 토폴로지
 
@@ -67,10 +67,10 @@ LangGraph 문서는 중요한 프로덕션 사용자로 Klarna, Uber, J.P. Morga
 
 `code/main.py`는 stdlib 상태 보존 그래프를 구현한다.
 
-- `State` — `messages`, `step`, `route`, `output`, `human_approval`을 가진 타입 딕셔너리.
-- `Node` — 상태를 받아 업데이트 딕셔너리를 반환하는 호출 가능 객체(callable).
-- `StateGraph` — 노드 + 간선 + 조건부 간선 + 실행 + 재개.
-- `SQLiteCheckpointer`(인메모리 가짜) — 매 노드 이후 상태를 직렬화하고, `load(session_id)`로 복원한다.
+- `State`: `messages`, `step`, `route`, `output`, `human_approval`을 가진 타입 딕셔너리.
+- `Node`: 상태를 받아 업데이트 딕셔너리를 반환하는 호출 가능 객체(callable).
+- `StateGraph`: 노드 + 간선 + 조건부 간선 + 실행 + 재개.
+- `SQLiteCheckpointer`(인메모리 가짜): 매 노드 이후 상태를 직렬화하고, `load(session_id)`로 복원한다.
 - 데모 그래프: classify -> branch(refund / bug / sales) -> human gate -> send.
 
 실행:
@@ -83,10 +83,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **LangGraph** — 레퍼런스, 프로덕션 준비 완료. `create_react_agent`, `create_supervisor`를 사용하거나 자신의 그래프를 만들어라.
-- **AutoGen v0.4**(Lesson 14) — 고동시성 시나리오를 위한 액터 모델 대안.
-- **Claude Agent SDK**(Lesson 17) — 내장 세션 저장소를 갖춘 관리형 하니스(managed harness).
-- **커스텀** — 상태 형태나 체크포인터 백엔드에 대한 정확한 제어가 필요할 때.
+- **LangGraph**: 레퍼런스, 프로덕션 준비 완료. `create_react_agent`, `create_supervisor`를 사용하거나 자신의 그래프를 만들어라.
+- **AutoGen v0.4**(Lesson 14): 고동시성 시나리오를 위한 액터 모델 대안.
+- **Claude Agent SDK**(Lesson 17): 내장 세션 저장소를 갖춘 관리형 하니스(managed harness).
+- **커스텀**: 상태 형태나 체크포인터 백엔드에 대한 정확한 제어가 필요할 때.
 
 ## 산출물 (Ship It)
 
@@ -115,7 +115,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 레퍼런스 문서
-- [langgraph-supervisor reference](https://reference.langchain.com/python/langgraph/supervisor/) — 슈퍼바이저 패턴 API
-- [AutoGen v0.4, Microsoft Research](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/) — 액터 모델 대안
-- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview) — 세션 저장소와 서브에이전트
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 레퍼런스 문서
+- [langgraph-supervisor reference](https://reference.langchain.com/python/langgraph/supervisor/): 슈퍼바이저 패턴 API
+- [AutoGen v0.4, Microsoft Research](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/): 액터 모델 대안
+- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview): 세션 저장소와 서브에이전트

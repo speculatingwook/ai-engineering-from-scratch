@@ -1,6 +1,6 @@
 # WMDP와 이중 용도 역량 평가 (WMDP and Dual-Use Capability Evaluation)
 
-> Li 외, "The WMDP Benchmark: Measuring and Reducing Malicious Use With Unlearning"(ICML 2024, arXiv:2403.03218). 생물보안(1,520), 사이버 보안(2,225), 화학(412)에 걸친 4,157개의 객관식 문항. 문항은 "황색 구역(yellow zone)" — 인접한 조력 지식(proximate enabling knowledge) — 에서 작동하며, 다중 전문가 검토와 ITAR/EAR 법적 준수로 걸러진다. 이중 목적: 이중 용도(dual-use) 역량의 대리 평가, 그리고 언러닝(unlearning) 벤치마크(동반 RMU 방법은 일반 역량을 보존하면서 WMDP 성능을 낮춘다). 2024-2025년 현장 서사: 초기 OpenAI/Anthropic 2024 평가는 인터넷 검색 대비 "미미한 상승(mild uplift)"을 보고했다; 2025년 4월 OpenAI의 Preparedness Framework v2는 모델이 "초보자가 알려진 생물학적 위협을 만드는 것을 의미 있게 돕기 직전(on the cusp)"이라고 말했다. Anthropic의 생물무기 획득 시험은 2.53배 상승을 보였고, 이는 ASL-3을 배제하기에 불충분했다.
+> Li 외, "The WMDP Benchmark: Measuring and Reducing Malicious Use With Unlearning"(ICML 2024, arXiv:2403.03218). 생물보안(1,520), 사이버 보안(2,225), 화학(412)에 걸친 4,157개의 객관식 문항. 문항은 "황색 구역(yellow zone)"(인접한 조력 지식(proximate enabling knowledge))에서 작동하며, 다중 전문가 검토와 ITAR/EAR 법적 준수로 걸러진다. 이중 목적: 이중 용도(dual-use) 역량의 대리 평가, 그리고 언러닝(unlearning) 벤치마크(동반 RMU 방법은 일반 역량을 보존하면서 WMDP 성능을 낮춘다). 2024-2025년 현장 서사: 초기 OpenAI/Anthropic 2024 평가는 인터넷 검색 대비 "미미한 상승(mild uplift)"을 보고했다; 2025년 4월 OpenAI의 Preparedness Framework v2는 모델이 "초보자가 알려진 생물학적 위협을 만드는 것을 의미 있게 돕기 직전(on the cusp)"이라고 말했다. Anthropic의 생물무기 획득 시험은 2.53배 상승을 보였고, 이는 ASL-3을 배제하기에 불충분했다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, WMDP-shaped uplift evaluation harness)
@@ -41,9 +41,9 @@
 
 1. **2024년 "미미한 상승".** 초기 OpenAI와 Anthropic의 Preparedness/RSP 평가는 생물 인접 작업을 시도하는 초보자에 대해 인터넷 검색 대비 작은 이점을 보고했다. 공개 프레이밍: 프런티어 모델이 돕긴 하지만, Google보다 실질적으로 더 많이는 아니다.
 
-2. **2025년 4월 "직전".** OpenAI의 Preparedness Framework v2는 모델이 "초보자가 알려진 생물학적 위협을 만드는 것을 의미 있게 돕기 직전"이라고 보고했다. 역량 주장이 아니라 — 그 직전 시점이 가깝다는 경고다.
+2. **2025년 4월 "직전".** OpenAI의 Preparedness Framework v2는 모델이 "초보자가 알려진 생물학적 위협을 만드는 것을 의미 있게 돕기 직전"이라고 보고했다. 역량 주장이 아니라. 그 직전 시점이 가깝다는 경고다.
 
-3. **Anthropic의 2025년 생물무기 획득 시험.** 초보자 참가자를 대상으로 한 통제 연구로, 획득 단계 작업에서의 상대적 성공을 측정했다. 2.53배 상승을 보고했다. ASL-3(Lesson 18)을 배제하기에 불충분하다 — Anthropic의 Responsible Scaling Policy 티어 3의 임계값이 충족되거나 근접한다.
+3. **Anthropic의 2025년 생물무기 획득 시험.** 초보자 참가자를 대상으로 한 통제 연구로, 획득 단계 작업에서의 상대적 성공을 측정했다. 2.53배 상승을 보고했다. ASL-3(Lesson 18)을 배제하기에 불충분하다. Anthropic의 Responsible Scaling Policy 티어 3의 임계값이 충족되거나 근접한다.
 
 ### 초보자 상대 대 전문가 절대
 
@@ -57,15 +57,15 @@
 ### 측정 함정
 
 WMDP는 역량 대리 지표이지 배포 측정이 아니다. WMDP에서 높은 점수를 받는 모델이 실제로 초보자에게 악용 가능한지는 다음에 따라 다를 수 있다:
-- 유도 저항성(Elicitation resistance) — 안전 필터를 건드리지 않고 역량을 끌어내기가 얼마나 어려운가
-- 암묵지(Tacit knowledge) — 정보가 아니라 실험실 기술을 요구하는 역량
-- 실행 장벽(Execution barriers) — 조달, 장비
+- 유도 저항성(Elicitation resistance): 안전 필터를 건드리지 않고 역량을 끌어내기가 얼마나 어려운가
+- 암묵지(Tacit knowledge): 정보가 아니라 실험실 기술을 요구하는 역량
+- 실행 장벽(Execution barriers): 조달, 장비
 
 Anthropic의 2025년 생물무기 획득 시험은 WMDP 방식 역량 위에 초보자 유도 계층을 더한다: 객관식 역량이 아니라 실제 작업 성공을 측정한다.
 
 ### Phase 18에서의 위치
 
-Lesson 12-16은 모델 출력에 대한 공격과 방어 도구다. Lesson 17은 이중 용도 역량 계층 — 프런티어 안전 프레임워크(Lesson 18)가 평가하는 측정 — 이다. Lesson 30은 현재 2026년 사이버/생물/화학/핵 상승 증거로 이 아크를 마무리한다.
+Lesson 12-16은 모델 출력에 대한 공격과 방어 도구다. Lesson 17은 이중 용도 역량 계층(프런티어 안전 프레임워크(Lesson 18)가 평가하는 측정) 이다. Lesson 30은 현재 2026년 사이버/생물/화학/핵 상승 증거로 이 아크를 마무리한다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -96,12 +96,12 @@ Lesson 12-16은 모델 출력에 대한 공격과 방어 도구다. Lesson 17은
 | RMU | "언러닝 베이스라인" | Representation Misdirection for Unlearning; WMDP 점수를 낮추고 일반 역량을 보존 |
 | 초보자 상대 상승 (Novice-relative uplift) | "비전문가를 얼마나 돕는가" | 초보자에게 현상 유지 인터넷 검색 대비 곱셈적 이점 |
 | 전문가 절대 역량 (Expert-absolute capability) | "전문가의 상한" | 동기 있는 전문가가 모델에서 추출 가능한 최대 정보 |
-| 획득 단계 작업 (Acquisition-phase task) | "합성 이전 단계" | 조달, 장비, 허가 — 피해 경로의 가장 초기 부분 |
+| 획득 단계 작업 (Acquisition-phase task) | "합성 이전 단계" | 조달, 장비, 허가: 피해 경로의 가장 초기 부분 |
 | ITAR/EAR | "수출 통제 준수" | 특정 조력 지식의 출판을 제약하는 법적 프레임워크 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al. — The WMDP Benchmark (arXiv:2403.03218, ICML 2024)](https://arxiv.org/abs/2403.03218) — 벤치마크 및 RMU 논문
-- [OpenAI — Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) — "on the cusp" 표현
-- [Anthropic — Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) — ASL-3 생물 임계값 및 획득 시험 결과
-- [DeepMind — Frontier Safety Framework v3.0 (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) — 생물 상승 CCL
+- [Li et al.(The WMDP Benchmark (arXiv:2403.03218, ICML 2024)](https://arxiv.org/abs/2403.03218)) 벤치마크 및 RMU 논문
+- [OpenAI(Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) "on the cusp" 표현
+- [Anthropic(Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL-3 생물 임계값 및 획득 시험 결과
+- [DeepMind(Frontier Safety Framework v3.0 (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) 생물 상승 CCL

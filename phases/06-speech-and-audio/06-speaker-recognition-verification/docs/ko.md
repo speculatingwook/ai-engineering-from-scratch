@@ -1,6 +1,6 @@
 # 화자 인식 & 검증
 
-> ASR은 "그들이 무엇을 말했는가?"를 묻는다. 화자 인식(speaker recognition)은 "누가 말했는가?"를 묻는다. 수학은 같아 보인다 — 임베딩(embedding)에 코사인(cosine) — 하지만 모든 프로덕션 결정은 단 하나의 EER 숫자에 달려 있다.
+> ASR은 "그들이 무엇을 말했는가?"를 묻는다. 화자 인식(speaker recognition)은 "누가 말했는가?"를 묻는다. 수학은 같아 보인다. 임베딩(embedding)에 코사인(cosine): 하지만 모든 프로덕션 결정은 단 하나의 EER 숫자에 달려 있다.
 
 **Type:** Build
 **Languages:** Python
@@ -13,7 +13,7 @@
 
 2018년 이전: GMM-UBM + i-vector. 합리적인 EER이지만 채널 시프트(channel shift)(전화 대 노트북)와 감정에 취약하다. 2018–2022: x-vector(각 마진(angular margin)으로 학습된 TDNN 백본). 2022년 이후: ECAPA-TDNN과 WavLM-large 임베딩. 2026년 기준 이 분야는 세 개의 모델과 하나의 지표가 지배한다.
 
-그 지표는 **EER** — 동등 오류율(Equal Error Rate)이다. 오수락률(False Accept Rate) = 오거부율(False Reject Rate)이 되도록 결정 임계값(threshold)을 설정하라. 그 교차점이 EER이다. 모든 논문, 모든 리더보드, 모든 조달 회의에서 쓰인다.
+그 지표는 **EER**: 동등 오류율(Equal Error Rate)이다. 오수락률(False Accept Rate) = 오거부율(False Reject Rate)이 되도록 결정 임계값(threshold)을 설정하라. 그 교차점이 EER이다. 모든 논문, 모든 리더보드, 모든 조달 회의에서 쓰인다.
 
 ## 개념 (The Concept)
 
@@ -23,7 +23,7 @@
 
 **ECAPA-TDNN(2020, 2026년에도 여전히 지배적).** Emphasized Channel Attention, Propagation and Aggregation - Time-Delay Neural Network. 스퀴즈-여기(squeeze-excitation)를 갖춘 1D 컨볼루션 블록, 멀티헤드 어텐션 풀링(multi-head attention pooling), 그 뒤를 잇는 192차원으로의 선형 층. VoxCeleb 1+2(2,700명 화자, 110만 발화)에서 Additive Angular Margin 손실(AAM-softmax)로 학습되었다.
 
-**WavLM-SV(2022년 이후).** 사전 학습된 WavLM-large SSL 백본을 AAM 손실로 파인튜닝(fine-tuning)한다. 더 높은 품질이지만 더 느리다 — 15 MB 대 300+ MB.
+**WavLM-SV(2022년 이후).** 사전 학습된 WavLM-large SSL 백본을 AAM 손실로 파인튜닝(fine-tuning)한다. 더 높은 품질이지만 더 느리다. 15 MB 대 300+ MB.
 
 **x-vector(베이스라인).** TDNN + 통계 풀링(statistics pooling). 고전적; CPU / 엣지(edge)에서 여전히 유용하다.
 
@@ -64,7 +64,7 @@ def embed_mfcc_stats(signal, sr):
     return mean + std  # 26-d
 ```
 
-SOTA에는 한참 못 미친다 — 교육용일 뿐이다. `code/main.py`는 이것을 합성 화자 데이터에 대한 개념 증명(proof-of-concept)으로 사용한다.
+SOTA에는 한참 못 미친다. 교육용일 뿐이다. `code/main.py`는 이것을 합성 화자 데이터에 대한 개념 증명(proof-of-concept)으로 사용한다.
 
 ### 단계 2: 코사인 유사도 + 임계값
 
@@ -161,12 +161,12 @@ for turn, _, speaker in diarization.itertracks(yield_label=True):
 | 등록(Enrollment) | 등록하기 | 화자의 참조 임베딩을 계산하는 것. |
 | AAM-softmax | 그 손실 | 가산 각 마진을 갖춘 softmax; 클러스터 분리를 강제함. |
 | PLDA | 고전적 점수화 | 확률적 LDA; 임베딩 위의 우도비 점수화. |
-| DER | 화자 분리 지표 | 화자 분리 오류율(Diarization Error Rate) — 누락 + 오경보 + 혼동. |
+| DER | 화자 분리 지표 | 화자 분리 오류율(Diarization Error Rate): 누락 + 오경보 + 혼동. |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Snyder et al. (2018). X-Vectors: Robust DNN Embeddings for Speaker Recognition](https://www.danielpovey.com/files/2018_icassp_xvectors.pdf) — 고전적인 딥 임베딩 논문.
-- [Desplanques et al. (2020). ECAPA-TDNN](https://arxiv.org/abs/2005.07143) — 2020–2026년 지배적 아키텍처.
-- [Chen et al. (2022). WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing](https://arxiv.org/abs/2110.13900) — SV와 화자 분리를 위한 SSL 백본.
-- [Bredin et al. (2023). pyannote.audio 3.1](https://github.com/pyannote/pyannote-audio) — 프로덕션 화자 분리 + 임베딩 스택.
-- [VoxCeleb leaderboard (updated 2026)](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/) — 모델에 걸친 현재 EER 순위.
+- [Snyder et al. (2018). X-Vectors: Robust DNN Embeddings for Speaker Recognition](https://www.danielpovey.com/files/2018_icassp_xvectors.pdf): 고전적인 딥 임베딩 논문.
+- [Desplanques et al. (2020). ECAPA-TDNN](https://arxiv.org/abs/2005.07143): 2020–2026년 지배적 아키텍처.
+- [Chen et al. (2022). WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing](https://arxiv.org/abs/2110.13900): SV와 화자 분리를 위한 SSL 백본.
+- [Bredin et al. (2023). pyannote.audio 3.1](https://github.com/pyannote/pyannote-audio): 프로덕션 화자 분리 + 임베딩 스택.
+- [VoxCeleb leaderboard (updated 2026)](https://www.robots.ox.ac.uk/~vgg/data/voxceleb/): 모델에 걸친 현재 EER 순위.

@@ -28,7 +28,7 @@ Phase 7 · Lesson 16이 준 것은 수학이었고, 이 레슨이 주는 것은 
 
 ### 불변항: Leviathan 거부 샘플링 (The invariant: Leviathan rejection sampling)
 
-`p(t)`를 어떤 접두사가 주어졌을 때 다음 토큰에 대한 드래프트의 분포로, `q(t)`를 검증자의 분포로 두자. 드래프트 토큰 `d ~ p`를 샘플링한다. 확률 `min(1, q(d) / p(d))`로 받아들인다. 거부 시, 잔차 분포 `(q - p)_+ / ||(q - p)_+||_1`에서 샘플링한다. 결과 샘플은 `q`에 따라 분포된다. 이는 `p`가 얼마나 나쁘든 참이다 — 나쁠수록 더 자주 거부하지만, 출력은 정확하게 남는다.
+`p(t)`를 어떤 접두사가 주어졌을 때 다음 토큰에 대한 드래프트의 분포로, `q(t)`를 검증자의 분포로 두자. 드래프트 토큰 `d ~ p`를 샘플링한다. 확률 `min(1, q(d) / p(d))`로 받아들인다. 거부 시, 잔차 분포 `(q - p)_+ / ||(q - p)_+||_1`에서 샘플링한다. 결과 샘플은 `q`에 따라 분포된다. 이는 `p`가 얼마나 나쁘든 참이다. 나쁠수록 더 자주 거부하지만, 출력은 정확하게 남는다.
 
 이런 호출 `N`개를 `prefix + d_1 + ... + d_N`에 대한 하나의 검증자 순방향 패스로 연속해서 쌓는다. 검증자는 `q_1, q_2, ..., q_{N+1}`을 동시에 반환한다. 왼쪽에서 오른쪽으로 훑는다. 위치 `j`에서의 첫 거부에서, `residual(q_j, p_j)`에서 샘플링하고 멈춘다. 완전 수락 시, `q_{N+1}`에서 보너스 토큰 하나를 샘플링한다.
 
@@ -48,7 +48,7 @@ E[accepted] = (1 - α^(N+1)) / (1 - α)
 
 **바닐라 추측(Vanilla speculative, Leviathan, 2023).** 드래프트 모델은 같은 가족의 독립적으로 학습된 더 작은 LLM이다. 연결하기 쉽고, `α ≈ 0.6`, 속도 향상은 잘해야 약 2배.
 
-**EAGLE-1 (Li et al., 2024).** 드래프트는 작은 트랜스포머다 — 보통 한 개나 두 개 층 — 검증자의 마지막 층 은닉 상태를 입력으로 받아 다음 토큰을 직접 예측한다. 드래프트가 검증자의 특성 표현(feature representation)을 보기 때문에, 그 분포는 검증자의 분포에 훨씬 가깝다. `α`가 0.7–0.8로 오른다.
+**EAGLE-1 (Li et al., 2024).** 드래프트는 작은 트랜스포머다. 보통 한 개나 두 개 층: 검증자의 마지막 층 은닉 상태를 입력으로 받아 다음 토큰을 직접 예측한다. 드래프트가 검증자의 특성 표현(feature representation)을 보기 때문에, 그 분포는 검증자의 분포에 훨씬 가깝다. `α`가 0.7–0.8로 오른다.
 
 **EAGLE-2 (Li et al., 2024).** 동적 드래프트 트리(dynamic draft tree)를 추가한다. `N`개 토큰의 단일 시퀀스를 제안하는 대신, 후보의 작은 트리를 제안하고, 하나의 순방향 패스로 검증자가 각각을 채점하고(트리 어텐션, tree attention), 가장 높은 확률의 경로를 훑는다. 드래프트 길이가 스텝마다 적응적(adaptive)이 된다. 수락된 경로 토큰당 `α`가 0.85 위로 오른다.
 
@@ -103,7 +103,7 @@ def residual(q, p):
 
 ### 4단계: KV 롤백 기록
 
-시뮬레이터는 워커(worker)당 논리적 `kv_length`를 추적한다. `k`개 드래프트의 수락 시, `kv_length += k`. 위치 `j`에서의 거부 시, 캐시는 이미 `j`를 지나 쓰여 있지만, 논리적 길이는 `prefix_length + j + 1`로 설정된다 — 보정 토큰 하나 너머. 후속 읽기는 논리적 길이로 잘린다.
+시뮬레이터는 워커(worker)당 논리적 `kv_length`를 추적한다. `k`개 드래프트의 수락 시, `kv_length += k`. 위치 `j`에서의 거부 시, 캐시는 이미 `j`를 지나 쓰여 있지만, 논리적 길이는 `prefix_length + j + 1`로 설정된다. 보정 토큰 하나 너머. 후속 읽기는 논리적 길이로 잘린다.
 
 ### 5단계: Leviathan 검사
 
@@ -161,22 +161,22 @@ H100의 배치 64에서 EAGLE-3을 사용한 SGLang: EAGLE-3 논문에 따르면
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
 | Leviathan 규칙 | "min(1, p에 대한 q)" | 확률 `min(1, q(d)/p(d))`로 베르누이(Bernoulli) 수락/거부, 거부 시 잔차에서 샘플링하면 검증자 분포를 정확히 보존 |
-| 잔차 분포(Residual distribution) | "(q 빼기 p) 양수, 정규화" | 0에서 클램프(clamp)되고 재정규화된 `(q - p)_+` — 거부 시 샘플링할 올바른 분포 |
+| 잔차 분포(Residual distribution) | "(q 빼기 p) 양수, 정규화" | 0에서 클램프(clamp)되고 재정규화된 `(q - p)_+`: 거부 시 샘플링할 올바른 분포 |
 | 수락률 α(Acceptance rate α) | "드래프트가 얼마나 자주 맞는지" | 거부 규칙 하에서의 토큰당 기대 베르누이 성공 확률; 모든 속도 향상 수학을 좌우함 |
 | EAGLE-1 | "은닉 상태 드래프트" | 검증자의 마지막 층 은닉 상태에 조건화된 작은 트랜스포머 드래프트 (Li et al., 2024) |
 | EAGLE-2 | "동적 드래프트 트리" | EAGLE-1 더하기 하나의 검증자 패스에서 트리 어텐션으로 채점되는 후보 연속의 트리 |
 | EAGLE-3 | "학습 시점 테스트" | 특성 예측 손실을 버리고, 학습 중 드래프트에 자신의 출력을 먹이며 직접 토큰 예측으로 학습 |
-| 학습 시점 테스트(Training-time test, TTT) | "노출 편향 수정" | 학습 중 드래프트를 자기회귀적으로 실행해 학습과 테스트 입력 분포를 일치 — 예약 샘플링의 직접 유사물 |
+| 학습 시점 테스트(Training-time test, TTT) | "노출 편향 수정" | 학습 중 드래프트를 자기회귀적으로 실행해 학습과 테스트 입력 분포를 일치: 예약 샘플링의 직접 유사물 |
 | KV 롤백(KV rollback) | "거부된 드래프트 되돌리기" | 거부 후 검증자의 KV 캐시를 수락된 접두사 길이로 재설정하는 기록 |
 | 보너스 토큰(Bonus token) | "공짜로 받는 것" | 모든 `N`개 드래프트가 수락되면, 추가 검증자 비용 없이 `q_{N+1}`에서 하나를 더 샘플링 |
 | 트리 어텐션(Tree attention) | "많은 후보를 한 번에 검증" | 드래프트 트리의 토폴로지를 존중하는 비인과 마스크가 있는 어텐션; 하나의 순방향 패스에서 트리의 모든 노드에 대해 `q_i`를 계산 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Leviathan, Kalman, Matias — Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192, ICML 2023)](https://arxiv.org/abs/2211.17192) — 기초 논문과 동등성 정리
-- [Chen et al. — Accelerating Large Language Model Decoding with Speculative Sampling (arXiv:2302.01318)](https://arxiv.org/abs/2302.01318) — 깔끔한 증명을 곁들인 동시의 독립적 도입
-- [Li et al. — EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077) — EAGLE-1, 은닉 상태 조건화 드래프트
-- [Li et al. — EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858) — 동적 트리 탐색
-- [Li et al. — EAGLE-3: Scaling up Inference Acceleration via Training-Time Test (arXiv:2503.01840, NeurIPS 2025)](https://arxiv.org/abs/2503.01840) — 2026년 프로덕션 기본값
-- [Cai et al. — Medusa: Multiple Decoding Heads (arXiv:2401.10774)](https://arxiv.org/abs/2401.10774) — 대안적 드래프트 없는 접근법
-- [vLLM Speculative Decoding documentation](https://docs.vllm.ai/en/latest/features/spec_decode.html) — 모든 전략이 연결된 표준적인 프로덕션 참조
+- [Leviathan, Kalman, Matias(Fast Inference from Transformers via Speculative Decoding (arXiv:2211.17192, ICML 2023)](https://arxiv.org/abs/2211.17192)) 기초 논문과 동등성 정리
+- [Chen et al.(Accelerating Large Language Model Decoding with Speculative Sampling (arXiv:2302.01318)](https://arxiv.org/abs/2302.01318)) 깔끔한 증명을 곁들인 동시의 독립적 도입
+- [Li et al.(EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077)) EAGLE-1, 은닉 상태 조건화 드래프트
+- [Li et al.(EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858)) 동적 트리 탐색
+- [Li et al.(EAGLE-3: Scaling up Inference Acceleration via Training-Time Test (arXiv:2503.01840, NeurIPS 2025)](https://arxiv.org/abs/2503.01840)) 2026년 프로덕션 기본값
+- [Cai et al.(Medusa: Multiple Decoding Heads (arXiv:2401.10774)](https://arxiv.org/abs/2401.10774)) 대안적 드래프트 없는 접근법
+- [vLLM Speculative Decoding documentation](https://docs.vllm.ai/en/latest/features/spec_decode.html): 모든 전략이 연결된 표준적인 프로덕션 참조

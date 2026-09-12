@@ -1,4 +1,4 @@
-# Whisper — 아키텍처 & 파인튜닝
+# Whisper: 아키텍처 & 파인튜닝
 
 > Whisper는 30초 윈도우의 트랜스포머(Transformer) 인코더-디코더(encoder-decoder)이며, 68만 시간의 다국어 약한 지도(weakly-supervised) 오디오-텍스트 쌍으로 학습되었다. 하나의 아키텍처, 여러 과제, 99개 언어에 걸친 견고함. 2026년의 레퍼런스 ASR이다.
 
@@ -36,9 +36,9 @@ Large-v3는 15.5억 파라미터(parameter)를 가진다. Turbo는 (32층에서)
 <|startoftranscript|><|en|><|transcribe|><|notimestamps|> Hello world.<|endoftext|>
 ```
 
-- `<|en|>` — 언어 태그; 번역-대-전사 동작을 강제한다.
-- `<|transcribe|>` 또는 `<|translate|>` — 임의 언어 입력에서 영어 출력을 번역하거나, 있는 그대로 전사한다.
-- `<|notimestamps|>` — 단어 수준 타임스탬프를 건너뛴다(더 빠름).
+- `<|en|>`: 언어 태그; 번역-대-전사 동작을 강제한다.
+- `<|transcribe|>` 또는 `<|translate|>`: 임의 언어 입력에서 영어 출력을 번역하거나, 있는 그대로 전사한다.
+- `<|notimestamps|>`: 단어 수준 타임스탬프를 건너뛴다(더 빠름).
 
 하나의 모델로 여러 과제를 처리하게 만드는 것이 바로 이 프롬프트다. `<|en|>`을 `<|fr|>`로 바꾸면 프랑스어를 전사한다.
 
@@ -147,7 +147,7 @@ with torch.inference_mode():
 | 스트리밍(2초 지연) | Whisper-Streaming 또는 Parakeet-TDT |
 | 단어 수준 타임스탬프 | WhisperX(wav2vec 2.0을 통한 강제 정렬) |
 
-`faster-whisper`(CTranslate2 백엔드)는 2026년 가장 빠른 CPU+GPU 추론 런타임이다 — 동일한 출력으로 바닐라보다 4배 빠르다.
+`faster-whisper`(CTranslate2 백엔드)는 2026년 가장 빠른 CPU+GPU 추론 런타임이다. 동일한 출력으로 바닐라보다 4배 빠르다.
 
 ## 2026년에도 여전히 출시되는 함정들 (Pitfalls that still ship in 2026)
 
@@ -180,8 +180,8 @@ with torch.inference_mode():
 
 ## 더 읽을거리 (Further Reading)
 
-- [Radford et al. (2022). Whisper paper](https://arxiv.org/abs/2212.04356) — 원조 아키텍처와 학습 레시피.
-- [OpenAI (2024). Whisper Large-v3-turbo release](https://github.com/openai/whisper/discussions/2363) — 4층 디코더, 8배 속도 향상.
-- [Bain et al. (2023). WhisperX](https://arxiv.org/abs/2303.00747) — 장문, 단어 정렬, 화자 분리.
-- [Systran — faster-whisper repo](https://github.com/SYSTRAN/faster-whisper) — CTranslate2 기반, 4배 빠름.
-- [HuggingFace — Whisper fine-tune tutorial](https://huggingface.co/blog/fine-tune-whisper) — 정전 격 LoRA / 전체 파인튜닝 안내.
+- [Radford et al. (2022). Whisper paper](https://arxiv.org/abs/2212.04356): 원조 아키텍처와 학습 레시피.
+- [OpenAI (2024). Whisper Large-v3-turbo release](https://github.com/openai/whisper/discussions/2363): 4층 디코더, 8배 속도 향상.
+- [Bain et al. (2023). WhisperX](https://arxiv.org/abs/2303.00747): 장문, 단어 정렬, 화자 분리.
+- [Systran(faster-whisper repo](https://github.com/SYSTRAN/faster-whisper)) CTranslate2 기반, 4배 빠름.
+- [HuggingFace(Whisper fine-tune tutorial](https://huggingface.co/blog/fine-tune-whisper)) 정전 격 LoRA / 전체 파인튜닝 안내.

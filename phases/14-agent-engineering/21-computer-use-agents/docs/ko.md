@@ -24,7 +24,7 @@
 
 - Claude 3.5 Sonnet, 이후 Claude 4 / 4.5. 퍼블릭 베타.
 - 비전 기반: 스크린샷 입력, 키보드/마우스 명령 출력.
-- OS 접근성 API 없음 — Claude는 픽셀을 읽는다.
+- OS 접근성 API 없음: Claude는 픽셀을 읽는다.
 - 구현에는 세 조각이 필요하다: 에이전트 루프, `computer` 도구(스키마가 모델에 내장되어 있으며 개발자가 설정 불가), 가상 디스플레이(Linux에서 Xvfb).
 - Claude는 기준점으로부터 목표 위치까지 픽셀을 세도록 학습되어, 해상도 독립적인 좌표를 생성한다.
 
@@ -65,9 +65,9 @@
 
 ### 언제 무엇을 선택할까
 
-- **Claude computer use** — 가장 풍부한 데스크톱 지원; Ubuntu/Linux 자동화에 최적.
-- **OpenAI CUA** — ChatGPT 통합; 소비자 대면 출시 경로가 쉬움.
-- **Gemini 2.5 Computer Use** — 브라우저 전용; 가장 낮은 지연 시간; 스텝마다 안전 내장.
+- **Claude computer use**: 가장 풍부한 데스크톱 지원; Ubuntu/Linux 자동화에 최적.
+- **OpenAI CUA**: ChatGPT 통합; 소비자 대면 출시 경로가 쉬움.
+- **Gemini 2.5 Computer Use**: 브라우저 전용; 가장 낮은 지연 시간; 스텝마다 안전 내장.
 
 ### 이 패턴이 잘못되는 지점
 
@@ -115,16 +115,16 @@ python3 code/main.py
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
 | Computer use | "컴퓨터를 운전하는 에이전트" | 비전 기반 입력 + 키보드/마우스 출력 |
-| Accessibility APIs | "OS UI API" | Claude / OpenAI CUA / Gemini가 사용하지 않음 — 순수 비전 |
+| Accessibility APIs | "OS UI API" | Claude / OpenAI CUA / Gemini가 사용하지 않음: 순수 비전 |
 | Per-step safety | "동작 가드" | 모든 동작 전에 분류기가 실행되어 안전하지 않은 것을 차단 |
 | Untrusted input | "화면 내용" | 스크린샷, DOM, 도구 출력; 허가가 아님 |
 | Virtual display | "Xvfb" | 에이전트를 위해 화면을 렌더링하는 헤드리스 X 서버 |
 | Online-Mind2Web | "라이브 웹 벤치마크" | Gemini 2.5가 보고하는 실제 웹 내비게이션 벤치마크 |
-| Sensitive action | "가드된 동작" | 로그인, 구매, 삭제 — 인간 개입 필요 |
+| Sensitive action | "가드된 동작" | 로그인, 구매, 삭제: 인간 개입 필요 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use) — Claude의 설계
-- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/) — CUA / Operator 출시
-- [Google, Gemini 2.5 Computer Use](https://blog.google/technology/google-deepmind/gemini-computer-use-model/) — 브라우저 전용, 스텝마다 안전
-- [Greshake et al., Indirect Prompt Injection (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173) — 신뢰할 수 없는 입력 위협 모델
+- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use): Claude의 설계
+- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/): CUA / Operator 출시
+- [Google, Gemini 2.5 Computer Use](https://blog.google/technology/google-deepmind/gemini-computer-use-model/): 브라우저 전용, 스텝마다 안전
+- [Greshake et al., Indirect Prompt Injection (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173): 신뢰할 수 없는 입력 위협 모델

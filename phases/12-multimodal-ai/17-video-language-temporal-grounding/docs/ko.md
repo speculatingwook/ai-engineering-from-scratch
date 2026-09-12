@@ -48,7 +48,7 @@ VideoChat은 Video-LLaMA 아이디어를 유지하되 오디오를 빼고 단순
 
 ### Qwen2.5-VL과 TMRoPE
 
-Qwen2.5-VL은 TMRoPE — Temporal-Modality Rotary Position Embedding을 도입했다. 각 패치 토큰이 (t, h, w) 위치를 담는데, 여기서 t는 (프레임 인덱스가 아니라) 실제 타임스탬프다.
+Qwen2.5-VL은 TMRoPE: Temporal-Modality Rotary Position Embedding을 도입했다. 각 패치 토큰이 (t, h, w) 위치를 담는데, 여기서 t는 (프레임 인덱스가 아니라) 실제 타임스탬프다.
 
 단순 시간 임베딩과의 주요 차이:
 

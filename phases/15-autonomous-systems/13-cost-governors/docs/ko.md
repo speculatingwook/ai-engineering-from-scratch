@@ -1,6 +1,6 @@
 # 액션 예산, 반복 상한, 그리고 비용 거버너(Cost Governor)
 
-> 어느 중간 규모 전자상거래 에이전트(agent)의 월간 LLM 비용은 팀이 "주문 추적" 스킬을 활성화한 뒤 1,200달러에서 4,800달러로 뛰었다. 가격 책정 버그가 아니다. 새로운 루프를 찾아 그 안에서 계속 지출한 에이전트다. Microsoft의 Agent Governance Toolkit(2026년 4월 2일)은 이 부류에 대한 방어를 성문화한다: 요청당 `max_tokens`, 과제당 토큰(token) 및 달러 예산, 일/월 단위 상한, 반복 상한, 계층형 모델 라우팅, 프롬프트 캐싱(prompt caching), 컨텍스트 윈도잉(context windowing), 비싼 액션에 대한 HITL 체크포인트, 예산 초과 시 킬 스위치(kill switch). Anthropic의 Claude Code Agent SDK는 같은 기본 요소를 다른 이름으로 출하한다. 금융 속도 제한(financial velocity limit) — 예를 들어 10분에 50달러 초과 시 접근 차단 — 은 월간 상한보다 루프를 더 빨리 잡는다.
+> 어느 중간 규모 전자상거래 에이전트(agent)의 월간 LLM 비용은 팀이 "주문 추적" 스킬을 활성화한 뒤 1,200달러에서 4,800달러로 뛰었다. 가격 책정 버그가 아니다. 새로운 루프를 찾아 그 안에서 계속 지출한 에이전트다. Microsoft의 Agent Governance Toolkit(2026년 4월 2일)은 이 부류에 대한 방어를 성문화한다: 요청당 `max_tokens`, 과제당 토큰(token) 및 달러 예산, 일/월 단위 상한, 반복 상한, 계층형 모델 라우팅, 프롬프트 캐싱(prompt caching), 컨텍스트 윈도잉(context windowing), 비싼 액션에 대한 HITL 체크포인트, 예산 초과 시 킬 스위치(kill switch). Anthropic의 Claude Code Agent SDK는 같은 기본 요소를 다른 이름으로 출하한다. 금융 속도 제한(financial velocity limit)(예를 들어 10분에 50달러 초과 시 접근 차단)은 월간 상한보다 루프를 더 빨리 잡는다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, layered cost-governor simulator)
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-자율 에이전트는 매 턴마다 실제 돈을 쓴다. 챗봇의 나쁜 출력은 나쁜 응답이지만, 에이전트의 나쁜 루프는 청구서다. 이 실패 양상을 가리키는, 업계에 문서화된 용어는 "지갑 거부(Denial of Wallet)"다 — 에이전트가 계속 추론하고, 계속 도구를 호출하고, 계속 청구하며, 무엇도 그것을 멈추지 않는다. 멈추도록 설계된 것이 없기 때문이다.
+자율 에이전트는 매 턴마다 실제 돈을 쓴다. 챗봇의 나쁜 출력은 나쁜 응답이지만, 에이전트의 나쁜 루프는 청구서다. 이 실패 양상을 가리키는, 업계에 문서화된 용어는 "지갑 거부(Denial of Wallet)"다. 에이전트가 계속 추론하고, 계속 도구를 호출하고, 계속 청구하며, 무엇도 그것을 멈추지 않는다. 멈추도록 설계된 것이 없기 때문이다.
 
 해결책은 하나의 숫자가 아니다. 서로 다른 시간 척도와 세분도(granularity)에서의 제한 스택이다: 요청당, 과제당, 시간당, 일당, 월당. 잘 설계된 스택은 폭주 루프를 몇 분 내에, 느린 누수를 몇 시간 내에, 나쁜 릴리스를 하루 내에 잡는다. 에이전트가 장기 지평(long-horizon)이고 자율적일 때도, 같은 스택이 예산을 애초부터 유지시킨다.
 
@@ -45,9 +45,9 @@
 
 Claude Code Agent SDK는 (공개 문서 기준) 다음을 노출한다:
 
-- `max_turns` — 반복 상한.
-- `max_budget_usd` — 달러 상한; 초과 시 세션 중단.
-- `allowed_tools` / `disallowed_tools` — 도구 허용 목록(allowlist)과 거부 목록(denylist).
+- `max_turns`: 반복 상한.
+- `max_budget_usd`: 달러 상한; 초과 시 세션 중단.
+- `allowed_tools` / `disallowed_tools`: 도구 허용 목록(allowlist)과 거부 목록(denylist).
 - 사용자 정의 비용 회계를 위한 도구 사용 전 훅(hook) 지점.
 
 권한 모드 사다리(Lesson 10)와 결합하라. `max_budget_usd` 없는 `autoMode` 세션은 거버넌스 없는 자율성이다. Anthropic은 Auto Mode에 예산 통제가 반드시 필요하다고 명시한다. 분류기는 비용과 직교(orthogonal)다.
@@ -95,8 +95,8 @@ Microsoft 문서의 실제 사례: 새 도구가 추가된 뒤 월간 비용이 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic Claude Code Agent SDK — agent loop and budgets](https://code.claude.com/docs/en/agent-sdk/agent-loop) — `max_turns`, `max_budget_usd`, 도구 허용 목록.
-- [Microsoft Agent Framework — human-in-the-loop and governance](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) — 비용 거버너 체크포인트.
-- [Anthropic — Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) — 제공자 측 비용 통제.
-- [Anthropic — Prompt caching (Claude API docs)](https://platform.claude.com/docs/en/prompt-caching) — 캐싱 메커니즘.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 장기 지평 에이전트의 비용 프로파일.
+- [Anthropic Claude Code Agent SDK(agent loop and budgets](https://code.claude.com/docs/en/agent-sdk/agent-loop)) `max_turns`, `max_budget_usd`, 도구 허용 목록.
+- [Microsoft Agent Framework(human-in-the-loop and governance](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) 비용 거버너 체크포인트.
+- [Anthropic(Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)) 제공자 측 비용 통제.
+- [Anthropic(Prompt caching (Claude API docs)](https://platform.claude.com/docs/en/prompt-caching)) 캐싱 메커니즘.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 에이전트의 비용 프로파일.

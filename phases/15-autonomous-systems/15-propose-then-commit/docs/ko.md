@@ -11,9 +11,9 @@
 
 에이전트가 액션을 취한다. 사용자는 승인할지 말지 결정해야 한다. 결정이 즉각적이면 검토라고 보기 어렵다. 결정이 구조화되어 있으면 느리지만 신뢰할 만하다. 엔지니어링 질문은 구조화된 검토를 어떻게 최소 저항 경로로 만드느냐다.
 
-2023년 시대의 HITL 패턴은 동기식 프롬프트(prompt)였다: "에이전트가 본문 Y로 X에게 이메일을 보내려 한다 — 승인?" 사용자가 승인을 클릭한다. 모두가 시스템이 안전하다고 느낀다. 하지만 이 표면은 심하게 고무 도장된다. 사용자는 빠르게 승인하고, 승인은 거의 예측력이 없으며, 에이전트가 잘못되면 감사 추적(audit trail)은 사용자가 기억하지 못하는 긴 승인 이력만 보여준다.
+2023년 시대의 HITL 패턴은 동기식 프롬프트(prompt)였다: "에이전트가 본문 Y로 X에게 이메일을 보내려 한다. 승인?" 사용자가 승인을 클릭한다. 모두가 시스템이 안전하다고 느낀다. 하지만 이 표면은 심하게 고무 도장된다. 사용자는 빠르게 승인하고, 승인은 거의 예측력이 없으며, 에이전트가 잘못되면 감사 추적(audit trail)은 사용자가 기억하지 못하는 긴 승인 이력만 보여준다.
 
-2026년 패턴 — 제안-후-커밋 — 은 HITL을 지속 기반(durable substrate) 위로 옮기고, 구조화된 메타데이터를 첨부하며, 긍정적 커밋을 요구한다. 모든 관리형 에이전트 SDK가 한 버전을 출하한다: LangGraph `interrupt()`, Microsoft Agent Framework `RequestInfoEvent`, Cloudflare `waitForApproval()`. API 이름은 다르지만, 형태는 다르지 않다.
+2026년 패턴(제안-후-커밋)은 HITL을 지속 기반(durable substrate) 위로 옮기고, 구조화된 메타데이터를 첨부하며, 긍정적 커밋을 요구한다. 모든 관리형 에이전트 SDK가 한 버전을 출하한다: LangGraph `interrupt()`, Microsoft Agent Framework `RequestInfoEvent`, Cloudflare `waitForApproval()`. API 이름은 다르지만, 형태는 다르지 않다.
 
 ## 개념 (The Concept)
 
@@ -38,7 +38,7 @@
 
 ### 지속성: 승인이 프로세스보다 오래 사는 이유
 
-승인 대기실은 에이전트가 소유하지 않는 상태 조각이다. 워크플로가 일시 정지된다(Lesson 12). 승인이 도착하면, 워크플로가 정확히 그 지점에서 재개한다. 이것이 LangGraph가 `interrupt()`를 인메모리 상태가 아니라 PostgreSQL 체크포인팅과 짝짓는 이유다 — 이틀 뒤의 승인도 워크플로를 온전히 찾아낸다.
+승인 대기실은 에이전트가 소유하지 않는 상태 조각이다. 워크플로가 일시 정지된다(Lesson 12). 승인이 도착하면, 워크플로가 정확히 그 지점에서 재개한다. 이것이 LangGraph가 `interrupt()`를 인메모리 상태가 아니라 PostgreSQL 체크포인팅과 짝짓는 이유다. 이틀 뒤의 승인도 워크플로를 온전히 찾아낸다.
 
 ### 고무 도장 승인과 챌린지-앤-리스폰스 완화책
 
@@ -101,8 +101,8 @@ HITL의 기본 UI("Approve" / "Reject" 버튼)는 진정한 검토 없는 빠른
 
 ## 더 읽을거리 (Further Reading)
 
-- [Microsoft Agent Framework — Human in the loop](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) — `RequestInfoEvent`, 지속 승인.
-- [Cloudflare Agents — Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/) — `waitForApproval()`과 Durable Objects.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 장기 지평 위험에 대한 완화책으로서의 HITL.
-- [EU AI Act — Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/) — 고위험 시스템에 대한 규제 베이스라인.
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — 감독을 둘러싼 헌법적 프레이밍.
+- [Microsoft Agent Framework(Human in the loop](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) `RequestInfoEvent`, 지속 승인.
+- [Cloudflare Agents(Human in the loop](https://developers.cloudflare.com/agents/concepts/human-in-the-loop/)) `waitForApproval()`과 Durable Objects.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 장기 지평 위험에 대한 완화책으로서의 HITL.
+- [EU AI Act(Article 14: Human oversight](https://artificialintelligenceact.eu/article/14/)) 고위험 시스템에 대한 규제 베이스라인.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 감독을 둘러싼 헌법적 프레이밍.

@@ -1,4 +1,4 @@
-# AI Scientist v2 — 워크숍 수준의 자율 연구
+# AI Scientist v2: 워크숍 수준의 자율 연구
 
 > Sakana의 AI Scientist v2(Yamada et al., arXiv:2504.08066)는 전체 연구 루프를 실행한다. 가설, 코드, 실험, 그림, 작성, 제출. 이것은 생성된 논문이 ICLR 2025 워크숍에서 동료 심사(peer review)를 통과한 최초의 시스템이다. 독립 평가(Beel et al.)는 실험의 42%가 코딩 오류로 실패했고 문헌 검토(literature review)가 정립된 개념을 자주 새로운 것으로 잘못 분류했음을 발견했다. Sakana 자신의 문서는 코드베이스가 LLM이 작성한 코드를 실행한다고 경고하며 Docker 격리를 권장한다. 그 그림의 두 절반 모두가 핵심이다.
 
@@ -95,14 +95,14 @@ v2는 셋 중 가장 약한 자동 평가기, 가장 넓은 출력 표면, 그�
 | AI Scientist v2 | "템플릿 없는 연구 에이전트" | VLM 그림 비평을 동반한 에이전트형 트리 탐색 |
 | 에이전트형 트리 탐색 (Agentic tree search) | "분기하는 연구 에이전트" | 여러 실험 계획을 병렬로 확장하고, 내부 비평가로 가지치기 |
 | 비전-언어 비평 (Vision-language critique) | "그림에 대한 VLM 광택" | 멀티모달 모델이 그림을 읽고 명료함을 위해 다시 씀 |
-| 문헌 검색 (Literature retrieval) | "새로움 점검" | 아이디어의 새로움을 확인하기 위해 선행 연구를 검색 — 잘못 분류한다고 기록됨 |
+| 문헌 검색 (Literature retrieval) | "새로움 점검" | 아이디어의 새로움을 확인하기 위해 선행 연구를 검색: 잘못 분류한다고 기록됨 |
 | 광택 가림 (Polish masking) | "예쁜 논문, 망가진 연구" | 표현 품질이 실험 품질을 능가함. 약점을 숨김 |
 | 샌드박스 탈출 (Sandbox escape) | "LLM 코드가 빠져나감" | 에이전트가 실행한 코드가 루프 설계자가 의도하지 않은 일을 함 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Yamada et al. (2025). The AI Scientist-v2](https://arxiv.org/abs/2504.08066) — 논문.
-- [Sakana blog on the Nature 2026 publication](https://sakana.ai/ai-scientist-nature/) — 동료 심사 맥락을 담은 벤더 요약.
-- [Beel et al. (2025). Independent evaluation of The AI Scientist](https://arxiv.org/abs/2502.14297) — 외부 평가 수치.
-- [Sakana AI Scientist v1 paper](https://arxiv.org/abs/2408.06292) — 템플릿화된 선행 시스템.
-- [Anthropic — Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) — 개방형 연구 에이전트에 대한 더 넓은 규정.
+- [Yamada et al. (2025). The AI Scientist-v2](https://arxiv.org/abs/2504.08066): 논문.
+- [Sakana blog on the Nature 2026 publication](https://sakana.ai/ai-scientist-nature/): 동료 심사 맥락을 담은 벤더 요약.
+- [Beel et al. (2025). Independent evaluation of The AI Scientist](https://arxiv.org/abs/2502.14297): 외부 평가 수치.
+- [Sakana AI Scientist v1 paper](https://arxiv.org/abs/2408.06292): 템플릿화된 선행 시스템.
+- [Anthropic(Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)) 개방형 연구 에이전트에 대한 더 넓은 규정.

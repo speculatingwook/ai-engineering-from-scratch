@@ -1,4 +1,4 @@
-# MCP 서버 만들기 — Python + TypeScript SDK
+# MCP 서버 만들기: Python + TypeScript SDK
 
 > 대부분의 MCP 튜토리얼은 stdio hello-world만 보여준다. 실제 서버는 tools와 resources와 prompts를 노출하고 능력 협상(capability negotiation)을 처리하며 구조화된 오류를 내보내고, SDK 전반에서 동일하게 동작한다. 이 레슨은 노트 서버를 종단 간(end-to-end)으로 만든다. stdlib stdio 전송(transport), JSON-RPC 디스패치(dispatch), 세 가지 서버 기본 요소(primitive), 그리고 졸업할 때 Python SDK의 FastMCP나 TypeScript SDK에 그대로 들어가는 순수 함수(pure-function) 스타일이다.
 
@@ -98,10 +98,10 @@ Prompts는 이름 붙은 인자를 가진 템플릿이다. 호스트는 프롬�
 
 각 도구는 안전 속성을 기술하는 `annotations`를 운반할 수 있다.
 
-- `readOnlyHint: true` — 순수 읽기, 재시도해도 안전함.
-- `destructiveHint: true` — 되돌릴 수 없는 부수 효과. 클라이언트가 확인해야 함.
-- `idempotentHint: true` — 같은 입력이 같은 출력을 만듦.
-- `openWorldHint: true` — 외부 시스템과 상호작용함.
+- `readOnlyHint: true`: 순수 읽기, 재시도해도 안전함.
+- `destructiveHint: true`: 되돌릴 수 없는 부수 효과. 클라이언트가 확인해야 함.
+- `idempotentHint: true`: 같은 입력이 같은 출력을 만듦.
+- `openWorldHint: true`: 외부 시스템과 상호작용함.
 
 클라이언트는 이를 사용해 UX(확인 대화상자, 상태 표시기)와 라우팅(routing)(Phase 13 · 17)을 결정한다.
 
@@ -167,8 +167,8 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | python main.
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol — Python SDK](https://github.com/modelcontextprotocol/python-sdk) — 레퍼런스 Python 구현
-- [Model Context Protocol — TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) — 병렬 TS 구현
-- [FastMCP — server framework](https://gofastmcp.com/) — MCP 서버를 위한 데코레이터 스타일 Python API
-- [MCP — Quickstart server guide](https://modelcontextprotocol.io/quickstart/server) — 어느 SDK든 사용하는 종단 간 튜토리얼
-- [MCP — Server tools spec](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) — tools/* 메시지에 대한 완전한 레퍼런스
+- [Model Context Protocol(Python SDK](https://github.com/modelcontextprotocol/python-sdk)) 레퍼런스 Python 구현
+- [Model Context Protocol(TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)) 병렬 TS 구현
+- [FastMCP(server framework](https://gofastmcp.com/)) MCP 서버를 위한 데코레이터 스타일 Python API
+- [MCP(Quickstart server guide](https://modelcontextprotocol.io/quickstart/server)) 어느 SDK든 사용하는 종단 간 튜토리얼
+- [MCP(Server tools spec](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)) tools/* 메시지에 대한 완전한 레퍼런스

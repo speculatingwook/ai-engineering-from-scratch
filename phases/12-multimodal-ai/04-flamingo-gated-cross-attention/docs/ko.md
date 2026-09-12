@@ -1,6 +1,6 @@
 # Flamingo와 퓨샷 VLM을 위한 게이트 교차 어텐션(Flamingo and Gated Cross-Attention for Few-Shot VLMs)
 
-> DeepMind의 Flamingo(2022)는 누구보다 먼저 두 가지를 해냈다. 단일 모델이 이미지, 비디오, 텍스트가 임의로 인터리브(interleave)된 시퀀스를 처리할 수 있음을 보였다. 그리고 VLM이 인컨텍스트(in-context)로 학습할 수 있음을 보였다. 세 개의 예시 (이미지, 캡션) 쌍이 담긴 퓨샷(few-shot) 프롬프트(prompt)를 주면, 모델은 어떤 그래디언트(gradient) 스텝도 없이 새 이미지를 캡션한다. 그 메커니즘은 게이트 교차 어텐션(gated cross-attention) 층으로, 동결된 LLM의 기존 층 사이에 삽입되며, 0에서 시작하는 학습되는 tanh 게이트(gate)를 가져 LLM의 텍스트 능력이 초기화 시점에 보존되도록 한다. 이 레슨은 Flamingo의 퍼시버 리샘플러(Perceiver resampler)와 게이트 교차 어텐션 아키텍처를 짚어 본다 — Gemini의 인터리브 입력과 Idefics2의 시각 토큰(visual token)의 조상이다.
+> DeepMind의 Flamingo(2022)는 누구보다 먼저 두 가지를 해냈다. 단일 모델이 이미지, 비디오, 텍스트가 임의로 인터리브(interleave)된 시퀀스를 처리할 수 있음을 보였다. 그리고 VLM이 인컨텍스트(in-context)로 학습할 수 있음을 보였다. 세 개의 예시 (이미지, 캡션) 쌍이 담긴 퓨샷(few-shot) 프롬프트(prompt)를 주면, 모델은 어떤 그래디언트(gradient) 스텝도 없이 새 이미지를 캡션한다. 그 메커니즘은 게이트 교차 어텐션(gated cross-attention) 층으로, 동결된 LLM의 기존 층 사이에 삽입되며, 0에서 시작하는 학습되는 tanh 게이트(gate)를 가져 LLM의 텍스트 능력이 초기화 시점에 보존되도록 한다. 이 레슨은 Flamingo의 퍼시버 리샘플러(Perceiver resampler)와 게이트 교차 어텐션 아키텍처를 짚어 본다. Gemini의 인터리브 입력과 Idefics2의 시각 토큰(visual token)의 조상이다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, gated cross-attention + Perceiver resampler demo)
@@ -18,9 +18,9 @@
 
 BLIP-2는 32개의 시각 토큰을 동결된 LLM의 입력 층에 먹인다. 프롬프트당 이미지 하나에는 동작한다. 하지만 "여기 이미지 A가 있다, 캡션하라, 여기 이미지 B가 있다, 캡션하라, 이제 여기 이미지 C가 있다, 캡션하라"처럼 텍스트와 인터리브된 *많은* 이미지를 먹이고 싶다면? LLM의 셀프 어텐션(self-attention)은 단일 스트림에서 이미지 토큰과 텍스트 토큰을 처리해야 하는데, 어떤 위치가 어떤 이미지에 주목할 수 있는지가 까다로운 문제가 된다.
 
-Flamingo의 답: LLM의 입력 스트림을 전혀 바꾸지 말라. 기존 LLM 블록 사이에 추가 교차 어텐션 층을 삽입하라. 텍스트 토큰은 여전히 늘 그렇듯 LLM의 인과 셀프 어텐션을 통해 흐른다. 몇 개의 LLM 블록마다 한 번씩, 텍스트 토큰은 또한 새로운 게이트 층을 통해 이미지 특성에 교차 어텐션을 한다. (0으로 초기화된) 게이트는 스텝 0에서 새 층들이 항등 연산(no-op)임을 의미한다 — 모델은 정확히 사전 학습된 LLM처럼 행동한다. 학습이 진행되면서 게이트가 열리고 시각 정보가 흐르기 시작한다.
+Flamingo의 답: LLM의 입력 스트림을 전혀 바꾸지 말라. 기존 LLM 블록 사이에 추가 교차 어텐션 층을 삽입하라. 텍스트 토큰은 여전히 늘 그렇듯 LLM의 인과 셀프 어텐션을 통해 흐른다. 몇 개의 LLM 블록마다 한 번씩, 텍스트 토큰은 또한 새로운 게이트 층을 통해 이미지 특성에 교차 어텐션을 한다. (0으로 초기화된) 게이트는 스텝 0에서 새 층들이 항등 연산(no-op)임을 의미한다. 모델은 정확히 사전 학습된 LLM처럼 행동한다. 학습이 진행되면서 게이트가 열리고 시각 정보가 흐르기 시작한다.
 
-Flamingo가 답한 두 번째 질문: 프롬프트당 가변 개수의 이미지(0, 1, 또는 다수)를 어떻게 처리하는가? 퍼시버 리샘플러 — 패치 개수가 몇 개든 받아서 고정 개수의 시각 잠재 토큰을 만드는 작은 교차 어텐션 모듈이다. LLM 교차 어텐션 층은 프롬프트에 이미지가 몇 개든 상관없이 같은 형상을 본다.
+Flamingo가 답한 두 번째 질문: 프롬프트당 가변 개수의 이미지(0, 1, 또는 다수)를 어떻게 처리하는가? 퍼시버 리샘플러: 패치 개수가 몇 개든 받아서 고정 개수의 시각 잠재 토큰을 만드는 작은 교차 어텐션 모듈이다. LLM 교차 어텐션 층은 프롬프트에 이미지가 몇 개든 상관없이 같은 형상을 본다.
 
 ## 개념 (The Concept)
 
@@ -69,7 +69,7 @@ Flamingo 프롬프트는 이렇게 생겼다:
 <image1> A photo of a cat. <image2> A photo of a dog. <image3> A photo of a
 ```
 
-모델은 완성 패턴을 보고 "bird"(또는 image3가 보여 주는 무엇이든)를 출력한다. 그래디언트 스텝 없음. 동결된 LLM의 인컨텍스트 학습 능력이 게이트 교차 어텐션을 통해 이어진다 — 이것이 논문의 핵심이며 그것이 중요한 이유다.
+모델은 완성 패턴을 보고 "bird"(또는 image3가 보여 주는 무엇이든)를 출력한다. 그래디언트 스텝 없음. 동결된 LLM의 인컨텍스트 학습 능력이 게이트 교차 어텐션을 통해 이어진다. 이것이 논문의 핵심이며 그것이 중요한 이유다.
 
 ### 학습 데이터 (Training data)
 
@@ -100,7 +100,7 @@ Otter(2023)는 MIMIC-IT(멀티모달 명령어 데이터셋)에 대한 명령어
 | 시각 다리 | 입력에서 한 번의 Q-Former | M개 층마다의 게이트 교차 어텐션 |
 | 시각 토큰 | 이미지당 32개 | 교차 어텐션 층당, 이미지당 64개 |
 | 동결 LLM | 예 | 예 |
-| 퓨샷 인컨텍스트 | 약함 | 강함 — 논문의 핵심 |
+| 퓨샷 인컨텍스트 | 약함 | 강함: 논문의 핵심 |
 | 인터리브 입력 | 네이티브 지원 없음 | 예, 설계 목표 |
 | 학습 데이터 | 1억 3000만 쌍 | 13억 쌍 + 4300만 인터리브 페이지 |
 | 파라미터(parameter) 개수 | 학습 1억 8800만 | 학습 약 100억(교차 어텐션 층) |
@@ -149,9 +149,9 @@ Otter(2023)는 MIMIC-IT(멀티모달 명령어 데이터셋)에 대한 명령어
 
 ## 더 읽을거리 (Further Reading)
 
-- [Alayrac et al. — Flamingo (arXiv:2204.14198)](https://arxiv.org/abs/2204.14198) — 원논문.
-- [Awadalla et al. — OpenFlamingo (arXiv:2308.01390)](https://arxiv.org/abs/2308.01390) — 오픈 재현.
-- [Laurençon et al. — OBELICS (arXiv:2306.16527)](https://arxiv.org/abs/2306.16527) — 인터리브 웹 코퍼스.
-- [Jaegle et al. — Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795) — 일반 퍼시버 아키텍처.
-- [Li et al. — Otter (arXiv:2305.03726)](https://arxiv.org/abs/2305.03726) — 명령어 튜닝된 Flamingo 후손.
-- [Laurençon et al. — Idefics2 (arXiv:2405.02246)](https://arxiv.org/abs/2405.02246) — Flamingo 접근법의 현대적 단순화.
+- [Alayrac et al.(Flamingo (arXiv:2204.14198)](https://arxiv.org/abs/2204.14198)) 원논문.
+- [Awadalla et al.(OpenFlamingo (arXiv:2308.01390)](https://arxiv.org/abs/2308.01390)) 오픈 재현.
+- [Laurençon et al.(OBELICS (arXiv:2306.16527)](https://arxiv.org/abs/2306.16527)) 인터리브 웹 코퍼스.
+- [Jaegle et al.(Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795)) 일반 퍼시버 아키텍처.
+- [Li et al.(Otter (arXiv:2305.03726)](https://arxiv.org/abs/2305.03726)) 명령어 튜닝된 Flamingo 후손.
+- [Laurençon et al.(Idefics2 (arXiv:2405.02246)](https://arxiv.org/abs/2405.02246)) Flamingo 접근법의 현대적 단순화.

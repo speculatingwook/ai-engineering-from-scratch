@@ -1,4 +1,4 @@
-# 이미지의 기초 — 픽셀, 채널, 색 공간
+# 이미지의 기초: 픽셀, 채널, 색 공간
 
 > 이미지는 빛 샘플들의 텐서(tensor)다. 앞으로 쓰게 될 모든 비전 모델은 이 한 가지 사실에서 출발한다.
 
@@ -72,7 +72,7 @@ Continuous scene                 Sensor grid                     Digital image
 
 ### 왜 채널이 셋인가
 
-검출기 하나는 가시광 스펙트럼 전체에 걸친 광자를 센다 — 그것이 그레이스케일이다. 색을 얻으려면 센서는 격자를 빨강, 초록, 파랑 필터의 모자이크로 덮는다. 디모자이킹(demosaicing) 후, 모든 공간 위치는 세 개의 정수를 갖는다. 빨강 필터 검출기의 응답값, 초록 필터, 그리고 인근의 파랑 필터 응답값이다. 그 세 정수가 한 픽셀의 RGB 삼원색 값이다.
+검출기 하나는 가시광 스펙트럼 전체에 걸친 광자를 센다. 그것이 그레이스케일이다. 색을 얻으려면 센서는 격자를 빨강, 초록, 파랑 필터의 모자이크로 덮는다. 디모자이킹(demosaicing) 후, 모든 공간 위치는 세 개의 정수를 갖는다. 빨강 필터 검출기의 응답값, 초록 필터, 그리고 인근의 파랑 필터 응답값이다. 그 세 정수가 한 픽셀의 RGB 삼원색 값이다.
 
 ```
 One pixel in memory:
@@ -167,9 +167,9 @@ RGB는 캡처 포맷이지만, 모델에 항상 가장 유용한 표현인 것�
 
 대부분의 현대 CNN에는 RGB를 먹인다. 다른 공간을 만나는 경우는 다음과 같다.
 
-- **HSV** — 고전적 CV 코드, 색 기반 분할, 화이트 밸런싱.
-- **YCbCr** — JPEG 내부 읽기, 비디오 파이프라인, Y만으로 동작하는 초해상도 모델.
-- **그레이스케일** — OCR, 문서 모델, 색이 신호가 아니라 방해 변수인 모든 경우.
+- **HSV**: 고전적 CV 코드, 색 기반 분할, 화이트 밸런싱.
+- **YCbCr**: JPEG 내부 읽기, 비디오 파이프라인, Y만으로 동작하는 초해상도 모델.
+- **그레이스케일**: OCR, 문서 모델, 색이 신호가 아니라 방해 변수인 모든 경우.
 
 RGB로부터의 그레이스케일은 평균이 아니라 가중합이다. 인간의 눈이 빨강이나 파랑보다 초록에 더 민감하기 때문이다.
 
@@ -181,9 +181,9 @@ Y = 0.299 R + 0.587 G + 0.114 B       (ITU-R BT.601, the classic weights)
 
 모든 모델은 고정된 입력 크기를 갖는다(대부분의 ImageNet 분류기는 224x224, 현대적 검출기는 384x384 또는 512x512). 손에 든 이미지가 그 크기에 들어맞는 경우는 거의 없다. 중요한 세 가지 리사이즈 선택은 다음과 같다.
 
-- **짧은 변을 리사이즈한 뒤 중앙 크롭** — 표준 ImageNet 레시피. 종횡비를 보존하고 가장자리 픽셀 한 줄을 버린다.
-- **리사이즈 후 패딩** — 종횡비와 모든 픽셀을 보존하고 검은 띠를 추가한다. 검출과 OCR의 표준이다.
-- **목표 크기로 직접 리사이즈** — 이미지를 늘린다. 저렴하고 기하 구조를 왜곡하지만 많은 분류(classification) 작업에는 괜찮다.
+- **짧은 변을 리사이즈한 뒤 중앙 크롭**: 표준 ImageNet 레시피. 종횡비를 보존하고 가장자리 픽셀 한 줄을 버린다.
+- **리사이즈 후 패딩**: 종횡비와 모든 픽셀을 보존하고 검은 띠를 추가한다. 검출과 OCR의 표준이다.
+- **목표 크기로 직접 리사이즈**: 이미지를 늘린다. 저렴하고 기하 구조를 왜곡하지만 많은 분류(classification) 작업에는 괜찮다.
 
 보간(interpolation) 방법은 새 격자가 옛 격자와 맞지 않을 때 중간 픽셀을 어떻게 계산할지 결정한다.
 
@@ -379,8 +379,8 @@ print(f"\nbatched shape: {tuple(batch.shape)}   # (N, C, H, W) — ready for a m
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-vision-preprocessing-audit.md` — 임의의 모델 카드나 데이터셋 카드를, 팀이 반드시 지켜야 할 전처리 불변식들의 체크리스트로 바꾸는 프롬프트(prompt).
-- `outputs/skill-image-tensor-inspector.md` — 임의의 이미지 형태 텐서나 배열이 주어지면 dtype, 레이아웃, 범위, 그리고 그것이 원본인지 정규화된 것인지 표준화된 것인지 보고하는 스킬.
+- `outputs/prompt-vision-preprocessing-audit.md`: 임의의 모델 카드나 데이터셋 카드를, 팀이 반드시 지켜야 할 전처리 불변식들의 체크리스트로 바꾸는 프롬프트(prompt).
+- `outputs/skill-image-tensor-inspector.md`: 임의의 이미지 형태 텐서나 배열이 주어지면 dtype, 레이아웃, 범위, 그리고 그것이 원본인지 정규화된 것인지 표준화된 것인지 보고하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -392,18 +392,18 @@ print(f"\nbatched shape: {tuple(batch.shape)}   # (N, C, H, W) — ready for a m
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|----------------------|
-| 픽셀(Pixel) | "색칠된 네모" | 한 격자 위치에서의 빛 강도의 단일 샘플 — 색은 숫자 셋, 그레이스케일은 하나 |
+| 픽셀(Pixel) | "색칠된 네모" | 한 격자 위치에서의 빛 강도의 단일 샘플: 색은 숫자 셋, 그레이스케일은 하나 |
 | 채널(Channel) | "색" | 이미지 텐서로 쌓이는 병렬 공간 격자 중 하나. HWC에서는 마지막 축, CHW에서는 첫 축 |
 | HWC / CHW | "형태" | 이미지 텐서의 축 순서. 디스크와 PIL은 HWC, PyTorch와 cuDNN은 CHW를 쓴다 |
-| 정규화(Normalize) | "이미지를 스케일링한다" | 픽셀이 [0, 1]에 살도록 255로 나누는 것 — 필요하지만 충분하지는 않다 |
+| 정규화(Normalize) | "이미지를 스케일링한다" | 픽셀이 [0, 1]에 살도록 255로 나누는 것: 필요하지만 충분하지는 않다 |
 | 표준화(Standardize) | "0 중심으로 만든다" | 입력 분포가 모델이 학습한 것과 일치하도록 채널마다 평균을 빼고 표준편차로 나누는 것 |
 | 그레이스케일 변환(Grayscale conversion) | "채널을 평균낸다" | 인간의 휘도 지각과 일치하는 계수 0.299/0.587/0.114의 가중합 |
-| 보간(Interpolation) | "리사이즈가 픽셀을 고르는 방식" | 새 격자가 옛 격자와 맞지 않을 때 출력값을 결정하는 규칙 — 레이블에는 nearest, 학습에는 bilinear, 디스플레이에는 bicubic |
+| 보간(Interpolation) | "리사이즈가 픽셀을 고르는 방식" | 새 격자가 옛 격자와 맞지 않을 때 출력값을 결정하는 규칙: 레이블에는 nearest, 학습에는 bilinear, 디스플레이에는 bicubic |
 | 종횡비(Aspect ratio) | "너비 나누기 높이" | "리사이즈 후 패딩"과 "리사이즈 후 늘리기"를 구분하는 비율 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Charles Poynton — A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf) — 왜 그렇게 많은 색 공간이 있고 각각이 언제 중요한지에 대한 가장 명료한 기술적 해설
-- [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html) — 프로덕션에서 실제로 조립하게 될 변환들의 전체 파이프라인
-- [How JPEG Works (Colt McAnlis)](https://www.youtube.com/watch?v=F1kYBnY6mwg) — 크로마 서브샘플링, DCT, 그리고 JPEG가 왜 RGB가 아니라 YCbCr을 인코딩하는지에 대한 날카로운 시각적 투어
-- [ImageNet Preprocessing Conventions (torchvision models)](https://pytorch.org/vision/stable/models.html) — `mean=[0.485, 0.456, 0.406]`의 출처이자 동물원의 모든 모델이 왜 그것을 기대하는지에 대한 진실의 원천
+- [Charles Poynton(A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf)) 왜 그렇게 많은 색 공간이 있고 각각이 언제 중요한지에 대한 가장 명료한 기술적 해설
+- [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html): 프로덕션에서 실제로 조립하게 될 변환들의 전체 파이프라인
+- [How JPEG Works (Colt McAnlis)](https://www.youtube.com/watch?v=F1kYBnY6mwg): 크로마 서브샘플링, DCT, 그리고 JPEG가 왜 RGB가 아니라 YCbCr을 인코딩하는지에 대한 날카로운 시각적 투어
+- [ImageNet Preprocessing Conventions (torchvision models)](https://pytorch.org/vision/stable/models.html): `mean=[0.485, 0.456, 0.406]`의 출처이자 동물원의 모든 모델이 왜 그것을 기대하는지에 대한 진실의 원천

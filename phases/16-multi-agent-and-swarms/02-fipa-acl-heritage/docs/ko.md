@@ -98,9 +98,9 @@ Liu et al.의 2025년 서베이("A Survey of Agent Interoperability Protocols: M
 
 **FIPA가 주었으나 현대 명세들이 버린 것:**
 
-- 형식 의미론 — `inform`이 발신자가 콘텐츠를 믿는다는 것을 함의함을 증명할 수 있다.
-- 수행문의 정전 카탈로그 — "`cancel`을 둬야 하는가?"를 다시 논쟁할 필요가 없다.
-- 수십 년의 상호작용 프로토콜 패턴 — contract-net, subscribe-notify, propose-accept — 알려진 정확성 속성과 함께.
+- 형식 의미론: `inform`이 발신자가 콘텐츠를 믿는다는 것을 함의함을 증명할 수 있다.
+- 수행문의 정전 카탈로그: "`cancel`을 둬야 하는가?"를 다시 논쟁할 필요가 없다.
+- 수십 년의 상호작용 프로토콜 패턴(contract-net, subscribe-notify, propose-accept) 알려진 정확성 속성과 함께.
 
 **현대 명세들이 주지만 FIPA가 주지 않은 것:**
 
@@ -127,9 +127,9 @@ FIPA는 약 15개의 상호작용 프로토콜을 제공했다. 그중 세 개�
 
 완전한 온톨로지로 가지 않는 완화책:
 
-- `content`에 대한 JSON Schema — 와이어에서 구조적 오류를 거부한다.
-- 타입이 지정된 아티팩트(A2A) — 잘못된 양식(modality)을 거부한다.
-- 봉투 안의 명시적 수행문 — 콘텐츠가 자연어일 때조차 의도를 명확하게 만든다.
+- `content`에 대한 JSON Schema: 와이어에서 구조적 오류를 거부한다.
+- 타입이 지정된 아티팩트(A2A): 잘못된 양식(modality)을 거부한다.
+- 봉투 안의 명시적 수행문: 콘텐츠가 자연어일 때조차 의도를 명확하게 만든다.
 
 ### 2026년 명세들, 발화 행위 유산에 매핑하기
 
@@ -194,14 +194,14 @@ FIPA-ACL을 다시 가져오지 마라. 그 체크리스트를 가져와라:
 | 수행문 (Performative) | "동사" | 메시지의 의도 클래스: `inform`, `request`, `propose`, `cfp` 등. |
 | KQML | "FIPA의 전신" | Knowledge Query and Manipulation Language(1993). 더 단순하고 더 좁다. |
 | 온톨로지 (Ontology) | "공유 어휘" | 콘텐츠 언어가 말하는 개념들에 대한 형식적 정의. |
-| SL0 / SL1 | "FIPA 콘텐츠 언어" | Semantic Language 레벨 0과 1 — 형식적 콘텐츠 언어 계열. |
+| SL0 / SL1 | "FIPA 콘텐츠 언어" | Semantic Language 레벨 0과 1: 형식적 콘텐츠 언어 계열. |
 | 계약망 (Contract Net) | "작업 시장" | 매니저가 cfp를 발행하고, 입찰자가 제안하고, 매니저가 수락한다. 정전적 상호작용 프로토콜. |
 | 상호작용 프로토콜 (Interaction protocol) | "메시지의 패턴" | 알려진 정확성을 갖는 수행문의 시퀀스: request-when, subscribe-notify 등. |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Liu et al. — A Survey of Agent Interoperability Protocols: MCP, ACP, A2A, ANP](https://arxiv.org/html/2505.02279v1) — 현대 명세들을 FIPA 유산에 연결하는 정전적 2025년 서베이
-- [FIPA ACL Message Structure Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/) — 2000년에 비준된 봉투 형식
-- [FIPA Communicative Act Library Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/) — 전체 수행문 카탈로그
-- [MCP specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) — `request`/`query-ref`의 현대 도구 사용 등가물
-- [A2A specification](https://a2a-protocol.org/latest/specification/) — contract-net과 subscribe-notify의 현대 에이전트-피어 등가물
+- [Liu et al.(A Survey of Agent Interoperability Protocols: MCP, ACP, A2A, ANP](https://arxiv.org/html/2505.02279v1)) 현대 명세들을 FIPA 유산에 연결하는 정전적 2025년 서베이
+- [FIPA ACL Message Structure Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/): 2000년에 비준된 봉투 형식
+- [FIPA Communicative Act Library Specification (fipa00037)](http://www.fipa.org/specs/fipa00037/): 전체 수행문 카탈로그
+- [MCP specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25): `request`/`query-ref`의 현대 도구 사용 등가물
+- [A2A specification](https://a2a-protocol.org/latest/specification/): contract-net과 subscribe-notify의 현대 에이전트-피어 등가물

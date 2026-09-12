@@ -1,4 +1,4 @@
-# 시간차 — Q-러닝과 SARSA (Temporal Difference — Q-Learning & SARSA)
+# 시간차(Q-러닝과 SARSA (Temporal Difference) Q-Learning & SARSA)
 
 > 몬테카를로(Monte Carlo)는 에피소드가 끝날 때까지 기다린다. TD는 다음 가치 추정값을 부트스트랩(bootstrap)하여 매 스텝마다 갱신한다. Q-러닝(Q-learning)은 오프-폴리시(off-policy)이며 낙관적이고, SARSA는 온-폴리시(on-policy)이며 신중하다. 둘 다 코드 한 줄이다. 둘 다 이 단계의 모든 심층 강화 학습 방법을 떠받친다.
 
@@ -109,9 +109,9 @@ def q_learning(env, episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
 ## 함정 (Pitfalls)
 
 - **초기 Q 값이 중요하다.** 낙관적 초기화(음의 보상 작업에서 `Q = 0`)는 탐험을 장려한다. 비관적 초기화는 탐욕 정책을 영원히 가둘 수 있다.
-- **α 스케줄.** 상수 `α`는 비정상 문제에 적합하다. 감쇠 `α_n = 1/n`은 이론적으로 수렴을 주지만 실전에서 너무 느리다 — `α`를 `[0.05, 0.3]`에 고정하고 학습 곡선을 모니터링하라.
+- **α 스케줄.** 상수 `α`는 비정상 문제에 적합하다. 감쇠 `α_n = 1/n`은 이론적으로 수렴을 주지만 실전에서 너무 느리다. `α`를 `[0.05, 0.3]`에 고정하고 학습 곡선을 모니터링하라.
 - **ε 스케줄.** 높게 시작(`ε=1.0`), `ε=0.05`까지 감쇠. "GLIE"(무한 탐험 하에서 극한에서 탐욕적)가 수렴 조건이다.
-- **Q-러닝의 최대 편향.** `max` 연산자는 `Q`가 노이즈가 있을 때 위쪽으로 편향된다. 과대추정으로 이어진다 — Hasselt의 이중 Q-러닝(Double Q-learning, Lesson 05에서 DDQN이 사용)이 두 개의 Q 표로 이를 고친다.
+- **Q-러닝의 최대 편향.** `max` 연산자는 `Q`가 노이즈가 있을 때 위쪽으로 편향된다. 과대추정으로 이어진다. Hasselt의 이중 Q-러닝(Double Q-learning, Lesson 05에서 DDQN이 사용)이 두 개의 Q 표로 이를 고친다.
 - **종료되지 않는 에피소드.** TD는 종료 상태 없이 학습할 수 있지만, 스텝에 한계를 두거나 그 한계에서 부트스트랩을 올바르게 처리해야 한다. 표준: 한계를 비종료로 취급하고 부트스트랩을 계속한다.
 - **상태 해싱.** 상태가 튜플/텐서라면, 해시 가능한 키를 사용하라(리스트가 아닌 튜플; 원본이 아닌 반올림된 float의 튜플).
 
@@ -176,9 +176,9 @@ Refuse to apply tabular TD to state spaces > 10⁶. Refuse to ship a Q-learning 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Watkins & Dayan (1992). Q-learning](https://link.springer.com/article/10.1007/BF00992698) — 원조 논문과 수렴 증명.
-- [Sutton & Barto (2018). Ch. 6 — Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf) — TD(0), SARSA, Q-러닝, 기대 SARSA.
-- [Hasselt (2010). Double Q-learning](https://papers.nips.cc/paper_files/paper/2010/hash/091d584fced301b442654dd8c23b3fc9-Abstract.html) — 최대화 편향에 대한 해법.
-- [Seijen, Hasselt, Whiteson, Wiering (2009). A Theoretical and Empirical Analysis of Expected SARSA](https://ieeexplore.ieee.org/document/4927542) — 기대 SARSA의 동기.
-- [Rummery & Niranjan (1994). On-line Q-learning using connectionist systems](https://www.researchgate.net/publication/2500611_On-Line_Q-Learning_Using_Connectionist_Systems) — SARSA(당시에는 "수정 연결주의 Q-러닝"으로 불림)를 만든 논문.
-- [Sutton & Barto (2018). Ch. 7 — n-step Bootstrapping](http://incompleteideas.net/book/RLbook2020.pdf) — TD(0)를 TD(n)으로 일반화, Q-러닝에서 적격성 흔적(eligibility traces)으로, 그리고 나중에 PPO의 GAE로 가는 경로.
+- [Watkins & Dayan (1992). Q-learning](https://link.springer.com/article/10.1007/BF00992698): 원조 논문과 수렴 증명.
+- [Sutton & Barto (2018). Ch. 6(Temporal-Difference Learning](http://incompleteideas.net/book/RLbook2020.pdf)) TD(0), SARSA, Q-러닝, 기대 SARSA.
+- [Hasselt (2010). Double Q-learning](https://papers.nips.cc/paper_files/paper/2010/hash/091d584fced301b442654dd8c23b3fc9-Abstract.html): 최대화 편향에 대한 해법.
+- [Seijen, Hasselt, Whiteson, Wiering (2009). A Theoretical and Empirical Analysis of Expected SARSA](https://ieeexplore.ieee.org/document/4927542): 기대 SARSA의 동기.
+- [Rummery & Niranjan (1994). On-line Q-learning using connectionist systems](https://www.researchgate.net/publication/2500611_On-Line_Q-Learning_Using_Connectionist_Systems): SARSA(당시에는 "수정 연결주의 Q-러닝"으로 불림)를 만든 논문.
+- [Sutton & Barto (2018). Ch. 7(n-step Bootstrapping](http://incompleteideas.net/book/RLbook2020.pdf)) TD(0)를 TD(n)으로 일반화, Q-러닝에서 적격성 흔적(eligibility traces)으로, 그리고 나중에 PPO의 GAE로 가는 경로.

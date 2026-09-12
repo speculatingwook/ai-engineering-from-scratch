@@ -1,4 +1,4 @@
-# 어텐션 변형 — 슬라이딩 윈도우, 희소, 차분(Differential)
+# 어텐션 변형: 슬라이딩 윈도우, 희소, 차분(Differential)
 
 > 완전 어텐션(full attention)은 원이다. 모든 토큰(token)이 모든 토큰을 보고, 메모리가 그 대가를 치른다. 네 가지 변형이 원의 모양을 구부려 비용의 절반을 되찾는다.
 
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-완전 어텐션(full attention)은 시퀀스(sequence) 길이에 대해 `O(N²)` 메모리와 `O(N²)` 연산이 든다. 128K 컨텍스트(context)의 Llama 3 70B의 경우 층(layer)당 160억 개의 어텐션 항목이고, 그것이 80개 층이다. Flash Attention(Lesson 12)은 `O(N²)` 활성(activation) 메모리를 숨기지만 산술 비용은 바꾸지 않는다 — 모든 토큰이 여전히 다른 모든 토큰에 어텐션한다.
+완전 어텐션(full attention)은 시퀀스(sequence) 길이에 대해 `O(N²)` 메모리와 `O(N²)` 연산이 든다. 128K 컨텍스트(context)의 Llama 3 70B의 경우 층(layer)당 160억 개의 어텐션 항목이고, 그것이 80개 층이다. Flash Attention(Lesson 12)은 `O(N²)` 활성(activation) 메모리를 숨기지만 산술 비용은 바꾸지 않는다. 모든 토큰이 여전히 다른 모든 토큰에 어텐션한다.
 
 세 부류의 변형이 어텐션 행렬(matrix) 자체의 위상(topology)을 바꾼다:
 
@@ -39,11 +39,11 @@ positions 0-7          positions 0-7, W=4
 7 | x x x x x x x x  7 |          x x x x
 ```
 
-`N = 8192`이고 `W = 1024`인 경우, 점수 행렬은 기댓값으로 1024 × 8192개의 0이 아닌 행을 가진다 — 8배 감소.
+`N = 8192`이고 `W = 1024`인 경우, 점수 행렬은 기댓값으로 1024 × 8192개의 0이 아닌 행을 가진다. 8배 감소.
 
 **SWA로 KV 캐시가 줄어든다.** K와 V의 마지막 `W`개 토큰만 층당 유지하면 된다. Gemma-3 스타일 구성(1024 윈도우, 128K 컨텍스트)의 경우, KV 캐시가 128배 줄어든다.
 
-**품질 비용.** SWA만 쓰는 트랜스포머는 장거리 검색에 어려움을 겪는다. 해법: SWA 층을 완전 어텐션 층과 번갈아 배치한다. Gemma 3는 5:1 SWA:전역을 쓴다. Mistral 7B는 정보가 겹치는 윈도우로 "앞으로 흐르는" 인과-SWA 스택(stack)을 썼다 — 각 층이 유효 수용 영역(receptive field)을 `W`만큼 늘리고, `L`개 층 후 모델은 `L × W` 토큰 뒤까지 어텐션할 수 있다.
+**품질 비용.** SWA만 쓰는 트랜스포머는 장거리 검색에 어려움을 겪는다. 해법: SWA 층을 완전 어텐션 층과 번갈아 배치한다. Gemma 3는 5:1 SWA:전역을 쓴다. Mistral 7B는 정보가 겹치는 윈도우로 "앞으로 흐르는" 인과-SWA 스택(stack)을 썼다. 각 층이 유효 수용 영역(receptive field)을 `W`만큼 늘리고, `L`개 층 후 모델은 `L × W` 토큰 뒤까지 어텐션할 수 있다.
 
 ### 희소 / 블록 어텐션
 
@@ -107,7 +107,7 @@ def swa_mask(n, window):
     return M
 ```
 
-파라미터(parameter) 하나 — `window`. `window >= n`이면 완전 인과 어텐션을 되찾는다. `window = 1`이면 각 토큰이 자기 자신에만 어텐션한다.
+파라미터(parameter) 하나: `window`. `window >= n`이면 완전 인과 어텐션을 되찾는다. `window = 1`이면 각 토큰이 자기 자신에만 어텐션한다.
 
 ### 3단계: 국소 + 스트라이드 희소 마스크
 
@@ -167,10 +167,10 @@ out = flex_attention(q, k, v, block_mask=mask)
 
 **각각을 선택할 때:**
 
-- **순수 완전 어텐션** — ~16K 컨텍스트까지의 모든 층, 또는 검색 품질이 가장 중요할 때.
-- **SWA + 전역 혼합** — 장문 컨텍스트(>32K), 학습과 추론이 메모리에 묶일 때. 32K 이상에서 2026년 기본값.
-- **희소 블록 어텐션** — 커스텀 커널, 커스텀 패턴. 특화된 워크로드(검색, 오디오)를 위해 예약.
-- **차분 어텐션** — 어텐션-싱크 오염이 해가 되는 모든 워크로드(장문 컨텍스트 RAG, 건초더미 속 바늘).
+- **순수 완전 어텐션**: ~16K 컨텍스트까지의 모든 층, 또는 검색 품질이 가장 중요할 때.
+- **SWA + 전역 혼합**: 장문 컨텍스트(>32K), 학습과 추론이 메모리에 묶일 때. 32K 이상에서 2026년 기본값.
+- **희소 블록 어텐션**: 커스텀 커널, 커스텀 패턴. 특화된 워크로드(검색, 오디오)를 위해 예약.
+- **차분 어텐션**: 어텐션-싱크 오염이 해가 되는 모든 워크로드(장문 컨텍스트 RAG, 건초더미 속 바늘).
 
 ## 산출물 (Ship It)
 
@@ -198,12 +198,12 @@ out = flex_attention(q, k, v, block_mask=mask)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Beltagy, Peters, Cohan (2020). Longformer: The Long-Document Transformer](https://arxiv.org/abs/2004.05150) — 표준 슬라이딩 윈도우 + 전역 토큰 논문.
-- [Zaheer et al. (2020). Big Bird: Transformers for Longer Sequences](https://arxiv.org/abs/2007.14062) — 국소 + 전역 + 무작위.
-- [Child et al. (2019). Generating Long Sequences with Sparse Transformers](https://arxiv.org/abs/1904.10509) — OpenAI의 국소+스트라이드 패턴.
-- [Gemma Team (2024). Gemma 2: Improving Open Language Models at a Practical Size](https://arxiv.org/abs/2408.00118) — 1:1 SWA:전역 혼합.
-- [Gemma Team (2025). Gemma 3 technical report](https://arxiv.org/abs/2503.19786) — 이제 교과서 기본값인 window=1024의 5:1 혼합.
-- [Ye et al. (2024). Differential Transformer](https://arxiv.org/abs/2410.05258) — DIFF Transformer 논문.
-- [Yuan et al. (2025). Native Sparse Attention](https://arxiv.org/abs/2502.11089) — DeepSeek-V3.2의 학습된 희소성 어텐션.
-- [PyTorch — FlexAttention blog and docs](https://pytorch.org/blog/flexattention/) — Use It의 마스크-호출가능 패턴에 대한 API 레퍼런스.
+- [Beltagy, Peters, Cohan (2020). Longformer: The Long-Document Transformer](https://arxiv.org/abs/2004.05150): 표준 슬라이딩 윈도우 + 전역 토큰 논문.
+- [Zaheer et al. (2020). Big Bird: Transformers for Longer Sequences](https://arxiv.org/abs/2007.14062): 국소 + 전역 + 무작위.
+- [Child et al. (2019). Generating Long Sequences with Sparse Transformers](https://arxiv.org/abs/1904.10509): OpenAI의 국소+스트라이드 패턴.
+- [Gemma Team (2024). Gemma 2: Improving Open Language Models at a Practical Size](https://arxiv.org/abs/2408.00118): 1:1 SWA:전역 혼합.
+- [Gemma Team (2025). Gemma 3 technical report](https://arxiv.org/abs/2503.19786): 이제 교과서 기본값인 window=1024의 5:1 혼합.
+- [Ye et al. (2024). Differential Transformer](https://arxiv.org/abs/2410.05258): DIFF Transformer 논문.
+- [Yuan et al. (2025). Native Sparse Attention](https://arxiv.org/abs/2502.11089): DeepSeek-V3.2의 학습된 희소성 어텐션.
+- [PyTorch(FlexAttention blog and docs](https://pytorch.org/blog/flexattention/)) Use It의 마스크-호출가능 패턴에 대한 API 레퍼런스.
 </content>

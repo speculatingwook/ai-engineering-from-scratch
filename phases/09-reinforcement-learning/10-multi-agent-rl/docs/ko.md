@@ -11,7 +11,7 @@
 
 방을 탐색하는 법을 배우는 로봇은 단일 에이전트 강화 학습 문제다. 축구 팀은 아니다. AlphaStar 대 StarCraft 상대는 아니다. 입찰 에이전트들의 시장은 아니다. 4방향 정지에서 협상하는 두 자동차는 아니다. 다대다 실세계 문제는 아니다.
 
-모든 멀티 에이전트 설정에서, 어느 한 에이전트의 관점에서 다른 에이전트들은 환경의 일부*이다*. 그들이 학습하고 행동을 바꾸면서 환경은 비정상(non-stationary)이 된다. 마르코프 성질 — "다음 상태는 오직 현재 상태와 나의 행동에만 의존한다" — 이 위반되는데, 다음 상태가 *다른* 에이전트들이 무엇을 선택했는지에도 의존하고 그들의 정책은 움직이는 표적이기 때문이다.
+모든 멀티 에이전트 설정에서, 어느 한 에이전트의 관점에서 다른 에이전트들은 환경의 일부*이다*. 그들이 학습하고 행동을 바꾸면서 환경은 비정상(non-stationary)이 된다. 마르코프 성질("다음 상태는 오직 현재 상태와 나의 행동에만 의존한다")이 위반되는데, 다음 상태가 *다른* 에이전트들이 무엇을 선택했는지에도 의존하고 그들의 정책은 움직이는 표적이기 때문이다.
 
 이는 표(tabular) 수렴 증명을 깨뜨린다(Q-러닝의 보장은 정상 환경을 가정한다). 순진한 심층 강화 학습도 깨뜨린다: 에이전트들이 루프 속에서 서로를 쫓으며 결코 안정적인 정책으로 수렴하지 않는다. 멀티 에이전트 특화 기법이 필요하다: 중앙집중 학습 / 분산 실행, 반사실(counterfactual) 베이스라인(baseline), 리그 플레이(league play), 자기 대국(self-play).
 
@@ -35,11 +35,11 @@
 
 **1. 독립 Q-러닝 / 독립 PPO (IQL, IPPO).** 각 에이전트가 다른 에이전트들을 환경의 일부로 취급하며 자신의 Q나 정책을 학습한다. 단순하고 때때로 작동한다(특히 경험 재현(experience replay)이 평활화 에이전트-모델링 트릭으로 작용할 때). 이론적 수렴: 없음. 실전에서: 느슨하게 결합된 작업에는 괜찮고, 단단하게 결합된 작업에는 나쁘다.
 
-**2. 중앙집중 학습, 분산 실행 (centralized training, decentralized execution, CTDE).** 가장 흔한 현대 패러다임. 각 에이전트는 국소 관측 `o_i`에 조건화된 자신의 *정책* `π_i`를 가진다 — 배포 시 표준 분산 실행. *학습* 중에는, 중앙집중 크리틱(critic) `Q(s, a_1, …, a_n)`이 전체 전역 상태와 결합 행동에 조건화된다. 예:
+**2. 중앙집중 학습, 분산 실행 (centralized training, decentralized execution, CTDE).** 가장 흔한 현대 패러다임. 각 에이전트는 국소 관측 `o_i`에 조건화된 자신의 *정책* `π_i`를 가진다. 배포 시 표준 분산 실행. *학습* 중에는, 중앙집중 크리틱(critic) `Q(s, a_1, …, a_n)`이 전체 전역 상태와 결합 행동에 조건화된다. 예:
 - **MADDPG** (Lowe et al. 2017): 에이전트별 중앙집중 크리틱을 가진 DDPG.
-- **COMA** (Foerster et al. 2017): 반사실 베이스라인 — "내가 대신 행동 `a'`을 취했다면 내 보상이 어땠을까?"를 물어 — 나의 기여를 분리한다.
+- **COMA** (Foerster et al. 2017): 반사실 베이스라인("내가 대신 행동 `a'`을 취했다면 내 보상이 어땠을까?"를 물어) 나의 기여를 분리한다.
 - **MAPPO** / 공유 크리틱을 가진 **IPPO** (Yu et al. 2022): 중앙집중 가치 함수를 가진 PPO. 2026년 협력 MARL에 지배적.
-- **QMIX** (Rashid et al. 2018): 가치 분해 — 단조 혼합을 가진 `Q_tot(s, a) = f(Q_1(s, a_1), …, Q_n(s, a_n))`.
+- **QMIX** (Rashid et al. 2018): 가치 분해: 단조 혼합을 가진 `Q_tot(s, a) = f(Q_1(s, a_1), …, Q_n(s, a_n))`.
 
 **3. 자기 대국.** 같은 에이전트의 두 복사본이 서로를 상대한다. 상대의 정책은 과거 스냅샷에서 온 내 정책*이다*. AlphaGo / AlphaZero / MuZero. OpenAI Five. 영합 게임에 가장 잘 작동한다; 학습 신호가 대칭적이다.
 
@@ -174,11 +174,11 @@ Refuse independent Q-learning on tightly-coupled cooperative tasks. Refuse to re
 
 ## 더 읽을거리 (Further Reading)
 
-- [Lowe et al. (2017). Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments (MADDPG)](https://arxiv.org/abs/1706.02275) — 중앙집중 크리틱을 가진 CTDE.
-- [Foerster et al. (2017). Counterfactual Multi-Agent Policy Gradients (COMA)](https://arxiv.org/abs/1705.08926) — 신용 할당을 위한 반사실 베이스라인.
-- [Rashid et al. (2018). QMIX: Monotonic Value Function Factorisation](https://arxiv.org/abs/1803.11485) — 단조성을 가진 가치 분해.
-- [Yu et al. (2022). The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games (MAPPO)](https://arxiv.org/abs/2103.01955) — PPO가 MARL에 놀랍도록 강하다.
-- [Vinyals et al. (2019). Grandmaster level in StarCraft II using multi-agent reinforcement learning (AlphaStar)](https://www.nature.com/articles/s41586-019-1724-z) — 대규모 리그 플레이.
-- [Silver et al. (2017). Mastering the game of Go without human knowledge (AlphaGo Zero)](https://www.nature.com/articles/nature24270) — 영합 게임에서의 순수 자기 대국.
-- [Sutton & Barto (2018). Ch. 15 — Neuroscience & Ch. 17 — Frontiers](http://incompleteideas.net/book/RLbook2020.pdf) — 멀티 에이전트 설정과 CTDE가 풀도록 설계된 비정상성 문제에 대한 교과서의 짧은 다룸을 포함.
-- [Zhang, Yang & Başar (2021). Multi-Agent Reinforcement Learning: A Selective Overview](https://arxiv.org/abs/1911.10635) — 수렴 결과와 함께 협력, 경쟁, 혼합 MARL을 다루는 개관.
+- [Lowe et al. (2017). Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments (MADDPG)](https://arxiv.org/abs/1706.02275): 중앙집중 크리틱을 가진 CTDE.
+- [Foerster et al. (2017). Counterfactual Multi-Agent Policy Gradients (COMA)](https://arxiv.org/abs/1705.08926): 신용 할당을 위한 반사실 베이스라인.
+- [Rashid et al. (2018). QMIX: Monotonic Value Function Factorisation](https://arxiv.org/abs/1803.11485): 단조성을 가진 가치 분해.
+- [Yu et al. (2022). The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games (MAPPO)](https://arxiv.org/abs/2103.01955): PPO가 MARL에 놀랍도록 강하다.
+- [Vinyals et al. (2019). Grandmaster level in StarCraft II using multi-agent reinforcement learning (AlphaStar)](https://www.nature.com/articles/s41586-019-1724-z): 대규모 리그 플레이.
+- [Silver et al. (2017). Mastering the game of Go without human knowledge (AlphaGo Zero)](https://www.nature.com/articles/nature24270): 영합 게임에서의 순수 자기 대국.
+- [Sutton & Barto (2018). Ch. 15: Neuroscience & Ch. 17: Frontiers](http://incompleteideas.net/book/RLbook2020.pdf): 멀티 에이전트 설정과 CTDE가 풀도록 설계된 비정상성 문제에 대한 교과서의 짧은 다룸을 포함.
+- [Zhang, Yang & Başar (2021). Multi-Agent Reinforcement Learning: A Selective Overview](https://arxiv.org/abs/1911.10635): 수렴 결과와 함께 협력, 경쟁, 혼합 MARL을 다루는 개관.

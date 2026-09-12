@@ -1,4 +1,4 @@
-# A2A — 에이전트 간 프로토콜 (A2A — The Agent-to-Agent Protocol)
+# A2A(에이전트 간 프로토콜 (A2A) The Agent-to-Agent Protocol)
 
 > 구글은 2025년 4월 A2A를 발표했다. 2026년 4월 기준 스펙은 https://a2a-protocol.org/latest/specification/ 에 있고 150개 이상의 조직이 이를 지지한다. A2A는 MCP(Lesson 13)에 대한 수평적 보완재다. MCP가 수직적(에이전트 ↔ 도구)인 반면, A2A는 피어 투 피어(peer-to-peer, 에이전트 ↔ 에이전트)다. A2A는 에이전트 카드(Agent Card, 발견), 아티팩트(artifact, 텍스트·구조화 데이터·비디오)를 동반한 작업, 불투명 작업 수명주기(opaque task lifecycle), 인증을 정의한다. 프로덕션(production) 시스템은 점점 더 MCP와 A2A를 짝지어 쓴다. 구글 클라우드는 2025~2026년에 걸쳐 A2A 지원을 Vertex AI Agent Builder에 통합했다.
 
@@ -65,9 +65,9 @@ Client                     Agent server
 
 A2A는 흔한 세 가지 패턴을 지원한다.
 
-- **베어러 토큰(Bearer token)** — OAuth2 또는 불투명 토큰.
-- **mTLS** — 상호 TLS. 조직들이 서로에게 신원을 증명한다.
-- **서명된 요청(Signed requests)** — 페이로드에 대한 HMAC.
+- **베어러 토큰(Bearer token)**: OAuth2 또는 불투명 토큰.
+- **mTLS**: 상호 TLS. 조직들이 서로에게 신원을 증명한다.
+- **서명된 요청(Signed requests)**: 페이로드에 대한 HMAC.
 
 인증은 에이전트 카드에 선언된다. 클라이언트는 이를 발견하고 준수한다.
 
@@ -92,9 +92,9 @@ A2A는 흔한 세 가지 패턴을 지원한다.
 
 2024~2026년에 여러 관련 스펙이 등장했다.
 
-- **ACP**(IBM/Linux Foundation) — A2A의 전신, 범위가 더 좁다.
-- **ANP**(Agent Network Protocol) — 피어 발견 중심, 탈중앙화 우선.
-- **NLIP**(Ecma Natural Language Interaction Protocol, 2025년 12월 표준화) — 자연어 콘텐츠 타입.
+- **ACP**(IBM/Linux Foundation): A2A의 전신, 범위가 더 좁다.
+- **ANP**(Agent Network Protocol): 피어 발견 중심, 탈중앙화 우선.
+- **NLIP**(Ecma Natural Language Interaction Protocol, 2025년 12월 표준화): 자연어 콘텐츠 타입.
 
 A2A는 2026년 4월 기준 가장 많이 채택된 피어 프로토콜이다. 비교는 arXiv:2505.02279(Liu et al., "A Survey of Agent Interoperability Protocols")를 보라.
 
@@ -159,7 +159,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [A2A specification](https://a2a-protocol.org/latest/specification/) — 정전(canonical) 스펙
-- [Google Developers Blog — A2A announcement](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) — 2025년 4월 출시 게시물
-- [A2A GitHub repo](https://github.com/a2aproject/A2A) — 레퍼런스 구현과 SDK
-- [Liu et al. — A Survey of Agent Interoperability Protocols](https://arxiv.org/html/2505.02279v1) — MCP, ACP, A2A, ANP 비교
+- [A2A specification](https://a2a-protocol.org/latest/specification/): 정전(canonical) 스펙
+- [Google Developers Blog(A2A announcement](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)) 2025년 4월 출시 게시물
+- [A2A GitHub repo](https://github.com/a2aproject/A2A): 레퍼런스 구현과 SDK
+- [Liu et al.(A Survey of Agent Interoperability Protocols](https://arxiv.org/html/2505.02279v1)) MCP, ACP, A2A, ANP 비교

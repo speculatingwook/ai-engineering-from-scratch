@@ -1,4 +1,4 @@
-# OpenTelemetry GenAI — 툴 호출을 종단 간(End-to-End)으로 추적하기
+# OpenTelemetry GenAI: 툴 호출을 종단 간(End-to-End)으로 추적하기
 
 > 에이전트가 다섯 개의 툴, 세 개의 MCP 서버, 두 개의 하위 에이전트를 호출한다. 그 모든 것을 가로지르는 하나의 트레이스(trace)가 필요하다. OpenTelemetry GenAI 시맨틱 컨벤션(semantic conventions)(v1.37 이상에서 안정화된 속성)은 2026년 표준이며, Datadog, Langfuse, Arize Phoenix, OpenLLMetry, AgentOps가 네이티브로 지원한다. 이 레슨은 필수 속성을 명명하고, 스팬(span) 계층(에이전트 → LLM → 툴)을 살펴보며, 어떤 OTel 익스포터(exporter)에든 연결할 수 있는 stdlib 스팬 방출기를 출하한다.
 
@@ -43,16 +43,16 @@ agent.invoke_agent  (top, INTERNAL span)
 
 - `gen_ai.operation.name` — `"chat"`, `"text_completion"`, `"embeddings"`, `"execute_tool"`, `"invoke_agent"`.
 - `gen_ai.provider.name` — `"openai"`, `"anthropic"`, `"google"`, `"azure_openai"`.
-- `gen_ai.request.model` — 요청된 모델 문자열(예: `"gpt-4o-2024-08-06"`).
-- `gen_ai.response.model` — 실제로 서비스된 모델.
+- `gen_ai.request.model`: 요청된 모델 문자열(예: `"gpt-4o-2024-08-06"`).
+- `gen_ai.response.model`: 실제로 서비스된 모델.
 - `gen_ai.usage.input_tokens` / `gen_ai.usage.output_tokens`.
-- `gen_ai.response.id` — 상관관계를 위한 제공자 응답 id.
+- `gen_ai.response.id`: 상관관계를 위한 제공자 응답 id.
 
 툴 스팬의 경우:
 
-- `gen_ai.tool.name` — 툴 식별자.
-- `gen_ai.tool.call.id` — 특정 호출 id.
-- `gen_ai.tool.description` — 툴 설명(선택).
+- `gen_ai.tool.name`: 툴 식별자.
+- `gen_ai.tool.call.id`: 특정 호출 id.
+- `gen_ai.tool.description`: 툴 설명(선택).
 
 에이전트 스팬의 경우:
 
@@ -71,9 +71,9 @@ agent.invoke_agent  (top, INTERNAL span)
 
 토큰 수준 이벤트를 스팬 이벤트로 추가할 수 있다:
 
-- `gen_ai.content.prompt` — 입력 메시지.
-- `gen_ai.content.completion` — 출력 메시지.
-- `gen_ai.content.tool_call` — 기록된 툴 호출.
+- `gen_ai.content.prompt`: 입력 메시지.
+- `gen_ai.content.completion`: 출력 메시지.
+- `gen_ai.content.tool_call`: 기록된 툴 호출.
 
 이벤트는 상세한 재생을 위해 스팬 내에서 시간 순서로 정렬된다.
 
@@ -99,9 +99,9 @@ MCP 클라이언트가 서버를 호출할 때 W3C traceparent 헤더를 요청�
 
 스팬과 함께, GenAI semconv는 메트릭을 정의한다:
 
-- `gen_ai.client.token.usage` — 히스토그램(histogram).
-- `gen_ai.client.operation.duration` — 히스토그램.
-- `gen_ai.tool.execution.duration` — 히스토그램.
+- `gen_ai.client.token.usage`: 히스토그램(histogram).
+- `gen_ai.client.operation.duration`: 히스토그램.
+- `gen_ai.tool.execution.duration`: 히스토그램.
 
 호출별 세부가 필요하지 않은 대시보드에는 이것들을 사용한다.
 
@@ -153,8 +153,8 @@ AgentOps(2024년 설립)는 GenAI 관찰성에 특화한다. 인기 프레임워
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenTelemetry — GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — GenAI 스팬, 메트릭, 이벤트를 위한 표준 컨벤션
-- [OpenTelemetry — GenAI spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/) — LLM 및 툴 실행 스팬 속성 목록
-- [OpenTelemetry — GenAI agent spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/) — 에이전트 수준 `invoke_agent` 스팬
-- [open-telemetry/semantic-conventions — GenAI spans](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md) — GitHub 호스팅 진실 소스
-- [Datadog — LLM OTel semantic convention](https://www.datadoghq.com/blog/llm-otel-semantic-convention/) — 프로덕션 통합 안내
+- [OpenTelemetry(GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/)) GenAI 스팬, 메트릭, 이벤트를 위한 표준 컨벤션
+- [OpenTelemetry(GenAI spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)) LLM 및 툴 실행 스팬 속성 목록
+- [OpenTelemetry(GenAI agent spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)) 에이전트 수준 `invoke_agent` 스팬
+- [open-telemetry/semantic-conventions(GenAI spans](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)) GitHub 호스팅 진실 소스
+- [Datadog(LLM OTel semantic convention](https://www.datadoghq.com/blog/llm-otel-semantic-convention/)) 프로덕션 통합 안내

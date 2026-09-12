@@ -30,17 +30,17 @@
 
 - 스팬 이름: 이름이 있으면 `invoke_agent {gen_ai.agent.name}`; 없으면 `invoke_agent`로 폴백.
 - 스팬 종류(span kind):
-  - **CLIENT** — 원격 에이전트 서비스용(OpenAI Assistants API, Bedrock Agents).
-  - **INTERNAL** — 인프로세스(in-process) 에이전트 프레임워크용(LangChain, CrewAI, 로컬 ReAct).
+  - **CLIENT**: 원격 에이전트 서비스용(OpenAI Assistants API, Bedrock Agents).
+  - **INTERNAL**: 인프로세스(in-process) 에이전트 프레임워크용(LangChain, CrewAI, 로컬 ReAct).
 
 ### 핵심 속성
 
 - `gen_ai.provider.name` — `anthropic`, `openai`, `aws.bedrock`, `google.vertex`.
-- `gen_ai.request.model` — 모델 ID.
-- `gen_ai.response.model` — 해소된(resolved) 모델(라우팅으로 인해 요청과 다를 수 있음).
-- `gen_ai.agent.name` — 에이전트 식별자.
+- `gen_ai.request.model`: 모델 ID.
+- `gen_ai.response.model`: 해소된(resolved) 모델(라우팅으로 인해 요청과 다를 수 있음).
+- `gen_ai.agent.name`: 에이전트 식별자.
 - `gen_ai.operation.name` — `chat`, `completion`, `invoke_agent`, `tool_call`.
-- `gen_ai.data_source.id` — RAG의 경우: 어느 말뭉치(corpus)나 저장소를 조회했는지.
+- `gen_ai.data_source.id`: RAG의 경우: 어느 말뭉치(corpus)나 저장소를 조회했는지.
 
 Anthropic, Azure AI Inference, AWS Bedrock, OpenAI를 위한 기술별 컨벤션이 존재한다.
 
@@ -91,9 +91,9 @@ python3 code/main.py
 ## 라이브러리로 써보기 (Use It)
 
 - **Datadog LLM Observability**(v1.37+)는 속성을 네이티브 매핑한다.
-- **Langfuse / Phoenix / Opik**(Lesson 24) — 생태계를 자동 계측한다.
-- **Jaeger / Honeycomb / Grafana Tempo** — 원시 OTel 트레이스; GenAI 속성으로 대시보드를 구축하라.
-- **자체 호스팅** — GenAI 프로세서를 갖춘 OTel Collector를 실행하라.
+- **Langfuse / Phoenix / Opik**(Lesson 24): 생태계를 자동 계측한다.
+- **Jaeger / Honeycomb / Grafana Tempo**: 원시 OTel 트레이스; GenAI 속성으로 대시보드를 구축하라.
+- **자체 호스팅**: GenAI 프로세서를 갖춘 OTel Collector를 실행하라.
 
 ## 산출물 (Ship It)
 
@@ -122,7 +122,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — 명세
-- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) — 기본적으로 GenAI 스팬
-- [AutoGen v0.4 (Microsoft Research)](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/) — OTel 스팬 내장
-- [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) — W3C 트레이스 컨텍스트 전파
+- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/): 명세
+- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/): 기본적으로 GenAI 스팬
+- [AutoGen v0.4 (Microsoft Research)](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/): OTel 스팬 내장
+- [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview): W3C 트레이스 컨텍스트 전파

@@ -24,15 +24,15 @@
 
 - 네 개의 자체 호스팅 웹 앱(쇼핑 사이트, 포럼, GitLab 유사 개발 도구, 비즈니스 CMS)에 걸친 812개의 장기(long-horizon) 과제.
 - 더해서 유틸리티: 지도, 계산기, 스크래치패드.
-- 평가는 gym API를 통한 실행 기반이다 — 주문이 접수되었는가, 이슈가 닫혔는가, CMS 페이지가 갱신되었는가?
+- 평가는 gym API를 통한 실행 기반이다. 주문이 접수되었는가, 이슈가 닫혔는가, CMS 페이지가 갱신되었는가?
 - 출시 당시: 최고의 GPT-4 에이전트가 14.41% 성공률을 기록한 반면 인간은 78.24%였다.
 
-자체 호스팅 구도가 중요하다 — 대상 앱이 고정(pinned)되어 있고 재현 가능하므로 벤치마크가 불안정하지 않다.
+자체 호스팅 구도가 중요하다. 대상 앱이 고정(pinned)되어 있고 재현 가능하므로 벤치마크가 불안정하지 않다.
 
 ### 확장판 (Extensions)
 
-- **VisualWebArena** — 성공이 이미지 해석에 달려 있는 시각적으로 그라운딩된(visually grounded) 과제(스크린샷을 일급 관찰값으로 사용).
-- **TheAgentCompany** (2024년 12월) — 터미널 + 코딩을 추가; 실제 원격 근무 환경에 더 가깝다.
+- **VisualWebArena**: 성공이 이미지 해석에 달려 있는 시각적으로 그라운딩된(visually grounded) 과제(스크린샷을 일급 관찰값으로 사용).
+- **TheAgentCompany** (2024년 12월): 터미널 + 코딩을 추가; 실제 원격 근무 환경에 더 가깝다.
 
 ### OSWorld (Xie et al., NeurIPS 2024)
 
@@ -48,8 +48,8 @@
 
 ### 후속작 (Follow-ups)
 
-- **OSWorld-G** — 564개 샘플의 그라운딩 스위트 + Jedi 학습 세트. 그라운딩을 계획(planning)에서 분해하여 따로 측정할 수 있게 한다.
-- **OSWorld-Human** — 수작업으로 선별한 골드(gold) 행동 궤적(trajectory). 최상위 에이전트가 필요한 것보다 1.4~2.7배 많은 스텝을 사용함을 보여준다(궤적 효율성 격차).
+- **OSWorld-G**: 564개 샘플의 그라운딩 스위트 + Jedi 학습 세트. 그라운딩을 계획(planning)에서 분해하여 따로 측정할 수 있게 한다.
+- **OSWorld-Human**: 수작업으로 선별한 골드(gold) 행동 궤적(trajectory). 최상위 에이전트가 필요한 것보다 1.4~2.7배 많은 스텝을 사용함을 보여준다(궤적 효율성 격차).
 
 ### 이것이 중요한 이유
 
@@ -82,8 +82,8 @@ python3 code/main.py
 
 - 지속적 평가를 위해 내부 클러스터에 자체 호스팅한 **WebArena Verified**.
 - 데스크톱 에이전트를 위한 VM 플릿(fleet)의 **OSWorld**.
-- **컴퓨터 사용 에이전트(computer-use agent)**(Lesson 21) — Claude, OpenAI CUA, Gemini — 모두 이와 같은 워크로드로 학습됨.
-- **자기 제품의 흐름** — 상위 20개 과제의 골드 궤적을 포착하라. 매주 그 과제로 에이전트를 돌려라.
+- **컴퓨터 사용 에이전트(computer-use agent)**(Lesson 21)(Claude, OpenAI CUA, Gemini) 모두 이와 같은 워크로드로 학습됨.
+- **자기 제품의 흐름**: 상위 20개 과제의 골드 궤적을 포착하라. 매주 그 과제로 에이전트를 돌려라.
 
 ## 산출물 (Ship It)
 
@@ -93,7 +93,7 @@ python3 code/main.py
 
 1. 장난감 하니스를 두 번째 앱(포럼)으로 확장하라. 3개 과제와 골드 궤적을 작성하라.
 2. 과제별 궤적 효율성 보고를 추가하라. 이 장난감에서 에이전트는 골드 대비 1배, 2배, 3배인가?
-3. "방해(distractor)" 도구 — 골드 궤적이 결코 사용하지 않는 도구 — 를 구현하라. 스크립트화된 에이전트가 유혹에 빠지는가?
+3. "방해(distractor)" 도구(골드 궤적이 결코 사용하지 않는 도구)를 구현하라. 스크립트화된 에이전트가 유혹에 빠지는가?
 4. OSWorld-G를 읽어라. 직접 만든 평가에서 그라운딩 실패와 계획 실패를 어떻게 분리하겠는가?
 5. WebArena의 앱 README를 읽어라. 고정된 앱 버전 중 하나를 업그레이드하면 무엇이 깨지는가?
 
@@ -112,7 +112,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Zhou et al., WebArena (arXiv:2307.13854)](https://arxiv.org/abs/2307.13854) — 4개 앱 웹 벤치마크
-- [Xie et al., OSWorld (arXiv:2404.07972)](https://arxiv.org/abs/2404.07972) — 크로스 OS 데스크톱 벤치마크
-- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use) — Claude의 벤치마크 형태의 능력
-- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/) — OSWorld와 WebArena 수치
+- [Zhou et al., WebArena (arXiv:2307.13854)](https://arxiv.org/abs/2307.13854): 4개 앱 웹 벤치마크
+- [Xie et al., OSWorld (arXiv:2404.07972)](https://arxiv.org/abs/2404.07972): 크로스 OS 데스크톱 벤치마크
+- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use): Claude의 벤치마크 형태의 능력
+- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/): OSWorld와 WebArena 수치

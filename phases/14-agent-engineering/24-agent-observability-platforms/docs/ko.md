@@ -1,6 +1,6 @@
 # 에이전트 관측성: Langfuse, Phoenix, Opik
 
-> 세 가지 오픈소스 에이전트(agent) 관측성(observability) 플랫폼이 2026년을 지배한다. Langfuse(MIT) — 월 600만+ 설치, 추적(tracing) + 프롬프트(prompt) 관리 + 평가 + 세션 리플레이. Arize Phoenix(Elastic 2.0) — 깊은 에이전트 특화 평가, RAG 관련성, OpenInference 자동 계측. Comet Opik(Apache 2.0) — 자동 프롬프트 최적화, 가드레일(guardrail), LLM 심판 환각 탐지.
+> 세 가지 오픈소스 에이전트(agent) 관측성(observability) 플랫폼이 2026년을 지배한다. Langfuse(MIT): 월 600만+ 설치, 추적(tracing) + 프롬프트(prompt) 관리 + 평가 + 세션 리플레이. Arize Phoenix(Elastic 2.0): 깊은 에이전트 특화 평가, RAG 관련성, OpenInference 자동 계측. Comet Opik(Apache 2.0): 자동 프롬프트 최적화, 가드레일(guardrail), LLM 심판 환각 탐지.
 
 **Type:** Learn
 **Languages:** Python (stdlib)
@@ -32,7 +32,7 @@ OTel GenAI(Lesson 23)는 스키마를 제공한다. 그래도 스팬(span)을 �
 - 더 깊은 에이전트 특화 평가: 트레이스 클러스터링, 이상 탐지, RAG를 위한 검색 관련성.
 - 네이티브 OpenInference 자동 계측.
 - 프로덕션을 위해 관리형 Arize AX와 짝을 이룸.
-- 프롬프트 버전 관리 없음 — 더 넓은 플랫폼과 함께 쓰는 드리프트(drift)/행동 회귀 도구로 자리매김.
+- 프롬프트 버전 관리 없음: 더 넓은 플랫폼과 함께 쓰는 드리프트(drift)/행동 회귀 도구로 자리매김.
 - 가장 강한 부분: RAG 관련성, 행동 드리프트, 이상 탐지.
 
 ### Comet Opik (Apache 2.0)
@@ -40,7 +40,7 @@ OTel GenAI(Lesson 23)는 스키마를 제공한다. 그래도 스팬(span)을 �
 - A/B 실험을 통한 자동 프롬프트 최적화.
 - 가드레일(PII 편집, 주제 제약).
 - LLM 심판 환각 탐지.
-- Comet 자체 측정에 따른 벤치마크: Opik 로그 + 평가가 23.44초인 반면 Langfuse는 327.15초(~14배 격차) — 벤더 벤치마크는 방향성으로만 받아들여라.
+- Comet 자체 측정에 따른 벤치마크: Opik 로그 + 평가가 23.44초인 반면 Langfuse는 327.15초(~14배 격차): 벤더 벤치마크는 방향성으로만 받아들여라.
 - 가장 강한 부분: 최적화 루프, 자동 실험, 가드레일 강제.
 
 ### 업계 데이터
@@ -55,12 +55,12 @@ Maxim(2026 현장 분석)에 따르면: 조직의 89%가 에이전트 관측성�
 | 깊은 RAG 평가 + 드리프트 | Phoenix |
 | 자동 최적화 + 가드레일 | Opik |
 | 개방형 라이선스, ELv2 아님 | Langfuse(MIT) 또는 Opik(Apache 2.0) |
-| Datadog / New Relic 통합 | 아무거나 — 모두 OTel을 내보냄 |
+| Datadog / New Relic 통합 | 아무거나: 모두 OTel을 내보냄 |
 
 ### 이 패턴이 잘못되는 지점
 
 - **평가 전략 없음.** 평가 없는 추적은 그저 비싼 로깅일 뿐이다.
-- **그라운딩 없이 자체 제작한 LLM 심판.** CRITIC 패턴(Lesson 05)이 적용된다 — 심판은 사실 검증을 위해 외부 도구가 필요하다.
+- **그라운딩 없이 자체 제작한 LLM 심판.** CRITIC 패턴(Lesson 05)이 적용된다. 심판은 사실 검증을 위해 외부 도구가 필요하다.
 - **프롬프트 버전이 트레이스에 묶여 있지 않음.** 프로덕션이 회귀할 때 원인이 된 프롬프트로 이분 탐색(bisect)할 수 없다.
 
 ## 직접 만들기 (Build It)
@@ -113,7 +113,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Langfuse docs](https://langfuse.com/) — 추적, 평가, 프롬프트 관리
-- [Arize Phoenix docs](https://docs.arize.com/phoenix) — 자동 계측, 드리프트
-- [Comet Opik](https://www.comet.com/site/products/opik/) — 최적화 + 가드레일
-- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — 셋 모두가 소비하는 스키마
+- [Langfuse docs](https://langfuse.com/): 추적, 평가, 프롬프트 관리
+- [Arize Phoenix docs](https://docs.arize.com/phoenix): 자동 계측, 드리프트
+- [Comet Opik](https://www.comet.com/site/products/opik/): 최적화 + 가드레일
+- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/): 셋 모두가 소비하는 스키마

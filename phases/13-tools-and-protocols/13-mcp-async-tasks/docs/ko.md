@@ -1,4 +1,4 @@
-# 비동기 태스크 (SEP-1686) — 장기 실행 작업을 위한 호출-지금, 가져오기-나중에
+# 비동기 태스크 (SEP-1686): 장기 실행 작업을 위한 호출-지금, 가져오기-나중에
 
 > 실제 에이전트 작업은 수 분에서 수 시간이 걸린다. CI 실행, 딥 리서치 합성, 배치 내보내기가 그렇다. 동기(synchronous) 도구 호출은 연결을 끊거나 타임아웃되거나 UI를 막는다. 2025-11-25에 병합된 SEP-1686은 태스크(Task) 프리미티브(primitive)를 추가한다. 어떤 요청이든 태스크가 되도록 증강(augment)할 수 있고, 결과는 나중에 가져오거나 상태 알림(state notification)으로 스트리밍한다. 드리프트(drift) 위험을 짚어두자면, 태스크는 2026년 상반기까지 실험적이다. SDK 표면도 아직 사양을 중심으로 설계하는 중이다.
 
@@ -51,9 +51,9 @@
 
 도구 어노테이션(annotation)은 태스크 지원을 선언할 수 있다:
 
-- `taskSupport: "forbidden"` — 이 도구는 항상 동기로 실행된다. 빠른 도구에 안전하다.
-- `taskSupport: "optional"` — 클라이언트가 태스크 증강을 요청할 수 있다.
-- `taskSupport: "required"` — 클라이언트가 반드시 태스크 증강을 써야 한다.
+- `taskSupport: "forbidden"`: 이 도구는 항상 동기로 실행된다. 빠른 도구에 안전하다.
+- `taskSupport: "optional"`: 클라이언트가 태스크 증강을 요청할 수 있다.
+- `taskSupport: "required"`: 클라이언트가 반드시 태스크 증강을 써야 한다.
 
 `generate_report` 도구는 `required`일 것이다. `notes_search` 도구는 `forbidden`일 것이다.
 
@@ -70,10 +70,10 @@ working  -> cancelled
 
 ### 메서드
 
-- `tasks/status {taskId}` — 현재 상태와 진행 힌트를 반환한다.
-- `tasks/result {taskId}` — 아직 완료되지 않았으면 블로킹하거나 404를 반환한다.
-- `tasks/cancel {taskId}` — 멱등(idempotent). 종단 상태는 무시한다.
-- `tasks/list` — 선택적. 활성 및 최근 완료된 태스크를 열거한다.
+- `tasks/status {taskId}`: 현재 상태와 진행 힌트를 반환한다.
+- `tasks/result {taskId}`: 아직 완료되지 않았으면 블로킹하거나 404를 반환한다.
+- `tasks/cancel {taskId}`: 멱등(idempotent). 종단 상태는 무시한다.
+- `tasks/list`: 선택적. 활성 및 최근 완료된 태스크를 열거한다.
 
 ### 상태 변경 스트리밍
 
@@ -153,8 +153,8 @@ SEP-1686은 2025-11-25에 출시되었지만 더 넓은 로드맵은 세 가지 
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — GitHub SEP-1686 issue](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1686) — 발단이 된 제안과 전체 토론
-- [WorkOS — MCP async tasks for AI agent workflows](https://workos.com/blog/mcp-async-tasks-ai-agent-workflows) — 근거를 동반한 설계 설명
-- [DeepWiki — MCP task system and async operations](https://deepwiki.com/modelcontextprotocol/modelcontextprotocol/2.7-task-system-and-async-operations) — 메커니즘과 상태 기계
-- [FastMCP — Tasks](https://gofastmcp.com/servers/tasks) — SDK 수준 태스크 구현 패턴
-- [MCP blog — 2026 roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/) — 서브태스크를 포함한 미해결 이슈와 2026년 우선순위
+- [MCP(GitHub SEP-1686 issue](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1686)) 발단이 된 제안과 전체 토론
+- [WorkOS(MCP async tasks for AI agent workflows](https://workos.com/blog/mcp-async-tasks-ai-agent-workflows)) 근거를 동반한 설계 설명
+- [DeepWiki(MCP task system and async operations](https://deepwiki.com/modelcontextprotocol/modelcontextprotocol/2.7-task-system-and-async-operations)) 메커니즘과 상태 기계
+- [FastMCP(Tasks](https://gofastmcp.com/servers/tasks)) SDK 수준 태스크 구현 패턴
+- [MCP blog(2026 roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/)) 서브태스크를 포함한 미해결 이슈와 2026년 우선순위

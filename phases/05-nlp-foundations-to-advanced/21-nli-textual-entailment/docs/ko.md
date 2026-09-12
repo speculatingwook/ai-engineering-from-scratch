@@ -1,4 +1,4 @@
-# 자연어 추론(Natural Language Inference) — 텍스트 함의(Textual Entailment)
+# 자연어 추론(Natural Language Inference): 텍스트 함의(Textual Entailment)
 
 > "t가 h를 함의한다"는 것은 t를 읽은 사람이 h가 참이라고 결론 내린다는 뜻이다. NLI는 함의(entailment) / 모순(contradiction) / 중립(neutral)을 예측하는 과제다. 겉보기엔 지루하지만 프로덕션(production)에서는 핵심을 떠받친다.
 

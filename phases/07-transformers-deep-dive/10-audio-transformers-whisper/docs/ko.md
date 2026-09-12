@@ -1,4 +1,4 @@
-# 오디오 트랜스포머 — Whisper 아키텍처
+# 오디오 트랜스포머: Whisper 아키텍처
 
 > 오디오는 시간에 따른 주파수의 이미지다. Whisper는 멜 스펙트로그램(mel spectrogram)을 먹고 다시 말로 내뱉는 ViT다.
 
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-Whisper(OpenAI, Radford et al. 2022) 이전에 최첨단 자동 음성 인식(automatic speech recognition, ASR)은 wav2vec 2.0과 HuBERT를 의미했다 — 자기 지도 특성 추출기(feature extractor)에 파인튜닝(fine-tuning)된 헤드를 얹은 형태다. 품질은 높지만 데이터 파이프라인(pipeline)이 비싸고 도메인에 취약했다. 다국어 음성 인식은 언어 계열마다 별도의 모델이 필요했다.
+Whisper(OpenAI, Radford et al. 2022) 이전에 최첨단 자동 음성 인식(automatic speech recognition, ASR)은 wav2vec 2.0과 HuBERT를 의미했다. 자기 지도 특성 추출기(feature extractor)에 파인튜닝(fine-tuning)된 헤드를 얹은 형태다. 품질은 높지만 데이터 파이프라인(pipeline)이 비싸고 도메인에 취약했다. 다국어 음성 인식은 언어 계열마다 별도의 모델이 필요했다.
 
 Whisper는 세 가지에 베팅했다:
 
@@ -23,23 +23,23 @@ Whisper는 세 가지에 베팅했다:
 
 ![Whisper pipeline: audio → mel → encoder → decoder → text](../assets/whisper.svg)
 
-### 1단계 — 리샘플링(resample) + 윈도잉(window)
+### 1단계: 리샘플링(resample) + 윈도잉(window)
 
 16 kHz 오디오. 30초로 자르거나 패딩(pad)한다. 로그-멜 스펙트로그램을 계산한다: 80개 멜 빈(mel bin), 10 ms 스트라이드 → ~3,000 프레임(frame) × 80 특성. 이것이 Whisper가 보는 "입력 이미지"다.
 
-### 2단계 — 합성곱 스템(convolutional stem)
+### 2단계: 합성곱 스템(convolutional stem)
 
 커널 3, 스트라이드 2의 Conv1D 층 두 개가 3,000 프레임을 1,500으로 줄인다. 파라미터를 크게 늘리지 않으면서 시퀀스 길이를 절반으로 줄인다.
 
-### 3단계 — 인코더
+### 3단계: 인코더
 
 1,500개 타임스텝(timestep)에 대한 24층(large 기준) 트랜스포머 인코더. 사인파 위치 인코딩(positional encoding), 셀프 어텐션(self-attention), GELU FFN. 1,500 × 1,280 은닉 상태를 생성한다.
 
-### 4단계 — 디코더
+### 4단계: 디코더
 
 24층 트랜스포머 디코더. GPT-2의 상위 집합(superset)에 몇 개의 오디오 전용 특수 토큰을 더한 BPE 어휘(vocabulary)로부터 토큰을 자기회귀적으로 생성한다.
 
-### 5단계 — 작업 토큰
+### 5단계: 작업 토큰
 
 디코더 프롬프트(prompt)는 모델에게 무엇을 할지 알려 주는 제어 토큰으로 시작한다:
 
@@ -55,7 +55,7 @@ Whisper는 세 가지에 베팅했다:
 
 모델은 이 관례로 학습되었다. 접두사(prefix)로 작업을 제어한다. 2026년의 명령어 튜닝(instruction-tuning)에 해당하지만, 음성에 적용된 형태다.
 
-### 6단계 — 출력
+### 6단계: 출력
 
 로그 확률(log-prob) 임계값과 함께 빔 서치(beam search, 폭 5). `<|notimestamps|>` 토큰이 없으면 오디오 0.02초마다 타임스탬프를 예측한다.
 
@@ -76,7 +76,7 @@ Large-v3-turbo(2024)는 디코더를 32층에서 4층으로 줄였다. 디코딩
 ### Whisper가 하지 않는 것
 
 - 화자 분리(diarization, 누가 말하는지)는 안 한다. 이를 위해서는 pyannote와 함께 써라.
-- 네이티브 실시간 스트리밍(streaming)은 안 된다 — 30초 윈도우가 고정이다. 최신 래퍼(wrapper, `faster-whisper`, `WhisperX`)는 VAD + 겹침(overlap)을 통해 스트리밍을 덧붙인다.
+- 네이티브 실시간 스트리밍(streaming)은 안 된다. 30초 윈도우가 고정이다. 최신 래퍼(wrapper, `faster-whisper`, `WhisperX`)는 VAD + 겹침(overlap)을 통해 스트리밍을 덧붙인다.
 - 외부 청킹(chunking) 없이는 30초를 넘는 장문 컨텍스트(context)도 없다. 인간의 음성은 전사에 장거리 컨텍스트가 거의 필요 없기 때문에 실제로는 잘 작동한다.
 
 ### 2026년 지형
@@ -91,7 +91,7 @@ Large-v3-turbo(2024)는 디코더를 32층에서 4층으로 줄였다. 디코딩
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`를 참고하라. Whisper를 학습시키지는 않는다 — 로그-멜 스펙트로그램 파이프라인 + 작업 토큰 프롬프트 포매터(formatter)를 만든다. 이것들이 프로덕션(production)에서 실제로 다루는 부분이다.
+`code/main.py`를 참고하라. Whisper를 학습시키지는 않는다. 로그-멜 스펙트로그램 파이프라인 + 작업 토큰 프롬프트 포매터(formatter)를 만든다. 이것들이 프로덕션(production)에서 실제로 다루는 부분이다.
 
 ### 1단계: 오디오 합성
 
@@ -151,13 +151,13 @@ for s in segments:
 
 - 하나의 모델로 다국어 ASR.
 - 잡음이 많고 다양한 오디오의 강건한 전사.
-- 연구 / 프로토타입 ASR — 가장 빠른 출발점.
+- 연구 / 프로토타입 ASR: 가장 빠른 출발점.
 
 **다른 것을 선택할 때:**
 
-- 엣지에서의 초저지연 스트리밍 — 동일 품질에서 Moonshine이 Whisper를 이긴다.
-- <200 ms가 필요한 실시간 대화형 AI — 전용 스트리밍 ASR.
-- 화자 분리 — Whisper는 안 한다; pyannote를 덧붙여라.
+- 엣지에서의 초저지연 스트리밍: 동일 품질에서 Moonshine이 Whisper를 이긴다.
+- <200 ms가 필요한 실시간 대화형 AI: 전용 스트리밍 ASR.
+- 화자 분리: Whisper는 안 한다; pyannote를 덧붙여라.
 
 ## 산출물 (Ship It)
 
@@ -184,12 +184,12 @@ for s in segments:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Radford et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356) — Whisper 논문.
-- [OpenAI Whisper repo](https://github.com/openai/whisper) — 레퍼런스 코드 + 모델 가중치(weight). `whisper/model.py`를 읽으면 Conv1D 스템 + 인코더 + 디코더를 ~400줄 안에서 위에서 아래로 볼 수 있다.
-- [OpenAI Whisper — `whisper/decoding.py`](https://github.com/openai/whisper/blob/main/whisper/decoding.py) — 5~6단계에서 설명한 빔 서치 + 작업 토큰 로직이 여기 있다; 500줄, 완전히 읽을 만하다.
-- [Baevski et al. (2020). wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations](https://arxiv.org/abs/2006.11477) — 선행 연구; 일부 환경에서는 여전히 SOTA 특성.
-- [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) — 프로덕션 래퍼, 레퍼런스보다 4배 빠름.
-- [Jia et al. (2024). Moonshine: Speech Recognition for Live Transcription and Voice Commands](https://arxiv.org/abs/2410.15608) — 2024년의 엣지 친화적 ASR, Whisper 형태이지만 더 작다.
-- [HuggingFace blog — "Fine-Tune Whisper For Multilingual ASR with 🤗 Transformers"](https://huggingface.co/blog/fine-tune-whisper) — 멜 스펙트로그램 전처리기와 토큰-타임스탬프 처리를 포함한 표준 파인튜닝 레시피.
-- [HuggingFace `modeling_whisper.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/whisper/modeling_whisper.py) — 이 레슨의 아키텍처 다이어그램을 그대로 따르는 전체 구현(인코더, 디코더, 교차 어텐션(cross-attention), 생성).
+- [Radford et al. (2022). Robust Speech Recognition via Large-Scale Weak Supervision](https://arxiv.org/abs/2212.04356): Whisper 논문.
+- [OpenAI Whisper repo](https://github.com/openai/whisper): 레퍼런스 코드 + 모델 가중치(weight). `whisper/model.py`를 읽으면 Conv1D 스템 + 인코더 + 디코더를 ~400줄 안에서 위에서 아래로 볼 수 있다.
+- [OpenAI Whisper(`whisper/decoding.py`](https://github.com/openai/whisper/blob/main/whisper/decoding.py)) 5~6단계에서 설명한 빔 서치 + 작업 토큰 로직이 여기 있다; 500줄, 완전히 읽을 만하다.
+- [Baevski et al. (2020). wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations](https://arxiv.org/abs/2006.11477): 선행 연구; 일부 환경에서는 여전히 SOTA 특성.
+- [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper): 프로덕션 래퍼, 레퍼런스보다 4배 빠름.
+- [Jia et al. (2024). Moonshine: Speech Recognition for Live Transcription and Voice Commands](https://arxiv.org/abs/2410.15608): 2024년의 엣지 친화적 ASR, Whisper 형태이지만 더 작다.
+- [HuggingFace blog("Fine-Tune Whisper For Multilingual ASR with 🤗 Transformers"](https://huggingface.co/blog/fine-tune-whisper)) 멜 스펙트로그램 전처리기와 토큰-타임스탬프 처리를 포함한 표준 파인튜닝 레시피.
+- [HuggingFace `modeling_whisper.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/whisper/modeling_whisper.py): 이 레슨의 아키텍처 다이어그램을 그대로 따르는 전체 구현(인코더, 디코더, 교차 어텐션(cross-attention), 생성).
 </content>

@@ -1,4 +1,4 @@
-# Capstone 82 — 탈옥 분류 체계 (Jailbreak Taxonomy)
+# Capstone 82: 탈옥 분류 체계 (Jailbreak Taxonomy)
 
 > 분류 체계가 없는 안전 하네스는 동전 던지기와 다를 바 없다. 막기 전에 그 공격의 이름부터 정해야 한다.
 

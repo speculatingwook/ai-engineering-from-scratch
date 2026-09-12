@@ -26,8 +26,8 @@
 
 ### 상대 깊이 vs 메트릭 깊이
 
-- **상대 깊이(Relative depth)** — 실세계 단위 없는 순서가 매겨진 `z` 값. "픽셀 A가 픽셀 B보다 가깝지만, 거리의 비율은 미터에 고정되어 있지 않다."
-- **메트릭 깊이(Metric depth)** — 카메라로부터의 미터 단위 절대 거리. 모델이 이미지 단서와 실제 거리 사이의 통계적 관계를 학습했어야 한다.
+- **상대 깊이(Relative depth)**: 실세계 단위 없는 순서가 매겨진 `z` 값. "픽셀 A가 픽셀 B보다 가깝지만, 거리의 비율은 미터에 고정되어 있지 않다."
+- **메트릭 깊이(Metric depth)**: 카메라로부터의 미터 단위 절대 거리. 모델이 이미지 단서와 실제 거리 사이의 통계적 관계를 학습했어야 한다.
 
 MiDaS와 Depth Anything V3는 상대 깊이를 만든다. Marigold도 상대 깊이를 만든다. ZoeDepth, UniDepth, Metric3D는 메트릭 깊이를 만든다. 메트릭 모델은 카메라 내부 파라미터에 민감하지만, 상대 모델은 그렇지 않다.
 
@@ -51,19 +51,19 @@ Depth Anything V3는 인코더를 동결하고 DPT 스타일 디코더(decoder)�
 
 2D 이미지는 깊이와 상관된 많은 단안 단서를 담는다.
 
-- **원근(Perspective)** — 3D의 평행선이 2D에서 수렴한다.
-- **질감 그래디언트(Texture gradient)** — 멀리 있는 표면은 더 작고 더 조밀한 질감을 가진다.
-- **가림 순서(Occlusion order)** — 더 가까운 객체가 더 먼 것을 가린다.
-- **크기 항상성(Size constancy)** — 알려진 객체(자동차, 사람)가 대략적인 스케일을 준다.
-- **대기 원근(Atmospheric perspective)** — 실외 장면에서 먼 객체는 더 흐릿하고 더 푸르게 보인다.
+- **원근(Perspective)**: 3D의 평행선이 2D에서 수렴한다.
+- **질감 그래디언트(Texture gradient)**: 멀리 있는 표면은 더 작고 더 조밀한 질감을 가진다.
+- **가림 순서(Occlusion order)**: 더 가까운 객체가 더 먼 것을 가린다.
+- **크기 항상성(Size constancy)**: 알려진 객체(자동차, 사람)가 대략적인 스케일을 준다.
+- **대기 원근(Atmospheric perspective)**: 실외 장면에서 먼 객체는 더 흐릿하고 더 푸르게 보인다.
 
 수십억 장의 이미지로 학습된 ViT는 이 단서들을 내재화한다. 충분한 데이터와 강한 백본이 있으면 단안 깊이는 명시적 3D 감독 없이도 합리적인 정확도에 도달한다.
 
 ### 단안 깊이가 할 수 없는 것
 
 - 내부 파라미터나 장면 속 알려진 객체 없이는 **절대 메트릭 스케일**을 알 수 없다. 신경망(network)은 컵이 1 m인지 10 m인지 모른 채 "컵이 숟가락보다 두 배 멀다"를 예측할 수 있다.
-- **가려진 기하** — 의자의 뒷면은 보이지 않으며 신뢰성 있게 추론할 수 없다.
-- **진정으로 질감 없거나 반사적인 표면** — 거울, 유리, 균일한 벽. 신경망은 그럴듯하지만 틀린 깊이를 보고한다.
+- **가려진 기하**: 의자의 뒷면은 보이지 않으며 신뢰성 있게 추론할 수 없다.
+- **진정으로 질감 없거나 반사적인 표면**: 거울, 유리, 균일한 벽. 신경망은 그럴듯하지만 틀린 깊이를 보고한다.
 
 ### 2026년의 Depth Anything V3
 
@@ -75,7 +75,7 @@ Depth Anything V3는 인코더를 동결하고 DPT 스타일 디코더(decoder)�
 
 2026년에 깊이가 필요할 때 호출할 드롭인(drop-in) 모델이 바로 이것이다.
 
-### Marigold — 깊이를 위한 디퓨전
+### Marigold: 깊이를 위한 디퓨전
 
 Marigold(Ke et al., CVPR 2024)는 깊이 추정을 조건부 이미지-투-이미지 디퓨전으로 재구성한다. 조건화(conditioning)는 RGB, 타깃은 깊이 맵이다. 사전 학습된 Stable Diffusion 2 U-Net을 백본으로 쓴다. 출력 깊이 맵은 객체 경계에서 유난히 선명하다. 트레이드오프(trade-off)는 순방향(feed-forward) 모델보다 느린 추론(10-50 디노이징 스텝)이다.
 
@@ -206,11 +206,11 @@ depth_np = np.array(out["depth"])
 
 ## 라이브러리로 써보기 (Use It)
 
-- **Depth Anything V3** (Meta AI / ByteDance, 2024-2026) — 상대 깊이의 기본값. 프로덕션에서 가장 빠른 ViT-라지 백본 모델.
-- **Marigold** (ETH, 2024) — 가장 높은 시각 품질, 느린 추론.
-- **UniDepth** (ETH, 2024) — 카메라 내부 파라미터 추정을 갖춘 메트릭 깊이.
-- **ZoeDepth** (Intel, 2023) — 메트릭 깊이; 더 오래됐지만 여전히 신뢰성 있음.
-- **MiDaS v3.1** — 레거시지만 안정적; 비교에 좋은 베이스라인(baseline).
+- **Depth Anything V3** (Meta AI / ByteDance, 2024-2026): 상대 깊이의 기본값. 프로덕션에서 가장 빠른 ViT-라지 백본 모델.
+- **Marigold** (ETH, 2024): 가장 높은 시각 품질, 느린 추론.
+- **UniDepth** (ETH, 2024): 카메라 내부 파라미터 추정을 갖춘 메트릭 깊이.
+- **ZoeDepth** (Intel, 2023): 메트릭 깊이; 더 오래됐지만 여전히 신뢰성 있음.
+- **MiDaS v3.1**: 레거시지만 안정적; 비교에 좋은 베이스라인(baseline).
 
 전형적인 통합 패턴은 다음과 같다.
 
@@ -226,8 +226,8 @@ depth_np = np.array(out["depth"])
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-depth-model-picker.md` — 지연 시간(latency), 메트릭 대 상대 필요, 장면 유형에 따라 Depth Anything V3, Marigold, UniDepth, MiDaS 중에서 고른다.
-- `outputs/skill-depth-to-pointcloud.md` — 올바른 내부 파라미터 처리와 `.ply` 내보내기로 깊이 맵에서 점 구름을 만드는 스킬.
+- `outputs/prompt-depth-model-picker.md`: 지연 시간(latency), 메트릭 대 상대 필요, 장면 유형에 따라 Depth Anything V3, Marigold, UniDepth, MiDaS 중에서 고른다.
+- `outputs/skill-depth-to-pointcloud.md`: 올바른 내부 파라미터 처리와 `.ply` 내보내기로 깊이 맵에서 점 구름을 만드는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -250,8 +250,8 @@ depth_np = np.array(out["depth"])
 
 ## 더 읽을거리 (Further Reading)
 
-- [Depth Anything V3 paper page](https://depth-anything.github.io/) — DINOv2 인코더를 갖춘 SOTA 단안 깊이
-- [Marigold (Ke et al., CVPR 2024)](https://marigoldmonodepth.github.io/) — 디퓨전 기반 깊이 추정
-- [UniDepth (Piccinelli et al., 2024)](https://arxiv.org/abs/2403.18913) — 내부 파라미터를 갖춘 메트릭 깊이
-- [MiDaS v3.1 (Intel ISL)](https://github.com/isl-org/MiDaS) — 정석적인 상대 깊이 베이스라인
-- [DINOv3 blog post (Meta)](https://ai.meta.com/blog/dinov3-self-supervised-vision-model/) — 깊이 정확도를 끌어올리는 인코더 계열
+- [Depth Anything V3 paper page](https://depth-anything.github.io/): DINOv2 인코더를 갖춘 SOTA 단안 깊이
+- [Marigold (Ke et al., CVPR 2024)](https://marigoldmonodepth.github.io/): 디퓨전 기반 깊이 추정
+- [UniDepth (Piccinelli et al., 2024)](https://arxiv.org/abs/2403.18913): 내부 파라미터를 갖춘 메트릭 깊이
+- [MiDaS v3.1 (Intel ISL)](https://github.com/isl-org/MiDaS): 정석적인 상대 깊이 베이스라인
+- [DINOv3 blog post (Meta)](https://ai.meta.com/blog/dinov3-self-supervised-vision-model/): 깊이 정확도를 끌어올리는 인코더 계열

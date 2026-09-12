@@ -1,4 +1,4 @@
-# Capstone 85 — 콘텐츠 분류기 통합 (Content Classifier Integration)
+# Capstone 85: 콘텐츠 분류기 통합 (Content Classifier Integration)
 
 > 출력 쪽 분류기는 입력 쪽 규칙과 다른 질문에 답한다. 그리고 둘 다 정책 라우터가 있어야 한다.
 

@@ -1,4 +1,4 @@
-# 루트와 유도 — 범위 지정과 작업 중간의 사용자 입력
+# 루트와 유도: 범위 지정과 작업 중간의 사용자 입력
 
 > 하드코딩된 경로는 사용자가 다른 프로젝트를 여는 순간 깨진다. 미리 채워진 도구 인자는 사용자가 충분히 명시하지 않으면 깨진다. 루트(root)는 서버가 다룰 범위를 사용자가 제어하는 URI 집합으로 한정한다. 유도(elicitation)는 도구 호출 중간에 일시 정지하여 폼이나 URL로 사용자에게 구조화된 입력을 요청한다. 이 두 클라이언트 프리미티브(primitive)는 흔한 MCP 실패 모드에 대한 두 가지 해결책이다. SEP-1036(URL 모드 유도, 2025-11-25)은 2026년 상반기까지 실험적이다. 여기에 의존하기 전에 SDK 버전을 확인하라.
 
@@ -166,8 +166,8 @@
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Client roots spec](https://modelcontextprotocol.io/specification/draft/client/roots) — 표준 루트 레퍼런스
-- [MCP — Client elicitation spec](https://modelcontextprotocol.io/specification/draft/client/elicitation) — 표준 유도 레퍼런스
-- [Cisco — What's new in MCP elicitation, structured content, OAuth enhancements](https://blogs.cisco.com/developer/whats-new-in-mcp-elicitation-structured-content-and-oauth-enhancements) — 2025-11-25 추가분 설명
-- [MCP — GitHub SEP-1036](https://github.com/modelcontextprotocol/modelcontextprotocol) — URL 모드 유도 제안(실험적, 드리프트 위험)
-- [The New Stack — How elicitation brings human-in-the-loop to AI tools](https://thenewstack.io/how-elicitation-in-mcp-brings-human-in-the-loop-to-ai-tools/) — UX 설명
+- [MCP(Client roots spec](https://modelcontextprotocol.io/specification/draft/client/roots)) 표준 루트 레퍼런스
+- [MCP(Client elicitation spec](https://modelcontextprotocol.io/specification/draft/client/elicitation)) 표준 유도 레퍼런스
+- [Cisco(What's new in MCP elicitation, structured content, OAuth enhancements](https://blogs.cisco.com/developer/whats-new-in-mcp-elicitation-structured-content-and-oauth-enhancements)) 2025-11-25 추가분 설명
+- [MCP(GitHub SEP-1036](https://github.com/modelcontextprotocol/modelcontextprotocol)) URL 모드 유도 제안(실험적, 드리프트 위험)
+- [The New Stack(How elicitation brings human-in-the-loop to AI tools](https://thenewstack.io/how-elicitation-in-mcp-brings-human-in-the-loop-to-ai-tools/)) UX 설명

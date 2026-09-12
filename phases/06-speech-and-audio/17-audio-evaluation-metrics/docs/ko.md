@@ -1,4 +1,4 @@
-# 오디오 평가(Audio Evaluation) — WER, MOS, UTMOS, MMAU, FAD, 그리고 오픈 리더보드
+# 오디오 평가(Audio Evaluation): WER, MOS, UTMOS, MMAU, FAD, 그리고 오픈 리더보드
 
 > 측정할 수 없는 것은 출시할 수 없다. 이 레슨은 모든 오디오 과제에 대한 2026년 지표를 짚는다. ASR(WER, CER, RTFx), TTS(MOS, UTMOS, SECS, ASR 왕복 WER), 오디오-언어(MMAU, LongAudioBench), 음악(FAD, CLAP), 화자(EER). 그리고 비교가 이루어지는 리더보드들까지.
 
@@ -25,7 +25,7 @@
 
 ## 개념 (The Concept)
 
-![오디오 평가 매트릭스 — 지표 vs 과제 vs 2026 리더보드](../assets/eval-landscape.svg)
+![오디오 평가 매트릭스: 지표 vs 과제 vs 2026 리더보드](../assets/eval-landscape.svg)
 
 ### ASR 지표
 
@@ -215,10 +215,10 @@ def eer(same_scores, diff_scores):
 
 ## 더 읽을거리 (Further Reading)
 
-- [jiwer](https://github.com/jitsi/jiwer) — 정규화 유틸리티를 갖춘 WER/CER 라이브러리.
-- [UTMOS (Saeki et al. 2022)](https://arxiv.org/abs/2204.02152) — 학습된 MOS 예측기.
-- [Fréchet Audio Distance (Kilgour et al. 2019)](https://arxiv.org/abs/1812.08466) — 음악 생성 표준.
-- [Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard) — 2026년 실시간 순위.
-- [TTS Arena](https://huggingface.co/spaces/TTS-AGI/TTS-Arena) — 인간 투표 TTS 리더보드.
-- [MMAU-Pro benchmark](https://mmaubenchmark.github.io/) — LALM 추론 리더보드.
-- [HEAR benchmark](https://hearbenchmark.com/) — 오디오 SSL 벤치마크.
+- [jiwer](https://github.com/jitsi/jiwer): 정규화 유틸리티를 갖춘 WER/CER 라이브러리.
+- [UTMOS (Saeki et al. 2022)](https://arxiv.org/abs/2204.02152): 학습된 MOS 예측기.
+- [Fréchet Audio Distance (Kilgour et al. 2019)](https://arxiv.org/abs/1812.08466): 음악 생성 표준.
+- [Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard): 2026년 실시간 순위.
+- [TTS Arena](https://huggingface.co/spaces/TTS-AGI/TTS-Arena): 인간 투표 TTS 리더보드.
+- [MMAU-Pro benchmark](https://mmaubenchmark.github.io/): LALM 추론 리더보드.
+- [HEAR benchmark](https://hearbenchmark.com/): 오디오 SSL 벤치마크.

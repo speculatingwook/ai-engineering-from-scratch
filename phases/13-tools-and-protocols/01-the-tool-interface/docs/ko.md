@@ -1,6 +1,6 @@
-# 도구 인터페이스(Tool Interface) — 에이전트에게 구조화된 입출력이 필요한 이유
+# 도구 인터페이스(Tool Interface): 에이전트에게 구조화된 입출력이 필요한 이유
 
-> 언어 모델은 토큰(token)을 생성한다. 프로그램은 행동을 취한다. 이 둘 사이의 간극이 바로 도구 인터페이스(tool interface)다. 모델이 행동을 요청하고 호스트(host)가 그것을 실행하게 해주는 계약이다. 2026년의 모든 스택 — OpenAI, Anthropic, Gemini의 함수 호출(function calling); MCP의 `tools/call`; A2A의 태스크 파트(task parts) — 은 동일한 4단계 루프를 서로 다르게 인코딩한 것이다. 이 레슨은 그 루프에 이름을 붙이고, 그것을 돌리는 데 필요한 최소한의 장치를 보여준다.
+> 언어 모델은 토큰(token)을 생성한다. 프로그램은 행동을 취한다. 이 둘 사이의 간극이 바로 도구 인터페이스(tool interface)다. 모델이 행동을 요청하고 호스트(host)가 그것을 실행하게 해주는 계약이다. 2026년의 모든 스택(OpenAI, Anthropic, Gemini의 함수 호출(function calling); MCP의 `tools/call`; A2A의 태스크 파트(task parts))은 동일한 4단계 루프를 서로 다르게 인코딩한 것이다. 이 레슨은 그 루프에 이름을 붙이고, 그것을 돌리는 데 필요한 최소한의 장치를 보여준다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, no LLM)
@@ -11,14 +11,14 @@
 
 - 텍스트만 생성할 수 있는 LLM이 왜 스스로는 현실 세계에 대해 행동을 취할 수 없는지 설명하기.
 - 4단계 도구 호출 루프(describe → decide → execute → observe)를 그리고, 각 단계를 누가 소유하는지 명명하기.
-- 도구 설명을 세 부분 — 이름, JSON Schema 입력, 결정론적 실행기(executor) 함수 — 로 작성하기.
+- 도구 설명을 세 부분(이름, JSON Schema 입력, 결정론적 실행기(executor) 함수)로 작성하기.
 - 순수(pure) 도구와 부수 효과(side-effecting) 도구를 구분하고, 이 구분이 안전성에 중요한 이유를 설명하기.
 
 ## 문제 (The Problem)
 
 LLM은 다음 토큰의 확률 분포(probability distribution)를 내보낸다. 그것이 출력 표면(output surface)의 전부다. 채팅 모델에게 "지금 벵갈루루의 날씨는 어때?"라고 물으면, 그럴듯한 문장을 쓸 수는 있지만 날씨 API에 직접 접속할 수는 없다. 그 문장은 우연히 맞을 수도 있고, 사흘 지난 정보일 수도 있다.
 
-그 간극을 메우는 것이 도구 인터페이스의 목적이다. 호스트 프로그램 — 에이전트(agent) 런타임, Claude Desktop, ChatGPT, Cursor, 혹은 커스텀 스크립트 — 은 호출 가능한 도구 목록을 모델에게 광고한다. 모델은 행동이 필요하다고 판단하면 도구 이름과 그 인자(arguments)를 담은 구조화된 페이로드(payload)를 내보낸다. 호스트는 그 페이로드를 파싱하고 도구를 실제로 실행한 뒤 결과를 다시 모델에게 전달한다. 이 루프는 모델이 더 이상 호출이 필요 없다고 판단할 때까지 계속된다.
+그 간극을 메우는 것이 도구 인터페이스의 목적이다. 호스트 프로그램(에이전트(agent) 런타임, Claude Desktop, ChatGPT, Cursor, 혹은 커스텀 스크립트)은 호출 가능한 도구 목록을 모델에게 광고한다. 모델은 행동이 필요하다고 판단하면 도구 이름과 그 인자(arguments)를 담은 구조화된 페이로드(payload)를 내보낸다. 호스트는 그 페이로드를 파싱하고 도구를 실제로 실행한 뒤 결과를 다시 모델에게 전달한다. 이 루프는 모델이 더 이상 호출이 필요 없다고 판단할 때까지 계속된다.
 
 이 계약의 첫 버전은 2023년 6월 OpenAI의 "functions" 파라미터로 출시되었다. Anthropic은 Claude 2.1에서 `tool_use` 블록으로 그 뒤를 이었다. Gemini는 몇 달 뒤 `functionDeclarations`를 추가했다. 이제 모든 제공자(provider)가 동일한 형태를 노출한다. JSON Schema로 타입이 지정된 도구 목록이 들어가고, JSON 페이로드 도구 호출이 나온다. Model Context Protocol(2024년 11월)은 이 계약을 일반화하여 하나의 도구 레지스트리(registry)가 모든 모델을 섬기도록 했다. A2A(2026년 4월, v1.0)는 에이전트 간 위임(agent-to-agent delegation)을 위해 동일한 기본 요소(primitive)를 한 겹 더 쌓았다.
 
@@ -63,7 +63,7 @@ LLM은 다음 토큰의 확률 분포(probability distribution)를 내보낸다.
 - **순수(Pure).** 읽기 전용, 결정론적, 부수 효과 없음. `get_weather`, `search_docs`, `get_current_time`. 추측적으로 호출해도 안전하다.
 - **결과 초래형(Consequential).** 상태를 변경하고, 돈을 쓰고, 사용자 데이터를 건드린다. `send_email`, `delete_file`, `execute_trade`. 반드시 게이트(gate)를 거쳐야 한다.
 
-Meta의 2026년 에이전트 보안 "둘의 규칙(Rule of Two)"은 단일 턴이 다음 셋 중 최대 두 개만 결합할 수 있다고 말한다. 신뢰할 수 없는 입력, 민감한 데이터, 결과 초래형 행동. 도구 인터페이스는 — 호출을 거부하거나, 사용자 확인을 요구하거나, 스코프(scope)를 에스컬레이션함으로써 — 그 규칙을 강제하는 지점이다. 전체 보안 챕터는 Phase 13 · 15를, 에이전트 수준 권한 정책은 Phase 14 · 09를 참고하라.
+Meta의 2026년 에이전트 보안 "둘의 규칙(Rule of Two)"은 단일 턴이 다음 셋 중 최대 두 개만 결합할 수 있다고 말한다. 신뢰할 수 없는 입력, 민감한 데이터, 결과 초래형 행동. 도구 인터페이스는(호출을 거부하거나, 사용자 확인을 요구하거나, 스코프(scope)를 에스컬레이션함으로써) 그 규칙을 강제하는 지점이다. 전체 보안 챕터는 Phase 13 · 15를, 에이전트 수준 권한 정책은 Phase 14 · 09를 참고하라.
 
 ### 루프가 사는 곳 (Where the loop lives)
 
@@ -80,7 +80,7 @@ Meta의 2026년 에이전트 보안 "둘의 규칙(Rule of Two)"은 단일 턴�
 
 "모델에게 JSON으로 답하라고 요청하기"는 함수 호출 이전의 패턴이었다. 이것은 프런티어 모델(frontier model)에서 약 5~15퍼센트 실패하고, 더 작은 모델에서는 훨씬 더 자주 실패한다. 실패 양상에는 빠진 중괄호, 끝에 붙은 쉼표(trailing comma), 환각된 필드, 잘못된 타입이 포함된다. 그러면 JSON 수리 패스, 재시도, 혹은 제약 디코더(constrained decoder)가 필요하다.
 
-네이티브 함수 호출이 더 나은 이유는 세 가지다. 첫째, 제공자는 정확한 호출 형태로 모델을 종단 간(end-to-end)으로 학습시키므로, 엄격 모드에서 유효 JSON 비율이 98~99퍼센트까지 올라간다. 둘째, 호출 페이로드는 자유 텍스트(free-text) 안이 아니라 자신만의 프로토콜 슬롯에 들어가므로 — 도구 호출이 사용자에게 보이는 응답으로 새어 나가지 않는다. 셋째, 제공자들은 제약 디코딩(constrained decoding)으로 스키마 준수를 강제한다(OpenAI의 엄격 모드, Anthropic의 `tool_use`, Gemini의 `responseSchema`). 출력은 검증을 통과하도록 보장된다.
+네이티브 함수 호출이 더 나은 이유는 세 가지다. 첫째, 제공자는 정확한 호출 형태로 모델을 종단 간(end-to-end)으로 학습시키므로, 엄격 모드에서 유효 JSON 비율이 98~99퍼센트까지 올라간다. 둘째, 호출 페이로드는 자유 텍스트(free-text) 안이 아니라 자신만의 프로토콜 슬롯에 들어가므로: 도구 호출이 사용자에게 보이는 응답으로 새어 나가지 않는다. 셋째, 제공자들은 제약 디코딩(constrained decoding)으로 스키마 준수를 강제한다(OpenAI의 엄격 모드, Anthropic의 `tool_use`, Gemini의 `responseSchema`). 출력은 검증을 통과하도록 보장된다.
 
 Phase 13 · 02는 세 제공자 API를 나란히 살펴본다. Phase 13 · 04는 구조화된 출력을 깊이 다룬다.
 
@@ -88,7 +88,7 @@ Phase 13 · 02는 세 제공자 API를 나란히 살펴본다. Phase 13 · 04는
 
 루프는 모델이 호출을 멈추거나 호스트가 최대 턴 횟수에 도달할 때 종료된다. 프로덕션 호스트는 이를 5에서 20턴 사이로 설정한다. 그 이상이면, 모델이 빠져나올 수 없는 루프에 거의 확실히 갇혀 있는 것이다. Claude Code는 기본값 20, OpenAI Assistants는 10, Cursor의 에이전트 모드는 25다.
 
-대안 — 무한 루프 — 은 6개월마다 "에이전트가 밤새 API 호출에 400달러를 썼다"는 사후 분석(post-mortem)으로 나타난다. 한도 없이는 출시하지 마라.
+대안(무한 루프)은 6개월마다 "에이전트가 밤새 API 호출에 400달러를 썼다"는 사후 분석(post-mortem)으로 나타난다. 한도 없이는 출시하지 마라.
 
 Phase 14 · 12는 오류 복구와 자가 치유(self-healing)를 깊이 다루고, Phase 17은 프로덕션 속도 제한(rate limit)을 다룬다.
 
@@ -145,8 +145,8 @@ Phase 14 · 12는 오류 복구와 자가 치유(self-healing)를 깊이 다루�
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Function calling guide](https://platform.openai.com/docs/guides/function-calling) — OpenAI 스타일 도구 선언과 호출 형태에 대한 표준 레퍼런스
-- [Anthropic — Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview) — Claude의 `tool_use` / `tool_result` 블록 형식
-- [Google — Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling) — Gemini의 `functionDeclarations`와 병렬 호출 의미론
-- [Model Context Protocol — Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) — 도구 인터페이스의 제공자 비종속적 일반화
-- [JSON Schema — 2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes) — 모든 현대 도구 API가 사용하는 스키마 방언(dialect)
+- [OpenAI(Function calling guide](https://platform.openai.com/docs/guides/function-calling)) OpenAI 스타일 도구 선언과 호출 형태에 대한 표준 레퍼런스
+- [Anthropic(Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview)) Claude의 `tool_use` / `tool_result` 블록 형식
+- [Google(Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling)) Gemini의 `functionDeclarations`와 병렬 호출 의미론
+- [Model Context Protocol(Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) 도구 인터페이스의 제공자 비종속적 일반화
+- [JSON Schema(2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes)) 모든 현대 도구 API가 사용하는 스키마 방언(dialect)

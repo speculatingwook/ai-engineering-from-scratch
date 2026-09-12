@@ -139,7 +139,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [AutoGen group chat docs](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html) — 레퍼런스 구현
-- [AG2 repo](https://github.com/ag2ai/ag2) — 커뮤니티 AutoGen v0.2 연속판
-- [Microsoft Agent Framework docs](https://microsoft.github.io/agent-framework/) — 병합된 후속작, 2026년 2월 RC
-- [AutoGen v0.4 release notes](https://microsoft.github.io/autogen/stable/) — 이벤트 기반 액터 모델 재작성 세부사항
+- [AutoGen group chat docs](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html): 레퍼런스 구현
+- [AG2 repo](https://github.com/ag2ai/ag2): 커뮤니티 AutoGen v0.2 연속판
+- [Microsoft Agent Framework docs](https://microsoft.github.io/agent-framework/): 병합된 후속작, 2026년 2월 RC
+- [AutoGen v0.4 release notes](https://microsoft.github.io/autogen/stable/): 이벤트 기반 액터 모델 재작성 세부사항

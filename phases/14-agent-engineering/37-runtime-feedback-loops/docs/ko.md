@@ -118,10 +118,10 @@ python3 code/main.py
 
 - [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/)
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
-- [Guardrails AI x MLflow — deterministic safety, PII, quality validators](https://guardrailsai.com/blog/guardrails-mlflow) — 회귀 테스트로서의 편집 패턴
-- [Aport.io, Best AI Agent Guardrails 2026: Pre-Action Authorization Compared](https://aport.io/blog/best-ai-agent-guardrails-2026-pre-action-authorization-compared/) — 도구 전/후 캡처
-- [Andrii Furmanets, AI Agents in 2026: Practical Architecture for Tools, Memory, Evals, Guardrails](https://andriifurmanets.com/blogs/ai-agents-2026-practical-architecture-tools-memory-evals-guardrails) — 관측성 표면
-- Phase 14 · 23 — 텔레메트리 측면을 위한 OTel GenAI 규약
-- Phase 14 · 24 — 에이전트 관측성 플랫폼(Langfuse, Phoenix, Opik)
-- Phase 14 · 33 — 완료를 선언하기 전에 피드백을 요구하는 규칙
-- Phase 14 · 38 — JSONL을 읽는 검증 게이트
+- [Guardrails AI x MLflow(deterministic safety, PII, quality validators](https://guardrailsai.com/blog/guardrails-mlflow)) 회귀 테스트로서의 편집 패턴
+- [Aport.io, Best AI Agent Guardrails 2026: Pre-Action Authorization Compared](https://aport.io/blog/best-ai-agent-guardrails-2026-pre-action-authorization-compared/): 도구 전/후 캡처
+- [Andrii Furmanets, AI Agents in 2026: Practical Architecture for Tools, Memory, Evals, Guardrails](https://andriifurmanets.com/blogs/ai-agents-2026-practical-architecture-tools-memory-evals-guardrails): 관측성 표면
+- Phase 14 · 23: 텔레메트리 측면을 위한 OTel GenAI 규약
+- Phase 14 · 24: 에이전트 관측성 플랫폼(Langfuse, Phoenix, Opik)
+- Phase 14 · 33: 완료를 선언하기 전에 피드백을 요구하는 규칙
+- Phase 14 · 38: JSONL을 읽는 검증 게이트

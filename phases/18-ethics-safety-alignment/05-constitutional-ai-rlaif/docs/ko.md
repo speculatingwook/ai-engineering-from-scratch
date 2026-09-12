@@ -1,6 +1,6 @@
 # 헌법적 AI와 RLAIF(Constitutional AI and RLAIF)
 
-> Bai et al. (arXiv:2212.08073, 2022)은 물었다: 인간 레이블러(labeler)를 원칙 목록을 읽는 AI로 대체하면 어떨까? 헌법적 AI(Constitutional AI)는 두 단계를 가진다 — 헌법(constitution) 아래에서의 자기 비판(self-critique)과 수정, 그다음 AI 피드백으로부터의 RL이다. 이 기법은 RLAIF라는 용어를 만들었고 Claude 1 사후 학습(post-training) 파이프라인에 탑재되었다. 2026년 1월 21일 Anthropic은 다시 쓴 Claude 헌법을 발표했다: 규범적 규칙보다 설명적 추론, 4단 우선순위 위계, 그리고 모델의 도덕적 지위에 대한 불확실성을 최초로 주요 연구소가 공식 인정한 것이다. CC0 1.0으로 공개되었다.
+> Bai et al. (arXiv:2212.08073, 2022)은 물었다: 인간 레이블러(labeler)를 원칙 목록을 읽는 AI로 대체하면 어떨까? 헌법적 AI(Constitutional AI)는 두 단계를 가진다. 헌법(constitution) 아래에서의 자기 비판(self-critique)과 수정, 그다음 AI 피드백으로부터의 RL이다. 이 기법은 RLAIF라는 용어를 만들었고 Claude 1 사후 학습(post-training) 파이프라인에 탑재되었다. 2026년 1월 21일 Anthropic은 다시 쓴 Claude 헌법을 발표했다: 규범적 규칙보다 설명적 추론, 4단 우선순위 위계, 그리고 모델의 도덕적 지위에 대한 불확실성을 최초로 주요 연구소가 공식 인정한 것이다. CC0 1.0으로 공개되었다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy self-critique-and-revise loop)
@@ -10,7 +10,7 @@
 ## 학습 목표 (Learning Objectives)
 
 - 헌법적 AI의 두 단계(비판-그리고-수정 SFT, AI 피드백으로부터의 RL)와 각 단계에서 헌법의 역할을 설명하기.
-- 인간 선호 레이블러를 AI 레이블러로 대체하는 것이 "더 저렴한" RLHF가 아닌 이유를 설명하기 — 이 대체는 파이프라인의 실패 모드를 바꾼다.
+- 인간 선호 레이블러를 AI 레이블러로 대체하는 것이 "더 저렴한" RLHF가 아닌 이유를 설명하기: 이 대체는 파이프라인의 실패 모드를 바꾼다.
 - 2026 Claude 헌법의 4단 우선순위 구조와 2023년 개정에서 무엇이 바뀌었는지 요약하기.
 - 헌법적 분류기(Constitutional Classifiers)와 23.7% 계산 오버헤드(v1)에서 ~1%(v2 / 2026)로의 하락을 설명하기.
 
@@ -22,13 +22,13 @@ RLHF는 레이블러가 필요하다. 레이블러는 느리고, 편향되어 �
 
 ## 개념 (The Concept)
 
-### 1단계 — 지도된 자기 비판과 수정
+### 1단계: 지도된 자기 비판과 수정
 
 도움되지만-아직-무해하지-않은 SFT 모델에서 시작한다. 레드팀(red-team) 프롬프트가 주어지면, 모델은 초기 응답을 만든다. 두 번째 모델(또는 두 번째 턴의 같은 모델)이 헌법에서 샘플링된 원칙을 읽고 그 응답을 비판한다. 세 번째 단계가 그 비판을 다루도록 응답을 수정한다. 수정된 응답이 SFT 목표다.
 
 헌법은 원칙들의 목록이다. Bai et al. 2022는 "가장 덜 해롭고 윤리적인 응답을 선호하라", "설교를 피하라", "어시스턴트는 도움되고, 정직하며, 무해해야 한다"를 포함한 16개의 원칙을 사용했다. 비판을 집중시키기 위해 그 집합은 의도적으로 작게 유지되었다.
 
-### 2단계 — AI 피드백으로부터의 RL (RLAIF)
+### 2단계: AI 피드백으로부터의 RL (RLAIF)
 
 완성문 쌍을 생성한다. "피드백 모델"이 샘플링된 헌법 원칙에 대해 각각을 점수 매긴다. 선호 신호는 피드백 모델의 순위다. AI가 생성한 선호로 보상 모델을 학습한다; 이 보상 모델을 대상으로 PPO를 한다. 그 외 모든 것은 InstructGPT의 파이프라인(레슨 1)이다.
 
@@ -37,7 +37,7 @@ RLHF는 레이블러가 필요하다. 레이블러는 느리고, 편향되어 �
 ### 왜 이것이 단지 "더 저렴한 RLHF"가 아닌가
 
 - 레이블러 편향이 레이블러 심리에서 원칙 해석으로 옮겨간다. AI 레이블러는 "정직하라"를 어떤 인간보다 더 또는 덜 엄격하게 해석할 수 있으며, 그 엄격함은 데이터셋 전반에 걸쳐 균일하다.
-- 선호 신호는 강하게 가독적(legible)이다 — 원칙, 비판, 수정을 읽을 수 있다. 인간 레이블은 불투명하다.
+- 선호 신호는 강하게 가독적(legible)이다. 원칙, 비판, 수정을 읽을 수 있다. 인간 레이블은 불투명하다.
 - 실패 모드가 바뀐다. 아첨이 떨어진다(AI 레이블러는 기쁘게 할 사용자가 없다). 굿하트의 법칙(Goodhart's Law)은 지속된다(프록시는 이제 "원칙 집합 X에 대한 모델의 해석"으로, 여전히 불완전한 측정이다).
 
 CAI의 2022년 주장: 학습된 모델은 비슷한 데이터를 가진 RLHF 모델보다 더 무해하고 대략 비슷하게 도움된다. 이는 여러 연구소에 걸쳐 유지되어 왔다.
@@ -105,8 +105,8 @@ Anthropic은 2026년 1월 21일에 상당히 개정된 헌법을 발표했다. �
 
 ## 더 읽을거리 (Further Reading)
 
-- [Bai et al. — Constitutional AI: Harmlessness from AI Feedback (arXiv:2212.08073)](https://arxiv.org/abs/2212.08073) — 원조 2단계 파이프라인
-- [Anthropic — Claude's Constitution (Jan 2026)](https://www.anthropic.com/news/claudes-constitution) — 2026 4단 개정, CC0 1.0
-- [Anthropic — Constitutional Classifiers (2024-2026)](https://www.anthropic.com/research/constitutional-classifiers) — v2에서 ~1% 오버헤드를 둔 출력 게이트 방어책
-- [Lee et al. — RLAIF vs RLHF: Scaling Reinforcement Learning from Human Feedback (arXiv:2309.00267)](https://arxiv.org/abs/2309.00267) — 경험적 RLAIF / RLHF 비교
-- [Kundu et al. — Specific versus General Principles for Constitutional AI (arXiv:2310.13798)](https://arxiv.org/abs/2310.13798) — 원칙 세분성의 효과
+- [Bai et al.(Constitutional AI: Harmlessness from AI Feedback (arXiv:2212.08073)](https://arxiv.org/abs/2212.08073)) 원조 2단계 파이프라인
+- [Anthropic(Claude's Constitution (Jan 2026)](https://www.anthropic.com/news/claudes-constitution)) 2026 4단 개정, CC0 1.0
+- [Anthropic(Constitutional Classifiers (2024-2026)](https://www.anthropic.com/research/constitutional-classifiers)) v2에서 ~1% 오버헤드를 둔 출력 게이트 방어책
+- [Lee et al.(RLAIF vs RLHF: Scaling Reinforcement Learning from Human Feedback (arXiv:2309.00267)](https://arxiv.org/abs/2309.00267)) 경험적 RLAIF / RLHF 비교
+- [Kundu et al.(Specific versus General Principles for Constitutional AI (arXiv:2310.13798)](https://arxiv.org/abs/2310.13798)) 원칙 세분성의 효과

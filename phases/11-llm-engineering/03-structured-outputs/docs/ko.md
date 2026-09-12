@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 10, Lessons 01-05 (LLMs from Scratch)
 **Time:** ~90분
-**Related:** Phase 5 · 20 (Structured Outputs & Constrained Decoding)은 디코더 수준 이론(FSM/CFG 로짓 프로세서, Outlines, XGrammar)을 다룬다. 이 레슨은 프로덕션 SDK 표면(OpenAI `response_format`, Anthropic tool use, Instructor)에 초점을 둔다 — API 아래에서 무슨 일이 일어나는지 이해하고 싶다면 Phase 5 · 20을 먼저 읽어라.
+**Related:** Phase 5 · 20 (Structured Outputs & Constrained Decoding)은 디코더 수준 이론(FSM/CFG 로짓 프로세서, Outlines, XGrammar)을 다룬다. 이 레슨은 프로덕션 SDK 표면(OpenAI `response_format`, Anthropic tool use, Instructor)에 초점을 둔다. API 아래에서 무슨 일이 일어나는지 이해하고 싶다면 Phase 5 · 20을 먼저 읽어라.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -52,7 +52,7 @@ graph LR
 
 **프롬프트 기반(Prompt-based)** ("Respond in valid JSON"): 강제 없음. 모델은 보통 따르지만 때로는 그렇지 않다. 신뢰성: ~90%. 실패 양상: 마크다운 펜스, 서두 텍스트, 잘린 출력, 잘못된 구조.
 
-**JSON 모드(JSON mode)**: API가 출력이 유효한 JSON임을 보장한다. OpenAI의 `response_format: { type: "json_object" }`가 이를 활성화한다. 출력은 오류 없이 파싱된다. 그러나 기대하는 스키마와 일치하지 않을 수 있다 — 여분의 키, 잘못된 타입, 누락된 필드.
+**JSON 모드(JSON mode)**: API가 출력이 유효한 JSON임을 보장한다. OpenAI의 `response_format: { type: "json_object" }`가 이를 활성화한다. 출력은 오류 없이 파싱된다. 그러나 기대하는 스키마와 일치하지 않을 수 있다. 여분의 키, 잘못된 타입, 누락된 필드.
 
 **스키마 모드(Schema mode)**: API가 JSON Schema를 받아 출력이 그것과 일치함을 보장한다. 2026년에 모든 주요 프로바이더가 이를 기본 지원한다: OpenAI의 `response_format: { type: "json_schema", json_schema: {...} }`(또한 `tool_choice="required"`로도), Anthropic의 `input_schema`를 사용한 tool use, Gemini의 `response_schema` + `response_mime_type: "application/json"`. 출력은 지정한 그대로의 정확한 키, 타입, 제약을 갖는다.
 
@@ -123,9 +123,9 @@ graph TD
 
 스키마 강제가 있어도, 구조화된 출력은 미묘한 방식으로 실패할 수 있다.
 
-**환각된 값(Hallucinated values)**: 출력이 스키마와 일치하지만 지어낸 데이터를 담고 있다. 텍스트가 $348이라고 말하는데 모델이 `{"price": 299.99}`를 만든다. 스키마 검증은 이를 잡을 수 없다 — 타입은 맞고, 값은 틀렸다.
+**환각된 값(Hallucinated values)**: 출력이 스키마와 일치하지만 지어낸 데이터를 담고 있다. 텍스트가 $348이라고 말하는데 모델이 `{"price": 299.99}`를 만든다. 스키마 검증은 이를 잡을 수 없다. 타입은 맞고, 값은 틀렸다.
 
-**열거형 혼동(Enum confusion)**: 필드를 `["in_stock", "out_of_stock", "preorder"]`로 제약한다. 모델이 `"available"`을 출력한다 — 의미적으로는 맞지만, 허용 집합에 없다. 좋은 제약 디코딩은 이를 막는다. 프롬프트 기반 접근법은 막지 못한다.
+**열거형 혼동(Enum confusion)**: 필드를 `["in_stock", "out_of_stock", "preorder"]`로 제약한다. 모델이 `"available"`을 출력한다. 의미적으로는 맞지만, 허용 집합에 없다. 좋은 제약 디코딩은 이를 막는다. 프롬프트 기반 접근법은 막지 못한다.
 
 **중첩 객체 깊이(Nested object depth)**: 깊게 중첩된 스키마(4단계 이상)는 더 많은 오류를 만든다. 중첩의 각 단계는 모델이 구조를 놓칠 수 있는 또 다른 지점이다.
 
@@ -510,7 +510,7 @@ Instructor는 임의의 LLM 클라이언트를 감싸 검증과 자동 재시도
 
 ## 연습 문제 (Exercises)
 
-1. 스키마 검증기를 `oneOf`(데이터가 여러 스키마 중 정확히 하나와 일치해야 함)를 지원하도록 확장하라. 이것은 다형적 출력을 처리한다 — 예를 들어, 서로 다른 형태를 가진 `Product` 또는 `Service` 객체일 수 있는 필드.
+1. 스키마 검증기를 `oneOf`(데이터가 여러 스키마 중 정확히 하나와 일치해야 함)를 지원하도록 확장하라. 이것은 다형적 출력을 처리한다. 예를 들어, 서로 다른 형태를 가진 `Product` 또는 `Service` 객체일 수 있는 필드.
 
 2. 두 스키마를 비교해 깨지는 변경(필수 필드 제거, 타입 변경)과 깨지지 않는 변경(선택적 필드 추가, 제약 완화)을 식별하는 "스키마 diff" 도구를 만들라. 이것은 프로덕션에서 추출 스키마를 버전 관리하는 데 필수적이다.
 

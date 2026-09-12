@@ -9,7 +9,7 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- 세 가지 평가 계층 — 정적 벤치마크(static benchmark), 커스텀 오프라인(custom offline), 온라인 프로덕션(online production) — 의 이름을 대고 각각이 무엇을 위한 것인지 설명하기.
+- 세 가지 평가 계층(정적 벤치마크(static benchmark), 커스텀 오프라인(custom offline), 온라인 프로덕션(online production))의 이름을 대고 각각이 무엇을 위한 것인지 설명하기.
 - 평가자-최적화자(evaluator-optimizer) 긴밀한 루프(tight loop)를 설명하기.
 - 2026년 모범 사례를 설명하기: 평가는 코드 옆에 살고, CI에서 실행되며, PR을 통제한다.
 - Phase 14의 모든 레슨을 그것이 생성하는 평가 케이스에 연결하기.
@@ -22,14 +22,14 @@
 
 ### 세 가지 평가 계층
 
-1. **정적 벤치마크** — 코드에는 SWE-bench Verified(Lesson 19), 브라우징/데스크톱에는 WebArena/OSWorld(Lesson 20), 제너럴리스트에는 GAIA(Lesson 19), 도구 사용에는 BFCL V4(Lesson 06). 모델 간 비교와 회귀(regression) 통제에 사용한다. 오염(contamination)은 실재한다: SWE-bench+는 32.67%의 솔루션 누출(solution leakage)을 발견했다. 항상 Verified / +-감사 점수를 보고하라.
+1. **정적 벤치마크**: 코드에는 SWE-bench Verified(Lesson 19), 브라우징/데스크톱에는 WebArena/OSWorld(Lesson 20), 제너럴리스트에는 GAIA(Lesson 19), 도구 사용에는 BFCL V4(Lesson 06). 모델 간 비교와 회귀(regression) 통제에 사용한다. 오염(contamination)은 실재한다: SWE-bench+는 32.67%의 솔루션 누출(solution leakage)을 발견했다. 항상 Verified / +-감사 점수를 보고하라.
 
-2. **커스텀 오프라인 평가** — 제품의 형태에 맞춘다:
+2. **커스텀 오프라인 평가**: 제품의 형태에 맞춘다:
    - LLM-as-judge(Langfuse, Phoenix, Opik — Lesson 24).
    - 실행 기반(execution-based)(패치를 실행하고 테스트를 확인).
    - 궤적 기반(trajectory-based)(액션 시퀀스를 골드(gold)와 비교; OSWorld-Human은 최상위 에이전트가 골드 대비 1.4~2.7배임을 보여준다).
 
-3. **온라인 평가** — 프로덕션:
+3. **온라인 평가**: 프로덕션:
    - 세션 리플레이(session replay)(Langfuse).
    - 가드레일 발동 경보(Lesson 16, 21).
    - 스텝별 비용/지연 시간 추적(Lesson 23 OTel 스팬).
@@ -82,7 +82,7 @@ Phase 14의 모든 레슨은 평가 케이스를 생성한다:
 ### 평가 주도 개발이 실패하는 지점
 
 - **베이스라인(baseline) 없음.** 마지막으로 알려진 정상값(last-known-good)이 없는 평가는 해석할 수 없다. 베이스라인을 저장하라.
-- **그라운딩 없는 LLM 판정.** 판정자도 환각(hallucinate)을 일으킨다. CRITIC 패턴(Lesson 05) — 판정자가 외부 도구에 그라운딩(ground)한다.
+- **그라운딩 없는 LLM 판정.** 판정자도 환각(hallucinate)을 일으킨다. CRITIC 패턴(Lesson 05): 판정자가 외부 도구에 그라운딩(ground)한다.
 - **평가에 대한 과적합(over-fitting).** 평가를 위해 최적화하면 프로덕션 유용성에서 멀어진다. 케이스를 교체(rotate)하라.
 - **불안정한(flaky) 평가.** 비결정론적 케이스는 거짓 경보를 유발한다. 시드(seed)를 고정하고 상태를 스냅샷하라.
 
@@ -137,7 +137,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — "단순하게 시작하고, 평가로 최적화하라"
-- [OpenAI, SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/) — 큐레이션된 벤치마크
-- [Berkeley Function Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html) — 도구 사용 벤치마크
-- [Langfuse docs](https://langfuse.com/) — 실전에서의 평가 + 세션 리플레이
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): "단순하게 시작하고, 평가로 최적화하라"
+- [OpenAI, SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/): 큐레이션된 벤치마크
+- [Berkeley Function Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html): 도구 사용 벤치마크
+- [Langfuse docs](https://langfuse.com/): 실전에서의 평가 + 세션 리플레이

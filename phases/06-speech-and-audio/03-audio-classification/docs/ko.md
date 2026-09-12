@@ -1,4 +1,4 @@
-# 오디오 분류 — MFCC 기반 k-NN에서 AST와 BEATs까지
+# 오디오 분류: MFCC 기반 k-NN에서 AST와 BEATs까지
 
 > "개 짖음 대 사이렌"부터 "이건 무슨 언어인가"까지 모든 것이 오디오 분류(audio classification)다. 특성(feature)은 멜(mel)이다. 아키텍처는 십 년마다 바뀐다. 평가(evaluation)는 AUC, F1, 클래스별 재현율(recall)로 유지된다.
 
@@ -29,7 +29,7 @@
 
 ### 클래스 불균형이 진짜 난제다
 
-ESC-50: 50개 클래스, 각 40개 클립 — 균형 잡혀 있고 쉽다. UrbanSound8K: 10개 클래스, 10:1로 불균형. AudioSet: 632개 클래스에 100,000:1의 롱테일(long tail)이 펼쳐진다. 효과 있는 기법:
+ESC-50: 50개 클래스, 각 40개 클립: 균형 잡혀 있고 쉽다. UrbanSound8K: 10개 클래스, 10:1로 불균형. AudioSet: 632개 클래스에 100,000:1의 롱테일(long tail)이 펼쳐진다. 효과 있는 기법:
 
 - 학습 중 균형 샘플링(평가에서는 아님).
 - Mixup: 두 클립(과 그 레이블)을 선형 보간하는 증강.
@@ -115,7 +115,7 @@ class AudioCNN(nn.Module):
 
 300만 파라미터(parameter). 단일 RTX 4090에서 ESC-50에 ~10분 만에 학습된다. 80%+ 정확도.
 
-### 단계 5: 2026년의 기본 — BEATs 파인튜닝
+### 단계 5: 2026년의 기본: BEATs 파인튜닝
 
 ```python
 from transformers import ASTFeatureExtractor, ASTForAudioClassification
@@ -172,8 +172,8 @@ BEATs의 경우 `beats` 라이브러리를 통해 `microsoft/BEATs-base`를 사�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gong, Chung, Glass (2021). AST: Audio Spectrogram Transformer](https://arxiv.org/abs/2104.01778) — 2021–2024년의 표준 아키텍처.
-- [Chen et al. (2022, rev. 2024). BEATs: Audio Pre-Training with Acoustic Tokenizers](https://arxiv.org/abs/2212.09058) — 2024년 이후의 기본.
-- [Park et al. (2019). SpecAugment](https://arxiv.org/abs/1904.08779) — 지배적인 오디오 증강.
-- [Piczak (2015). ESC-50 dataset](https://github.com/karolpiczak/ESC-50) — 명맥을 잇는 50개 클래스 벤치마크.
-- [Gemmeke et al. (2017). AudioSet](https://research.google.com/audioset/) — 632개 클래스 YouTube 분류 체계; 여전히 표준.
+- [Gong, Chung, Glass (2021). AST: Audio Spectrogram Transformer](https://arxiv.org/abs/2104.01778): 2021–2024년의 표준 아키텍처.
+- [Chen et al. (2022, rev. 2024). BEATs: Audio Pre-Training with Acoustic Tokenizers](https://arxiv.org/abs/2212.09058): 2024년 이후의 기본.
+- [Park et al. (2019). SpecAugment](https://arxiv.org/abs/1904.08779): 지배적인 오디오 증강.
+- [Piczak (2015). ESC-50 dataset](https://github.com/karolpiczak/ESC-50): 명맥을 잇는 50개 클래스 벤치마크.
+- [Gemmeke et al. (2017). AudioSet](https://research.google.com/audioset/): 632개 클래스 YouTube 분류 체계; 여전히 표준.

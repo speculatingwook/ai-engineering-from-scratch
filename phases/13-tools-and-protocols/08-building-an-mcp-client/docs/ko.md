@@ -1,4 +1,4 @@
-# MCP 클라이언트 만들기 — 탐색, 호출, 세션 관리
+# MCP 클라이언트 만들기: 탐색, 호출, 세션 관리
 
 > 대부분의 MCP 콘텐츠는 서버 튜토리얼만 제공하고 클라이언트는 대충 넘긴다. 정작 까다로운 오케스트레이션(orchestration)이 자리 잡은 곳은 클라이언트 코드다. 프로세스 생성(process spawning), 능력 협상(capability negotiation), 여러 서버에 걸친 도구 목록 병합, sampling 콜백, 재연결(reconnection), 네임스페이스 충돌 해소가 모두 여기에 있다. 이 레슨은 서로 다른 세 MCP 서버를 모델이 쓸 하나의 평평한 도구 네임스페이스로 묶는 다중 서버(multi-server) 클라이언트를 만든다.
 
@@ -37,10 +37,10 @@
 
 서버당 하나의 `Session` 객체가 보유하는 것:
 
-- `process` — Popen 핸들.
-- `capabilities` — 서버가 `initialize`에서 선언한 것.
-- `tools` — 마지막 `tools/list` 결과.
-- `pending` — 요청 id에서 응답을 기다리는 promise/future로의 맵.
+- `process`: Popen 핸들.
+- `capabilities`: 서버가 `initialize`에서 선언한 것.
+- `tools`: 마지막 `tools/list` 결과.
+- `pending`: 요청 id에서 응답을 기다리는 promise/future로의 맵.
 
 요청은 본질적으로 비동기다. 서버 B가 호출 도중일 때 서버 A로 보낸 `tools/call`이 차단되면 안 된다. 큐(queue)를 가진 스레드나 asyncio를 사용하라.
 
@@ -70,7 +70,7 @@ Claude Desktop은 서버별 접두사를 사용한다. Cursor는 명확한 오�
 
 ### 알림 처리
 
-`notifications/tools/list_changed`는 `tools/list`를 다시 호출하라는 뜻이다. `notifications/resources/updated`는 리소스가 사용 중이면 다시 읽으라는 뜻이다. 알림은 응답을 만들어서는 안 된다 — ack(확인 응답)하려 들지 마라.
+`notifications/tools/list_changed`는 `tools/list`를 다시 호출하라는 뜻이다. `notifications/resources/updated`는 리소스가 사용 중이면 다시 읽으라는 뜻이다. 알림은 응답을 만들어서는 안 된다. ack(확인 응답)하려 들지 마라.
 
 흔한 클라이언트 버그: 알림이 스트림에 앉아 있는 동안 `tools/call`에서 읽기 루프를 차단하는 것. 모든 메시지를 큐에 밀어 넣는 백그라운드 리더 스레드(background reader thread)를 사용하라. 메인 스레드가 큐에서 꺼내 디스패치한다.
 
@@ -85,7 +85,7 @@ Phase 13 · 09는 Streamable HTTP 재연결 의미론을 다룬다. stdio는 더
 
 ### 킵얼라이브와 세션 id
 
-Streamable HTTP는 `Mcp-Session-Id` 헤더를 사용한다. Stdio에는 세션 id가 없다 — 프로세스 정체성이 곧 세션이다. 킵얼라이브(keepalive) 핑은 선택적이다. stdio 파이프는 비활성 상태에서 깨지지 않는다.
+Streamable HTTP는 `Mcp-Session-Id` 헤더를 사용한다. Stdio에는 세션 id가 없다. 프로세스 정체성이 곧 세션이다. 킵얼라이브(keepalive) 핑은 선택적이다. stdio 파이프는 비활성 상태에서 깨지지 않는다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -136,10 +136,10 @@ Streamable HTTP는 `Mcp-Session-Id` 헤더를 사용한다. Stdio에는 세션 i
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol — Client spec](https://modelcontextprotocol.io/specification/2025-11-25/client) — 표준 클라이언트 동작
-- [MCP — Quickstart client guide](https://modelcontextprotocol.io/quickstart/client) — Python SDK를 사용한 hello-world 클라이언트 튜토리얼
-- [MCP Python SDK — client module](https://github.com/modelcontextprotocol/python-sdk) — 레퍼런스 `ClientSession`과 `stdio_client`
-- [MCP TypeScript SDK — Client](https://github.com/modelcontextprotocol/typescript-sdk) — TS 병렬
-- [VS Code — MCP in extensions](https://code.visualstudio.com/api/extension-guides/ai/mcp) — VS Code가 단일 에디터 호스트에서 여러 MCP 서버를 다중화(multiplex)하는 방식
+- [Model Context Protocol(Client spec](https://modelcontextprotocol.io/specification/2025-11-25/client)) 표준 클라이언트 동작
+- [MCP(Quickstart client guide](https://modelcontextprotocol.io/quickstart/client)) Python SDK를 사용한 hello-world 클라이언트 튜토리얼
+- [MCP Python SDK(client module](https://github.com/modelcontextprotocol/python-sdk)) 레퍼런스 `ClientSession`과 `stdio_client`
+- [MCP TypeScript SDK(Client](https://github.com/modelcontextprotocol/typescript-sdk)) TS 병렬
+- [VS Code(MCP in extensions](https://code.visualstudio.com/api/extension-guides/ai/mcp)) VS Code가 단일 에디터 호스트에서 여러 MCP 서버를 다중화(multiplex)하는 방식
 </content>
 </invoke>

@@ -1,6 +1,6 @@
 # 킬 스위치, 회로 차단기, 그리고 카나리아 토큰
 
-> 킬 스위치(kill switch)는 에이전트(agent)의 편집 표면 밖에 보유된 불리언(boolean)이다 — Redis 키, 기능 플래그(feature flag), 서명된 설정 — 으로 에이전트를 통째로 비활성화한다. 회로 차단기(circuit breaker)는 더 세분화되어 있다. 특정 패턴(연속 다섯 번의 동일한 도구 호출)에서 트립(trip)하고, 위반 경로를 일시 정지하며, 사람에게 격상한다. 카나리아 토큰(canary token)은 고전적 기만(deception)에서 물려받았다. 에이전트가 건드릴 정당한 이유가 없는 가짜 자격 증명(credential)이나 허니팟(honeypot) 레코드로, 그 접근이 경보를 촉발한다. eBPF 기반 데이터패스(예: Cilium)는 격리된(quarantined) 파드(pod)의 송신(egress)을 커널 층에서 포렌식 허니팟으로 다시 쓸 수 있다. 공개된 Cilium 벤치마크는 부하 하에서 밀리초 미만의 P99 데이터패스 지연 시간(latency)을 보고한다(전파 예산은 데이터패스 자체가 아니라 정책 업데이트가 노드에 도달하는 방식에 달려 있다). 움직이는 베이스라인(baseline)에 적응하는 통계적 탐지기(EWMA, CUSUM)는 표류(drift)를 조용히 받아들일 것이다 — 휘지 않는 단단한 헌법적 한계(constitutional limit)와 층으로 결합하라.
+> 킬 스위치(kill switch)는 에이전트(agent)의 편집 표면 밖에 보유된 불리언(boolean)이다. Redis 키나 기능 플래그(feature flag), 서명된 설정으로 에이전트를 통째로 비활성화한다. 회로 차단기(circuit breaker)는 더 세분화되어 있다. 특정 패턴(연속 다섯 번의 동일한 도구 호출)에서 트립(trip)하고, 위반 경로를 일시 정지하며, 사람에게 격상한다. 카나리아 토큰(canary token)은 고전적 기만(deception)에서 물려받았다. 에이전트가 건드릴 정당한 이유가 없는 가짜 자격 증명(credential)이나 허니팟(honeypot) 레코드로, 그 접근이 경보를 촉발한다. eBPF 기반 데이터패스(예: Cilium)는 격리된(quarantined) 파드(pod)의 송신(egress)을 커널 층에서 포렌식 허니팟으로 다시 쓸 수 있다. 공개된 Cilium 벤치마크는 부하 하에서 밀리초 미만의 P99 데이터패스 지연 시간(latency)을 보고한다(전파 예산은 데이터패스 자체가 아니라 정책 업데이트가 노드에 도달하는 방식에 달려 있다). 움직이는 베이스라인(baseline)에 적응하는 통계적 탐지기(EWMA, CUSUM)는 표류(drift)를 조용히 받아들일 것이다. 휘지 않는 단단한 헌법적 한계(constitutional limit)와 층으로 결합하라.
 
 **Type:** Learn
 **Languages:** Python (stdlib, three-detector simulator: kill switch, circuit breaker, canary)
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-비용 거버너(cost governor, Lesson 13)는 에이전트가 무엇을 지출할 수 있는지를 한정한다. 다만 예산 안에서 무엇을 할 수 있는지까지 한정하지는 않는다. 50달러 속도 제한(velocity limit)을 가진 에이전트도 여전히 비밀을 유출하거나, 잘못된 게시물을 발행하거나, 리소스를 삭제할 수 있다 — 비싼 액션은 토큰(token)으로는 종종 싼 액션이다.
+비용 거버너(cost governor, Lesson 13)는 에이전트가 무엇을 지출할 수 있는지를 한정한다. 다만 예산 안에서 무엇을 할 수 있는지까지 한정하지는 않는다. 50달러 속도 제한(velocity limit)을 가진 에이전트도 여전히 비밀을 유출하거나, 잘못된 게시물을 발행하거나, 리소스를 삭제할 수 있다. 비싼 액션은 토큰(token)으로는 종종 싼 액션이다.
 
 이 레슨은 비용 층 옆에 자리하는 세 가지 탐지기를 다룬다:
 
@@ -115,8 +115,8 @@ Cilium의 eBPF 기반 네트워크 정책은 격리된 파드의 송신을 커�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 자율 에이전트를 위한 킬 스위치와 회로 차단기 프레이밍.
-- [Microsoft Agent Framework — HITL and oversight](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) — 프로덕션 거버넌스 패턴.
-- [OWASP LLM / Agentic Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/) — 탐지 및 대응 요구사항.
-- [Cilium — Network policy and eBPF](https://docs.cilium.io/en/stable/security/network/) — 파드 수준 송신 리다이렉트와 포렌식 허니팟 패턴.
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — "헌법적 한계"로서의 하드코딩된 금지.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 자율 에이전트를 위한 킬 스위치와 회로 차단기 프레이밍.
+- [Microsoft Agent Framework(HITL and oversight](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) 프로덕션 거버넌스 패턴.
+- [OWASP LLM / Agentic Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/): 탐지 및 대응 요구사항.
+- [Cilium(Network policy and eBPF](https://docs.cilium.io/en/stable/security/network/)) 파드 수준 송신 리다이렉트와 포렌식 허니팟 패턴.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) "헌법적 한계"로서의 하드코딩된 금지.

@@ -192,6 +192,6 @@ Refuse to recommend fine-tuning a transformer when data is under ~500 labeled ex
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kim, Y. (2014). Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882) — TextCNN 논문. 여덟 쪽. 읽기 쉽다.
-- [Hochreiter, S. and Schmidhuber, J. (1997). Long Short-Term Memory](https://www.bioinf.jku.at/publications/older/2604.pdf) — LSTM 논문. 뜻밖에 명료하다.
-- [Olah, C. (2015). Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) — LSTM을 모두가 접근할 수 있게 만든 다이어그램들.
+- [Kim, Y. (2014). Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882): TextCNN 논문. 여덟 쪽. 읽기 쉽다.
+- [Hochreiter, S. and Schmidhuber, J. (1997). Long Short-Term Memory](https://www.bioinf.jku.at/publications/older/2604.pdf): LSTM 논문. 뜻밖에 명료하다.
+- [Olah, C. (2015). Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/): LSTM을 모두가 접근할 수 있게 만든 다이어그램들.

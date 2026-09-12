@@ -1,4 +1,4 @@
-# 추측 디코딩(Speculative Decoding) — 드래프트, 검증, 반복
+# 추측 디코딩(Speculative Decoding): 드래프트, 검증, 반복
 
 > 자기회귀(autoregressive) 디코딩(decoding)은 직렬이다. 각 토큰(token)은 이전 것을 기다린다. 추측 디코딩(speculative decoding)은 사슬을 끊는다: 저렴한 모델(model)이 N개의 토큰을 드래프트(draft)하고, 비싼 모델이 N개 모두를 한 번의 순방향 패스(forward pass)로 검증한다. 드래프트가 맞으면 N개의 생성에 대해 큰 모델의 순방향 한 번을 치른 셈이다.
 
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-70B LLM이 토큰 하나를 샘플링(sampling)하는 데 H100에서 ~30 ms가 걸린다. 3B 드래프트 모델은 ~3 ms가 걸린다. 3B가 5개 토큰을 앞서 드래프트하게 한 뒤, 70B를 *한 번* 돌려 5개 모두를 검증하면, 최대 5개의 받아들여진 토큰에 대해 총 `5×3 + 30 = 45 ms`다 — 직선 생성의 `5×30 = 150 ms` 대비. 이것이 추측 디코딩의 완전한 홍보 문구다: 약간의 추가 GPU 메모리(드래프트 모델)를 2~4배 낮은 디코딩 지연 시간(latency)과 맞바꾼다.
+70B LLM이 토큰 하나를 샘플링(sampling)하는 데 H100에서 ~30 ms가 걸린다. 3B 드래프트 모델은 ~3 ms가 걸린다. 3B가 5개 토큰을 앞서 드래프트하게 한 뒤, 70B를 *한 번* 돌려 5개 모두를 검증하면, 최대 5개의 받아들여진 토큰에 대해 총 `5×3 + 30 = 45 ms`다. 직선 생성의 `5×30 = 150 ms` 대비. 이것이 추측 디코딩의 완전한 홍보 문구다: 약간의 추가 GPU 메모리(드래프트 모델)를 2~4배 낮은 디코딩 지연 시간(latency)과 맞바꾼다.
 
 이 트릭은 분포(distribution)를 보존해야 한다. Leviathan et al. (2023)이 처음 제시하고 Chen et al.이 동시에 내놓은 추측 샘플링(speculative sampling)은 출력 시퀀스(sequence)가 큰 모델이 혼자 생성했을 것과 **동일하게 분포(identically distributed)**됨을 보장한다. 품질 트레이드오프(trade-off)가 없다. 그저 더 빠를 뿐이다.
 
@@ -52,7 +52,7 @@
 - 디코딩 전략. 그리디(greedy) 드래프트 대 그리디 검증기: 높은 α. 온도 샘플링(temperature sampling): 맞추기 어렵고, 수용이 떨어진다.
 - 작업 유형. 코드와 구조화된 출력은 더 많이 수용한다(예측 가능). 자유 형식의 창작 글쓰기는 덜 수용한다.
 
-### Medusa — 드래프트 모델 없는 드래프트
+### Medusa: 드래프트 모델 없는 드래프트
 
 Medusa는 드래프트 모델을 검증기 위의 추가 출력 헤드로 교체한다. 위치 `t`에서:
 
@@ -68,7 +68,7 @@ shared trunk → hidden h_t
 
 장점: 두 번째 모델이 없다. 단점: 학습 가능한 파라미터(parameter)를 추가한다; 지도 파인튜닝(supervised fine-tuning) 단계(~1B 토큰)가 필요하다; 수용률이 좋은 드래프트를 쓴 바닐라 추측보다 약간 낮다.
 
-### EAGLE — 은닉 상태 재사용으로 더 나은 드래프트
+### EAGLE: 은닉 상태 재사용으로 더 나은 드래프트
 
 EAGLE-1/2/3(Li et al., 2024~2025)은 드래프트 모델을, 검증기의 마지막 층(layer) 은닉 상태를 입력으로 받는 작은 트랜스포머(transformer, 보통 1층)로 만든다. 드래프트가 검증기의 특성(feature) 표현을 보기 때문에, 그 예측이 검증기의 출력 분포와 강하게 상관된다. 수용률이 ~0.6(바닐라)에서 0.85+로 올라간다.
 
@@ -211,13 +211,13 @@ vllm serve meta-llama/Llama-3.1-70B-Instruct \
 
 ## 더 읽을거리 (Further Reading)
 
-- [Leviathan, Kalman, Matias (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192) — 핵심 알고리즘과 동등성 정리.
-- [Chen et al. (2023). Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318) — 동시 도입; 깔끔한 베르누이-거부 증명.
-- [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774) — Medusa 논문; 트리 어텐션 검증.
-- [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077) — EAGLE-1; 은닉 상태 조건화 드래프트.
-- [Li et al. (2024). EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees](https://arxiv.org/abs/2406.16858) — EAGLE-2; 동적 트리 깊이.
+- [Leviathan, Kalman, Matias (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192): 핵심 알고리즘과 동등성 정리.
+- [Chen et al. (2023). Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318): 동시 도입; 깔끔한 베르누이-거부 증명.
+- [Cai et al. (2024). Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://arxiv.org/abs/2401.10774): Medusa 논문; 트리 어텐션 검증.
+- [Li et al. (2024). EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/abs/2401.15077): EAGLE-1; 은닉 상태 조건화 드래프트.
+- [Li et al. (2024). EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees](https://arxiv.org/abs/2406.16858): EAGLE-2; 동적 트리 깊이.
 - [Li et al. (2025). EAGLE-3: Scaling up Inference Acceleration of Large Language Models via Training-Time Test](https://arxiv.org/abs/2503.01840) — EAGLE-3.
-- [Fu et al. (2024). Break the Sequential Dependency of LLM Inference Using Lookahead Decoding](https://arxiv.org/abs/2402.02057) — 룩어헤드, 드래프트 없는 접근.
-- [vLLM docs — Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode.html) — 네 가지 전략을 모두 연결한 표준 프로덕션 레퍼런스.
-- [SafeAILab / EAGLE reference implementation](https://github.com/SafeAILab/EAGLE) — EAGLE-1/2/3의 레퍼런스 코드.
+- [Fu et al. (2024). Break the Sequential Dependency of LLM Inference Using Lookahead Decoding](https://arxiv.org/abs/2402.02057): 룩어헤드, 드래프트 없는 접근.
+- [vLLM docs(Speculative Decoding](https://docs.vllm.ai/en/latest/features/spec_decode.html)) 네 가지 전략을 모두 연결한 표준 프로덕션 레퍼런스.
+- [SafeAILab / EAGLE reference implementation](https://github.com/SafeAILab/EAGLE): EAGLE-1/2/3의 레퍼런스 코드.
 </content>

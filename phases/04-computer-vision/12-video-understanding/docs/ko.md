@@ -1,4 +1,4 @@
-# 비디오 이해 — 시간적 모델링 (Temporal Modeling)
+# 비디오 이해: 시간적 모델링 (Temporal Modeling)
 
 > 비디오는 이미지의 시퀀스에 그것들을 잇는 물리(physics)를 더한 것이다. 모든 비디오 모델은 시간을 추가 축으로 다루거나(3D 합성곱), 어텐션할 시퀀스로 다루거나(트랜스포머), 한 번 추출해 풀링할 특성으로 다룬다(2D+pool).
 
@@ -77,9 +77,9 @@ I3D 비결: 사전 학습된 2D ImageNet 모델을 가져와, 각 2D 커널을 �
 비디오를 시공간 패치(patch)의 격자로 토큰화(tokenise)하고 그 모두에 걸쳐 어텐션한다. TimeSformer, ViViT, Video Swin, VideoMAE.
 
 중요한 어텐션 패턴:
-- **결합(Joint)** — (t, h, w) 전체에 대한 하나의 큰 어텐션. `T*H*W`에 대해 이차(quadratic). 비쌈.
-- **분할(Divided)** — 블록당 두 개의 어텐션: 하나는 시간에 대해, 하나는 공간에 대해. 거의 선형에 가까운 스케일링.
-- **인수분해(Factorised)** — 시간 어텐션이 블록들에 걸쳐 공간 어텐션과 번갈아 나타난다.
+- **결합(Joint)**: (t, h, w) 전체에 대한 하나의 큰 어텐션. `T*H*W`에 대해 이차(quadratic). 비쌈.
+- **분할(Divided)**: 블록당 두 개의 어텐션: 하나는 시간에 대해, 하나는 공간에 대해. 거의 선형에 가까운 스케일링.
+- **인수분해(Factorised)**: 시간 어텐션이 블록들에 걸쳐 공간 어텐션과 번갈아 나타난다.
 
 장점:
 - 모든 주요 벤치마크(benchmark)에서 SOTA 정확도.
@@ -96,26 +96,26 @@ I3D 비결: 사전 학습된 2D ImageNet 모델을 가져와, 각 2D 커널을 �
 
 30fps의 10초 클립은 300프레임이다. 300개를 모두 어떤 모델에 넣는 것은 낭비다. 표준 전략:
 
-- **균등 샘플링(Uniform sampling)** — 클립 전체에 걸쳐 T개의 프레임을 고르게 고른다. 2D+pool의 기본값.
-- **밀집 샘플링(Dense sampling)** — 무작위 연속 T-프레임 윈도우. 움직임에는 인접 프레임이 필요하므로 3D 합성곱에서 흔하다.
-- **다중 클립(Multi-clip)** — 같은 비디오에서 여러 T-프레임 윈도우를 샘플링하고, 각각을 분류한 뒤, 테스트 시점에 예측을 평균한다.
+- **균등 샘플링(Uniform sampling)**: 클립 전체에 걸쳐 T개의 프레임을 고르게 고른다. 2D+pool의 기본값.
+- **밀집 샘플링(Dense sampling)**: 무작위 연속 T-프레임 윈도우. 움직임에는 인접 프레임이 필요하므로 3D 합성곱에서 흔하다.
+- **다중 클립(Multi-clip)**: 같은 비디오에서 여러 T-프레임 윈도우를 샘플링하고, 각각을 분류한 뒤, 테스트 시점에 예측을 평균한다.
 
 T는 보통 8, 16, 32, 또는 64다. T가 높을수록 = 더 많은 연산으로 더 많은 시간적 신호.
 
 ### 평가 (Evaluation)
 
 두 수준:
-- **클립 수준 정확도(Clip-level accuracy)** — 모델이 하나의 T-프레임 클립을 보고 top-k를 보고한다.
-- **비디오 수준 정확도(Video-level accuracy)** — 비디오당 여러 클립에 걸쳐 클립 수준 예측을 평균한다. 더 높고 더 안정적이다.
+- **클립 수준 정확도(Clip-level accuracy)**: 모델이 하나의 T-프레임 클립을 보고 top-k를 보고한다.
+- **비디오 수준 정확도(Video-level accuracy)**: 비디오당 여러 클립에 걸쳐 클립 수준 예측을 평균한다. 더 높고 더 안정적이다.
 
 항상 둘 다 보고하라. 클립 78% / 비디오 82%를 기록하는 모델은 테스트 시점 평균에 크게 의존하는 것이고, 80% / 81%를 기록하는 모델은 클립 단위에서 더 견고하다.
 
 ### 만나게 될 데이터셋
 
-- **Kinetics-400 / 600 / 700** — 범용 행동 데이터셋. 40만 개 클립. YouTube URL(다수가 이제 사라짐).
-- **Something-Something V2** — 움직임으로 정의되는 행동("X를 왼쪽에서 오른쪽으로 옮기기"). 2D+pool로는 풀 수 없다.
-- **UCF-101**, **HMDB-51** — 더 오래되고 더 작지만 여전히 보고된다.
-- **AVA** — 공간과 시간에서의 행동 *위치 추정(localisation)*. 분류보다 어렵다.
+- **Kinetics-400 / 600 / 700**: 범용 행동 데이터셋. 40만 개 클립. YouTube URL(다수가 이제 사라짐).
+- **Something-Something V2**: 움직임으로 정의되는 행동("X를 왼쪽에서 오른쪽으로 옮기기"). 2D+pool로는 풀 수 없다.
+- **UCF-101**, **HMDB-51**: 더 오래되고 더 작지만 여전히 보고된다.
+- **AVA**: 공간과 시간에서의 행동 *위치 추정(localisation)*. 분류보다 어렵다.
 
 ## 직접 만들기 (Build It)
 
@@ -233,8 +233,8 @@ print(f"(2+1)D output: {tuple(c(x).shape)}")
 
 두 라이브러리가 프로덕션(production) 비디오 작업을 다룬다:
 
-- `torchvision.models.video` — 사전 학습된 Kinetics 가중치를 가진 R(2+1)D, MViT, Swin3D. 이미지 모델과 동일한 API.
-- `pytorchvideo`(Meta) — 모델 주(zoo), Kinetics / SSv2 / AVA용 데이터 로더, 표준 변환.
+- `torchvision.models.video`: 사전 학습된 Kinetics 가중치를 가진 R(2+1)D, MViT, Swin3D. 이미지 모델과 동일한 API.
+- `pytorchvideo`(Meta): 모델 주(zoo), Kinetics / SSv2 / AVA용 데이터 로더, 표준 변환.
 
 비전-언어(Vision-Language) 비디오 모델(비디오 캡셔닝, 비디오 QA)에는 `transformers`(`VideoMAE`, `VideoLLaMA`, `InternVideo`)를 쓴다.
 
@@ -242,8 +242,8 @@ print(f"(2+1)D output: {tuple(c(x).shape)}")
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-video-architecture-picker.md` — 외형 대 움직임, 데이터셋 크기, 연산 예산에 기반해 2D+pool / I3D / (2+1)D / 트랜스포머를 골라주는 프롬프트(prompt).
-- `outputs/skill-frame-sampler-auditor.md` — 비디오 파이프라인(pipeline)의 샘플러를 검사하고 흔한 버그를 표시하는 스킬: off-by-one 인덱스, `num_frames < T`일 때의 불균등 샘플링, 종횡비 보존 크롭(aspect-preserving crop)의 부재 등.
+- `outputs/prompt-video-architecture-picker.md`: 외형 대 움직임, 데이터셋 크기, 연산 예산에 기반해 2D+pool / I3D / (2+1)D / 트랜스포머를 골라주는 프롬프트(prompt).
+- `outputs/skill-frame-sampler-auditor.md`: 비디오 파이프라인(pipeline)의 샘플러를 검사하고 흔한 버그를 표시하는 스킬: off-by-one 인덱스, `num_frames < T`일 때의 불균등 샘플링, 종횡비 보존 크롭(aspect-preserving crop)의 부재 등.
 
 ## 연습 문제 (Exercises)
 
@@ -266,7 +266,7 @@ print(f"(2+1)D output: {tuple(c(x).shape)}")
 
 ## 더 읽을거리 (Further Reading)
 
-- [I3D: Quo Vadis, Action Recognition (Carreira & Zisserman, 2017)](https://arxiv.org/abs/1705.07750) — 팽창과 Kinetics 데이터셋을 소개한다
-- [R(2+1)D: A Closer Look at Spatiotemporal Convolutions (Tran et al., 2018)](https://arxiv.org/abs/1711.11248) — 인수분해된 합성곱. 여전히 강력한 베이스라인
-- [TimeSformer: Is Space-Time Attention All You Need? (Bertasius et al., 2021)](https://arxiv.org/abs/2102.05095) — 최초의 강력한 비디오 트랜스포머
-- [VideoMAE (Tong et al., 2022)](https://arxiv.org/abs/2203.12602) — 비디오를 위한 마스크드 오토인코더(masked autoencoder) 사전 학습. 현재 지배적인 사전 학습 레시피
+- [I3D: Quo Vadis, Action Recognition (Carreira & Zisserman, 2017)](https://arxiv.org/abs/1705.07750): 팽창과 Kinetics 데이터셋을 소개한다
+- [R(2+1)D: A Closer Look at Spatiotemporal Convolutions (Tran et al., 2018)](https://arxiv.org/abs/1711.11248): 인수분해된 합성곱. 여전히 강력한 베이스라인
+- [TimeSformer: Is Space-Time Attention All You Need? (Bertasius et al., 2021)](https://arxiv.org/abs/2102.05095): 최초의 강력한 비디오 트랜스포머
+- [VideoMAE (Tong et al., 2022)](https://arxiv.org/abs/2203.12602): 비디오를 위한 마스크드 오토인코더(masked autoencoder) 사전 학습. 현재 지배적인 사전 학습 레시피

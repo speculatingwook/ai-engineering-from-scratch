@@ -135,10 +135,10 @@ def make_tokens(style, length, vocab_size, rng):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Défossez et al. (2022). Encodec: High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438) — 코덱 표준.
-- [Zeghidour et al. (2021). SoundStream](https://arxiv.org/abs/2107.03312) — 처음으로 널리 쓰인 신경 오디오 코덱.
+- [Défossez et al. (2022). Encodec: High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438): 코덱 표준.
+- [Zeghidour et al. (2021). SoundStream](https://arxiv.org/abs/2107.03312): 처음으로 널리 쓰인 신경 오디오 코덱.
 - [Kumar et al. (2023). High-Fidelity Audio Compression with Improved RVQGAN (DAC)](https://arxiv.org/abs/2306.06546) — DAC.
 - [Wang et al. (2023). Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers (VALL-E)](https://arxiv.org/abs/2301.02111) — VALL-E.
 - [Copet et al. (2023). Simple and Controllable Music Generation (MusicGen)](https://arxiv.org/abs/2306.05284) — MusicGen.
 - [Liu et al. (2023). AudioLDM 2: Learning Holistic Audio Generation with Self-supervised Pretraining](https://arxiv.org/abs/2308.05734) — AudioLDM 2.
-- [Stability AI (2024). Stable Audio 2.5](https://stability.ai/news/introducing-stable-audio-2-5) — 플로 매칭을 쓰는 2025년 텍스트-투-뮤직.
+- [Stability AI (2024). Stable Audio 2.5](https://stability.ai/news/introducing-stable-audio-2-5): 플로 매칭을 쓰는 2025년 텍스트-투-뮤직.

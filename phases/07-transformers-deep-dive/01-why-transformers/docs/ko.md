@@ -1,4 +1,4 @@
-# 왜 트랜스포머인가(Why Transformers) — RNN의 문제들
+# 왜 트랜스포머인가(Why Transformers): RNN의 문제들
 
 > RNN은 토큰(token)을 한 번에 하나씩 처리한다. 트랜스포머(transformer)는 모든 토큰을 한꺼번에 처리한다. 이 하나의 아키텍처적 베팅이 2017년 이후 딥러닝의 모든 스케일링 곡선을 바꿨다.
 
@@ -9,11 +9,11 @@
 
 ## 문제 (The Problem)
 
-2017년 이전에는 지구상의 모든 최신 시퀀스 모델 — 언어, 번역, 음성 — 이 순환 신경망(recurrent neural network)이었다. LSTM과 GRU가 반세기 가까이 ImageNet에 견줄 만한 번역 벤치마크(benchmark)에서 우승했다. 누구에게나 그것이 유일한 도구였다.
+2017년 이전에는 지구상의 모든 최신 시퀀스 모델(언어, 번역, 음성)이 순환 신경망(recurrent neural network)이었다. LSTM과 GRU가 반세기 가까이 ImageNet에 견줄 만한 번역 벤치마크(benchmark)에서 우승했다. 누구에게나 그것이 유일한 도구였다.
 
 여기에는 세 가지 치명적 약점이 있었다. 순차적 계산은 시간 축을 따라 병렬화할 수 없었다. 토큰 `t+1`은 토큰 `t`의 은닉 상태(hidden state)가 필요하다. 1,024 토큰 시퀀스는 사이클당 1,000,000번의 부동소수점 연산을 하는 GPU에서도 1,024번의 직렬 스텝을 거쳐야 했다. 병렬성을 위해 설계된 하드웨어에서 학습(training) 실제 시계 시간이 시퀀스 길이에 선형으로 비례한 것이다.
 
-기울기 소실(vanishing gradient) 탓에 50 토큰 뒤의 정보는 이미 50개의 비선형성을 거쳐 압축돼 버린다. 게이트 순환 유닛(LSTM, GRU)이 그 압착을 완화했지만 결코 없애지는 못했다. 그래서 장거리 의존성 — "내가 지난여름 교토행 비행기에서 읽은 그 책은…" — 은 일상적으로 실패했다.
+기울기 소실(vanishing gradient) 탓에 50 토큰 뒤의 정보는 이미 50개의 비선형성을 거쳐 압축돼 버린다. 게이트 순환 유닛(LSTM, GRU)이 그 압착을 완화했지만 결코 없애지는 못했다. 그래서 장거리 의존성("내가 지난여름 교토행 비행기에서 읽은 그 책은…")은 일상적으로 실패했다.
 
 고정 폭 은닉 상태에서는 인코더(encoder)가 디코더(decoder)가 무언가를 보기도 전에 전체 소스 시퀀스를 단일 벡터(vector)로 짜 넣어야 했다. 소스가 5 토큰이든 500 토큰이든 상관없다. 병목(bottleneck)은 같은 모양이다.
 
@@ -29,15 +29,15 @@
 
 **브로드캐스트로서의 어텐션.** 셀프 어텐션(self-attention)은 모든 쌍 `(i, j)`에 대해 `output_i = sum_j(a_ij * v_j)`를 동시에 계산한다. 전체 N×N 어텐션 행렬이 하나의 배치 행렬곱(matmul)으로 채워진다. 어떤 스텝도 다른 것에 의존하지 않는다. GPU가 이를 좋아한다.
 
-**속도 향상은 상수가 아니다.** 그것은 `O(N)` 직렬 깊이와 `O(1)` 직렬 깊이의 차이다. 실제로 트랜스포머는 N=512에서 동일 하드웨어 기준 에폭(epoch)당 5-10배 빠르게 학습하고, 어텐션의 `O(N²)` 메모리 장벽(나중에 Flash Attention이 고쳤다 — 레슨 12 참조)에 부딪히기 전까지 시퀀스 길이와 함께 격차가 벌어진다.
+**속도 향상은 상수가 아니다.** 그것은 `O(N)` 직렬 깊이와 `O(1)` 직렬 깊이의 차이다. 실제로 트랜스포머는 N=512에서 동일 하드웨어 기준 에폭(epoch)당 5-10배 빠르게 학습하고, 어텐션의 `O(N²)` 메모리 장벽(나중에 Flash Attention이 고쳤다. 레슨 12 참조)에 부딪히기 전까지 시퀀스 길이와 함께 격차가 벌어진다.
 
 **트랜스포머의 비용.** 어텐션 메모리는 `O(N²)`로 비례한다. 2K 컨텍스트에는 괜찮다. 128K 컨텍스트에는 슬라이딩 윈도우, RoPE 외삽, Flash Attention 타일링, 또는 선형 어텐션 변형이 필요하다. 순환은 시간과 메모리 둘 다 `O(N)`이었다. 트랜스포머는 메모리로 시간을 맞바꾼 뒤 병렬성으로 시간을 되찾는다.
 
-**귀납적 편향(inductive bias) 전환.** RNN은 국소성과 최근성을 가정한다. 트랜스포머는 아무것도 가정하지 않는다 — 모든 쌍이 어텐션의 후보다. 그래서 트랜스포머는 잘 학습하려면 더 많은 데이터가 필요하지만, 일단 데이터가 있으면 더 멀리 확장된다. Chinchilla(2022)가 이를 공식화했다. 충분한 토큰이 주어지면, 트랜스포머는 항상 동일 파라미터(parameter) 수의 RNN을 이긴다.
+**귀납적 편향(inductive bias) 전환.** RNN은 국소성과 최근성을 가정한다. 트랜스포머는 아무것도 가정하지 않는다. 모든 쌍이 어텐션의 후보다. 그래서 트랜스포머는 잘 학습하려면 더 많은 데이터가 필요하지만, 일단 데이터가 있으면 더 멀리 확장된다. Chinchilla(2022)가 이를 공식화했다. 충분한 토큰이 주어지면, 트랜스포머는 항상 동일 파라미터(parameter) 수의 RNN을 이긴다.
 
 ## 직접 만들기 (Build It)
 
-여기에 신경망(neural network)은 없다 — 노트북에서 격차를 느낄 수 있도록 핵심 병목을 수치적으로 시뮬레이션한다.
+여기에 신경망(neural network)은 없다. 노트북에서 격차를 느낄 수 있도록 핵심 병목을 수치적으로 시뮬레이션한다.
 
 ### 1단계: 직렬 깊이 측정하기
 
@@ -75,7 +75,7 @@ O(N) 격차를 가시화하는 타이밍 표를 출력한다. 2026년 Mac 노트
 | matmul 가속기가 없는 엣지 디바이스 | Depthwise-separable RNN이 여전히 FLOPs/watt에서 이김 |
 | 그 외 모든 것 (학습, 배치 추론, 128K까지의 컨텍스트) | 트랜스포머 |
 
-Mamba 같은 상태 공간 모델(state-space model, SSM)은 본질적으로 양쪽의 장점을 주는 구조적 파라미터화를 갖춘 RNN이다. `O(N)` 스캔 메모리, 선택적 스캔을 통한 병렬 학습. 이들은 트랜스포머 품질의 90%를 회복하면서 더 나은 장기 컨텍스트 스케일링을 보인다. 2026년에 대부분의 프런티어 연구소는 하이브리드 SSM+트랜스포머 모델(예: Jamba, Samba)을 학습한다 — 순환은 죽지 않았고, 하나의 구성요소다.
+Mamba 같은 상태 공간 모델(state-space model, SSM)은 본질적으로 양쪽의 장점을 주는 구조적 파라미터화를 갖춘 RNN이다. `O(N)` 스캔 메모리, 선택적 스캔을 통한 병렬 학습. 이들은 트랜스포머 품질의 90%를 회복하면서 더 나은 장기 컨텍스트 스케일링을 보인다. 2026년에 대부분의 프런티어 연구소는 하이브리드 SSM+트랜스포머 모델(예: Jamba, Samba)을 학습한다. 순환은 죽지 않았고, 하나의 구성요소다.
 
 ## 산출물 (Ship It)
 
@@ -101,7 +101,7 @@ Mamba 같은 상태 공간 모델(state-space model, SSM)은 본질적으로 양
 
 ## 더 읽을거리 (Further Reading)
 
-- [Vaswani et al. (2017). Attention Is All You Need](https://arxiv.org/abs/1706.03762) — 주류 NLP에서 순환을 죽인 논문.
-- [Bahdanau, Cho, Bengio (2014). Neural MT by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) — 어텐션이 RNN에 볼트로 붙어 탄생한 곳.
-- [Hochreiter, Schmidhuber (1997). Long Short-Term Memory](https://www.bioinf.jku.at/publications/older/2604.pdf) — 기록을 위한 원조 LSTM 논문.
-- [Gu, Dao (2023). Mamba: Linear-Time Sequence Modeling with Selective State Spaces](https://arxiv.org/abs/2312.00752) — 트랜스포머에 대한 현대적 순환 응답.
+- [Vaswani et al. (2017). Attention Is All You Need](https://arxiv.org/abs/1706.03762): 주류 NLP에서 순환을 죽인 논문.
+- [Bahdanau, Cho, Bengio (2014). Neural MT by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473): 어텐션이 RNN에 볼트로 붙어 탄생한 곳.
+- [Hochreiter, Schmidhuber (1997). Long Short-Term Memory](https://www.bioinf.jku.at/publications/older/2604.pdf): 기록을 위한 원조 LSTM 논문.
+- [Gu, Dao (2023). Mamba: Linear-Time Sequence Modeling with Selective State Spaces](https://arxiv.org/abs/2312.00752): 트랜스포머에 대한 현대적 순환 응답.

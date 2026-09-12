@@ -1,4 +1,4 @@
-# 캡스톤 — 완전한 툴 생태계 구축하기
+# 캡스톤: 완전한 툴 생태계 구축하기
 
 > Phase 13은 모든 조각을 가르쳤다. 이 캡스톤(capstone)은 이를 하나의 프로덕션 형태 시스템으로 연결한다: 툴 + 리소스 + 프롬프트 + 태스크 + UI를 갖춘 MCP 서버, 엣지에서의 OAuth 2.1, RBAC 게이트웨이, 멀티 서버 클라이언트, A2A 하위 에이전트 호출, 컬렉터로 들어가는 OTel 추적, CI에서의 툴 포이즈닝(tool-poisoning) 탐지, 그리고 AGENTS.md + SKILL.md 번들. 끝까지 따라오면 모든 아키텍처 선택을 방어할 수 있다.
 
@@ -151,8 +151,8 @@ research-system/
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) — 통합 레퍼런스
-- [MCP blog — 2026 roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/) — 프로토콜이 향하는 곳
-- [a2a-protocol.org](https://a2a-protocol.org/latest/) — A2A v1.0 레퍼런스
-- [OpenTelemetry — GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — 표준 추적 컨벤션
-- [Anthropic — Claude Agent SDK overview](https://code.claude.com/docs/en/agent-sdk/overview) — 프로덕션 에이전트 런타임 패턴
+- [MCP(Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) 통합 레퍼런스
+- [MCP blog(2026 roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/)) 프로토콜이 향하는 곳
+- [a2a-protocol.org](https://a2a-protocol.org/latest/): A2A v1.0 레퍼런스
+- [OpenTelemetry(GenAI semconv](https://opentelemetry.io/docs/specs/semconv/gen-ai/)) 표준 추적 컨벤션
+- [Anthropic(Claude Agent SDK overview](https://code.claude.com/docs/en/agent-sdk/overview)) 프로덕션 에이전트 런타임 패턴

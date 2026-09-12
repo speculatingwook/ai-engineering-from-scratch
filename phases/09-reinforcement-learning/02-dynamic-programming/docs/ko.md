@@ -1,4 +1,4 @@
-# 동적 계획법 — 정책 반복과 가치 반복 (Dynamic Programming — Policy Iteration & Value Iteration)
+# 동적 계획법(정책 반복과 가치 반복 (Dynamic Programming) Policy Iteration & Value Iteration)
 
 > 동적 계획법(dynamic programming)은 커닝하는 강화 학습이다. 이미 전이 함수와 보상 함수를 알고 있으니, 그저 `V` 또는 `π`가 더 이상 움직이지 않을 때까지 벨만 방정식을 반복할 뿐이다. 이것은 모든 샘플링 기반 방법이 따라잡으려 애쓰는 벤치마크(benchmark)다.
 
@@ -11,7 +11,7 @@
 
 모델이 알려진 MDP가 있다고 하자: 임의의 상태-행동 쌍에 대해 `P(s' | s, a)`와 `R(s, a, s')`를 질의할 수 있다. 재고 관리자는 수요 분포를 안다. 보드 게임은 전이가 결정론적이다. 그리드월드는 파이썬 네 줄이면 된다. 즉 *모델*이 있는 것이다.
 
-모델-프리(model-free) 강화 학습(Q-러닝, PPO, REINFORCE)은 모델이 없는 경우 — 환경으로부터 샘플링만 할 수 있는 경우 — 를 위해 발명되었다. 하지만 모델이 있다면 더 빠르고 더 나은 방법이 있다: 동적 계획법이다. 벨만(Bellman)이 1957년에 설계했다. 이 방법들은 여전히 정확성을 정의한다: "이 MDP에 대한 최적 정책"이라고 말할 때 그 정책은 DP가 반환할 정책을 뜻한다.
+모델-프리(model-free) 강화 학습(Q-러닝, PPO, REINFORCE)은 모델이 없는 경우(환경으로부터 샘플링만 할 수 있는 경우)를 위해 발명되었다. 하지만 모델이 있다면 더 빠르고 더 나은 방법이 있다: 동적 계획법이다. 벨만(Bellman)이 1957년에 설계했다. 이 방법들은 여전히 정확성을 정의한다: "이 MDP에 대한 최적 정책"이라고 말할 때 그 정책은 DP가 반환할 정책을 뜻한다.
 
 2026년에 이것이 필요한 이유는 세 가지다. 첫째, 강화 학습 연구의 모든 표(tabular) 환경(GridWorld, FrozenLake, CliffWalking)은 황금 표준(gold-standard) 정책을 만들기 위해 DP로 풀린다. 둘째, 정확한 가치는 샘플링 방법을 *디버깅*하게 해준다: Q-러닝의 `V*(s_0)` 추정값이 DP 답과 30% 차이가 난다면 Q-러닝에 버그가 있다는 뜻이다. 셋째, 현대의 오프라인 강화 학습과 계획 방법(MCTS, AlphaZero의 탐색, Phase 9 · 10의 모델 기반 강화 학습)은 모두 학습된 혹은 주어진 모델 위에서 벨만 백업(Bellman backup)을 반복한다.
 
@@ -36,7 +36,7 @@
 
 **일반화 정책 반복(generalized policy iteration, GPI).** 통합적 틀이다. 가치 함수와 정책은 양방향 개선 루프에 묶여 있다. 둘을 상호 일관성으로 몰아가는 모든 방법(비동기 가치 반복, 수정 정책 반복, Q-러닝, 액터-크리틱, PPO)은 GPI의 한 사례다.
 
-**`γ < 1`이 중요한 이유.** 벨만 연산자(Bellman operator)는 상한 노름(sup-norm)에서 `γ`-축약(contraction)이다: `||T V - T V'||_∞ ≤ γ ||V - V'||_∞`. 축약은 유일한 고정점과 기하적 수렴을 함의한다. `γ < 1`을 버리면 보장을 잃는다 — 유한 지평이나 흡수 종료 상태가 필요하다.
+**`γ < 1`이 중요한 이유.** 벨만 연산자(Bellman operator)는 상한 노름(sup-norm)에서 `γ`-축약(contraction)이다: `||T V - T V'||_∞ ≤ γ ||V - V'||_∞`. 축약은 유일한 고정점과 기하적 수렴을 함의한다. `γ < 1`을 버리면 보장을 잃는다. 유한 지평이나 흡수 종료 상태가 필요하다.
 
 ## 직접 만들기 (Build It)
 
@@ -79,7 +79,7 @@ def policy_evaluation(policy, gamma=0.99, tol=1e-6):
 
 ### 3단계: 정책 개선
 
-`π`를 `V`에 대한 탐욕 정책으로 교체한다. `π`가 바뀌지 않았다면 반환한다 — 우리는 최적점에 있다.
+`π`를 `V`에 대한 탐욕 정책으로 교체한다. `π`가 바뀌지 않았다면 반환한다. 우리는 최적점에 있다.
 
 ```python
 def policy_improvement(V, gamma=0.99):
@@ -148,7 +148,7 @@ def value_iteration(gamma=0.99, tol=1e-6):
 | Q-러닝 / PPO 구현 검증 | 장난감 환경에서 DP-최적 V*와 비교 |
 | 모델 기반 강화 학습 (Phase 9 · 10) | 학습된 전이 모델 위의 벨만 백업 |
 | AlphaZero / MuZero에서의 계획 | 몬테카를로 트리 탐색 = 비동기 벨만 백업 |
-| 오프라인 강화 학습 (CQL, IQL) | 보수적 Q-반복 — OOD 행동에 페널티를 둔 DP |
+| 오프라인 강화 학습 (CQL, IQL) | 보수적 Q-반복: OOD 행동에 페널티를 둔 DP |
 
 누군가 "최적 가치 함수"라고 말할 때마다 그것은 "DP 고정점"을 뜻한다. 논문에서 `V*`나 `Q*`를 보면 이 루프를 떠올려라.
 
@@ -197,8 +197,8 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) — 정책 반복과 가치 반복의 정전(正典)적 제시.
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) — 축약 사상(contraction-mapping) 논증의 엄밀한 다룸.
-- [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) — 수정 정책 반복과 그 수렴 분석.
-- [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/) — 원조 정책 반복 논문.
-- [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html) — 이후 모든 레슨이 사용하는 DP에서 근사-DP / 심층 강화 학습으로의 다리.
+- [Sutton & Barto (2018). Ch. 4(Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf)) 정책 반복과 가치 반복의 정전(正典)적 제시.
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html): 축약 사상(contraction-mapping) 논증의 엄밀한 다룸.
+- [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887): 수정 정책 반복과 그 수렴 분석.
+- [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/): 원조 정책 반복 논문.
+- [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html): 이후 모든 레슨이 사용하는 DP에서 근사-DP / 심층 강화 학습으로의 다리.

@@ -1,4 +1,4 @@
-# 정렬 연구 생태계 — MATS, Redwood, Apollo, METR
+# 정렬 연구 생태계: MATS, Redwood, Apollo, METR
 
 > 다섯 개 조직이 2026년 비연구소(non-lab) 정렬(alignment) 연구 계층을 정의한다. MATS(ML Alignment & Theory Scholars): 2021년 말 이후 527명 이상의 연구자, 180편 이상의 논문, 1만 회 이상의 인용, h-지수 47. 2024년 여름 코호트(cohort)는 약 90명의 학자와 40명의 멘토와 함께 501(c)(3)으로 법인화됨. 2025년 이전 동문의 80%가 안전/보안에 종사하며 200명 이상이 Anthropic, DeepMind, OpenAI, 영국 AISI, RAND, Redwood, METR, Apollo에 있다. Redwood Research: Buck Shlegeris가 설립한 응용 정렬 연구소. AI 통제(AI Control)(레슨 10)를 도입함. 통제 안전 사례에 대해 영국 AISI와 협력함. Apollo Research: 프런티어(frontier) 연구소를 위한 배포 전(pre-deployment) 책략(scheming) 평가. In-Context Scheming(레슨 8)과 Towards Safety Cases for AI Scheming을 저술함. METR(Model Evaluation and Threat Research): 과업 기반(task-based) 역량 평가, 자율 과업 시간 지평(time-horizon) 연구. "Common Elements of Frontier AI Safety Policies"가 연구소 프레임워크를 비교함. Eleos AI Research: 모델 복지(model-welfare) 배포 전 평가(레슨 19). Claude Opus 4 복지 평가를 수행함.
 
@@ -105,8 +105,8 @@ MATS는 연구자를 훈련한다. 졸업생은 Anthropic, DeepMind, OpenAI(연�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MATS (ML Alignment & Theory Scholars)](https://www.matsprogram.org/) — 멘토십 프로그램
-- [Redwood Research](https://www.redwoodresearch.org/) — AI 통제 논문
-- [Apollo Research](https://www.apolloresearch.ai/) — 책략 평가
-- [METR — Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) — 프레임워크 비교
-- [Eleos AI Research](https://www.eleosai.org/research) — 모델 복지 방법론
+- [MATS (ML Alignment & Theory Scholars)](https://www.matsprogram.org/): 멘토십 프로그램
+- [Redwood Research](https://www.redwoodresearch.org/): AI 통제 논문
+- [Apollo Research](https://www.apolloresearch.ai/): 책략 평가
+- [METR(Common Elements of Frontier AI Safety Policies](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 프레임워크 비교
+- [Eleos AI Research](https://www.eleosai.org/research): 모델 복지 방법론

@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-DeepSeek-V3는 그 아키텍처가 Llama 계열과 의미 있게 다른 첫 프런티어 오픈 모델이다. Llama 3 405B는 "여섯 손잡이를 돌린 GPT-2"다. DeepSeek-V3는 여섯 손잡이를 모두 돌리고 네 개를 더한 GPT-2다. Llama 3 config를 읽는 것은 DeepSeek config를 읽기 위한 준비운동이지만, 깊은 구조 — 어텐션(attention) 블록의 형태, 라우팅 로직, 학습 시점 목표 — 는 별도의 안내가 필요할 만큼 다르다.
+DeepSeek-V3는 그 아키텍처가 Llama 계열과 의미 있게 다른 첫 프런티어 오픈 모델이다. Llama 3 405B는 "여섯 손잡이를 돌린 GPT-2"다. DeepSeek-V3는 여섯 손잡이를 모두 돌리고 네 개를 더한 GPT-2다. Llama 3 config를 읽는 것은 DeepSeek config를 읽기 위한 준비운동이지만, 깊은 구조(어텐션(attention) 블록의 형태, 라우팅 로직, 학습 시점 목표)는 별도의 안내가 필요할 만큼 다르다.
 
 이를 배우는 보상은 이렇다. DeepSeek-V3의 오픈 가중치(weight) 공개는 오픈 모델에서 "프런티어 능력"이 의미하는 바를 바꿔놓았다. 그 아키텍처는 2026년의 여러 학습 실행이 베끼고 있는 청사진이다. 이를 이해하는 것은 프런티어 LLM 학습이나 추론을 다루는 어떤 역할에서든 기본 자격이다.
 
@@ -28,7 +28,7 @@ DeepSeek-V3는 여전히 자기회귀(autoregressive)다. 여전히 디코더(de
 
 ### 반전: GQA 대신 MLA
 
-Phase 10 · 14에서 GQA가 K와 V를 Q 헤드 그룹에 걸쳐 공유하여 KV 캐시를 줄임을 알았다. Multi-Head Latent Attention(MLA)은 더 나아간다: K와 V를 공유된 저랭크 잠재 표현(`kv_lora_rank`)으로 압축한 다음, 즉석에서 헤드별로 압축 해제한다. KV 캐시는 잠재 표현만 저장한다 — 보통 8 x 128 = 1024 부동소수점이 아니라 토큰당 층(layer)당 512 부동소수점이다.
+Phase 10 · 14에서 GQA가 K와 V를 Q 헤드 그룹에 걸쳐 공유하여 KV 캐시를 줄임을 알았다. Multi-Head Latent Attention(MLA)은 더 나아간다: K와 V를 공유된 저랭크 잠재 표현(`kv_lora_rank`)으로 압축한 다음, 즉석에서 헤드별로 압축 해제한다. KV 캐시는 잠재 표현만 저장한다. 보통 8 x 128 = 1024 부동소수점이 아니라 토큰당 층(layer)당 512 부동소수점이다.
 
 128k 컨텍스트에서 MLA를 가진 DeepSeek-V3(토큰당 층당 하나의 공유 잠재 `c^{KV}`; K와 V는 둘 다 후속 행렬곱에 흡수될 수 있는 업투영(up-projection)을 통해 이 잠재 표현에서 유도된다):
 
@@ -110,7 +110,7 @@ mtp_module: 1               (1 MTP module at depth 1)
 - 58개 MoE 블록: MLA를 가진 어텐션(~144M) + 각각 256개 전문가(개당 30M) + 1개 공유 전문가(30M) + norm. 모든 전문가를 포함해 블록당 총 ~7.95B. 58개 MoE 블록에 대해 총 461B.
 - MTP 모듈: 14B.
 
-총합: 핵심 아키텍처에 대해 ~476B + MTP 14B다. 공개된 671B 수치는 여기에 더해 추가적인 구조적 파라미터(편향 텐서(tensor), 전문가별 구성 요소, 공유 전문가 스케일링 등)를 설명한다. 계산기에서 우리가 재현하는 수치는 공개된 것의 3~5% 이내다 — 차이는 DeepSeek 보고서가 그 2절 부록에 문서화한 세밀한 계산에서 온다.
+총합: 핵심 아키텍처에 대해 ~476B + MTP 14B다. 공개된 671B 수치는 여기에 더해 추가적인 구조적 파라미터(편향 텐서(tensor), 전문가별 구성 요소, 공유 전문가 스케일링 등)를 설명한다. 계산기에서 우리가 재현하는 수치는 공개된 것의 3~5% 이내다. 차이는 DeepSeek 보고서가 그 2절 부록에 문서화한 세밀한 계산에서 온다.
 
 순방향당 활성 파라미터:
 
@@ -147,7 +147,7 @@ DeepSeek-V4(만약 출시된다면)는 MLA + MoE + MTP를 유지하고 Phase 10 
 
 - 공개된 671B 대비 총 파라미터 개수.
 - 공개된 37B 대비 활성 파라미터 개수.
-- 128k 컨텍스트에서의 KV 캐시 — MLA 대 GQA 비교.
+- 128k 컨텍스트에서의 KV 캐시: MLA 대 GQA 비교.
 - 파라미터 예산이 실제로 어디로 가는지 보기 위한 층별 분해.
 
 ## 산출물 (Ship It)
@@ -183,9 +183,9 @@ DeepSeek-V4(만약 출시된다면)는 MLA + MoE + MTP를 유지하고 Phase 10 
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI — DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437) — 전체 아키텍처, 학습, 결과 문서
-- [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3) — config 파일과 배포(deployment) 메모
-- [DeepSeek-V2 paper (arXiv:2405.04434)](https://arxiv.org/abs/2405.04434) — MLA를 도입한 전신
-- [DeepSeek-R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948) — V3의 아키텍처에 대한 추론 학습 후속
-- [Native Sparse Attention (arXiv:2502.11089)](https://arxiv.org/abs/2502.11089) — DeepSeek 계열 어텐션의 미래 방향
-- [DualPipe repository](https://github.com/deepseek-ai/DualPipe) — 학습 스케줄 참조
+- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437)) 전체 아키텍처, 학습, 결과 문서
+- [DeepSeek-V3 model card on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V3): config 파일과 배포(deployment) 메모
+- [DeepSeek-V2 paper (arXiv:2405.04434)](https://arxiv.org/abs/2405.04434): MLA를 도입한 전신
+- [DeepSeek-R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948): V3의 아키텍처에 대한 추론 학습 후속
+- [Native Sparse Attention (arXiv:2502.11089)](https://arxiv.org/abs/2502.11089): DeepSeek 계열 어텐션의 미래 방향
+- [DualPipe repository](https://github.com/deepseek-ai/DualPipe): 학습 스케줄 참조

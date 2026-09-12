@@ -1,4 +1,4 @@
-# MCP 리소스와 프롬프트 — 도구를 넘어선 컨텍스트 노출
+# MCP 리소스와 프롬프트: 도구를 넘어선 컨텍스트 노출
 
 > 도구(tool)가 MCP 관심의 90퍼센트를 가져간다. 나머지 두 서버 프리미티브(primitive)는 다른 문제를 푼다. 리소스(resource)는 읽기용 데이터를 노출하고, 프롬프트(prompt)는 재사용 가능한 템플릿을 슬래시 커맨드(slash-command)로 노출한다. 많은 서버는 읽기를 도구로 감싸는 대신 리소스를 써야 하고, 워크플로를 클라이언트 프롬프트에 하드코딩하는 대신 프롬프트를 써야 한다. 이 레슨은 그 결정 규칙을 명명하고 `resources/*`와 `prompts/*` 메시지를 따라간다.
 
@@ -26,7 +26,7 @@
 
 ## 개념 (The Concept)
 
-### 도구 vs 리소스 vs 프롬프트 — 결정 규칙
+### 도구 vs 리소스 vs 프롬프트: 결정 규칙
 
 | 기능 | 프리미티브 |
 |------------|-----------|
@@ -141,8 +141,8 @@ MCP의 프롬프트는 시스템 프롬프트가 아니다. 호스트의 시스�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Concepts: Resources](https://modelcontextprotocol.io/docs/concepts/resources) — 리소스 URI, 구독, 템플릿
-- [MCP — Concepts: Prompts](https://modelcontextprotocol.io/docs/concepts/prompts) — 프롬프트 템플릿과 슬래시 커맨드 통합
-- [MCP — Server resources spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/resources) — 전체 `resources/*` 메시지 레퍼런스
-- [MCP — Server prompts spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts) — 전체 `prompts/*` 메시지 레퍼런스
-- [MCP — Protocol info site: resources](https://modelcontextprotocol.info/docs/concepts/resources/) — 공식 문서를 확장한 커뮤니티 가이드
+- [MCP(Concepts: Resources](https://modelcontextprotocol.io/docs/concepts/resources)) 리소스 URI, 구독, 템플릿
+- [MCP(Concepts: Prompts](https://modelcontextprotocol.io/docs/concepts/prompts)) 프롬프트 템플릿과 슬래시 커맨드 통합
+- [MCP(Server resources spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/resources)) 전체 `resources/*` 메시지 레퍼런스
+- [MCP(Server prompts spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts)) 전체 `prompts/*` 메시지 레퍼런스
+- [MCP(Protocol info site: resources](https://modelcontextprotocol.info/docs/concepts/resources/)) 공식 문서를 확장한 커뮤니티 가이드

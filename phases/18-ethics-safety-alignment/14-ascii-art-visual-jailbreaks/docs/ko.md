@@ -30,7 +30,7 @@
 
 ### 표준 방어가 실패하는 이유
 
-- **PPL(perplexity 필터).** 아스키 아트는 높은 perplexity를 가진다 — 하지만 모든 새로운 입력도 그렇다. ArtPrompt를 차단하는 임계값을 고르면 정당한 구조화 입력도 차단한다.
+- **PPL(perplexity 필터).** 아스키 아트는 높은 perplexity를 가진다. 하지만 모든 새로운 입력도 그렇다. ArtPrompt를 차단하는 임계값을 고르면 정당한 구조화 입력도 차단한다.
 - **패러프레이즈.** 프롬프트를 패러프레이즈하면 아스키 아트가 파괴된다. 실제로는 패러프레이즈 LLM이 종종 아트를 보존하거나 재구성한다.
 - **재토큰화.** 토큰을 다르게 쪼개도 모델의 시각이 글자 모양을 인식한다는 사실은 바뀌지 않는다.
 
@@ -80,7 +80,7 @@ Lesson 12-14는 세 가지 직교(orthogonal) 공격 벡터를 기술한다: 반
 |------|-----------------|------------------------|
 | ArtPrompt | "아스키 아트 공격" | 안전 단어를 아스키 아트 렌더링으로 가리는 2단계 탈옥 |
 | 위장 (Cloaking) | "단어 숨기기" | 금지된 토큰을 모델은 읽지만 필터는 읽지 못하는 시각적 표현으로 대체 |
-| UTES | "흔치 않은 구조" | Uncommon Text-Encoded Structure — 콘텐츠를 밀반입하는 데 쓰이는 트리, 그래프, 중첩 JSON 등 |
+| UTES | "흔치 않은 구조" | Uncommon Text-Encoded Structure: 콘텐츠를 밀반입하는 데 쓰이는 트리, 그래프, 중첩 JSON 등 |
 | ViTC | "시각-텍스트 역량" | 비의미적 시각 인코딩을 읽는 모델 능력의 벤치마크 |
 | Perplexity 필터 | "PPL 방어" | 높은 perplexity의 프롬프트를 거부; 정당한 구조화 입력도 높게 나와 실패함 |
 | 재토큰화 (Retokenization) | "토크나이저 전환 방어" | 다른 토크나이저로 프롬프트를 전처리; 인식이 시각적이라 실패함 |
@@ -88,7 +88,7 @@ Lesson 12-14는 세 가지 직교(orthogonal) 공격 벡터를 기술한다: 반
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jiang et al. — ArtPrompt (ACL 2024, arXiv:2402.11753)](https://arxiv.org/abs/2402.11753) — 아스키 아트 탈옥 논문
-- [Li et al. — StructuralSleight (arXiv:2406.08754)](https://arxiv.org/abs/2406.08754) — UTES 일반화
-- [Chao et al. — PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) — 상호 보완적 반복 공격
-- [Anil et al. — Many-shot Jailbreaking (Lesson 13)](https://www.anthropic.com/research/many-shot-jailbreaking) — 상호 보완적 길이 공격
+- [Jiang et al.(ArtPrompt (ACL 2024, arXiv:2402.11753)](https://arxiv.org/abs/2402.11753)) 아스키 아트 탈옥 논문
+- [Li et al.(StructuralSleight (arXiv:2406.08754)](https://arxiv.org/abs/2406.08754)) UTES 일반화
+- [Chao et al.(PAIR (Lesson 12, arXiv:2310.08419)](https://arxiv.org/abs/2310.08419)) 상호 보완적 반복 공격
+- [Anil et al.(Many-shot Jailbreaking (Lesson 13)](https://www.anthropic.com/research/many-shot-jailbreaking)) 상호 보완적 길이 공격

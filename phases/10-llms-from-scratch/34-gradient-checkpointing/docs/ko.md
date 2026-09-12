@@ -256,7 +256,7 @@ def should_recompute(layer_type, activation_bytes, recompute_flops_ratio):
 
 ## 라이브러리로 써보기 (Use It)
 
-- **torch.utils.checkpoint**: `from torch.utils.checkpoint import checkpoint` — PyTorch의 표준 래퍼. 함수를 감싸고, 입력만 저장하며, 역방향에서 재계산한다.
+- **torch.utils.checkpoint**: `from torch.utils.checkpoint import checkpoint`: PyTorch의 표준 래퍼. 함수를 감싸고, 입력만 저장하며, 역방향에서 재계산한다.
 - **Megatron-Core 활성값 재계산**: `selective`, `full`, `block` 모드를 지원한다. 2024년 이후 최첨단 학습의 표준이다.
 - **FSDP2 오프로드**: FSDP2의 `offload_policy`와 함께 `module.to_empty(device="cpu")`로, 재계산 대신 활성값을 CPU로 샤딩(shard)한다.
 - **DeepSpeed ZeRO-Offload**: 옵티마이저 상태와 활성값에 대한 CPU 오프로드로, 체크포인팅을 보완한다.

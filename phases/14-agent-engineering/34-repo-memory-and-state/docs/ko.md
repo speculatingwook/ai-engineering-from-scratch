@@ -130,12 +130,12 @@ python3 code/main.py
 - [JSON Schema specification](https://json-schema.org/specification.html)
 - [LangGraph checkpointers](https://langchain-ai.github.io/langgraph/concepts/persistence/)
 - [Letta memory blocks](https://docs.letta.com/concepts/memory)
-- [Fast.io, AI Agent State Checkpointing: A Practical Guide](https://fast.io/resources/ai-agent-state-checkpointing/) — 멱등성을 가진 스키마 우선 체크포인팅
-- [Fast.io, AI Agent Workflow State Persistence: Best Practices 2026](https://fast.io/resources/ai-agent-workflow-state-persistence/) — 동시성 제어, TTL, 이벤트 소싱
-- [Hive Issue #6263 — non-atomic state.json writes silently ignored](https://github.com/aden-hive/hive/issues/6263) — 실제 프로젝트에서의 실패 모드
-- [eunomia, Checkpoint/Restore Systems: Evolution, Techniques, Applications](https://eunomia.dev/blog/2025/05/11/checkpointrestore-systems-evolution-techniques-and-applications-in-ai-agents/) — OS 역사의 CR 원시 요소를 에이전트에 적용
+- [Fast.io, AI Agent State Checkpointing: A Practical Guide](https://fast.io/resources/ai-agent-state-checkpointing/): 멱등성을 가진 스키마 우선 체크포인팅
+- [Fast.io, AI Agent Workflow State Persistence: Best Practices 2026](https://fast.io/resources/ai-agent-workflow-state-persistence/): 동시성 제어, TTL, 이벤트 소싱
+- [Hive Issue #6263(non-atomic state.json writes silently ignored](https://github.com/aden-hive/hive/issues/6263)) 실제 프로젝트에서의 실패 모드
+- [eunomia, Checkpoint/Restore Systems: Evolution, Techniques, Applications](https://eunomia.dev/blog/2025/05/11/checkpointrestore-systems-evolution-techniques-and-applications-in-ai-agents/): OS 역사의 CR 원시 요소를 에이전트에 적용
 - [Indium, 7 State Persistence Strategies for Long-Running AI Agents in 2026](https://www.indium.tech/blog/7-state-persistence-strategies-ai-agents-2026/)
-- [Microsoft Agent Framework, Compaction](https://learn.microsoft.com/en-us/agent-framework/agents/conversations/compaction) — 벤더 체크포인트 관리자
-- Phase 14 · 08 — 메모리 블록과 수면 시간 컴퓨트(sleep-time compute)
-- Phase 14 · 32 — 이 레슨이 스키마화하는 세 파일 최소
-- Phase 14 · 40 — 동일한 스키마에서 읽는 핸드오프 패킷(handoff packet)
+- [Microsoft Agent Framework, Compaction](https://learn.microsoft.com/en-us/agent-framework/agents/conversations/compaction): 벤더 체크포인트 관리자
+- Phase 14 · 08: 메모리 블록과 수면 시간 컴퓨트(sleep-time compute)
+- Phase 14 · 32: 이 레슨이 스키마화하는 세 파일 최소
+- Phase 14 · 40: 동일한 스키마에서 읽는 핸드오프 패킷(handoff packet)

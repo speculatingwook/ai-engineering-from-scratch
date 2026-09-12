@@ -1,6 +1,6 @@
-# 배치 API(Batch APIs) — 업계 표준이 된 50% 할인
+# 배치 API(Batch APIs): 업계 표준이 된 50% 할인
 
-> 모든 주요 프로바이더가 50% 할인과 ~24시간 처리 시간을 갖춘 비동기 배치 API를 출시한다. OpenAI, Anthropic, Google, 그리고 대부분의 추론(inference) 플랫폼(Fireworks 배치 티어, Together 배치)이 같은 패턴을 구현한다. 배치를 프롬프트 캐싱과 쌓으면 야간 파이프라인은 동기·비캐시 비용의 ~10%로 떨어진다. 규칙은 잔인하리만치 단순하다: 대화형(interactive)이 아니라면 배치에 속한다. 콘텐츠 생성 파이프라인, 문서 분류(classification), 데이터 추출, 리포트 생성, 대량 레이블링, 카탈로그 태깅 — 24시간 지연 시간(latency)을 견딜 수 있는 무엇이든 배치로 옮기기 전까지는 그냥 새어 나가는 돈이다. 2026년 프로덕션 패턴은 모든 새 LLM 워크로드를 세 레인으로 분류하는 것이다: 대화형(캐싱이 있는 동기), 준대화형(폴백이 있는 비동기 큐), 배치(야간, 캐시된 입력 쌓기). 대화형인 척하지만 수 분의 지연 시간을 견디는 워크로드가 가장 많이 낭비한다.
+> 모든 주요 프로바이더가 50% 할인과 ~24시간 처리 시간을 갖춘 비동기 배치 API를 출시한다. OpenAI, Anthropic, Google, 그리고 대부분의 추론(inference) 플랫폼(Fireworks 배치 티어, Together 배치)이 같은 패턴을 구현한다. 배치를 프롬프트 캐싱과 쌓으면 야간 파이프라인은 동기·비캐시 비용의 ~10%로 떨어진다. 규칙은 잔인하리만치 단순하다: 대화형(interactive)이 아니라면 배치에 속한다. 콘텐츠 생성 파이프라인, 문서 분류(classification), 데이터 추출, 리포트 생성, 대량 레이블링, 카탈로그 태깅: 24시간 지연 시간(latency)을 견딜 수 있는 무엇이든 배치로 옮기기 전까지는 그냥 새어 나가는 돈이다. 2026년 프로덕션 패턴은 모든 새 LLM 워크로드를 세 레인으로 분류하는 것이다: 대화형(캐싱이 있는 동기), 준대화형(폴백이 있는 비동기 큐), 배치(야간, 캐시된 입력 쌓기). 대화형인 척하지만 수 분의 지연 시간을 견디는 워크로드가 가장 많이 낭비한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy batch-vs-sync cost simulator)
@@ -18,7 +18,7 @@
 
 팀이 야간 리포트 생성 파이프라인을 출시한다. 문서 50,000개를 각각 요약하고, 요약을 클러스터링하고, 경영진 브리프를 초안한다. 동기로 실행하면 밤마다 $2,000에 4시간이 걸린다. 여기서 배치 API를 알게 된다.
 
-배치는 50% 할인을 준다. 또한 (50k 호출 전체에 공유되는) 시스템 프롬프트에 프롬프트 캐싱을 켠다. 쌓으면 청구액은 밤마다 $180로 떨어진다 — 베이스라인의 ~9%. 같은 파이프라인, 세 가지 설정 변경.
+배치는 50% 할인을 준다. 또한 (50k 호출 전체에 공유되는) 시스템 프롬프트에 프롬프트 캐싱을 켠다. 쌓으면 청구액은 밤마다 $180로 떨어진다. 베이스라인의 ~9%. 같은 파이프라인, 세 가지 설정 변경.
 
 배치는 LLM 비용 도구함에서 가장 저렴한 레버인데도 아무도 당기지 않는다. 그 이유는 대개 조직적이다: SLA가 실제로는 "아침까지"인데 팀은 "실시간"이라고 생각한다. 이 레슨은 청구액의 90%를 새어 나가게 두지 않는 법을 다룬다.
 
@@ -28,7 +28,7 @@
 
 **OpenAI Batch API**: 요청 목록과 함께 JSONL 파일 업로드. 약속된 24시간 처리 시간(실무에서는 보통 ~2-8시간). 입력 및 출력 토큰에 50% 할인. `/v1/batches` 엔드포인트. 캐시 적격 입력은 그 위에 캐시된 입력 가격도 받는다.
 
-**Anthropic Message Batches**: JSONL 업로드. 24시간 처리 시간. 50% 할인. `cache_control` 지원 — 캐시 쓰기는 명시적이고, 읽기는 배치 내에서 자동으로 일어난다.
+**Anthropic Message Batches**: JSONL 업로드. 24시간 처리 시간. 50% 할인. `cache_control` 지원: 캐시 쓰기는 명시적이고, 읽기는 배치 내에서 자동으로 일어난다.
 
 **Google Vertex AI Batch Prediction**: BigQuery 또는 GCS 입력. Gemini에 대해 유사한 50% 할인. Vertex 파이프라인과 통합.
 
@@ -48,13 +48,13 @@
 
 ### 워크로드 분류
 
-**대화형(Interactive)** — 사용자가 응답을 기다린다. TTFT가 중요하다. 프롬프트 캐싱이 있는 동기 호출. 배치 불가.
+**대화형(Interactive)**: 사용자가 응답을 기다린다. TTFT가 중요하다. 프롬프트 캐싱이 있는 동기 호출. 배치 불가.
 
-**준대화형(Semi-interactive)** — 사용자가 작업을 제출하고 몇 분 후 다시 확인한다. 배치가 없으면 동기로 폴백하는 비동기 큐. 중간 볼륨의 RAG 인덱싱을 생각하라.
+**준대화형(Semi-interactive)**: 사용자가 작업을 제출하고 몇 분 후 다시 확인한다. 배치가 없으면 동기로 폴백하는 비동기 큐. 중간 볼륨의 RAG 인덱싱을 생각하라.
 
-**배치(Batch)** — 사용자가 "아침까지" 또는 "다음 시간까지" 결과를 기대한다. 콘텐츠 파이프라인, 대규모 분류, 오프라인 분석. 항상 배치하고, 항상 캐싱을 쌓는다.
+**배치(Batch)**: 사용자가 "아침까지" 또는 "다음 시간까지" 결과를 기대한다. 콘텐츠 파이프라인, 대규모 분류, 오프라인 분석. 항상 배치하고, 항상 캐싱을 쌓는다.
 
-흔한 실수: 파이프라인이 프로덕션이라는 이유로 모든 것을 대화형으로 분류하는 것. 프로덕션은 지연 시간 사양이 아니다 — SLA가 그렇다.
+흔한 실수: 파이프라인이 프로덕션이라는 이유로 모든 것을 대화형으로 분류하는 것. 프로덕션은 지연 시간 사양이 아니다. SLA가 그렇다.
 
 ### 부분 대화성 함정
 
@@ -92,7 +92,7 @@
 1. `code/main.py`를 실행하라. 3K 토큰 시스템 프롬프트와 500 토큰 출력을 가진 100k 문서 파이프라인에 대해, 전체 스택(배치 + 캐시) 대 동기 베이스라인의 절감액을 계산하라.
 2. 실제로 아는 제품에서 세 기능을 고르라. 각각을 대화형/준/배치로 분류하라.
 3. 한 사용자가 리포트에 3시간이 걸렸다고 불평한다. 그것은 배치 오분류였는가 아니면 정당한 대화형이었는가? 결정 기준을 작성하라.
-4. 배치 API 반환 SLA는 24시간이지만 P99는 20시간이다. 이것을 사용자에게 어떻게 전달할 것인가 — 엣지 케이스에서 하류 시스템 동작은 무엇인가?
+4. 배치 API 반환 SLA는 24시간이지만 P99는 20시간이다. 이것을 사용자에게 어떻게 전달할 것인가: 엣지 케이스에서 하류 시스템 동작은 무엇인가?
 5. 손익분기점을 계산하라: 어느 공유 프리픽스 길이에서 배치 + 캐시가 자체 예약 GPU에서 야간에 돌리는 것보다 저렴해지는가?
 
 ## 핵심 용어 (Key Terms)
@@ -110,8 +110,8 @@
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI Batch API](https://platform.openai.com/docs/guides/batch) — JSONL 형식과 `/v1/batches` 의미론.
-- [Anthropic Message Batches](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing) — 배치 형식과 `cache_control` 상호작용.
-- [Vertex AI Batch Prediction](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/batch-prediction) — Gemini 배치 의미론.
+- [OpenAI Batch API](https://platform.openai.com/docs/guides/batch): JSONL 형식과 `/v1/batches` 의미론.
+- [Anthropic Message Batches](https://docs.anthropic.com/en/docs/build-with-claude/batch-processing): 배치 형식과 `cache_control` 상호작용.
+- [Vertex AI Batch Prediction](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/batch-prediction): Gemini 배치 의미론.
 - [Finout — OpenAI vs Anthropic API Pricing 2026](https://www.finout.io/blog/openai-vs-anthropic-api-pricing-comparison)
 - [Zen Van Riel — LLM API Cost Comparison 2026](https://zenvanriel.com/ai-engineer-blog/llm-api-cost-comparison-2026/)

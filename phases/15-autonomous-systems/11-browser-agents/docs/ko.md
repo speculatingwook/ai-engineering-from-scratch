@@ -1,6 +1,6 @@
 # 브라우저 에이전트와 장기 지평 웹 과제
 
-> ChatGPT agent(2025년 7월)는 Operator와 deep research를 하나의 브라우저/터미널 에이전트(agent)로 합치고, BrowseComp에서 68.9%로 SOTA를 세웠다. OpenAI는 2025년 8월 31일 Operator를 종료했다 — 제품 층에서 통합한 것이다. Anthropic의 Vercept 인수는 OSWorld에서 Claude Sonnet을 15% 미만에서 72.5%로 끌어올렸다. WebArena-Verified(ServiceNow, ICLR 2026)는 원본 WebArena의 거짓 음성률(false-negative rate) 11.3퍼센트포인트를 고치고, 258개 과제의 Hard 부분집합을 출시했다. 수치는 진짜다. 공격 표면(attack surface)도 진짜다. OpenAI의 대비(preparedness) 책임자는 브라우저 에이전트로의 간접 프롬프트 주입(indirect prompt injection)이 "완전히 패치할 수 있는 버그가 아니다"라고 공개적으로 밝혔다. 문서화된 2025~2026년 공격들: Tainted Memories(Atlas CSRF), HashJack(Cato Networks), 그리고 Perplexity Comet의 원클릭 하이재킹.
+> ChatGPT agent(2025년 7월)는 Operator와 deep research를 하나의 브라우저/터미널 에이전트(agent)로 합치고, BrowseComp에서 68.9%로 SOTA를 세웠다. OpenAI는 2025년 8월 31일 Operator를 종료했다. 제품 층에서 통합한 것이다. Anthropic의 Vercept 인수는 OSWorld에서 Claude Sonnet을 15% 미만에서 72.5%로 끌어올렸다. WebArena-Verified(ServiceNow, ICLR 2026)는 원본 WebArena의 거짓 음성률(false-negative rate) 11.3퍼센트포인트를 고치고, 258개 과제의 Hard 부분집합을 출시했다. 수치는 진짜다. 공격 표면(attack surface)도 진짜다. OpenAI의 대비(preparedness) 책임자는 브라우저 에이전트로의 간접 프롬프트 주입(indirect prompt injection)이 "완전히 패치할 수 있는 버그가 아니다"라고 공개적으로 밝혔다. 문서화된 2025~2026년 공격들: Tainted Memories(Atlas CSRF), HashJack(Cato Networks), 그리고 Perplexity Comet의 원클릭 하이재킹.
 
 **Type:** Learn
 **Languages:** Python (stdlib, indirect prompt-injection attack surface model)
@@ -11,7 +11,7 @@
 
 브라우저 에이전트는 신뢰할 수 없는 콘텐츠를 읽고 중대한 액션을 취하는 장기 지평(long-horizon) 에이전트다. 에이전트가 방문하는 모든 페이지는 사용자가 작성하지 않은 입력이다. 모든 페이지의 모든 폼(form)은 잠재적 명령 채널이다. 2025~2026년 공격 말뭉치는 이것이 가설이 아님을 보여준다. Tainted Memories는 조작된 페이지를 통해 공격자가 악성 명령을 에이전트의 메모리에 묶게 한다. HashJack은 에이전트가 방문하는 URL 프래그먼트(fragment)에 명령을 숨긴다. Perplexity Comet 하이재킹은 단 한 번의 클릭으로 적중했다.
 
-방어 그림은 불편하다. OpenAI의 대비 책임자는 조용히 묻혀 있던 부분을 크게 말했다. 간접 프롬프트 주입은 "완전히 패치할 수 있는 버그가 아니다." 이는 공격이 에이전트의 읽기-대-행동 경계에 살기 때문인데, 그 경계는 아키텍처적으로 흐릿하다 — 모델이 읽는 모든 토큰(token)은 원리상 명령으로 읽힐 수 있다.
+방어 그림은 불편하다. OpenAI의 대비 책임자는 조용히 묻혀 있던 부분을 크게 말했다. 간접 프롬프트 주입은 "완전히 패치할 수 있는 버그가 아니다." 이는 공격이 에이전트의 읽기-대-행동 경계에 살기 때문인데, 그 경계는 아키텍처적으로 흐릿하다. 모델이 읽는 모든 토큰(token)은 원리상 명령으로 읽힐 수 있다.
 
 이 레슨은 공격 표면을 명명하고, 벤치마크 지형(BrowseComp, OSWorld, WebArena-Verified)을 명명하며, 최소한의 간접 프롬프트 주입 시나리오를 모델링하여, Lesson 14와 18에서 실제 방어를 추론할 수 있게 한다.
 
@@ -97,8 +97,8 @@
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Introducing ChatGPT agent](https://openai.com/index/introducing-chatgpt-agent/) — Operator와 deep research의 병합; BrowseComp SOTA.
-- [OpenAI — Computer-Using Agent](https://openai.com/index/computer-using-agent/) — Operator 계보와 ChatGPT agent가 된 아키텍처.
-- [Zhou et al. — WebArena](https://webarena.dev/) — 원본 벤치마크.
-- [WebArena-Verified (OpenReview)](https://openreview.net/forum?id=94tlGxmqkN) — ICLR 2026 고친 부분집합 논문.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 컴퓨터 사용 에이전트에 대한 공격 표면 논의 포함.
+- [OpenAI(Introducing ChatGPT agent](https://openai.com/index/introducing-chatgpt-agent/)) Operator와 deep research의 병합; BrowseComp SOTA.
+- [OpenAI(Computer-Using Agent](https://openai.com/index/computer-using-agent/)) Operator 계보와 ChatGPT agent가 된 아키텍처.
+- [Zhou et al.(WebArena](https://webarena.dev/)) 원본 벤치마크.
+- [WebArena-Verified (OpenReview)](https://openreview.net/forum?id=94tlGxmqkN): ICLR 2026 고친 부분집합 논문.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 컴퓨터 사용 에이전트에 대한 공격 표면 논의 포함.

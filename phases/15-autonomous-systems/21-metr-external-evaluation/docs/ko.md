@@ -1,6 +1,6 @@
 # METR 시간 지평과 외부 능력 평가 (METR Time Horizons and External Capability Evaluation)
 
-> METR(전(前) ARC Evals)은 2023년 12월부터 독립적인 501(c)(3) 단체다. METR의 Time Horizon 1.1 벤치마크(benchmark, 2026년 1월)는 작업 성공 확률 대 log(전문가 인간 완료 시간)에 로지스틱(logistic) 곡선을 적합(fit)시킨다. 50% 확률에서의 교차점이 모델의 시간 지평(time horizon)을 정의한다. 2025–2026년 참여 집합은 GPT-5.1, GPT-5.1-Codex-Max, 그리고 프로토타입 모니터링 평가(모니터가 부수 작업(side task)을 잡아낼 수 있는가; 에이전트(agent)가 회피할 수 있는가)를 다룬다. 벤치마크 스위트: HCAST(180개 이상의 ML, 사이버, SWE, 추론 작업; 1분에서 8시간 이상), RE-Bench(전문가 베이스라인(baseline)을 가진 71개의 ML 연구 공학 작업), SWAA. 정직한 메모: METR 측정은 이상화되어 있다 — 인간 없음, 실제 결과 없음 — 그리고 팀은 평가 대 배포(deployment) 행동 간극(eval-vs-deployment behavior gap, Lesson 1)을 문서화했다. 시간 지평은 상한(upper bound)이지 배포 예측이 아니다.
+> METR(전(前) ARC Evals)은 2023년 12월부터 독립적인 501(c)(3) 단체다. METR의 Time Horizon 1.1 벤치마크(benchmark, 2026년 1월)는 작업 성공 확률 대 log(전문가 인간 완료 시간)에 로지스틱(logistic) 곡선을 적합(fit)시킨다. 50% 확률에서의 교차점이 모델의 시간 지평(time horizon)을 정의한다. 2025–2026년 참여 집합은 GPT-5.1, GPT-5.1-Codex-Max, 그리고 프로토타입 모니터링 평가(모니터가 부수 작업(side task)을 잡아낼 수 있는가; 에이전트(agent)가 회피할 수 있는가)를 다룬다. 벤치마크 스위트: HCAST(180개 이상의 ML, 사이버, SWE, 추론 작업; 1분에서 8시간 이상), RE-Bench(전문가 베이스라인(baseline)을 가진 71개의 ML 연구 공학 작업), SWAA. 정직한 메모: METR 측정은 이상화되어 있다. 인간 없음, 실제 결과 없음: 그리고 팀은 평가 대 배포(deployment) 행동 간극(eval-vs-deployment behavior gap, Lesson 1)을 문서화했다. 시간 지평은 상한(upper bound)이지 배포 예측이 아니다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, logistic-fit horizon estimator)
@@ -65,7 +65,7 @@ Time Horizon 1.1에 따르면:
 
 ### 외부 평가자 논거
 
-외부 평가가 중요한 이유는 내부 연구소가 자신이 보고하는 지표를 최적화할 유인을 갖기 때문이다. METR의 독립성 — 선언된 방법론과 동료 심사(peer-reviewed) 논문을 갖춘 501(c)(3) — 이 구조적 완화책이다. 이것만으로 충분하지는 않지만(연구소가 여전히 METR이 보는 것을 통제한다), 외부 평가가 전혀 없는 것보다는 명백히 낫다.
+외부 평가가 중요한 이유는 내부 연구소가 자신이 보고하는 지표를 최적화할 유인을 갖기 때문이다. METR의 독립성(선언된 방법론과 동료 심사(peer-reviewed) 논문을 갖춘 501(c)(3))이 구조적 완화책이다. 이것만으로 충분하지는 않지만(연구소가 여전히 METR이 보는 것을 통제한다), 외부 평가가 전혀 없는 것보다는 명백히 낫다.
 
 ### 실무에서 지평 수치를 사용하는 방법
 
@@ -108,8 +108,8 @@ Time Horizon 1.1에 따르면:
 
 ## 더 읽을거리 (Further Reading)
 
-- [METR — Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/) — HCAST, RE-Bench, SWAA 명세.
-- [METR — Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) — 원본 지평 논문.
-- [METR — Time Horizon 1.1 (January 2026)](https://metr.org/research/) — 현재 수치와 방법론.
-- [Epoch AI — METR Time Horizons benchmark](https://epoch.ai/benchmarks/metr-time-horizons) — 실시간 추적.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — METR 측정에 대한 내부 관점.
+- [METR(Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/)) HCAST, RE-Bench, SWAA 명세.
+- [METR(Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) 원본 지평 논문.
+- [METR(Time Horizon 1.1 (January 2026)](https://metr.org/research/)) 현재 수치와 방법론.
+- [Epoch AI(METR Time Horizons benchmark](https://epoch.ai/benchmarks/metr-time-horizons)) 실시간 추적.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) METR 측정에 대한 내부 관점.

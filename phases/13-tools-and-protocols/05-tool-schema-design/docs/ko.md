@@ -1,4 +1,4 @@
-# 도구 스키마 설계 — 이름 짓기, 설명, 파라미터 제약
+# 도구 스키마 설계: 이름 짓기, 설명, 파라미터 제약
 
 > 올바른 도구도 모델이 언제 그것을 써야 할지 알 수 없으면 조용히 실패한다. 이름 짓기, 설명, 파라미터 형태는 StableToolBench와 MCPToolBench++ 같은 벤치마크에서 도구 선택 정확도를 10~20퍼센트포인트 흔든다. 이 레슨은 모델이 신뢰성 있게 고르는 도구와 모델이 잘못 발화하는(mis-fire) 도구를 가르는 설계 규칙에 이름을 붙인다.
 
@@ -165,8 +165,8 @@ GOOD : Invalid input: 'city' is required. Example: {"city": "Bengaluru"}.
 
 ## 더 읽을거리 (Further Reading)
 
-- [Composio — How to build tools for AI agents: field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide) — 이름 짓기, 설명, 측정된 정확도 향상
-- [OneUptime — Tool schemas for agents](https://oneuptime.com/blog/post/2026-01-30-tool-schemas/view) — 프로덕션에서 나온 파라미터 설계 패턴
-- [Databricks — Agent system design patterns](https://docs.databricks.com/aws/en/generative-ai/guide/agent-system-design-patterns) — 측정 가능한 벤치마크를 가진 레지스트리 수준 설계
-- [Anthropic — Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) — Claude 기반 에이전트를 위한 설명 패턴
-- [OpenAI — Function calling best practices](https://platform.openai.com/docs/guides/function-calling#best-practices) — 설명 길이, 엄격 모드 요구 사항, 원자적 도구 지침
+- [Composio(How to build tools for AI agents: field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide)) 이름 짓기, 설명, 측정된 정확도 향상
+- [OneUptime(Tool schemas for agents](https://oneuptime.com/blog/post/2026-01-30-tool-schemas/view)) 프로덕션에서 나온 파라미터 설계 패턴
+- [Databricks(Agent system design patterns](https://docs.databricks.com/aws/en/generative-ai/guide/agent-system-design-patterns)) 측정 가능한 벤치마크를 가진 레지스트리 수준 설계
+- [Anthropic(Building agents with the Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk)) Claude 기반 에이전트를 위한 설명 패턴
+- [OpenAI(Function calling best practices](https://platform.openai.com/docs/guides/function-calling#best-practices)) 설명 길이, 엄격 모드 요구 사항, 원자적 도구 지침

@@ -1,4 +1,4 @@
-# Capstone 04 — 멀티모달 문서 QA (Vision-First PDF, Tables, Charts)
+# Capstone 04: 멀티모달 문서 QA (Vision-First PDF, Tables, Charts)
 
 > 2026년의 문서 QA 프런티어는 OCR 후 텍스트(OCR-then-text)에서 비전 우선(vision-first) 늦은 상호작용(late interaction)으로 이동했다. ColPali, ColQwen2.5, ColQwen3-omni는 각 PDF 페이지를 이미지로 취급해 다중 벡터(multi-vector) 늦은 상호작용으로 임베딩(embedding)하고, 쿼리가 패치(patch)에 직접 어텐션(attention)하게 한다. 재무 10-K, 과학 논문, 손글씨 노트에서 이 패턴은 OCR 우선 방식을 큰 차이로 앞선다. 1만 페이지에 대해 파이프라인을 처음부터 끝까지 만들고, OCR 후 텍스트 방식과 나란히 비교한 결과를 발행하라.
 
@@ -129,11 +129,11 @@ answer:
 
 ## 더 읽을거리 (Further Reading)
 
-- [ColPali (Illuin Tech) repository](https://github.com/illuin-tech/colpali) — 레퍼런스 늦은 상호작용 문서 검색
-- [ColPali paper (arXiv:2407.01449)](https://arxiv.org/abs/2407.01449) — 기초가 되는 방법론 논문
-- [ColQwen family on Hugging Face](https://huggingface.co/vidore) — 프로덕션 준비된 체크포인트
-- [M3DocRAG (Adobe)](https://arxiv.org/abs/2411.04952) — 다중 페이지 멀티모달 RAG 베이스라인
-- [Vespa multi-vector tutorial](https://docs.vespa.ai/en/colpali.html) — 레퍼런스 서빙 스택
-- [Qdrant multi-vector support](https://qdrant.tech/documentation/concepts/vectors/#multivectors) — 대안 인덱스
-- [AstraDB multi-vector](https://docs.datastax.com/en/astra-db-serverless/databases/vector-search.html) — 대안 매니지드 인덱스
-- [Nougat OCR](https://github.com/facebookresearch/nougat) — 방정식 처리가 가능한 OCR 폴백
+- [ColPali (Illuin Tech) repository](https://github.com/illuin-tech/colpali): 레퍼런스 늦은 상호작용 문서 검색
+- [ColPali paper (arXiv:2407.01449)](https://arxiv.org/abs/2407.01449): 기초가 되는 방법론 논문
+- [ColQwen family on Hugging Face](https://huggingface.co/vidore): 프로덕션 준비된 체크포인트
+- [M3DocRAG (Adobe)](https://arxiv.org/abs/2411.04952): 다중 페이지 멀티모달 RAG 베이스라인
+- [Vespa multi-vector tutorial](https://docs.vespa.ai/en/colpali.html): 레퍼런스 서빙 스택
+- [Qdrant multi-vector support](https://qdrant.tech/documentation/concepts/vectors/#multivectors): 대안 인덱스
+- [AstraDB multi-vector](https://docs.datastax.com/en/astra-db-serverless/databases/vector-search.html): 대안 매니지드 인덱스
+- [Nougat OCR](https://github.com/facebookresearch/nougat): 방정식 처리가 가능한 OCR 폴백

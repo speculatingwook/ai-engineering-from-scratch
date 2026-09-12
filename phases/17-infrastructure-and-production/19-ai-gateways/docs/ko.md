@@ -1,6 +1,6 @@
-# AI 게이트웨이(AI Gateways) — LiteLLM, Portkey, Kong AI Gateway, Bifrost
+# AI 게이트웨이(AI Gateways): LiteLLM, Portkey, Kong AI Gateway, Bifrost
 
-> 게이트웨이(gateway)는 앱과 모델 프로바이더 사이에 위치한다. 핵심 기능은 프로바이더 라우팅, 폴백(fallback), 재시도, 속도 제한(rate limiting), 시크릿 참조, 관측성(observability), 가드레일(guardrails)이다. 2026년 시장 분할: **LiteLLM**은 100+ 프로바이더, OpenAI 호환의 MIT OSS이지만 ~2000 RPS 부근에서 무너진다(8 GB 메모리, 발표된 벤치마크에서 연쇄 장애). Python, <500 RPS, 개발/프로토타이핑에 최적. **Portkey**는 컨트롤 플레인(control-plane)으로 포지셔닝되어 있고(가드레일, PII 마스킹, 탈옥(jailbreak) 탐지, 감사 추적), 2026년 3월 Apache 2.0 오픈소스가 되었으며, 20-40ms 지연 시간(latency) 오버헤드, 월 $49 프로덕션 티어. **Kong AI Gateway**는 Kong Gateway 위에 구축됨 — Kong 자체 벤치마크에서 같은 12 CPU 기준: Portkey보다 228% 빠르고, LiteLLM보다 859% 빠름. 모델당 월 $100 가격(Plus 티어에서 최대 5개). 이미 Kong을 쓴다면 엔터프라이즈 적합. **Bifrost**(Maxim AI) — 설정 가능한 백오프(backoff)가 있는 자동 재시도, OpenAI 429에서 Anthropic으로 폴백. **Cloudflare / Vercel AI Gateways** — 관리형, 제로 운영(zero-ops), 기본 재시도. 셀프 호스트 여부는 데이터 거주성이 좌우한다. Portkey와 Kong은 OSS + 선택적 관리형으로 중간에 위치한다.
+> 게이트웨이(gateway)는 앱과 모델 프로바이더 사이에 위치한다. 핵심 기능은 프로바이더 라우팅, 폴백(fallback), 재시도, 속도 제한(rate limiting), 시크릿 참조, 관측성(observability), 가드레일(guardrails)이다. 2026년 시장 분할: **LiteLLM**은 100+ 프로바이더, OpenAI 호환의 MIT OSS이지만 ~2000 RPS 부근에서 무너진다(8 GB 메모리, 발표된 벤치마크에서 연쇄 장애). Python, <500 RPS, 개발/프로토타이핑에 최적. **Portkey**는 컨트롤 플레인(control-plane)으로 포지셔닝되어 있고(가드레일, PII 마스킹, 탈옥(jailbreak) 탐지, 감사 추적), 2026년 3월 Apache 2.0 오픈소스가 되었으며, 20-40ms 지연 시간(latency) 오버헤드, 월 $49 프로덕션 티어. **Kong AI Gateway**는 Kong Gateway 위에 구축됨: Kong 자체 벤치마크에서 같은 12 CPU 기준: Portkey보다 228% 빠르고, LiteLLM보다 859% 빠름. 모델당 월 $100 가격(Plus 티어에서 최대 5개). 이미 Kong을 쓴다면 엔터프라이즈 적합. **Bifrost**(Maxim AI): 설정 가능한 백오프(backoff)가 있는 자동 재시도, OpenAI 429에서 Anthropic으로 폴백. **Cloudflare / Vercel AI Gateways**: 관리형, 제로 운영(zero-ops), 기본 재시도. 셀프 호스트 여부는 데이터 거주성이 좌우한다. Portkey와 Kong은 OSS + 선택적 관리형으로 중간에 위치한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy gateway-routing simulator)
@@ -24,13 +24,13 @@
 
 ### 여섯 가지 핵심 기능
 
-1. **프로바이더 라우팅** — OpenAI, Anthropic, Gemini, 셀프 호스트 등을 하나의 API 뒤에.
-2. **폴백** — 429, 5xx, 또는 품질 실패 시 다른 곳에서 재시도.
-3. **재시도** — 지수 백오프, 시도 횟수 제한.
-4. **속도 제한** — 테넌트별, 키별, 모델별.
-5. **시크릿 참조** — 런타임에 볼트(vault)에서 자격 증명을 가져옴(앱 안에는 절대 없음).
-6. **관측성** — OTel + GenAI 속성(Phase 17 · 13) + 비용 귀속.
-7. **가드레일** — PII 마스킹, 탈옥 탐지, 허용 주제 필터.
+1. **프로바이더 라우팅**: OpenAI, Anthropic, Gemini, 셀프 호스트 등을 하나의 API 뒤에.
+2. **폴백**: 429, 5xx, 또는 품질 실패 시 다른 곳에서 재시도.
+3. **재시도**: 지수 백오프, 시도 횟수 제한.
+4. **속도 제한**: 테넌트별, 키별, 모델별.
+5. **시크릿 참조**: 런타임에 볼트(vault)에서 자격 증명을 가져옴(앱 안에는 절대 없음).
+6. **관측성**: OTel + GenAI 속성(Phase 17 · 13) + 비용 귀속.
+7. **가드레일**: PII 마스킹, 탈옥 탐지, 허용 주제 필터.
 
 ### LiteLLM — MIT OSS, Python
 
@@ -39,14 +39,14 @@
 - 최적: Python 앱, <500 RPS, 개발/스테이징 게이트웨이, 실험적 라우팅.
 - 비용: OSS는 $0. 클라우드 무료 티어 존재.
 
-### Portkey — 컨트롤 플레인 포지셔닝
+### Portkey: 컨트롤 플레인 포지셔닝
 
 - 2026년 3월 기준 Apache 2.0 OSS. 가드레일, PII 마스킹, 탈옥 탐지, 감사 추적.
 - 요청당 20-40ms 지연 시간 오버헤드.
 - 보존 + SLA가 있는 프로덕션 티어 월 $49.
 - 최적: 가드레일 + 관측성이 묶인 것이 필요한 규제 산업.
 
-### Kong AI Gateway — 스케일 플레이
+### Kong AI Gateway: 스케일 플레이
 
 - Kong Gateway(성숙한 API 게이트웨이 제품, lua+OpenResty) 위에 구축.
 - 12 CPU 등가에서의 Kong 자체 벤치마크: Portkey보다 228% 빠르고, LiteLLM보다 859% 빠름.

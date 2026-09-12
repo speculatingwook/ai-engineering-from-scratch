@@ -28,49 +28,49 @@ LLM 기능을 하나 출시했다. 동작한다. 그런데 프롬프트 실패, 
 
 **개발 플랫폼**은 관측성을 평가, 프롬프트 관리, 데이터셋 버전 관리, 세션 리플레이와 묶는다. 실험을 돌리고, 어느 프롬프트가 통했는지 보고, 새 프롬프트를 이전 우승자들에 대해 데이터셋 회귀 테스트한다. LangSmith, Langfuse, Comet Opik.
 
-**게이트웨이/텔레메트리 도구**는 추론 호출을 계측한다 — 프롬프트, 응답, 토큰, 지연 시간, 모델, 비용. Helicone, SigNoz, OpenLLMetry, Phoenix. 미니멀리스트. OpenTelemetry를 통해 별도의 평가 도구와 결합 가능.
+**게이트웨이/텔레메트리 도구**는 추론 호출을 계측한다. 프롬프트, 응답, 토큰, 지연 시간, 모델, 비용. Helicone, SigNoz, OpenLLMetry, Phoenix. 미니멀리스트. OpenTelemetry를 통해 별도의 평가 도구와 결합 가능.
 
-### Langfuse — OSS 균형
+### Langfuse: OSS 균형
 
 - 코어는 Apache / MIT 라이선스. Docker로 셀프 호스트.
 - 클라우드 무료 티어: 월 50K 이벤트. 유료: 팀에 월 $29.
 - 평가, 프롬프트 관리, 트레이스, 데이터셋. 네 가지 개발 플랫폼 기능 모두를 합리적으로 커버.
 - 최적 지점: LangSmith급 기능을 원하지만 셀프 호스트해야 하거나 OSS 라이선스에 머물러야 함.
 
-### Phoenix (Arize) — 텔레메트리 우선, OpenTelemetry 네이티브
+### Phoenix (Arize): 텔레메트리 우선, OpenTelemetry 네이티브
 
 - Elastic License 2.0. 셀프 호스트가 간단함.
 - RAG 및 드리프트 시각화에 탁월. 임베딩 공간 산점도(scatter plot)가 일급으로 출시됨.
-- 지속적 프로덕션 백엔드로 설계되지 않음 — 주로 개발 시점 관측성.
+- 지속적 프로덕션 백엔드로 설계되지 않음: 주로 개발 시점 관측성.
 - 최적 지점: RAG 파이프라인 개발, 드리프트 디버깅, 프로덕션을 위한 별도 게이트웨이와 페어링.
 
-### Arize AX — 스케일 플레이
+### Arize AX: 스케일 플레이
 
 - 상용. Iceberg/Parquet를 통한 제로 카피 데이터 레이크 통합.
 - 스케일에서 모놀리식 관측성(Datadog급)보다 ~100배 저렴하다고 주장. 계산은 이렇다: 트레이스를 S3의 자체 Parquet에 저장하고 Arize가 직접 읽음.
 - 최적 지점: 하루 >1000만 트레이스, 기존 데이터 레이크, Datadog 가격 없이 LLM 특화 대시보드를 원함.
 
-### LangSmith — LangChain/LangGraph 우선
+### LangSmith: LangChain/LangGraph 우선
 
 - 상용, 사용자당 월 $39. 셀프 호스트는 Enterprise에서만.
 - LangChain과 LangGraph 스택에 동급 최고. 둘 다 아니면 매력이 덜함.
 - 최적 지점: LangChain에 전념하고 지불 의향이 있는 팀.
 
-### Helicone — 프록시 기반 최소 실행 가능
+### Helicone: 프록시 기반 최소 실행 가능
 
 - `OPENAI_API_BASE`를 Helicone 프록시로 바꿔 15-30분 설정.
 - MIT 라이선스. 월 100K 요청 무료, 유료 월 $20+.
-- 페일오버, 캐싱, 속도 제한 포함 — 게이트웨이 역할도 함.
+- 페일오버, 캐싱, 속도 제한 포함: 게이트웨이 역할도 함.
 - 에이전트 / 다단계 트레이스에 대한 깊이는 덜함.
 - 최적 지점: 빠른 시작, 단일 스택 앱, 게이트웨이 + 관측성을 하나로 필요.
 
-### Opik (Comet) — OSS 개발 플랫폼
+### Opik (Comet): OSS 개발 플랫폼
 
 - Apache 2.0, 완전 OSS.
 - Comet 혈통에 Langfuse와 유사한 기능 세트.
 - 최적 지점: 이미 Comet을 쓰는 ML 팀, 같은 화면에서 LLM 관측성을 원함.
 
-### SigNoz — OpenTelemetry 우선 풀 APM
+### SigNoz: OpenTelemetry 우선 풀 APM
 
 - Apache 2.0. 일반 APM에 더해 OpenTelemetry를 통한 LLM도 처리.
 - 최적 지점: 서비스와 LLM 호출 전반의 통합 관측성.
@@ -88,7 +88,7 @@ OpenTelemetry는 2025년 말에 GenAI 시맨틱 컨벤션을 발표했다(`gen_a
 
 에이전트 프레임워크 내부에서 계측하면(예: LangSmith 트레이스 추가) 그 프레임워크에 결합된다. HTTP/OpenAI-SDK 계층에서 계측하면(OpenLLMetry 또는 게이트웨이를 통해) 이식 가능하다.
 
-### 샘플링 — 모든 것을 보관할 수는 없다
+### 샘플링: 모든 것을 보관할 수는 없다
 
 하루 >100만 요청에서, 전체 트레이스 보존은 LLM 호출보다 비싸다. 규칙으로 샘플링하라: 오류 100%, 고비용 100%, 성공 5%. 집계는 항상 유지하고, 롱테일을 위해 원본을 유지하라.
 

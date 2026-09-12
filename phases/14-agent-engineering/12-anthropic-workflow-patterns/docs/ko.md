@@ -29,7 +29,7 @@
 
 ### 증강된 LLM (The augmented LLM)
 
-다섯 패턴 모두의 토대: 세 가지 능력 — 검색(search, retrieval), 도구(tools, actions), 메모리(memory, persistence) — 을 갖춘 하나의 LLM이다. 어떤 API 호출이든 이것들을 사용할 수 있다.
+다섯 패턴 모두의 토대: 세 가지 능력(검색(search, retrieval), 도구(tools, actions), 메모리(memory, persistence))을 갖춘 하나의 LLM이다. 어떤 API 호출이든 이것들을 사용할 수 있다.
 
 ### 다섯 가지 패턴
 
@@ -53,7 +53,7 @@
 
 - **개방형 연구.** 다음 단계가 마지막 단계가 반환한 것에 의존할 때.
 - **가변 길이 작업.** 단계 수를 알 수 없는, 수 분에서 수 시간의 작업.
-- **새로운 도메인.** 올바른 워크플로를 아직 모를 때 — 먼저 탐색하고 나중에 성문화하라.
+- **새로운 도메인.** 올바른 워크플로를 아직 모를 때: 먼저 탐색하고 나중에 성문화하라.
 
 ### 컨텍스트 엔지니어링 동반자
 
@@ -63,11 +63,11 @@
 
 `code/main.py`는 `ScriptedLLM`에 대해 다섯 워크플로 패턴을 모두 구현한다.
 
-- `prompt_chain(input, steps)` — 순차적.
-- `route(input, classifier, handlers)` — 분류 + 디스패치.
-- `parallel_vote(prompt, n, aggregator)` — N회 실행, 집계.
-- `orchestrator_workers(task, workers)` — 오케스트레이터가 워커를 고름.
-- `evaluator_optimizer(task, proposer, evaluator, max_iter)` — 통과할 때까지 루프.
+- `prompt_chain(input, steps)`: 순차적.
+- `route(input, classifier, handlers)`: 분류 + 디스패치.
+- `parallel_vote(prompt, n, aggregator)`: N회 실행, 집계.
+- `orchestrator_workers(task, workers)`: 오케스트레이터가 워커를 고름.
+- `evaluator_optimizer(task, proposer, evaluator, max_iter)`: 통과할 때까지 루프.
 
 실행:
 
@@ -110,7 +110,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic, Building Effective Agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents) — 다섯 가지 워크플로 패턴
-- [Anthropic, Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — 동반 분야
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 상태 보존 그래프가 비용을 치를 가치가 있을 때
-- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) — 제품화된 오케스트레이터-워커 패턴
+- [Anthropic, Building Effective Agents (Dec 2024)](https://www.anthropic.com/research/building-effective-agents): 다섯 가지 워크플로 패턴
+- [Anthropic, Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): 동반 분야
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 상태 보존 그래프가 비용을 치를 가치가 있을 때
+- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/): 제품화된 오케스트레이터-워커 패턴

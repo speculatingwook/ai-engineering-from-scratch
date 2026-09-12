@@ -1,4 +1,4 @@
-# MCP 앱 — `ui://`를 통한 상호작용형 UI 리소스
+# MCP 앱: `ui://`를 통한 상호작용형 UI 리소스
 
 > 텍스트 전용 도구 출력은 에이전트가 보여줄 수 있는 것을 제한한다. MCP 앱(MCP Apps, SEP-1724, 2026년 1월 26일 공식화)은 도구가 샌드박스(sandbox) 처리된 상호작용형 HTML을 반환해 Claude Desktop, ChatGPT, Cursor, Goose, VS Code에서 인라인으로 렌더링되게 한다. 대시보드, 폼, 지도, 3D 장면을 모두 하나의 확장(extension)으로 띄운다. 이 레슨은 `ui://` 리소스 스킴, `text/html;profile=mcp-app` MIME, iframe 샌드박스 postMessage 프로토콜, 그리고 서버가 HTML을 렌더링하면서 따라오는 보안 표면을 따라간다.
 
@@ -100,10 +100,10 @@ window.addEventListener("message", (event) => {
 
 UI가 호출할 수 있는 호스트 측 메서드:
 
-- `host.callTool(name, arguments)` — 서버 도구를 호출한다.
-- `host.readResource(uri)` — MCP 리소스를 읽는다.
-- `host.getPrompt(name, arguments)` — 프롬프트 템플릿을 가져온다.
-- `host.close()` — UI를 닫는다.
+- `host.callTool(name, arguments)`: 서버 도구를 호출한다.
+- `host.readResource(uri)`: MCP 리소스를 읽는다.
+- `host.getPrompt(name, arguments)`: 프롬프트 템플릿을 가져온다.
+- `host.close()`: UI를 닫는다.
 
 모든 호출은 여전히 MCP 프로토콜을 거치고 서버의 권한을 상속한다.
 
@@ -111,10 +111,10 @@ UI가 호출할 수 있는 호스트 측 메서드:
 
 `_meta.ui.permissions` 목록은 추가 기능을 요청한다:
 
-- `camera` — 사용자의 카메라에 접근(문서 스캔 UI에 사용).
-- `microphone` — 음성 입력.
-- `geolocation` — 위치.
-- `network:*` — `connectSrc`만으로 허용되는 것보다 넓은 네트워크 접근.
+- `camera`: 사용자의 카메라에 접근(문서 스캔 UI에 사용).
+- `microphone`: 음성 입력.
+- `geolocation`: 위치.
+- `network:*`: `connectSrc`만으로 허용되는 것보다 넓은 네트워크 접근.
 
 각 권한은 UI가 렌더링되기 전에 사용자가 보는 프롬프트다.
 
@@ -144,8 +144,8 @@ iframe이 로드된 후, postMessage로 `ui/initialize`를 보낸다:
 
 ext-apps SDK는 두 가지 편의 프리미티브(primitive)를 노출한다:
 
-- `AppRenderer`(서버 측) — React / Vue / Solid 컴포넌트를 감싸 올바른 MIME과 메타데이터를 가진 `ui://` 리소스를 내보낸다.
-- `AppFrame`(클라이언트 측) — 리소스를 받아 iframe을 마운트하고 postMessage를 중재한다.
+- `AppRenderer`(서버 측): React / Vue / Solid 컴포넌트를 감싸 올바른 MIME과 메타데이터를 가진 `ui://` 리소스를 내보낸다.
+- `AppFrame`(클라이언트 측): 리소스를 받아 iframe을 마운트하고 postMessage를 중재한다.
 
 이것들을 쓰거나 HTML과 JSON-RPC를 직접 작성할 수 있다.
 
@@ -205,8 +205,8 @@ MCP 앱은 2026년 1월 26일에 출시되었다. 2026년 4월 기준 클라이�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP ext-apps — GitHub](https://github.com/modelcontextprotocol/ext-apps) — 레퍼런스 구현과 SDK
-- [MCP Apps specification 2026-01-26](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx) — 공식 사양 문서
-- [MCP — Apps extension overview](https://modelcontextprotocol.io/extensions/apps/overview) — 고수준 문서
-- [MCP blog — MCP Apps launch](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/) — 2026년 1월 출시 게시물
-- [MCP Apps API reference](https://apps.extensions.modelcontextprotocol.io/api/) — JSDoc 스타일 SDK 레퍼런스
+- [MCP ext-apps(GitHub](https://github.com/modelcontextprotocol/ext-apps)) 레퍼런스 구현과 SDK
+- [MCP Apps specification 2026-01-26](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx): 공식 사양 문서
+- [MCP(Apps extension overview](https://modelcontextprotocol.io/extensions/apps/overview)) 고수준 문서
+- [MCP blog(MCP Apps launch](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/)) 2026년 1월 출시 게시물
+- [MCP Apps API reference](https://apps.extensions.modelcontextprotocol.io/api/): JSDoc 스타일 SDK 레퍼런스

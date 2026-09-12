@@ -1,4 +1,4 @@
-# 핸드오프와 루틴 — 무상태 오케스트레이션 (Handoffs and Routines — Stateless Orchestration)
+# 핸드오프와 루틴(무상태 오케스트레이션 (Handoffs and Routines) Stateless Orchestration)
 
 > OpenAI의 Swarm(2024년 10월)은 멀티 에이전트 오케스트레이션(orchestration)을 두 가지 프리미티브로 증류했다. **루틴(routines)**(시스템 프롬프트로서의 명령어 + 도구)과 **핸드오프(handoffs)**(다른 Agent를 반환하는 도구)다. 상태 기계(state machine)도, 분기 DSL도 없다. LLM이 올바른 핸드오프 도구를 호출함으로써 라우팅한다. OpenAI Agents SDK(2025년 3월)는 프로덕션(production) 후속작이다. Swarm 자체는 가장 깔끔한 개념적 레퍼런스로 남아 있다. 전체 소스가 수백 줄에 들어간다. 이 패턴이 바이럴(viral)인 이유는 API 표면이 대략 "에이전트 = 프롬프트 + 도구, 핸드오프 = 에이전트를 반환하는 함수"이기 때문이다. 한계는 무상태(stateless)라는 것이고, 그래서 메모리는 호출자의 몫이다.
 
@@ -129,7 +129,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI cookbook — Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents) — 레퍼런스 정식 설명
-- [OpenAI Swarm repo](https://github.com/openai/swarm) — 원본 구현, 개념적 레퍼런스로 유지됨
-- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/) — 세션과 추적을 갖춘 프로덕션 후속작
-- [Anthropic handoff-in-Claude notes](https://docs.anthropic.com/en/docs/claude-code) — Claude Code 서브에이전트가 `Task`를 통해 핸드오프 유사 패턴을 사용하는 방식
+- [OpenAI cookbook(Orchestrating Agents: Routines and Handoffs](https://developers.openai.com/cookbook/examples/orchestrating_agents)) 레퍼런스 정식 설명
+- [OpenAI Swarm repo](https://github.com/openai/swarm): 원본 구현, 개념적 레퍼런스로 유지됨
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): 세션과 추적을 갖춘 프로덕션 후속작
+- [Anthropic handoff-in-Claude notes](https://docs.anthropic.com/en/docs/claude-code): Claude Code 서브에이전트가 `Task`를 통해 핸드오프 유사 패턴을 사용하는 방식

@@ -1,4 +1,4 @@
-# Capstone 05 — 자율 연구 에이전트 (AI-Scientist Class)
+# Capstone 05: 자율 연구 에이전트 (AI-Scientist Class)
 
 > Sakana의 AI-Scientist-v2는 완성된 논문을 발표했다. Agent Laboratory는 실험을 실행했다. Allen AI는 트레이스(trace)를 공유했다. 2026년의 형태는 실험을 다루는 계획-실행-검증(plan-execute-verify) 트리 탐색(tree search), 예산이 정해진 비용, 샌드박스(sandbox)로 격리된 코드 실행, 비전 피드백 LaTeX 작성기, 자동화된 NeurIPS 스타일 리뷰어 앙상블(reviewer ensemble)이다. 캡스톤(capstone)은 그런 것을 하나 만들어서, 논문당 $30 이내에서 처음부터 끝까지 실행하고, Sakana가 문서화한 샌드박스 탈출 레드팀(red team)에서 살아남는 것이다.
 
@@ -145,11 +145,11 @@ $ ai-scientist run --seed "attention sparsity in sub-1B transformers" --budget 3
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sakana AI-Scientist-v2 repository](https://github.com/SakanaAI/AI-Scientist-v2) — 레퍼런스 프로덕션 연구 에이전트
-- [Sakana AI-Scientist-v1 paper (arXiv:2408.06292)](https://arxiv.org/abs/2408.06292) — 원래 방법론
-- [ShinkaEvolve (Sakana ICLR 2026)](https://sakana.ai) — 진화적 확장
-- [Agent Laboratory (AMD)](https://github.com/SamuelSchmidgall/AgentLaboratory) — 다중 역할 연구실 프레임워크
-- [LangGraph documentation](https://langchain-ai.github.io/langgraph/) — 레퍼런스 오케스트레이션 계층
-- [Semantic Scholar Graph API](https://api.semanticscholar.org/) — 문헌 검색
-- [E2B sandboxes](https://e2b.dev) — 레퍼런스 실험 격리
-- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/Reviewer-Guidelines) — 리뷰어 앙상블이 인코딩하는 평가 기준
+- [Sakana AI-Scientist-v2 repository](https://github.com/SakanaAI/AI-Scientist-v2): 레퍼런스 프로덕션 연구 에이전트
+- [Sakana AI-Scientist-v1 paper (arXiv:2408.06292)](https://arxiv.org/abs/2408.06292): 원래 방법론
+- [ShinkaEvolve (Sakana ICLR 2026)](https://sakana.ai): 진화적 확장
+- [Agent Laboratory (AMD)](https://github.com/SamuelSchmidgall/AgentLaboratory): 다중 역할 연구실 프레임워크
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/): 레퍼런스 오케스트레이션 계층
+- [Semantic Scholar Graph API](https://api.semanticscholar.org/): 문헌 검색
+- [E2B sandboxes](https://e2b.dev): 레퍼런스 실험 격리
+- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/Reviewer-Guidelines): 리뷰어 앙상블이 인코딩하는 평가 기준

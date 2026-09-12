@@ -1,4 +1,4 @@
-# 의미 분할(Semantic Segmentation) — U-Net
+# 의미 분할(Semantic Segmentation): U-Net
 
 > 분할(segmentation)은 모든 픽셀에서의 분류(classification)다. U-Net은 다운샘플링 인코더(encoder)와 업샘플링 디코더(decoder)를 짝짓고 그 사이에 스킵 연결(skip connection)을 두어 이 일을 해낸다.
 
@@ -80,8 +80,8 @@ flowchart LR
 
 디코더는 공간 차원을 확장해야 한다. 두 선택지가 있다.
 
-- **전치 합성곱**(`nn.ConvTranspose2d`) — 학습 가능한 업샘플. 역사적 U-Net 기본값. 스트라이드와 커널 크기가 균등하게 나뉘지 않으면 체커보드 아티팩트를 만들 수 있다.
-- **양선형 업샘플 + 3x3 합성곱** — 매끄러운 업샘플 뒤에 합성곱. 아티팩트가 더 적고, 파라미터(parameter)가 더 적으며, 이제 현대적 기본값이다.
+- **전치 합성곱**(`nn.ConvTranspose2d`): 학습 가능한 업샘플. 역사적 U-Net 기본값. 스트라이드와 커널 크기가 균등하게 나뉘지 않으면 체커보드 아티팩트를 만들 수 있다.
+- **양선형 업샘플 + 3x3 합성곱**: 매끄러운 업샘플 뒤에 합성곱. 아티팩트가 더 적고, 파라미터(parameter)가 더 적으며, 이제 현대적 기본값이다.
 
 둘 다 실무에서 쓰인다. 첫 U-Net에는 양선형이 더 안전하다.
 
@@ -118,10 +118,10 @@ L = L_cross_entropy + lambda * L_dice       (lambda ~ 1)
 
 ### 평가 지표
 
-- **픽셀 정확도** — 올바르게 예측된 픽셀의 비율. 저렴하다. 분류에서의 정확도와 같은 이유로 불균형 데이터에서 망가진다.
-- **클래스별 IoU** — 각 클래스 마스크의 합집합 대비 교집합. 클래스에 걸친 평균 = mIoU.
-- **Dice (픽셀에 대한 F1)** — IoU와 유사하다. `Dice = 2 * IoU / (1 + IoU)`. 의료 영상은 Dice를, 주행 커뮤니티는 IoU를 선호한다. 둘은 단조롭게 관련되어 있다.
-- **경계 F1** — 예측된 경계가 정답 경계에 얼마나 가까운지 측정하며, 작은 이동도 벌점을 준다. 반도체 검사 같은 고정밀 작업에 중요하다.
+- **픽셀 정확도**: 올바르게 예측된 픽셀의 비율. 저렴하다. 분류에서의 정확도와 같은 이유로 불균형 데이터에서 망가진다.
+- **클래스별 IoU**: 각 클래스 마스크의 합집합 대비 교집합. 클래스에 걸친 평균 = mIoU.
+- **Dice (픽셀에 대한 F1)**: IoU와 유사하다. `Dice = 2 * IoU / (1 + IoU)`. 의료 영상은 Dice를, 주행 커뮤니티는 IoU를 선호한다. 둘은 단조롭게 관련되어 있다.
+- **경계 F1**: 예측된 경계가 정답 경계에 얼마나 가까운지 측정하며, 작은 이동도 벌점을 준다. 반도체 검사 같은 고정밀 작업에 중요하다.
 
 mIoU만이 아니라 클래스별 IoU를 보고하라. 평균 IoU는 아홉 개가 85%일 때 한 클래스가 15%인 것을 숨긴다.
 
@@ -130,7 +130,7 @@ mIoU만이 아니라 클래스별 IoU를 보고하라. 평균 IoU는 아홉 개�
 U-Net의 인코더는 해상도를 네 번 절반으로 줄이므로, 입력은 16으로 나누어떨어져야 한다. 의료 이미지는 흔히 512x512 또는 1024x1024다. 자율 주행 크롭은 2048x1024다. U-Net의 메모리 비용은 `H * W * C_max`에 따라 스케일링되며, 1024 병목 채널을 가진 1024x1024에서 순방향 패스는 이미 기가바이트의 VRAM을 쓴다.
 
 두 가지 표준 우회책이 있다.
-1. 입력을 타일링한다 — 겹침을 두고 256x256 타일을 처리한 뒤 꿰맨다.
+1. 입력을 타일링한다. 겹침을 두고 256x256 타일을 처리한 뒤 꿰맨다.
 2. 병목을 공간 해상도를 더 높게 유지하면서 수용 영역(receptive field)을 넓히는 팽창 합성곱(dilated convolution)으로 대체한다(DeepLab 계열).
 
 첫 모델에는 64채널 기반 U-Net을 가진 256x256 입력이 8 GB VRAM에서 편안하게 학습된다.
@@ -230,7 +230,7 @@ print(f"output: {net(x).shape}")
 print(f"params: {sum(p.numel() for p in net.parameters()):,}")
 ```
 
-출력 형태 `(1, 2, 256, 256)` — 입력과 같은 공간 크기, `num_classes` 채널. `base=32`에서 약 770만 개의 파라미터.
+출력 형태 `(1, 2, 256, 256)`: 입력과 같은 공간 크기, `num_classes` 채널. `base=32`에서 약 770만 개의 파라미터.
 
 ### 4단계: 손실
 
@@ -269,7 +269,7 @@ def iou_per_class(logits, targets, num_classes):
     return ious
 ```
 
-길이 C의 벡터를 반환한다. `nan`은 배치에 없는 클래스를 표시한다 — mIoU를 계산할 때 그런 클래스는 평균에 넣지 마라.
+길이 C의 벡터를 반환한다. `nan`은 배치에 없는 클래스를 표시한다. mIoU를 계산할 때 그런 클래스는 평균에 넣지 마라.
 
 ### 6단계: 종단 간 검증을 위한 합성 데이터셋
 
@@ -369,8 +369,8 @@ model = smp.Unet(
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-segmentation-task-picker.md` — 의미, 인스턴스, 파놉틱 분할 중에서 고르고 주어진 작업에 대한 아키텍처 이름을 짓는 프롬프트(prompt).
-- `outputs/skill-segmentation-mask-inspector.md` — 클래스 분포, 예측 마스크 통계, 그리고 과소 예측되거나 경계가 흐릿한 클래스를 보고하는 스킬.
+- `outputs/prompt-segmentation-task-picker.md`: 의미, 인스턴스, 파놉틱 분할 중에서 고르고 주어진 작업에 대한 아키텍처 이름을 짓는 프롬프트(prompt).
+- `outputs/skill-segmentation-mask-inspector.md`: 클래스 분포, 예측 마스크 통계, 그리고 과소 예측되거나 경계가 흐릿한 클래스를 보고하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -393,7 +393,7 @@ model = smp.Unet(
 
 ## 더 읽을거리 (Further Reading)
 
-- [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597) — 원조 논문. 모두가 베끼는 그림은 2페이지에 있다
-- [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038) — 분할을 처음으로 종단 간 합성곱 문제로 만든 논문
-- [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch) — 프로덕션 분할의 참고 자료. 모든 표준 아키텍처에 모든 표준 손실
-- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch) — 실제 데이터에서 TTA, 의사 레이블링, 클래스 가중치가 왜 중요한지에 대한 설명
+- [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597): 원조 논문. 모두가 베끼는 그림은 2페이지에 있다
+- [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038): 분할을 처음으로 종단 간 합성곱 문제로 만든 논문
+- [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch): 프로덕션 분할의 참고 자료. 모든 표준 아키텍처에 모든 표준 손실
+- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch): 실제 데이터에서 TTA, 의사 레이블링, 클래스 가중치가 왜 중요한지에 대한 설명

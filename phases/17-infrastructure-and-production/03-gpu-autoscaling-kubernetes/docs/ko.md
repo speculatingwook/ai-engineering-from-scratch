@@ -1,6 +1,6 @@
-# Kubernetes에서의 GPU 오토스케일링(GPU Autoscaling) — Karpenter, KAI Scheduler, 갱 스케줄링(Gang Scheduling)
+# Kubernetes에서의 GPU 오토스케일링(GPU Autoscaling): Karpenter, KAI Scheduler, 갱 스케줄링(Gang Scheduling)
 
-> 하나가 아니라 세 계층. Karpenter는 노드를 동적으로 프로비저닝(provisioning)한다(1분 미만, Cluster Autoscaler보다 40% 빠름). KAI Scheduler는 갱 스케줄링(gang scheduling), 토폴로지 인식(topology awareness), 계층적 큐를 처리한다 — 일곱 개 노드가 빠진 GPU 하나를 기다리며 비용을 태우는 8개 중 7개 부분 할당(partial allocation) 함정을 방지한다. 애플리케이션 수준 오토스케일러(NVIDIA Dynamo Planner, llm-d Workload Variant Autoscaler)는 CPU/DCGM 듀티 사이클(duty cycle)이 아니라 추론 특화 신호 — 큐 깊이(queue depth), KV 캐시 사용률 — 로 스케일링한다. 전형적인 HPA 함정은 `DCGM_FI_DEV_GPU_UTIL`이 듀티 사이클 측정이라는 점이다: 100%는 10개 요청일 수도 100개일 수도 있다. vLLM은 KV 캐시 메모리를 미리 할당하므로, 메모리는 결코 스케일 다운을 트리거하지 않는다. 이 레슨은 세 계층을 조합하고, 추론 도중 실행 중인 GPU 작업을 종료시키는 기본 Karpenter `WhenEmptyOrUnderutilized` 정책을 피하는 법을 가르친다.
+> 하나가 아니라 세 계층. Karpenter는 노드를 동적으로 프로비저닝(provisioning)한다(1분 미만, Cluster Autoscaler보다 40% 빠름). KAI Scheduler는 갱 스케줄링(gang scheduling), 토폴로지 인식(topology awareness), 계층적 큐를 처리한다. 일곱 개 노드가 빠진 GPU 하나를 기다리며 비용을 태우는 8개 중 7개 부분 할당(partial allocation) 함정을 방지한다. 애플리케이션 수준 오토스케일러(NVIDIA Dynamo Planner, llm-d Workload Variant Autoscaler)는 CPU/DCGM 듀티 사이클(duty cycle)이 아니라 추론에 특화된 신호, 즉 큐 깊이(queue depth)와 KV 캐시 사용률로 스케일링한다. 전형적인 HPA 함정은 `DCGM_FI_DEV_GPU_UTIL`이 듀티 사이클 측정이라는 점이다: 100%는 10개 요청일 수도 100개일 수도 있다. vLLM은 KV 캐시 메모리를 미리 할당하므로, 메모리는 결코 스케일 다운을 트리거하지 않는다. 이 레슨은 세 계층을 조합하고, 추론 도중 실행 중인 GPU 작업을 종료시키는 기본 Karpenter `WhenEmptyOrUnderutilized` 정책을 피하는 법을 가르친다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy queue-depth autoscaler simulator)
@@ -26,7 +26,7 @@
 
 ## 개념 (The Concept)
 
-### 계층 1 — 노드 프로비저닝 (Karpenter)
+### 계층 1: 노드 프로비저닝 (Karpenter)
 
 Karpenter는 대기 중인 파드(pod)를 감시하고 약 45~60초 내에 노드를 프로비저닝한다(Cluster Autoscaler는 GPU 노드에 대해 일반적으로 90~120초 소요). `NodePool` 제약에 따라 인스턴스 타입을 동적으로 고른다. 파드가 8개 H100을 필요로 하는데 클러스터에 일치하는 노드가 없으면, Karpenter는 기존 그룹을 스케일링하는 대신 하나를 직접 프로비저닝한다.
 
@@ -42,21 +42,21 @@ disruption:
 
 Karpenter가 한 시간 후 진짜로 비어 있는 노드를 통합하게 하되 실행 중인 작업은 결코 축출하지 않게 한다.
 
-### 계층 2 — 갱 스케줄링 (KAI Scheduler)
+### 계층 2: 갱 스케줄링 (KAI Scheduler)
 
 KAI Scheduler(프로젝트명 "Karp"였다가 이후 개명)는 기본 kube-scheduler가 하지 않는 것을 처리한다:
 
-**갱 스케줄링** — 전부 아니면 전무로 스케줄링한다. 8개 GPU가 필요한 분산 추론 파드는 8개가 모두 함께 시작되거나 하나도 시작되지 않는다. 이것이 없으면 부분 할당 함정에 빠진다: 8개 중 7개 파드가 시작되어 무기한 기다리며 돈을 태운다.
+**갱 스케줄링**: 전부 아니면 전무로 스케줄링한다. 8개 GPU가 필요한 분산 추론 파드는 8개가 모두 함께 시작되거나 하나도 시작되지 않는다. 이것이 없으면 부분 할당 함정에 빠진다: 8개 중 7개 파드가 시작되어 무기한 기다리며 돈을 태운다.
 
-**토폴로지 인식** — 어느 GPU가 NVLink를 공유하는지, 어느 것이 같은 랙에 있는지, 어느 것 사이에 InfiniBand가 있는지 안다. 그에 따라 파드를 배치한다. DeepSeek-V3 67B 텐서 병렬(tensor-parallel) 워크로드는 하나의 NVLink 도메인에 머물러야 한다. KAI Scheduler는 그것을 존중한다.
+**토폴로지 인식**: 어느 GPU가 NVLink를 공유하는지, 어느 것이 같은 랙에 있는지, 어느 것 사이에 InfiniBand가 있는지 안다. 그에 따라 파드를 배치한다. DeepSeek-V3 67B 텐서 병렬(tensor-parallel) 워크로드는 하나의 NVLink 도메인에 머물러야 한다. KAI Scheduler는 그것을 존중한다.
 
-**계층적 큐** — 여러 팀이 우선순위와 쿼터를 가지고 같은 GPU 풀을 두고 경쟁한다. 팀 A의 프로덕션 압박은 우선순위 규칙이 허용할 때에만 팀 B의 학습 작업에 의해 선점된다.
+**계층적 큐**: 여러 팀이 우선순위와 쿼터를 가지고 같은 GPU 풀을 두고 경쟁한다. 팀 A의 프로덕션 압박은 우선순위 규칙이 허용할 때에만 팀 B의 학습 작업에 의해 선점된다.
 
 KAI는 kube-scheduler와 나란히 보조 스케줄러로 배포된다. 워크로드에 이를 사용하도록 어노테이션(annotation)을 단다. Ray와 vLLM 프로덕션 스택 둘 다 통합한다.
 
-### 계층 3 — 애플리케이션 수준 신호
+### 계층 3: 애플리케이션 수준 신호
 
-**HPA 함정**: `DCGM_FI_DEV_GPU_UTIL`은 듀티 사이클 지표다 — 각 샘플링 간격에 GPU가 작업을 하고 있었는지를 측정한다. 100% 사용률은 동시 요청 10개를 의미할 수도, 100개를 의미할 수도 있다. 어느 쪽이든 GPU는 바빴다. 듀티 사이클로 스케일링하는 것은 눈을 감고 스케일링하는 것이다.
+**HPA 함정**: `DCGM_FI_DEV_GPU_UTIL`은 듀티 사이클 지표다. 각 샘플링 간격에 GPU가 작업을 하고 있었는지를 측정한다. 100% 사용률은 동시 요청 10개를 의미할 수도, 100개를 의미할 수도 있다. 어느 쪽이든 GPU는 바빴다. 듀티 사이클로 스케일링하는 것은 눈을 감고 스케일링하는 것이다.
 
 더 나쁜 것은, vLLM과 유사 엔진들이 KV 캐시 메모리를 미리 할당한다는 점이다(`--gpu-memory-utilization`까지). 메모리 사용량은 요청 하나에서도 90% 가까이 유지된다. 메모리 기반 HPA는 결코 스케일 다운하지 않는다.
 
@@ -90,7 +90,7 @@ NVIDIA Dynamo Planner와 llm-d Workload Variant Autoscaler는 이 신호들을 �
 ### 기억해야 할 숫자
 
 - Karpenter 노드 프로비저닝: 약 45~60초 vs Cluster Autoscaler 약 90~120초(GPU 노드).
-- KAI Scheduler는 부분 할당 낭비를 방지한다 — 8개 중 7개 함정.
+- KAI Scheduler는 부분 할당 낭비를 방지한다. 8개 중 7개 함정.
 - HPA 신호로서 `DCGM_FI_DEV_GPU_UTIL`: 망가짐. 큐 깊이나 KV 사용률을 쓰라.
 - Karpenter `WhenEmptyOrUnderutilized`: 실행 중인 GPU 작업을 종료한다. 추론에는 `WhenEmpty + consolidateAfter: 1h`를 쓰라.
 
@@ -127,9 +127,9 @@ NVIDIA Dynamo Planner와 llm-d Workload Variant Autoscaler는 이 신호들을 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [KAI Scheduler GitHub](https://github.com/kai-scheduler/KAI-Scheduler) — 설계 문서와 설정 예제.
-- [Karpenter Disruption Controls](https://karpenter.sh/docs/concepts/disruption/) — 통합 정책 의미론과 GPU 안전 기본값.
-- [NVIDIA — Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/) — Dynamo Planner 스케일링 신호.
-- [Ray docs — KAI Scheduler for RayClusters](https://docs.ray.io/en/latest/cluster/kubernetes/k8s-ecosystem/kai-scheduler.html) — Ray 통합 패턴.
-- [AWS EKS Compute and Autoscaling Best Practices](https://docs.aws.amazon.com/eks/latest/best-practices/aiml-compute.html) — 매니지드 Kubernetes 특화 가이드.
-- [llm-d GitHub](https://github.com/llm-d/llm-d) — Workload Variant Autoscaler 설계.
+- [KAI Scheduler GitHub](https://github.com/kai-scheduler/KAI-Scheduler): 설계 문서와 설정 예제.
+- [Karpenter Disruption Controls](https://karpenter.sh/docs/concepts/disruption/): 통합 정책 의미론과 GPU 안전 기본값.
+- [NVIDIA(Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/)) Dynamo Planner 스케일링 신호.
+- [Ray docs(KAI Scheduler for RayClusters](https://docs.ray.io/en/latest/cluster/kubernetes/k8s-ecosystem/kai-scheduler.html)) Ray 통합 패턴.
+- [AWS EKS Compute and Autoscaling Best Practices](https://docs.aws.amazon.com/eks/latest/best-practices/aiml-compute.html): 매니지드 Kubernetes 특화 가이드.
+- [llm-d GitHub](https://github.com/llm-d/llm-d): Workload Variant Autoscaler 설계.

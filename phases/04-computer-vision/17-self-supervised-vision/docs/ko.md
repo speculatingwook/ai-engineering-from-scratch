@@ -1,4 +1,4 @@
-# 자기 지도 비전 — SimCLR, DINO, MAE (Self-Supervised Vision)
+# 자기 지도 비전: SimCLR, DINO, MAE (Self-Supervised Vision)
 
 > 레이블(label)은 지도 비전(supervised vision)의 병목이다. 자기 지도 사전 학습(self-supervised pretraining)은 그 병목을 없앤다. 레이블 없는 1억 장의 이미지에서 시각적 특성을 학습한 뒤, 레이블된 1만 장에 파인튜닝(fine-tune)한다.
 
@@ -9,18 +9,18 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- 세 가지 주요 자기 지도 계열 — 대조(contrastive)(SimCLR), 교사-학생(teacher-student)(DINO), 마스킹된 복원(masked reconstruction)(MAE) — 을 추적하고, 각각이 무엇을 최적화하는지 진술하기
+- 세 가지 주요 자기 지도 계열(대조(contrastive)(SimCLR), 교사-학생(teacher-student)(DINO), 마스킹된 복원(masked reconstruction)(MAE))을 추적하고, 각각이 무엇을 최적화하는지 진술하기
 - InfoNCE 손실(loss)을 밑바닥부터 구현하고, 왜 512짜리 배치(batch)는 작동하고 32짜리 배치는 실패하는지 설명하기
 - 왜 MAE의 75% 마스킹 비율(masking ratio)이 임의적이지 않은지, 그리고 그것이 텍스트에 대한 BERT의 15%와 어떻게 다른지 설명하기
 - 선형 프로빙(linear probing)과 제로샷(zero-shot) 검색을 위해 DINOv2나 MAE의 ImageNet 체크포인트(checkpoint)를 사용하기
 
 ## 문제 (The Problem)
 
-지도 ImageNet은 130만 장의 레이블된 이미지를 가지며, 주석을 다는 데 약 1,000만 달러가 든 것으로 추정된다. 의료 및 산업 데이터셋(dataset)은 더 작고 레이블링(label)이 훨씬 더 비싸다. 그래서 모든 비전 팀이 묻는다. 값싼 레이블 없는 데이터 — YouTube 프레임, 웹 크롤, 웹캠 영상, 위성 스윕 — 에 사전 학습한 뒤 작은 레이블된 집합에 파인튜닝할 수 있는가?
+지도 ImageNet은 130만 장의 레이블된 이미지를 가지며, 주석을 다는 데 약 1,000만 달러가 든 것으로 추정된다. 의료 및 산업 데이터셋(dataset)은 더 작고 레이블링(label)이 훨씬 더 비싸다. 그래서 모든 비전 팀이 묻는다. 값싼 레이블 없는 데이터(YouTube 프레임, 웹 크롤, 웹캠 영상, 위성 스윕)에 사전 학습한 뒤 작은 레이블된 집합에 파인튜닝할 수 있는가?
 
 자기 지도 학습(self-supervised learning)이 그 답이다. LAION이나 JFT에 학습된 현대의 자기 지도 ViT는 파인튜닝되었을 때 지도 ImageNet 정확도에 도달하거나 능가한다. 또한 하류 작업(검출, 분할, 깊이)에 지도 사전 학습보다 더 잘 전이된다. DINOv2(Meta, 2023)와 MAE(Meta, 2022)는 전이 가능한 비전 특성을 다룰 때 현재의 프로덕션(production) 기본값이다.
 
-개념적 전환은 이렇다. 프리텍스트 작업(pretext task) — 모델이 학습하도록 시키는 것 — 이 꼭 하류 작업일 필요는 없다. 중요한 것은 그 작업이 모델에게 유용한 특성을 학습하도록 강제한다는 점이다. 흑백 이미지의 색을 예측하기, 이미지를 회전시키고 모델에게 회전을 분류하라고 하기, 패치(patch)를 마스킹하고 복원하기 — 모두 효과가 있었다. 규모로 확장되는 세 접근법은 대조 학습(contrastive learning), 교사-학생 증류(distillation), 마스킹된 복원이다.
+개념적 전환은 이렇다. 프리텍스트 작업(pretext task): 모델이 학습하도록 시키는 것: 이 꼭 하류 작업일 필요는 없다. 중요한 것은 그 작업이 모델에게 유용한 특성을 학습하도록 강제한다는 점이다. 흑백 이미지의 색을 예측하기, 이미지를 회전시키고 모델에게 회전을 분류하라고 하기, 패치(patch)를 마스킹하고 복원하기: 모두 효과가 있었다. 규모로 확장되는 세 접근법은 대조 학습(contrastive learning), 교사-학생 증류(distillation), 마스킹된 복원이다.
 
 ## 개념 (The Concept)
 
@@ -50,7 +50,7 @@ sim = cosine similarity
 tau = temperature (0.1 standard)
 ```
 
-이것이 InfoNCE 손실이다. 양성(positive)당 많은 음성(negative)이 필요하므로 배치 크기가 중요하다 — SimCLR은 512~8192가 필요하다. MoCo는 음성 개수를 배치 크기와 분리하려고 과거 배치들의 모멘텀 큐(momentum queue)를 도입했다.
+이것이 InfoNCE 손실이다. 양성(positive)당 많은 음성(negative)이 필요하므로 배치 크기가 중요하다. SimCLR은 512~8192가 필요하다. MoCo는 음성 개수를 배치 크기와 분리하려고 과거 배치들의 모멘텀 큐(momentum queue)를 도입했다.
 
 ### 교사-학생 (Teacher-student, DINO)
 
@@ -79,9 +79,9 @@ Loss:     MSE between reconstructed and original pixels on masked patches only
 
 MAE를 작동하게 하는 핵심 설계 선택:
 
-- **75% 마스크 비율** — 높다. 인코더가 의미론적 특성을 학습하도록 강제한다. 25%를 복원하는 것은 거의 자명할 것이다(인접 픽셀이 너무 상관되어 있어 CNN이 정확히 맞힐 수 있다).
-- **비대칭 인코더/디코더(Asymmetric encoder/decoder)** — 큰 ViT 인코더는 보이는 패치만 본다. 작은 디코더(8층, 512차원)가 복원을 처리한다. 순진한 BEiT보다 3배 빠른 사전 학습.
-- **픽셀 공간 복원 타깃(Pixel-space reconstruction target)** — BEiT의 토큰화된 타깃보다 단순하고 ViT에서 더 잘 작동한다.
+- **75% 마스크 비율**: 높다. 인코더가 의미론적 특성을 학습하도록 강제한다. 25%를 복원하는 것은 거의 자명할 것이다(인접 픽셀이 너무 상관되어 있어 CNN이 정확히 맞힐 수 있다).
+- **비대칭 인코더/디코더(Asymmetric encoder/decoder)**: 큰 ViT 인코더는 보이는 패치만 본다. 작은 디코더(8층, 512차원)가 복원을 처리한다. 순진한 BEiT보다 3배 빠른 사전 학습.
+- **픽셀 공간 복원 타깃(Pixel-space reconstruction target)**: BEiT의 토큰화된 타깃보다 단순하고 ViT에서 더 잘 작동한다.
 
 사전 학습 후에는 디코더를 버린다. 인코더가 특성 추출기다.
 
@@ -90,7 +90,7 @@ MAE를 작동하게 하는 핵심 설계 선택:
 BERT는 토큰(token)의 15%를 마스킹한다. MAE는 75%를 마스킹한다. 차이는 정보 밀도다.
 
 - 자연어는 토큰당 엔트로피가 높다. 토큰의 15%를 예측하는 것도 여전히 어렵다. 각 마스킹된 위치에 그럴듯한 완성이 여럿 있기 때문이다.
-- 이미지 패치는 엔트로피가 낮다 — 마스킹되지 않은 이웃이 종종 마스킹된 패치의 픽셀을 거의 정확히 결정한다. 예측에 의미론적 이해가 필요하게 만들려면 공격적으로 마스킹해야 한다.
+- 이미지 패치는 엔트로피가 낮다. 마스킹되지 않은 이웃이 종종 마스킹된 패치의 픽셀을 거의 정확히 결정한다. 예측에 의미론적 이해가 필요하게 만들려면 공격적으로 마스킹해야 한다.
 
 75%는 단순한 공간적 외삽(spatial extrapolation)으로 작업을 풀 수 없을 만큼 높다. 인코더는 이미지 콘텐츠를 표현해야 한다.
 
@@ -222,8 +222,8 @@ with torch.no_grad():
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-ssl-pretraining-picker.md` — 데이터셋 크기, 연산, 하류 작업이 주어졌을 때 SimCLR / MAE / DINOv2를 골라주는 프롬프트(prompt).
-- `outputs/skill-linear-probe-runner.md` — 어떤 동결된 인코더 + 레이블된 데이터셋에 대해서든 선형 프로브 평가를 작성하는 스킬.
+- `outputs/prompt-ssl-pretraining-picker.md`: 데이터셋 크기, 연산, 하류 작업이 주어졌을 때 SimCLR / MAE / DINOv2를 골라주는 프롬프트(prompt).
+- `outputs/skill-linear-probe-runner.md`: 어떤 동결된 인코더 + 레이블된 데이터셋에 대해서든 선형 프로브 평가를 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -246,7 +246,7 @@ with torch.no_grad():
 
 ## 더 읽을거리 (Further Reading)
 
-- [SimCLR (Chen et al., 2020)](https://arxiv.org/abs/2002.05709) — 대조 학습 레퍼런스
-- [DINO (Caron et al., 2021)](https://arxiv.org/abs/2104.14294) — 모멘텀, 중심화, 날카롭게 하기를 쓴 교사-학생
-- [MAE (He et al., 2022)](https://arxiv.org/abs/2111.06377) — ViT를 위한 마스크드 오토인코더(masked autoencoder) 사전 학습
-- [DINOv2 (Oquab et al., 2023)](https://arxiv.org/abs/2304.07193) — 자기 지도 ViT를 프로덕션 특성으로 규모를 키우기
+- [SimCLR (Chen et al., 2020)](https://arxiv.org/abs/2002.05709): 대조 학습 레퍼런스
+- [DINO (Caron et al., 2021)](https://arxiv.org/abs/2104.14294): 모멘텀, 중심화, 날카롭게 하기를 쓴 교사-학생
+- [MAE (He et al., 2022)](https://arxiv.org/abs/2111.06377): ViT를 위한 마스크드 오토인코더(masked autoencoder) 사전 학습
+- [DINOv2 (Oquab et al., 2023)](https://arxiv.org/abs/2304.07193): 자기 지도 ViT를 프로덕션 특성으로 규모를 키우기

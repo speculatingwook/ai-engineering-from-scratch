@@ -251,6 +251,6 @@ Refuse to recommend dropping stopwords for sentiment tasks. Refuse to report acc
 
 ## 더 읽을거리 (Further Reading)
 
-- [Pang and Lee (2008). Opinion Mining and Sentiment Analysis](https://www.cs.cornell.edu/home/llee/opinion-mining-sentiment-analysis-survey.html) — 기초가 되는 서베이. 길지만, 처음 네 절이 모든 고전적 내용을 다룬다.
-- [Wang and Manning (2012). Baselines and Bigrams: Simple, Good Sentiment and Topic Classification](https://aclanthology.org/P12-2018/) — 짧은 텍스트에서 바이그램 + 나이브 베이즈를 이기기 어렵다는 것을 보여 준 논문.
-- [scikit-learn text feature extraction docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction) — `CountVectorizer`, `TfidfVectorizer`, 그리고 튜닝할 모든 손잡이를 다루는 레퍼런스.
+- [Pang and Lee (2008). Opinion Mining and Sentiment Analysis](https://www.cs.cornell.edu/home/llee/opinion-mining-sentiment-analysis-survey.html): 기초가 되는 서베이. 길지만, 처음 네 절이 모든 고전적 내용을 다룬다.
+- [Wang and Manning (2012). Baselines and Bigrams: Simple, Good Sentiment and Topic Classification](https://aclanthology.org/P12-2018/): 짧은 텍스트에서 바이그램 + 나이브 베이즈를 이기기 어렵다는 것을 보여 준 논문.
+- [scikit-learn text feature extraction docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction): `CountVectorizer`, `TfidfVectorizer`, 그리고 튜닝할 모든 손잡이를 다루는 레퍼런스.

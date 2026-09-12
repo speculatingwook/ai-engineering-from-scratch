@@ -1,6 +1,6 @@
 # EchoLeak와 AI를 위한 CVE의 출현
 
-> CVE-2025-32711 "EchoLeak"(CVSS 9.3)은 프로덕션 LLM 시스템(Microsoft 365 Copilot)에서 공개적으로 문서화된 최초의 제로클릭(zero-click) 프롬프트 인젝션(prompt injection)이었다. Aim Labs(Aim Security)가 발견했고, MSRC에 공개되었으며, 2025년 6월 서버 측 업데이트로 패치되었다. 공격: 공격자가 임의의 직원에게 조작된 이메일을 보낸다. 피해자의 Copilot이 일상적인 질의 중에 그 이메일을 RAG 컨텍스트(context)로 검색한다. 숨겨진 지시가 실행된다. Copilot이 CSP가 승인한 Microsoft 도메인을 통해 민감한 조직 데이터를 유출(exfiltrate)한다. XPIA 프롬프트 인젝션 필터와 Copilot의 링크 검열(link-redaction) 메커니즘을 우회했다. Aim Labs의 용어: "LLM 범위 위반(LLM Scope Violation)" — 외부의 신뢰할 수 없는 입력이 모델을 조작하여 기밀 데이터에 접근하고 누출하게 한다. 관련: CamoLeak(CVSS 9.6, GitHub Copilot Chat)는 Camo 이미지 프록시(proxy)를 악용했다. 이미지 렌더링을 완전히 비활성화하여 수정되었다. GitHub Copilot RCE CVE-2025-53773. NIST는 간접 프롬프트 인젝션(indirect prompt injection)을 "생성 AI의 가장 큰 보안 결함"이라고 칭했다. OWASP 2025는 이를 LLM 애플리케이션에 대한 1위 위협으로 순위 매겼다.
+> CVE-2025-32711 "EchoLeak"(CVSS 9.3)은 프로덕션 LLM 시스템(Microsoft 365 Copilot)에서 공개적으로 문서화된 최초의 제로클릭(zero-click) 프롬프트 인젝션(prompt injection)이었다. Aim Labs(Aim Security)가 발견했고, MSRC에 공개되었으며, 2025년 6월 서버 측 업데이트로 패치되었다. 공격: 공격자가 임의의 직원에게 조작된 이메일을 보낸다. 피해자의 Copilot이 일상적인 질의 중에 그 이메일을 RAG 컨텍스트(context)로 검색한다. 숨겨진 지시가 실행된다. Copilot이 CSP가 승인한 Microsoft 도메인을 통해 민감한 조직 데이터를 유출(exfiltrate)한다. XPIA 프롬프트 인젝션 필터와 Copilot의 링크 검열(link-redaction) 메커니즘을 우회했다. Aim Labs의 용어: "LLM 범위 위반(LLM Scope Violation)": 외부의 신뢰할 수 없는 입력이 모델을 조작하여 기밀 데이터에 접근하고 누출하게 한다. 관련: CamoLeak(CVSS 9.6, GitHub Copilot Chat)는 Camo 이미지 프록시(proxy)를 악용했다. 이미지 렌더링을 완전히 비활성화하여 수정되었다. GitHub Copilot RCE CVE-2025-53773. NIST는 간접 프롬프트 인젝션(indirect prompt injection)을 "생성 AI의 가장 큰 보안 결함"이라고 칭했다. OWASP 2025는 이를 LLM 애플리케이션에 대한 1위 위협으로 순위 매겼다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, scope-violation trace reconstruction)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-레슨 15는 간접 프롬프트 인젝션을 개념으로 기술한다. 레슨 25는 그 부류의 첫 프로덕션 CVE를 기술한다. 정책 교훈: AI 취약점은 이제 보통의 보안 취약점이다 — CVE를 받고, 공개가 필요하며, CVSS 점수화를 따른다. 실무 교훈: 위협 모델(threat model)이 벤치마크뿐 아니라 프로덕션에서 검증되었다.
+레슨 15는 간접 프롬프트 인젝션을 개념으로 기술한다. 레슨 25는 그 부류의 첫 프로덕션 CVE를 기술한다. 정책 교훈: AI 취약점은 이제 보통의 보안 취약점이다. CVE를 받고, 공개가 필요하며, CVSS 점수화를 따른다. 실무 교훈: 위협 모델(threat model)이 벤치마크뿐 아니라 프로덕션에서 검증되었다.
 
 ## 개념 (The Concept)
 
@@ -98,11 +98,11 @@ GitHub Copilot의 코드 제안 표면에서 프롬프트 인젝션을 통한 �
 | 제로클릭(Zero-click) | "사용자 행동 없음" | 공격이 일상적인 에이전트(agent) 작동 중에 발화 |
 | XPIA | "Microsoft PI 필터" | Cross-Prompt Injection Attack 필터. EchoLeak가 우회 |
 | OWASP LLM01 | "최상위 LLM 위협" | 프롬프트 인젝션. OWASP의 2025년 순위 |
-| 세 경계 모델(Three-boundary model) | "Aim Labs 프레임워크" | 검색, 범위, 출력 — 각각 독립적으로 통제되어야 함 |
+| 세 경계 모델(Three-boundary model) | "Aim Labs 프레임워크" | 검색, 범위, 출력: 각각 독립적으로 통제되어야 함 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Aim Labs — EchoLeak writeup (June 2025)](https://www.aim.security/lp/aim-labs-echoleak-blogpost) — CVE 공개
-- [Aim Labs — LLM Scope Violation framework](https://arxiv.org/html/2509.10540v1) — 위협 모델 프레임워크
-- [Microsoft MSRC CVE-2025-32711](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-32711) — CVE 기록
-- [OWASP — LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/) — LLM01 프롬프트 인젝션
+- [Aim Labs(EchoLeak writeup (June 2025)](https://www.aim.security/lp/aim-labs-echoleak-blogpost)) CVE 공개
+- [Aim Labs(LLM Scope Violation framework](https://arxiv.org/html/2509.10540v1)) 위협 모델 프레임워크
+- [Microsoft MSRC CVE-2025-32711](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-32711): CVE 기록
+- [OWASP(LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/)) LLM01 프롬프트 인젝션

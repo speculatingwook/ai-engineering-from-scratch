@@ -1,4 +1,4 @@
-# 프로덕션 양자화(Production Quantization) — AWQ, GPTQ, GGUF K-quants, FP8, MXFP4/NVFP4
+# 프로덕션 양자화(Production Quantization): AWQ, GPTQ, GGUF K-quants, FP8, MXFP4/NVFP4
 
 > 양자화(quantization) 포맷은 보편적 선택이 아니라 하드웨어, 서빙 엔진(serving engine), 워크로드에 따라 정해진다. GGUF Q4_K_M 또는 Q5_K_M은 llama.cpp와 Ollama로 서빙되며 CPU와 엣지(edge)를 차지한다. 같은 베이스(base)에서 멀티 LoRA가 필요할 때는 vLLM 안에서 GPTQ가 앞선다. Marlin-AWQ 커널을 갖춘 AWQ는 7B급 모델의 INT4에서 최고의 Pass@1과 함께 약 741 토큰(token)/초를 내며, 2026년 데이터센터 프로덕션 기본값이다. FP8은 Hopper, Ada, Blackwell에서 중간 지점으로, 거의 무손실이며 널리 지원된다. NVFP4와 MXFP4(Blackwell 마이크로스케일링)는 공격적이라 블록별 검증이 필요하다. 함정은 두 가지다. 보정(calibration) 데이터셋은 배포 도메인과 일치해야 하고, KV 캐시는 가중치(weight) 양자화와 별개다. "내 모델은 이제 4GB"라는 AWQ의 교훈은 프로덕션 배치(batch) 크기에서의 10~30GB KV 캐시를 잊는다.
 
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-양자화는 메모리와 HBM 대역폭을 줄이는데, 그것이 바로 디코드(decode)가 필요로 하는 것이다. FP16 70B 모델은 140GB의 가중치다. 가중치를 INT4(AWQ 또는 GPTQ)로 양자화하면 모델은 35GB가 된다 — KV 캐시를 위한 여유와 함께 하나의 H100에 들어가는데, 2k 컨텍스트의 128 동시 시퀀스에서 KV 캐시만 20~30GB이므로 이것이 중요하다.
+양자화는 메모리와 HBM 대역폭을 줄이는데, 그것이 바로 디코드(decode)가 필요로 하는 것이다. FP16 70B 모델은 140GB의 가중치다. 가중치를 INT4(AWQ 또는 GPTQ)로 양자화하면 모델은 35GB가 된다. KV 캐시를 위한 여유와 함께 하나의 H100에 들어가는데, 2k 컨텍스트의 128 동시 시퀀스에서 KV 캐시만 20~30GB이므로 이것이 중요하다.
 
 하지만 양자화는 공짜가 아니다. 공격적 양자화는 품질을 저하시키며, 특히 추론 중심 작업에서 그렇다. 포맷마다 작동하는 엔진이 다르고, 하드웨어마다 네이티브로 지원하는 정밀도가 다르다. 2026년의 난립한 포맷 지형은 실재하므로 남의 선택을 베낄 수 없다. 자기 스택에 맞춰 골라야 한다.
 
@@ -33,31 +33,31 @@
 | MXFP4 | 4 | Blackwell 멀티 유저 | TRT-LLM |
 | NVFP4 | 4 | Blackwell 멀티 유저 | TRT-LLM |
 
-### GGUF — CPU/엣지 기본값
+### GGUF: CPU/엣지 기본값
 
 GGUF는 그 자체가 양자화 방식이 아니라 파일 포맷으로, K-quant 변형(Q2_K, Q3_K_M, Q4_K_M, Q5_K_M, Q6_K, Q8_0)을 하나의 컨테이너에 묶는다. 프로덕션 기본값은 Q4_K_M과 Q5_K_M으로, 4~5비트에서 거의 BF16 품질을 낸다. llama.cpp가 가장 빠른 CPU 추론(inference) 엔진이므로 CPU나 엣지 서빙에는 이 포맷이 최선이다.
 
-vLLM에서의 처리량 페널티: 7B에서 약 93 토큰/초 — 그 포맷은 GPU 커널에 최적화되어 있지 않다. 배포 타깃이 CPU/엣지일 때 GGUF를 쓰라. 그 외에는 아니다.
+vLLM에서의 처리량 페널티: 7B에서 약 93 토큰/초: 그 포맷은 GPU 커널에 최적화되어 있지 않다. 배포 타깃이 CPU/엣지일 때 GGUF를 쓰라. 그 외에는 아니다.
 
-### GPTQ — vLLM에서의 멀티 LoRA
+### GPTQ: vLLM에서의 멀티 LoRA
 
 GPTQ는 보정 패스를 가진 학습 후 양자화 알고리즘이다. Marlin 커널이 GPU에서 그것을 빠르게 만든다(비-Marlin GPTQ 대비 2.6배 속도 향상). 7B에서 약 712 토큰/초.
 
 고유한 이점은 GPTQ-Int4가 vLLM에서 LoRA 어댑터를 지원한다는 것이다. 베이스 모델에 더해 10~50개의 파인튜닝(fine-tuning)된 변형(각각 LoRA로)을 서빙한다면 GPTQ가 답이다. NVFP4는 2026년 초 기준 아직 LoRA를 지원하지 않는다.
 
-### AWQ — 데이터센터 GPU 기본값
+### AWQ: 데이터센터 GPU 기본값
 
 활성화 인식 가중치 양자화(Activation-aware Weight Quantization). 양자화 동안 가장 두드러진 약 1%의 가중치를 보호한다. Marlin-AWQ 커널은 단순 구현 대비 10.9배 빠르다. 7B에서 약 741 토큰/초로, INT4 포맷 중 Pass@1이 가장 높다.
 
 멀티 LoRA(GPTQ)나 공격적 Blackwell FP4(NVFP4)가 필요하지 않은 한 새 GPU 서빙에는 AWQ를 고르라.
 
-### FP8 — 신뢰할 수 있는 중간
+### FP8: 신뢰할 수 있는 중간
 
 8비트 부동소수점(floating point). 거의 무손실. 널리 지원됨. Hopper 텐서 코어가 FP8을 네이티브로 가속한다. Blackwell이 상속한다. FP8은 품질이 타협 불가능할 때(추론, 의료, 코드 생성) 안전한 2026년 기본값이다. 메모리 절감은 INT4의 절반이지만 품질 위험은 훨씬 낮다.
 
-### MXFP4 / NVFP4 — Blackwell 공격적
+### MXFP4 / NVFP4: Blackwell 공격적
 
-마이크로스케일링 FP4. 각 가중치 블록이 자신의 스케일 팩터를 갖는다. 공격적이지만 Blackwell 텐서 코어에서 하드웨어 가속된다. FP8 대비 토큰당 바이트를 절반으로 — Phase 17 · 07의 경제적 이점.
+마이크로스케일링 FP4. 각 가중치 블록이 자신의 스케일 팩터를 갖는다. 공격적이지만 Blackwell 텐서 코어에서 하드웨어 가속된다. FP8 대비 토큰당 바이트를 절반으로: Phase 17 · 07의 경제적 이점.
 
 주의사항:
 - 아직 LoRA 지원 없음(2026년 초).
@@ -77,7 +77,7 @@ AWQ는 가중치를 4비트로 줄인다. KV 캐시는 별개이며 FP16/FP8에 
 - 가중치: 약 35GB(140GB에서 INT4).
 - 128 동시 × 2k 컨텍스트에서 KV 캐시: 약 20GB.
 - 활성값(activation): 약 5GB.
-- 합계: 약 60GB — H100 80GB에 들어감.
+- 합계: 약 60GB: H100 80GB에 들어감.
 
 "내 모델을 4GB로 양자화했다"는 단순한 계산은 나머지 30~50GB를 빠뜨린다. HBM 전체를 두고 예산을 잡아야 한다.
 
@@ -128,9 +128,9 @@ AWQ는 가중치를 4비트로 줄인다. KV 캐시는 별개이며 FP16/FP8에 
 
 ## 더 읽을거리 (Further Reading)
 
-- [VRLA Tech — LLM Quantization 2026](https://vrlatech.com/llm-quantization-explained-int4-int8-fp8-awq-and-gptq-in-2026/) — 비교 벤치마크.
-- [Jarvis Labs — vLLM Quantization Complete Guide](https://jarvislabs.ai/blog/vllm-quantization-complete-guide-benchmarks) — 포맷별 처리량 숫자.
-- [PremAI — GGUF vs AWQ vs GPTQ vs bitsandbytes 2026](https://blog.premai.io/llm-quantization-guide-gguf-vs-awq-vs-gptq-vs-bitsandbytes-compared-2026/) — 포맷별 선택.
-- [vLLM docs — Quantization](https://docs.vllm.ai/en/latest/features/quantization/index.html) — 지원 포맷과 플래그.
-- [AWQ paper (arXiv:2306.00978)](https://arxiv.org/abs/2306.00978) — 원본 AWQ 정식화.
-- [GPTQ paper (arXiv:2210.17323)](https://arxiv.org/abs/2210.17323) — 원본 GPTQ 정식화.
+- [VRLA Tech(LLM Quantization 2026](https://vrlatech.com/llm-quantization-explained-int4-int8-fp8-awq-and-gptq-in-2026/)) 비교 벤치마크.
+- [Jarvis Labs(vLLM Quantization Complete Guide](https://jarvislabs.ai/blog/vllm-quantization-complete-guide-benchmarks)) 포맷별 처리량 숫자.
+- [PremAI(GGUF vs AWQ vs GPTQ vs bitsandbytes 2026](https://blog.premai.io/llm-quantization-guide-gguf-vs-awq-vs-gptq-vs-bitsandbytes-compared-2026/)) 포맷별 선택.
+- [vLLM docs(Quantization](https://docs.vllm.ai/en/latest/features/quantization/index.html)) 지원 포맷과 플래그.
+- [AWQ paper (arXiv:2306.00978)](https://arxiv.org/abs/2306.00978): 원본 AWQ 정식화.
+- [GPTQ paper (arXiv:2210.17323)](https://arxiv.org/abs/2210.17323): 원본 GPTQ 정식화.

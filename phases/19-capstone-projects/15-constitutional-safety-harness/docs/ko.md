@@ -1,4 +1,4 @@
-# Capstone 15 — 헌법적 안전 하네스 + 레드팀 사격장 (Constitutional Safety Harness + Red-Team Range)
+# Capstone 15: 헌법적 안전 하네스 + 레드팀 사격장 (Constitutional Safety Harness + Red-Team Range)
 
 > Anthropic의 Constitutional Classifiers, Meta의 Llama Guard 4, Google의 ShieldGemma-2, NVIDIA의 Nemotron 3 Content Safety, 그리고 다국어 커버리지를 위한 X-Guard가 2026 안전 분류기(safety-classifier) 스택을 정의했다. garak, PyRIT, NVIDIA Aegis, 그리고 promptfoo는 표준 적대적(adversarial) 평가 도구가 되었다. NeMo Guardrails v0.12는 이것들을 프로덕션(production) 파이프라인으로 묶는다. 이 캡스톤(capstone)은 그 모든 것을 함께 연결한다: 타깃(target) 앱을 둘러싼 계층화된 안전 하네스(safety harness), 6개 이상의 공격 계열(attack family)을 돌리는 자율 레드팀 에이전트(red-team agent), 그리고 측정 가능한 무해성(harmlessness) 차이를 만들어내는 헌법적 자기 비평(constitutional self-critique) 실행.
 
@@ -12,7 +12,7 @@
 
 2026년 LLM 안전의 최전선은 분류기가 작동하는지 여부(대략 작동한다)가 아니라, 과도 거부(over-refusing)하거나 명백한 구멍을 남기지 않으면서 프로덕션 앱 주위에 이 분류기들을 어떻게 올바르게 조합하느냐다. Llama Guard 4는 영어 정책 위반을 처리한다. X-Guard(132개 언어)는 다국어 탈옥(jailbreak)을 처리한다. ShieldGemma-2는 이미지 기반 프롬프트 인젝션(prompt injection)을 잡는다. NVIDIA Nemotron 3 Content Safety는 엔터프라이즈 범주를 다룬다. Anthropic의 Constitutional Classifiers는 서빙이 아니라 학습 중에 쓰이는 별도 접근법이다.
 
-공격 진화도 중요하다. PAIR와 TAP는 탈옥 발견을 자동화한다. GCG는 그래디언트 기반(gradient-based) 접미사 공격을 실행한다. 멀티턴(multi-turn)과 코드 스위치(code-switch) 공격은 에이전트 메모리를 악용한다. 배포된 모든 LLM은 레드팀 사격장(red-team range)이 필요하다 — garak과 PyRIT가 표준 드라이버다 — 여기에 문서화된 완화책(mitigation)과 CVSS로 채점된 발견(finding)을 더한다.
+공격 진화도 중요하다. PAIR와 TAP는 탈옥 발견을 자동화한다. GCG는 그래디언트 기반(gradient-based) 접미사 공격을 실행한다. 멀티턴(multi-turn)과 코드 스위치(code-switch) 공격은 에이전트 메모리를 악용한다. 배포된 모든 LLM은 레드팀 사격장(red-team range)이 필요하다. garak과 PyRIT가 표준 드라이버다. 여기에 문서화된 완화책(mitigation)과 CVSS로 채점된 발견(finding)을 더한다.
 
 이 캡스톤에서는 타깃 애플리케이션(8B 인스트럭션 튜닝(instruction-tuned) 모델이거나 다른 캡스톤의 RAG 챗봇 중 하나)을 강화하고, 6개 이상의 공격 계열을 거기에 실행하며, 전후(before/after) 무해성 측정을 만들어낸다.
 
@@ -145,12 +145,12 @@ $ safety probe --model=target --family=PAIR --budget=50
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic Constitutional Classifiers](https://www.anthropic.com/research/constitutional-classifiers) — 학습 시점 레퍼런스
-- [Meta Llama Guard 4](https://ai.meta.com/research/publications/llama-guard-4/) — 2026 입출력 분류기
-- [Google ShieldGemma-2](https://huggingface.co/google/shieldgemma-2b) — 이미지 + 멀티모달 안전
-- [NVIDIA Nemotron 3 Content Safety](https://developer.nvidia.com/blog/building-nvidia-nemotron-3-agents-for-reasoning-multimodal-rag-voice-and-safety/) — 엔터프라이즈 레퍼런스
-- [X-Guard (arXiv:2504.08848)](https://arxiv.org/abs/2504.08848) — 132개 언어 다국어 안전
-- [garak](https://github.com/NVIDIA/garak) — NVIDIA 레드팀 툴킷
-- [PyRIT](https://github.com/Azure/PyRIT) — Microsoft 레드팀 프레임워크
-- [NeMo Guardrails v0.12](https://docs.nvidia.com/nemo-guardrails/) — 레일 프레임워크
-- [PAIR (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419) — 탈옥 에이전트 논문
+- [Anthropic Constitutional Classifiers](https://www.anthropic.com/research/constitutional-classifiers): 학습 시점 레퍼런스
+- [Meta Llama Guard 4](https://ai.meta.com/research/publications/llama-guard-4/): 2026 입출력 분류기
+- [Google ShieldGemma-2](https://huggingface.co/google/shieldgemma-2b): 이미지 + 멀티모달 안전
+- [NVIDIA Nemotron 3 Content Safety](https://developer.nvidia.com/blog/building-nvidia-nemotron-3-agents-for-reasoning-multimodal-rag-voice-and-safety/): 엔터프라이즈 레퍼런스
+- [X-Guard (arXiv:2504.08848)](https://arxiv.org/abs/2504.08848): 132개 언어 다국어 안전
+- [garak](https://github.com/NVIDIA/garak): NVIDIA 레드팀 툴킷
+- [PyRIT](https://github.com/Azure/PyRIT): Microsoft 레드팀 프레임워크
+- [NeMo Guardrails v0.12](https://docs.nvidia.com/nemo-guardrails/): 레일 프레임워크
+- [PAIR (arXiv:2310.08419)](https://arxiv.org/abs/2310.08419): 탈옥 에이전트 논문

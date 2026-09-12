@@ -39,11 +39,11 @@ LLM 에이전트는 이 셋을 모두 위반한다. 같은 베이스 모델을 �
 
 ### 2025~2026년의 대응
 
-**CP-WBFT**(arXiv:2511.10400) — 신뢰도 프로브 가중 BFT(Confidence-Probed Weighted BFT). 각 투표자가 자신의 답에 신뢰도 프로브(자기 보고 확률, 또는 별도 보정(calibration) 모델의 예측)를 붙인다. 투표 가중치가 신뢰도에 비례한다. 완전 그래프(complete graph)에서 +85.71% BFT 개선을 보고했다. 완화 대상: 아첨적 동조(동조하는 에이전트는 자청한 입장에 낮은 신뢰도를 보이는 경향이 있다).
+**CP-WBFT**(arXiv:2511.10400): 신뢰도 프로브 가중 BFT(Confidence-Probed Weighted BFT). 각 투표자가 자신의 답에 신뢰도 프로브(자기 보고 확률, 또는 별도 보정(calibration) 모델의 예측)를 붙인다. 투표 가중치가 신뢰도에 비례한다. 완전 그래프(complete graph)에서 +85.71% BFT 개선을 보고했다. 완화 대상: 아첨적 동조(동조하는 에이전트는 자청한 입장에 낮은 신뢰도를 보이는 경향이 있다).
 
-**DecentLLMs**(arXiv:2507.14928) — 리더 없음. 워커 에이전트가 병렬로 제안하고, 평가자(evaluator) 에이전트가 제안에 점수를 매기며, 최종 답은 점수 매겨진 입장들의 기하 중앙값이다. `f < n/2`일 때 견고하다. 완화 대상: 비잔틴 거짓말과 상관 오류(기하 중앙값은 이상치에 견고하며 모델 편향된 평균이 아니라 조밀한 클러스터 쪽으로 당겨진다).
+**DecentLLMs**(arXiv:2507.14928): 리더 없음. 워커 에이전트가 병렬로 제안하고, 평가자(evaluator) 에이전트가 제안에 점수를 매기며, 최종 답은 점수 매겨진 입장들의 기하 중앙값이다. `f < n/2`일 때 견고하다. 완화 대상: 비잔틴 거짓말과 상관 오류(기하 중앙값은 이상치에 견고하며 모델 편향된 평균이 아니라 조밀한 클러스터 쪽으로 당겨진다).
 
-**WBFT**(arXiv:2505.05103) — 계층 구조 클러스터링을 동반한 가중 BFT. 투표 가중치는 응답 품질에 이력에서 학습한 신뢰 점수(trust score)를 더해 할당된다. 에이전트를 Core와 Edge로 클러스터링한다. Core 에이전트가 먼저 합의를 이루어야 하고, Edge 에이전트가 따른다. 완화 대상: 확장성(Core 합의가 작고 빠르다)과 단일 문화에 대한 부분적 완화(Core를 다양성을 위해 고를 수 있다).
+**WBFT**(arXiv:2505.05103): 계층 구조 클러스터링을 동반한 가중 BFT. 투표 가중치는 응답 품질에 이력에서 학습한 신뢰 점수(trust score)를 더해 할당된다. 에이전트를 Core와 Edge로 클러스터링한다. Core 에이전트가 먼저 합의를 이루어야 하고, Edge 에이전트가 따른다. 완화 대상: 확장성(Core 합의가 작고 빠르다)과 단일 문화에 대한 부분적 완화(Core를 다양성을 위해 고를 수 있다).
 
 ### 실증: "Can AI Agents Agree?" (arXiv:2603.01213)
 
@@ -80,18 +80,18 @@ LLM 에이전트를 위한 최소 BFT 라운드:
 ### 합의가 도움이 안 되는 곳
 
 - **모호한 질문.** 질문에 정답이 없으면 합의는 의견이다. 그렇게 부르라.
-- **복합 질문.** "코드를 쓰고 설명하라" — 두 개의 답이다. 각각 독립적으로 투표하라.
+- **복합 질문.** "코드를 쓰고 설명하라". 두 개의 답이다. 각각 독립적으로 투표하라.
 - **적대적 다중 라운드.** 에이전트가 이전 라운드를 관찰하고 모방할 수 있으면(Du 2023 토론), 진실과 무관하게 서로 동의하기 시작한다. 라운드를 한정하라(보통 2~3).
 
 ## 직접 만들기 (Build It)
 
 `code/main.py`는 다음을 구현한다.
 
-- `AgentVoter` — (answer, confidence)를 가진 스크립트된 정책.
-- `MajorityVote` — 고전적 최다 득표(plurality).
-- `CPWBFT` — 의미론적 클러스터링을 동반한 신뢰도 가중 투표.
-- `DecentLLMs` — 점수 매겨진 제안에 대한 기하 중앙값 집계.
-- `Scenario` — 세 가지 공격 패턴 하에서 각 집계기를 실행한다.
+- `AgentVoter`: (answer, confidence)를 가진 스크립트된 정책.
+- `MajorityVote`: 고전적 최다 득표(plurality).
+- `CPWBFT`: 의미론적 클러스터링을 동반한 신뢰도 가중 투표.
+- `DecentLLMs`: 점수 매겨진 제안에 대한 기하 중앙값 집계.
+- `Scenario`: 세 가지 공격 패턴 하에서 각 집계기를 실행한다.
 
 구현된 공격 패턴:
 
@@ -124,7 +124,7 @@ python3 code/main.py
 ## 연습 문제 (Exercises)
 
 1. `code/main.py`를 실행하라. 최다 득표가 단일 문화 공격에서 실패하지만, 단일 문화 신뢰도가 0.7 미만일 때 CPWBFT가 이를 부분적으로 완화하는지 확인하라.
-2. 네 번째 공격 패턴을 추가하라. **무응답(silent abstention)** — 한 에이전트가 답하기를 거부한다("모르겠다"). 각 집계기는 무응답을 어떻게 다루어야 하는가? 당신의 선택을 구현하라.
+2. 네 번째 공격 패턴을 추가하라. **무응답(silent abstention)**: 한 에이전트가 답하기를 거부한다("모르겠다"). 각 집계기는 무응답을 어떻게 다루어야 하는가? 당신의 선택을 구현하라.
 3. 의미론적 클러스터링을 문자열 정규화에서 임베딩 유사도로 바꿔라(어떤 오픈소스 임베딩 모델이든 사용). 아첨 공격에 무슨 일이 일어나는가?
 4. CP-WBFT(arXiv:2511.10400)를 읽어라. 신뢰도 프로브 보정 단계(별도 보정 모델이 각 에이전트의 자기 보고 신뢰도를 검사)를 구현하라. 단일 문화 시나리오에서의 정확도 향상을 측정하라.
 5. "Can AI Agents Agree?"(arXiv:2603.01213)를 읽어라. 단순화된 스칼라 합의 실험을 재현하라. 세 에이전트, 하나의 스칼라 질문, 기만적 페르소나 프롬프트(prompt). CPWBFT나 DecentLLMs가 이를 잡아내는가?
@@ -144,8 +144,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Castro & Liskov — Practical Byzantine Fault Tolerance (OSDI 1999)](https://pmg.csail.mit.edu/papers/osdi99.pdf) — 토대
-- [CP-WBFT — Confidence-Probe Weighted BFT](https://arxiv.org/abs/2511.10400) — 신뢰도에 의한 투표 가중
-- [DecentLLMs — leaderless multi-agent consensus](https://arxiv.org/abs/2507.14928) — 기하 중앙값 집계
-- [WBFT — Weighted BFT with Hierarchical Structure Clustering](https://arxiv.org/abs/2505.05103) — 한정된 지연 시간을 위한 Core/Edge 분할
-- [Can AI Agents Agree?](https://arxiv.org/abs/2603.01213) — 스칼라 합의의 취약성과 기만적 페르소나 공격
+- [Castro & Liskov(Practical Byzantine Fault Tolerance (OSDI 1999)](https://pmg.csail.mit.edu/papers/osdi99.pdf)) 토대
+- [CP-WBFT(Confidence-Probe Weighted BFT](https://arxiv.org/abs/2511.10400)) 신뢰도에 의한 투표 가중
+- [DecentLLMs(leaderless multi-agent consensus](https://arxiv.org/abs/2507.14928)) 기하 중앙값 집계
+- [WBFT(Weighted BFT with Hierarchical Structure Clustering](https://arxiv.org/abs/2505.05103)) 한정된 지연 시간을 위한 Core/Edge 분할
+- [Can AI Agents Agree?](https://arxiv.org/abs/2603.01213): 스칼라 합의의 취약성과 기만적 페르소나 공격

@@ -1,4 +1,4 @@
-# 음성 활동 탐지 & 턴테이킹(Voice Activity Detection & Turn-Taking) — Silero, Cobra, 그리고 플러시 트릭
+# 음성 활동 탐지 & 턴테이킹(Voice Activity Detection & Turn-Taking): Silero, Cobra, 그리고 플러시 트릭
 
 > 모든 음성 에이전트(agent)는 두 가지 판단에 따라 살고 죽는다. 사용자가 지금 말하고 있는가, 그리고 다 말했는가? VAD가 첫 번째에 답한다. 턴 감지(turn-detection)(VAD + 침묵 행오버 + 의미적 엔드포인트 모델)가 두 번째에 답한다. 둘 중 하나라도 틀리면 비서는 사용자 말을 끊거나 끝없이 떠들게 된다.
 
@@ -11,9 +11,9 @@
 
 음성 에이전트가 모든 20ms 청크마다 내리는 세 가지 별개의 판단:
 
-1. **이 프레임은 음성인가?** — VAD. 프레임 단위 이진(binary).
-2. **사용자가 새 발화를 시작했는가?** — 시작(onset) 감지.
-3. **사용자가 끝냈는가?** — 엔드포인팅(end-pointing)(턴 종료).
+1. **이 프레임은 음성인가?**: VAD. 프레임 단위 이진(binary).
+2. **사용자가 새 발화를 시작했는가?**: 시작(onset) 감지.
+3. **사용자가 끝냈는가?**: 엔드포인팅(end-pointing)(턴 종료).
 
 순진한 답(에너지 임계값)은 교통, 키보드, 군중 웅성거림 같은 잡음에서 모두 실패한다. 2026년의 답: Silero VAD(오픈, 딥러닝) + 턴 감지 모델(의미적 엔드포인팅) + VAD에 보정된 침묵 행오버.
 
@@ -32,7 +32,7 @@
 ### 핵심 파라미터와 기본값
 
 - **임계값(Threshold).** Silero는 확률을 출력한다. &gt; 0.5(기본값) 또는 &gt; 0.3(민감)에서 음성으로 분류한다. 낮은 임계값 = 첫 단어 잘림은 줄고, 거짓 양성은 늘어난다.
-- **최소 음성 지속 시간.** 250ms보다 짧은 음성은 거부한다 — 보통 기침이나 의자 소리다.
+- **최소 음성 지속 시간.** 250ms보다 짧은 음성은 거부한다. 보통 기침이나 의자 소리다.
 - **침묵 행오버(silence hangover, 엔드포인팅).** VAD가 0으로 돌아온 뒤, 턴 종료를 선언하기 전에 500-800ms 기다린다. 너무 짧으면 → 사용자를 끊는다. 너무 길면 → 굼떠 보인다.
 - **프리롤 버퍼(pre-roll buffer).** VAD가 발동하기 전 300-500ms의 오디오를 유지한다. "hey"가 잘리는 것을 막는다.
 
@@ -118,7 +118,7 @@ def flush_on_end(stt_client, audio_buffer):
     return stt_client.recv_transcript(timeout_ms=150)
 ```
 
-이것이 동작하려면 STT(Kyutai, Deepgram, AssemblyAI)가 플러시를 지원해야 한다. Whisper 스트리밍은 지원하지 않는다 — 블록 기반이고 항상 청크를 기다린다.
+이것이 동작하려면 STT(Kyutai, Deepgram, AssemblyAI)가 플러시를 지원해야 한다. Whisper 스트리밍은 지원하지 않는다. 블록 기반이고 항상 청크를 기다린다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -165,9 +165,9 @@ def flush_on_end(stt_client, audio_buffer):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Silero VAD](https://github.com/snakers4/silero-vad) — 레퍼런스 오픈 VAD.
-- [Picovoice Cobra VAD](https://picovoice.ai/products/cobra/) — 상용 정확도 선두주자.
-- [Kyutai — Unmute + flush trick](https://kyutai.org/stt) — 200ms 미만 엔지니어링 트릭.
-- [LiveKit — turn detection](https://docs.livekit.io/agents/logic/turns/) — 프로덕션에서의 의미적 엔드포인팅.
-- [WebRTC VAD](https://webrtc.googlesource.com/src/) — 레거시 베이스라인.
-- [pyannote segmentation](https://github.com/pyannote/pyannote-audio) — 화자 분리급 세분화.
+- [Silero VAD](https://github.com/snakers4/silero-vad): 레퍼런스 오픈 VAD.
+- [Picovoice Cobra VAD](https://picovoice.ai/products/cobra/): 상용 정확도 선두주자.
+- [Kyutai(Unmute + flush trick](https://kyutai.org/stt)) 200ms 미만 엔지니어링 트릭.
+- [LiveKit(turn detection](https://docs.livekit.io/agents/logic/turns/)) 프로덕션에서의 의미적 엔드포인팅.
+- [WebRTC VAD](https://webrtc.googlesource.com/src/): 레거시 베이스라인.
+- [pyannote segmentation](https://github.com/pyannote/pyannote-audio): 화자 분리급 세분화.

@@ -1,4 +1,4 @@
-# 이미지 생성(Image Generation) — 확산 모델(Diffusion Models)
+# 이미지 생성(Image Generation): 확산 모델(Diffusion Models)
 
 > 확산 모델(diffusion model)은 잡음 제거(denoise)를 학습한다. 잡음 낀 이미지에서 아주 약간의 잡음을 제거하도록 학습시키고, 그것을 천 번 거꾸로 반복하면, 이미지 생성기를 얻는다.
 
@@ -296,8 +296,8 @@ scheduler = DDPMScheduler(num_train_timesteps=1000)
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-diffusion-sampler-picker.md` — 품질 목표, 지연 시간 예산, 조건화 유형을 바탕으로 DDPM / DDIM / DPM-Solver / Euler를 고르는 프롬프트(prompt).
-- `outputs/skill-noise-schedule-designer.md` — T와 목표 손상 수준이 주어지면 선형, 코사인, 시그모이드 베타 스케줄을 만들고, 시간에 따른 신호 대 잡음비의 진단 플롯을 함께 만드는 스킬.
+- `outputs/prompt-diffusion-sampler-picker.md`: 품질 목표, 지연 시간 예산, 조건화 유형을 바탕으로 DDPM / DDIM / DPM-Solver / Euler를 고르는 프롬프트(prompt).
+- `outputs/skill-noise-schedule-designer.md`: T와 목표 손상 수준이 주어지면 선형, 코사인, 시그모이드 베타 스케줄을 만들고, 시간에 따른 신호 대 잡음비의 진단 플롯을 함께 만드는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -320,7 +320,7 @@ scheduler = DDPMScheduler(num_train_timesteps=1000)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Denoising Diffusion Probabilistic Models (Ho et al., 2020)](https://arxiv.org/abs/2006.11239) — 확산을 실용적으로 만들고 FID에서 GAN을 이긴 논문
-- [Improved DDPM (Nichol & Dhariwal, 2021)](https://arxiv.org/abs/2102.09672) — 코사인 스케줄과 v-파라미터화
-- [DDIM (Song, Meng, Ermon, 2020)](https://arxiv.org/abs/2010.02502) — 실시간 추론을 가능하게 만든 결정론적 샘플러
-- [Elucidating the Design Space of Diffusion (Karras et al., 2022)](https://arxiv.org/abs/2206.00364) — 모든 확산 설계 선택의 통합적 관점. 현재 최고의 참고 자료
+- [Denoising Diffusion Probabilistic Models (Ho et al., 2020)](https://arxiv.org/abs/2006.11239): 확산을 실용적으로 만들고 FID에서 GAN을 이긴 논문
+- [Improved DDPM (Nichol & Dhariwal, 2021)](https://arxiv.org/abs/2102.09672): 코사인 스케줄과 v-파라미터화
+- [DDIM (Song, Meng, Ermon, 2020)](https://arxiv.org/abs/2010.02502): 실시간 추론을 가능하게 만든 결정론적 샘플러
+- [Elucidating the Design Space of Diffusion (Karras et al., 2022)](https://arxiv.org/abs/2206.00364): 모든 확산 설계 선택의 통합적 관점. 현재 최고의 참고 자료

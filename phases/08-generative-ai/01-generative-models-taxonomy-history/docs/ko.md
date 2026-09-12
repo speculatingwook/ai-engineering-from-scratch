@@ -1,4 +1,4 @@
-# 생성 모델 — 분류 체계와 역사 (Generative Models — Taxonomy & History)
+# 생성 모델(분류 체계와 역사 (Generative Models) Taxonomy & History)
 
 > 모든 이미지 모델, 텍스트 모델, 비디오 모델, 3D 모델은 다섯 개의 통(bucket) 중 하나에 들어간다. 잘못된 통을 고르면 몇 주 동안 수학과 씨름하게 된다. 올바른 통을 고르면 지난 12년간의 분야 발전사가 머릿속에 깔끔하게 쌓인다.
 
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-생성 모델(generative model)은 단 하나의 일을 한다. 어떤 미지의 분포 `p_data(x)`에서 추출된 학습 샘플(training sample)이 주어졌을 때, 같은 분포에서 나온 것처럼 보이는 새로운 샘플을 출력하는 것이다. 얼굴, 문장, MIDI 파일, 단백질 구조 — 눈을 가늘게 뜨고 보면 모두 같은 문제다.
+생성 모델(generative model)은 단 하나의 일을 한다. 어떤 미지의 분포 `p_data(x)`에서 추출된 학습 샘플(training sample)이 주어졌을 때, 같은 분포에서 나온 것처럼 보이는 새로운 샘플을 출력하는 것이다. 얼굴, 문장, MIDI 파일, 단백질 구조: 눈을 가늘게 뜨고 보면 모두 같은 문제다.
 
 문제는 `p_data`가 수백만 차원의 공간에 산다는 점이다(512x512 RGB 이미지는 약 786k 차원이다). 샘플들은 그 공간 안의 얇은 다양체(manifold) 위에 놓여 있고, 가진 예제는 기껏해야 1천만 개 정도다. 밀도(density)를 무차별 대입으로 푸는 것은 가망이 없다. 모든 생성 모델은 하나의 어려운 문제를 약간 덜 어려운 문제로 바꾸는 타협(compromise)이다.
 
@@ -17,7 +17,7 @@
 
 ## 개념 (The Concept)
 
-![생성 모델의 다섯 계열 — 무엇을 모델링하는가에 따른 분류 체계](../assets/taxonomy.svg)
+![생성 모델의 다섯 계열: 무엇을 모델링하는가에 따른 분류 체계](../assets/taxonomy.svg)
 
 **1. 명시적 밀도, 다루기 쉬움(Explicit density, tractable).** `log p(x)`를 실제로 평가할 수 있는 합(sum)으로 쓴다. 자기회귀(autoregressive) 모델(PixelCNN, WaveNet, GPT)은 `p(x) = ∏ p(x_i | x_<i)`로 인수분해한다. 정규화 흐름(normalizing flow)(RealNVP, Glow)은 단순한 기저(base)의 가역(invertible) 변환으로 `p(x)`를 구성한다. 장점: 정확한 가능도(likelihood), 깔끔한 학습 손실(loss). 단점: 자기회귀 추론은 순차적이고(긴 시퀀스에서 느림), 흐름은 가역 아키텍처를 요구한다(아키텍처적으로 제약이 크다).
 
@@ -34,7 +34,7 @@
 | 연도 | 모델 | 왜 중요했는가 |
 |------|-------|-----------------|
 | 2013 | VAE (Kingma) | 사용 가능한 학습 손실을 가진 최초의 딥러닝 생성 모델. |
-| 2014 | GAN (Goodfellow) | 암묵적 밀도, 가능도 없음 — 충격적으로 선명한 샘플. |
+| 2014 | GAN (Goodfellow) | 암묵적 밀도, 가능도 없음: 충격적으로 선명한 샘플. |
 | 2015 | DRAW, PixelCNN | 순차적 이미지 생성. |
 | 2017 | Glow, RealNVP | 가역 흐름; 깊이를 갖춘 정확한 가능도. |
 | 2017 | Progressive GAN | 최초의 메가픽셀 얼굴. |
@@ -107,7 +107,7 @@ implicit (nearest-sample gen): 20 new samples printed, no p(x)
 |------|-----------------|-----------------------|
 | 생성 모델(Generative model) | "새로운 것을 만든다" | `p_data(x)`에 대한 샘플러(sampler)를 학습하고, 선택적으로 `log p(x)`를 노출한다. |
 | 명시적 밀도(Explicit density) | "평가할 수 있다" | 모델이 닫힌 형태이거나 다루기 쉬운 `log p(x)`를 제공한다. |
-| 암묵적 밀도(Implicit density) | "GAN 스타일" | 샘플러만 있을 뿐 — 주어진 점의 `p(x)`를 평가할 방법이 없다. |
+| 암묵적 밀도(Implicit density) | "GAN 스타일" | 샘플러만 있을 뿐: 주어진 점의 `p(x)`를 평가할 방법이 없다. |
 | ELBO | "증거 하한(evidence lower bound)" | `log p(x)`에 대한 다루기 쉬운 하한; VAE와 확산이 이를 최적화한다. |
 | 점수(Score) | "로그 밀도의 그래디언트" | `∇_x log p(x)`; 확산과 SDE 모델이 이 장(field)을 학습한다. |
 | 다양체 가설(Manifold hypothesis) | "데이터는 어떤 표면 위에 산다" | 고차원 데이터가 저차원 다양체에 집중된다; 차원 축소가 작동하는 이유. |
@@ -126,9 +126,9 @@ implicit (nearest-sample gen): 20 new samples printed, no p(x)
 
 ## 더 읽을거리 (Further Reading)
 
-- [Goodfellow et al. (2014). Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) — GAN 논문.
-- [Kingma & Welling (2013). Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114) — VAE 논문.
-- [Ho, Jain, Abbeel (2020). Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) — DDPM 논문.
-- [Song et al. (2021). Score-Based Generative Modeling through SDEs](https://arxiv.org/abs/2011.13456) — SDE로서의 확산.
-- [Lipman et al. (2023). Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747) — 흐름 매칭 논문.
+- [Goodfellow et al. (2014). Generative Adversarial Nets](https://arxiv.org/abs/1406.2661): GAN 논문.
+- [Kingma & Welling (2013). Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114): VAE 논문.
+- [Ho, Jain, Abbeel (2020). Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239): DDPM 논문.
+- [Song et al. (2021). Score-Based Generative Modeling through SDEs](https://arxiv.org/abs/2011.13456): SDE로서의 확산.
+- [Lipman et al. (2023). Flow Matching for Generative Modeling](https://arxiv.org/abs/2210.02747): 흐름 매칭 논문.
 - [Esser et al. (2024). Scaling Rectified Flow Transformers for High-Resolution Image Synthesis](https://arxiv.org/abs/2403.03206) — Stable Diffusion 3.

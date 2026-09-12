@@ -131,13 +131,13 @@ python3 code/main.py
 
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
 - [OpenAI Agents SDK guardrails](https://platform.openai.com/docs/guides/agents-sdk/guardrails)
-- [microservices.io, GenAI dev platform: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html) — 프리커밋과 CI 사이의 심층 방어
-- [ICMD, The 2026 Playbook for Agentic AI Ops](https://icmd.app/article/the-2026-playbook-for-agentic-ai-ops-guardrails-costs-and-reliability-at-scale-1776661990431) — 승인 게이트 사다리(초안 → 승인 → 임계값 아래 자동)
-- [Type-Checked Compliance: Deterministic Guardrails (arXiv 2604.01483)](https://arxiv.org/pdf/2604.01483) — 결정론적 게이팅의 상한으로서의 Lean 4
-- [logi-cmd/agent-guardrails — merge gate spec](https://github.com/logi-cmd/agent-guardrails) — 스코프 + 변이 테스트(mutation-testing) 게이트
-- [Guardrails AI x MLflow](https://guardrailsai.com/blog/guardrails-mlflow) — CI 채점자로서의 결정론적 검증기
-- [Akira, Real-Time Guardrails for Agentic Systems](https://www.akira.ai/blog/real-time-guardrails-agentic-systems) — 도구 전/후 게이트
-- Phase 14 · 27 — 프롬프트 인젝션 방어(게이트의 적대적 짝)
-- Phase 14 · 36 — 이 게이트가 강제하는 스코프 계약
-- Phase 14 · 37 — 이 게이트가 채점하는 피드백 로그
-- Phase 14 · 39 — 게이트가 넘겨주는 리뷰어 에이전트
+- [microservices.io, GenAI dev platform: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html): 프리커밋과 CI 사이의 심층 방어
+- [ICMD, The 2026 Playbook for Agentic AI Ops](https://icmd.app/article/the-2026-playbook-for-agentic-ai-ops-guardrails-costs-and-reliability-at-scale-1776661990431): 승인 게이트 사다리(초안 → 승인 → 임계값 아래 자동)
+- [Type-Checked Compliance: Deterministic Guardrails (arXiv 2604.01483)](https://arxiv.org/pdf/2604.01483): 결정론적 게이팅의 상한으로서의 Lean 4
+- [logi-cmd/agent-guardrails(merge gate spec](https://github.com/logi-cmd/agent-guardrails)) 스코프 + 변이 테스트(mutation-testing) 게이트
+- [Guardrails AI x MLflow](https://guardrailsai.com/blog/guardrails-mlflow): CI 채점자로서의 결정론적 검증기
+- [Akira, Real-Time Guardrails for Agentic Systems](https://www.akira.ai/blog/real-time-guardrails-agentic-systems): 도구 전/후 게이트
+- Phase 14 · 27: 프롬프트 인젝션 방어(게이트의 적대적 짝)
+- Phase 14 · 36: 이 게이트가 강제하는 스코프 계약
+- Phase 14 · 37: 이 게이트가 채점하는 피드백 로그
+- Phase 14 · 39: 게이트가 넘겨주는 리뷰어 에이전트

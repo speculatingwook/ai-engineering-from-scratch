@@ -1,6 +1,6 @@
-# LLM 기능 A/B 테스트 — GrowthBook, Statsig, 그리고 감(vibes) 문제
+# LLM 기능 A/B 테스트: GrowthBook, Statsig, 그리고 감(vibes) 문제
 
-> 전통적인 A/B 테스트는 비결정적(non-deterministic) LLM을 위해 만들어지지 않았다. 결정적 구분은 이렇다. 평가(eval)는 "모델이 그 일을 할 수 있는가?"에 답하고, A/B 테스트는 "사용자가 신경 쓰는가?"에 답한다. 둘 다 필요하다. 감(vibe check)으로 배포하는 시대는 끝났다. 2026년에 무엇을 테스트할 것인가: 프롬프트 엔지니어링(prompt engineering)(표현), 모델 선택(GPT-4 vs GPT-3.5 vs OSS; 정확도 vs 비용 vs 지연 시간(latency)), 생성 파라미터(generation parameter)(temperature, top-p). 실제 사례: 한 챗봇의 보상 모델(reward-model) 변형은 대화 길이 +70%, 리텐션(retention) +30%를 달성했다. Nextdoor의 AI 제목 줄(subject-line) 실험은 보상 함수(reward-function) 정제 후 CTR +1%를 달성했다. Khan Academy의 Khanmigo는 지연 시간 대 수학 정확도 축에서 반복 개선했다. 플랫폼 양분: **Statsig**(2025년 9월 OpenAI에 11억 달러에 인수됨) — 순차 테스트(sequential testing), CUPED, 올인원. **GrowthBook** — 오픈소스, 웨어하우스 네이티브(warehouse-native), 베이지안(Bayesian) + 빈도주의(Frequentist) + 순차 엔진, CUPED, SRM 점검, Benjamini-Hochberg + Bonferroni 보정. 웨어하우스-SQL 선호와 "OpenAI에 인수됨"이 조직에 중요한지에 따라 고른다.
+> 전통적인 A/B 테스트는 비결정적(non-deterministic) LLM을 위해 만들어지지 않았다. 결정적 구분은 이렇다. 평가(eval)는 "모델이 그 일을 할 수 있는가?"에 답하고, A/B 테스트는 "사용자가 신경 쓰는가?"에 답한다. 둘 다 필요하다. 감(vibe check)으로 배포하는 시대는 끝났다. 2026년에 무엇을 테스트할 것인가: 프롬프트 엔지니어링(prompt engineering)(표현), 모델 선택(GPT-4 vs GPT-3.5 vs OSS; 정확도 vs 비용 vs 지연 시간(latency)), 생성 파라미터(generation parameter)(temperature, top-p). 실제 사례: 한 챗봇의 보상 모델(reward-model) 변형은 대화 길이 +70%, 리텐션(retention) +30%를 달성했다. Nextdoor의 AI 제목 줄(subject-line) 실험은 보상 함수(reward-function) 정제 후 CTR +1%를 달성했다. Khan Academy의 Khanmigo는 지연 시간 대 수학 정확도 축에서 반복 개선했다. 플랫폼 양분: **Statsig**(2025년 9월 OpenAI에 11억 달러에 인수됨)(순차 테스트(sequential testing), CUPED, 올인원. **GrowthBook**) 오픈소스, 웨어하우스 네이티브(warehouse-native), 베이지안(Bayesian) + 빈도주의(Frequentist) + 순차 엔진, CUPED, SRM 점검, Benjamini-Hochberg + Bonferroni 보정. 웨어하우스-SQL 선호와 "OpenAI에 인수됨"이 조직에 중요한지에 따라 고른다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy sequential test simulator)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-시스템 프롬프트를 손으로 조정했다. 더 나아 보인다. 배포한다. 전환율(conversion)이 잡음 수준으로 바뀐다. 지표 탓을 한다. 또는 새 모델을 배포했는데 전환율이 움직이지 않았다 — 모델이 나빠진 것인가, 아니면 변화가 너무 작아 감지되지 않은 것인가? 모른다. A/B 없이 배포했기 때문이다.
+시스템 프롬프트를 손으로 조정했다. 더 나아 보인다. 배포한다. 전환율(conversion)이 잡음 수준으로 바뀐다. 지표 탓을 한다. 또는 새 모델을 배포했는데 전환율이 움직이지 않았다. 모델이 나빠진 것인가, 아니면 변화가 너무 작아 감지되지 않은 것인가? 모른다. A/B 없이 배포했기 때문이다.
 
 평가는 모델이 레이블(label)이 달린 셋에서 어떤 과제를 할 수 있는지에 답한다. 사용자가 그 출력을 선호하는지에는 답하지 않는다. 오직 통제된 온라인 실험만이 그것에 답하며, 그것도 실험이 충분한 검정력(power)을 갖추고, 비결정성을 통제하며, 다중 비교를 보정할 때만 그렇다.
 
@@ -24,19 +24,19 @@
 
 ### 평가 vs A/B 테스트
 
-**평가(Evals)** — 오프라인, 레이블 셋, 심판(루브릭(rubric) 또는 LLM-as-judge 또는 사람). 답: "이 고정된 분포에서 출력이 정확한가 / 도움이 되는가 / 안전한가?"
+**평가(Evals)**: 오프라인, 레이블 셋, 심판(루브릭(rubric) 또는 LLM-as-judge 또는 사람). 답: "이 고정된 분포에서 출력이 정확한가 / 도움이 되는가 / 안전한가?"
 
-**A/B 테스트** — 온라인, 실 사용자, 무작위화. 답: "새 변형이 중요한 사용자 수준 지표를 움직이는가?"
+**A/B 테스트**: 온라인, 실 사용자, 무작위화. 답: "새 변형이 중요한 사용자 수준 지표를 움직이는가?"
 
 둘 다 필요하다. 평가는 노출 전에 회귀(regression)를 잡고, A/B는 그 이후 제품 영향을 확인한다.
 
 ### 무엇을 테스트할 것인가
 
-1. **프롬프트 엔지니어링** — 표현, 시스템 프롬프트 구조, 예시. 지표: 과제 성공, 사용자 리텐션, 요청당 비용.
-2. **모델 선택** — GPT-4 vs GPT-3.5-Turbo vs Llama-OSS. 지표: 정확도(과제) + 요청당 비용 + 지연 시간 P99. 다목적(multi-objective).
-3. **생성 파라미터** — temperature, top-p, max_tokens. 지표: 과제 특화(출력 다양성 vs 결정성).
+1. **프롬프트 엔지니어링**: 표현, 시스템 프롬프트 구조, 예시. 지표: 과제 성공, 사용자 리텐션, 요청당 비용.
+2. **모델 선택**: GPT-4 vs GPT-3.5-Turbo vs Llama-OSS. 지표: 정확도(과제) + 요청당 비용 + 지연 시간 P99. 다목적(multi-objective).
+3. **생성 파라미터**: temperature, top-p, max_tokens. 지표: 과제 특화(출력 다양성 vs 결정성).
 
-### CUPED — 분산 감소
+### CUPED: 분산 감소
 
 Controlled-experiments Using Pre-Experiment Data. 사후 기간(post-period)을 비교하기 전에 사전 기간(pre-period) 분산을 회귀로 제거한다. 전형적 분산 감소: 30~70%. 유효 표본 크기(effective sample size)가 공짜로 올라간다.
 
@@ -50,9 +50,9 @@ Controlled-experiments Using Pre-Experiment Data. 사후 기간(post-period)을 
 
 95% 신뢰도로 20개의 A/B 테스트를 돌리면 우연히 거짓 양성 하나가 나온다. Bonferroni 보정은 테스트당 α를 더 빡빡하게 한다. Benjamini-Hochberg는 거짓 발견율(false-discovery rate)을 통제한다. GrowthBook은 둘 다 구현한다.
 
-### SRM — 표본 비율 불일치 (sample ratio mismatch)
+### SRM: 표본 비율 불일치 (sample ratio mismatch)
 
-할당 해시(assignment hash)가 사용자를 변형들에 무작위로 배정한다. 50/50 분할이 47/53을 내놓는다면 무언가 망가진 것이다 — SRM 점검이 그것을 표시한다. 두 플랫폼 모두 구현한다.
+할당 해시(assignment hash)가 사용자를 변형들에 무작위로 배정한다. 50/50 분할이 47/53을 내놓는다면 무언가 망가진 것이다. SRM 점검이 그것을 표시한다. 두 플랫폼 모두 구현한다.
 
 ### Statsig vs GrowthBook
 

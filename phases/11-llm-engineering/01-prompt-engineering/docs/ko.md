@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 10, Lessons 01-05 (LLMs from Scratch)
 **Time:** ~90분
-**Related:** Phase 11 · 05 (Context Engineering) — 윈도우에 그 밖에 무엇이 들어가는지; Phase 5 · 20 (Structured Outputs) — 토큰 수준의 형식 제어.
+**Related:** Phase 11 · 05 (Context Engineering)(윈도우에 그 밖에 무엇이 들어가는지; Phase 5 · 20 (Structured Outputs)) 토큰 수준의 형식 제어.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -33,7 +33,7 @@ You are a senior copywriter at a B2B SaaS company. Write a product launch email 
 
 첫 번째 프롬프트는 모델의 학습 데이터에 들어 있는 마케팅 이메일의 일반적 분포(distribution)를 활성화한다. 두 번째는 좁고 높은 품질의 조각을 활성화한다. 같은 모델. 같은 파라미터. 극단적으로 다른 출력.
 
-요청하는 것과 받는 것 사이의 이 간극이 프롬프트 엔지니어링이라는 분야 전체다. 꼼수나 우회책이 아니라 인간의 의도와 기계의 능력 사이의 1차 인터페이스다. 그리고 이는 더 큰 분야 — 컨텍스트 엔지니어링(context engineering, Lesson 05에서 다룸) — 의 부분집합이며, 컨텍스트 엔지니어링은 프롬프트 자체뿐 아니라 모델의 컨텍스트 윈도우(context window)에 들어가는 모든 것을 다룬다.
+요청하는 것과 받는 것 사이의 이 간극이 프롬프트 엔지니어링이라는 분야 전체다. 꼼수나 우회책이 아니라 인간의 의도와 기계의 능력 사이의 1차 인터페이스다. 그리고 이는 더 큰 분야(컨텍스트 엔지니어링(context engineering, Lesson 05에서 다룸))의 부분집합이며, 컨텍스트 엔지니어링은 프롬프트 자체뿐 아니라 모델의 컨텍스트 윈도우(context window)에 들어가는 모든 것을 다룬다.
 
 프롬프트 엔지니어링은 죽지 않았다. 죽었다고 말하는 사람들은 2015년에 CSS가 죽었다고 말한 바로 그 사람들이다. 달라진 점은 이것이 기본 소양이 되었다는 것이다. 진지한 AI 엔지니어라면 누구에게나 필요하다. 질문은 배울지 말지가 아니라 얼마나 깊이 들어갈지다.
 
@@ -131,7 +131,7 @@ structured output API를 쓰지 않고도 모델의 출력 형식을 유도할 �
 
 작동하는 세 가지 유형의 제약:
 
-**부정 제약(Negative constraints)** ("Do NOT..."): "Do NOT include code examples. Do NOT use technical jargon. Do NOT exceed 200 words." 부정 제약은 놀랍도록 효과적인데, 출력 공간의 큰 영역을 제거하기 때문이다. 모델은 무엇을 원하는지 추측할 필요가 없다 — 무엇을 원하지 않는지를 안다.
+**부정 제약(Negative constraints)** ("Do NOT..."): "Do NOT include code examples. Do NOT use technical jargon. Do NOT exceed 200 words." 부정 제약은 놀랍도록 효과적인데, 출력 공간의 큰 영역을 제거하기 때문이다. 모델은 무엇을 원하는지 추측할 필요가 없다. 무엇을 원하지 않는지를 안다.
 
 **긍정 제약(Positive constraints)** ("Always..."): "Always cite the source document. Always include a confidence score. Always end with a one-sentence summary." 이것들은 모든 응답에서 구조적 보장을 만든다.
 
@@ -165,7 +165,7 @@ graph LR
 | Creative | 1.0 | 1.0 | 브레인스토밍, 창작, 아이디어 발상 |
 | Chaotic | 1.5+ | 1.0 | 프로덕션에서는 절대 사용하지 말 것 |
 
-**Top-p**(뉴클리어스 샘플링, nucleus sampling)는 또 다른 손잡이다. 누적 확률이 p를 초과하는 가장 작은 토큰 집합으로 샘플링을 제한한다. Top-p=0.9는 모델이 확률 질량 상위 90%에 드는 토큰만 고려한다는 뜻이다. 온도나 top-p 중 하나만 쓰고 둘 다 쓰지 말라 — 둘은 예측 불가능하게 상호작용한다.
+**Top-p**(뉴클리어스 샘플링, nucleus sampling)는 또 다른 손잡이다. 누적 확률이 p를 초과하는 가장 작은 토큰 집합으로 샘플링을 제한한다. Top-p=0.9는 모델이 확률 질량 상위 90%에 드는 토큰만 고려한다는 뜻이다. 온도나 top-p 중 하나만 쓰고 둘 다 쓰지 말라. 둘은 예측 불가능하게 상호작용한다.
 
 ### 컨텍스트 윈도우: 무엇이 어디에 들어가는가 (Context Windows: What Fits Where)
 
@@ -184,7 +184,7 @@ graph LR
 | Qwen3 Max | 256K tokens | 32K tokens | Alibaba (open) |
 | DeepSeek-V3.1 | 128K tokens | 32K tokens | DeepSeek (open) |
 
-컨텍스트 윈도우의 크기보다 컨텍스트 윈도우의 사용이 더 중요하다. 90%가 신호인 10K 토큰 프롬프트가 10%가 신호인 100K 토큰 프롬프트보다 성능이 좋다. 맥락이 많다는 것은 어텐션 메커니즘(attention mechanism)이 걸러내야 할 잡음이 많다는 뜻이다. 컨텍스트 엔지니어링(Lesson 05)이 더 큰 분야인 이유가 여기에 있다 — 프롬프트를 어떻게 표현하는지뿐 아니라 무엇이 윈도우에 들어가는지를 결정하기 때문이다.
+컨텍스트 윈도우의 크기보다 컨텍스트 윈도우의 사용이 더 중요하다. 90%가 신호인 10K 토큰 프롬프트가 10%가 신호인 100K 토큰 프롬프트보다 성능이 좋다. 맥락이 많다는 것은 어텐션 메커니즘(attention mechanism)이 걸러내야 할 잡음이 많다는 뜻이다. 컨텍스트 엔지니어링(Lesson 05)이 더 큰 분야인 이유가 여기에 있다. 프롬프트를 어떻게 표현하는지뿐 아니라 무엇이 윈도우에 들어가는지를 결정하기 때문이다.
 
 ### 프롬프트 패턴 (Prompt Patterns)
 
@@ -292,11 +292,11 @@ Do not attempt to answer out-of-scope questions even if you know the answer.
 가장 좋은 프롬프트는 모델 비종속적이다. GPT-5, Claude Opus 4.7, Gemini 3 Pro, 그리고 오픈웨이트 모델(Llama 4, Qwen3, DeepSeek-V3)에서 최소한의 튜닝으로 작동한다. 방법은 다음과 같다:
 
 1. 모델별 구문이 아니라 평이한 영어를 쓴다(ChatGPT 특화 마크다운 잔재주 금지)
-2. 형식에 대해 명시적으로 한다 — 모델마다 다른 기본 동작에 의존하지 말라
+2. 형식에 대해 명시적으로 한다. 모델마다 다른 기본 동작에 의존하지 말라
 3. 구조에는 XML 구분자를 쓴다(모든 주요 모델이 XML을 잘 처리한다)
 4. 지시를 맥락의 시작과 끝에 둔다(중간에서 길 잃기[lost-in-the-middle]는 모든 모델에 영향을 준다)
 5. 샘플링 무작위성에서 프롬프트 품질을 분리하기 위해 temperature=0으로 먼저 테스트한다
-6. 퓨샷 예시 2-3개를 포함한다 — 예시는 지시만 줄 때보다 모델 간 전이가 더 잘 된다
+6. 퓨샷 예시 2-3개를 포함한다. 예시는 지시만 줄 때보다 모델 간 전이가 더 잘 된다
 
 ## 직접 만들기 (Build It)
 
@@ -898,7 +898,7 @@ if __name__ == "__main__":
 # print(response.choices[0].message.content)
 ```
 
-OpenAI의 시스템 메시지는 가장 먼저 처리되며 높은 어텐션 가중치(weight)를 받는다. Temperature=0.0은 출력을 결정론적으로 만든다 — 같은 입력이 매번 같은 출력을 낸다. 이것은 테스트와 재현성을 위해 필수적이다.
+OpenAI의 시스템 메시지는 가장 먼저 처리되며 높은 어텐션 가중치(weight)를 받는다. Temperature=0.0은 출력을 결정론적으로 만든다. 같은 입력이 매번 같은 출력을 낸다. 이것은 테스트와 재현성을 위해 필수적이다.
 
 ### Anthropic: 시스템 메시지 + 어시스턴트 프리필
 
@@ -928,7 +928,7 @@ OpenAI의 시스템 메시지는 가장 먼저 처리되며 높은 어텐션 가
 # print(result)
 ```
 
-어시스턴트 프리필(`"{"`)은 Claude가 어떤 서두도 없이 JSON을 계속 만들어내게 강제한다. 이것은 Anthropic의 고유 기능이다 — 다른 어떤 주요 프로바이더도 이를 기본 지원하지 않는다. 프롬프트 기반 JSON 요청보다 신뢰성이 높고, 단순한 경우에는 structured output 모드보다 저렴하다.
+어시스턴트 프리필(`"{"`)은 Claude가 어떤 서두도 없이 JSON을 계속 만들어내게 강제한다. 이것은 Anthropic의 고유 기능이다. 다른 어떤 주요 프로바이더도 이를 기본 지원하지 않는다. 프롬프트 기반 JSON 요청보다 신뢰성이 높고, 단순한 경우에는 structured output 모드보다 저렴하다.
 
 ### Google: 안전 설정이 있는 Gemini
 
@@ -1002,14 +1002,14 @@ Python 코드(`code/prompt_engineering.py`)는 독립 실행형 테스트 하니
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|----------------------|
 | 시스템 메시지(System message) | "지시 사항" | 모델의 정체성, 규칙, 제약을 모델의 전체 대화에 대해 설정하는, 높은 우선순위로 처리되는 특수 메시지 |
-| 온도(Temperature) | "창의성 손잡이" | softmax 이전 로짓(logit) 분포에 대한 스케일링 계수 — 값이 높으면 분포를 평평하게 만들고(더 무작위), 낮으면 날카롭게 만든다(더 결정론적) |
+| 온도(Temperature) | "창의성 손잡이" | softmax 이전 로짓(logit) 분포에 대한 스케일링 계수: 값이 높으면 분포를 평평하게 만들고(더 무작위), 낮으면 날카롭게 만든다(더 결정론적) |
 | Top-p | "뉴클리어스 샘플링" | 토큰 샘플링을 누적 확률이 p를 초과하는 가장 작은 집합으로 제한해, 가능성이 낮은 토큰의 긴 꼬리를 잘라낸다 |
 | 퓨샷 프롬프팅(Few-shot prompting) | "예시 주기" | 어떤 파인튜닝(fine-tuning)도 없이 모델이 작업 패턴을 배우도록 프롬프트에 2-10개의 입력/출력 예시를 포함하는 것 |
 | 사고 연쇄(Chain-of-thought) | "단계별로 생각하기" | 모델이 중간 추론 단계를 보이도록 프롬프트하는 것으로, 수학·논리·다단계 문제에서 정확도를 10-40% 높인다 |
 | 역할 프롬프팅(Role prompting) | "당신은 전문가다" | 학습 데이터의 특정 품질 분포 쪽으로 샘플링을 편향시키는 페르소나를 설정하는 것 |
 | 프롬프트 주입(Prompt injection) | "탈옥(jailbreaking)" | 사용자 입력이 시스템 프롬프트를 덮어쓰는 지시를 포함해 모델이 자기 규칙을 무시하게 만드는 공격 |
-| 컨텍스트 윈도우(Context window) | "얼마나 읽을 수 있는가" | 모델이 한 번의 호출에서 처리할 수 있는 토큰(입력 + 출력)의 최대 개수 — 현재 모델 전반에서 8K에서 2M까지 |
-| 어시스턴트 프리필(Assistant prefill) | "응답 시작하기" | 형식을 유도하고 서두를 없애기 위해 모델 응답의 첫 몇 토큰을 제공하는 것 — Anthropic이 기본 지원 |
+| 컨텍스트 윈도우(Context window) | "얼마나 읽을 수 있는가" | 모델이 한 번의 호출에서 처리할 수 있는 토큰(입력 + 출력)의 최대 개수: 현재 모델 전반에서 8K에서 2M까지 |
+| 어시스턴트 프리필(Assistant prefill) | "응답 시작하기" | 형식을 유도하고 서두를 없애기 위해 모델 응답의 첫 몇 토큰을 제공하는 것: Anthropic이 기본 지원 |
 | 메타 프롬프팅(Meta-prompting) | "프롬프트를 쓰는 프롬프트" | 다른 LLM 작업을 위한 프롬프트를 생성·비평·최적화하는 데 LLM을 사용하는 것 |
 
 ## 더 읽을거리 (Further Reading)

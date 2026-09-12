@@ -163,7 +163,7 @@ print(tfidf.toarray().round(3))
 | `ngram_range=(1, 2)` | 바이그램(bigram)을 포함한다. 보통 분류 성능을 높인다. |
 | `min_df=2` | 2개 미만 문서에 등장하는 단어를 버린다. 노이즈가 많은 데이터에서 어휘를 줄인다. |
 | `max_df=0.95` | 95%를 초과하는 문서에 등장하는 단어를 버린다. 하드코딩된 목록 없이 불용어 제거를 근사한다. |
-| `stop_words="english"` | scikit-learn의 내장 불용어 목록. 과제 의존적 — 감성 분석은 부정어를 버리면 *안 된다*. |
+| `stop_words="english"` | scikit-learn의 내장 불용어 목록. 과제 의존적: 감성 분석은 부정어를 버리면 *안 된다*. |
 | `sublinear_tf=True` | 가공되지 않은 `tf` 대신 `1 + log(tf)`를 사용한다. 한 문서에서 한 단어가 여러 번 반복될 때 도움이 된다. |
 
 ### TF-IDF가 여전히 이기는 때 (2026년 기준)
@@ -255,6 +255,6 @@ Example output:
 
 ## 더 읽을거리 (Further Reading)
 
-- [scikit-learn — feature extraction from text](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction) — 표준 API 레퍼런스, 모든 손잡이에 대한 설명 포함.
-- [Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval](https://www.sciencedirect.com/science/article/pii/0306457388900210) — TF-IDF를 10년간 기본값으로 만든 논문.
-- ["Why TF-IDF Still Beats Embeddings" — Ashfaque Thonikkadavan (Medium)](https://medium.com/@cmtwskb/why-tf-idf-still-beats-embeddings-ad85c123e1b2) — 옛 방법이 언제, 왜 이기는지에 대한 2026년의 관점.
+- [scikit-learn(feature extraction from text](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction)) 표준 API 레퍼런스, 모든 손잡이에 대한 설명 포함.
+- [Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval](https://www.sciencedirect.com/science/article/pii/0306457388900210): TF-IDF를 10년간 기본값으로 만든 논문.
+- ["Why TF-IDF Still Beats Embeddings"(Ashfaque Thonikkadavan (Medium)](https://medium.com/@cmtwskb/why-tf-idf-still-beats-embeddings-ad85c123e1b2)) 옛 방법이 언제, 왜 이기는지에 대한 2026년의 관점.

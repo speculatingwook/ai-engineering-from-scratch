@@ -1,6 +1,6 @@
-# 비전-언어 모델 — ViT-MLP-LLM 패턴 (Vision-Language Models — The ViT-MLP-LLM Pattern)
+# 비전-언어 모델(ViT-MLP-LLM 패턴 (Vision-Language Models) The ViT-MLP-LLM Pattern)
 
-> 비전 인코더(vision encoder)는 이미지를 토큰(token)으로 변환한다. MLP 프로젝터(projector)는 그 토큰들을 LLM의 임베딩(embedding) 공간으로 매핑한다. 나머지는 언어 모델(language model)이 맡는다. 이 패턴 — ViT-MLP-LLM — 이 2026년의 모든 프로덕션(production) VLM이다.
+> 비전 인코더(vision encoder)는 이미지를 토큰(token)으로 변환한다. MLP 프로젝터(projector)는 그 토큰들을 LLM의 임베딩(embedding) 공간으로 매핑한다. 나머지는 언어 모델(language model)이 맡는다. 이 패턴(ViT-MLP-LLM)이 2026년의 모든 프로덕션(production) VLM이다.
 
 **Type:** Learn + Use
 **Languages:** Python
@@ -18,7 +18,7 @@
 
 CLIP(Phase 4 Lesson 18)은 이미지와 텍스트에 대한 공유 임베딩 공간을 주며, 이는 제로샷(zero-shot) 분류(classification)와 검색(retrieval)에는 충분하다. 하지만 CLIP은 텍스트를 생성하지 않으므로 "이 이미지에 빨간 차가 몇 대 있나?"에는 답하지 못한다. 유사도를 점수로 매길 뿐이다.
 
-비전-언어 모델(Vision-Language Models, VLMs) — Qwen3-VL, InternVL3.5, LLaVA-Next, GLM-4.6V — 은 CLIP 계열 이미지 인코더(encoder)를 완전한 언어 모델에 붙여 결합한다. 모델(model)은 이미지와 질문을 보고 답을 생성한다. 2026년 오픈소스 VLM은 멀티모달(multimodal) 벤치마크(MMMU, MMBench, DocVQA, ChartQA, MathVista, OSWorld)에서 GPT-5와 Gemini-2.5-Pro와 맞먹거나 능가한다.
+비전-언어 모델(Vision-Language Models, VLMs)(Qwen3-VL, InternVL3.5, LLaVA-Next, GLM-4.6V)은 CLIP 계열 이미지 인코더(encoder)를 완전한 언어 모델에 붙여 결합한다. 모델(model)은 이미지와 질문을 보고 답을 생성한다. 2026년 오픈소스 VLM은 멀티모달(multimodal) 벤치마크(MMMU, MMBench, DocVQA, ChartQA, MathVista, OSWorld)에서 GPT-5와 Gemini-2.5-Pro와 맞먹거나 능가한다.
 
 세 조각(ViT, 프로젝터, LLM)이 표준이다. 모델 간 차이는 어느 ViT, 어느 프로젝터, 어느 LLM, 학습 데이터, 정렬 레시피를 쓰느냐에 있다. 일단 패턴을 이해하면 어느 구성요소든 갈아 끼우는 일은 기계적이다.
 
@@ -44,9 +44,9 @@ flowchart LR
     style LLM fill:#dcfce7,stroke:#16a34a
 ```
 
-1. **비전 인코더(Vision encoder)** — 사전 학습된(pretrained) ViT(CLIP-L/14, SigLIP, DINOv3, 또는 파인튜닝(fine-tune)한 변형). 패치(patch) 토큰을 만든다.
-2. **프로젝터(Projector)** — 비전 토큰을 LLM의 임베딩 차원으로 매핑하는 작은 모듈(2-4층 MLP, 또는 Q-former). 대부분의 파인튜닝이 여기서 일어난다.
-3. **LLM** — 디코더 전용(decoder-only) 언어 모델(Qwen3, Llama, Mistral, GLM, InternLM). 비전 + 텍스트 토큰을 순서대로 읽고 텍스트를 생성한다.
+1. **비전 인코더(Vision encoder)**: 사전 학습된(pretrained) ViT(CLIP-L/14, SigLIP, DINOv3, 또는 파인튜닝(fine-tune)한 변형). 패치(patch) 토큰을 만든다.
+2. **프로젝터(Projector)**: 비전 토큰을 LLM의 임베딩 차원으로 매핑하는 작은 모듈(2-4층 MLP, 또는 Q-former). 대부분의 파인튜닝이 여기서 일어난다.
+3. **LLM**: 디코더 전용(decoder-only) 언어 모델(Qwen3, Llama, Mistral, GLM, InternLM). 비전 + 텍스트 토큰을 순서대로 읽고 텍스트를 생성한다.
 
 세 조각 모두 원칙적으로 학습 가능하다. 실제로는 프로젝터가 학습하는 동안 비전 인코더와 LLM은 대부분 동결한(frozen) 채로 둔다. 적은 비용으로 수십억 파라미터의 신호를 얻는 방식이다.
 
@@ -58,9 +58,9 @@ flowchart LR
 
 현대 VLM은 단계적으로 학습한다:
 
-1. **정렬(Alignment)** — ViT와 LLM을 동결한다. 이미지-캡션 쌍에 대해 프로젝터만 학습한다. 프로젝터가 비전 공간을 언어 공간으로 매핑하도록 가르친다.
-2. **사전 학습(Pre-training)** — 모든 것을 동결 해제한다. 대규모 교차(interleaved) 이미지-텍스트 데이터(5억+ 쌍)에 대해 학습한다. 모델의 시각 지식을 쌓는다.
-3. **명령어 튜닝(Instruction tuning)** — 큐레이션된 (이미지, 질문, 답) 세 쌍에 파인튜닝한다. 대화 행동과 과제 형식을 가르친다. 이 단계가 "비전 인식 LM"을 쓸 만한 어시스턴트로 바꾼다.
+1. **정렬(Alignment)**: ViT와 LLM을 동결한다. 이미지-캡션 쌍에 대해 프로젝터만 학습한다. 프로젝터가 비전 공간을 언어 공간으로 매핑하도록 가르친다.
+2. **사전 학습(Pre-training)**: 모든 것을 동결 해제한다. 대규모 교차(interleaved) 이미지-텍스트 데이터(5억+ 쌍)에 대해 학습한다. 모델의 시각 지식을 쌓는다.
+3. **명령어 튜닝(Instruction tuning)**: 큐레이션된 (이미지, 질문, 답) 세 쌍에 파인튜닝한다. 대화 행동과 과제 형식을 가르친다. 이 단계가 "비전 인식 LM"을 쓸 만한 어시스턴트로 바꾼다.
 
 대부분의 LoRA 파인튜닝은 작은 라벨된 데이터셋(dataset)으로 3단계를 겨냥한다.
 
@@ -83,11 +83,11 @@ Qwen3-VL-235B는 GUI(데스크톱, 모바일, 웹)를 작동시키는 **시각 �
 
 ### 에이전트 역량 + RoPE 변형
 
-VLM은 프레임이 비디오에서 **언제**인지 알아야 한다. Qwen3-VL은 T-RoPE(시간적 회전 위치 임베딩(temporal rotary position embeddings))에서 **텍스트 기반 시간 정렬(text-based time alignment)** 로 진화했다 — 비디오 프레임과 교차된 명시적 타임스탬프 텍스트 토큰. 모델은 "`<timestamp 00:32>` frame, prompt"를 보고 시간적 관계를 추론할 수 있다.
+VLM은 프레임이 비디오에서 **언제**인지 알아야 한다. Qwen3-VL은 T-RoPE(시간적 회전 위치 임베딩(temporal rotary position embeddings))에서 **텍스트 기반 시간 정렬(text-based time alignment)** 로 진화했다. 비디오 프레임과 교차된 명시적 타임스탬프 텍스트 토큰. 모델은 "`<timestamp 00:32>` frame, prompt"를 보고 시간적 관계를 추론할 수 있다.
 
 ### 정렬 문제
 
-크롤링된 데이터셋의 이미지-텍스트 쌍 중 12%는 이미지에 완전히 그라운딩되지 않은 설명을 담는다. 이것으로 학습된 VLM은 조용히 환각하는 법을 배운다 — 객체를 날조하고, 숫자를 잘못 읽고, 관계를 지어낸다. 프로덕션에서 이것이 지배적인 실패 양상이다.
+크롤링된 데이터셋의 이미지-텍스트 쌍 중 12%는 이미지에 완전히 그라운딩되지 않은 설명을 담는다. 이것으로 학습된 VLM은 조용히 환각하는 법을 배운다. 객체를 날조하고, 숫자를 잘못 읽고, 관계를 지어낸다. 프로덕션에서 이것이 지배적인 실패 양상이다.
 
 Skywork.ai는 이를 추적하기 위해 **교차 모달 오차율(Cross-Modal Error Rate, CMER)** 을 도입했다:
 
@@ -171,7 +171,7 @@ class MinimalVLM(nn.Module):
         return out
 ```
 
-텍스트의 `<image>` 플레이스홀더 토큰이 실제 이미지 임베딩으로 대체된다 — LLaVA, Qwen-VL, InternVL이 쓰는 것과 같은 패턴이다.
+텍스트의 `<image>` 플레이스홀더 토큰이 실제 이미지 임베딩으로 대체된다. LLaVA, Qwen-VL, InternVL이 쓰는 것과 같은 패턴이다.
 
 ### 3단계: CMER 계산
 
@@ -213,15 +213,15 @@ class ToyVLM(nn.Module):
         return self.head(pooled)
 ```
 
-이것을 합성 (특성, 클래스) 쌍에 200 스텝 미만으로 적합할 수 있다 — 프로젝터 패턴이 동작함을 보여주기에 충분하다.
+이것을 합성 (특성, 클래스) 쌍에 200 스텝 미만으로 적합할 수 있다. 프로젝터 패턴이 동작함을 보여주기에 충분하다.
 
 ## 라이브러리로 써보기 (Use It)
 
 2026년 프로덕션 팀이 VLM을 쓰는 세 가지 방법:
 
-- **호스팅 API** — OpenAI Vision, Anthropic Claude Vision, Google Gemini Vision. 인프라 제로, 벤더 리스크.
-- **오픈소스 자체 호스팅** — `transformers`와 `vllm`을 통한 Qwen3-VL 또는 InternVL3.5. 완전한 제어, 더 높은 초기 노력.
-- **도메인에 파인튜닝** — Qwen2.5-VL-7B 또는 LLaVA-1.6-7B를 로드하고, 5k-50k 커스텀 예시에 LoRA, `vllm` 또는 `TGI`로 서빙.
+- **호스팅 API**: OpenAI Vision, Anthropic Claude Vision, Google Gemini Vision. 인프라 제로, 벤더 리스크.
+- **오픈소스 자체 호스팅**: `transformers`와 `vllm`을 통한 Qwen3-VL 또는 InternVL3.5. 완전한 제어, 더 높은 초기 노력.
+- **도메인에 파인튜닝**: Qwen2.5-VL-7B 또는 LLaVA-1.6-7B를 로드하고, 5k-50k 커스텀 예시에 LoRA, `vllm` 또는 `TGI`로 서빙.
 
 ```python
 from transformers import AutoProcessor, AutoModelForVision2Seq
@@ -250,8 +250,8 @@ answer = processor.decode(generated[0][inputs["input_ids"].shape[1]:], skip_spec
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-vlm-selector.md` — 정확도, 지연 시간(latency), 컨텍스트 길이, 예산에 따라 Qwen3-VL / InternVL3.5 / LLaVA-Next / API를 고른다.
-- `outputs/skill-cmer-monitor.md` — 프로덕션 VLM 엔드포인트를 교차 모달 오차율, 엔드포인트별 대시보드, 경보 임계값으로 계측하는 코드를 방출한다.
+- `outputs/prompt-vlm-selector.md`: 정확도, 지연 시간(latency), 컨텍스트 길이, 예산에 따라 Qwen3-VL / InternVL3.5 / LLaVA-Next / API를 고른다.
+- `outputs/skill-cmer-monitor.md`: 프로덕션 VLM 엔드포인트를 교차 모달 오차율, 엔드포인트별 대시보드, 경보 임계값으로 계측하는 코드를 방출한다.
 
 ## 연습 문제 (Exercises)
 

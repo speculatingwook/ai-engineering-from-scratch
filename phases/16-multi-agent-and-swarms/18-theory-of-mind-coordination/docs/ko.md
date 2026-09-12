@@ -1,6 +1,6 @@
 # 마음 이론과 창발적 협응 (Theory of Mind and Emergent Coordination)
 
-> Li et al. (arXiv:2310.10701)은 협력적 텍스트 게임에서 LLM 에이전트(agent)가 **창발적 고차 마음 이론(emergent high-order Theory of Mind, ToM)** — 다른 에이전트가 제3의 에이전트의 믿음에 대해 무엇을 믿는지에 관한 추론 — 을 보이지만, 컨텍스트 관리와 환각(hallucination)으로 인해 긴 시야의 계획 수립에는 실패함을 보였다. Riedl (arXiv:2510.05174)은 한 집단 전체에서 고차 시너지(higher-order synergy)를 측정했고, **오직** ToM 프롬프트(prompt) 조건만이 정체성과 연결된 차별화(identity-linked differentiation)와 목표 지향적 상보성(goal-directed complementarity)을 만들어 내며, 저용량 LLM은 허위 창발만을 보임을 발견했다. 즉, 협응의 창발은 프롬프트에 조건적이고 모델 의존적이며, 공짜로 얻어지지 않는다. 이 레슨은 최소한의 ToM 인식 에이전트를 구현하고, ToM 프롬프트가 있을 때와 없을 때 협력 과제를 실행하며, Riedl 2025 프로토콜에 대비하여 협응 차이(coordination delta)를 측정한다.
+> Li et al. (arXiv:2310.10701)은 협력적 텍스트 게임에서 LLM 에이전트(agent)가 **창발적 고차 마음 이론(emergent high-order Theory of Mind, ToM)**(다른 에이전트가 제3의 에이전트의 믿음에 대해 무엇을 믿는지에 관한 추론)을 보이지만, 컨텍스트 관리와 환각(hallucination)으로 인해 긴 시야의 계획 수립에는 실패함을 보였다. Riedl (arXiv:2510.05174)은 한 집단 전체에서 고차 시너지(higher-order synergy)를 측정했고, **오직** ToM 프롬프트(prompt) 조건만이 정체성과 연결된 차별화(identity-linked differentiation)와 목표 지향적 상보성(goal-directed complementarity)을 만들어 내며, 저용량 LLM은 허위 창발만을 보임을 발견했다. 즉, 협응의 창발은 프롬프트에 조건적이고 모델 의존적이며, 공짜로 얻어지지 않는다. 이 레슨은 최소한의 ToM 인식 에이전트를 구현하고, ToM 프롬프트가 있을 때와 없을 때 협력 과제를 실행하며, Riedl 2025 프로토콜에 대비하여 협응 차이(coordination delta)를 측정한다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib)
@@ -75,7 +75,7 @@ action selection:
   - pick action that maximizes joint outcome under those predictions
 ```
 
-`other_models` 속성이 ToM 상태다. 1차 ToM은 한 수준만 유지한다. 2차는 `other_models[i][other_models_of_j]`를 추가한다 — 내가 에이전트 i가 에이전트 j에 대해 믿는다고 생각하는 것.
+`other_models` 속성이 ToM 상태다. 1차 ToM은 한 수준만 유지한다. 2차는 `other_models[i][other_models_of_j]`를 추가한다. 내가 에이전트 i가 에이전트 j에 대해 믿는다고 생각하는 것.
 
 ### 긴 시야가 해가 되는 이유
 
@@ -107,7 +107,7 @@ Li et al.이 기록한 바: 컨텍스트 한계로 인해 에이전트는 어떤
 
 `code/main.py`는 다음을 구현한다.
 
-- `ToMAgent` — 자신의 믿음과 다른 에이전트별 믿음 모델을 추적한다.
+- `ToMAgent`: 자신의 믿음과 다른 에이전트별 믿음 모델을 추적한다.
 - 협력 과제: 세 에이전트가 세 상자에서 세 토큰(token)을 수집해야 한다. 각 상자는 토큰 하나를 담을 수 있다. 에이전트들은 통신할 수 없고, 서로의 행동에서 의도를 추론한다.
 - 두 가지 구성: `zeroth_order`(ToM 없음)와 `first_order`(한 수준 믿음 모델을 가진 ToM).
 - 무작위화된 200회 시행에 대한 측정: 완료율, 중복률(두 에이전트가 같은 상자를 목표로 함), 완료까지의 평균 턴 수.
@@ -157,7 +157,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al. — Theory of Mind for Multi-Agent Collaboration via Large Language Models](https://arxiv.org/abs/2310.10701) — 협력 게임에서의 창발적 ToM; 긴 시야 실패 모드
-- [Riedl — Emergent Coordination in Multi-Agent Language Models](https://arxiv.org/abs/2510.05174) — 집단 규모 측정; ToM 프롬프트가 핵심 조건
-- [Premack & Woodruff — Does the chimpanzee have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-chimpanzee-have-a-theory-of-mind/1E96B02CD9850E69AF20F81FA7EB3595) — ToM 개념의 1978년 기원
-- [Baron-Cohen, Leslie, Frith — Does the autistic child have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-autistic-child-have-a-theory-of-mind/) — 샐리-앤 논문 (1985)
+- [Li et al.(Theory of Mind for Multi-Agent Collaboration via Large Language Models](https://arxiv.org/abs/2310.10701)) 협력 게임에서의 창발적 ToM; 긴 시야 실패 모드
+- [Riedl(Emergent Coordination in Multi-Agent Language Models](https://arxiv.org/abs/2510.05174)) 집단 규모 측정; ToM 프롬프트가 핵심 조건
+- [Premack & Woodruff(Does the chimpanzee have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-chimpanzee-have-a-theory-of-mind/1E96B02CD9850E69AF20F81FA7EB3595)) ToM 개념의 1978년 기원
+- [Baron-Cohen, Leslie, Frith(Does the autistic child have a theory of mind?](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/does-the-autistic-child-have-a-theory-of-mind/)) 샐리-앤 논문 (1985)

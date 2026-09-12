@@ -1,6 +1,6 @@
 # 모델, 시스템, 데이터셋 카드
 
-> 세 가지 문서화 형식이 AI 투명성을 구조화한다. 모델 카드(Model Cards)(Mitchell et al. 2019) — 모델을 위한 영양 표시(nutrition label): 학습 데이터, 정량적으로 분해된(disaggregated) 분석, 윤리적 고려 사항, 주의 사항. Hugging Face 모델 카드의 0.3%만이 윤리적 고려 사항을 문서화한다(Oreamuno et al. 2023). 데이터셋을 위한 데이터시트(Datasheets for Datasets)(Gebru et al. 2018, CACM) — 동기, 구성, 수집 과정, 라벨링, 배포, 유지보수. 전자 부품 데이터시트 비유. 데이터 카드(Data Cards)(Pushkarna et al., Google 2022) — 다양한 독자를 위한 경계 객체(boundary object)로서의 모듈식 계층적 상세도(망원경적/잠망경적/현미경적). 2024-2025년 발전: LLM을 통한 자동 생성(CardGen, Liu et al. 2024). 모델 카드의 상세도는 HF에서 최대 29%의 다운로드 증가와 상관관계를 가진다(Liang et al. 2024). 검증 가능한 증명(verifiable attestation)(Laminator, Duddu et al. 2024). 탄소/물에 대한 지속가능성 보고 추가(Jouneaux et al. 2025년 7월). EU/ISO 규제 카드 출현. 시스템 카드(System Cards)(Sidhpurwala 2024; Meta 시스템 수준 투명성; "Blueprints of Trust" arXiv:2509.20394) — 보안 역량, 프롬프트 인젝션(prompt-injection) 보호, 데이터 유출(data-exfiltration) 탐지, 인간 가치와의 정렬(alignment)을 포괄하는 종단 간(end-to-end) AI 시스템 문서화.
+> 세 가지 문서화 형식이 AI 투명성을 구조화한다. 모델 카드(Model Cards)(Mitchell et al. 2019): 모델을 위한 영양 표시(nutrition label): 학습 데이터, 정량적으로 분해된(disaggregated) 분석, 윤리적 고려 사항, 주의 사항. Hugging Face 모델 카드의 0.3%만이 윤리적 고려 사항을 문서화한다(Oreamuno et al. 2023). 데이터셋을 위한 데이터시트(Datasheets for Datasets)(Gebru et al. 2018, CACM): 동기, 구성, 수집 과정, 라벨링, 배포, 유지보수. 전자 부품 데이터시트 비유. 데이터 카드(Data Cards)(Pushkarna et al., Google 2022): 다양한 독자를 위한 경계 객체(boundary object)로서의 모듈식 계층적 상세도(망원경적/잠망경적/현미경적). 2024-2025년 발전: LLM을 통한 자동 생성(CardGen, Liu et al. 2024). 모델 카드의 상세도는 HF에서 최대 29%의 다운로드 증가와 상관관계를 가진다(Liang et al. 2024). 검증 가능한 증명(verifiable attestation)(Laminator, Duddu et al. 2024). 탄소/물에 대한 지속가능성 보고 추가(Jouneaux et al. 2025년 7월). EU/ISO 규제 카드 출현. 시스템 카드(System Cards)(Sidhpurwala 2024; Meta 시스템 수준 투명성; "Blueprints of Trust" arXiv:2509.20394): 보안 역량, 프롬프트 인젝션(prompt-injection) 보호, 데이터 유출(data-exfiltration) 탐지, 인간 가치와의 정렬(alignment)을 포괄하는 종단 간(end-to-end) AI 시스템 문서화.
 
 **Type:** Build
 **Languages:** Python (stdlib, model-card + datasheet + system-card generator)
@@ -71,8 +71,8 @@ Sidhpurwala 2024와 Meta의 시스템 수준 투명성 작업. "Blueprints of Tr
 ### 2024-2025년 발전
 
 - **CardGen(Liu et al. 2024).** LLM을 통한 자동 모델 카드 생성. 표준화된 Mitchell 2019 필드에서 많은 사람이 작성한 카드보다 높은 객관성을 보고한다.
-- **다운로드 상관관계(Liang et al. 2024).** 상세한 모델 카드는 HF에서 최대 29% 높은 다운로드율과 상관관계를 가진다 — 채택 압력은 이제 준수 주도가 아니라 시장 주도다.
-- **Laminator(Duddu et al. 2024).** 하드웨어 TEE / 암호학적 서명을 통한 검증 가능한 증명 — 모델 카드가 단순한 주장이 아니라 주장의 증명(proof-of-claim)을 담게 한다.
+- **다운로드 상관관계(Liang et al. 2024).** 상세한 모델 카드는 HF에서 최대 29% 높은 다운로드율과 상관관계를 가진다. 채택 압력은 이제 준수 주도가 아니라 시장 주도다.
+- **Laminator(Duddu et al. 2024).** 하드웨어 TEE / 암호학적 서명을 통한 검증 가능한 증명: 모델 카드가 단순한 주장이 아니라 주장의 증명(proof-of-claim)을 담게 한다.
 - **지속가능성(Jouneaux et al. 2025년 7월).** 탄소, 물, 계산 에너지 발자국에 대한 추가. 출현하는 ISO 표준.
 - **규제 카드.** EU AI Act(레슨 24) GPAI 실천 강령의 투명성 장은 모델 카드를 준수 산출물로 요구한다.
 
@@ -114,7 +114,7 @@ Sidhpurwala 2024와 Meta의 시스템 수준 투명성 작업. "Blueprints of Tr
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mitchell et al. — Model Cards for Model Reporting (arXiv:1810.03993, FAT* 2019)](https://arxiv.org/abs/1810.03993) — 표준적인 모델 카드
-- [Gebru et al. — Datasheets for Datasets (CACM 2021, arXiv:1803.09010)](https://arxiv.org/abs/1803.09010) — 데이터시트 논문
-- [Pushkarna et al. — Data Cards (Google 2022)](https://arxiv.org/abs/2204.01075) — 계층적 데이터 문서
-- [Sidhpurwala et al. — Blueprints of Trust (arXiv:2509.20394)](https://arxiv.org/abs/2509.20394) — 시스템 카드 형식화
+- [Mitchell et al.(Model Cards for Model Reporting (arXiv:1810.03993, FAT* 2019)](https://arxiv.org/abs/1810.03993)) 표준적인 모델 카드
+- [Gebru et al.(Datasheets for Datasets (CACM 2021, arXiv:1803.09010)](https://arxiv.org/abs/1803.09010)) 데이터시트 논문
+- [Pushkarna et al.(Data Cards (Google 2022)](https://arxiv.org/abs/2204.01075)) 계층적 데이터 문서
+- [Sidhpurwala et al.(Blueprints of Trust (arXiv:2509.20394)](https://arxiv.org/abs/2509.20394)) 시스템 카드 형식화

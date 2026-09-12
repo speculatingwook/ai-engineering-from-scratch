@@ -9,11 +9,11 @@
 
 ## 문제 (Problem)
 
-다중 에이전트 시스템은 에이전트들이 공동으로 가치를 생산하지만 개별적으로 보상받아야 할 때 복잡해진다. 고전적 메커니즘 — 균등 분할, 마지막 기여자가 모두 가져가기 — 은 불공정하거나 조작 가능하다. 섀플리 가치를 통한 연합 기반 보상은 구성상 공정하지만 계산이 비싸다. 2025-2026년 문헌은 유용한 근사들을 밀어붙인다: 섀플리 샘플링(sampling), 단조 집계 경매, 확인된 기여로부터 축적되는 온체인(on-chain) 평판.
+다중 에이전트 시스템은 에이전트들이 공동으로 가치를 생산하지만 개별적으로 보상받아야 할 때 복잡해진다. 고전적 메커니즘(균등 분할, 마지막 기여자가 모두 가져가기)은 불공정하거나 조작 가능하다. 섀플리 가치를 통한 연합 기반 보상은 구성상 공정하지만 계산이 비싸다. 2025-2026년 문헌은 유용한 근사들을 밀어붙인다: 섀플리 샘플링(sampling), 단조 집계 경매, 확인된 기여로부터 축적되는 온체인(on-chain) 평판.
 
 기여 귀속을 넘어, 이 분야는 실제 경제적 에이전트로 방향을 틀었다. Bittensor TAO는 서브넷별 모델을 파인튜닝(fine-tuning)하기 위한 채굴 컴퓨트에 보상하고, Fetch.ai/ASI는 ASI-1 Mini LLM 사용에 FET 토큰으로 보상하며, Gonka는 트랜스포머 작업 증명(proof-of-work)을 생산적 AI 과제 쪽으로 재할당한다. 자율적으로 거래하는 에이전트는 오늘날 존재한다. 문제는 인센티브를 어떻게 정렬하느냐다.
 
-이 레슨은 에이전트 경제를 특정 문제군 — 기여 귀속, 메커니즘 설계, 평판 — 으로 다루고, 아이디어가 머리에 남도록 최소한의 수학으로 각각을 만든다.
+이 레슨은 에이전트 경제를 특정 문제군, 즉 기여 귀속과 메커니즘 설계, 평판으로 다루고, 아이디어가 머리에 남도록 최소한의 수학으로 각각을 만든다.
 
 ## 개념 (Concept)
 
@@ -27,7 +27,7 @@
 
 모든 프로덕션 시스템이 다섯 계층 전부를 쓰는 것은 아니다. Bittensor는 1, 2, 부분적으로 3, 부분적으로 4를 쓰고 5는 쓰지 않는다. OpenAI 에이전트는 3을 제외하고 아무것도 쓰지 않는다. 이 스택은 요구사항이 아니라 참조 지도다.
 
-### Bittensor, Fetch.ai, Gonka — 무엇이 돌아가는가
+### Bittensor, Fetch.ai, Gonka: 무엇이 돌아가는가
 
 **Bittensor (TAO).** 서브넷은 특화된 과제(언어 모델링, 이미지 생성, 예측)다. 채굴자는 모델 출력을 제출한다. 검증자가 그것을 순위 매긴다. 스테이크 가중 점수화가 TAO 보상을 분배한다. 각 서브넷은 자체 평가를 가진다. 경제적 교훈: 사용된 컴퓨트가 아니라 과제별 출력 품질에 대가를 지불하라.
 
@@ -49,11 +49,11 @@ shapley(i) = (1/N!) * sum over all orderings O of (v(S_i_O ∪ {i}) - v(S_i_O))
 
 여기서 `S_i_O`는 순서 `O`에서 `i` 앞에 있는 에이전트들의 집합이다. 실제로는: 모든 순열을 열거하고, 각 순열에서 각 에이전트의 한계 기여를 기록한 뒤, 평균을 낸다.
 
-N=3 에이전트의 경우, 순열이 6개다. N=10의 경우, 360만 개다 — 그래서 실제로는 열거하기보다 순서를 샘플링한다.
+N=3 에이전트의 경우, 순열이 6개다. N=10의 경우, 360만 개다. 그래서 실제로는 열거하기보다 순서를 샘플링한다.
 
 ### 집계를 위한 차가 경매
 
-Google Research("Mechanism design for large language models")는 LLM 출력을 집계하기 위한 차가 토큰 경매를 제안한다. 설정: N개의 에이전트가 각각 하나의 완성을 제안한다. 각각은 선택되는 것에 대한 사적 가치를 가진다. 경매인은 가장 가치 높은 제안을 고르고 *두 번째로 높은* 가치를 지불한다. 단조 집계(가치가 몇 개가 입찰되었는지가 아니라 어떤 제안이 선택되는지에 의존) 하에서, 이것은 진실 유발적이다 — 에이전트들이 자신의 진짜 가치를 입찰한다.
+Google Research("Mechanism design for large language models")는 LLM 출력을 집계하기 위한 차가 토큰 경매를 제안한다. 설정: N개의 에이전트가 각각 하나의 완성을 제안한다. 각각은 선택되는 것에 대한 사적 가치를 가진다. 경매인은 가장 가치 높은 제안을 고르고 *두 번째로 높은* 가치를 지불한다. 단조 집계(가치가 몇 개가 입찰되었는지가 아니라 어떤 제안이 선택되는지에 의존) 하에서, 이것은 진실 유발적이다. 에이전트들이 자신의 진짜 가치를 입찰한다.
 
 LLM 시스템에 이것이 중요한 이유: 서로 다른 가격을 가진 여러 에이전트에게 완성 과제를 외주할 수 있다. 경매가 최선을 고르고 공정하게 지불하며, 에이전트들은 거짓 보고할 유인이 없다.
 
@@ -95,9 +95,9 @@ LaMAS 제안(AAMAS 2025)은 다음을 결합한다: DID 신원, 섀플리 가치
 
 `code/main.py`는 다음을 구현한다.
 
-- `shapley(value_fn, agents)` — 작은 N에 대한 열거를 통한 정확한 섀플리 계산.
-- `second_price_auction(bids)` — 진실 유발적 메커니즘. 승자가 두 번째로 높은 값을 지불.
-- `Reputation` — 지수 감쇠와 슬래싱을 갖춘 DID에 묶인 평판.
+- `shapley(value_fn, agents)`: 작은 N에 대한 열거를 통한 정확한 섀플리 계산.
+- `second_price_auction(bids)`: 진실 유발적 메커니즘. 승자가 두 번째로 높은 값을 지불.
+- `Reputation`: 지수 감쇠와 슬래싱을 갖춘 DID에 묶인 평판.
 - 데모 1: 세 에이전트가 협력하고, 정확한 섀플리가 기여를 귀속.
 - 데모 2: 다섯 에이전트가 과제 슬롯을 두고 입찰. 차가 경매가 승자 + 지불을 고름.
 - 데모 3: 이질적 평판을 가진 에이전트에게 100라운드의 과제 배정. 평판 가중 라우팅이 무작위를 이김.
@@ -147,9 +147,9 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [The Agent Economy](https://arxiv.org/abs/2602.14219) — 5계층 에이전트 경제 스택의 2026년 서베이
-- [Google Research — Mechanism design for large language models](https://research.google/blog/mechanism-design-for-large-language-models/) — 단조 집계를 갖춘 토큰 경매
-- [AAMAS 2025 — decentralized LaMAS](https://www.ifaamas.org/Proceedings/aamas2025/pdfs/p2896.pdf) — 섀플리 가치 기여 귀속
-- [Bittensor TAO documentation](https://docs.bittensor.com/) — 서브넷 구조와 보상 분배
-- [Fetch.ai / ASI Alliance](https://fetch.ai/) — ASI-1 Mini LLM과 FET 토큰
-- [W3C Decentralized Identifiers (DIDs) spec](https://www.w3.org/TR/did-core/) — 신원 기반
+- [The Agent Economy](https://arxiv.org/abs/2602.14219): 5계층 에이전트 경제 스택의 2026년 서베이
+- [Google Research(Mechanism design for large language models](https://research.google/blog/mechanism-design-for-large-language-models/)) 단조 집계를 갖춘 토큰 경매
+- [AAMAS 2025(decentralized LaMAS](https://www.ifaamas.org/Proceedings/aamas2025/pdfs/p2896.pdf)) 섀플리 가치 기여 귀속
+- [Bittensor TAO documentation](https://docs.bittensor.com/): 서브넷 구조와 보상 분배
+- [Fetch.ai / ASI Alliance](https://fetch.ai/): ASI-1 Mini LLM과 FET 토큰
+- [W3C Decentralized Identifiers (DIDs) spec](https://www.w3.org/TR/did-core/): 신원 기반

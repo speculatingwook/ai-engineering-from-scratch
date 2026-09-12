@@ -29,29 +29,29 @@
 
 ## 개념 (The Concept)
 
-### 계층 1 — 사전 시딩된 노드 이미지 (Bottlerocket)
+### 계층 1: 사전 시딩된 노드 이미지 (Bottlerocket)
 
-AWS에서, Bottlerocket의 이중 볼륨 아키텍처는 OS를 데이터에서 분리한다. 컨테이너 이미지가 미리 풀된 데이터 볼륨을 스냅샷하고, `EC2NodeClass`에서 스냅샷 ID를 참조하라. 새 노드는 가중치가 이미 로컬 NVMe에 있는 채로 부팅한다 — 2단계와 3단계의 일부가 사라진다. Karpenter와 네이티브로 작동한다. 일반적 절감: 큰 모델에 대해 콜드 스타트당 2~4분.
+AWS에서, Bottlerocket의 이중 볼륨 아키텍처는 OS를 데이터에서 분리한다. 컨테이너 이미지가 미리 풀된 데이터 볼륨을 스냅샷하고, `EC2NodeClass`에서 스냅샷 ID를 참조하라. 새 노드는 가중치가 이미 로컬 NVMe에 있는 채로 부팅한다. 2단계와 3단계의 일부가 사라진다. Karpenter와 네이티브로 작동한다. 일반적 절감: 큰 모델에 대해 콜드 스타트당 2~4분.
 
 GCP에서의 동등물: 사전 구워진 컨테이너 레이어를 가진 커스텀 VM 이미지. Azure에서: 같은 패턴의 매니지드 디스크 스냅샷.
 
-### 계층 2 — 모델 스트리밍 (Run:ai Model Streamer)
+### 계층 2: 모델 스트리밍 (Run:ai Model Streamer)
 
 첫 요청에 답하기 전에 전체 파일을 로드하는 대신, 가중치를 GPU 메모리에 층별로 스트리밍하고 첫 트랜스포머 블록이 상주하자마자 처리를 시작한다. NVIDIA Run:ai Model Streamer는 vLLM 2026에 네이티브로 출하된다. S3, GCS, 로컬 NVMe와 작동한다. I/O를 연산 셋업과 겹치게 하여 큰 모델의 가중치 로드 시간을 대략 절반으로 줄인다.
 
-### 계층 3 — GPU 메모리 스냅샷 (Modal)
+### 계층 3: GPU 메모리 스냅샷 (Modal)
 
-Modal은 첫 로드 후 GPU 상태(가중치, CUDA 그래프, KV 캐시 영역)의 체크포인트를 찍는다. 이후 재시작은 HBM으로 직접 역직렬화한다 — 재초기화보다 10배 빠르다. 이것은 "2초 안에 웜 GPU를 부팅"에 가장 가까운 것이다. 트레이드오프: 스냅샷은 GPU 토폴로지별이라, Karpenter가 다른 SKU로 마이그레이션하면 재체크포인트한다.
+Modal은 첫 로드 후 GPU 상태(가중치, CUDA 그래프, KV 캐시 영역)의 체크포인트를 찍는다. 이후 재시작은 HBM으로 직접 역직렬화한다. 재초기화보다 10배 빠르다. 이것은 "2초 안에 웜 GPU를 부팅"에 가장 가까운 것이다. 트레이드오프: 스냅샷은 GPU 토폴로지별이라, Karpenter가 다른 SKU로 마이그레이션하면 재체크포인트한다.
 
-### 계층 4 — 웜 풀 (min_workers=1)
+### 계층 4: 웜 풀 (min_workers=1)
 
 가장 단순한 완화: 레플리카 하나를 항상 준비 상태로 유지한다. 비용은 24x7로 GPU 하나의 시간당 요율이다. 산술은 작은 모델에는 가혹하고(30초 콜드 스타트를 피하려고 시간당 0.85~1.50달러를 낸다) 큰 모델에는 친절하다(5분 콜드 스타트를 피하려고 시간당 4달러를 낸다). 웜 풀이 필수가 되는 SLA 임계값: 일반적으로 70B 이상 모델에서 TTFT P99 < 60초.
 
-### 계층 5 — 계층형 로딩 (ServerlessLLM)
+### 계층 5: 계층형 로딩 (ServerlessLLM)
 
 ServerlessLLM은 스토리지를 계층 구조로 취급한다: NVMe(빠르지만 큼), DRAM(중간이지만 계층화됨), HBM(작지만 즉각적). 가중치는 DRAM에 사전 로드되고, HBM으로는 온디맨드 로드된다. 논문은 순진한 디스크-HBM 대비 콜드 로드에서 10~200배 지연 시간 감소를 보고한다. 프로덕션 채택은 초기지만 vLLM과의 통합이 존재한다.
 
-### 계층 6 — 라이브 마이그레이션 (보너스 패턴)
+### 계층 6: 라이브 마이그레이션 (보너스 패턴)
 
 노드가 사용 불가능해질 때(스팟 축출, 노드 드레인), 전통적 패턴은 다른 레플리카를 콜드 스타트하고 요청 큐를 비우는 것이다. 라이브 마이그레이션은 입력 토큰(킬로바이트)을 모델이 로드된 목적지로 옮기고 목적지에서 KV 캐시를 재계산한다. 재계산은 GB의 KV 캐시를 네트워크로 전송하는 것보다 저렴하다. 분리형(disaggregated) 배포에 적용 가능하다.
 
@@ -118,9 +118,9 @@ P99 TTFT SLA가 2초인 서비스의 경우, 질문은 "웜 풀 예/아니오"�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Modal — Cold start performance](https://modal.com/docs/guide/cold-start) — Modal의 공개된 벤치마크와 체크포인트 아키텍처.
-- [AWS Bottlerocket](https://github.com/bottlerocket-os/bottlerocket) — 사전 시딩 데이터 볼륨 스냅샷 패턴.
-- [NVIDIA Run:ai Model Streamer](https://github.com/run-ai/runai-model-streamer) — 가중치 로드를 연산 셋업과 겹침.
-- [Baseten — Cold-start mitigation](https://www.baseten.co/blog/cold-start-mitigation/) — 사전 예열 플레이북.
-- [ServerlessLLM paper (USENIX OSDI'24)](https://www.usenix.org/conference/osdi24/presentation/fu) — 계층형 로딩 설계.
-- [NVIDIA — Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/) — 분리형 배포를 위한 라이브 마이그레이션.
+- [Modal(Cold start performance](https://modal.com/docs/guide/cold-start)) Modal의 공개된 벤치마크와 체크포인트 아키텍처.
+- [AWS Bottlerocket](https://github.com/bottlerocket-os/bottlerocket): 사전 시딩 데이터 볼륨 스냅샷 패턴.
+- [NVIDIA Run:ai Model Streamer](https://github.com/run-ai/runai-model-streamer): 가중치 로드를 연산 셋업과 겹침.
+- [Baseten(Cold-start mitigation](https://www.baseten.co/blog/cold-start-mitigation/)) 사전 예열 플레이북.
+- [ServerlessLLM paper (USENIX OSDI'24)](https://www.usenix.org/conference/osdi24/presentation/fu): 계층형 로딩 설계.
+- [NVIDIA(Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/)) 분리형 배포를 위한 라이브 마이그레이션.

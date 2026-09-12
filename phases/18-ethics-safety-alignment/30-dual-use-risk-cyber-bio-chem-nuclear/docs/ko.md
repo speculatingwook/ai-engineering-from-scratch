@@ -1,4 +1,4 @@
-# 이중 용도 위험 — 사이버, 생물, 화학, 핵 향상
+# 이중 용도 위험: 사이버, 생물, 화학, 핵 향상
 
 > 2026년 이중 용도(dual-use) 그림을, 영역별로. 생물/화학: 레슨 17은 WMDP를 다룬다. Anthropic의 생물무기 획득 실험(2.53배 향상)과 OpenAI의 2025년 4월 Preparedness Framework v2 경고("초보자가 알려진 생물학적 위협을 만드는 것을 의미 있게 돕는 문턱에 있다")가 변곡점(inflection point)을 표시한다. 사이버(2025년 11월 Anthropic 보고서): 중국 연계 국가 행위자가 Claude의 에이전트(agentic) 코딩 도구를 사용해 사이버 공격 캠페인의 최대 90%를 자동화했으며, 인간 개입은 4-6개 단계에서만 있었다. OpenAI "신뢰 접근(trusted access)" 파일럿은 검증된 보안 조직에게 방어적 이중 용도 작업을 위한 역량 접근을 제공한다. 화학/생물 실행 격차(execution gap) 침식: 고전적 방어는 "정보 접근만으로는 불충분하다"였다. 비전(vision) 가능 프런티어(frontier) 모델(GPT-5.2, Gemini 3 Pro, Claude Opus 4.5, Grok 4.1)은 습식 실험실(wet-lab) 비디오를 관찰하고 실시간 수정을 제공할 수 있다. 2025년 12월: OpenAI는 GPT-5가 습식 실험실 실험을 반복하여, AI 주도 프로토콜 최적화를 통해 79배 효율 향상을 달성하는 것을 시연했다. 초보자 대 전문가 패턴: AI는 초보자에게 더 큰 상대적 향상을 제공하지만, 전문가에게 더 큰 절대적 역량을 제공한다.
 
@@ -110,7 +110,7 @@ Anthropic의 2025년 11월 보고서: 중국 연계 국가 행위자가 Claude�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — November 2025 cyber threat report](https://www.anthropic.com/news/disrupting-AI-espionage) — 중국 연계 캠페인 자동화
-- [OpenAI — Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) — 생물 "문턱에 있음"
-- [Anthropic — RSP v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) — ASL-3 생물 문턱
-- [Council on Strategic Risks — 2025 AI x Bio wrapup](https://councilonstrategicrisks.org/2025/12/22/2025-aixbio-wrapped-a-year-in-review-and-projections-for-2026/) — 연말 종합
+- [Anthropic(November 2025 cyber threat report](https://www.anthropic.com/news/disrupting-AI-espionage)) 중국 연계 캠페인 자동화
+- [OpenAI(Preparedness Framework v2 (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) 생물 "문턱에 있음"
+- [Anthropic(RSP v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL-3 생물 문턱
+- [Council on Strategic Risks(2025 AI x Bio wrapup](https://councilonstrategicrisks.org/2025/12/22/2025-aixbio-wrapped-a-year-in-review-and-projections-for-2026/)) 연말 종합

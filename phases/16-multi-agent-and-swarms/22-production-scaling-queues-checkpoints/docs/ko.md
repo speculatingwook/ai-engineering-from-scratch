@@ -1,6 +1,6 @@
-# 프로덕션 스케일링 — 큐, 체크포인트, 내구성 (Production Scaling — Queues, Checkpoints, Durability)
+# 프로덕션 스케일링(큐, 체크포인트, 내구성 (Production Scaling) Queues, Checkpoints, Durability)
 
-> 다중 에이전트(multi-agent) 시스템을 수천 개의 동시 실행으로 확장하려면 **내구성 실행(durable execution)**이 필요하다. LangGraph의 런타임(runtime)은 각 슈퍼 스텝(super-step) 이후 `thread_id`를 키로 하는 체크포인트(checkpoint)를 기록한다(기본값은 Postgres). 워커(worker)가 충돌하면 리스(lease)가 해제되고 다른 워커가 재개한다. 에이전트(agent)는 인간 입력을 기다리며 무한정 잠들 수 있다. **MegaAgent** (arXiv:2408.09955)는 세 가지 상태(Idle / Processing / Response)와 2계층 협응(그룹 내 채팅 + 그룹 간 관리자 채팅)을 갖춘 에이전트별 생산자-소비자 큐(queue)를 실행했다. **파이버(fiber)/비동기**는 LLM 스트리밍에서 작업당 스레드(thread-per-job)를 능가한다. 스레드는 토큰(token)을 기다리며 99%의 시간 동안 유휴 상태이지만, 파이버는 I/O에서 협력적으로 양보한다. 반론: Ashpreet Bedi의 "Scaling Agentic Software"는 부하가 그렇지 않음을 증명하기 전까지는 **FastAPI + Postgres + 그 외 아무것도 없음**을 주장한다 — 단순한 아키텍처가 생각보다 멀리 간다는 것이다. 이 레슨은 내구성 체크포인트 로그, 상태 전이를 갖춘 에이전트별 작업 큐, 비동기 대 스레드 데모를 만들고, 실용적인 "단순하게 시작하라" 규칙을 익힌다.
+> 다중 에이전트(multi-agent) 시스템을 수천 개의 동시 실행으로 확장하려면 **내구성 실행(durable execution)**이 필요하다. LangGraph의 런타임(runtime)은 각 슈퍼 스텝(super-step) 이후 `thread_id`를 키로 하는 체크포인트(checkpoint)를 기록한다(기본값은 Postgres). 워커(worker)가 충돌하면 리스(lease)가 해제되고 다른 워커가 재개한다. 에이전트(agent)는 인간 입력을 기다리며 무한정 잠들 수 있다. **MegaAgent** (arXiv:2408.09955)는 세 가지 상태(Idle / Processing / Response)와 2계층 협응(그룹 내 채팅 + 그룹 간 관리자 채팅)을 갖춘 에이전트별 생산자-소비자 큐(queue)를 실행했다. **파이버(fiber)/비동기**는 LLM 스트리밍에서 작업당 스레드(thread-per-job)를 능가한다. 스레드는 토큰(token)을 기다리며 99%의 시간 동안 유휴 상태이지만, 파이버는 I/O에서 협력적으로 양보한다. 반론: Ashpreet Bedi의 "Scaling Agentic Software"는 부하가 그렇지 않음을 증명하기 전까지는 **FastAPI + Postgres + 그 외 아무것도 없음**을 주장한다. 단순한 아키텍처가 생각보다 멀리 간다는 것이다. 이 레슨은 내구성 체크포인트 로그, 상태 전이를 갖춘 에이전트별 작업 큐, 비동기 대 스레드 데모를 만들고, 실용적인 "단순하게 시작하라" 규칙을 익힌다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib, `asyncio`, `sqlite3`)
@@ -68,7 +68,7 @@ coordinators:
   inter-group admin chat  (high-level routing)
 ```
 
-2계층 협응은 그룹 내 대화는 밀집하게 일어나게 하면서 그룹 간은 희소하게 유지한다 — 수천 개 에이전트에서 비용을 선형으로 유지하는 데 쓰이는 패턴이다.
+2계층 협응은 그룹 내 대화는 밀집하게 일어나게 하면서 그룹 간은 희소하게 유지한다. 수천 개 에이전트에서 비용을 선형으로 유지하는 데 쓰이는 패턴이다.
 
 ### 비동기 대 작업당 스레드
 
@@ -120,10 +120,10 @@ Anthropic의 다중 에이전트 연구 시스템은 "레인보우 배포(rainbo
 
 `code/main.py`는 다음을 구현한다.
 
-- `CheckpointStore` — thread-id 키를 갖춘 SQLite 기반 체크포인트 로그. 각 슈퍼 스텝이 한 행을 추가한다.
-- `run_with_checkpoint(agent, thread_id)` — 실행 도중 충돌을 시뮬레이션한다. 두 번째 워커가 마지막 체크포인트부터 재개한다.
-- `AgentQueue` — 작은 작업 큐를 갖춘 에이전트별 Idle / Processing / Response 상태 머신.
-- `demo_async_vs_threads()` — asyncio를 통해, 그리고 스레드를 통해 500개의 동시 시뮬레이션 "LLM 호출"을 실행한다. 벽시계 시간과 피크 메모리(근사)를 보고한다.
+- `CheckpointStore`: thread-id 키를 갖춘 SQLite 기반 체크포인트 로그. 각 슈퍼 스텝이 한 행을 추가한다.
+- `run_with_checkpoint(agent, thread_id)`: 실행 도중 충돌을 시뮬레이션한다. 두 번째 워커가 마지막 체크포인트부터 재개한다.
+- `AgentQueue`: 작은 작업 큐를 갖춘 에이전트별 Idle / Processing / Response 상태 머신.
+- `demo_async_vs_threads()`: asyncio를 통해, 그리고 스레드를 통해 500개의 동시 시뮬레이션 "LLM 호출"을 실행한다. 벽시계 시간과 피크 메모리(근사)를 보고한다.
 
 실행:
 
@@ -172,8 +172,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangChain — The runtime behind production deep agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents) — LangGraph 런타임 설계
-- [MegaAgent](https://arxiv.org/abs/2408.09955) — 에이전트별 생산자-소비자 큐. 수천 개 동시 에이전트에서의 2계층 협응
-- [Matrix](https://arxiv.org/abs/2511.21686) — 메시지 큐를 협응 기반으로 하는 분산 프레임워크
-- [Temporal docs](https://docs.temporal.io/) — 내구성 실행을 위한 참조 워크플로 엔진
-- [Anthropic — Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) — 레인보우 배포를 포함한 프로덕션 교훈
+- [LangChain(The runtime behind production deep agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents)) LangGraph 런타임 설계
+- [MegaAgent](https://arxiv.org/abs/2408.09955): 에이전트별 생산자-소비자 큐. 수천 개 동시 에이전트에서의 2계층 협응
+- [Matrix](https://arxiv.org/abs/2511.21686): 메시지 큐를 협응 기반으로 하는 분산 프레임워크
+- [Temporal docs](https://docs.temporal.io/): 내구성 실행을 위한 참조 워크플로 엔진
+- [Anthropic(Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 레인보우 배포를 포함한 프로덕션 교훈

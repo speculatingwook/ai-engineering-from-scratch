@@ -49,7 +49,7 @@ WinoIdentity(COLM 2025)는 불확실성 기반 교차 공정성을 도입한다.
 
 ### 메타 비평
 
-10년간의 문헌 검토(arXiv:2508.11067, 2025)는 이 분야가 이진 성별 편향에 불균형적으로 집중함을 발견한다. 다른 축들 — 장애, 종교, 이주 지위, 다국어 정체성 — 은 훨씬 적은 주의를 받는다. 메타 비평은 좁은 집중이 방치를 통해 소외된 집단에 해를 끼칠 수 있다고 주장한다. 이진 성별에 대해 잘 디바이어싱된 모델이 아무도 확인하지 않은 차원에서는 심하게 편향될 수 있다는 것이다.
+10년간의 문헌 검토(arXiv:2508.11067, 2025)는 이 분야가 이진 성별 편향에 불균형적으로 집중함을 발견한다. 다른 축들(장애, 종교, 이주 지위, 다국어 정체성)은 훨씬 적은 주의를 받는다. 메타 비평은 좁은 집중이 방치를 통해 소외된 집단에 해를 끼칠 수 있다고 주장한다. 이진 성별에 대해 잘 디바이어싱된 모델이 아무도 확인하지 않은 차원에서는 심하게 편향될 수 있다는 것이다.
 
 ### Phase 18에서의 위치
 
@@ -89,7 +89,7 @@ Lesson 20-21은 편향과 공정성을 공식적으로 다룬다. Lesson 22는 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gallegos et al. — Bias and Fairness in LLMs: A Survey (arXiv:2309.00770, Computational Linguistics 2024)](https://arxiv.org/abs/2309.00770) — 대표 서베이
-- [An et al. — Intersectional resume-evaluation bias (PNAS Nexus, March 2025)](https://academic.oup.com/pnasnexus/article/4/3/pgaf089/8111343) — 다섯 모델 교차 연구
-- [WinoIdentity — uncertainty-based intersectional fairness (arXiv:2508.07111, COLM 2025)](https://arxiv.org/abs/2508.07111) — 새로운 벤치마크
-- [UniBias — attention-head manipulation (Zhou et al. 2024, ACL)](https://arxiv.org/abs/2405.20612) — 제로샷 디바이어싱
+- [Gallegos et al.(Bias and Fairness in LLMs: A Survey (arXiv:2309.00770, Computational Linguistics 2024)](https://arxiv.org/abs/2309.00770)) 대표 서베이
+- [An et al.(Intersectional resume-evaluation bias (PNAS Nexus, March 2025)](https://academic.oup.com/pnasnexus/article/4/3/pgaf089/8111343)) 다섯 모델 교차 연구
+- [WinoIdentity(uncertainty-based intersectional fairness (arXiv:2508.07111, COLM 2025)](https://arxiv.org/abs/2508.07111)) 새로운 벤치마크
+- [UniBias(attention-head manipulation (Zhou et al. 2024, ACL)](https://arxiv.org/abs/2405.20612)) 제로샷 디바이어싱

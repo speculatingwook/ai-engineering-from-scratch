@@ -26,7 +26,7 @@ Toolformer는 베이스라인(baseline)을 확립했다: 모델은 자기지도�
 
 아이디어: 모델이 자신의 사전 학습(pretraining) 말뭉치를 후보 API 호출로 주석 달게 한다. 각 후보에 대해 그것을 실행한다. 도구 결과를 포함하는 것이 다음 토큰에 대한 손실을 줄일 때만 주석을 유지한다. 걸러진 말뭉치에 대해 파인튜닝(fine-tuning)한다.
 
-다룬 도구: 계산기, QA 시스템, 검색 엔진, 번역기, 캘린더. 자기지도 신호는 순전히 도구가 텍스트 예측에 도움이 되는지에 관한 것이다 — 사람 레이블(label) 없음.
+다룬 도구: 계산기, QA 시스템, 검색 엔진, 번역기, 캘린더. 자기지도 신호는 순전히 도구가 텍스트 예측에 도움이 되는지에 관한 것이다. 사람 레이블(label) 없음.
 
 규모 결과: 도구 사용은 규모에서 창발한다. 작은 모델은 도구 주석에서 손해를 보고 큰 모델은 이득을 본다. 그래서 2026년 프런티어 모델에는 강한 도구 사용이 내장된 반면, 대부분의 7B 모델은 신뢰성을 확보하려면 명시적 도구 사용 파인튜닝이 필요하다.
 
@@ -34,11 +34,11 @@ Toolformer는 베이스라인(baseline)을 확립했다: 모델은 자기지도�
 
 BFCL은 2026년의 사실상 표준 평가다. V4 구성:
 
-- **에이전트형(Agentic, 40%)** — 전체 에이전트 트래젝토리: 메모리, 멀티턴, 동적 결정.
-- **멀티턴(Multi-Turn, 30%)** — 도구 사슬을 가진 대화형 대화.
-- **라이브(Live, 10%)** — 사용자가 제출한 실제 프롬프트(prompt)(더 어려운 분포).
-- **논라이브(Non-Live, 10%)** — 합성 테스트 케이스.
-- **환각(Hallucination, 10%)** — 어떤 도구도 호출하지 말아야 할 때를 탐지.
+- **에이전트형(Agentic, 40%)**: 전체 에이전트 트래젝토리: 메모리, 멀티턴, 동적 결정.
+- **멀티턴(Multi-Turn, 30%)**: 도구 사슬을 가진 대화형 대화.
+- **라이브(Live, 10%)**: 사용자가 제출한 실제 프롬프트(prompt)(더 어려운 분포).
+- **논라이브(Non-Live, 10%)**: 합성 테스트 케이스.
+- **환각(Hallucination, 10%)**: 어떤 도구도 호출하지 말아야 할 때를 탐지.
 
 V3는 상태 기반 평가를 도입했다: 도구 시퀀스 이후, 도구 호출의 AST를 매칭하는 대신 API의 실제 상태(예: "파일이 생성됐는가?")를 확인한다. V4는 웹 검색, 메모리, 형식 민감도 범주를 추가했다.
 
@@ -63,7 +63,7 @@ Anthropic은 `input_schema`를 직접 쓰고, OpenAI는 `function.parameters`를
 1. **타입 강제 변환(Type coercion).** 모델이 스키마가 int라고 한 곳에 문자열 "5"를 반환할 수 있다. 모호하지 않으면 강제 변환하고, 그렇지 않으면 거부하라.
 2. **열거형 검증(Enum validation).** 스키마가 `status in {"open", "closed"}`라고 했는데 모델이 `"in_progress"`를 방출하면, 서술적 에러로 거부하라.
 3. **필수 필드(Required fields).** 필수 필드 누락 -> 크래시가 아니라 즉각적인 에러 관찰을 모델에 돌려보내라.
-4. **형식 검증(Format validation).** 날짜, 이메일, URL — 정규식이 아니라 구체적인 파서로 검증하라.
+4. **형식 검증(Format validation).** 날짜, 이메일, URL: 정규식이 아니라 구체적인 파서로 검증하라.
 
 모든 검증 실패는 모델이 올바른 형태로 재시도할 수 있도록 구조화된 관찰을 반환해야 한다.
 
@@ -101,7 +101,7 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-모든 제공자는 자체 도구 스키마를 가진다 — Anthropic, OpenAI, Gemini, Bedrock. 다중 제공자가 필요하면 변환 계층(OpenAI Agents SDK, Vercel AI SDK, LangChain 도구 어댑터)을 사용하라. BFCL이 참조 벤치마크(benchmark)다 — 도구 사용이 제품의 핵심이라면 출하 전에 에이전트에 대해 그것을 돌려라.
+모든 제공자는 자체 도구 스키마를 가진다. Anthropic, OpenAI, Gemini, Bedrock. 다중 제공자가 필요하면 변환 계층(OpenAI Agents SDK, Vercel AI SDK, LangChain 도구 어댑터)을 사용하라. BFCL이 참조 벤치마크(benchmark)다. 도구 사용이 제품의 핵심이라면 출하 전에 에이전트에 대해 그것을 돌려라.
 
 ## 산출물 (Ship It)
 
@@ -120,7 +120,7 @@ python3 code/main.py
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
 | 함수 호출(Function calling) | "도구 사용" | 검증된 스키마를 가진 구조화 출력 도구 호출 |
-| Toolformer | "자기지도 도구 주석" | Schick 2023 — 결과가 다음 토큰 손실을 줄이는 도구 호출을 유지 |
+| Toolformer | "자기지도 도구 주석" | Schick 2023: 결과가 다음 토큰 손실을 줄이는 도구 호출을 유지 |
 | BFCL | "Berkeley Function Calling Leaderboard" | 2026 벤치마크: 40% 에이전트형, 30% 멀티턴, 10% 라이브, 10% 논라이브, 10% 환각 |
 | 도구 스키마(Tool schema) | "모델을 위한 함수 시그니처" | name, description, 인자의 JSON Schema |
 | tool_use_id | "상관 ID" | 도구 호출을 그 결과에 묶음; 병렬 디스패치에 필수 |
@@ -130,7 +130,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Schick et al., Toolformer (arXiv:2302.04761)](https://arxiv.org/abs/2302.04761) — 자기지도 도구 주석
-- [Berkeley Function Calling Leaderboard (V4)](https://gorilla.cs.berkeley.edu/leaderboard.html) — 2026 평가 벤치마크
-- [Anthropic, Tool use documentation](https://platform.claude.com/docs/en/agent-sdk/overview) — Claude Agent SDK의 프로덕션 도구 스키마
-- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/) — 함수 도구 타입과 Guardrails
+- [Schick et al., Toolformer (arXiv:2302.04761)](https://arxiv.org/abs/2302.04761): 자기지도 도구 주석
+- [Berkeley Function Calling Leaderboard (V4)](https://gorilla.cs.berkeley.edu/leaderboard.html): 2026 평가 벤치마크
+- [Anthropic, Tool use documentation](https://platform.claude.com/docs/en/agent-sdk/overview): Claude Agent SDK의 프로덕션 도구 스키마
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): 함수 도구 타입과 Guardrails

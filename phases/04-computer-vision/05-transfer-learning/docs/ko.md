@@ -76,7 +76,7 @@ PyTorch에서 이것은 옵티마이저(optimizer)에 전달되는 파라미터 
 
 ### BatchNorm 문제
 
-BN 층은 ImageNet에서 계산된 `running_mean`과 `running_var` 버퍼를 갖는다. 작업의 픽셀 분포가 다르면 — 다른 조명, 다른 센서, 다른 색 공간 — 그 버퍼는 틀렸다. 선호 순서대로 세 가지 선택지:
+BN 층은 ImageNet에서 계산된 `running_mean`과 `running_var` 버퍼를 갖는다. 작업의 픽셀 분포가 다르면(다른 조명, 다른 센서, 다른 색 공간) 그 버퍼는 틀렸다. 선호 순서대로 세 가지 선택지:
 
 1. **BN을 train 모드로 둔 채 파인튜닝.** BN이 다른 모든 것과 함께 실행 통계를 업데이트하게 한다. 작업 데이터셋이 중간 크기(>= 5k 예제)일 때의 기본 선택.
 2. **BN을 eval 모드로 고정.** ImageNet 통계를 유지하고 가중치(weight)만 학습한다. BN의 이동 평균이 잡음투성이일 만큼 데이터셋이 작을 때 옳다.
@@ -110,8 +110,8 @@ decay = 0.75에 L = 12 트랜스포머(transformer) 블록이면, 첫 블록은 
 
 전이 학습 실행은 밑바닥부터 학습할 때는 추적하지 않을 두 숫자가 필요하다.
 
-- **사전 학습만의 정확도** — 백본을 고정한 헤드의 정확도. 이것이 바닥이다.
-- **파인튜닝된 정확도** — 종단 간 학습 후의 같은 모델. 이것이 천장이다.
+- **사전 학습만의 정확도**: 백본을 고정한 헤드의 정확도. 이것이 바닥이다.
+- **파인튜닝된 정확도**: 종단 간 학습 후의 같은 모델. 이것이 천장이다.
 
 파인튜닝된 것이 사전 학습만의 것보다 낮으면, 학습률 또는 BN 버그가 있는 것이다. 항상 둘 다 출력하라.
 
@@ -133,7 +133,7 @@ print("feature dim:", backbone.fc.in_features)
 
 `ResNet18`은 스테이지 네 개(`layer1..layer4`)에 스템(stem)과 `fc` 헤드를 갖는다. 모든 torchvision 분류 백본은 유사한 구조를 갖는다.
 
-### 2단계: 특성 추출 — 전부 고정하고 헤드 교체하기
+### 2단계: 특성 추출: 전부 고정하고 헤드 교체하기
 
 ```python
 def make_feature_extractor(num_classes=10):
@@ -300,8 +300,8 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-4)
 
 이 레슨은 다음을 만든다.
 
-- `outputs/prompt-fine-tune-planner.md` — 데이터셋 크기, 도메인 거리, 연산 예산을 바탕으로 특성 추출 대 점진적 대 종단 간 파인튜닝을 고르는 프롬프트.
-- `outputs/skill-freeze-inspector.md` — PyTorch 모델이 주어지면 어떤 파라미터가 학습 가능한지, 어떤 BatchNorm 층이 eval 모드인지, 그리고 옵티마이저가 실제로 학습 가능한 파라미터를 받고 있는지 보고하는 스킬.
+- `outputs/prompt-fine-tune-planner.md`: 데이터셋 크기, 도메인 거리, 연산 예산을 바탕으로 특성 추출 대 점진적 대 종단 간 파인튜닝을 고르는 프롬프트.
+- `outputs/skill-freeze-inspector.md`: PyTorch 모델이 주어지면 어떤 파라미터가 학습 가능한지, 어떤 BatchNorm 층이 eval 모드인지, 그리고 옵티마이저가 실제로 학습 가능한 파라미터를 받고 있는지 보고하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -319,12 +319,12 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-4)
 | 층별 LR 감쇠(Layer-wise LR decay) | "매끄러운 LR 그래디언트" | 층당 LR에 decay^(L - k)를 곱한 것. 트랜스포머 파인튜닝에서 흔하다 |
 | 파국적 망각(Catastrophic forgetting) | "모델이 ImageNet을 잃었다" | 너무 높은 LR이 새 작업 신호가 학습되기 전에 사전 학습된 특성을 덮어쓴다 |
 | BN 통계 표류(BN statistics drift) | "실행 평균이 틀렸다" | 현재 작업과 다른 분포에서 계산된 BatchNorm running_mean/var가 조용히 정확도를 해친다 |
-| 선형 프로브(Linear probe) | "고정 백본 + 선형 헤드" | 사전 학습된 특성의 평가 — 고정된 표현 위 최선의 선형 분류기의 정확도 |
+| 선형 프로브(Linear probe) | "고정 백본 + 선형 헤드" | 사전 학습된 특성의 평가: 고정된 표현 위 최선의 선형 분류기의 정확도 |
 | 파국적 붕괴(Catastrophic collapse) | "전부 한 클래스로 예측" | 헤드의 그래디언트가 안정화되기 전에 특성을 파괴할 만큼 높은 LR로 파인튜닝할 때 일어난다 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [How transferable are features in deep neural networks? (Yosinski et al., 2014)](https://arxiv.org/abs/1411.1792) — 층에 걸친 특성 전이성을 정량화한 논문
-- [Universal Language Model Fine-tuning (ULMFiT, Howard & Ruder, 2018)](https://arxiv.org/abs/1801.06146) — 원조 변별적 LR / 점진적 해제 레시피. 그 아이디어는 비전으로 직접 전이된다
-- [timm documentation](https://huggingface.co/docs/timm) — 현대 비전 백본과 그것들이 학습된 정확한 파인튜닝 기본값에 대한 참고 자료
-- [A Simple Framework for Linear-Probe Evaluation (Kornblith et al., 2019)](https://arxiv.org/abs/1805.08974) — 선형 프로브 정확도가 왜 중요하고 어떻게 올바르게 보고하는지
+- [How transferable are features in deep neural networks? (Yosinski et al., 2014)](https://arxiv.org/abs/1411.1792): 층에 걸친 특성 전이성을 정량화한 논문
+- [Universal Language Model Fine-tuning (ULMFiT, Howard & Ruder, 2018)](https://arxiv.org/abs/1801.06146): 원조 변별적 LR / 점진적 해제 레시피. 그 아이디어는 비전으로 직접 전이된다
+- [timm documentation](https://huggingface.co/docs/timm): 현대 비전 백본과 그것들이 학습된 정확한 파인튜닝 기본값에 대한 참고 자료
+- [A Simple Framework for Linear-Probe Evaluation (Kornblith et al., 2019)](https://arxiv.org/abs/1805.08974): 선형 프로브 정확도가 왜 중요하고 어떻게 올바르게 보고하는지

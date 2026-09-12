@@ -1,4 +1,4 @@
-# 밑바닥부터 트랜스포머 만들기 — 캡스톤(Capstone)
+# 밑바닥부터 트랜스포머 만들기: 캡스톤(Capstone)
 
 > 열세 개의 레슨. 하나의 모델. 지름길 없음.
 
@@ -13,7 +13,7 @@
 
 캡스톤(capstone): 작은 디코더 전용(decoder-only) 트랜스포머(transformer)를 문자 단위(character-level) 언어 모델링(language modeling) 작업에 대해 종단 간(end-to-end)으로 학습(training)한다. 셰익스피어를 읽는다. 새로운 셰익스피어를 생성한다. 노트북에서 10분 미만으로 학습할 만큼 작다. 더 큰 데이터셋(dataset)과 더 긴 학습으로 바꿔 넣으면 실제 LM이 될 만큼 정확하다.
 
-이것이 이 과정의 "nanoGPT"다. 독창적이지 않다 — Karpathy의 2023년 nanoGPT 튜토리얼은 모든 학생이 적어도 한 번은 작성하는 레퍼런스 구현이다. 우리는 그 형태를 가져와 우리가 다룬 내용에 맞춰 재구성한다.
+이것이 이 과정의 "nanoGPT"다. 독창적이지 않다. Karpathy의 2023년 nanoGPT 튜토리얼은 모든 학생이 적어도 한 번은 작성하는 레퍼런스 구현이다. 우리는 그 형태를 가져와 우리가 다룬 내용에 맞춰 재구성한다.
 
 ## 개념 (The Concept)
 
@@ -52,20 +52,20 @@ shift-by-one cross-entropy            ◀── Lesson 07
 
 ### 우리가 만드는 것
 
-- `GPTConfig` — 모든 하이퍼파라미터(hyperparameter)를 설정하는 한 곳.
-- `MultiHeadAttention` — 인과(causal), 배치(batch) 처리, 선택적 Flash 스타일 경로(PyTorch의 `scaled_dot_product_attention`) 포함.
-- `SwiGLUFFN` — 현대적 FFN.
-- `Block` — 프리노름(pre-norm), 잔차(residual)로 감싼 어텐션 + FFN.
-- `GPT` — 임베딩(embedding), 쌓은 블록, LM 헤드, generate().
+- `GPTConfig`: 모든 하이퍼파라미터(hyperparameter)를 설정하는 한 곳.
+- `MultiHeadAttention`: 인과(causal), 배치(batch) 처리, 선택적 Flash 스타일 경로(PyTorch의 `scaled_dot_product_attention`) 포함.
+- `SwiGLUFFN`: 현대적 FFN.
+- `Block`: 프리노름(pre-norm), 잔차(residual)로 감싼 어텐션 + FFN.
+- `GPT`: 임베딩(embedding), 쌓은 블록, LM 헤드, generate().
 - AdamW, 코사인 LR(학습률(learning rate)), 그래디언트 클리핑(gradient clipping)을 갖춘 학습 루프.
 - 셰익스피어 텍스트에 대한 문자 단위 토크나이저(tokenizer).
 
 ### 우리가 만들지 않는 것
 
-- RoPE — Lesson 04에서 개념적으로 구현했다. 여기서는 단순함을 위해 학습된 위치 임베딩(positional embedding)을 쓴다. 연습 문제에서 RoPE로 바꿔 넣으라고 한다.
-- 생성 중 KV 캐시 — 각 생성 스텝이 전체 접두사(prefix)에 대한 어텐션을 다시 계산한다. 더 느리지만 더 단순하다. 연습 문제에서 KV 캐시를 추가하라고 한다.
-- Flash Attention — PyTorch 2.0+는 입력이 맞으면 자동 디스패치(dispatch)한다; 우리는 `F.scaled_dot_product_attention`을 쓴다.
-- MoE — 블록당 단일 FFN. MoE는 Lesson 11에서 봤다.
+- RoPE: Lesson 04에서 개념적으로 구현했다. 여기서는 단순함을 위해 학습된 위치 임베딩(positional embedding)을 쓴다. 연습 문제에서 RoPE로 바꿔 넣으라고 한다.
+- 생성 중 KV 캐시: 각 생성 스텝이 전체 접두사(prefix)에 대한 어텐션을 다시 계산한다. 더 느리지만 더 단순하다. 연습 문제에서 KV 캐시를 추가하라고 한다.
+- Flash Attention: PyTorch 2.0+는 입력이 맞으면 자동 디스패치(dispatch)한다; 우리는 `F.scaled_dot_product_attention`을 쓴다.
+- MoE: 블록당 단일 FFN. MoE는 Lesson 11에서 봤다.
 
 ### 목표 지표
 
@@ -100,7 +100,7 @@ decode = lambda xs: "".join(itos[x] for x in xs)
 
 ### 2단계: 모델
 
-`code/main.py`를 참고하라. 블록은 Lesson 05의 교과서다 — 프리노름, RMSNorm, SwiGLU, 인과 MHA. 4/4/128의 파라미터(parameter) 수: ~800K.
+`code/main.py`를 참고하라. 블록은 Lesson 05의 교과서다. 프리노름, RMSNorm, SwiGLU, 인과 MHA. 4/4/128의 파라미터(parameter) 수: ~800K.
 
 ### 3단계: 학습 루프
 
@@ -150,10 +150,10 @@ The chief that well shame and hath been his friends,
 
 ## 연습 문제 (Exercises)
 
-1. **쉬움.** `code/main.py`를 실행하라. 학습한 모델의 마지막 스텝 검증 손실이 2.0 미만인지 확인하라. `max_steps`를 2,000에서 5,000으로 바꿔라 — 검증 손실이 계속 향상되는가?
+1. **쉬움.** `code/main.py`를 실행하라. 학습한 모델의 마지막 스텝 검증 손실이 2.0 미만인지 확인하라. `max_steps`를 2,000에서 5,000으로 바꿔라. 검증 손실이 계속 향상되는가?
 2. **중간.** 학습된 위치 임베딩을 RoPE로 교체하라. `MultiHeadAttention` 내부에서 Q와 K에 회전(rotation)을 적용하라. 학습하고 검증 손실이 최소한 그만큼 낮은지 확인하라.
 3. **중간.** 샘플링 루프에 KV 캐시를 구현하라. 캐시 있을 때와 없을 때 500 토큰을 생성하라. 노트북에서 실측 시간(wall-clock)이 5~20배 향상되어야 한다.
-4. **어려움.** 다음의 다음 토큰을 예측하는 두 번째 헤드(MTP — DeepSeek-V3의 다중 토큰 예측(Multi-Token Prediction))를 모델에 추가하라. 공동으로 학습하라. 도움이 되는가?
+4. **어려움.** 다음의 다음 토큰을 예측하는 두 번째 헤드(MTP: DeepSeek-V3의 다중 토큰 예측(Multi-Token Prediction))를 모델에 추가하라. 공동으로 학습하라. 도움이 되는가?
 5. **어려움.** 블록당 단일 FFN을 4전문가 MoE로 교체하라. 라우터(router) + top-2 라우팅. 동일 활성 파라미터에서 검증 손실이 어떻게 바뀌는지 보라.
 
 ## 핵심 용어 (Key Terms)
@@ -171,5 +171,5 @@ The chief that well shame and hath been his friends,
 
 ## 더 읽을거리 (Further Reading)
 
-- [The Annotated Transformer (Harvard NLP)](https://nlp.seas.harvard.edu/annotated-transformer/) — 고전적인 주석 달린 구현.
+- [The Annotated Transformer (Harvard NLP)](https://nlp.seas.harvard.edu/annotated-transformer/): 고전적인 주석 달린 구현.
 </content>

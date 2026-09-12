@@ -13,7 +13,7 @@
 
 - Michael Jordan(농구)?
 - Michael B. Jordan(배우)?
-- Michael I. Jordan(버클리 ML 교수 — 그렇다, ML 논문에서 이 혼동은 실제로 일어난다)?
+- Michael I. Jordan(버클리 ML 교수: 그렇다, ML 논문에서 이 혼동은 실제로 일어난다)?
 - Jordan(국가)?
 - Jordan(히브리어 이름)?
 

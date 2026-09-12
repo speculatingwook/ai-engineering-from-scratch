@@ -1,6 +1,6 @@
 # CAIS, CAISI, 그리고 사회적 규모 위험 (CAIS, CAISI, and Societal-Scale Risk)
 
-> Center for AI Safety(CAIS, 샌프란시스코, 2022년 Hendrycks와 Zhang이 설립)는 네 가지 위험 프레임워크 — 악의적 사용(malicious use), AI 경쟁(AI races), 조직적 위험(organizational risks), 악성 AI(rogue AIs) — 와, 수백 명의 교수와 기업 지도자가 서명한 2023년 5월 멸종 위험 성명을 발표한다. CAIS의 2026년 발표물: 프런티어 모델(frontier model) 평가를 위한 AI Dashboard, Remote Labor Index(Scale AI와 공동), Superintelligence Strategy Paper, AI Frontiers 뉴스레터. 별개의 실체: NIST Center for AI Standards and Innovation(CAISI) — 미국 정부 대상 자발적 협약과, 사이버·생물·화학 무기 위험에 초점을 맞춘 비분류(unclassified) 능력 평가. CAIS는 조직적 위험을 네 가지 최상위 위험 중 하나로 표시한다. 안전 문화, 엄격한 감사, 다층 방어, 정보 보안이 기초적이지만 일상적으로 배포 속도와 트레이드오프(trade-off)된다. California SB-53는 서명되면 미국 최초의 주(州) 수준 파국적 위험(catastrophic-risk) 규제가 될 것이다.
+> Center for AI Safety(CAIS, 샌프란시스코, 2022년 Hendrycks와 Zhang이 설립)는 네 가지 위험 프레임워크: 악의적 사용(malicious use), AI 경쟁(AI races), 조직적 위험(organizational risks), 악성 AI(rogue AIs)와, 수백 명의 교수와 기업 지도자가 서명한 2023년 5월 멸종 위험 성명을 발표한다. CAIS의 2026년 발표물: 프런티어 모델(frontier model) 평가를 위한 AI Dashboard, Remote Labor Index(Scale AI와 공동), Superintelligence Strategy Paper, AI Frontiers 뉴스레터. 별개의 실체: NIST Center for AI Standards and Innovation(CAISI): 미국 정부 대상 자발적 협약과, 사이버·생물·화학 무기 위험에 초점을 맞춘 비분류(unclassified) 능력 평가. CAIS는 조직적 위험을 네 가지 최상위 위험 중 하나로 표시한다. 안전 문화, 엄격한 감사, 다층 방어, 정보 보안이 기초적이지만 일상적으로 배포 속도와 트레이드오프(trade-off)된다. California SB-53는 서명되면 미국 최초의 주(州) 수준 파국적 위험(catastrophic-risk) 규제가 될 것이다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, four-risk inventory and mitigation matcher)
@@ -67,7 +67,7 @@ CAISI의 역할은 METR의 비공개 연구소 참여(Lesson 21)에 대한 공�
 
 ### 사회적 규모 위험은 단일 계층 문제가 아니다
 
-Phase 15의 일관된 주제 — 심층 방어(defense in depth) — 는 사회적 계층에서도 적용된다. 어느 단일 조직, 규제, 또는 프레임워크도 파국적 위험을 닫지 못한다. 생태계는 다음과 같을 때만 기능한다.
+Phase 15의 일관된 주제(심층 방어(defense in depth))는 사회적 계층에서도 적용된다. 어느 단일 조직, 규제, 또는 프레임워크도 파국적 위험을 닫지 못한다. 생태계는 다음과 같을 때만 기능한다.
 
 - 연구소가 스케일링 정책을 출고한다(Lessons 19, 20).
 - 외부 평가자가 측정을 생성한다(Lesson 21).
@@ -112,8 +112,8 @@ Phase 15의 일관된 주제 — 심층 방어(defense in depth) — 는 사회�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Center for AI Safety](https://safe.ai/) — 네 가지 위험 프레임워크의 기관 본거지.
-- [CAIS — AI Risks that Could Lead to Catastrophe](https://safe.ai/ai-risk) — 네 가지 위험 논문.
-- [CAIS — May 2023 statement on extinction risk](https://safe.ai/statement-on-ai-risk) — 짧은 공동 성명.
-- [NIST CAISI](https://www.nist.gov/caisi) — 정부 대상 AI 표준 및 혁신 센터.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 연구소 수준 약속을 사회적 규모 프레이밍과 연결한다.
+- [Center for AI Safety](https://safe.ai/): 네 가지 위험 프레임워크의 기관 본거지.
+- [CAIS(AI Risks that Could Lead to Catastrophe](https://safe.ai/ai-risk)) 네 가지 위험 논문.
+- [CAIS(May 2023 statement on extinction risk](https://safe.ai/statement-on-ai-risk)) 짧은 공동 성명.
+- [NIST CAISI](https://www.nist.gov/caisi): 정부 대상 AI 표준 및 혁신 센터.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 연구소 수준 약속을 사회적 규모 프레이밍과 연결한다.

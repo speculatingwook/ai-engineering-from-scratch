@@ -1,4 +1,4 @@
-# Capstone 06 — 쿠버네티스를 위한 DevOps 트러블슈팅 에이전트
+# Capstone 06: 쿠버네티스를 위한 DevOps 트러블슈팅 에이전트
 
 > AWS의 DevOps Agent가 정식 출시(GA)되었고, Resolve AI는 K8s 플레이북을 발표했고 NeuBird는 시맨틱 모니터링을 시연했고 Metoro는 AI SRE를 서비스별 SLO에 묶었다. 프로덕션(production) 형태는 정해졌다. 알림 웹훅(webhook)이 발동하면, 에이전트가 텔레메트리(telemetry)를 읽고 K8s 객체의 그래프를 걷고 근본 원인 가설의 순위를 매기고 승인 버튼이 달린 Slack 브리핑을 게시한다. 기본은 읽기 전용. 모든 조치(remediation)는 사람에 의해 게이팅된다. 이 캡스톤(capstone)은 그런 에이전트로, 20개의 합성 인시던트(incident)에서 평가되고 세 개의 공유된 케이스에서 AWS의 Agent와 비교된다.
 
@@ -20,7 +20,7 @@
 
 알림이 발동하면, 에이전트는 영향받은 객체로부터 근본 원인을 분석한다. 간선을 걷고 관련 텔레메트리 조각(최근 15분)을 끌어오고 가설의 초안을 작성한다. 가설은 증거로 순위가 매겨진다. 얼마나 많은 텔레메트리 인용이 그것을 뒷받침하는지, 얼마나 최근인지, 얼마나 구체적인지. 상위 3개 가설은 그래프 경로 시각화와 조치 액션을 위한 승인 버튼과 함께 Slack으로 간다.
 
-조치는 게이팅된다. 허용되는 기본 액션은 읽기 전용이다. 파괴적 액션(스케일 다운, 롤백, Pod 삭제)은 Slack 승인을 요구한다. ArgoCD 롤백 훅은 에이전트가 결코 보유하지 않는 인증 토큰을 요구한다. 감사 로그는 에이전트가 *고려한* 모든 명령을 — 실행한 것만이 아니라 — 기록하므로, 검토 과정이 아차사고(near-miss)를 잡아낸다.
+조치는 게이팅된다. 허용되는 기본 액션은 읽기 전용이다. 파괴적 액션(스케일 다운, 롤백, Pod 삭제)은 Slack 승인을 요구한다. ArgoCD 롤백 훅은 에이전트가 결코 보유하지 않는 인증 토큰을 요구한다. 감사 로그는 에이전트가 *고려한* 모든 명령을(실행한 것만이 아니라) 기록하므로, 검토 과정이 아차사고(near-miss)를 잡아낸다.
 
 ## 아키텍처 (Architecture)
 
@@ -137,11 +137,11 @@ webhook: alert.pagerduty.com -> checkout-api SLO breach, error rate 14%
 
 ## 더 읽을거리 (Further Reading)
 
-- [AWS DevOps Agent GA](https://aws.amazon.com/blogs/aws/aws-devops-agent-helps-you-accelerate-incident-response-and-improve-system-reliability-preview/) — 정전(canonical)에 해당하는 2026 레퍼런스
-- [Resolve AI K8s troubleshooting](https://resolve.ai/blog/kubernetes-troubleshooting-in-resolve-ai) — 경쟁사 레퍼런스
-- [NeuBird semantic monitoring](https://www.neubird.ai) — 시맨틱 그래프 접근법
-- [Metoro AI SRE](https://metoro.io) — SLO 우선 프로덕션 프레이밍
-- [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) — 클러스터 상태 소스
-- [LangGraph](https://langchain-ai.github.io/langgraph/) — 레퍼런스 에이전트 오케스트레이터
-- [FastMCP](https://github.com/jlowin/fastmcp) — Python MCP 서버 프레임워크
-- [ArgoCD rollback](https://argo-cd.readthedocs.io/en/stable/user-guide/commands/argocd_app_rollback/) — 게이팅된 조치 대상
+- [AWS DevOps Agent GA](https://aws.amazon.com/blogs/aws/aws-devops-agent-helps-you-accelerate-incident-response-and-improve-system-reliability-preview/): 정전(canonical)에 해당하는 2026 레퍼런스
+- [Resolve AI K8s troubleshooting](https://resolve.ai/blog/kubernetes-troubleshooting-in-resolve-ai): 경쟁사 레퍼런스
+- [NeuBird semantic monitoring](https://www.neubird.ai): 시맨틱 그래프 접근법
+- [Metoro AI SRE](https://metoro.io): SLO 우선 프로덕션 프레이밍
+- [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics): 클러스터 상태 소스
+- [LangGraph](https://langchain-ai.github.io/langgraph/): 레퍼런스 에이전트 오케스트레이터
+- [FastMCP](https://github.com/jlowin/fastmcp): Python MCP 서버 프레임워크
+- [ArgoCD rollback](https://argo-cd.readthedocs.io/en/stable/user-guide/commands/argocd_app_rollback/): 게이팅된 조치 대상

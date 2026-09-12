@@ -9,7 +9,7 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- Jamba 블록의 세 원시 요소(primitive) — 트랜스포머 층, Mamba 층, MoE — 와 1:7:짝수 교차(interleaving) 레시피를 설명한다.
+- Jamba 블록의 세 원시 요소(primitive)(트랜스포머 층, Mamba 층, MoE)와 1:7:짝수 교차(interleaving) 레시피를 설명한다.
 - SSM의 순환이 높은 수준에서 어떻게 생겼는지, 그리고 그것이 일정 메모리 추론을 가능하게 하는 이유를 진술한다.
 - 256k 컨텍스트에서 Jamba 모델의 KV 캐시 풋프린트를 계산하고 순수 트랜스포머 모델이 필요로 할 것과 비교한다.
 - 세 가지 Mamba-3 혁신(지수-사다리꼴(exponential-trapezoidal) 이산화, 복소수 값 상태 갱신, MIMO)과 각각이 겨냥하는 문제를 명명한다.
@@ -69,7 +69,7 @@ AI21은 절제(ablation) 실험을 했다: 어텐션 대 Mamba의 어느 비율�
 
 ### 위치 인코딩
 
-Mamba 층은 (순환을 통해) 그 자체로 위치를 인식한다. 원래 Mamba 기반 하이브리드의 어텐션 층은 RoPE를 쓰지 않았다 — SSM 층이 위치 정보를 제공했다. Jamba 1.5는 더 긴 컨텍스트 일반화를 위해 어텐션 층에 RoPE를 추가하는데, 이는 경험적 장문 컨텍스트 평가에서 나온 사후 개량이다.
+Mamba 층은 (순환을 통해) 그 자체로 위치를 인식한다. 원래 Mamba 기반 하이브리드의 어텐션 층은 RoPE를 쓰지 않았다. SSM 층이 위치 정보를 제공했다. Jamba 1.5는 더 긴 컨텍스트 일반화를 위해 어텐션 층에 RoPE를 추가하는데, 이는 경험적 장문 컨텍스트 평가에서 나온 사후 개량이다.
 
 ### 메모리 예산
 
@@ -88,13 +88,13 @@ Mamba-3(ICLR 2026, arXiv:2603.15569)는 순수 SSM 쪽에 세 가지 혁신을 �
 
 1. **지수-사다리꼴 이산화.** Mamba-2의 오일러 방법(Euler-method) 이산화를 더 표현력 있는 순환으로 교체한다. `x_t`에 대한 바깥 합성곱이 아니라 핵심 순환 안에서 상태-입력에 적용되는 합성곱 유사 연산.
 
-2. **복소수 값 상태 갱신.** 이전 Mamba들은 상태 행렬을 복소수(S4)에서 실수 대각(Mamba)으로, 다시 스케일링된 항등(Mamba-2)으로 줄였다. Mamba-3는 복소수 값을 다시 추가한다 — 상태에 대한 데이터 의존적 회전 임베딩(rotary embedding)과 동등하다. 이는 이전의 실수 값 단순화가 비용으로 치렀던 상태 추적 능력을 복원한다.
+2. **복소수 값 상태 갱신.** 이전 Mamba들은 상태 행렬을 복소수(S4)에서 실수 대각(Mamba)으로, 다시 스케일링된 항등(Mamba-2)으로 줄였다. Mamba-3는 복소수 값을 다시 추가한다. 상태에 대한 데이터 의존적 회전 임베딩(rotary embedding)과 동등하다. 이는 이전의 실수 값 단순화가 비용으로 치렀던 상태 추적 능력을 복원한다.
 
 3. **다중 입력 다중 출력(MIMO) 투영.** 특성별 스칼라 투영 대신 행렬 값 투영을 쓴다. 디코드 지연 시간(latency)을 늘리지 않고 모델링 능력과 추론 시점 하드웨어 활용도를 개선한다.
 
 1.5B 파라미터에서 Mamba-3는 Gated DeltaNet보다 평균 하류 정확도를 0.6점 개선하고; MIMO 변형은 1.2점을 더해 총 1.8점 이득을 낸다. 동일한 상태 크기에서 Mamba-3는 절반의 상태로 Mamba-2에 맞먹는다.
 
-Mamba-3는 아직 대규모 프로덕션 하이브리드에 탑재되지 않았다 — 그러나 다음 Jamba급 모델의 SSM 쪽으로 명백한 후보다.
+Mamba-3는 아직 대규모 프로덕션 하이브리드에 탑재되지 않았다. 그러나 다음 Jamba급 모델의 SSM 쪽으로 명백한 후보다.
 
 ### 언제 하이브리드를 쓸 것인가
 
@@ -142,7 +142,7 @@ Mamba-3는 아직 대규모 프로덕션 하이브리드에 탑재되지 않았�
 
 - 대부분의 프로덕션 추론 서버(vLLM, SGLang)는 Jamba와 Mamba를 지원한다. 특정 버전을 확인하라.
 - 256k 컨텍스트에서 Jamba의 메모리 이점은 동시 요청 처리량(throughput)에서 드러난다. 동일한 VRAM에 트랜스포머 시퀀스보다 더 많은 Jamba 시퀀스를 넣는다.
-- 독립형 모델로서의 Mamba-3는 아직 프로덕션에 탑재되지 않았다 — 1.5B의 연구 프리뷰.
+- 독립형 모델로서의 Mamba-3는 아직 프로덕션에 탑재되지 않았다. 1.5B의 연구 프리뷰.
 
 ## 산출물 (Ship It)
 
@@ -177,9 +177,9 @@ Mamba-3는 아직 대규모 프로덕션 하이브리드에 탑재되지 않았�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Lieber et al. — Jamba: A Hybrid Transformer-Mamba Language Model (arXiv:2403.19887)](https://arxiv.org/abs/2403.19887) — 원래 Jamba 논문, 비율 절제, 256k 컨텍스트 주장
-- [AI21 — Jamba 1.5: Hybrid Transformer-Mamba at Scale (arXiv:2408.12570)](https://arxiv.org/abs/2408.12570) — 확장된 계열, 398B/94B와 12B/52B 공개 출시
-- [Gu, Dao — Mamba: Linear-Time Sequence Modeling with Selective State Spaces (arXiv:2312.00752)](https://arxiv.org/abs/2312.00752) — Jamba가 그 위에 만드는 선택적 SSM 논문
-- [Dao, Gu — Mamba-2 (arXiv:2405.21060)](https://arxiv.org/abs/2405.21060) — 단순화된 구조화 상태 공간 후속
-- [Lahoti et al. — Mamba-3 (arXiv:2603.15569, ICLR 2026)](https://arxiv.org/abs/2603.15569) — 복소수 값 상태, MIMO, 2026년 순수 SSM 프런티어
-- [Gu et al. — Efficiently Modeling Long Sequences with Structured State Spaces (arXiv:2111.00396)](https://arxiv.org/abs/2111.00396) — S4 논문, LLM을 위한 SSM 계보의 출발점
+- [Lieber et al.(Jamba: A Hybrid Transformer-Mamba Language Model (arXiv:2403.19887)](https://arxiv.org/abs/2403.19887)) 원래 Jamba 논문, 비율 절제, 256k 컨텍스트 주장
+- [AI21(Jamba 1.5: Hybrid Transformer-Mamba at Scale (arXiv:2408.12570)](https://arxiv.org/abs/2408.12570)) 확장된 계열, 398B/94B와 12B/52B 공개 출시
+- [Gu, Dao(Mamba: Linear-Time Sequence Modeling with Selective State Spaces (arXiv:2312.00752)](https://arxiv.org/abs/2312.00752)) Jamba가 그 위에 만드는 선택적 SSM 논문
+- [Dao, Gu(Mamba-2 (arXiv:2405.21060)](https://arxiv.org/abs/2405.21060)) 단순화된 구조화 상태 공간 후속
+- [Lahoti et al.(Mamba-3 (arXiv:2603.15569, ICLR 2026)](https://arxiv.org/abs/2603.15569)) 복소수 값 상태, MIMO, 2026년 순수 SSM 프런티어
+- [Gu et al.(Efficiently Modeling Long Sequences with Structured State Spaces (arXiv:2111.00396)](https://arxiv.org/abs/2111.00396)) S4 논문, LLM을 위한 SSM 계보의 출발점

@@ -63,7 +63,7 @@ S14는 이 단계(phase)에서 중요하다. 자율 코딩 에이전트(Lesson 9
 - 명백한 오용에 대한 **빠른 기본 거부**(CSAM 생성 요청은 밀리초 단위로 잡힌다).
 - 차등 처리를 위한 **카테고리 라우팅**(일부는 차단, 일부는 로깅, 소수는 에스컬레이션).
 - **출력 레일**은 그렇지 않으면 민감한 카테고리를 유출했을 모델 출력을 잡아낸다.
-- 규제 당국을 위한 **컴플라이언스 표면적** — 선언된 분류 체계를 가진 문서화되고 감사 가능한 분류기.
+- 규제 당국을 위한 **컴플라이언스 표면적**: 선언된 분류 체계를 가진 문서화되고 감사 가능한 분류기.
 
 ### 분류기가 지는 곳
 
@@ -118,8 +118,8 @@ S14는 이 단계(phase)에서 중요하다. 자율 코딩 에이전트(Lesson 9
 
 ## 더 읽을거리 (Further Reading)
 
-- [Inan et al. — Llama Guard: LLM-based Input-Output Safeguard](https://ai.meta.com/research/publications/llama-guard-llm-based-input-output-safeguard-for-human-ai-conversations/) — 원본 논문.
-- [Meta — Llama Guard 4 model card](https://www.llama.com/docs/model-cards-and-prompt-formats/llama-guard-4/) — 멀티모달, S1–S14 분류 체계.
-- [NVIDIA NeMo Guardrails (GitHub)](https://github.com/NVIDIA-NeMo/Guardrails) — v0.20.0 2026년 1월.
-- [Huang et al. — Bypassing Prompt Injection and Jailbreak Detection in LLM Guardrails](https://arxiv.org/abs/2504.11168) — 가드 시스템 전반의 ASR 수치.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 분류기 더하기 런타임 프레이밍.
+- [Inan et al.(Llama Guard: LLM-based Input-Output Safeguard](https://ai.meta.com/research/publications/llama-guard-llm-based-input-output-safeguard-for-human-ai-conversations/)) 원본 논문.
+- [Meta(Llama Guard 4 model card](https://www.llama.com/docs/model-cards-and-prompt-formats/llama-guard-4/)) 멀티모달, S1–S14 분류 체계.
+- [NVIDIA NeMo Guardrails (GitHub)](https://github.com/NVIDIA-NeMo/Guardrails): v0.20.0 2026년 1월.
+- [Huang et al.(Bypassing Prompt Injection and Jailbreak Detection in LLM Guardrails](https://arxiv.org/abs/2504.11168)) 가드 시스템 전반의 ASR 수치.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 분류기 더하기 런타임 프레이밍.

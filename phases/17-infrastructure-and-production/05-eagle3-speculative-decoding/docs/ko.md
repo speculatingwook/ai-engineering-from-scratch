@@ -1,6 +1,6 @@
 # 프로덕션에서의 EAGLE-3 추측 디코딩(Speculative Decoding)
 
-> 추측 디코딩(speculative decoding)은 빠른 드래프트 모델(draft model)을 타깃 모델(target model)과 짝짓는다. 드래프트가 K개 토큰(token)을 제안하면, 타깃은 단일 순방향에서 검증한다. 수용된 토큰은 공짜다. 2026년 EAGLE-3은 프로덕션급(production-grade) 변형이다 — 원시 토큰이 아니라 타깃 모델의 은닉 상태(hidden state) 위에서 드래프트 헤드를 학습시켜, 일반 채팅에서 수용률 alpha를 0.6~0.8 구간으로 밀어올린다. 올바른 질문은 "드래프트가 얼마나 빠른가"가 아니라 "내 트래픽에서 alpha가 얼마인가"이다. alpha가 약 0.55 아래로 떨어지면, 거부된 모든 드래프트가 두 번째 타깃 순방향 패스(forward pass) 비용을 치르기 때문에 추측 디코딩은 높은 동시성에서 순(net) 음수가 된다. 이 레슨은 먼저 alpha를 측정하고 나중에 플래그를 켜는 법을 가르친다.
+> 추측 디코딩(speculative decoding)은 빠른 드래프트 모델(draft model)을 타깃 모델(target model)과 짝짓는다. 드래프트가 K개 토큰(token)을 제안하면, 타깃은 단일 순방향에서 검증한다. 수용된 토큰은 공짜다. 2026년 EAGLE-3은 프로덕션급(production-grade) 변형이다. 원시 토큰이 아니라 타깃 모델의 은닉 상태(hidden state) 위에서 드래프트 헤드를 학습시켜, 일반 채팅에서 수용률 alpha를 0.6~0.8 구간으로 밀어올린다. 올바른 질문은 "드래프트가 얼마나 빠른가"가 아니라 "내 트래픽에서 alpha가 얼마인가"이다. alpha가 약 0.55 아래로 떨어지면, 거부된 모든 드래프트가 두 번째 타깃 순방향 패스(forward pass) 비용을 치르기 때문에 추측 디코딩은 높은 동시성에서 순(net) 음수가 된다. 이 레슨은 먼저 alpha를 측정하고 나중에 플래그를 켜는 법을 가르친다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy acceptance-rate simulator)
@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-디코드(decode)는 메모리 바운드(memory-bound)다. Llama 3.3 70B FP8을 돌리는 H100에서, 디코드된 각 토큰은 약 140GB/s의 가중치를 읽고 토큰 하나를 방출한다. 디코드 동안 GPU 연산은 거의 유휴 상태다 — 병목은 행렬곱(matmul) 처리량이 아니라 HBM 대역폭이다.
+디코드(decode)는 메모리 바운드(memory-bound)다. Llama 3.3 70B FP8을 돌리는 H100에서, 디코드된 각 토큰은 약 140GB/s의 가중치를 읽고 토큰 하나를 방출한다. 디코드 동안 GPU 연산은 거의 유휴 상태다. 병목은 행렬곱(matmul) 처리량이 아니라 HBM 대역폭이다.
 
 추측 디코딩은 그 간극을 이용한다. 값싼 드래프트 모델로 K개 후보 토큰을 생성한 뒤, 타깃 모델에게 단일 순방향 패스에서 K개 전부를 검증하도록 요청한다. 검증된 각 토큰은 사실상 공짜다(타깃이 어차피 해야 했을 K-배치 순방향에 분할상환된다).
 
-고전적 드래프트 모델 접근법은 같은 패밀리의 더 작은 모델(Llama 3.3 70B를 위해 Llama 3.2 1B가 드래프트)을 쓴다. 작동하지만 수용률은 평범하다 — 더 작은 모델의 분포가 타깃에서 발산한다. EAGLE, 다음 EAGLE-2, 다음 EAGLE-3은 가벼운 드래프트 헤드를 타깃 모델의 내부 상태 위에서 직접 학습시켜, 드래프트의 분포가 타깃을 훨씬 더 가깝게 추적한다. 이것이 alpha가 드래프트 모델에서 0.4였던 것이 EAGLE-3에서 0.6~0.8로 가는 이유다.
+고전적 드래프트 모델 접근법은 같은 패밀리의 더 작은 모델(Llama 3.3 70B를 위해 Llama 3.2 1B가 드래프트)을 쓴다. 작동하지만 수용률은 평범하다. 더 작은 모델의 분포가 타깃에서 발산한다. EAGLE, 다음 EAGLE-2, 다음 EAGLE-3은 가벼운 드래프트 헤드를 타깃 모델의 내부 상태 위에서 직접 학습시켜, 드래프트의 분포가 타깃을 훨씬 더 가깝게 추적한다. 이것이 alpha가 드래프트 모델에서 0.4였던 것이 EAGLE-3에서 0.6~0.8로 가는 이유다.
 
 함정: EAGLE-3은 vLLM 2026에서 옵트인이다. `speculative_config`를 명시적으로 설정해야 한다. 플래그 없으면 가속 없다. 실제 트래픽에서 alpha를 측정하지 않고 켜는 팀은 꼬리 지연 시간(tail latency)이 더 좋아지기는커녕 오히려 나빠지는 경우를 흔히 겪는다.
 
@@ -34,11 +34,11 @@
 
 거부된 토큰은 사라지지 않는다. 첫 거부된 토큰에 대해 두 번째 타깃 순방향을 강제한다. alpha가 0.4로 떨어지는 워크로드에서는, 드래프트 오버헤드에 더해 검증과 리롤(re-roll)을 치른다. 높은 동시성(가령 동시 256)에서는 디코드 배치(batch)가 이미 충분히 커서 "타깃 단독"과 "검증 포함 타깃" 사이의 메모리 대역폭 간극이 줄어든다. 대부분의 2026년 하드웨어에서 alpha 0.55 아래에서는 추측 디코딩이 순 음수다.
 
-alpha는 워크로드에 따라 다르다. ShareGPT 스타일 일반 채팅에서, ShareGPT로 학습된 EAGLE-3은 0.6~0.8을 친다. 도메인 특화 트래픽(코드, 의료, 법률)에서는 일반 데이터로 학습된 드래프트 헤드가 0.4~0.6으로 떨어진다. 도메인 특화 드래프트 헤드를 학습시키면 alpha가 회복된다 — 그것은 타깃 파인튜닝(finetuning)에 비해 가볍고 빠른 학습 작업이다.
+alpha는 워크로드에 따라 다르다. ShareGPT 스타일 일반 채팅에서, ShareGPT로 학습된 EAGLE-3은 0.6~0.8을 친다. 도메인 특화 트래픽(코드, 의료, 법률)에서는 일반 데이터로 학습된 드래프트 헤드가 0.4~0.6으로 떨어진다. 도메인 특화 드래프트 헤드를 학습시키면 alpha가 회복된다. 그것은 타깃 파인튜닝(finetuning)에 비해 가볍고 빠른 학습 작업이다.
 
 ### EAGLE 세대 한눈에 보기
 
-- **고전적 드래프트 모델**: 같은 패밀리의 작은 모델. Alpha 0.3~0.5. 인프라가 단순함 — 두 모델 로드, 드래프트가 타깃 순방향당 K개 순방향을 돌림.
+- **고전적 드래프트 모델**: 같은 패밀리의 작은 모델. Alpha 0.3~0.5. 인프라가 단순함: 두 모델 로드, 드래프트가 타깃 순방향당 K개 순방향을 돌림.
 - **EAGLE-1 (2024)**: 타깃 은닉 상태(마지막 층) 위에서 학습된 단일 드래프트 헤드. Alpha 약 0.5~0.6. 타깃 위에 작은 파라미터 오버헤드.
 - **EAGLE-2 (2025)**: 적응적 드래프트 길이와 트리 기반 드래프트(하나의 타깃 패스에서 여러 분기 검증). Alpha 약 0.6~0.7. 더 복잡한 드래프트 스케줄러.
 - **EAGLE-3 (2025-2026)**: 여러 타깃 층(마지막만이 아니라) 위에서 학습된 드래프트 헤드, 더 나은 정렬. 일반 채팅에서 Alpha 약 0.6~0.8.
@@ -76,7 +76,7 @@ Google은 2025년 AI Overviews에 추측 디코딩을 배포했다(같은 품질
 
 ## 산출물 (Ship It)
 
-이 레슨은 `outputs/skill-eagle3-rollout.md`를 만들어낸다. 타깃 모델, 트래픽 분포 설명, 동시성 목표가 주어지면, 단계적 EAGLE-3 롤아웃(rollout) 계획을 만들어낸다 — 베이스라인 벤치마크, 설정 활성화, alpha 측정, alpha >= 0.55로 게이트, P99 ITL 감시.
+이 레슨은 `outputs/skill-eagle3-rollout.md`를 만들어낸다. 타깃 모델, 트래픽 분포 설명, 동시성 목표가 주어지면, 단계적 EAGLE-3 롤아웃(rollout) 계획을 만들어낸다. 베이스라인 벤치마크, 설정 활성화, alpha 측정, alpha >= 0.55로 게이트, P99 ITL 감시.
 
 ## 연습 문제 (Exercises)
 
@@ -102,9 +102,9 @@ Google은 2025년 AI Overviews에 추측 디코딩을 배포했다(같은 품질
 
 ## 더 읽을거리 (Further Reading)
 
-- [vLLM — Speculative Decoding docs](https://docs.vllm.ai/en/latest/features/spec_decode/) — V1의 `speculative_config`와 청크 프리필 호환성에 관한 권위 있는 출처.
-- [vLLM Speculative Config API](https://docs.vllm.ai/en/latest/api/vllm/config/speculative/) — 정확한 필드 집합.
-- [EAGLE paper (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077) — 원본 EAGLE 드래프트 헤드 정식화.
-- [EAGLE-2 paper (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858) — 적응적 드래프트와 트리.
-- [UC Berkeley EECS-2025-224](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-224.html) — 추측 디코딩을 활용한 효율적 LLM 시스템.
-- [BentoML — Speculative Decoding](https://bentoml.com/llm/inference-optimization/speculative-decoding) — 프로덕션 롤아웃 체크리스트.
+- [vLLM(Speculative Decoding docs](https://docs.vllm.ai/en/latest/features/spec_decode/)) V1의 `speculative_config`와 청크 프리필 호환성에 관한 권위 있는 출처.
+- [vLLM Speculative Config API](https://docs.vllm.ai/en/latest/api/vllm/config/speculative/): 정확한 필드 집합.
+- [EAGLE paper (arXiv:2401.15077)](https://arxiv.org/abs/2401.15077): 원본 EAGLE 드래프트 헤드 정식화.
+- [EAGLE-2 paper (arXiv:2406.16858)](https://arxiv.org/abs/2406.16858): 적응적 드래프트와 트리.
+- [UC Berkeley EECS-2025-224](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-224.html): 추측 디코딩을 활용한 효율적 LLM 시스템.
+- [BentoML(Speculative Decoding](https://bentoml.com/llm/inference-optimization/speculative-decoding)) 프로덕션 롤아웃 체크리스트.

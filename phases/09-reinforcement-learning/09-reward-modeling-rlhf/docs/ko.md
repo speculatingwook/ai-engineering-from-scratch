@@ -1,6 +1,6 @@
 # 보상 모델링과 RLHF (Reward Modeling & RLHF)
 
-> 인간은 "좋은 어시스턴트 응답"에 대한 보상 함수를 쓸 수 없지만, 두 응답을 비교해 더 나은 것을 고를 수는 있다. 그 비교에 보상 모델(reward model)을 맞춘 뒤, 언어 모델을 그것에 대해 강화 학습(RL)한다. Christiano 2017. InstructGPT 2022. GPT-3를 ChatGPT로 바꾼 레시피다. 2026년에는 대부분 DPO로 대체되고 있지만 — 사고 모델은 그대로 남는다.
+> 인간은 "좋은 어시스턴트 응답"에 대한 보상 함수를 쓸 수 없지만, 두 응답을 비교해 더 나은 것을 고를 수는 있다. 그 비교에 보상 모델(reward model)을 맞춘 뒤, 언어 모델을 그것에 대해 강화 학습(RL)한다. Christiano 2017. InstructGPT 2022. GPT-3를 ChatGPT로 바꾼 레시피다. 2026년에는 대부분 DPO로 대체되고 있지만: 사고 모델은 그대로 남는다.
 
 **Type:** Build
 **Languages:** Python
@@ -42,7 +42,7 @@ RLHF(Christiano et al. 2017; Ouyang et al. 2022)는 선호를 보상 모델로 �
 
   `r_total(x, y) = R_φ(x, y) - β · KL(π_θ(·|x) || π_ref(·|x))`
 
-  KL 페널티는 `π_θ`가 `π_SFT`에서 임의로 표류하는 것을 막는다 — 단단한 신뢰 영역(trust region)이 아니라 *정규화기(regularizer)*다. `β`는 보통 `0.01`-`0.05`다.
+  KL 페널티는 `π_θ`가 `π_SFT`에서 임의로 표류하는 것을 막는다. 단단한 신뢰 영역(trust region)이 아니라 *정규화기(regularizer)*다. `β`는 보통 `0.01`-`0.05`다.
 - 이 보상으로 PPO(Lesson 08)를 실행한다. 어드밴티지(advantage)는 토큰 수준 궤적(trajectory)에서 계산되지만, RM은 전체 응답만 채점한다.
 
 **왜 KL인가?** 그것이 없으면 PPO는 기꺼이 보상 해킹(reward-hacking) 전략을 찾는다. RM은 분포 내 완성에서만 학습되었기 때문이다. 분포 밖 응답이 어떤 인간 작성 응답보다 높은 점수를 받을 수 있다. KL은 `π_θ`를 RM이 학습된 다양체(manifold) 근처에 유지한다. RLHF에서 가장 중요한 단일 손잡이다.
@@ -56,7 +56,7 @@ RLHF(Christiano et al. 2017; Ouyang et al. 2022)는 선호를 보상 모델로 �
 
 ## 직접 만들기 (Build It)
 
-이 레슨은 문자열로 표현된 작은 합성 "프롬프트"와 "응답"을 사용한다. RM은 토큰 가방(bag-of-tokens) 표현에 대한 선형 채점기다. 실제 LLM 없음 — 규모가 아니라 파이프라인의 *형태*가 중요하다. `code/main.py`를 보라.
+이 레슨은 문자열로 표현된 작은 합성 "프롬프트"와 "응답"을 사용한다. RM은 토큰 가방(bag-of-tokens) 표현에 대한 선형 채점기다. 실제 LLM 없음: 규모가 아니라 파이프라인의 *형태*가 중요하다. `code/main.py`를 보라.
 
 ### 1단계: 합성 선호 데이터
 
@@ -72,7 +72,7 @@ def make_pair(rng):
     return (x, y_good, y_bad)
 ```
 
-실제 RLHF에서는 이것이 인간 레이블러로 대체된다. 형태 — `(prompt, preferred_response, rejected_response)` — 는 동일하다.
+실제 RLHF에서는 이것이 인간 레이블러로 대체된다. 형태(`(prompt, preferred_response, rejected_response)`)는 동일하다.
 
 ### 2단계: 브래들리-테리 보상 모델
 
@@ -113,7 +113,7 @@ def rlhf_step(theta, ref, w, prompt, rng, eps=0.2, beta=0.1, lr=0.05):
 
 ### 5단계: TRL을 사용한 프로덕션 레시피
 
-장난감 파이프라인을 이해했으면, 여기 실제 라이브러리 사용자가 작성하는 동일한 루프가 있다. Hugging Face의 [TRL](https://huggingface.co/docs/trl)이 참조 구현이다 — 2단계에는 `RewardTrainer`, 3단계에는 (KL-대-참조가 내장된) `PPOTrainer`.
+장난감 파이프라인을 이해했으면, 여기 실제 라이브러리 사용자가 작성하는 동일한 루프가 있다. Hugging Face의 [TRL](https://huggingface.co/docs/trl)이 참조 구현이다. 2단계에는 `RewardTrainer`, 3단계에는 (KL-대-참조가 내장된) `PPOTrainer`.
 
 ```python
 # Stage 2: reward model from pairwise preferences
@@ -227,13 +227,13 @@ Refuse to ship RLHF-PPO without a KL monitor. Refuse to use an RM smaller than t
 
 ## 더 읽을거리 (Further Reading)
 
-- [Christiano et al. (2017). Deep Reinforcement Learning from Human Preferences](https://arxiv.org/abs/1706.03741) — RLHF를 시작한 논문.
-- [Ouyang et al. (2022). InstructGPT — Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) — ChatGPT 뒤의 레시피.
-- [Stiennon et al. (2020). Learning to summarize with human feedback](https://arxiv.org/abs/2009.01325) — 요약을 위한 초기 RLHF.
-- [Rafailov et al. (2023). Direct Preference Optimization](https://arxiv.org/abs/2305.18290) — DPO; 2026년 RLHF 이후의 기본값.
-- [Bai et al. (2022). Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) — RLAIF와 자기 비판 루프.
-- [Anthropic RLHF paper (Bai et al. 2022). Training a Helpful and Harmless Assistant](https://arxiv.org/abs/2204.05862) — HH 논문.
-- [Hugging Face TRL library](https://huggingface.co/docs/trl) — 프로덕션 `RewardTrainer`와 `PPOTrainer`. 적응적-KL과 가치 헤드 세부사항은 트레이너 소스를 읽어라.
-- [Hugging Face — Illustrating Reinforcement Learning from Human Feedback](https://huggingface.co/blog/rlhf) by Lambert, Castricato, von Werra, Havrilla — 다이어그램과 함께하는 3단계 파이프라인의 정전적 안내.
-- [von Werra et al. (2020). TRL: Transformer Reinforcement Learning](https://github.com/huggingface/trl) — 그 라이브러리; `examples/`에 Llama, Mistral, Qwen을 위한 종단간(end-to-end) RLHF 스크립트가 있다.
-- [Sutton & Barto (2018). Ch. 17.4 — Designing Reward Signals](http://incompleteideas.net/book/RLbook2020.pdf) — 보상 가설 관점; 보상 해킹을 생각하기 위한 필수 전제조건.
+- [Christiano et al. (2017). Deep Reinforcement Learning from Human Preferences](https://arxiv.org/abs/1706.03741): RLHF를 시작한 논문.
+- [Ouyang et al. (2022). InstructGPT(Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155)) ChatGPT 뒤의 레시피.
+- [Stiennon et al. (2020). Learning to summarize with human feedback](https://arxiv.org/abs/2009.01325): 요약을 위한 초기 RLHF.
+- [Rafailov et al. (2023). Direct Preference Optimization](https://arxiv.org/abs/2305.18290): DPO; 2026년 RLHF 이후의 기본값.
+- [Bai et al. (2022). Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073): RLAIF와 자기 비판 루프.
+- [Anthropic RLHF paper (Bai et al. 2022). Training a Helpful and Harmless Assistant](https://arxiv.org/abs/2204.05862): HH 논문.
+- [Hugging Face TRL library](https://huggingface.co/docs/trl): 프로덕션 `RewardTrainer`와 `PPOTrainer`. 적응적-KL과 가치 헤드 세부사항은 트레이너 소스를 읽어라.
+- [Hugging Face(Illustrating Reinforcement Learning from Human Feedback](https://huggingface.co/blog/rlhf) by Lambert, Castricato, von Werra, Havrilla) 다이어그램과 함께하는 3단계 파이프라인의 정전적 안내.
+- [von Werra et al. (2020). TRL: Transformer Reinforcement Learning](https://github.com/huggingface/trl): 그 라이브러리; `examples/`에 Llama, Mistral, Qwen을 위한 종단간(end-to-end) RLHF 스크립트가 있다.
+- [Sutton & Barto (2018). Ch. 17.4(Designing Reward Signals](http://incompleteideas.net/book/RLbook2020.pdf)) 보상 가설 관점; 보상 해킹을 생각하기 위한 필수 전제조건.

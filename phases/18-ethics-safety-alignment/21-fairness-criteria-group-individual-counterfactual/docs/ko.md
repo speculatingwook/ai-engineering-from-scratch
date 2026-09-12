@@ -1,6 +1,6 @@
-# 공정성 기준 — 집단, 개인, 반사실
+# 공정성 기준: 집단, 개인, 반사실
 
-> 세 가지 계열이 공정성(fairness) 문헌을 구조화한다. 집단 공정성(group fairness): 인구통계학적 동등성(demographic parity), 균등화된 승산(equalized odds), 조건부 사용 정확도 동등성(conditional use accuracy equality) — 보호 집단(protected group) 간에 평균적으로 동일한 비율. 개인 공정성(individual fairness)(Dwork et al. 2012): 비슷한 개인은 비슷한 결정을 받는다. 결정 사상(decision map)에 대한 립시츠 조건(Lipschitz condition). 반사실 공정성(counterfactual fairness)(Kusner et al. 2017): 민감 속성(sensitive attribute)을 반사실적으로 변경했을 때 결정이 바뀌지 않으면, 그 결정은 해당 개인에게 공정하다. 2024년 이론적 결과(NeurIPS 2024): 반사실 공정성(CF)과 정확도 사이에는 본질적인 트레이드오프(trade-off)가 존재한다. 모델 비의존적(model-agnostic) 방법은 최적이지만 불공정한 예측기를, 정확도 손실이 유계인 상태로 반사실 공정 예측기로 변환한다. 백트래킹 반사실(backtracking counterfactuals)(arXiv:2401.13935, 2024년 1월): 법적으로 보호되는 속성에 대한 개입(intervention)을 요구하지 않는 새로운 패러다임. 철학적 화해(ICLR Blogposts 2024): 인과 그래프(causal graph)가 주어지면, 특정 집단 공정성 척도를 만족하는 것이 반사실 공정성을 함의한다.
+> 세 가지 계열이 공정성(fairness) 문헌을 구조화한다. 집단 공정성(group fairness): 인구통계학적 동등성(demographic parity), 균등화된 승산(equalized odds), 조건부 사용 정확도 동등성(conditional use accuracy equality): 보호 집단(protected group) 간에 평균적으로 동일한 비율. 개인 공정성(individual fairness)(Dwork et al. 2012): 비슷한 개인은 비슷한 결정을 받는다. 결정 사상(decision map)에 대한 립시츠 조건(Lipschitz condition). 반사실 공정성(counterfactual fairness)(Kusner et al. 2017): 민감 속성(sensitive attribute)을 반사실적으로 변경했을 때 결정이 바뀌지 않으면, 그 결정은 해당 개인에게 공정하다. 2024년 이론적 결과(NeurIPS 2024): 반사실 공정성(CF)과 정확도 사이에는 본질적인 트레이드오프(trade-off)가 존재한다. 모델 비의존적(model-agnostic) 방법은 최적이지만 불공정한 예측기를, 정확도 손실이 유계인 상태로 반사실 공정 예측기로 변환한다. 백트래킹 반사실(backtracking counterfactuals)(arXiv:2401.13935, 2024년 1월): 법적으로 보호되는 속성에 대한 개입(intervention)을 요구하지 않는 새로운 패러다임. 철학적 화해(ICLR Blogposts 2024): 인과 그래프(causal graph)가 주어지면, 특정 집단 공정성 척도를 만족하는 것이 반사실 공정성을 함의한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, three-criteria comparison)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-레슨 20은 편향(bias)을 측정했다. 레슨 21은 그 측정이 따라야 할 공정성 기준을 정의한다. 세 가지 계열은 구조적으로 서로 다른 기준을 제시한다 — 어떤 모델은 집단 공정하면서 개인 불공정할 수 있고, 반사실 공정하면서 집단 불공정할 수 있다. 기준 선택은 정책 결정이다. 어떤 기준도 보편적으로 최적이지 않다.
+레슨 20은 편향(bias)을 측정했다. 레슨 21은 그 측정이 따라야 할 공정성 기준을 정의한다. 세 가지 계열은 구조적으로 서로 다른 기준을 제시한다. 어떤 모델은 집단 공정하면서 개인 불공정할 수 있고, 반사실 공정하면서 집단 불공정할 수 있다. 기준 선택은 정책 결정이다. 어떤 기준도 보편적으로 최적이지 않다.
 
 ## 개념 (The Concept)
 
@@ -46,7 +46,7 @@ NeurIPS 2024 이론적 결과: 반사실 공정성과 예측 정확도 사이에
 
 ### 백트래킹 반사실
 
-arXiv:2401.13935 (2024년 1월). 전통적인 반사실은 민감 속성에 대한 개입을 요구한다 — "이 사람의 성별이 달랐다면 결정이 바뀌었을까." 법적으로 이는 문제가 된다. 분류 관련 법에서 보호 속성에는 개입할 수 없다.
+arXiv:2401.13935 (2024년 1월). 전통적인 반사실은 민감 속성에 대한 개입을 요구한다. "이 사람의 성별이 달랐다면 결정이 바뀌었을까." 법적으로 이는 문제가 된다. 분류 관련 법에서 보호 속성에는 개입할 수 없다.
 
 백트래킹 반사실은 방향을 뒤집는다. 속성에 개입하는 대신, 그 개인의 실제 특성들의 어떤 조합이 반사실적 결과를 만들어냈을지를 묻는다. 이는 법적 반론을 우회한다.
 
@@ -94,7 +94,7 @@ ICLR Blogposts 2024. 인과 그래프가 손에 있으면, 특정 집단 공정�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Dwork et al. — Fairness through Awareness (arXiv:1104.3913)](https://arxiv.org/abs/1104.3913) — 개인 공정성
-- [Kusner, Loftus, Russell, Silva — Counterfactual Fairness (arXiv:1703.06856)](https://arxiv.org/abs/1703.06856) — 반사실 공정성
-- [Chouldechova — Fair prediction with disparate impact (arXiv:1703.00056)](https://arxiv.org/abs/1703.00056) — 불가능성
-- [Backtracking Counterfactuals (arXiv:2401.13935)](https://arxiv.org/abs/2401.13935) — 보호 속성 개입을 위한 새로운 패러다임
+- [Dwork et al.(Fairness through Awareness (arXiv:1104.3913)](https://arxiv.org/abs/1104.3913)) 개인 공정성
+- [Kusner, Loftus, Russell, Silva(Counterfactual Fairness (arXiv:1703.06856)](https://arxiv.org/abs/1703.06856)) 반사실 공정성
+- [Chouldechova(Fair prediction with disparate impact (arXiv:1703.00056)](https://arxiv.org/abs/1703.00056)) 불가능성
+- [Backtracking Counterfactuals (arXiv:2401.13935)](https://arxiv.org/abs/2401.13935): 보호 속성 개입을 위한 새로운 패러다임

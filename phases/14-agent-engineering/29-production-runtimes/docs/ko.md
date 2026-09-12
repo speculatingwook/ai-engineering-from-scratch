@@ -133,7 +133,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 지속적 실행 세부 사항
-- [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview) — 호스팅형 장기 실행 비동기
-- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use) — "작업당 수십~수백 스텝"
-- [AutoGen v0.4 (Microsoft Research)](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/) — 액터 모델 결함 격리
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 지속적 실행 세부 사항
+- [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview): 호스팅형 장기 실행 비동기
+- [Anthropic, Introducing computer use](https://www.anthropic.com/news/3-5-models-and-computer-use): "작업당 수십~수백 스텝"
+- [AutoGen v0.4 (Microsoft Research)](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/): 액터 모델 결함 격리

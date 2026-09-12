@@ -1,6 +1,6 @@
-# 규제 프레임워크 — EU, 미국, 영국, 한국
+# 규제 프레임워크: EU, 미국, 영국, 한국
 
-> 네 가지 주요 규제 체제가 2026년 AI 거버넌스(governance) 지형을 정의한다. EU AI Act(2024년 8월 1일 발효) — 금지된 관행과 AI 리터러시(literacy)는 2025년 2월 2일부터, GPAI 의무는 2025년 8월 2일부터, 완전한 적용 및 제50조 투명성은 2026년 8월 2일부터, 레거시 GPAI 및 내장된 고위험(high-risk) 시스템은 2027년 8월 2일부터. 벌금은 최대 1,500만 EUR 또는 전 세계 매출의 3%. GPAI 실천 강령(GPAI Code of Practice)(2025년 7월 10일): 세 개 장 — 투명성(Transparency), 저작권(Copyright), 안전 및 보안(Safety and Security) — 12개 약속. 집행은 2026년 8월 시작. 영국 AISI -> AI Security Institute(2025년 2월): 명칭 변경이 더 좁은 범위를 시사한다. 미국 AISI -> CAISI(2025년 6월): NIST 산하 Center for AI Standards and Innovation. 성장 친화적 입장으로의 전환. 한국 AI 기본법(2024년 12월 통과, 2026년 1월 시행): 제12조가 MSIT 산하에 AISI를 설립한다. 외국 AI 기업에 대한 국내 대리인(local representative), 위험 평가(risk assessment), 고영향(high-impact) 및 생성형 AI에 대한 안전 조치를 의무화한다.
+> 네 가지 주요 규제 체제가 2026년 AI 거버넌스(governance) 지형을 정의한다. EU AI Act(2024년 8월 1일 발효): 금지된 관행과 AI 리터러시(literacy)는 2025년 2월 2일부터, GPAI 의무는 2025년 8월 2일부터, 완전한 적용 및 제50조 투명성은 2026년 8월 2일부터, 레거시 GPAI 및 내장된 고위험(high-risk) 시스템은 2027년 8월 2일부터. 벌금은 최대 1,500만 EUR 또는 전 세계 매출의 3%. GPAI 실천 강령(GPAI Code of Practice)(2025년 7월 10일): 세 개 장: 투명성(Transparency), 저작권(Copyright), 안전 및 보안(Safety and Security): 12개 약속. 집행은 2026년 8월 시작. 영국 AISI -> AI Security Institute(2025년 2월): 명칭 변경이 더 좁은 범위를 시사한다. 미국 AISI -> CAISI(2025년 6월): NIST 산하 Center for AI Standards and Innovation. 성장 친화적 입장으로의 전환. 한국 AI 기본법(2024년 12월 통과, 2026년 1월 시행): 제12조가 MSIT 산하에 AISI를 설립한다. 외국 AI 기업에 대한 국내 대리인(local representative), 위험 평가(risk assessment), 고영향(high-impact) 및 생성형 AI에 대한 안전 조치를 의무화한다.
 
 **Type:** Learn
 **Languages:** none
@@ -49,7 +49,7 @@
 
 ### 제50조를 위한 투명성 강령
 
-첫 초안 2025년 12월 17일. 두 번째 초안 2026년 3월. 최종본 2026년 6월. 딥페이크(deepfake)를 포함한 AI 생성 콘텐츠 라벨링을 다룬다 — 레슨 23의 워터마킹 기술을 요구하는 규제 계층이다.
+첫 초안 2025년 12월 17일. 두 번째 초안 2026년 3월. 최종본 2026년 6월. 딥페이크(deepfake)를 포함한 AI 생성 콘텐츠 라벨링을 다룬다. 레슨 23의 워터마킹 기술을 요구하는 규제 계층이다.
 
 ### 영국 AI Security Institute(2025년 2월)
 
@@ -73,7 +73,7 @@ AI Safety Institute에서 명칭을 변경했다. 이 명칭 변경은 범위를
 ### 관할권 간 동역학
 
 - EU: 엄격하고, 위험 등급화되어 있으며, 무거운 벌금. 프라이버시 인접 규제의 벤치마크(benchmark).
-- 미국: 혁신 우호적, 분산적, 주(예: California AB 2013 — 레슨 27)가 연방 공백을 채운다.
+- 미국: 혁신 우호적, 분산적, 주(예: California AB 2013: 레슨 27)가 연방 공백을 채운다.
 - 영국: 좁은 보안 초점, 강력한 평가 인프라.
 - 한국: MSIT 주도, 외국 제공자 중심.
 
@@ -117,7 +117,7 @@ AI Safety Institute에서 명칭을 변경했다. 이 명칭 변경은 범위를
 
 ## 더 읽을거리 (Further Reading)
 
-- [EU AI Act text (Regulation 2024/1689)](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai) — 규정과 일정
-- [GPAI Code of Practice (10 July 2025)](https://digital-strategy.ec.europa.eu/en/library/final-version-general-purpose-ai-code-practice) — 세 개 장 강령
-- [UK AI Security Institute (renamed Feb 2025)](https://www.gov.uk/government/organisations/ai-security-institute) — 공식 페이지
-- [CSET — South Korea AI Framework Act Analysis (2025)](https://cset.georgetown.edu/publication/south-korea-ai-law-2025/) — 한국 프레임워크 분석
+- [EU AI Act text (Regulation 2024/1689)](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai): 규정과 일정
+- [GPAI Code of Practice (10 July 2025)](https://digital-strategy.ec.europa.eu/en/library/final-version-general-purpose-ai-code-practice): 세 개 장 강령
+- [UK AI Security Institute (renamed Feb 2025)](https://www.gov.uk/government/organisations/ai-security-institute): 공식 페이지
+- [CSET(South Korea AI Framework Act Analysis (2025)](https://cset.georgetown.edu/publication/south-korea-ai-law-2025/)) 한국 프레임워크 분석

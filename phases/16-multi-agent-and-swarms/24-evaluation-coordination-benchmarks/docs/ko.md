@@ -1,6 +1,6 @@
 # 평가와 협응 벤치마크 (Evaluation and Coordination Benchmarks)
 
-> 2025-2026년의 다섯 벤치마크(benchmark)가 다중 에이전트(multi-agent) 평가 공간을 다룬다. **MultiAgentBench / MARBLE** (ACL 2025, arXiv:2503.01935)은 마일스톤 KPI로 별/사슬/트리/그래프 토폴로지(topology)를 평가한다. **그래프가 연구에 가장 좋고**, 인지적 계획 수립이 마일스톤 달성을 약 3% 더한다. **COMMA**는 멀티모달 비대칭 정보 협응을 평가한다. GPT-4o를 포함한 최첨단 모델들이 무작위 베이스라인(baseline)을 이기는 데 고전한다. **MedAgentBoard** (arXiv:2505.12371)는 네 가지 의료 과제 범주를 다루며, 다중 에이전트가 단일 LLM을 지배하지 못한다는 것을 종종 발견한다. **AgentArch** (arXiv:2509.10769)는 도구 사용 + 메모리 + 오케스트레이션(orchestration)을 결합한 엔터프라이즈 에이전트(agent) 아키텍처를 벤치마크한다. **SWE-bench Pro** ([arXiv:2509.16941](https://arxiv.org/abs/2509.16941))는 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41개 저장소의 1865개 문제를 가진다. 프런티어 모델들은 Pro에서 약 23%를, Verified에서 70%+를 받는다 — 오염(contamination)에 대한 현실 점검이다. Claude Opus 4.7(2026년 4월)은 명시적 에이전트 팀 협응으로 Pro에서 **64.3%**로 보고된다(아직 Anthropic 1차 출처가 발표되지 않음 — 예비적으로 취급). Verdent(에이전트 스캐폴드)는 Verified에서 **76.1% pass@1**을 달성한다([Verdent technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report)). **AAAI 2026 Bridge Program WMAC** (https://multiagents.org/2026/)는 2026년 커뮤니티 초점이다. 이 레슨은 MARBLE의 지표를 토대로, 토폴로지 대 지표 스윕을 실행하고, "SWE-bench Verified를 그냥 통과하는 것은 일반화의 증거가 아니다" 규칙을 못 박는다.
+> 2025-2026년의 다섯 벤치마크(benchmark)가 다중 에이전트(multi-agent) 평가 공간을 다룬다. **MultiAgentBench / MARBLE** (ACL 2025, arXiv:2503.01935)은 마일스톤 KPI로 별/사슬/트리/그래프 토폴로지(topology)를 평가한다. **그래프가 연구에 가장 좋고**, 인지적 계획 수립이 마일스톤 달성을 약 3% 더한다. **COMMA**는 멀티모달 비대칭 정보 협응을 평가한다. GPT-4o를 포함한 최첨단 모델들이 무작위 베이스라인(baseline)을 이기는 데 고전한다. **MedAgentBoard** (arXiv:2505.12371)는 네 가지 의료 과제 범주를 다루며, 다중 에이전트가 단일 LLM을 지배하지 못한다는 것을 종종 발견한다. **AgentArch** (arXiv:2509.10769)는 도구 사용 + 메모리 + 오케스트레이션(orchestration)을 결합한 엔터프라이즈 에이전트(agent) 아키텍처를 벤치마크한다. **SWE-bench Pro** ([arXiv:2509.16941](https://arxiv.org/abs/2509.16941))는 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41개 저장소의 1865개 문제를 가진다. 프런티어 모델들은 Pro에서 약 23%를, Verified에서 70%+를 받는다. 오염(contamination)에 대한 현실 점검이다. Claude Opus 4.7(2026년 4월)은 명시적 에이전트 팀 협응으로 Pro에서 **64.3%**로 보고된다(아직 Anthropic 1차 출처가 발표되지 않음: 예비적으로 취급). Verdent(에이전트 스캐폴드)는 Verified에서 **76.1% pass@1**을 달성한다([Verdent technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report)). **AAAI 2026 Bridge Program WMAC** (https://multiagents.org/2026/)는 2026년 커뮤니티 초점이다. 이 레슨은 MARBLE의 지표를 토대로, 토폴로지 대 지표 스윕을 실행하고, "SWE-bench Verified를 그냥 통과하는 것은 일반화의 증거가 아니다" 규칙을 못 박는다.
 
 **Type:** Learn
 **Languages:** Python (stdlib)
@@ -9,7 +9,7 @@
 
 ## 문제 (Problem)
 
-한 논문이 "우리의 다중 에이전트 시스템이 더 낫다"고 주장할 때, 질문은 이것이다: 무엇보다 더 나은가, 무엇에서, 어떻게 측정해서? 2023-2024년의 다중 에이전트 평가 시대는 혼돈이었다 — 모두가 자기만의 지표, 자기만의 베이스라인, 자기만의 과제 집합을 골랐다. 2025-2026년 벤치마크들이 구조를 부과했다.
+한 논문이 "우리의 다중 에이전트 시스템이 더 낫다"고 주장할 때, 질문은 이것이다: 무엇보다 더 나은가, 무엇에서, 어떻게 측정해서? 2023-2024년의 다중 에이전트 평가 시대는 혼돈이었다. 모두가 자기만의 지표, 자기만의 베이스라인, 자기만의 과제 집합을 골랐다. 2025-2026년 벤치마크들이 구조를 부과했다.
 
 공유 벤치마크 없이는, 두 다중 에이전트 시스템을 의미 있게 비교할 수 없다. 더 나쁜 것은, 홀드아웃 벤치마크 없이는 프런티어 모델이 오염될 수 있다. SWE-bench Verified는 2025년 중반까지 학습 코퍼스에 부분적으로 오염되었다. 프런티어 점수가 부풀려졌다. Pro는 오염되지 않은 현실 점검으로 설계되었다.
 
@@ -31,32 +31,32 @@ arXiv:2503.01935. 연구, 코딩, 계획 수립 과제에서 네 가지 협응 �
 
 사용하는 경우: 협응 토폴로지를 동등하게 비교하고 싶을 때. MARBLE 저장소(https://github.com/ulab-uiuc/MARBLE)가 평가기를 제공한다.
 
-### COMMA — 멀티모달 비대칭 정보
+### COMMA: 멀티모달 비대칭 정보
 
-에이전트들이 서로 다른 관찰 모달리티를 가지고 완전한 정보 공유 없이 협응해야 하는 과제를 다룬다. 보고된 결과는 불편하다: COMMA의 에이전트-에이전트 협업에서 GPT-4o를 포함한 프런티어 모델들이 **무작위 베이스라인**을 이기는 데 고전한다. 다중 에이전트 모달리티가 학습도 평가도 부족하다는 신호다 — LLM은 단일 모달리티 협력은 그럭저럭 다루지만, 다중 모달리티 협응은 무너진다.
+에이전트들이 서로 다른 관찰 모달리티를 가지고 완전한 정보 공유 없이 협응해야 하는 과제를 다룬다. 보고된 결과는 불편하다: COMMA의 에이전트-에이전트 협업에서 GPT-4o를 포함한 프런티어 모델들이 **무작위 베이스라인**을 이기는 데 고전한다. 다중 에이전트 모달리티가 학습도 평가도 부족하다는 신호다. LLM은 단일 모달리티 협력은 그럭저럭 다루지만, 다중 모달리티 협응은 무너진다.
 
 사용하는 경우: 시스템에 멀티모달 또는 비대칭 정보 협응이 있을 때. COMMA의 영(null) 결과는 주장하기 전에 측정하라는 경고다.
 
-### MedAgentBoard — 도메인 스트레스 테스트
+### MedAgentBoard: 도메인 스트레스 테스트
 
 arXiv:2505.12371. 네 가지 의료 과제 범주: 진단, 치료 계획 수립, 보고서 생성, 환자 소통. 다중 에이전트 대 단일 LLM 대 전통적 규칙 기반 시스템을 비교한다.
 
-발견: 다중 에이전트가 대부분의 범주에서 단일 LLM을 지배하지 *않는다*. 다중 에이전트의 이점은 좁다 — 과제 분해는 하위 과제가 명확히 분리 가능할 때(진단 + 치료) 도움이 된다. 협응 오버헤드가 특화 이득을 초과할 때(보고서 생성)는 해가 된다.
+발견: 다중 에이전트가 대부분의 범주에서 단일 LLM을 지배하지 *않는다*. 다중 에이전트의 이점은 좁다. 과제 분해는 하위 과제가 명확히 분리 가능할 때(진단 + 치료) 도움이 된다. 협응 오버헤드가 특화 이득을 초과할 때(보고서 생성)는 해가 된다.
 
 사용하는 경우: 도메인에 명확한 단일 LLM 베이스라인이 있을 때. MedAgentBoard의 교훈이 일반화된다면, 제안된 다중 에이전트 시스템 상당수가 과잉 설계된 것이다.
 
-### AgentArch — 엔터프라이즈 아키텍처
+### AgentArch: 엔터프라이즈 아키텍처
 
 arXiv:2509.10769. 도구 사용, 메모리, 오케스트레이션이 함께 계층화된 엔터프라이즈 환경. 벤치마크는 각 계층의 기여를 분리한다: 도구를 추가하면 얼마나 도움이 되는가? 메모리를 추가하면? 다중 에이전트 오케스트레이션을 추가하면?
 
 사용하는 경우: 엔터프라이즈 에이전트 스택을 설계 중이고 각 계층을 정당화해야 할 때. AgentArch는 가치를 측정할 수 없는 기능을 사들이지 않도록 돕는다.
 
-### SWE-bench Pro — 현실 점검
+### SWE-bench Pro: 현실 점검
 
 arXiv:2509.16941. 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41개 저장소의 1865개 문제. 더 늦은 학습 컷오프로 **오염되지 않게** 설계되었다. 프런티어 모델들은 Pro에서 약 23%를, Verified에서 70%+를 받는다. 그 격차가 오염 신호다.
 
 2026년 4월 점수:
-- Pro에서의 Claude Opus 4.7: **64.3%**(명시적 에이전트 팀 협응으로 보고됨. 아직 Anthropic 1차 출처가 발표되지 않음 — 예비적으로 취급).
+- Pro에서의 Claude Opus 4.7: **64.3%**(명시적 에이전트 팀 협응으로 보고됨. 아직 Anthropic 1차 출처가 발표되지 않음: 예비적으로 취급).
 - Verified에서의 Verdent(에이전트 스캐폴드): **76.1% pass@1**([technical report](https://www.verdent.ai/blog/swe-bench-verified-technical-report)).
 - 에이전트 스캐폴딩 없는 Pro에서의 프런티어 원시 점수: 약 23-35%([SWE-bench Pro paper](https://arxiv.org/abs/2509.16941)).
 
@@ -64,9 +64,9 @@ arXiv:2509.16941. 비즈니스 앱, B2B 서비스, 개발자 도구에 걸친 41
 
 ### AAAI 2026 WMAC
 
-AAAI 2026 Bridge Program — Workshop on Multi-Agent Coordination (https://multiagents.org/2026/). 다중 에이전트 AI 연구를 위한 2026년 커뮤니티 초점. 채택된 논문과 워크숍 프로시딩이 새 방법을 평가하는 정석 장이다. 프로덕션(production) 결정에는 arXiv 사전 인쇄본보다 WMAC 채택 주장을 우선하라.
+AAAI 2026 Bridge Program: Workshop on Multi-Agent Coordination (https://multiagents.org/2026/). 다중 에이전트 AI 연구를 위한 2026년 커뮤니티 초점. 채택된 논문과 워크숍 프로시딩이 새 방법을 평가하는 정석 장이다. 프로덕션(production) 결정에는 arXiv 사전 인쇄본보다 WMAC 채택 주장을 우선하라.
 
-### 벤치마크 주장을 회의적으로 읽기 — 2026년 체크리스트
+### 벤치마크 주장을 회의적으로 읽기: 2026년 체크리스트
 
 누군가 다중 에이전트 결과를 주장할 때:
 
@@ -112,7 +112,7 @@ python3 code/main.py
 
 프로덕션 평가 규율:
 
-- **내부 벤치마크를 만들어라** — 실제 프로덕션 분포를 반영하는. 공개 벤치마크는 정보를 주지만 대체하지 못한다.
+- **내부 벤치마크를 만들어라**. 실제 프로덕션 분포를 반영하는. 공개 벤치마크는 정보를 주지만 대체하지 못한다.
 - **모든 비교에 무작위 베이스라인을 포함하라.** 협응 과제에서 무작위를 큰 폭으로 이길 수 없다면, 그 과제는 잘못 설정된 것일 수 있다.
 - **정확도와 함께 비용을 보고하라.** 토큰 비용과 벽시계 시간. 운영 팀은 둘 다 필요로 한다.
 - **분기마다 벤치마크를 재구축하라.** 프로덕션 분포는 이동한다. 낡은 벤치마크는 오도한다.
@@ -141,9 +141,9 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [MultiAgentBench / MARBLE](https://arxiv.org/abs/2503.01935) — 마일스톤 KPI를 갖춘 토폴로지 벤치마크
-- [MARBLE repository](https://github.com/ulab-uiuc/MARBLE) — 참조 구현
-- [MedAgentBoard](https://arxiv.org/abs/2505.12371) — 도메인 스트레스 테스트. 다중 에이전트가 종종 지배하지 못함
-- [AgentArch](https://arxiv.org/abs/2509.10769) — 엔터프라이즈 에이전트 아키텍처
-- [SWE-bench leaderboards](https://www.swebench.com/) — 프런티어 모델의 Verified 및 Pro 점수
-- [AAAI 2026 WMAC](https://multiagents.org/2026/) — 2026년 커뮤니티 초점
+- [MultiAgentBench / MARBLE](https://arxiv.org/abs/2503.01935): 마일스톤 KPI를 갖춘 토폴로지 벤치마크
+- [MARBLE repository](https://github.com/ulab-uiuc/MARBLE): 참조 구현
+- [MedAgentBoard](https://arxiv.org/abs/2505.12371): 도메인 스트레스 테스트. 다중 에이전트가 종종 지배하지 못함
+- [AgentArch](https://arxiv.org/abs/2509.10769): 엔터프라이즈 에이전트 아키텍처
+- [SWE-bench leaderboards](https://www.swebench.com/): 프런티어 모델의 Verified 및 Pro 점수
+- [AAAI 2026 WMAC](https://multiagents.org/2026/): 2026년 커뮤니티 초점

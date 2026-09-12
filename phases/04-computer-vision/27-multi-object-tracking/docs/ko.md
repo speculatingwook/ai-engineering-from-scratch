@@ -51,7 +51,7 @@ flowchart LR
 - **DeepSORT** (2017): SORT + 트랙별 CNN 기반 외형 특성(ReID 임베딩(embedding)). 교차를 더 잘 처리.
 - **ByteTrack** (2021): 저신뢰도 검출을 두 번째 단계로 연결; 외형 특성이 필요 없지만 MOT17에서 최상위 성능.
 - **BoT-SORT** (2022): Byte + 카메라 운동 보상 + ReID.
-- **StrongSORT / OC-SORT** — 더 나은 운동과 외형을 가진 ByteTrack 후손.
+- **StrongSORT / OC-SORT**: 더 나은 운동과 외형을 가진 ByteTrack 후손.
 
 ### 칼만 필터 한 문단 요약
 
@@ -90,9 +90,9 @@ SAM 2는 인스턴스별 시공간 특성의 **메모리 뱅크**를 유지하�
 
 ### 알아야 할 세 메트릭
 
-- **MOTA (Multi-Object Tracking Accuracy)** — 1 - (FN + FP + ID 전환) / GT. 오차 유형으로 가중; 검출과 연결 실패를 뒤섞는 단일 메트릭.
-- **IDF1 (ID F1)** — ID 정밀도와 재현율의 조화 평균. 각 정답(ground-truth) 트랙이 시간에 걸쳐 ID를 얼마나 잘 유지하는지에 특별히 초점. ID 전환에 민감한 작업에 MOTA보다 낫다.
-- **HOTA (Higher Order Tracking Accuracy)** — 검출 정확도(DetA)와 연결 정확도(AssA)로 분해. 2020년 이래 커뮤니티 표준; 가장 포괄적.
+- **MOTA (Multi-Object Tracking Accuracy)**: 1 - (FN + FP + ID 전환) / GT. 오차 유형으로 가중; 검출과 연결 실패를 뒤섞는 단일 메트릭.
+- **IDF1 (ID F1)**: ID 정밀도와 재현율의 조화 평균. 각 정답(ground-truth) 트랙이 시간에 걸쳐 ID를 얼마나 잘 유지하는지에 특별히 초점. ID 전환에 민감한 작업에 MOTA보다 낫다.
+- **HOTA (Higher Order Tracking Accuracy)**: 검출 정확도(DetA)와 연결 정확도(AssA)로 분해. 2020년 이래 커뮤니티 표준; 가장 포괄적.
 
 감시(누가 누구인가)에는 IDF1을 보고한다. 스포츠 분석(패스 세기)에는 HOTA. 일반적 학술 비교에도 HOTA.
 
@@ -241,9 +241,9 @@ def count_id_switches(tracks_per_frame, gt_per_frame):
 
 2026년의 프로덕션 트래커:
 
-- `ultralytics` — YOLOv8 + ByteTrack / BoT-SORT 내장. `results = model.track(source, tracker="bytetrack.yaml")`. 기본값.
-- `supervision` (Roboflow) — ByteTrack 래퍼와 주석 유틸리티.
-- SAM 2 / SAM 3.1 — `processor.track()`을 통한 메모리 기반 추적.
+- `ultralytics`: YOLOv8 + ByteTrack / BoT-SORT 내장. `results = model.track(source, tracker="bytetrack.yaml")`. 기본값.
+- `supervision` (Roboflow): ByteTrack 래퍼와 주석 유틸리티.
+- SAM 2 / SAM 3.1: `processor.track()`을 통한 메모리 기반 추적.
 - 커스텀 스택: 검출기(YOLOv8 / RT-DETR) + `sort-tracker` / `OC-SORT` / `StrongSORT`.
 
 선택:
@@ -257,8 +257,8 @@ def count_id_switches(tracks_per_frame, gt_per_frame):
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-tracker-picker.md` — 장면 유형, 가림 패턴, 지연 시간(latency) 예산에 따라 SORT / ByteTrack / BoT-SORT / SAM 2 / SAM 3.1을 고른다.
-- `outputs/skill-mot-evaluator.md` — 정답 트랙에 대한 MOTA / IDF1 / HOTA의 완전한 평가 하니스(harness)를 작성한다.
+- `outputs/prompt-tracker-picker.md`: 장면 유형, 가림 패턴, 지연 시간(latency) 예산에 따라 SORT / ByteTrack / BoT-SORT / SAM 2 / SAM 3.1을 고른다.
+- `outputs/skill-mot-evaluator.md`: 정답 트랙에 대한 MOTA / IDF1 / HOTA의 완전한 평가 하니스(harness)를 작성한다.
 
 ## 연습 문제 (Exercises)
 
@@ -281,10 +281,10 @@ def count_id_switches(tracks_per_frame, gt_per_frame):
 
 ## 더 읽을거리 (Further Reading)
 
-- [SORT (Bewley et al., 2016)](https://arxiv.org/abs/1602.00763) — 최소 검출 기반 추적 논문
-- [DeepSORT (Wojke et al., 2017)](https://arxiv.org/abs/1703.07402) — 외형 특성 추가
-- [ByteTrack (Zhang et al., 2022)](https://arxiv.org/abs/2110.06864) — 저신뢰도 두 번째 패스
-- [BoT-SORT (Aharon et al., 2022)](https://arxiv.org/abs/2206.14651) — 카메라 운동 보상
-- [HOTA (Luiten et al., 2020)](https://arxiv.org/abs/2009.07736) — 분해된 추적 메트릭
-- [SAM 2 video segmentation (Meta, 2024)](https://ai.meta.com/sam2/) — 메모리 기반 트래커
+- [SORT (Bewley et al., 2016)](https://arxiv.org/abs/1602.00763): 최소 검출 기반 추적 논문
+- [DeepSORT (Wojke et al., 2017)](https://arxiv.org/abs/1703.07402): 외형 특성 추가
+- [ByteTrack (Zhang et al., 2022)](https://arxiv.org/abs/2110.06864): 저신뢰도 두 번째 패스
+- [BoT-SORT (Aharon et al., 2022)](https://arxiv.org/abs/2206.14651): 카메라 운동 보상
+- [HOTA (Luiten et al., 2020)](https://arxiv.org/abs/2009.07736): 분해된 추적 메트릭
+- [SAM 2 video segmentation (Meta, 2024)](https://ai.meta.com/sam2/): 메모리 기반 트래커
 - [SAM 3.1 Object Multiplex (Meta, March 2026)](https://ai.meta.com/blog/segment-anything-model-3/)

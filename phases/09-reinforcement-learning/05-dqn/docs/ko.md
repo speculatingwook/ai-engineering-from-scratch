@@ -11,13 +11,13 @@
 
 표(tabular) Q-러닝은 모든 (상태, 행동) 쌍에 대해 별도의 Q-값이 필요하다. 체스 보드는 약 10⁴³개의 상태를 가진다. Atari 프레임은 210×160×3 = 100,800개의 특성(feature)이다. 표 강화 학습은 수십억은커녕 수천 개의 상태에서 죽는다.
 
-해법은 돌이켜보면 명백하다: Q-표를 신경망(neural network) `Q(s, a; θ)`로 교체한다. 하지만 돌이켜보면-명백한 것에 수십 년이 걸렸다. Q-러닝과 함께하는 순진한 함수 근사는 "치명적 삼중주(deadly triad)" — 함수 근사 + 부트스트래핑(bootstrapping) + 오프-폴리시(off-policy) 학습 — 하에서 발산한다. Mnih et al. (2013, 2015)은 학습을 안정화하는 세 가지 공학적 트릭을 찾아냈다:
+해법은 돌이켜보면 명백하다: Q-표를 신경망(neural network) `Q(s, a; θ)`로 교체한다. 하지만 돌이켜보면-명백한 것에 수십 년이 걸렸다. Q-러닝과 함께하는 순진한 함수 근사는 "치명적 삼중주(deadly triad)"(함수 근사 + 부트스트래핑(bootstrapping) + 오프-폴리시(off-policy) 학습) 하에서 발산한다. Mnih et al. (2013, 2015)은 학습을 안정화하는 세 가지 공학적 트릭을 찾아냈다:
 
 1. **경험 재현(experience replay)**은 전이를 비상관화한다.
 2. **타깃 네트워크(target network)**는 부트스트랩 타깃을 고정한다.
 3. **보상 클리핑(reward clipping)**은 그래디언트(gradient) 크기를 정규화한다.
 
-Atari에서의 DQN은 단일 하이퍼파라미터(hyperparameter) 세트를 가진 단일 아키텍처가 원본 픽셀로부터 수십 개의 제어 문제를 푼 최초의 사례였다. 그 이후 만들어진 모든 "심층 강화 학습" — DDQN, Rainbow, Dueling, Distributional, R2D2, Agent57 — 은 이 세-트릭 기반 위에 쌓여 있다.
+Atari에서의 DQN은 단일 하이퍼파라미터(hyperparameter) 세트를 가진 단일 아키텍처가 원본 픽셀로부터 수십 개의 제어 문제를 푼 최초의 사례였다. 그 이후 만들어진 모든 "심층 강화 학습"(DDQN, Rainbow, Dueling, Distributional, R2D2, Agent57)은 이 세-트릭 기반 위에 쌓여 있다.
 
 ## 개념 (The Concept)
 
@@ -33,7 +33,7 @@ Atari에서의 DQN은 단일 하이퍼파라미터(hyperparameter) 세트를 가
 
 **경험 재현.** 약 10⁶개 전이의 링 버퍼(ring buffer). 각 학습 스텝은 미니배치(mini-batch)를 균일 무작위로 샘플링한다. 이는 시간적 상관(연속 프레임은 거의 동일하다)을 깨고 네트워크가 드문 보상 전이로부터 여러 번 학습하게 하며 연속된 그래디언트 갱신을 비상관화한다. 이것 없이는, 신경망을 가진 온-폴리시 TD가 Atari에서 발산한다.
 
-**타깃 네트워크.** 벨만 방정식(Bellman equation)의 양변에 같은 네트워크 `Q(·; θ)`를 사용하면 타깃이 매 갱신마다 움직인다 — "자기 꼬리 쫓기." 해법: 동결된 가중치(weight)를 가진 두 번째 네트워크 `Q(·; θ^-)`를 유지한다. `C`스텝마다 `θ → θ^-`로 복사한다. 이는 한 번에 수천 번의 그래디언트 스텝 동안 회귀 타깃을 안정화한다. 소프트 갱신 `θ^- ← τ θ + (1-τ) θ^-`(DDPG, SAC에서 사용)는 더 매끄러운 변형이다.
+**타깃 네트워크.** 벨만 방정식(Bellman equation)의 양변에 같은 네트워크 `Q(·; θ)`를 사용하면 타깃이 매 갱신마다 움직인다. "자기 꼬리 쫓기." 해법: 동결된 가중치(weight)를 가진 두 번째 네트워크 `Q(·; θ^-)`를 유지한다. `C`스텝마다 `θ → θ^-`로 복사한다. 이는 한 번에 수천 번의 그래디언트 스텝 동안 회귀 타깃을 안정화한다. 소프트 갱신 `θ^- ← τ θ + (1-τ) θ^-`(DDPG, SAC에서 사용)는 더 매끄러운 변형이다.
 
 **보상 클리핑.** Atari 보상 크기는 1에서 1000+까지 다양하다. `{-1, 0, +1}`로 클리핑하면 어떤 단일 게임도 그래디언트를 지배하지 못한다. 보상 크기가 중요할 때는 잘못이지만 부호만 중요한 Atari에는 적합하다.
 
@@ -47,7 +47,7 @@ Atari에서의 DQN은 단일 하이퍼파라미터(hyperparameter) 세트를 가
 
 ## 직접 만들기 (Build It)
 
-여기 코드는 표준 라이브러리(stdlib)만 쓰고 numpy를 쓰지 않는다 — 작은 연속 GridWorld에서 손으로 만든 단일 은닉층(hidden layer) MLP를 사용하므로, 모든 학습 스텝이 마이크로초 안에 실행된다. 알고리즘은 대규모의 Atari DQN과 동일하다.
+여기 코드는 표준 라이브러리(stdlib)만 쓰고 numpy를 쓰지 않는다. 작은 연속 GridWorld에서 손으로 만든 단일 은닉층(hidden layer) MLP를 사용하므로, 모든 학습 스텝이 마이크로초 안에 실행된다. 알고리즘은 대규모의 Atari DQN과 동일하다.
 
 ### 1단계: 재현 버퍼
 
@@ -176,7 +176,7 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 ## 연습 문제 (Exercises)
 
 1. **쉬움.** `code/main.py`를 실행하라. 에피소드별 리턴 곡선을 그려라. 실행 평균이 -10을 초과할 때까지 몇 에피소드가 걸리는가?
-2. **중간.** 타깃 네트워크를 비활성화하라(벨만 타깃의 양변에 온라인 망을 사용). 학습 불안정성을 측정하라 — 리턴이 진동하는가 발산하는가?
+2. **중간.** 타깃 네트워크를 비활성화하라(벨만 타깃의 양변에 온라인 망을 사용). 학습 불안정성을 측정하라. 리턴이 진동하는가 발산하는가?
 3. **어려움.** 더블 DQN을 추가하라: 온라인 망으로 `argmax a'`를 고르고, 타깃 망으로 평가하라. 노이즈 보상 GridWorld에서 더블 DQN을 쓸 때와 안 쓸 때 1,000 에피소드 후 `Q(s_0, best_a)`의 편향을 참 `V*(s_0)`와 비교하라.
 
 ## 핵심 용어 (Key Terms)
@@ -194,11 +194,11 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mnih et al. (2013). Playing Atari with Deep Reinforcement Learning](https://arxiv.org/abs/1312.5602) — 심층 강화 학습을 촉발한 2013 NeurIPS 워크숍 논문.
-- [Mnih et al. (2015). Human-level control through deep reinforcement learning](https://www.nature.com/articles/nature14236) — Nature 논문, 49-게임 DQN.
+- [Mnih et al. (2013). Playing Atari with Deep Reinforcement Learning](https://arxiv.org/abs/1312.5602): 심층 강화 학습을 촉발한 2013 NeurIPS 워크숍 논문.
+- [Mnih et al. (2015). Human-level control through deep reinforcement learning](https://www.nature.com/articles/nature14236): Nature 논문, 49-게임 DQN.
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) — DDQN.
-- [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581) — 듀얼링 DQN.
-- [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298) — 트릭을 쌓은 논문.
-- [OpenAI Spinning Up — DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html) — 명료한 현대적 설명.
-- [Sutton & Barto (2018). Ch. 9 — On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf) — DQN의 타깃 네트워크와 재현 버퍼가 길들이도록 설계된 "치명적 삼중주"(함수 근사 + 부트스트래핑 + 오프-폴리시)의 교과서적 다룸.
-- [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/) — 절제 연구(ablation studies)에서 사용되는 참조 단일 파일 DQN; 이 레슨의 밑바닥 버전과 함께 읽으면 좋다.
+- [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581): 듀얼링 DQN.
+- [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298): 트릭을 쌓은 논문.
+- [OpenAI Spinning Up(DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html)) 명료한 현대적 설명.
+- [Sutton & Barto (2018). Ch. 9(On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf)) DQN의 타깃 네트워크와 재현 버퍼가 길들이도록 설계된 "치명적 삼중주"(함수 근사 + 부트스트래핑 + 오프-폴리시)의 교과서적 다룸.
+- [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/): 절제 연구(ablation studies)에서 사용되는 참조 단일 파일 DQN; 이 레슨의 밑바닥 버전과 함께 읽으면 좋다.

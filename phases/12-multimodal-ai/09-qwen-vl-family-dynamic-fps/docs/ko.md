@@ -1,6 +1,6 @@
 # Qwen-VL 계열과 동적 FPS 비디오(Qwen-VL Family and Dynamic-FPS Video)
 
-> Qwen-VL 계열 — Qwen-VL(2023), Qwen2-VL(2024), Qwen2.5-VL(2025), Qwen3-VL(2025) — 은 2026년 가장 영향력 있는 오픈 비전-언어 모델 혈통이다. 각 세대는 나머지 오픈 생태계가 12개월 안에 따라 한 결정적 아키텍처 선택을 하나씩 했다: M-RoPE로 구현한 네이티브 동적 해상도(dynamic resolution), 절대 시간 정렬을 갖춘 동적 FPS 샘플링(sampling), ViT 내 윈도우 어텐션(window attention), 구조화된 에이전트(agent) 출력 포맷이다. Qwen3-VL에 이르러 레시피는 안정화되었다. 네이티브 종횡비 입력을 받는 2D-RoPE-ViT 인코더(encoder), 큰 Qwen3 언어 베이스로 이어지는 MLP 투영기(projector), OCR·그라운딩(grounding)·에이전트 행동을 일급 목표로 강조한 학습 단계로 이뤄진다. 이 레슨은 모든 손잡이가 왜 그 자리에 있는지 이해하도록 그 계열을 연대순으로 읽는다.
+> Qwen-VL 계열(Qwen-VL(2023), Qwen2-VL(2024), Qwen2.5-VL(2025), Qwen3-VL(2025))은 2026년 가장 영향력 있는 오픈 비전-언어 모델 혈통이다. 각 세대는 나머지 오픈 생태계가 12개월 안에 따라 한 결정적 아키텍처 선택을 하나씩 했다: M-RoPE로 구현한 네이티브 동적 해상도(dynamic resolution), 절대 시간 정렬을 갖춘 동적 FPS 샘플링(sampling), ViT 내 윈도우 어텐션(window attention), 구조화된 에이전트(agent) 출력 포맷이다. Qwen3-VL에 이르러 레시피는 안정화되었다. 네이티브 종횡비 입력을 받는 2D-RoPE-ViT 인코더(encoder), 큰 Qwen3 언어 베이스로 이어지는 MLP 투영기(projector), OCR·그라운딩(grounding)·에이전트 행동을 일급 목표로 강조한 학습 단계로 이뤄진다. 이 레슨은 모든 손잡이가 왜 그 자리에 있는지 이해하도록 그 계열을 연대순으로 읽는다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, M-RoPE encoder + dynamic-FPS sampler)
@@ -38,7 +38,7 @@ Qwen-VL은 LLaVA-1.5와 BLIP-2에 대한 직접적 응답으로 2023년 8월에 
 
 당시 벤치마크(benchmark): 영어에서 GPT-4V와 경쟁력이 있고, 중국어에서 지배적. 그라운딩 지도 신호가 진짜 헤드라인이었다.
 
-### Qwen2-VL (2024년 9월) — M-RoPE와 네이티브 해상도
+### Qwen2-VL (2024년 9월): M-RoPE와 네이티브 해상도
 
 Qwen2-VL은 고정 해상도 + Q-Former 스택을 네이티브 동적 해상도 ViT 인코더로 대체했다. 핵심 변화:
 
@@ -49,7 +49,7 @@ Qwen2-VL은 고정 해상도 + Q-Former 스택을 네이티브 동적 해상도 
 
 결과: Qwen2-VL-7B는 여러 멀티모달 벤치마크에서 GPT-4o와 동등했고 DocVQA에서는 앞섰다(94.5 대 88.4). 아키텍처 변경이 결정적 한 수였다.
 
-### Qwen2.5-VL (2025년 2월) — 동적 FPS + 절대 시간
+### Qwen2.5-VL (2025년 2월): 동적 FPS + 절대 시간
 
 Qwen2.5-VL의 큰 전환은 비디오였다. 동적 FPS는 단지 "필요할 때 더 많은 프레임을 샘플링"하는 것이 아니다. 논문은 다음을 형식화했다:
 

@@ -69,17 +69,17 @@ on_complete
 
 루프는 계약의 특정 지점에서 타입화된 스트림에 이벤트를 추가한다. 스트림은 추가 전용(append-only)이며 구독자는 어떤 오프셋(offset)에서든 재생할 수 있다. 구현된 열한 가지 이벤트 타입은 다음과 같다:
 
-- `session.start` — `run(goal)`이 호출될 때 한 번 방출됨
-- `plan.draft` — 플래너가 초안 계획을 반환할 때 방출됨
-- `plan.commit` — 초안이 활성 계획으로 커밋된 후 방출됨
-- `step.start` — 각 실행 스텝의 시작에서 방출됨
-- `step.end` — 각 실행 스텝의 끝에서 방출됨
-- `tool.call` — 도구가 필요한 스텝이 호출자에게 제어를 양보할 때 방출됨
-- `tool.result` — 도구 결과와 함께 재개할 때 방출됨
-- `tool.error` — 오류와 함께 재개할 때 또는 훅이 호출을 중단할 때 방출됨
-- `budget.warn` — 예산 한도에 도달할 때 방출됨
-- `session.pause` — 루프가 일시 정지(예산 또는 훅)에서 양보할 때 방출됨
-- `session.complete` — 루프가 `DONE`에 도달할 때 한 번 방출됨
+- `session.start`: `run(goal)`이 호출될 때 한 번 방출됨
+- `plan.draft`: 플래너가 초안 계획을 반환할 때 방출됨
+- `plan.commit`: 초안이 활성 계획으로 커밋된 후 방출됨
+- `step.start`: 각 실행 스텝의 시작에서 방출됨
+- `step.end`: 각 실행 스텝의 끝에서 방출됨
+- `tool.call`: 도구가 필요한 스텝이 호출자에게 제어를 양보할 때 방출됨
+- `tool.result`: 도구 결과와 함께 재개할 때 방출됨
+- `tool.error`: 오류와 함께 재개할 때 또는 훅이 호출을 중단할 때 방출됨
+- `budget.warn`: 예산 한도에 도달할 때 방출됨
+- `session.pause`: 루프가 일시 정지(예산 또는 훅)에서 양보할 때 방출됨
+- `session.complete`: 루프가 `DONE`에 도달할 때 한 번 방출됨
 
 이벤트는 훅 페이로드를 중복하지 않는다. 훅은 명령적(imperative)이다(변형, 중단). 이벤트는 관찰적(observational)이다(기록, 전송). 둘을 직교(orthogonal)하는 것으로 다룬다.
 

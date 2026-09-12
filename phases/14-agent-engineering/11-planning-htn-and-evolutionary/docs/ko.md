@@ -10,7 +10,7 @@
 ## 학습 목표 (Learning Objectives)
 
 - 계층적 작업 네트워크(Hierarchical Task Network): 작업(task), 방법(method), 연산자(operator), 전제 조건(precondition), 효과(effect)를 설명하기.
-- ChatHTN의 하이브리드 루프 — LLM 폴백(fallback) 분해를 갖춘 기호적 탐색 — 를 기술하기.
+- ChatHTN의 하이브리드 루프(LLM 폴백(fallback) 분해를 갖춘 기호적 탐색)를 기술하기.
 - AlphaEvolve의 진화적 루프와 그것이 왜 프로그래밍적 평가자(evaluator)가 있어야만 작동하는지 설명하기.
 - stdlib로 토이 HTN 플래너와 토이 진화적 탐색을 구현하기.
 
@@ -18,8 +18,8 @@
 
 ReWOO(Lesson 02), Plan-and-Execute, ReAct는 대부분의 에이전트(agent) 계획 수립을 다룬다. 이들이 잘 다루지 못하는 두 가지 경우가 있다.
 
-1. **증명 가능한 정확성을 가진 계획.** 스케줄링, 항공 경로 설정, 컴플라이언스(compliance) 워크플로 — 계획은 구성상(by construction) 건전해야 한다. 가끔 단계를 환각(hallucinate)하는 유창한 LLM 계획은 용납될 수 없다.
-2. **기계로 검증 가능한 적합도 함수를 가진 최적화.** 행렬 곱셈, 스케줄링 휴리스틱(heuristic), 컴파일러 패스(pass) — 목표는 "올바른 계획"이 아니라 "최선의 계획"이다.
+1. **증명 가능한 정확성을 가진 계획.** 스케줄링, 항공 경로 설정, 컴플라이언스(compliance) 워크플로: 계획은 구성상(by construction) 건전해야 한다. 가끔 단계를 환각(hallucinate)하는 유창한 LLM 계획은 용납될 수 없다.
+2. **기계로 검증 가능한 적합도 함수를 가진 최적화.** 행렬 곱셈, 스케줄링 휴리스틱(heuristic), 컴파일러 패스(pass): 목표는 "올바른 계획"이 아니라 "최선의 계획"이다.
 
 HTN 계획 수립과 AlphaEvolve는 서로 다른 두 문제를 해결한다. 둘 다 LLM을 대체물이 아니라 증폭기(amplifier)로 사용한다.
 
@@ -29,10 +29,10 @@ HTN 계획 수립과 AlphaEvolve는 서로 다른 두 문제를 해결한다. �
 
 HTN은 다음으로 구성된다.
 
-- **작업(Tasks)** — 복합(compound, 분해되어야 함) 작업과 원시(primitive, 직접 실행 가능) 작업.
-- **방법(Methods)** — 복합 작업을 하위 작업(subtask)으로 분해하는 방식들로, 전제 조건을 가진다.
-- **연산자(Operators)** — 전제 조건과 효과를 가진 원시 행동.
-- **상태(State)** — 사실(fact)들의 집합.
+- **작업(Tasks)**: 복합(compound, 분해되어야 함) 작업과 원시(primitive, 직접 실행 가능) 작업.
+- **방법(Methods)**: 복합 작업을 하위 작업(subtask)으로 분해하는 방식들로, 전제 조건을 가진다.
+- **연산자(Operators)**: 전제 조건과 효과를 가진 원시 행동.
+- **상태(State)**: 사실(fact)들의 집합.
 
 계획 수립: 목표 작업과 초기 상태가 주어졌을 때, 전제 조건이 순서대로 만족되는 원시 연산자들로의 분해를 찾는 것.
 
@@ -104,10 +104,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **HTN 플래너** — `pyhop`, `SHOP3`, 또는 도메인 특화 정책 집행을 위해 직접 만든 것.
-- **ChatHTN** — 연구용 코드. 그 패턴(기호적 + LLM 폴백)은 임의의 HTN 플래너로 깔끔하게 포팅된다.
-- **AlphaEvolve** — DeepMind 논문. 그 패턴(앙상블 + 평가자)은 재현 가능하다. OpenEvolve와 유사한 오픈소스 포크(fork)들이 등장하고 있다.
-- **에이전트 프레임워크** — 아직 일급(first-class) HTN이나 AlphaEvolve를 제공하는 것은 없다. 서브에이전트나 백그라운드 워커로 직접 만들어라.
+- **HTN 플래너**: `pyhop`, `SHOP3`, 또는 도메인 특화 정책 집행을 위해 직접 만든 것.
+- **ChatHTN**: 연구용 코드. 그 패턴(기호적 + LLM 폴백)은 임의의 HTN 플래너로 깔끔하게 포팅된다.
+- **AlphaEvolve**: DeepMind 논문. 그 패턴(앙상블 + 평가자)은 재현 가능하다. OpenEvolve와 유사한 오픈소스 포크(fork)들이 등장하고 있다.
+- **에이전트 프레임워크**: 아직 일급(first-class) HTN이나 AlphaEvolve를 제공하는 것은 없다. 서브에이전트나 백그라운드 워커로 직접 만들어라.
 
 ## 산출물 (Ship It)
 
@@ -135,6 +135,6 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Gopalakrishnan et al., ChatHTN (arXiv:2505.11814)](https://arxiv.org/abs/2505.11814) — 기호적 + LLM 하이브리드 플래너
-- [Novikov et al., AlphaEvolve (arXiv:2506.13131)](https://arxiv.org/abs/2506.13131) — LLM 변이를 활용한 진화적 코드 탐색
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 단순 루프 대신 플래너에 손을 뻗을 때
+- [Gopalakrishnan et al., ChatHTN (arXiv:2505.11814)](https://arxiv.org/abs/2505.11814): 기호적 + LLM 하이브리드 플래너
+- [Novikov et al., AlphaEvolve (arXiv:2506.13131)](https://arxiv.org/abs/2506.13131): LLM 변이를 활용한 진화적 코드 탐색
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 단순 루프 대신 플래너에 손을 뻗을 때

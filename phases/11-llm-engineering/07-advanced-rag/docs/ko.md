@@ -6,7 +6,7 @@
 **Languages:** Python
 **Prerequisites:** Phase 11, Lesson 06 (RAG)
 **Time:** ~90분
-**Related:** Phase 5 · 23 (Chunking Strategies for RAG)는 여섯 가지 청킹 알고리즘 — 재귀, 의미, 문장, 부모-문서, 늦은 청킹(late chunking), 맥락 검색(contextual retrieval) — 을 Vectara/Anthropic 벤치마크(benchmark)와 함께 다룬다. 이 레슨은 그 위에 쌓는다: 하이브리드 검색, 재순위화, 쿼리 변환.
+**Related:** Phase 5 · 23 (Chunking Strategies for RAG)는 여섯 가지 청킹 알고리즘(재귀, 의미, 문장, 부모-문서, 늦은 청킹(late chunking), 맥락 검색(contextual retrieval))을 Vectara/Anthropic 벤치마크(benchmark)와 함께 다룬다. 이 레슨은 그 위에 쌓는다: 하이브리드 검색, 재순위화, 쿼리 변환.
 
 ## 학습 목표 (Learning Objectives)
 
@@ -89,7 +89,7 @@ graph LR
 - Jina-Reranker-v2 Multilingual: 오픈웨이트, 100개 이상 언어
 - bge-reranker-v2-m3: 오픈웨이트, 강한 베이스라인
 - cross-encoder/ms-marco-MiniLM-L-6-v2: 오픈웨이트, 프로토타이핑용 CPU에서 실행
-- ColBERTv2 / Jina-ColBERT-v2: 늦은 상호작용(late-interaction) 다중 벡터 재순위기 — 채점 시 O(docs)가 아니라 O(tokens)
+- ColBERTv2 / Jina-ColBERT-v2: 늦은 상호작용(late-interaction) 다중 벡터 재순위기: 채점 시 O(docs)가 아니라 O(tokens)
 
 ### 쿼리 변환 (Query Transformation)
 

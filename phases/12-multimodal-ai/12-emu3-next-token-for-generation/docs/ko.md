@@ -1,6 +1,6 @@
 # Emu3: 이미지·비디오 생성을 위한 다음 토큰 예측(Next-Token Prediction)
 
-> BAAI의 Emu3(Wang et al., 2024년 9월)는 디퓨전(diffusion) 대 자기회귀(autoregressive) 논쟁을 끝냈어야 할 2024년의 결과물이다. 단일 Llama 스타일 디코더 전용(decoder-only) 트랜스포머(transformer)를, 텍스트 + VQ 이미지 토큰 + 3D VQ 비디오 토큰의 통합 어휘에 걸쳐 다음 토큰 예측(next-token-prediction) 목표만으로 학습시켜, 이미지 생성에서 SDXL을, 지각(perception)에서 LLaVA-1.6을 이긴다. CLIP 손실(loss)도, 디퓨전 스케줄도 없다. 품질을 위해 추론(inference) 시 분류기 없는 가이던스(classifier-free guidance)를 쓰지만, 핵심 학습 목표는 교사 강요(teacher forcing)를 사용한 다음 토큰 예측이다. Nature에 게재되었다. 이 레슨은 Emu3 논제 — 왜 더 나은 토크나이저(tokenizer)와 규모만 있으면 되는지 — 를 읽고 디퓨전 접근법과 대조한다.
+> BAAI의 Emu3(Wang et al., 2024년 9월)는 디퓨전(diffusion) 대 자기회귀(autoregressive) 논쟁을 끝냈어야 할 2024년의 결과물이다. 단일 Llama 스타일 디코더 전용(decoder-only) 트랜스포머(transformer)를, 텍스트 + VQ 이미지 토큰 + 3D VQ 비디오 토큰의 통합 어휘에 걸쳐 다음 토큰 예측(next-token-prediction) 목표만으로 학습시켜, 이미지 생성에서 SDXL을, 지각(perception)에서 LLaVA-1.6을 이긴다. CLIP 손실(loss)도, 디퓨전 스케줄도 없다. 품질을 위해 추론(inference) 시 분류기 없는 가이던스(classifier-free guidance)를 쓰지만, 핵심 학습 목표는 교사 강요(teacher forcing)를 사용한 다음 토큰 예측이다. Nature에 게재되었다. 이 레슨은 Emu3 논제(왜 더 나은 토크나이저(tokenizer)와 규모만 있으면 되는지)를 읽고 디퓨전 접근법과 대조한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, 3D video tokenizer math + autoregressive sampler skeleton)
@@ -67,11 +67,11 @@ Emu3는 기능적으로 구분되는 세 개의 API로 출시되지만 기저 �
 
 Emu3 논문(2024년 9월)에서:
 
-- 이미지 생성: MJHQ-30K FID(5.4 대 5.6), GenEval 종합(0.54 대 0.55 — 통계적 동률)에서 SDXL을 이기고, Deep-Eval의 종합에서 대등하다.
+- 이미지 생성: MJHQ-30K FID(5.4 대 5.6), GenEval 종합(0.54 대 0.55: 통계적 동률)에서 SDXL을 이기고, Deep-Eval의 종합에서 대등하다.
 - 이미지 지각: VQAv2(75.1 대 72.4)에서 LLaVA-1.6을 이기고, MMMU에서 대략 대등하다.
 - 비디오 생성: Sora 시대에 공개적으로 벤치마크된 모델들과 경쟁력 있는 FVD로 4초 클립 품질을 낸다.
 
-수치가 항상 이기는 것은 아니다 — Emu3는 여기서 한 점을 내주고 저기서 한 점을 얻는다 — 하지만 "다음 토큰 예측만 있으면 된다"는 주장은 여러 모달리티에 걸쳐 방어할 만하다.
+수치가 항상 이기는 것은 아니다. Emu3는 여기서 한 점을 내주고 저기서 한 점을 얻는다. 하지만 "다음 토큰 예측만 있으면 된다"는 주장은 여러 모달리티에 걸쳐 방어할 만하다.
 
 ### 연산 비용
 
@@ -92,7 +92,7 @@ Show-o, Janus-Pro, InternVL-U는 모두 이 논제 위에 쌓거나 이에 도�
 - 2D 대 3D VQ 토크나이저 개수 계산기: (해상도, 패치, 클립 길이, FPS)가 주어지면 이미지 대 비디오의 토큰 수를 계산한다.
 - 온도에서 분류기 없는 가이던스를 적용한 자기회귀 이미지 토큰 샘플러.
 
-CFG 구현은 Emu3의 레시피와 일치한다 — 조건부 로짓과 무조건부 로짓을 가이던스 가중치로 섞는다.
+CFG 구현은 Emu3의 레시피와 일치한다. 조건부 로짓과 무조건부 로짓을 가이던스 가중치로 섞는다.
 
 ## 산출물 (Ship It)
 

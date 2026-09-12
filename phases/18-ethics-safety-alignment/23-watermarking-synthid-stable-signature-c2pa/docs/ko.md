@@ -1,6 +1,6 @@
-# 워터마킹 — SynthID, Stable Signature, C2PA
+# 워터마킹: SynthID, Stable Signature, C2PA
 
-> 세 가지 기술이 2026년 AI 생성 콘텐츠의 출처(provenance)를 구조화한다. SynthID(Google DeepMind) — 이미지 워터마킹은 2023년 8월 출시, 텍스트+비디오는 2024년 5월(Gemini + Veo), 텍스트는 2024년 10월 Responsible GenAI Toolkit을 통해 오픈소스화, 통합 멀티미디어 탐지기는 2025년 11월 Gemini 3 Pro와 함께 출시. 텍스트 워터마킹은 다음 토큰(next-token) 샘플링(sampling) 확률을 감지 불가능하게 조정한다. 이미지/비디오 워터마크는 압축, 크롭(cropping), 필터, 프레임 레이트 변경을 견딘다. Stable Signature(Fernandez et al., ICCV 2023, arXiv:2303.15435) — 잠재 확산(latent diffusion) 디코더(decoder)를 파인튜닝(fine-tuning)하여 모든 출력이 고정 메시지를 담도록 한다. 크롭된(콘텐츠의 10%) 생성 이미지가 FPR<1e-6에서 90% 초과로 탐지됨. 후속 연구 "Stable Signature is Unstable"(arXiv:2405.07145, 2024년 5월) — 파인튜닝이 품질을 보존하면서 워터마크를 제거한다. C2PA — 암호학적으로 서명되고 변조가 드러나는(tamper-evident) 메타데이터 표준(C2PA 2.2 Explainer 2025). 워터마킹과 C2PA는 상호 보완적이다: 메타데이터는 제거될 수 있지만 더 풍부한 출처를 담는다. 워터마크는 트랜스코딩(transcoding)을 통과해 지속되지만 더 적은 정보를 담는다.
+> 세 가지 기술이 2026년 AI 생성 콘텐츠의 출처(provenance)를 구조화한다. SynthID(Google DeepMind): 이미지 워터마킹은 2023년 8월 출시, 텍스트+비디오는 2024년 5월(Gemini + Veo), 텍스트는 2024년 10월 Responsible GenAI Toolkit을 통해 오픈소스화, 통합 멀티미디어 탐지기는 2025년 11월 Gemini 3 Pro와 함께 출시. 텍스트 워터마킹은 다음 토큰(next-token) 샘플링(sampling) 확률을 감지 불가능하게 조정한다. 이미지/비디오 워터마크는 압축, 크롭(cropping), 필터, 프레임 레이트 변경을 견딘다. Stable Signature(Fernandez et al., ICCV 2023, arXiv:2303.15435): 잠재 확산(latent diffusion) 디코더(decoder)를 파인튜닝(fine-tuning)하여 모든 출력이 고정 메시지를 담도록 한다. 크롭된(콘텐츠의 10%) 생성 이미지가 FPR<1e-6에서 90% 초과로 탐지됨. 후속 연구 "Stable Signature is Unstable"(arXiv:2405.07145, 2024년 5월): 파인튜닝이 품질을 보존하면서 워터마크를 제거한다. C2PA: 암호학적으로 서명되고 변조가 드러나는(tamper-evident) 메타데이터 표준(C2PA 2.2 Explainer 2025). 워터마킹과 C2PA는 상호 보완적이다: 메타데이터는 제거될 수 있지만 더 풍부한 출처를 담는다. 워터마크는 트랜스코딩(transcoding)을 통과해 지속되지만 더 적은 정보를 담는다.
 
 **Type:** Build
 **Languages:** Python (stdlib, token-watermark embed + detect)
@@ -33,7 +33,7 @@ Google이 프로덕션에 적용한 Kirchenbauer et al. 2023 메커니즘:
 성질:
 - 독자에게 감지 불가능하다(δ가 충분히 작아 품질 손실이 미미하다).
 - 어휘 분할 함수에 접근할 수 있으면 탐지 가능하다.
-- 패러프레이즈에 견고하지 않다 — 텍스트를 다시 쓰면 신호가 파괴된다.
+- 패러프레이즈에 견고하지 않다. 텍스트를 다시 쓰면 신호가 파괴된다.
 
 SynthID-text는 2024년 10월 Google의 Responsible GenAI Toolkit을 통해 오픈소스화되었다.
 
@@ -91,7 +91,7 @@ AI 생성 콘텐츠 라벨링을 위한 투명성 강령(Transparency Code)(첫 
 
 4. SynthID-text + C2PA 메타데이터를 사용하는 배포를 설계하라. 소비자가 보는 출처 체인을 기술하라. 각 구성 요소의 실패 모드 하나씩을 식별하라.
 
-5. 2024년 "Stable Signature is Unstable" 결과는 파인튜닝이 이미지 워터마크를 제거함을 보인다. 이 공격을 제한하는 배포 통제를 설계하라 — 예를 들어, 파인튜닝된 체크포인트(checkpoint)의 서명된 릴리스를 요구한다.
+5. 2024년 "Stable Signature is Unstable" 결과는 파인튜닝이 이미지 워터마크를 제거함을 보인다. 이 공격을 제한하는 배포 통제를 설계하라. 예를 들어, 파인튜닝된 체크포인트(checkpoint)의 서명된 릴리스를 요구한다.
 
 ## 핵심 용어 (Key Terms)
 
@@ -107,8 +107,8 @@ AI 생성 콘텐츠 라벨링을 위한 투명성 강령(Transparency Code)(첫 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kirchenbauer et al. — A Watermark for Large Language Models (ICML 2023, arXiv:2301.10226)](https://arxiv.org/abs/2301.10226) — 토큰 워터마크 메커니즘
-- [Fernandez et al. — Stable Signature (ICCV 2023, arXiv:2303.15435)](https://arxiv.org/abs/2303.15435) — 이미지 워터마크 논문
-- ["Stable Signature is Unstable" (arXiv:2405.07145)](https://arxiv.org/abs/2405.07145) — 제거 공격
-- [Google DeepMind — SynthID](https://deepmind.google/models/synthid/) — 교차 모달 워터마크
-- [C2PA 2.2 Explainer (2025)](https://c2pa.org/specifications/specifications/2.2/explainer/Explainer.html) — 메타데이터 표준
+- [Kirchenbauer et al.(A Watermark for Large Language Models (ICML 2023, arXiv:2301.10226)](https://arxiv.org/abs/2301.10226)) 토큰 워터마크 메커니즘
+- [Fernandez et al.(Stable Signature (ICCV 2023, arXiv:2303.15435)](https://arxiv.org/abs/2303.15435)) 이미지 워터마크 논문
+- ["Stable Signature is Unstable" (arXiv:2405.07145)](https://arxiv.org/abs/2405.07145): 제거 공격
+- [Google DeepMind(SynthID](https://deepmind.google/models/synthid/)) 교차 모달 워터마크
+- [C2PA 2.2 Explainer (2025)](https://c2pa.org/specifications/specifications/2.2/explainer/Explainer.html): 메타데이터 표준

@@ -1,6 +1,6 @@
 # 장시간 실행 백그라운드 에이전트: 지속 실행(Durable Execution)
 
-> 프로덕션(production) 장기 지평(long-horizon) 에이전트(agent)는 `while True`로 돌지 않는다. 모든 LLM 호출은 체크포인트(checkpoint), 재시도(retry), 재생(replay)을 갖춘 액티비티(activity)가 된다. Temporal의 OpenAI Agents SDK 통합은 2026년 3월 정식 출시(GA)되었다. Claude Code Routines(Anthropic)는 지속적인 로컬 프로세스 없이 예약된 Claude Code 호출을 실행한다. 세션은 사람 입력(human-input)에서 일시 정지하고, 배포(deploy)를 견디며, `thread_id`로 키가 지정된 최신 체크포인트에서 재개한다. 새로운 사용성 뒤에는 오래된 패턴 — 워크플로 오케스트레이션(workflow orchestration) — 이 자리하며, 한 가지 새로운 입력이 있다: 복구 시 결정론적으로 재생되어야 하는 비결정론적 액티비티로서의 LLM 호출.
+> 프로덕션(production) 장기 지평(long-horizon) 에이전트(agent)는 `while True`로 돌지 않는다. 모든 LLM 호출은 체크포인트(checkpoint), 재시도(retry), 재생(replay)을 갖춘 액티비티(activity)가 된다. Temporal의 OpenAI Agents SDK 통합은 2026년 3월 정식 출시(GA)되었다. Claude Code Routines(Anthropic)는 지속적인 로컬 프로세스 없이 예약된 Claude Code 호출을 실행한다. 세션은 사람 입력(human-input)에서 일시 정지하고, 배포(deploy)를 견디며, `thread_id`로 키가 지정된 최신 체크포인트에서 재개한다. 새로운 사용성 뒤에는 오래된 패턴(워크플로 오케스트레이션(workflow orchestration))이 자리하며, 한 가지 새로운 입력이 있다: 복구 시 결정론적으로 재생되어야 하는 비결정론적 액티비티로서의 LLM 호출.
 
 **Type:** Learn
 **Languages:** Python (stdlib, minimal durable-execution state machine)
@@ -14,9 +14,9 @@
 - 순진한 `while True` 루프에서는: 모든 것이 사라진다. 실행이 처음부터 재시작한다. (실제 부작용이 있는) 세 도구 호출이 다시 실행된다. 사용자는 이미 승인한 것들에 대해 다시 프롬프트를 받는다. 마흔 번의 LLM 호출이 다시 청구된다.
 - 지속 실행(durable execution)에서는: 실행이 가장 최근 체크포인트에서 재개한다. 이미 완료된 액티비티는 다시 실행되지 않는다. 그 결과는 지속 로그(durable log)에서 재생된다. 사용자는 이미 승인한 것들을 다시 승인하지 않는다. 이미 이뤄진 LLM 호출은 다시 청구되지 않는다.
 
-이것은 워크플로 엔진들이 십 년간 출하해 온 같은 패턴이다(Temporal, Cadence, Uber의 Cherami). 새로운 점은 이제 LLM 호출이 일종의 액티비티 — 비결정론적이고, 비싸며, 부작용이 있는 — 이며, 이 패턴에 깔끔하게 들어맞는다는 것이다.
+이것은 워크플로 엔진들이 십 년간 출하해 온 같은 패턴이다(Temporal, Cadence, Uber의 Cherami). 새로운 점은 이제 LLM 호출이 일종의 액티비티(비결정론적이고, 비싸며, 부작용이 있는) 이며, 이 패턴에 깔끔하게 들어맞는다는 것이다.
 
-레슨의 관통하는 주제: 장기 지평 신뢰성은 쇠퇴한다(METR은 "35분 열화"를 관찰한다 — 성공률이 지평에 따라 대략 이차적으로 떨어진다). 지속 실행은 신뢰성 프로파일이 지지하는 것보다 더 긴 실행을 가능하게 하며, 이는 설계가 옳으면 안전하게, 설계가 틀리면 위험하게 실패하는 새로운 방식이다.
+레슨의 관통하는 주제: 장기 지평 신뢰성은 쇠퇴한다(METR은 "35분 열화"를 관찰한다. 성공률이 지평에 따라 대략 이차적으로 떨어진다). 지속 실행은 신뢰성 프로파일이 지지하는 것보다 더 긴 실행을 가능하게 하며, 이는 설계가 옳으면 안전하게, 설계가 틀리면 위험하게 실패하는 새로운 방식이다.
 
 ## 개념 (The Concept)
 
@@ -105,8 +105,8 @@ METR은 측정된 모든 에이전트 부류가 약 35분의 연속 작동을 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop) — 예산, 턴, 재개 시맨틱.
-- [Microsoft — Agent Framework: human-in-the-loop and checkpointing](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop) — RequestInfoEvent 형태.
-- [LangChain — The Runtime Behind Production Deep Agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents) — 구체적 런타임 요구사항.
-- [OpenAI Agents SDK + Temporal integration (Trigger.dev announcement)](https://trigger.dev) — LLM 호출을 위한 액티비티 형태.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 35분 열화 참조.
+- [Anthropic(Claude Code Agent SDK: agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop)) 예산, 턴, 재개 시맨틱.
+- [Microsoft(Agent Framework: human-in-the-loop and checkpointing](https://learn.microsoft.com/en-us/agent-framework/workflows/human-in-the-loop)) RequestInfoEvent 형태.
+- [LangChain(The Runtime Behind Production Deep Agents](https://www.langchain.com/conceptual-guides/runtime-behind-production-deep-agents)) 구체적 런타임 요구사항.
+- [OpenAI Agents SDK + Temporal integration (Trigger.dev announcement)](https://trigger.dev): LLM 호출을 위한 액티비티 형태.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 35분 열화 참조.

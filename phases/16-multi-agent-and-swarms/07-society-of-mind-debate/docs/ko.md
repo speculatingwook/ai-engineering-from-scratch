@@ -1,6 +1,6 @@
 # 마음의 사회와 멀티 에이전트 토론 (Society of Mind and Multi-Agent Debate)
 
-> 민스키(Minsky)의 1986년 전제 — 지능은 전문가들의 사회다 — 는 10년마다 재발견된다. 2023년 Du et al.은 이를 구체적인 알고리즘으로 바꿨다: 여러 LLM 인스턴스가 답을 제안하고, 서로의 답을 읽고, 비판하고, 갱신한다. N 라운드에 걸쳐 그들은 여섯 가지 추론 및 사실성 과제에서 제로샷 CoT와 리플렉션(reflection)을 이기는 합의(consensus)로 수렴한다. 두 가지 발견이 중요하다: **여러 에이전트(agent)**와 **여러 라운드**가 독립적으로 기여한다. 사회는 단일 에이전트의 독백을 이기고, 다중 라운드 교환은 일회성 투표를 이긴다.
+> 민스키(Minsky)의 1986년 전제(지능은 전문가들의 사회다)는 10년마다 재발견된다. 2023년 Du et al.은 이를 구체적인 알고리즘으로 바꿨다: 여러 LLM 인스턴스가 답을 제안하고, 서로의 답을 읽고, 비판하고, 갱신한다. N 라운드에 걸쳐 그들은 여섯 가지 추론 및 사실성 과제에서 제로샷 CoT와 리플렉션(reflection)을 이기는 합의(consensus)로 수렴한다. 두 가지 발견이 중요하다: **여러 에이전트(agent)**와 **여러 라운드**가 독립적으로 기여한다. 사회는 단일 에이전트의 독백을 이기고, 다중 라운드 교환은 일회성 투표를 이긴다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib)
@@ -9,7 +9,7 @@
 
 ## 문제 (Problem)
 
-자기 일관성(self-consistency) — 한 모델을 여러 번 샘플링하고 다수 답을 취함 — 은 덧붙일 수 있는 가장 저렴한 추론 개선이다. 잘 동작하지만 빠르게 포화(saturation)된다. 샘플을 두 배로 늘려도 또 다른 의미 있는 도약을 보지 못할 수 있다.
+자기 일관성(self-consistency)(한 모델을 여러 번 샘플링하고 다수 답을 취함)은 덧붙일 수 있는 가장 저렴한 추론 개선이다. 잘 동작하지만 빠르게 포화(saturation)된다. 샘플을 두 배로 늘려도 또 다른 의미 있는 도약을 보지 못할 수 있다.
 
 토론(debate)은 그 포화를 깬다. 한 모델로부터 N개의 독립 샘플 대신, N개의 에이전트가 서로의 추론을 읽고 수정한다. 샘플 간 상관(correlation)이 떨어지고(더 이상 i.i.d.가 아니다), i.i.d. 투표가 자신만만하게 틀렸던 곳에서 수렴점이 종종 옳다.
 
@@ -30,7 +30,7 @@ arXiv:2305.14325 (ICML 2024)에서:
 같은 논문의 절제 실험(ablation):
 
 - **에이전트 수만**(1 라운드, N개의 다수결)으로는 대부분의 과제에서 단일 에이전트를 이기지만, 평탄해진다(plateau).
-- **라운드 수만**(자신의 이전 추론을 보는 1개 에이전트)으로는 거의 도움이 안 된다 — 리플렉션의 알려진 약점.
+- **라운드 수만**(자신의 이전 추론을 보는 1개 에이전트)으로는 거의 도움이 안 된다. 리플렉션의 알려진 약점.
 - **둘이 함께**일 때 큰 도약을 낳는다. 여러 에이전트 사이의 다중 라운드 교환이 이득을 이끈다.
 
 ### 왜 동작하는가
@@ -38,7 +38,7 @@ arXiv:2305.14325 (ICML 2024)에서:
 두 가지 메커니즘:
 
 1. **불일치에의 노출.** 한 에이전트가 다른 결론을 가진 다른 에이전트의 추론 사슬을 볼 때, 정당화하거나 갱신해야 한다. 어느 쪽이든, 라운드 r+1의 컨텍스트는 라운드 r보다 풍부하다.
-2. **상관된 오류 감소.** 자기 일관성에서는 모든 샘플이 같은 모델에서 오므로 오류가 상관된다 — 자신만만하게 틀린 답으로 평균낸다. 다른 모델이나 다른 시드(seed)는 상관을 줄인다. 서로 다른 *토론된 관점*은 더욱 상관을 줄인다.
+2. **상관된 오류 감소.** 자기 일관성에서는 모든 샘플이 같은 모델에서 오므로 오류가 상관된다. 자신만만하게 틀린 답으로 평균낸다. 다른 모델이나 다른 시드(seed)는 상관을 줄인다. 서로 다른 *토론된 관점*은 더욱 상관을 줄인다.
 
 ### 이질적 토론 (Heterogeneous debate)
 
@@ -46,7 +46,7 @@ A-HMAD와 관련 후속 연구는 서로 다른 에이전트에 *다른 기반 �
 
 단점: 토론에 참여하는 약한 모델이 합의를 그 틀린 답 쪽으로 끌고 갈 수 있다("Should we be going MAD?", arXiv:2311.17371 참고).
 
-### NLSOM — 129-에이전트 확장
+### NLSOM: 129-에이전트 확장
 
 Zhuge et al.("Mindstorms in Natural Language-Based Societies of Mind," arXiv:2305.17066)은 이 아이디어를 129명 사회로 확장했다. 결과: 규모와 함께 전문화와 자기 조직화(self-organization)가 창발하고, 시스템은 시각 질의응답(visual question answering) 같은 과제에서 단일 에이전트를 능가한다.
 
@@ -58,7 +58,7 @@ Zhuge et al.("Mindstorms in Natural Language-Based Societies of Mind," arXiv:230
 
 ## 직접 만들기 (Build It)
 
-`code/main.py`는 각 에이전트가 서로 다른(아마도 틀린) 답으로 시작하는 수학 질문에서 3-에이전트 × 3-라운드 토론을 실행한다. 에이전트들은 스크립트되어 있다 — 각각은 스크립트된 신뢰도(confidence)로 가중된 이웃들의 답을 평균하여 "갱신"한다. 수렴은 라운드별 로그에서 보인다.
+`code/main.py`는 각 에이전트가 서로 다른(아마도 틀린) 답으로 시작하는 수학 질문에서 3-에이전트 × 3-라운드 토론을 실행한다. 에이전트들은 스크립트되어 있다. 각각은 스크립트된 신뢰도(confidence)로 가중된 이웃들의 답을 평균하여 "갱신"한다. 수렴은 라운드별 로그에서 보인다.
 
 데모는 두 가지 핵심 효과를 보여준다.
 
@@ -91,7 +91,7 @@ python3 code/main.py
 2. 적대적 역할을 가진 네 번째 에이전트를 추가하라: 항상 현재 다수와 불일치한다. 이것이 수렴을 깨는가 개선하는가?
 3. 라운드별 합의 점수(다수 답에 속한 에이전트의 비율)를 플롯(출력)하라. 언제 1.0에 도달하며 그것이 "옳음"과 동등한가?
 4. Du et al. 섹션 4 절제 실험을 읽어라. 이 코드를 사용해 "에이전트만" 대 "라운드만" 대 "둘 다" 결과를 재현하라.
-5. "Should we be going MAD?" (arXiv:2311.17371)를 읽고 라운드로빈을 넘는 두 가지 토론 변형을 나열하라 — 예: 심판 주도(judge-led), 토론 사슬(chain-of-debate), 적대적.
+5. "Should we be going MAD?" (arXiv:2311.17371)를 읽고 라운드로빈을 넘는 두 가지 토론 변형을 나열하라. 예: 심판 주도(judge-led), 토론 사슬(chain-of-debate), 적대적.
 
 ## 핵심 용어 (Key Terms)
 
@@ -99,7 +99,7 @@ python3 code/main.py
 |------|----------------|------------------------|
 | 마음의 사회 (Society of Mind) | "민스키의 아이디어" | 상호작용하는 전문가로서의 지능; 1986년 틀이 이제 LLM 토론을 통해 실용화됨. |
 | 멀티 에이전트 토론 (Multi-agent debate) | "에이전트들이 논쟁한다" | N개 에이전트가 제안하고, 서로 비판하고, R 라운드에 걸쳐 수정하고, 다수결한다. |
-| 합의 (Consensus) | "그들이 동의한다" | 인식론적 진리가 아니다 — 그저 다수 답에 속한 비율. 자신만만하게 틀릴 수 있다. |
+| 합의 (Consensus) | "그들이 동의한다" | 인식론적 진리가 아니다. 그저 다수 답에 속한 비율. 자신만만하게 틀릴 수 있다. |
 | 라운드 (Rounds) | "교환 단계" | 한 라운드 = 각 에이전트가 다른 이들을 읽고 한 번 갱신함. |
 | 이질적 토론 (Heterogeneous debate) | "모델 계열을 섞어라" | 오류의 상관을 줄이기 위해 다른 기반 모델을 사용함. |
 | 아첨 연쇄 (Sycophancy cascade) | "모두가 큰 목소리에 동의한다" | 정확성과 무관하게 에이전트들이 가장 자신만만한 에이전트에게 양보하는 토론 실패. |
@@ -108,7 +108,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Du et al. — Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325) — 레퍼런스 논문, ICML 2024
-- [Zhuge et al. — Mindstorms in Natural Language-Based Societies of Mind](https://arxiv.org/abs/2305.17066) — 129-에이전트 NLSOM
-- [Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs](https://arxiv.org/abs/2311.17371) — 토론 변형을 벤치마크함
-- [Debate project page](https://composable-models.github.io/llm_debate/) — Du et al.의 코드, 데모, 절제 실험 세부사항
+- [Du et al.(Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325)) 레퍼런스 논문, ICML 2024
+- [Zhuge et al.(Mindstorms in Natural Language-Based Societies of Mind](https://arxiv.org/abs/2305.17066)) 129-에이전트 NLSOM
+- [Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs](https://arxiv.org/abs/2311.17371): 토론 변형을 벤치마크함
+- [Debate project page](https://composable-models.github.io/llm_debate/): Du et al.의 코드, 데모, 절제 실험 세부사항

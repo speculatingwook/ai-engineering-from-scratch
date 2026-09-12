@@ -1,6 +1,6 @@
-# 완전한 트랜스포머(The Full Transformer) — 인코더 + 디코더
+# 완전한 트랜스포머(The Full Transformer): 인코더 + 디코더
 
-> 어텐션(attention)이 주연이다. 나머지 모든 것 — 잔차(residual), 정규화(normalization), 피드포워드(feed-forward), 크로스 어텐션(cross-attention) — 은 그것을 깊이 쌓을 수 있게 하는 비계(scaffolding)다.
+> 어텐션(attention)이 주연이다. 나머지 모든 것(잔차(residual), 정규화(normalization), 피드포워드(feed-forward), 크로스 어텐션(cross-attention))은 그것을 깊이 쌓을 수 있게 하는 비계(scaffolding)다.
 
 **Type:** Build
 **Languages:** Python
@@ -11,9 +11,9 @@
 
 단일 어텐션 층(layer)은 모델이 아니라 특성(feature) 추출기다. 층당 하나의 행렬곱(matmul)은 언어를 다루기에 충분한 용량이 아니다. 그래서 깊이가 필요하다. 그런데 깊이는 올바른 배관(plumbing) 없이는 무너진다.
 
-2017년 Vaswani 논문은 하나의 어텐션 층을 쌓을 수 있는 블록으로 바꾼 여섯 가지 설계 결정을 묶었다. 그 이후의 모든 트랜스포머(transformer) — 인코더 전용(BERT), 디코더 전용(GPT), 인코더-디코더(T5) — 가 같은 골격을 물려받는다. 2026년에 블록들은 다듬어졌지만(RMSNorm, SwiGLU, pre-norm, RoPE) 골격은 동일하다.
+2017년 Vaswani 논문은 하나의 어텐션 층을 쌓을 수 있는 블록으로 바꾼 여섯 가지 설계 결정을 묶었다. 그 이후의 모든 트랜스포머(transformer)(인코더 전용(BERT), 디코더 전용(GPT), 인코더-디코더(T5))가 같은 골격을 물려받는다. 2026년에 블록들은 다듬어졌지만(RMSNorm, SwiGLU, pre-norm, RoPE) 골격은 동일하다.
 
-이 레슨은 그 골격이다. 다음 레슨들이 이를 특화한다 — 06은 인코더, 07은 디코더, 08은 인코더-디코더.
+이 레슨은 그 골격이다. 다음 레슨들이 이를 특화한다. 06은 인코더, 07은 디코더, 08은 인코더-디코더.
 
 ## 개념 (The Concept)
 
@@ -45,7 +45,7 @@ x → LN → MHA(self) → + → LN → FFN → + → out
 x → LN → MHA(masked self) → + → LN → MHA(cross to encoder) → + → LN → FFN → + → out
 ```
 
-디코더는 블록당 세 개의 하위 층(sublayer)을 가진다. 가운데 것 — 크로스 어텐션 — 이 정보가 인코더에서 디코더로 흐르는 유일한 곳이다. 순수 디코더 전용 아키텍처(GPT)에서는 크로스 어텐션이 생략되고 마스킹된 셀프 어텐션 + FFN만 있다.
+디코더는 블록당 세 개의 하위 층(sublayer)을 가진다. 가운데 것(크로스 어텐션)이 정보가 인코더에서 디코더로 흐르는 유일한 곳이다. 순수 디코더 전용 아키텍처(GPT)에서는 크로스 어텐션이 생략되고 마스킹된 셀프 어텐션 + FFN만 있다.
 
 ### Pre-norm vs post-norm
 
@@ -82,8 +82,8 @@ RMSNorm은 LayerNorm의 평균 중심화를 버린다(뺄셈 하나 줄임). 그
 
 레슨 03의 작은 `Matrix` 클래스를 사용한다(독립성을 위해 이 파일에 복사됨):
 
-- `layer_norm(x, eps=1e-5)` — 평균을 빼고 표준편차로 나눈다.
-- `rms_norm(x, eps=1e-6)` — RMS로 나눈다. 평균 뺄셈 없음.
+- `layer_norm(x, eps=1e-5)`: 평균을 빼고 표준편차로 나눈다.
+- `rms_norm(x, eps=1e-6)`: RMS로 나눈다. 평균 뺄셈 없음.
 - `gelu(x)`와 `silu(x) * W3 x` (SwiGLU).
 - `ffn_swiglu(x, W1, W2, W3)`.
 - `encoder_block(x, params)`와 `decoder_block(x, enc_out, params)`.
@@ -110,7 +110,7 @@ def decode(target_tokens, encoder_out, params):
 
 ### 3단계: 장난감 예제로 순방향 실행하기
 
-6 토큰 소스와 5 토큰 타깃을 통과시킨다. 출력 모양이 `(5, vocab)`인지 검증한다. 학습(training) 없음 — 이 레슨은 손실(loss)이 아니라 아키텍처에 관한 것이다.
+6 토큰 소스와 5 토큰 타깃을 통과시킨다. 출력 모양이 `(5, vocab)`인지 검증한다. 학습(training) 없음: 이 레슨은 손실(loss)이 아니라 아키텍처에 관한 것이다.
 
 ### 4단계: RMSNorm + SwiGLU로 교체하기
 
@@ -126,7 +126,7 @@ PyTorch/TF 레퍼런스 구현: `nn.TransformerEncoderLayer`, `nn.TransformerDec
 
 HF `transformers`에는 읽어볼 만한 깔끔한 레퍼런스 블록이 있다. `modeling_llama.py`가 정전(canonical)적인 2026년 디코더 전용 블록이다. 약 500줄이고 한 번 훑어볼 가치가 있다.
 
-**인코더 vs 디코더 vs 인코더-디코더 — 언제 고를까:**
+**인코더 vs 디코더 vs 인코더-디코더: 언제 고를까:**
 
 | 필요 | 선택 | 예시 |
 |------|------|---------|
@@ -144,7 +144,7 @@ HF `transformers`에는 읽어볼 만한 깔끔한 레퍼런스 블록이 있다
 
 1. **쉬움.** `d_model=512, n_heads=8, ffn_expansion=4, swiglu=True`에서 encoder_block의 파라미터를 센다. 블록을 구현하고 `sum(p.numel() for p in block.parameters())`를 사용해 검증한다.
 2. **보통.** post-norm에서 pre-norm으로 전환한다. 둘 다 초기화하고 무작위 입력에 대해 12개 적층 층 후의 활성값 노름(norm)을 측정한다. post-norm의 활성값은 폭발해야 하고, pre-norm의 것은 유계로 유지되어야 한다.
-3. **어려움.** 장난감 복사 과제(역순으로 `x` 복사)에 4층 인코더-디코더를 구현한다. 100 스텝 학습한다. 손실을 보고한다. RMSNorm + SwiGLU + RoPE로 교체한다 — 손실이 떨어지는가?
+3. **어려움.** 장난감 복사 과제(역순으로 `x` 복사)에 4층 인코더-디코더를 구현한다. 100 스텝 학습한다. 손실을 보고한다. RMSNorm + SwiGLU + RoPE로 교체한다. 손실이 떨어지는가?
 
 ## 핵심 용어 (Key Terms)
 
@@ -161,8 +161,8 @@ HF `transformers`에는 읽어볼 만한 깔끔한 레퍼런스 블록이 있다
 
 ## 더 읽을거리 (Further Reading)
 
-- [Vaswani et al. (2017). Attention Is All You Need](https://arxiv.org/abs/1706.03762) — 원조 블록 사양.
-- [Xiong et al. (2020). On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745) — pre-norm이 깊게 post-norm을 이기는 이유.
+- [Vaswani et al. (2017). Attention Is All You Need](https://arxiv.org/abs/1706.03762): 원조 블록 사양.
+- [Xiong et al. (2020). On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745): pre-norm이 깊게 post-norm을 이기는 이유.
 - [Zhang, Sennrich (2019). Root Mean Square Layer Normalization](https://arxiv.org/abs/1910.07467) — RMSNorm.
-- [Shazeer (2020). GLU Variants Improve Transformer](https://arxiv.org/abs/2002.05202) — SwiGLU 논문.
-- [HuggingFace `modeling_llama.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py) — 정전적 2026년 디코더 전용 블록.
+- [Shazeer (2020). GLU Variants Improve Transformer](https://arxiv.org/abs/2002.05202): SwiGLU 논문.
+- [HuggingFace `modeling_llama.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py): 정전적 2026년 디코더 전용 블록.

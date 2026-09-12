@@ -41,8 +41,8 @@ flowchart LR
     style BU fill:#fef3c7,stroke:#d97706
 ```
 
-- **하향식(Top-down)** — 사람을 먼저 검출한 다음, 각 크롭(crop)마다 인물별 키포인트 모델(model)을 실행한다. 가장 높은 정확도; 사람 수에 선형으로 비례해 확장된다.
-- **상향식(Bottom-up)** — 한 번의 순방향 패스(forward pass)로 모든 키포인트와 연결 필드(association field)를 예측하고, 그것들을 그룹화한다. 군중 크기에 관계없이 상수 시간이다.
+- **하향식(Top-down)**: 사람을 먼저 검출한 다음, 각 크롭(crop)마다 인물별 키포인트 모델(model)을 실행한다. 가장 높은 정확도; 사람 수에 선형으로 비례해 확장된다.
+- **상향식(Bottom-up)**: 한 번의 순방향 패스(forward pass)로 모든 키포인트와 연결 필드(association field)를 예측하고, 그것들을 그룹화한다. 군중 크기에 관계없이 상수 시간이다.
 
 하향식(HRNet, ViTPose)이 정확도 선두이고, 상향식(OpenPose, HigherHRNet)이 혼잡한 장면에서 처리량(throughput) 선두다.
 
@@ -56,7 +56,7 @@ target[k, y, x] = exp(-((x - cx_k)^2 + (y - cy_k)^2) / (2 sigma^2))
 
 추론 시, 각 히트맵의 argmax가 예측된 키포인트 위치다.
 
-히트맵이 직접 회귀보다 잘 동작하는 이유: 신경망의 공간 구조(합성곱(convolution) 특성 맵(feature map))가 공간 출력과 자연스럽게 정렬된다. 가우시안 타깃은 규제(regularisation) 역할도 한다 — 작은 위치 오차는 0이 아니라 작은 손실(loss)을 만든다.
+히트맵이 직접 회귀보다 잘 동작하는 이유: 신경망의 공간 구조(합성곱(convolution) 특성 맵(feature map))가 공간 출력과 자연스럽게 정렬된다. 가우시안 타깃은 규제(regularisation) 역할도 한다. 작은 위치 오차는 0이 아니라 작은 손실(loss)을 만든다.
 
 ### 서브픽셀 위치 추정
 
@@ -81,8 +81,8 @@ For each connection (limb):
 
 ### 2D vs 3D
 
-- **2D 포즈** — 이미지 좌표; 프로덕션 품질로 해결됨(MediaPipe, HRNet, ViTPose).
-- **3D 포즈** — 월드 / 카메라 좌표; 여전히 활발한 연구 영역. 흔한 접근법:
+- **2D 포즈**: 이미지 좌표; 프로덕션 품질로 해결됨(MediaPipe, HRNet, ViTPose).
+- **3D 포즈**: 월드 / 카메라 좌표; 여전히 활발한 연구 영역. 흔한 접근법:
   - 작은 MLP로 2D 예측을 3D로 끌어올림(lift)(VideoPose3D).
   - 이미지에서 직접 3D 회귀(PyMAF, MHFormer).
   - 정답(ground truth)을 위한 다중 시점(multi-view) 구성(CMU Panoptic).
@@ -132,7 +132,7 @@ class TinyKeypointNet(nn.Module):
 
 입력 `(N, 3, H, W)`, 출력 `(N, K, H, W)`. 손실은 가우시안 타깃에 대한 픽셀별 MSE다.
 
-### 3단계: 추론 — 키포인트 좌표 추출
+### 3단계: 추론: 키포인트 좌표 추출
 
 ```python
 def heatmap_to_coords(heatmaps):
@@ -189,17 +189,17 @@ for step in range(200):
 
 ## 라이브러리로 써보기 (Use It)
 
-- **MediaPipe Pose** — Google의 프로덕션 포즈 추정기; 10ms 미만 지연 시간(latency)으로 WebGL + 모바일 런타임을 제공한다.
-- **MMPose** (OpenMMLab) — 포괄적인 연구 코드베이스; 모든 최첨단(SOTA) 아키텍처를 사전 학습된 가중치(weight)와 함께 제공한다.
-- **YOLOv8-pose** — 단일 순방향 패스로 가장 빠른 실시간 다중 인물 포즈.
-- **transformers HumanDPT / PoseAnything** — 개방형 어휘(open-vocabulary) 포즈(임의의 객체, 임의의 키포인트 집합)를 위한 더 새로운 비전-언어(vision-language) 접근법.
+- **MediaPipe Pose**: Google의 프로덕션 포즈 추정기; 10ms 미만 지연 시간(latency)으로 WebGL + 모바일 런타임을 제공한다.
+- **MMPose** (OpenMMLab): 포괄적인 연구 코드베이스; 모든 최첨단(SOTA) 아키텍처를 사전 학습된 가중치(weight)와 함께 제공한다.
+- **YOLOv8-pose**: 단일 순방향 패스로 가장 빠른 실시간 다중 인물 포즈.
+- **transformers HumanDPT / PoseAnything**: 개방형 어휘(open-vocabulary) 포즈(임의의 객체, 임의의 키포인트 집합)를 위한 더 새로운 비전-언어(vision-language) 접근법.
 
 ## 산출물 (Ship It)
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-pose-stack-picker.md` — 지연 시간, 군중 크기, 2D vs 3D 필요에 따라 MediaPipe / YOLOv8-pose / HRNet / ViTPose를 고르는 프롬프트.
-- `outputs/skill-heatmap-to-coords.md` — 모든 프로덕션 포즈 모델이 사용하는 서브픽셀 히트맵-좌표 변환 루틴을 작성하는 스킬.
+- `outputs/prompt-pose-stack-picker.md`: 지연 시간, 군중 크기, 2D vs 3D 필요에 따라 MediaPipe / YOLOv8-pose / HRNet / ViTPose를 고르는 프롬프트.
+- `outputs/skill-heatmap-to-coords.md`: 모든 프로덕션 포즈 모델이 사용하는 서브픽셀 히트맵-좌표 변환 루틴을 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -222,7 +222,7 @@ for step in range(200):
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenPose (Cao et al., 2017)](https://arxiv.org/abs/1812.08008) — PAFs를 사용한 상향식; 여전히 그 접근법에 대한 최고의 설명
-- [HRNet (Sun et al., 2019)](https://arxiv.org/abs/1902.09212) — 하향식 레퍼런스 아키텍처
-- [ViTPose (Xu et al., 2022)](https://arxiv.org/abs/2204.12484) — 평범한 ViT를 포즈 백본으로; 많은 벤치마크에서 현재 최첨단
-- [MediaPipe Pose](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker) — 프로덕션 실시간 포즈; 2026년 가장 빠르게 배포된 스택
+- [OpenPose (Cao et al., 2017)](https://arxiv.org/abs/1812.08008): PAFs를 사용한 상향식; 여전히 그 접근법에 대한 최고의 설명
+- [HRNet (Sun et al., 2019)](https://arxiv.org/abs/1902.09212): 하향식 레퍼런스 아키텍처
+- [ViTPose (Xu et al., 2022)](https://arxiv.org/abs/2204.12484): 평범한 ViT를 포즈 백본으로; 많은 벤치마크에서 현재 최첨단
+- [MediaPipe Pose](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker): 프로덕션 실시간 포즈; 2026년 가장 빠르게 배포된 스택

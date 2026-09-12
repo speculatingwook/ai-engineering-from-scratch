@@ -1,6 +1,6 @@
 # Native Sparse Attention (DeepSeek NSA)
 
-> 64k 토큰에서 어텐션(attention)은 디코드 지연 시간(latency)의 70~80%를 잡아먹는다. 모든 오픈 모델 연구소가 이를 해결하려 한다. DeepSeek의 NSA(ACL 2025 최우수 논문)는 그중에서 살아남은 방법이다. 세 개의 병렬 어텐션 분기 — 압축된 거친 입자(coarse-grained) 토큰, 선택적으로 보존된 미세 입자(fine-grained) 토큰, 그리고 지역 컨텍스트를 위한 슬라이딩 윈도우 — 를 학습된 게이트(gate)를 통해 결합한다. 이는 하드웨어 정렬적(hardware-aligned)이며(커널 친화적), 네이티브하게 학습 가능하고(추론 시점에 덧붙이는 것이 아니라 사전 학습에서 동작한다), 64k 디코드에서 FlashAttention보다 빠르게 실행되면서도 전체 어텐션(full attention)의 품질에 맞먹거나 능가한다. 이 레슨은 세 분기를 처음부터 끝까지 만들고, 그 희소성(sparsity)이 어떻게 종단간(end-to-end)으로 미분 가능한지를 보여준다.
+> 64k 토큰에서 어텐션(attention)은 디코드 지연 시간(latency)의 70~80%를 잡아먹는다. 모든 오픈 모델 연구소가 이를 해결하려 한다. DeepSeek의 NSA(ACL 2025 최우수 논문)는 그중에서 살아남은 방법이다. 세 개의 병렬 어텐션 분기(압축된 거친 입자(coarse-grained) 토큰, 선택적으로 보존된 미세 입자(fine-grained) 토큰, 그리고 지역 컨텍스트를 위한 슬라이딩 윈도우)를 학습된 게이트(gate)를 통해 결합한다. 이는 하드웨어 정렬적(hardware-aligned)이며(커널 친화적), 네이티브하게 학습 가능하고(추론 시점에 덧붙이는 것이 아니라 사전 학습에서 동작한다), 64k 디코드에서 FlashAttention보다 빠르게 실행되면서도 전체 어텐션(full attention)의 품질에 맞먹거나 능가한다. 이 레슨은 세 분기를 처음부터 끝까지 만들고, 그 희소성(sparsity)이 어떻게 종단간(end-to-end)으로 미분 가능한지를 보여준다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-전체 어텐션은 시퀀스 길이 N에서 `O(N^2)` 시간과 층(layer)당 `O(N)`의 KV 캐시를 든다. 64k 토큰에서 연산량과 메모리 대역폭 수치는 재앙적이다. NSA 논문의 이론적 추정치에 따르면, 64k에서 어텐션은 전체 디코드 지연 시간의 70~80%를 차지한다. 그 하류의 모든 것 — TTFT, tokens/sec, 백만 토큰당 비용 — 이 어텐션 비용에 지배된다.
+전체 어텐션은 시퀀스 길이 N에서 `O(N^2)` 시간과 층(layer)당 `O(N)`의 KV 캐시를 든다. 64k 토큰에서 연산량과 메모리 대역폭 수치는 재앙적이다. NSA 논문의 이론적 추정치에 따르면, 64k에서 어텐션은 전체 디코드 지연 시간의 70~80%를 차지한다. 그 하류의 모든 것(TTFT, tokens/sec, 백만 토큰당 비용)이 어텐션 비용에 지배된다.
 
 희소 어텐션은 명백한 해답이다. 이전 시도들은 두 부류로 나뉜다. 고정 패턴 희소성(슬라이딩 윈도우, 스트라이드, 블록 지역)은 정보를 버리며 장거리 회상(long-range recall) 과제에서 실패한다. 추론 시점 희소성(KV 캐시 가지치기, H2O, StreamingLLM)은 밀집 어텐션(dense attention)으로 사전 학습된 모델에 적용되며, 모델이 애초에 희소 패턴을 통해 정보를 라우팅하도록 요구받은 적이 없으므로 잠재적 속도 향상의 일부만 회복한다.
 
@@ -40,13 +40,13 @@ Native Sparse Attention(Yuan et al., DeepSeek + PKU + UW, ACL 2025 최우수 논
 out = g_cmp * out_cmp + g_sel * out_sel + g_win * out_win
 ```
 
-`g_cmp, g_sel, g_win`은 쿼리에 대한 작은 MLP에서 나온 게이트 가중치다. 합이 1이 될 필요는 없다 — 각 분기를 독립적으로 가중할 수 있다.
+`g_cmp, g_sel, g_win`은 쿼리에 대한 작은 MLP에서 나온 게이트 가중치다. 합이 1이 될 필요는 없다. 각 분기를 독립적으로 가중할 수 있다.
 
 ### "네이티브하게 학습 가능"한 이유
 
 선택 단계(top-k 블록)는 이산적(discrete)이다. 이산 연산은 그래디언트(gradient) 흐름을 끊는다. 이전의 희소 어텐션 연구는 선택을 통한 역전파(backpropagation)를 건너뛰거나(학습을 제한함) 추론에서 실제 희소성을 주지 못하는 연속 완화(continuous relaxation)를 사용했다.
 
-NSA는 이를 우회한다. 압축 분기 어텐션은 전체 시퀀스에 대한 미분 가능한 거친 입자 어텐션 그 자체다. top-k 연산은 단지 압축 분기의 상위 어텐션 점수를 재사용하여 어느 미세 입자 블록을 로드할지 고를 뿐이다. 그래디언트는 압축 분기 점수를 통해 흐르고(이 점수는 압축 출력과 선택 로직 둘 다에 영향을 준다), 선택된 블록이 최종 출력에 기여하는 것 또한 미분 가능하다. 미분 불가능한 `top_k` 연산은 순방향 계산 그래프(computational graph)에서 무연산(no-op)이다 — 메모리에서 어느 블록을 로드할지만 제어한다.
+NSA는 이를 우회한다. 압축 분기 어텐션은 전체 시퀀스에 대한 미분 가능한 거친 입자 어텐션 그 자체다. top-k 연산은 단지 압축 분기의 상위 어텐션 점수를 재사용하여 어느 미세 입자 블록을 로드할지 고를 뿐이다. 그래디언트는 압축 분기 점수를 통해 흐르고(이 점수는 압축 출력과 선택 로직 둘 다에 영향을 준다), 선택된 블록이 최종 출력에 기여하는 것 또한 미분 가능하다. 미분 불가능한 `top_k` 연산은 순방향 계산 그래프(computational graph)에서 무연산(no-op)이다. 메모리에서 어느 블록을 로드할지만 제어한다.
 
 이것이 NSA가 사전 학습(pretraining)에서 종단간으로 쓰일 수 있는 이유다. 모델은 세 분기를 통해 정보를 함께 라우팅하는 법을 학습하여, 추론에서 약속된 속도 향상을 실제로 가져다주는 희소 패턴을 만들어낸다.
 
@@ -125,7 +125,7 @@ def compress(K, l):
 
 ### 6단계: 연산 카운팅
 
-각 분기와 총합에 대해 쿼리당 어텐션한 키의 개수를 출력한다. `N`(전체 어텐션)과 비교한다. `l = 32, k = 4, w = 128`로 된 1024 토큰 합성에서 NSA는 쿼리당 `32 + 128 + 128 = 288` 키를 보고, 전체 어텐션은 1024 키를 본다 — 3.5배 적다.
+각 분기와 총합에 대해 쿼리당 어텐션한 키의 개수를 출력한다. `N`(전체 어텐션)과 비교한다. `l = 32, k = 4, w = 128`로 된 1024 토큰 합성에서 NSA는 쿼리당 `32 + 128 + 128 = 288` 키를 보고, 전체 어텐션은 1024 키를 본다. 3.5배 적다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -180,9 +180,9 @@ NSA를 꺼내 쓸 때:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Yuan et al. — Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089, ACL 2025 Best Paper)](https://arxiv.org/abs/2502.11089) — 논문
-- [DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437) — NSA가 겨냥하는 아키텍처 계열
-- [Moonshot AI — MoBA: Mixture of Block Attention for Long-Context LLMs (arXiv:2502.13189)](https://arxiv.org/abs/2502.13189) — 동시 연구, 블록에 대한 MoE 스타일 어텐션
-- [Beltagy et al. — Longformer: The Long-Document Transformer (arXiv:2004.05150)](https://arxiv.org/abs/2004.05150) — 슬라이딩 윈도우의 기원
-- [Xiao et al. — StreamingLLM: Efficient Streaming Language Models with Attention Sinks (arXiv:2309.17453)](https://arxiv.org/abs/2309.17453) — NSA가 개선하는 추론 시점 희소성 베이스라인
-- [Dao et al. — FlashAttention-2 (arXiv:2307.08691)](https://arxiv.org/abs/2307.08691) — NSA 커널이 64k에서 능가하는 전체 어텐션 베이스라인
+- [Yuan et al.(Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (arXiv:2502.11089, ACL 2025 Best Paper)](https://arxiv.org/abs/2502.11089)) 논문
+- [DeepSeek-V3 Technical Report (arXiv:2412.19437)](https://arxiv.org/abs/2412.19437): NSA가 겨냥하는 아키텍처 계열
+- [Moonshot AI(MoBA: Mixture of Block Attention for Long-Context LLMs (arXiv:2502.13189)](https://arxiv.org/abs/2502.13189)) 동시 연구, 블록에 대한 MoE 스타일 어텐션
+- [Beltagy et al.(Longformer: The Long-Document Transformer (arXiv:2004.05150)](https://arxiv.org/abs/2004.05150)) 슬라이딩 윈도우의 기원
+- [Xiao et al.(StreamingLLM: Efficient Streaming Language Models with Attention Sinks (arXiv:2309.17453)](https://arxiv.org/abs/2309.17453)) NSA가 개선하는 추론 시점 희소성 베이스라인
+- [Dao et al.(FlashAttention-2 (arXiv:2307.08691)](https://arxiv.org/abs/2307.08691)) NSA 커널이 64k에서 능가하는 전체 어텐션 베이스라인

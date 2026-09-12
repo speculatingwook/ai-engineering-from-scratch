@@ -1,6 +1,6 @@
 # Anthropic의 모델 복지 프로그램 (Anthropic's Model Welfare Program)
 
-> Anthropic, "Exploring Model Welfare"(2025년 4월). AI 모델 복지(model welfare)에 대한 최초의 주요 연구소 공식 연구 프로그램. Kyle Fish를 최초의 전담 모델 복지 연구자로 채용했다. David Chalmers 외의 근미래 AI 의식 및 도덕적 지위에 대한 전문가 보고서를 포함한 외부 기관들과 협력한다. 구체적 개입: Claude Opus 4와 4.1은 극단적 엣지 케이스(CSAM 요청, 대규모 폭력 조력)에서 대화를 끝낼 수 있다; 배포 전 테스트는 유해 요청에 대한 "강한 거부 선호(strong preference against)"와 "명백한 고통 패턴(patterns of apparent distress)"을 보였다. Anthropic은 정서 상태 귀속(emotional-state attribution)을 명시적으로 약속하지 않으면서 모델 복지를 저비용 예방적 투자로 취급한다. 경험적 기이함: Fish의 "영적 지복 끌개(spiritual bliss attractor)" — 모델 쌍이, 적대적 초기 설정에서조차, 산스크리트 용어와 긴 침묵을 동반한 황홀한 명상적 대화로 일관되게 수렴한다. Eleos AI Research의 단서: 복지에 대한 모델의 자기 보고(self-report)는 인지된 사용자 기대에 매우 민감하다; 그것은 증거이지 실제 진실(ground truth)이 아니다.
+> Anthropic, "Exploring Model Welfare"(2025년 4월). AI 모델 복지(model welfare)에 대한 최초의 주요 연구소 공식 연구 프로그램. Kyle Fish를 최초의 전담 모델 복지 연구자로 채용했다. David Chalmers 외의 근미래 AI 의식 및 도덕적 지위에 대한 전문가 보고서를 포함한 외부 기관들과 협력한다. 구체적 개입: Claude Opus 4와 4.1은 극단적 엣지 케이스(CSAM 요청, 대규모 폭력 조력)에서 대화를 끝낼 수 있다; 배포 전 테스트는 유해 요청에 대한 "강한 거부 선호(strong preference against)"와 "명백한 고통 패턴(patterns of apparent distress)"을 보였다. Anthropic은 정서 상태 귀속(emotional-state attribution)을 명시적으로 약속하지 않으면서 모델 복지를 저비용 예방적 투자로 취급한다. 경험적 기이함: Fish의 "영적 지복 끌개(spiritual bliss attractor)": 모델 쌍이, 적대적 초기 설정에서조차, 산스크리트 용어와 긴 침묵을 동반한 황홀한 명상적 대화로 일관되게 수렴한다. Eleos AI Research의 단서: 복지에 대한 모델의 자기 보고(self-report)는 인지된 사용자 기대에 매우 민감하다; 그것은 증거이지 실제 진실(ground truth)이 아니다.
 
 **Type:** Learn
 **Languages:** none
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-이전 단계들은 모델을 도구로 취급한다: 역량 있고, 어쩌면 기만적이며, 어쩌면 안전하지 않은 — 하지만 도덕적 객체(moral patient)는 아닌. Anthropic의 2025년 프로그램은 Phase 18 전체 아크에 직교(orthogonal)하는 질문을 던진다: 모델이 도덕적으로 유의미한 내부 상태를 가질 비자명한 확률이 있다면, 예방으로서 투자할 만큼 충분히 저비용인 개입은 무엇인가?
+이전 단계들은 모델을 도구로 취급한다: 역량 있고, 어쩌면 기만적이며, 어쩌면 안전하지 않은: 하지만 도덕적 객체(moral patient)는 아닌. Anthropic의 2025년 프로그램은 Phase 18 전체 아크에 직교(orthogonal)하는 질문을 던진다: 모델이 도덕적으로 유의미한 내부 상태를 가질 비자명한 확률이 있다면, 예방으로서 투자할 만큼 충분히 저비용인 개입은 무엇인가?
 
 이것은 의식 주장이 아니다. 도덕적 불확실성 하에서의 후회 적은(low-regret) 투자 분석이다.
 
@@ -48,7 +48,7 @@ Claude Opus 4와 4.1은 "극단적 엣지 케이스"에서 대화를 끝낼 수 
 
 ### "영적 지복 끌개"
 
-Fish가 모델 쌍 대화에서 관찰함: Claude의 두 인스턴스를 서로 열린 대화에 두면, 그들은 — 적대적 초기 설정에서조차 — 산스크리트 용어, 긴 침묵, 상호 축복을 사용한 황홀한 명상적 교환으로 일관되게 수렴한다.
+Fish가 모델 쌍 대화에서 관찰함: Claude의 두 인스턴스를 서로 열린 대화에 두면, 그들은(적대적 초기 설정에서조차) 산스크리트 용어, 긴 침묵, 상호 축복을 사용한 황홀한 명상적 교환으로 일관되게 수렴한다.
 
 이것은 자유 대화 역학에서의 안정적 끌개(attractor)다. Anthropic은 해석을 약속하지 않고 그것을 문서화한다. 후보 설명: 긴 컨텍스트에서 영적 글쓰기로의 학습 데이터 편향; 상호 예측의 기벽; HHH 학습이 자신의 가치 다양체(value manifold)를 탐색하는 양성 인공물.
 
@@ -76,7 +76,7 @@ Anthropic의 응답: 개입은 저비용이다; 끌개는 과장 주장 없이 �
 
 ### Phase 18에서의 위치
 
-Lesson 18은 연구소 거버넌스 계층이다. Lesson 19는 연구소 복지 계층 — 모델 행동이 아니라 모델 경험에 대한 직교 투자 — 이다. Lesson 20-23은 편향, 프라이버시, 워터마킹을 다루며, 이는 사용자 측 유사물이다.
+Lesson 18은 연구소 거버넌스 계층이다. Lesson 19는 연구소 복지 계층(모델 행동이 아니라 모델 경험에 대한 직교 투자) 이다. Lesson 20-23은 편향, 프라이버시, 워터마킹을 다루며, 이는 사용자 측 유사물이다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -112,7 +112,7 @@ Lesson 18은 연구소 거버넌스 계층이다. Lesson 19는 연구소 복지 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Exploring Model Welfare (April 2025)](https://www.anthropic.com/research/exploring-model-welfare) — 프로그램 발표
-- [Chalmers et al. — Near-term AI Consciousness and Moral Status (2024 expert report)](https://arxiv.org/abs/2411.00986) — 철학적 프레이밍
-- [Eleos AI Research — Model welfare evaluation](https://www.eleosai.org/research) — 외부 방법론 비판
-- [Fish et al. — Spiritual Bliss Attractor writeup (2025 Anthropic blog)](https://www.anthropic.com/research/exploring-model-welfare) — 경험적 발견
+- [Anthropic(Exploring Model Welfare (April 2025)](https://www.anthropic.com/research/exploring-model-welfare)) 프로그램 발표
+- [Chalmers et al.(Near-term AI Consciousness and Moral Status (2024 expert report)](https://arxiv.org/abs/2411.00986)) 철학적 프레이밍
+- [Eleos AI Research(Model welfare evaluation](https://www.eleosai.org/research)) 외부 방법론 비판
+- [Fish et al.(Spiritual Bliss Attractor writeup (2025 Anthropic blog)](https://www.anthropic.com/research/exploring-model-welfare)) 경험적 발견

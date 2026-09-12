@@ -1,6 +1,6 @@
 # OpenAI Preparedness Framework와 DeepMind Frontier Safety Framework (OpenAI Preparedness Framework and DeepMind Frontier Safety Framework)
 
-> OpenAI Preparedness Framework v2(2025년 4월)는 추적 카테고리(Tracked Categories)와 구별되는 연구 카테고리(Research Categories) — 장거리 자율성(Long-range Autonomy), 샌드배깅(Sandbagging), 자율 복제 및 적응(Autonomous Replication and Adaptation), 안전장치 약화(Undermining Safeguards) — 를 도입한다. 추적 카테고리는 Safety Advisory Group이 검토하는 Capabilities Report와 Safeguards Report를 발동한다. DeepMind의 FSF v3(2025년 9월, 2026년 4월 17일에 Tracked Capability Levels 추가)는 자율성을 ML R&D와 Cyber 영역으로 접어 넣는다(ML R&D 자율성 레벨 1 = 인간 + AI 도구 대비 경쟁력 있는 비용으로 AI R&D 파이프라인(pipeline)을 완전 자동화). FSF v3은 도구적 추론(instrumental reasoning) 오용에 대한 자동 모니터링을 통해 기만적 정렬(deceptive alignment)을 명시적으로 다룬다. 정직한 메모: PF v2의 연구 카테고리(장거리 자율성 포함)는 완화책을 자동으로 발동하지 않는다. 정책 언어는 "잠재적(potential)"이다. DeepMind 자체도 도구적 추론이 강화되면 자동 모니터링이 "장기적으로 충분한 채로 남아 있지 않을 것"이라고 말한다.
+> OpenAI Preparedness Framework v2(2025년 4월)는 추적 카테고리(Tracked Categories)와 구별되는 연구 카테고리(Research Categories)(장거리 자율성(Long-range Autonomy), 샌드배깅(Sandbagging), 자율 복제 및 적응(Autonomous Replication and Adaptation), 안전장치 약화(Undermining Safeguards))를 도입한다. 추적 카테고리는 Safety Advisory Group이 검토하는 Capabilities Report와 Safeguards Report를 발동한다. DeepMind의 FSF v3(2025년 9월, 2026년 4월 17일에 Tracked Capability Levels 추가)는 자율성을 ML R&D와 Cyber 영역으로 접어 넣는다(ML R&D 자율성 레벨 1 = 인간 + AI 도구 대비 경쟁력 있는 비용으로 AI R&D 파이프라인(pipeline)을 완전 자동화). FSF v3은 도구적 추론(instrumental reasoning) 오용에 대한 자동 모니터링을 통해 기만적 정렬(deceptive alignment)을 명시적으로 다룬다. 정직한 메모: PF v2의 연구 카테고리(장거리 자율성 포함)는 완화책을 자동으로 발동하지 않는다. 정책 언어는 "잠재적(potential)"이다. DeepMind 자체도 도구적 추론이 강화되면 자동 모니터링이 "장기적으로 충분한 채로 남아 있지 않을 것"이라고 말한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, three-framework decision-table diff tool)
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-Lesson 19는 Anthropic의 스케일링 정책을 면밀히 읽었다. 이 레슨은 OpenAI와 DeepMind의 것을 읽음으로써 그림을 완성한다. 세 문서는 같은 질문 — 프런티어 연구소(frontier lab)는 언제 모델을 일시 중지하거나 게이트(gate)해야 하는가 — 을 다루는 사촌 격 산출물이며, 소수의 카테고리로 수렴하고 중요한 특정 지점들에서 갈린다.
+Lesson 19는 Anthropic의 스케일링 정책을 면밀히 읽었다. 이 레슨은 OpenAI와 DeepMind의 것을 읽음으로써 그림을 완성한다. 세 문서는 같은 질문(프런티어 연구소(frontier lab)는 언제 모델을 일시 중지하거나 게이트(gate)해야 하는가)을 다루는 사촌 격 산출물이며, 소수의 카테고리로 수렴하고 중요한 특정 지점들에서 갈린다.
 
 수렴: 셋 모두 장거리 자율성을 추적할 가치가 있는 능력 부류로 표시한다. 셋 모두 기만적 행동(정렬 위조(alignment faking), 샌드배깅)을 특정 위험 부류로 인정한다. 셋 모두 내부 검토 기구를 둔다. 발산: OpenAI는 카테고리를 "추적"(의무적 완화)과 "연구"(자동 발동 없음)로 나눈다. DeepMind는 자율성을 별도로 명명하기보다 두 영역으로 접어 넣는다. 연구소는 추적 대 연구, 또는 임계(Critical) 대 중간(Moderate), 또는 Tier-1 대 Tier-2를 명명한다. 어떤 능력이 어느 버킷에 속하는지의 운영적 결과는 연구소마다 다르다.
 
@@ -97,8 +97,8 @@ v2의 핵심 프레이밍: 연구 카테고리는 완화책을 자동으로 발�
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Updating our Preparedness Framework](https://openai.com/index/updating-our-preparedness-framework/) — v2 발표.
-- [OpenAI — Preparedness Framework v2 PDF](https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf) — 전체 문서.
-- [DeepMind — Strengthening our Frontier Safety Framework](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) — FSF v3 발표.
-- [DeepMind — Updating the Frontier Safety Framework (April 2026)](https://deepmind.google/blog/updating-the-frontier-safety-framework/) — Tracked Capability Levels 추가.
-- [Gemini 3 Pro FSF Report](https://storage.googleapis.com/deepmind-media/gemini/gemini_3_pro_fsf_report.pdf) — FSF 형식 Risk Report의 예시.
+- [OpenAI(Updating our Preparedness Framework](https://openai.com/index/updating-our-preparedness-framework/)) v2 발표.
+- [OpenAI(Preparedness Framework v2 PDF](https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf)) 전체 문서.
+- [DeepMind(Strengthening our Frontier Safety Framework](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) FSF v3 발표.
+- [DeepMind(Updating the Frontier Safety Framework (April 2026)](https://deepmind.google/blog/updating-the-frontier-safety-framework/)) Tracked Capability Levels 추가.
+- [Gemini 3 Pro FSF Report](https://storage.googleapis.com/deepmind-media/gemini/gemini_3_pro_fsf_report.pdf): FSF 형식 Risk Report의 예시.

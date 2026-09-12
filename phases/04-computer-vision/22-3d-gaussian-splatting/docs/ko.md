@@ -16,11 +16,11 @@
 
 ## 문제 (The Problem)
 
-NeRF는 장면을 MLP의 가중치(weight)로 저장한다. 렌더링되는 모든 픽셀은 광선(ray)을 따라 수백 번의 MLP 질의(query)다. 학습(training)에 몇 시간, 렌더링에 몇 초가 걸리고, 가중치는 편집할 수 없다 — 장면 안에서 의자를 옮기고 싶다면 다시 학습해야 한다.
+NeRF는 장면을 MLP의 가중치(weight)로 저장한다. 렌더링되는 모든 픽셀은 광선(ray)을 따라 수백 번의 MLP 질의(query)다. 학습(training)에 몇 시간, 렌더링에 몇 초가 걸리고, 가중치는 편집할 수 없다. 장면 안에서 의자를 옮기고 싶다면 다시 학습해야 한다.
 
 3D 가우시안 스플래팅(Kerbl, Kopanas, Leimkühler, Drettakis, SIGGRAPH 2023)이 그 모든 것을 대체했다. 장면은 3D 가우시안의 명시적(explicit) 집합이다. 렌더링은 100+ fps의 GPU 래스터화다. 학습은 몇 분이면 된다. 편집은 직접적이다. 가우시안의 부분집합을 평행이동하면 의자를 옮긴 것이다. 2026년까지 크로노스 그룹(Khronos Group)이 가우시안 스플랫용 glTF 확장을 비준했고, OpenUSD 26.03이 가우시안 스플랫 스키마를 제공하며, Zillow와 Apartments.com이 이 방식으로 부동산을 렌더링하고, 3D 재구성에 관한 대부분의 새 연구 논문이 핵심 3DGS 아이디어의 변형이다.
 
-심성 모형(mental model)은 단순하지만 수학에는 움직이는 부품이 충분히 많아서, 대부분의 입문서는 래스터화에서 시작하고 투영과 구면 조화 함수는 건너뛴다. 이 레슨은 전체를 만든다 — 먼저 2D 버전, 그다음 3D 확장.
+심성 모형(mental model)은 단순하지만 수학에는 움직이는 부품이 충분히 많아서, 대부분의 입문서는 래스터화에서 시작하고 투영과 구면 조화 함수는 건너뛴다. 이 레슨은 전체를 만든다. 먼저 2D 버전, 그다음 3D 확장.
 
 ## 개념 (The Concept)
 
@@ -36,9 +36,9 @@ opacity          alpha      (1,)    post-sigmoid opacity [0, 1]
 SH coefficients  c_lm       (3 * (L+1)^2,)   view-dependent colour
 ```
 
-회전 + 스케일이 3x3 공분산(covariance)을 만든다: `Sigma = R S S^T R^T`. 이것이 3D에서 가우시안의 형태다. 구면 조화 함수는 시점별 텍스처를 저장하지 않고도 색이 시점 방향에 따라 변하도록 한다 — 정반사 하이라이트(specular highlight), 미묘한 광택, 시점 의존 글로우(glow). SH 차수(degree) 3이면 색 채널당 16개 계수, 색만으로 가우시안당 48개 부동소수점을 얻는다.
+회전 + 스케일이 3x3 공분산(covariance)을 만든다: `Sigma = R S S^T R^T`. 이것이 3D에서 가우시안의 형태다. 구면 조화 함수는 시점별 텍스처를 저장하지 않고도 색이 시점 방향에 따라 변하도록 한다. 정반사 하이라이트(specular highlight), 미묘한 광택, 시점 의존 글로우(glow). SH 차수(degree) 3이면 색 채널당 16개 계수, 색만으로 가우시안당 48개 부동소수점을 얻는다.
 
-장면은 보통 100만~500만 개의 가우시안을 가진다. 각각은 대략 60개 부동소수점(3 + 4 + 3 + 1 + 48 + 기타)을 저장한다. 500만 가우시안 장면이면 240 MB다 — 점별 텍스처를 가진 동등한 점 구름(point cloud)보다 훨씬 작고, 고해상도로 다시 렌더링한 NeRF의 MLP 가중치보다 한 자릿수 작다.
+장면은 보통 100만~500만 개의 가우시안을 가진다. 각각은 대략 60개 부동소수점(3 + 4 + 3 + 1 + 48 + 기타)을 저장한다. 500만 가우시안 장면이면 240 MB다. 점별 텍스처를 가진 동등한 점 구름(point cloud)보다 훨씬 작고, 고해상도로 다시 렌더링한 NeRF의 MLP 가중치보다 한 자릿수 작다.
 
 ### 광선 행진이 아닌 래스터화
 
@@ -83,19 +83,19 @@ alpha_i = opacity_i * exp(-0.5 * d^T Sigma'^-1 d)   local contribution
 c_i = eval_SH(SH_i, view_direction)    view-dependent colour
 ```
 
-이것은 **NeRF의 체적 렌더(volumetric render)와 같은 방정식**이며, 단지 광선을 따라 조밀하게 샘플링한 것 대신 가우시안의 명시적 희소 집합에 대해 적용할 뿐이다. 그 동일성이 렌더링 품질이 NeRF와 일치하는 이유다 — 둘 다 같은 복사장(radiance-field) 방정식을 적분한다.
+이것은 **NeRF의 체적 렌더(volumetric render)와 같은 방정식**이며, 단지 광선을 따라 조밀하게 샘플링한 것 대신 가우시안의 명시적 희소 집합에 대해 적용할 뿐이다. 그 동일성이 렌더링 품질이 NeRF와 일치하는 이유다. 둘 다 같은 복사장(radiance-field) 방정식을 적분한다.
 
 ### 이것이 미분 가능한 이유
 
-모든 단계 — 투영, 타일 할당, 알파 합성, SH 평가 — 는 가우시안 파라미터에 대해 미분 가능하다. 정답(ground-truth) 이미지가 주어지면 렌더링된 픽셀 손실(loss)을 계산하고 래스터라이저로 역전파해서, 경사 하강법(gradient descent)으로 모든 `(mu, q, s, alpha, c_lm)`를 갱신한다. 약 30,000번의 반복(iteration)에 걸쳐 가우시안들은 자신의 올바른 위치, 스케일, 색을 찾는다.
+모든 단계(투영, 타일 할당, 알파 합성, SH 평가)는 가우시안 파라미터에 대해 미분 가능하다. 정답(ground-truth) 이미지가 주어지면 렌더링된 픽셀 손실(loss)을 계산하고 래스터라이저로 역전파해서, 경사 하강법(gradient descent)으로 모든 `(mu, q, s, alpha, c_lm)`를 갱신한다. 약 30,000번의 반복(iteration)에 걸쳐 가우시안들은 자신의 올바른 위치, 스케일, 색을 찾는다.
 
 ### 조밀화와 가지치기
 
 고정된 가우시안 집합으로는 복잡한 장면을 덮을 수 없다. 학습에는 두 가지 적응적 메커니즘이 포함된다:
 
-- 가우시안의 그래디언트(gradient) 크기가 크지만 스케일이 작을 때 현재 위치에서 **복제(Clone)** 한다 — 재구성에 여기 더 많은 세부가 필요하다.
-- 큰 스케일의 가우시안을 그래디언트가 클 때 더 작은 둘로 **분할(Split)** 한다 — 큰 가우시안 하나는 그 영역에 맞추기엔 너무 매끄럽다.
-- 불투명도가 임계값 아래로 떨어진 가우시안을 **가지치기(Prune)** 한다 — 그것들은 기여하지 않는다.
+- 가우시안의 그래디언트(gradient) 크기가 크지만 스케일이 작을 때 현재 위치에서 **복제(Clone)** 한다. 재구성에 여기 더 많은 세부가 필요하다.
+- 큰 스케일의 가우시안을 그래디언트가 클 때 더 작은 둘로 **분할(Split)** 한다. 큰 가우시안 하나는 그 영역에 맞추기엔 너무 매끄럽다.
+- 불투명도가 임계값 아래로 떨어진 가우시안을 **가지치기(Prune)** 한다. 그것들은 기여하지 않는다.
 
 조밀화는 N번 반복마다 실행된다. 장면은 보통 (SfM 점에서 씨앗을 얻은) 초기 약 10만 가우시안에서 학습 끝에 100만~500만으로 늘어난다.
 
@@ -116,9 +116,9 @@ c_i = eval_SH(SH_i, view_direction)    view-dependent colour
 
 ### 4D와 생성적 변형
 
-- **4D 가우시안 스플래팅(4D Gaussian Splatting)** — 가우시안이 시간의 함수다; 체적 비디오(volumetric video)에 사용됨(Superman 2026, A$AP Rocky의 "Helicopter").
-- **생성적 스플랫(Generative splats)** — 장면 전체를 환각으로 만들어내는 텍스트-투-스플랫(text-to-splat) 모델(World Labs의 Marble).
-- **3D Gaussian Unscented Transform** — 자율주행 시뮬레이션을 위한 NVIDIA NuRec의 변형.
+- **4D 가우시안 스플래팅(4D Gaussian Splatting)**: 가우시안이 시간의 함수다; 체적 비디오(volumetric video)에 사용됨(Superman 2026, A$AP Rocky의 "Helicopter").
+- **생성적 스플랫(Generative splats)**: 장면 전체를 환각으로 만들어내는 텍스트-투-스플랫(text-to-splat) 모델(World Labs의 Marble).
+- **3D Gaussian Unscented Transform**: 자율주행 시뮬레이션을 위한 NVIDIA NuRec의 변형.
 
 ## 직접 만들기 (Build It)
 
@@ -191,7 +191,7 @@ def rasterise_2d(means, covs, colours, opacities, depths, image_size):
     return out
 ```
 
-빠르지는 않다 — 실제 구현은 타일 기반 CUDA 커널을 쓴다 — 하지만 정확히 올바른 수학이며 완전히 미분 가능하다.
+빠르지는 않다. 실제 구현은 타일 기반 CUDA 커널을 쓴다. 하지만 정확히 올바른 수학이며 완전히 미분 가능하다.
 
 ### 3단계: 학습 가능한 2D 스플랫 장면
 
@@ -257,7 +257,7 @@ for step in range(200):
         print(f"step {step:3d}  mse {loss.item():.4f}")
 ```
 
-200 스텝에 걸쳐 64개 가우시안이 두 도형으로 자리 잡는다. 그것이 아이디어 전부다 — 명시적 기하 프리미티브(geometric primitive)에 대한 경사 하강법.
+200 스텝에 걸쳐 64개 가우시안이 두 도형으로 자리 잡는다. 그것이 아이디어 전부다. 명시적 기하 프리미티브(geometric primitive)에 대한 경사 하강법.
 
 ### 5단계: 2D에서 3D로
 
@@ -322,10 +322,10 @@ ns-train splatfacto --data path/to/data
 
 2026년에 중요한 내보내기 옵션:
 
-- `.ply` — 원시 가우시안 구름(이식성 높음, 가장 큰 파일).
-- `.splat` — PlayCanvas / SuperSplat 양자화(quantised) 형식.
-- glTF `KHR_gaussian_splatting` — 크로노스 표준, 뷰어 간 이식 가능(2026년 2월 RC).
-- OpenUSD `UsdVolParticleField3DGaussianSplat` — USD 네이티브, NVIDIA Omniverse 및 Vision Pro 파이프라인용.
+- `.ply`: 원시 가우시안 구름(이식성 높음, 가장 큰 파일).
+- `.splat`: PlayCanvas / SuperSplat 양자화(quantised) 형식.
+- glTF `KHR_gaussian_splatting`: 크로노스 표준, 뷰어 간 이식 가능(2026년 2월 RC).
+- OpenUSD `UsdVolParticleField3DGaussianSplat`: USD 네이티브, NVIDIA Omniverse 및 Vision Pro 파이프라인용.
 
 4D / 동적 장면의 경우, `4DGS`와 `Deformable-3DGS`가 시간 변화하는 평균과 불투명도로 같은 기계 장치를 확장한다.
 
@@ -333,8 +333,8 @@ ns-train splatfacto --data path/to/data
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-3dgs-capture-planner.md` — 주어진 장면 유형에 대해 캡처 세션(사진 수, 카메라 경로, 조명)을 계획하는 프롬프트.
-- `outputs/skill-3dgs-export-router.md` — 다운스트림 뷰어 또는 엔진에 따라 올바른 내보내기 형식(`.ply` / `.splat` / glTF / USD)을 고르는 스킬.
+- `outputs/prompt-3dgs-capture-planner.md`: 주어진 장면 유형에 대해 캡처 세션(사진 수, 카메라 경로, 조명)을 계획하는 프롬프트.
+- `outputs/skill-3dgs-export-router.md`: 다운스트림 뷰어 또는 엔진에 따라 올바른 내보내기 형식(`.ply` / `.splat` / glTF / USD)을 고르는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -357,9 +357,9 @@ ns-train splatfacto --data path/to/data
 
 ## 더 읽을거리 (Further Reading)
 
-- [3D Gaussian Splatting for Real-Time Radiance Field Rendering (Kerbl et al., SIGGRAPH 2023)](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/) — 원본 논문
-- [gsplat (Meta/nerfstudio)](https://github.com/nerfstudio-project/gsplat) — 프로덕션 품질 CUDA 래스터라이저
-- [nerfstudio Splatfacto](https://docs.nerf.studio/nerfology/methods/splat.html) — 레퍼런스 학습 레시피
-- [Khronos KHR_gaussian_splatting extension](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_gaussian_splatting/README.md) — 2026 이식 가능 형식
-- [OpenUSD 26.03 release notes](https://openusd.org/release/) — `UsdVolParticleField3DGaussianSplat` 스키마
-- [THE FUTURE 3D State of Gaussian Splatting 2026](https://www.thefuture3d.com/blog-0/2026/4/4/state-of-gaussian-splatting-2026) — 업계 개관
+- [3D Gaussian Splatting for Real-Time Radiance Field Rendering (Kerbl et al., SIGGRAPH 2023)](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/): 원본 논문
+- [gsplat (Meta/nerfstudio)](https://github.com/nerfstudio-project/gsplat): 프로덕션 품질 CUDA 래스터라이저
+- [nerfstudio Splatfacto](https://docs.nerf.studio/nerfology/methods/splat.html): 레퍼런스 학습 레시피
+- [Khronos KHR_gaussian_splatting extension](https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_gaussian_splatting/README.md): 2026 이식 가능 형식
+- [OpenUSD 26.03 release notes](https://openusd.org/release/): `UsdVolParticleField3DGaussianSplat` 스키마
+- [THE FUTURE 3D State of Gaussian Splatting 2026](https://www.thefuture3d.com/blog-0/2026/4/4/state-of-gaussian-splatting-2026): 업계 개관

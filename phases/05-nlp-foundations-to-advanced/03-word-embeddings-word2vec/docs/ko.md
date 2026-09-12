@@ -1,4 +1,4 @@
-# 단어 임베딩 — 밑바닥부터 만드는 Word2Vec (Word Embeddings — Word2Vec from Scratch)
+# 단어 임베딩(밑바닥부터 만드는 Word2Vec (Word Embeddings) Word2Vec from Scratch)
 
 > 한 단어는 그것이 어울리는 무리로 정의된다. 그 발상으로 얕은 신경망을 학습시키면 기하학적 구조가 떨어져 나온다.
 
@@ -196,9 +196,9 @@ print(model.wv.most_similar("cat", topn=3))
 
 실제 작업에서는 Word2Vec을 직접 학습시키는 일이 거의 없다. 사전 학습된 벡터를 다운로드한다.
 
-- **GloVe** — 스탠퍼드의 동시 출현 행렬(co-occurrence-matrix) 분해 접근법. 50차원, 100차원, 200차원, 300차원 체크포인트. 좋은 범용 커버리지. 레슨 04에서 GloVe를 구체적으로 다룬다.
-- **fastText** — 문자 n-그램을 임베딩하는 페이스북의 Word2Vec 확장. 서브워드(subword)를 조합하여 미등록(out-of-vocabulary) 단어를 처리한다. 레슨 04.
-- **Google News로 사전 학습된 Word2Vec** — 300차원, 300만 단어 어휘, 2013년 발표. 여전히 매일 다운로드된다.
+- **GloVe**: 스탠퍼드의 동시 출현 행렬(co-occurrence-matrix) 분해 접근법. 50차원, 100차원, 200차원, 300차원 체크포인트. 좋은 범용 커버리지. 레슨 04에서 GloVe를 구체적으로 다룬다.
+- **fastText**: 문자 n-그램을 임베딩하는 페이스북의 Word2Vec 확장. 서브워드(subword)를 조합하여 미등록(out-of-vocabulary) 단어를 처리한다. 레슨 04.
+- **Google News로 사전 학습된 Word2Vec**: 300차원, 300만 단어 어휘, 2013년 발표. 여전히 매일 다운로드된다.
 
 ### 2026년에도 Word2Vec이 이기는 때
 
@@ -258,6 +258,6 @@ Refuse to declare a model good on analogy accuracy alone. Analogy benchmarks are
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mikolov et al. (2013). Distributed Representations of Words and Phrases and their Compositionality](https://arxiv.org/abs/1310.4546) — 네거티브 샘플링 논문. 짧고 읽기 쉽다.
-- [Rong, X. (2014). word2vec Parameter Learning Explained](https://arxiv.org/abs/1411.2738) — 원본 논문의 수식이 빽빽하게 느껴진다면, 그래디언트에 대한 가장 명료한 유도.
-- [gensim Word2Vec tutorial](https://radimrehurek.com/gensim/models/word2vec.html) — 실제로 동작하는 프로덕션 학습 설정.
+- [Mikolov et al. (2013). Distributed Representations of Words and Phrases and their Compositionality](https://arxiv.org/abs/1310.4546): 네거티브 샘플링 논문. 짧고 읽기 쉽다.
+- [Rong, X. (2014). word2vec Parameter Learning Explained](https://arxiv.org/abs/1411.2738): 원본 논문의 수식이 빽빽하게 느껴진다면, 그래디언트에 대한 가장 명료한 유도.
+- [gensim Word2Vec tutorial](https://radimrehurek.com/gensim/models/word2vec.html): 실제로 동작하는 프로덕션 학습 설정.

@@ -1,4 +1,4 @@
-# 실시간 비전 — 엣지 배포 (Edge Deployment)
+# 실시간 비전: 엣지 배포 (Edge Deployment)
 
 > 엣지 추론(edge inference)은 정확도 90짜리 모델을 RAM 2GB의 기기에서 30fps로 돌리는 기술이다. 정확도의 모든 1퍼센트 포인트는 지연 시간(latency)의 밀리초와 맞바꿔진다.
 
@@ -67,26 +67,26 @@ FP32 가중치(weight)와 활성값(activation)을 INT8로 대체한다. 모델 
 
 종류:
 
-- **동적(Dynamic)** — 가중치를 INT8로 양자화하고, 활성값은 FP로 계산한다. 쉽고, 작은 속도 향상.
-- **정적(학습 후)(Static, post-training)** — 가중치를 양자화 + 작은 캘리브레이션(calibration) 집합에서 활성값 범위를 보정한다. 동적보다 훨씬 빠르다.
-- **양자화 인식 학습(Quantisation-aware training, QAT)** — 학습 중 양자화를 시뮬레이션해 모델이 그 주변에서 학습하게 한다. 최고의 정확도, 레이블된 데이터 필요.
+- **동적(Dynamic)**: 가중치를 INT8로 양자화하고, 활성값은 FP로 계산한다. 쉽고, 작은 속도 향상.
+- **정적(학습 후)(Static, post-training)**: 가중치를 양자화 + 작은 캘리브레이션(calibration) 집합에서 활성값 범위를 보정한다. 동적보다 훨씬 빠르다.
+- **양자화 인식 학습(Quantisation-aware training, QAT)**: 학습 중 양자화를 시뮬레이션해 모델이 그 주변에서 학습하게 한다. 최고의 정확도, 레이블된 데이터 필요.
 
 비전에서는 학습 후 정적 양자화가 5%의 노력으로 95%의 이득을 준다. PTQ의 정확도 손실이 용납 불가능할 때만 QAT를 쓴다.
 
 ### 가지치기와 증류
 
-- **가지치기(Pruning)** — 중요하지 않은 가중치(크기 기반)나 채널(구조적)을 제거한다. 과파라미터화된(overparameterised) 모델에서 잘 작동하고, 이미 컴팩트한 아키텍처에서는 덜 유용하다.
-- **증류(Distillation)** — 작은 학생(student)이 큰 교사(teacher)의 로짓(logit)을 모방하도록 학습시킨다. 모델을 줄이며 잃은 정확도의 대부분을 종종 회복한다. 프로덕션 엣지 모델의 표준.
+- **가지치기(Pruning)**: 중요하지 않은 가중치(크기 기반)나 채널(구조적)을 제거한다. 과파라미터화된(overparameterised) 모델에서 잘 작동하고, 이미 컴팩트한 아키텍처에서는 덜 유용하다.
+- **증류(Distillation)**: 작은 학생(student)이 큰 교사(teacher)의 로짓(logit)을 모방하도록 학습시킨다. 모델을 줄이며 잃은 정확도의 대부분을 종종 회복한다. 프로덕션 엣지 모델의 표준.
 
 ### 추론 런타임들
 
-- **PyTorch eager** — 느림, 배포용 아님. 개발 전용으로 쓴다.
-- **TorchScript** — 레거시. `torch.compile`과 ONNX 내보내기로 대체되었다.
-- **ONNX Runtime** — 중립 런타임. CPU, CUDA, CoreML, TensorRT, OpenVINO 모두 ONNX 제공자(provider)를 가진다. 여기서 시작하라.
-- **TensorRT** — NVIDIA의 컴파일러. NVIDIA GPU(워크스테이션과 Jetson)에서 최고의 지연 시간. ONNX Runtime과 통합되거나 독립 실행.
-- **Core ML** — iOS/macOS를 위한 Apple의 런타임. `.mlmodel`이나 `.mlpackage`가 필요하다.
-- **TFLite** — Android/ARM을 위한 Google의 런타임. `.tflite`가 필요하다.
-- **OpenVINO** — CPU/VPU를 위한 Intel의 런타임. `.xml` + `.bin`이 필요하다.
+- **PyTorch eager**: 느림, 배포용 아님. 개발 전용으로 쓴다.
+- **TorchScript**: 레거시. `torch.compile`과 ONNX 내보내기로 대체되었다.
+- **ONNX Runtime**: 중립 런타임. CPU, CUDA, CoreML, TensorRT, OpenVINO 모두 ONNX 제공자(provider)를 가진다. 여기서 시작하라.
+- **TensorRT**: NVIDIA의 컴파일러. NVIDIA GPU(워크스테이션과 Jetson)에서 최고의 지연 시간. ONNX Runtime과 통합되거나 독립 실행.
+- **Core ML**: iOS/macOS를 위한 Apple의 런타임. `.mlmodel`이나 `.mlpackage`가 필요하다.
+- **TFLite**: Android/ARM을 위한 Google의 런타임. `.tflite`가 필요하다.
+- **OpenVINO**: CPU/VPU를 위한 Intel의 런타임. `.xml` + `.bin`이 필요하다.
 
 실무에서는: PyTorch -> ONNX -> 타깃에 맞는 런타임 선택. ONNX가 공용어다.
 
@@ -240,8 +240,8 @@ def compare_regimes():
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-edge-deployment-planner.md` — 타깃 기기와 지연 시간 SLA가 주어졌을 때 백본(backbone), 양자화 전략, 런타임을 골라주는 프롬프트(prompt).
-- `outputs/skill-latency-profiler.md` — 워밍업, 동기화, 백분위수, 메모리 추적을 갖춘 완전한 지연 시간 벤치마킹 스크립트를 작성하는 스킬.
+- `outputs/prompt-edge-deployment-planner.md`: 타깃 기기와 지연 시간 SLA가 주어졌을 때 백본(backbone), 양자화 전략, 런타임을 골라주는 프롬프트(prompt).
+- `outputs/skill-latency-profiler.md`: 워밍업, 동기화, 백분위수, 메모리 추적을 갖춘 완전한 지연 시간 벤치마킹 스크립트를 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -264,7 +264,7 @@ def compare_regimes():
 
 ## 더 읽을거리 (Further Reading)
 
-- [EfficientNet (Tan & Le, 2019)](https://arxiv.org/abs/1905.11946) — 효율적 아키텍처를 위한 복합 스케일링(compound scaling)
-- [MobileNetV3 (Howard et al., 2019)](https://arxiv.org/abs/1905.02244) — h-swish와 스퀴즈-여기(squeeze-excite)를 쓴 모바일 우선 아키텍처
-- [A Practical Guide to TensorRT Optimization (NVIDIA)](https://developer.nvidia.com/blog/accelerating-model-inference-with-tensorrt-tips-and-best-practices-for-pytorch-users/) — 논문의 처리량 수치를 실제로 얻는 방법
-- [ONNX Runtime docs](https://onnxruntime.ai/docs/) — 양자화, 그래프 최적화, 제공자 선택
+- [EfficientNet (Tan & Le, 2019)](https://arxiv.org/abs/1905.11946): 효율적 아키텍처를 위한 복합 스케일링(compound scaling)
+- [MobileNetV3 (Howard et al., 2019)](https://arxiv.org/abs/1905.02244): h-swish와 스퀴즈-여기(squeeze-excite)를 쓴 모바일 우선 아키텍처
+- [A Practical Guide to TensorRT Optimization (NVIDIA)](https://developer.nvidia.com/blog/accelerating-model-inference-with-tensorrt-tips-and-best-practices-for-pytorch-users/): 논문의 처리량 수치를 실제로 얻는 방법
+- [ONNX Runtime docs](https://onnxruntime.ai/docs/): 양자화, 그래프 최적화, 제공자 선택

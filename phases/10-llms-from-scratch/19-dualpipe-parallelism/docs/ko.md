@@ -32,7 +32,7 @@
 
 N층 모델을 P개 장치에 걸쳐 분할한다. 장치 `i`는 층 `i * N/P .. (i+1) * N/P - 1`을 보유한다. 마이크로배치는 장치 0부터 P-1까지 순방향으로 흐른 다음, P-1부터 0까지 역방향으로 흐른다. 각 장치는 이전 장치가 그 출력을 보낼 때만 자기 순방향 단계를 시작할 수 있고, 하류 장치가 상류 그래디언트를 보낼 때만 역방향을 시작할 수 있다.
 
-GPipe(Huang et al., 2019)는 한 번에 하나의 마이크로배치를 스케줄링하는데, 이는 대부분의 GPU 시간을 낭비한다. 1F1B(Narayanan et al., 2021)는 여러 마이크로배치에 대해 순방향과 역방향 패스를 교차시킨다. Zero Bubble(Qi et al., 2023)은 역방향 패스를 두 부분 — 입력에 대한 역방향(B)과 가중치(weight)에 대한 역방향(W) — 으로 나누고, 버블을 채우도록 스케줄링한다. Zero Bubble 이후 파이프라인은 거의 빡빡하다.
+GPipe(Huang et al., 2019)는 한 번에 하나의 마이크로배치를 스케줄링하는데, 이는 대부분의 GPU 시간을 낭비한다. 1F1B(Narayanan et al., 2021)는 여러 마이크로배치에 대해 순방향과 역방향 패스를 교차시킨다. Zero Bubble(Qi et al., 2023)은 역방향 패스를 두 부분(입력에 대한 역방향(B)과 가중치(weight)에 대한 역방향(W))으로 나누고, 버블을 채우도록 스케줄링한다. Zero Bubble 이후 파이프라인은 거의 빡빡하다.
 
 DualPipe는 그다음 단계다. 그 위에 두 가지 아이디어를 추가한다:
 
@@ -79,11 +79,11 @@ rank 3:           F1  F2/F5R F3/F6R    ...
 bubble_1F1B = (P - 1) * forward_chunk_time
 ```
 
-Zero Bubble 개량은 그것을 낮추지만 0까지는 아니다. DualPipe는 안정 단계에서 마이크로배치 개수가 파이프라인 깊이의 2배로 나누어떨어지면 버블이 0이다. 안정 단계 밖(워밍업과 쿨다운)에서는 약간의 버블이 있지만 마이크로배치 개수에 따라 커지지 않는다 — 논문이 강조하는 핵심 속성이다.
+Zero Bubble 개량은 그것을 낮추지만 0까지는 아니다. DualPipe는 안정 단계에서 마이크로배치 개수가 파이프라인 깊이의 2배로 나누어떨어지면 버블이 0이다. 안정 단계 밖(워밍업과 쿨다운)에서는 약간의 버블이 있지만 마이크로배치 개수에 따라 커지지 않는다. 논문이 강조하는 핵심 속성이다.
 
 마케팅 용어로는 "버블 없음". 기술 용어로는 버블이 마이크로배치 개수에 따라 커지지 않음. Sea AI Lab의 후속 분석(DualPipeV / Cut-in-half)은 완전한 버블 0이 전문가 병렬화가 병목이 아닐 때만 나타남을 보인다; EP 구동 all-to-all에서는 항상 어떤 스케줄링 타협이 존재한다.
 
-### DualPipeV — 개량
+### DualPipeV: 개량
 
 Sea AI Lab(2025)은 EP 통신 오버랩이 요점이 아닐 때 2배 파라미터 복제가 낭비임을 관찰했다. DualPipeV 스케줄은 양방향 주입을 단일 파라미터 복사본에서 실행되는 "V 모양" 스케줄로 접어 넣는다. 버블은 DualPipe보다 약간 크지만, 메모리 절감은 상당하다. DeepSeek은 자사 오픈소스 DualPipe 구현에서 DualPipeV를 EP-off 모드로 채택했다.
 
@@ -98,9 +98,9 @@ Sea AI Lab(2025)은 EP 통신 오버랩이 요점이 아닐 때 2배 파라미�
 
 ### 14.8T 토큰 실행에 대한 의미
 
-DeepSeek-V3의 사전 학습은 대략 2.8M GPU-시간에 걸쳐 2,048개의 H800 GPU에서 14.8T 토큰을 소비했다. 순진한 1F1B였다면 그중 12~15%를 파이프라인 버블에 잃었을 것이다 — 340~420K GPU-시간, 완전한 70B 모델을 학습하기에 충분하다. DualPipe는 그 대부분을 회복했다. 내부 로그 없이 그 기여를 직접 정량화하기는 어렵지만, 논문의 주장은 학습 전반에 걸쳐 평균 95% 이상의 GPU 활용도다.
+DeepSeek-V3의 사전 학습은 대략 2.8M GPU-시간에 걸쳐 2,048개의 H800 GPU에서 14.8T 토큰을 소비했다. 순진한 1F1B였다면 그중 12~15%를 파이프라인 버블에 잃었을 것이다. 340~420K GPU-시간, 완전한 70B 모델을 학습하기에 충분하다. DualPipe는 그 대부분을 회복했다. 내부 로그 없이 그 기여를 직접 정량화하기는 어렵지만, 논문의 주장은 학습 전반에 걸쳐 평균 95% 이상의 GPU 활용도다.
 
-더 작은 실행(1k GPU 미만)에서 DualPipe는 과잉이다 — 파이프라인 버블이 총비용 대비 더 작고, 밀집 모델 학습은 좀처럼 all-to-all 병목에 부딪히지 않는다. 수천 GPU 규모의 프런티어 MoE 학습에서는 사실상 필수다.
+더 작은 실행(1k GPU 미만)에서 DualPipe는 과잉이다. 파이프라인 버블이 총비용 대비 더 작고, 밀집 모델 학습은 좀처럼 all-to-all 병목에 부딪히지 않는다. 수천 GPU 규모의 프런티어 MoE 학습에서는 사실상 필수다.
 
 ### 스택에서의 위치
 
@@ -110,7 +110,7 @@ DeepSeek-V3의 사전 학습은 대략 2.8M GPU-시간에 걸쳐 2,048개의 H80
 
 ## 라이브러리로 써보기 (Use It)
 
-`code/main.py`는 파이프라인 스케줄 시뮬레이터다. `(P, n_micro_batches, schedule)`을 받아 1F1B, Zero Bubble, DualPipe, DualPipeV 각각의 안정 단계 활용도를 출력한다. 이는 교육 도구다 — 수치는 논문의 정성적 주장과 일치하며, 프로덕션에서 측정된 속도 향상에 대한 주장이 아니다.
+`code/main.py`는 파이프라인 스케줄 시뮬레이터다. `(P, n_micro_batches, schedule)`을 받아 1F1B, Zero Bubble, DualPipe, DualPipeV 각각의 안정 단계 활용도를 출력한다. 이는 교육 도구다. 수치는 논문의 정성적 주장과 일치하며, 프로덕션에서 측정된 속도 향상에 대한 주장이 아니다.
 
 시뮬레이터의 가치: 서로 다른 P와 마이크로배치 개수로 실행하여 1F1B에서는 버블 분율이 커지지만 DualPipe에서는 그렇지 않음을 지켜보라.
 
@@ -155,9 +155,9 @@ DeepSeek-V3의 사전 학습은 대략 2.8M GPU-시간에 걸쳐 2,048개의 H80
 
 ## 더 읽을거리 (Further Reading)
 
-- [DeepSeek-AI — DeepSeek-V3 Technical Report (arXiv:2412.19437), Section 3.3.2 and Figure 5](https://arxiv.org/abs/2412.19437) — 주된 DualPipe 참조
-- [DeepSeek — DualPipe GitHub repository](https://github.com/deepseek-ai/DualPipe) — DualPipeV(Cut-in-half) 모드를 포함한 오픈소스 참조 구현
-- [Qi et al. — Zero Bubble Pipeline Parallelism (arXiv:2401.10241, Sea AI Lab 2023)](https://arxiv.org/abs/2401.10241) — Zero Bubble 전신
-- [Sea AI Lab — DualPipe could be better without the Dual](https://sail.sea.com/blog/articles/63) — DeepSeek의 EP-off 모드에 영향을 준 DualPipeV 분석
-- [Narayanan et al. — PipeDream / 1F1B (arXiv:1806.03377, 2018-2021)](https://arxiv.org/abs/1806.03377) — DualPipe가 비교하는 1F1B 스케줄
-- [Huang et al. — GPipe (arXiv:1811.06965, 2018)](https://arxiv.org/abs/1811.06965) — 원래 파이프라인 병렬화 논문과 버블 문제
+- [DeepSeek-AI(DeepSeek-V3 Technical Report (arXiv:2412.19437), Section 3.3.2 and Figure 5](https://arxiv.org/abs/2412.19437)) 주된 DualPipe 참조
+- [DeepSeek(DualPipe GitHub repository](https://github.com/deepseek-ai/DualPipe)) DualPipeV(Cut-in-half) 모드를 포함한 오픈소스 참조 구현
+- [Qi et al.(Zero Bubble Pipeline Parallelism (arXiv:2401.10241, Sea AI Lab 2023)](https://arxiv.org/abs/2401.10241)) Zero Bubble 전신
+- [Sea AI Lab(DualPipe could be better without the Dual](https://sail.sea.com/blog/articles/63)) DeepSeek의 EP-off 모드에 영향을 준 DualPipeV 분석
+- [Narayanan et al.(PipeDream / 1F1B (arXiv:1806.03377, 2018-2021)](https://arxiv.org/abs/1806.03377)) DualPipe가 비교하는 1F1B 스케줄
+- [Huang et al.(GPipe (arXiv:1811.06965, 2018)](https://arxiv.org/abs/1811.06965)) 원래 파이프라인 병렬화 논문과 버블 문제

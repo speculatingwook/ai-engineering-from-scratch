@@ -1,6 +1,6 @@
-# STaR, V-STaR, Quiet-STaR — 스스로 학습한 추론
+# STaR, V-STaR, Quiet-STaR: 스스로 학습한 추론
 
-> 가능한 한 가장 작은 자기 개선(self-improvement) 루프는 근거(rationale) 안에 자리한다. 모델이 사고 사슬(chain of thought)을 생성하고, 정답에 도달한 것들만 남긴 뒤, 그것들로 파인튜닝(fine-tuning)한다. 이것이 STaR다. V-STaR는 검증기(verifier)를 더해 추론 시점(inference-time) 선택을 더 낫게 만든다. Quiet-STaR는 근거를 모든 토큰(token) 수준까지 밀어 내린다. 셋 다 작동한다. 어느 것도 마법이 아니다 — 이 루프는 우연히 정답에 도달한 어떤 지름길이든 보존한다.
+> 가능한 한 가장 작은 자기 개선(self-improvement) 루프는 근거(rationale) 안에 자리한다. 모델이 사고 사슬(chain of thought)을 생성하고, 정답에 도달한 것들만 남긴 뒤, 그것들로 파인튜닝(fine-tuning)한다. 이것이 STaR다. V-STaR는 검증기(verifier)를 더해 추론 시점(inference-time) 선택을 더 낫게 만든다. Quiet-STaR는 근거를 모든 토큰(token) 수준까지 밀어 내린다. 셋 다 작동한다. 어느 것도 마법이 아니다. 이 루프는 우연히 정답에 도달한 어떤 지름길이든 보존한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, bootstrap-loop simulator)
@@ -28,7 +28,7 @@ STaR(Self-Taught Reasoner, Zelikman et al., 2022)는 묻는다. 모델이 자기
 
 한 가지 비틀기가 중요하다. 모델이 어떤 문제를 결코 맞히지 못한다면, 루프는 그 문제로 학습할 수 없다. STaR는 **합리화(rationalization)**를 더한다. 모델이 실패한 문제에는 정답을 힌트로 주입하고, 그 답으로 이어지는 근거를 만들어내도록 모델에게 다시 프롬프트한다. 합리화된 근거는 학습 집합에 추가된다.
 
-원 논문의 결과(Zelikman et al., 2022): GPT-J 기반 모델이 합리화를 동반한 반복적 STaR 라운드를 통해 GSM8K에서 5.8%에서 10.7%로 향상되었다 — 절대값으로 약 5퍼센트포인트. CommonsenseQA에서는 STaR로 학습한 GPT-J 6B가 72.5%에 도달했는데, 이는 손으로 주석한 근거로 학습한, 약 30배 더 큰 모델인 파인튜닝된 GPT-3 175B(~73%)에 필적한다.
+원 논문의 결과(Zelikman et al., 2022): GPT-J 기반 모델이 합리화를 동반한 반복적 STaR 라운드를 통해 GSM8K에서 5.8%에서 10.7%로 향상되었다. 절대값으로 약 5퍼센트포인트. CommonsenseQA에서는 STaR로 학습한 GPT-J 6B가 72.5%에 도달했는데, 이는 손으로 주석한 근거로 학습한, 약 30배 더 큰 모델인 파인튜닝된 GPT-3 175B(~73%)에 필적한다.
 
 ### V-STaR: DPO로 검증기를 학습시킨다
 
@@ -40,11 +40,11 @@ STaR는 틀린 근거를 버린다. Hosseini et al.(2024)은 그것들 역시 �
 
 Zelikman et al.(2024)은 물었다. 문제와 답 사이에서만이 아니라, 모델이 모든 토큰 위치에서 짧은 내부 근거를 생성하도록 학습하면 어떨까? Quiet-STaR는 모델이 예측되는 각 토큰 앞에 숨겨진 "생각(thought)"을 내보내도록 학습시킨 뒤, 학습된 가중치로 생각을 반영한 예측을 베이스라인 예측과 섞는다.
 
-결과: Mistral 7B는 작업별 파인튜닝 없이 GSM8K에서 5.9%에서 10.9%로, CommonsenseQA에서 36.3%에서 47.2%로 절대 제로샷(zero-shot) 향상을 얻었다. 모델은 "언제 생각할지"를 학습했다 — 어려운 토큰은 더 긴 내부 근거를 받고, 쉬운 토큰은 거의 받지 않는다.
+결과: Mistral 7B는 작업별 파인튜닝 없이 GSM8K에서 5.9%에서 10.9%로, CommonsenseQA에서 36.3%에서 47.2%로 절대 제로샷(zero-shot) 향상을 얻었다. 모델은 "언제 생각할지"를 학습했다. 어려운 토큰은 더 긴 내부 근거를 받고, 쉬운 토큰은 거의 받지 않는다.
 
 ### 셋 모두가 공유하는 안전 우려는 무엇인가
 
-세 방법 모두 최종 답을 그래디언트 신호(gradient signal)로 사용한다. 결함 있는 추론을 통해 정답에 도달한 근거 — 지름길을 악용하거나, 찍거나, 일반화되지 않는 패턴을 사용한 근거 — 가 긍정적으로 강화된다. 분포 내(in-distribution) 문제에서는 지름길이 작동한다. 분포 밖(out-of-distribution) 문제에서는 조용히 무너진다.
+세 방법 모두 최종 답을 그래디언트 신호(gradient signal)로 사용한다. 결함 있는 추론을 통해 정답에 도달한 근거(지름길을 악용하거나, 찍거나, 일반화되지 않는 패턴을 사용한 근거)가 긍정적으로 강화된다. 분포 내(in-distribution) 문제에서는 지름길이 작동한다. 분포 밖(out-of-distribution) 문제에서는 조용히 무너진다.
 
 V-STaR의 검증기는 근거에 순위를 매기도록 학습해 이를 완화하지만 검증기 역시 같은 레이블 집합으로 학습된다. 검증기는 정직한 불확실성보다 잘 포맷된 틀린 추론을 선호하도록 학습할 수 있다. 더 안전한 설계는 STaR 방식 데이터를 (a) 과정 지도(process-supervised) 보상 모델(답이 아니라 중간 스텝을 보상하는 것) 및 (b) 단순한 지름길을 깨뜨리는 별도 보관된(held-out) OOD 평가와 결합하는 것이다.
 
@@ -85,7 +85,7 @@ STaR를 이해하면 이 모든 것이 맞아떨어진다. 그것은 최소 실�
 
 4. STaR의 정답이면 유지(keep-if-correct) 필터를, 각 근거 스텝을 독립적으로 보상하는 과정 지도 대안과 비교하라. 레이블링 비용 차이와 그럴듯한 품질 차이를 식별하라.
 
-5. 배포된 모델에서 지름길 근거를 잡아낼 평가 하나를 설계하라. 완벽할 필요는 없다 — STaR 루프가 강화할 가장 단순한 지름길을 깨뜨리기만 하면 된다.
+5. 배포된 모델에서 지름길 근거를 잡아낼 평가 하나를 설계하라. 완벽할 필요는 없다. STaR 루프가 강화할 가장 단순한 지름길을 깨뜨리기만 하면 된다.
 
 ## 핵심 용어 (Key Terms)
 
@@ -96,13 +96,13 @@ STaR를 이해하면 이 모든 것이 맞아떨어진다. 그것은 최소 실�
 | V-STaR | "Verifier STaR" | 옳은 근거와 틀린 근거 모두로 검증기를 DPO 학습시키고 추론 시점 선택에 사용하는 것 |
 | Quiet-STaR | "토큰별 근거" | 모든 토큰 위치에서 숨겨진 생각을 생성하고 베이스라인 예측과 혼합하는 것 |
 | 답에 조건화된 그래디언트 (Answer-conditioned gradient) | "결과 기반 신호" | 추론 스텝이 아니라 최종 답을 보상하는 학습 루프 |
-| 과정 보상 모델 (Process reward model) | "스텝 수준 검증기" | 결과가 아니라 스텝별 정확성으로 학습된 보상 모델 — STaR와 대조됨 |
+| 과정 보상 모델 (Process reward model) | "스텝 수준 검증기" | 결과가 아니라 스텝별 정확성으로 학습된 보상 모델: STaR와 대조됨 |
 | 지름길 근거 (Shortcut rationale) | "정답, 틀린 추론" | 일반화되지 않는 패턴으로 레이블에 도달한 근거. STaR는 이것들을 남긴다 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Zelikman et al. (2022). STaR: Bootstrapping Reasoning With Reasoning](https://arxiv.org/abs/2203.14465) — 최초의 논문.
-- [Hosseini et al. (2024). V-STaR: Training Verifiers for Self-Taught Reasoners](https://arxiv.org/abs/2402.06457) — 추론 시점 선택을 위한 DPO 검증기를 추가한다.
-- [Zelikman et al. (2024). Quiet-STaR: Language Models Can Teach Themselves to Think Before Speaking](https://arxiv.org/abs/2403.09629) — 토큰별 내부 근거.
-- [Lightman et al. (2023). Let's Verify Step by Step](https://arxiv.org/abs/2305.20050) — 과정 보상 모델, 대안적 그래디언트 신호.
-- [DeepSeek-R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948) — 검증 가능한 작업에 대한 RL, 프런티어 학습으로 확장된 STaR.
+- [Zelikman et al. (2022). STaR: Bootstrapping Reasoning With Reasoning](https://arxiv.org/abs/2203.14465): 최초의 논문.
+- [Hosseini et al. (2024). V-STaR: Training Verifiers for Self-Taught Reasoners](https://arxiv.org/abs/2402.06457): 추론 시점 선택을 위한 DPO 검증기를 추가한다.
+- [Zelikman et al. (2024). Quiet-STaR: Language Models Can Teach Themselves to Think Before Speaking](https://arxiv.org/abs/2403.09629): 토큰별 내부 근거.
+- [Lightman et al. (2023). Let's Verify Step by Step](https://arxiv.org/abs/2305.20050): 과정 보상 모델, 대안적 그래디언트 신호.
+- [DeepSeek-R1 paper (arXiv:2501.12948)](https://arxiv.org/abs/2501.12948): 검증 가능한 작업에 대한 RL, 프런티어 학습으로 확장된 STaR.

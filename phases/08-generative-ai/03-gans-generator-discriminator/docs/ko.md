@@ -1,4 +1,4 @@
-# GAN — 생성기 대 판별기 (GANs — Generator vs Discriminator)
+# GAN(생성기 대 판별기 (GANs) Generator vs Discriminator)
 
 > 2014년 Goodfellow의 트릭은 밀도(density)를 아예 건너뛰는 것이었다. 두 개의 네트워크. 하나는 가짜를 만든다. 하나는 그것을 잡는다. 가짜가 진짜와 구별할 수 없을 때까지 싸운다. 작동해서는 안 된다. 종종 작동하지 않는다. 작동할 때, 그 샘플은 좁은 도메인에서 여전히 문헌상 가장 선명하다.
 
@@ -9,7 +9,7 @@
 
 ## 문제 (The Problem)
 
-VAE는 흐릿한 샘플을 만드는데, 이는 MSE 디코더(decoder) 손실(loss)이 *평균* 이미지에 대해 베이즈 최적이기 때문이다 — 그리고 그럴듯한 숫자 여럿의 평균은 흐릿한 숫자다. 필요한 것은 어느 한 목표값과의 픽셀 단위 근접성이 아니라 *그럴듯함(plausibility)*에 보상을 주는 손실이다. 그럴듯함에는 닫힌 형태가 없으니, 직접 학습해야 한다.
+VAE는 흐릿한 샘플을 만드는데, 이는 MSE 디코더(decoder) 손실(loss)이 *평균* 이미지에 대해 베이즈 최적이기 때문이다. 그리고 그럴듯한 숫자 여럿의 평균은 흐릿한 숫자다. 필요한 것은 어느 한 목표값과의 픽셀 단위 근접성이 아니라 *그럴듯함(plausibility)*에 보상을 주는 손실이다. 그럴듯함에는 닫힌 형태가 없으니, 직접 학습해야 한다.
 
 Goodfellow의 아이디어: 진짜 이미지와 가짜를 구별하도록 분류기(classifier) `D(x)`를 학습시킨다. `D`를 속이도록 생성기(generator) `G(z)`를 학습시킨다. `G`에 대한 손실 신호는, `D`가 지금 무엇이든 진짜처럼 보이게 만든다고 여기는 바로 그것이다. 이 신호는 `G`가 개선됨에 따라 갱신되며, 움직이는 목표를 쫓는다. 두 네트워크가 모두 수렴하면, `G`는 `log p(x)`를 한 번도 적지 않고 데이터 분포를 학습한 것이다.
 
@@ -44,12 +44,12 @@ min_G max_D  E_real[log D(x)] + E_fake[log(1 - D(G(z)))]
 
 | 연도 | 혁신 | 해결한 것 |
 |------|------------|-----|
-| 2015 | DCGAN | 합성곱/역합성곱, 배치 정규화(batch norm), LeakyReLU — 최초의 안정적인 아키텍처. |
+| 2015 | DCGAN | 합성곱/역합성곱, 배치 정규화(batch norm), LeakyReLU: 최초의 안정적인 아키텍처. |
 | 2017 | WGAN, WGAN-GP | BCE를 바서슈타인 거리(Wasserstein distance) + 그래디언트 페널티로 교체. 기울기 소실을 해결. |
 | 2017 | 스펙트럼 정규화(Spectral normalization) | 판별기를 립시츠 한계(Lipschitz-bound) 지음. 2026년 판별기에서도 여전히 사용됨. |
 | 2018 | Progressive GAN | 저해상도부터 학습, 층(layer)을 추가. 최초의 메가픽셀 결과. |
 | 2019 | StyleGAN / StyleGAN2 | 매핑 네트워크 + 적응형 인스턴스 정규화(adaptive instance norm). 고정 도메인 사실적 묘사의 최첨단. |
-| 2021 | StyleGAN3 | 앨리어스 없음(alias-free), 평행이동 등변(translation-equivariant) — 2026년에도 여전히 얼굴의 황금 표준. |
+| 2021 | StyleGAN3 | 앨리어스 없음(alias-free), 평행이동 등변(translation-equivariant): 2026년에도 여전히 얼굴의 황금 표준. |
 | 2022 | StyleGAN-XL | 조건부, 클래스 인지, 더 큰 규모. |
 | 2024 | R3GAN | 더 강한 정규화(regularization)로 재브랜딩; 트릭 없이 1024²에서 작동. |
 
@@ -59,7 +59,7 @@ min_G max_D  E_real[log D(x)] + E_fake[log(1 - D(G(z)))]
 
 ### 1단계: 비포화 손실
 
-기본 Goodfellow 손실 `log(1 - D(G(z)))`는 D가 G의 가짜를 높은 확신으로 가짜라고 분류할 때 0으로 간다. 그 시점에 G에 대한 그래디언트는 기본적으로 0이다 — G가 개선될 수 없다. 비포화 형태 `-log D(G(z))`는 반대의 점근선을 가진다: D가 확신할 때 폭발하여, G에 강한 신호를 준다.
+기본 Goodfellow 손실 `log(1 - D(G(z)))`는 D가 G의 가짜를 높은 확신으로 가짜라고 분류할 때 0으로 간다. 그 시점에 G에 대한 그래디언트는 기본적으로 0이다. G가 개선될 수 없다. 비포화 형태 `-log D(G(z))`는 반대의 점근선을 가진다: D가 확신할 때 폭발하여, G에 강한 신호를 준다.
 
 ```python
 def g_loss(d_fake):
@@ -115,9 +115,9 @@ if step % 200 == 0:
 | 이미지-이미지 변환 | Pix2Pix / CycleGAN (Phase 8 · 04) 또는 ControlNet (Phase 8 · 08) |
 | 빠른 1-스텝 텍스트-이미지 | 확산의 적대적 증류 (SDXL-Turbo, SD3-Turbo) |
 | 확산 트레이너 내부의 지각 손실 | 이미지 크롭(crop)에 대한 작은 GAN 판별기 |
-| 멀티모달, 개방형인 무엇이든 | 하지 마라 — 확산이나 흐름 매칭을 써라 |
+| 멀티모달, 개방형인 무엇이든 | 하지 마라. 확산이나 흐름 매칭을 써라 |
 
-GAN은 선명하지만 좁다. 도메인이 열리면 — 사진, 임의의 텍스트 프롬프트(prompt), 비디오 — 확산으로 전환하라. 적대적 트릭은 단독 생성기가 아니라 구성 요소(지각 손실, 증류)로 살아남는다.
+GAN은 선명하지만 좁다. 도메인이 열리면(사진, 임의의 텍스트 프롬프트(prompt), 비디오) 확산으로 전환하라. 적대적 트릭은 단독 생성기가 아니라 구성 요소(지각 손실, 증류)로 살아남는다.
 
 ## 산출물 (Ship It)
 
@@ -154,8 +154,8 @@ GAN은 개방형 도메인 생성의 샘플 품질에서는 더 이상 이기지
 
 ## 더 읽을거리 (Further Reading)
 
-- [Goodfellow et al. (2014). Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) — 원본 GAN 논문.
-- [Radford et al. (2015). Unsupervised Representation Learning with DCGAN](https://arxiv.org/abs/1511.06434) — 최초의 안정적인 아키텍처.
+- [Goodfellow et al. (2014). Generative Adversarial Nets](https://arxiv.org/abs/1406.2661): 원본 GAN 논문.
+- [Radford et al. (2015). Unsupervised Representation Learning with DCGAN](https://arxiv.org/abs/1511.06434): 최초의 안정적인 아키텍처.
 - [Arjovsky, Chintala, Bottou (2017). Wasserstein GAN](https://arxiv.org/abs/1701.07875) — WGAN.
 - [Miyato et al. (2018). Spectral Normalization for GANs](https://arxiv.org/abs/1802.05957) — SN.
 - [Karras et al. (2020). Analyzing and Improving the Image Quality of StyleGAN](https://arxiv.org/abs/1912.04958) — StyleGAN2.

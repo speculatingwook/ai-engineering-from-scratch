@@ -30,8 +30,8 @@
 
 트랜스포머(transformer)가 평탄화된 패치 시퀀스를 처리한다. 각 패치는 3D 위치 임베딩(positional embedding)(시간 + y + x)을 가진다. 어텐션(attention)은 보통 분해(factorize)된다.
 
-- **공간 어텐션(Spatial attention)** — 각 프레임의 패치 내에서.
-- **시간 어텐션(Temporal attention)** — 같은 공간 위치에 있는 프레임들 사이에서.
+- **공간 어텐션(Spatial attention)**: 각 프레임의 패치 내에서.
+- **시간 어텐션(Temporal attention)**: 같은 공간 위치에 있는 프레임들 사이에서.
 - **완전 3D 어텐션(Full 3D attention)**은 16-100배 더 비싸다. 저해상도나 연구에서만 쓴다.
 
 ### 텍스트 조건화 (Text conditioning)
@@ -145,10 +145,10 @@ def pos_embed(t, dim):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Brooks et al. (2024). Video generation models as world simulators](https://openai.com/index/video-generation-models-as-world-simulators/) — Sora 기술 보고서.
+- [Brooks et al. (2024). Video generation models as world simulators](https://openai.com/index/video-generation-models-as-world-simulators/): Sora 기술 보고서.
 - [Yang et al. (2024). CogVideoX: Text-to-Video Diffusion Models with An Expert Transformer](https://arxiv.org/abs/2408.06072) — CogVideoX.
 - [Kong et al. (2024). HunyuanVideo: A Systematic Framework for Large Video Generative Models](https://arxiv.org/abs/2412.03603) — HunyuanVideo.
 - [Genmo (2024). Mochi-1 Technical Report](https://www.genmo.ai/blog/mochi) — Mochi-1.
-- [Alibaba (2025). WAN 2.2](https://wanvideo.io/) — 2025년 중반 오픈 SOTA.
-- [Ho, Salimans, Gritsenko et al. (2022). Video Diffusion Models](https://arxiv.org/abs/2204.03458) — 영상 디퓨전의 효시 논문.
-- [Blattmann et al. (2023). Align your Latents (Video LDM)](https://arxiv.org/abs/2304.08818) — Stable Video Diffusion의 조상.
+- [Alibaba (2025). WAN 2.2](https://wanvideo.io/): 2025년 중반 오픈 SOTA.
+- [Ho, Salimans, Gritsenko et al. (2022). Video Diffusion Models](https://arxiv.org/abs/2204.03458): 영상 디퓨전의 효시 논문.
+- [Blattmann et al. (2023). Align your Latents (Video LDM)](https://arxiv.org/abs/2304.08818): Stable Video Diffusion의 조상.

@@ -138,11 +138,11 @@ print(neighbors("Tim Cook", relation="P108"))    # -> [(P108, Apple)]
 
 ## 함정 (Pitfalls)
 
-- **RE 이전의 상호참조(coreference).** "He founded Apple" — RE는 "he"가 누구인지 알아야 한다. 상호참조를 먼저 실행하라(레슨 24).
+- **RE 이전의 상호참조(coreference).** "He founded Apple": RE는 "he"가 누구인지 알아야 한다. 상호참조를 먼저 실행하라(레슨 24).
 - **엔티티 표준화.** "Apple Inc"와 "Apple"은 같은 노드로 해결되어야 한다. 엔티티 링킹을 먼저 하라(레슨 25).
 - **환각된 트리플.** LLM은 텍스트가 뒷받침하지 않는 트리플을 내보낸다. 스팬 검증을 강제하라.
 - **관계 표준화 표류(drift).** Open IE 관계는 일관성이 없다("was born in", "came from", "is a native of"). 표준 id로 축소하지 않으면 그래프를 쿼리할 수 없다.
-- **시간 오류.** "Tim Cook is CEO of Apple" — 지금은 참이지만 2005년에는 거짓이었다. 많은 관계가 시간으로 한정된다. 한정어(Wikidata의 `P580` 시작 시간, `P582` 종료 시간)를 사용하라.
+- **시간 오류.** "Tim Cook is CEO of Apple": 지금은 참이지만 2005년에는 거짓이었다. 많은 관계가 시간으로 한정된다. 한정어(Wikidata의 `P580` 시작 시간, `P582` 종료 시간)를 사용하라.
 - **도메인 불일치.** REBEL은 Wikipedia로 학습했다. 법률, 의료, 과학 텍스트는 도메인 파인튜닝된 RE 모델이 필요할 때가 많다.
 
 ## 라이브러리로 써보기 (Use It)

@@ -1,4 +1,4 @@
-# 오디오 기초 — 파형, 샘플링, 푸리에 변환
+# 오디오 기초: 파형, 샘플링, 푸리에 변환
 
 > 파형(waveform)은 원시 신호다. 스펙트로그램(spectrogram)은 그 표현이다. 멜 특성(mel feature)은 머신러닝에 친화적인 형태다. 현대의 모든 ASR과 TTS 파이프라인(pipeline)은 이 사다리를 오르며, 그 첫 단은 샘플링(sampling)과 푸리에(Fourier)를 이해하는 일이다.
 
@@ -40,7 +40,7 @@
 
 **비트 심도(Bit depth).** 16비트 PCM(부호 있는 int16, 범위 ±32,767)은 보편적인 교환 형식이다. 음악에는 24비트, 내부 DSP에는 32비트 float를 쓴다. `soundfile` 같은 라이브러리는 int16을 읽지만 `[-1, 1]` 범위의 float32 배열로 노출한다.
 
-**푸리에 변환(Fourier Transform).** 모든 유한 신호는 서로 다른 주파수의 사인파(sinusoid)의 합이다. 이산 푸리에 변환(Discrete Fourier Transform, DFT)은 `N`개의 샘플에 대해 `N`개의 복소 계수(complex coefficient)를 계산한다 — 주파수 빈(frequency bin)마다 하나씩. `bin k`는 주파수 `k · sr / N` Hz에 대응한다. 크기(magnitude)는 그 주파수에서의 진폭(amplitude)이고, 각도(angle)는 위상(phase)이다.
+**푸리에 변환(Fourier Transform).** 모든 유한 신호는 서로 다른 주파수의 사인파(sinusoid)의 합이다. 이산 푸리에 변환(Discrete Fourier Transform, DFT)은 `N`개의 샘플에 대해 `N`개의 복소 계수(complex coefficient)를 계산한다. 주파수 빈(frequency bin)마다 하나씩. `bin k`는 주파수 `k · sr / N` Hz에 대응한다. 크기(magnitude)는 그 주파수에서의 진폭(amplitude)이고, 각도(angle)는 위상(phase)이다.
 
 **FFT.** 고속 푸리에 변환(Fast Fourier Transform): `N`이 2의 거듭제곱일 때 DFT를 위한 `O(N log N)` 알고리즘이다. 모든 오디오 라이브러리는 내부적으로 FFT를 사용한다. 16 kHz에서 1024 샘플 FFT는 0–8 kHz에 걸쳐 15.6 Hz 해상도로 512개의 사용 가능한 주파수 빈을 준다.
 
@@ -82,7 +82,7 @@ def dft(x):
     return out
 ```
 
-`O(N²)` — `N=256`부터 정확성을 확인하는 데는 괜찮지만 실제 오디오에는 쓸모없다. 실제 코드는 `numpy.fft.rfft`나 `torch.fft.rfft`를 호출한다.
+`O(N²)`: `N=256`부터 정확성을 확인하는 데는 괜찮지만 실제 오디오에는 쓸모없다. 실제 코드는 `numpy.fft.rfft`나 `torch.fft.rfft`를 호출한다.
 
 ### 단계 4: 지배적 주파수를 찾는다
 
@@ -131,8 +131,8 @@ def dft(x):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Shannon (1949). Communication in the Presence of Noise](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) — 샘플링 정리의 배경이 된 논문.
-- [Smith — The Scientist and Engineer's Guide to Digital Signal Processing](https://www.dspguide.com/ch8.htm) — 무료의 정전(正典) 격 DSP 교과서.
-- [librosa docs — audio primer](https://librosa.org/doc/latest/tutorial.html) — 코드와 함께하는 실용적 안내.
-- [Heinrich Kuttruff — Room Acoustics (6th ed.)](https://www.routledge.com/Room-Acoustics/Kuttruff/p/book/9781482260434) — 실제 오디오가 깨끗한 사인파가 아닌 이유에 대한 참고서.
-- [Steve Eddins — FFT Interpretation notebook](https://blogs.mathworks.com/steve/2020/03/30/fft-spectrum-and-spectral-densities/) — 주파수 빈 직관을 10분 만에 정리.
+- [Shannon (1949). Communication in the Presence of Noise](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf): 샘플링 정리의 배경이 된 논문.
+- [Smith(The Scientist and Engineer's Guide to Digital Signal Processing](https://www.dspguide.com/ch8.htm)) 무료의 정전(正典) 격 DSP 교과서.
+- [librosa docs(audio primer](https://librosa.org/doc/latest/tutorial.html)) 코드와 함께하는 실용적 안내.
+- [Heinrich Kuttruff(Room Acoustics (6th ed.)](https://www.routledge.com/Room-Acoustics/Kuttruff/p/book/9781482260434)) 실제 오디오가 깨끗한 사인파가 아닌 이유에 대한 참고서.
+- [Steve Eddins(FFT Interpretation notebook](https://blogs.mathworks.com/steve/2020/03/30/fft-spectrum-and-spectral-densities/)) 주파수 빈 직관을 10분 만에 정리.

@@ -70,7 +70,7 @@ flowchart TD
 
 **데이터 누설(Data leakage).** 테스트 데이터가 학습에 누설되었다. 정확도가 의심스럽게 높다. 흔한 원인: 분할 전에 섞기, 전체 데이터셋(dataset)의 통계로 전처리하기, 분할 간 중복 샘플. 해결책: 먼저 분할하고, 다음에 전처리하고, 중복을 확인하라.
 
-**레이블 오류(Label errors).** 대부분의 실제 데이터셋에서 레이블(label)의 5-10%가 틀렸다(Northcutt et al., 2021 — "Pervasive Label Errors in Test Sets"). 모델이 잡음을 학습한다. 해결책: 확신 학습(confident learning)을 사용해 잘못 레이블된 예제를 찾아 고치거나, 손실 절단(loss truncation)을 사용해 높은 손실 샘플을 무시하라.
+**레이블 오류(Label errors).** 대부분의 실제 데이터셋에서 레이블(label)의 5-10%가 틀렸다(Northcutt et al., 2021: "Pervasive Label Errors in Test Sets"). 모델이 잡음을 학습한다. 해결책: 확신 학습(confident learning)을 사용해 잘못 레이블된 예제를 찾아 고치거나, 손실 절단(loss truncation)을 사용해 높은 손실 샘플을 무시하라.
 
 ### 증상 3: 손실에 NaN 또는 Inf (Symptom 3: NaN or Inf in Loss)
 
@@ -653,18 +653,18 @@ for epoch in range(100):
 ### 디버그 체크리스트(전체 학습 전) (The Debug Checklist (Before Full Training))
 
 1. 한 배치 과적합 테스트를 실행한다. 실패하면 멈춰라.
-2. 모델 요약을 출력한다 — 파라미터 수가 합리적인지 검증한다.
-3. 무작위 데이터로 단일 순방향 패스(forward pass)를 실행한다 — 출력 형태를 확인한다.
-4. 5 에폭 동안 학습한다 — 손실이 감소하는지 검증한다.
-5. 활성값 통계를 확인한다 — 죽은 층 없음, 폭발 없음.
-6. 그래디언트 흐름을 확인한다 — 소실 없음, 폭발 없음.
-7. 데이터 파이프라인을 검증한다 — 레이블과 함께 무작위 샘플 5개를 출력한다.
+2. 모델 요약을 출력한다. 파라미터 수가 합리적인지 검증한다.
+3. 무작위 데이터로 단일 순방향 패스(forward pass)를 실행한다. 출력 형태를 확인한다.
+4. 5 에폭 동안 학습한다. 손실이 감소하는지 검증한다.
+5. 활성값 통계를 확인한다. 죽은 층 없음, 폭발 없음.
+6. 그래디언트 흐름을 확인한다. 소실 없음, 폭발 없음.
+7. 데이터 파이프라인을 검증한다. 레이블과 함께 무작위 샘플 5개를 출력한다.
 
 ## 산출물 (Ship It)
 
 이 레슨은 다음을 만든다:
-- `outputs/prompt-nn-debugger.md` — 신경망 학습 실패를 진단하기 위한 프롬프트
-- `outputs/skill-debug-checklist.md` — 학습 문제 디버깅을 위한 결정 트리 체크리스트
+- `outputs/prompt-nn-debugger.md`: 신경망 학습 실패를 진단하기 위한 프롬프트
+- `outputs/skill-debug-checklist.md`: 학습 문제 디버깅을 위한 결정 트리 체크리스트
 
 디버깅을 위한 핵심 배포 패턴:
 - 프로덕션 학습 스크립트에 모니터링 후크 추가
@@ -688,12 +688,12 @@ for epoch in range(100):
 
 | 용어 | 사람들이 하는 말 | 실제 의미 |
 |------|----------------|----------------------|
-| 조용한 버그(Silent bug) | "실행은 되는데 나쁜 결과를 낸다" | 오류를 내지 않으면서 모델 품질을 떨어뜨리는 버그 — ML의 지배적인 실패 모드 |
+| 조용한 버그(Silent bug) | "실행은 되는데 나쁜 결과를 낸다" | 오류를 내지 않으면서 모델 품질을 떨어뜨리는 버그: ML의 지배적인 실패 모드 |
 | 죽은 ReLU(Dead ReLU) | "뉴런이 죽었다" | 입력이 항상 음수여서 0을 출력하고 영구히 0 그래디언트를 받는 ReLU 뉴런 |
 | 기울기 소실(Vanishing gradients) | "초기 층이 학습을 멈춘다" | 그래디언트가 층을 거치며 지수적으로 작아져, 초기 층의 가중치가 사실상 동결됨 |
 | 그래디언트 폭발(Exploding gradients) | "손실이 NaN으로 갔다" | 그래디언트가 층을 거치며 지수적으로 커져, 가중치 갱신이 너무 커서 오버플로함 |
 | 그래디언트 검사(Gradient checking) | "역전파가 올바른지 검증" | 역전파의 분석적 그래디언트를 유한 차분의 수치적 그래디언트와 비교 |
-| 한 배치 과적합(Overfit-one-batch) | "가장 중요한 디버그 테스트" | 단일 작은 배치에 학습해 모델이 학습할 수 있는지 검증 — 못 하면 무언가가 근본적으로 망가진 것 |
+| 한 배치 과적합(Overfit-one-batch) | "가장 중요한 디버그 테스트" | 단일 작은 배치에 학습해 모델이 학습할 수 있는지 검증: 못 하면 무언가가 근본적으로 망가진 것 |
 | LR 탐색기(LR finder) | "올바른 학습률을 찾기 위한 쓸기" | 한 에폭에 걸쳐 학습률을 지수적으로 증가시키고 손실이 발산하기 직전의 학습률을 고름 |
 | 데이터 누설(Data leakage) | "테스트 데이터가 학습에 누설됨" | 테스트 세트의 정보가 학습을 오염시켜 인위적으로 높은 정확도를 만드는 것 |
 | 활성값 통계(Activation statistics) | "층 건강 모니터링" | 죽거나 포화되거나 폭발한 뉴런을 탐지하기 위해 각 층 출력의 평균, 표준편차, 0 비율을 추적 |
@@ -701,8 +701,8 @@ for epoch in range(100):
 
 ## 더 읽을거리 (Further Reading)
 
-- Smith, "Cyclical Learning Rates for Training Neural Networks" (2017) — 학습률 범위 테스트(LR 탐색기)를 도입한 논문
-- Northcutt et al., "Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks" (2021) — ImageNet, CIFAR-10, 그 외 주요 벤치마크에서 레이블의 3-6%가 틀렸음을 입증
-- Zhang et al., "Understanding Deep Learning Requires Rethinking Generalization" (2017) — 신경망이 무작위 레이블을 암기할 수 있음을 보인 논문으로, 한 배치 과적합 테스트가 작동하는 이유
+- Smith, "Cyclical Learning Rates for Training Neural Networks" (2017): 학습률 범위 테스트(LR 탐색기)를 도입한 논문
+- Northcutt et al., "Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks" (2021): ImageNet, CIFAR-10, 그 외 주요 벤치마크에서 레이블의 3-6%가 틀렸음을 입증
+- Zhang et al., "Understanding Deep Learning Requires Rethinking Generalization" (2017): 신경망이 무작위 레이블을 암기할 수 있음을 보인 논문으로, 한 배치 과적합 테스트가 작동하는 이유
 - 내장 NaN/Inf 탐지를 위한 `torch.autograd.detect_anomaly`와 `torch.autograd.set_detect_anomaly`에 관한 PyTorch 문서
 </content>

@@ -18,7 +18,7 @@
 
 2026년 추론(inference) 경제학의 프런티어는 "달러당 토큰 몇 개"이다. 답은 네 가지 쌓인 선택에 달려 있다: 하드웨어 세대(Hopper H100/H200 vs Blackwell B200/GB200), 정밀도(BF16 → FP8 → NVFP4), 서빙 엔진(vLLM vs SGLang vs TRT-LLM), 그리고 오케스트레이션(평범 vs 분리형 vs Dynamo).
 
-vLLM을 갖춘 Hopper에서, 120B MoE는 100만 토큰당 약 0.09달러로 돈다. TRT-LLM + Dynamo를 갖춘 Blackwell에서, 같은 모델은 약 0.012달러로 돈다 — 7배 저렴하다. 그 격차의 일부는 하드웨어다(Blackwell은 Hopper 대비 GPU당 LLM 처리량이 11~15배). 일부는 스택이다: FP4 가중치, MTP 드래프트, 분리형 프리필/디코드, 그리고 MoE 전문가 통신을 위한 NVLink 5 all-to-all.
+vLLM을 갖춘 Hopper에서, 120B MoE는 100만 토큰당 약 0.09달러로 돈다. TRT-LLM + Dynamo를 갖춘 Blackwell에서, 같은 모델은 약 0.012달러로 돈다. 7배 저렴하다. 그 격차의 일부는 하드웨어다(Blackwell은 Hopper 대비 GPU당 LLM 처리량이 11~15배). 일부는 스택이다: FP4 가중치, MTP 드래프트, 분리형 프리필/디코드, 그리고 MoE 전문가 통신을 위한 NVLink 5 all-to-all.
 
 이것을 NVIDIA 스택 밖에서 복제할 수는 없다. 그것이 트레이드오프다. 경제성을 얻는 대신 이식성을 내준다. 어느 스택 선택이 격차의 어느 몫을 만드는지 이해하는 것이 이 레슨의 핵심이다.
 
@@ -103,8 +103,8 @@ TRT-LLM의 분리형 서빙(별도 프리필과 디코드 풀)은 Phase 17 · 20
 
 ## 더 읽을거리 (Further Reading)
 
-- [NVIDIA — Blackwell Ultra MLPerf Inference v6.0](https://developer.nvidia.com/blog/nvidia-blackwell-ultra-sets-new-inference-records-in-mlperf-debut/) — 2026년 4월 MLPerf 결과.
-- [NVIDIA — MoE Inference on Blackwell](https://developer.nvidia.com/blog/delivering-massive-performance-leaps-for-mixture-of-experts-inference-on-nvidia-blackwell/) — NVLink 5 all-to-all과 MoE 커널.
-- [TensorRT-LLM Overview](https://nvidia.github.io/TensorRT-LLM/overview.html) — 공식 엔진 문서.
-- [NVIDIA — Introducing Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/) — TRT-LLM 위의 분리형 오케스트레이션.
-- [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/) — Blackwell 숫자를 공표하는 벤치마크 스위트.
+- [NVIDIA(Blackwell Ultra MLPerf Inference v6.0](https://developer.nvidia.com/blog/nvidia-blackwell-ultra-sets-new-inference-records-in-mlperf-debut/)) 2026년 4월 MLPerf 결과.
+- [NVIDIA(MoE Inference on Blackwell](https://developer.nvidia.com/blog/delivering-massive-performance-leaps-for-mixture-of-experts-inference-on-nvidia-blackwell/)) NVLink 5 all-to-all과 MoE 커널.
+- [TensorRT-LLM Overview](https://nvidia.github.io/TensorRT-LLM/overview.html): 공식 엔진 문서.
+- [NVIDIA(Introducing Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/)) TRT-LLM 위의 분리형 오케스트레이션.
+- [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/): Blackwell 숫자를 공표하는 벤치마크 스위트.

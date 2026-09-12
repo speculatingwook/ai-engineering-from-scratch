@@ -1,4 +1,4 @@
-# Capstone 09 — 코드 마이그레이션 에이전트 (Repo-Level Language / Runtime Upgrade)
+# Capstone 09: 코드 마이그레이션 에이전트 (Repo-Level Language / Runtime Upgrade)
 
 > Amazon의 MigrationBench(Java 8 to 17)와 Google의 App Engine Py2-to-Py3 마이그레이터는 2026년의 기준을 세웠다. Moderne의 OpenRewrite는 대규모로 결정론적(deterministic) AST 재작성을 수행한다. Grit은 codemod 스타일 DSL로 같은 문제를 겨냥한다. 프로덕션(production) 패턴은 둘을 결합한다. 안전한 재작성을 위한 결정론적 기반(substrate)에 더해 모호한 경우를 위한 에이전트 계층, 브랜치별 빌드를 위한 샌드박스(sandbox), 그리고 PR이 열리기 전에 그린(green)으로 바뀌는 테스트 하네스(harness). 캡스톤(capstone)은 실제 저장소 50개를 마이그레이션하고 실패 분류 체계(taxonomy)와 함께 통과율을 발행하는 것이다.
 
@@ -133,11 +133,11 @@ $ migrate legacy-java-service --target java17
 
 ## 더 읽을거리 (Further Reading)
 
-- [Amazon MigrationBench](https://aws.amazon.com/blogs/devops/amazon-introduces-two-benchmark-datasets-for-evaluating-ai-agents-ability-on-code-migration/) — 정전(canonical)에 해당하는 2026 벤치마크
-- [Moderne.io OpenRewrite platform](https://www.moderne.io) — 결정론적 기반 레퍼런스
-- [OpenRewrite documentation](https://docs.openrewrite.org) — 레시피 작성
-- [Grit.io](https://www.grit.io) — 대안 codemod DSL
-- [OpenAI sandboxed migration cookbook](https://developers.openai.com/cookbook/examples/agents_sdk/sandboxed-code-migration/sandboxed_code_migration_agent) — Agents SDK 레퍼런스
-- [Google App Engine Py2 to Py3 migrator](https://cloud.google.com/appengine) — 대안 마이그레이션 벤치마크
-- [libcst](https://github.com/Instagram/LibCST) — Python 결정론적 기반
-- [Daytona sandboxes](https://daytona.io) — 레퍼런스 브랜치별 샌드박스
+- [Amazon MigrationBench](https://aws.amazon.com/blogs/devops/amazon-introduces-two-benchmark-datasets-for-evaluating-ai-agents-ability-on-code-migration/): 정전(canonical)에 해당하는 2026 벤치마크
+- [Moderne.io OpenRewrite platform](https://www.moderne.io): 결정론적 기반 레퍼런스
+- [OpenRewrite documentation](https://docs.openrewrite.org): 레시피 작성
+- [Grit.io](https://www.grit.io): 대안 codemod DSL
+- [OpenAI sandboxed migration cookbook](https://developers.openai.com/cookbook/examples/agents_sdk/sandboxed-code-migration/sandboxed_code_migration_agent): Agents SDK 레퍼런스
+- [Google App Engine Py2 to Py3 migrator](https://cloud.google.com/appengine): 대안 마이그레이션 벤치마크
+- [libcst](https://github.com/Instagram/LibCST): Python 결정론적 기반
+- [Daytona sandboxes](https://daytona.io): 레퍼런스 브랜치별 샌드박스

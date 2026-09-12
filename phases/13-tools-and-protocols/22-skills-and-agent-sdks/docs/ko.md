@@ -1,4 +1,4 @@
-# 스킬과 에이전트 SDK — Anthropic Skills, AGENTS.md, OpenAI Apps SDK
+# 스킬과 에이전트 SDK: Anthropic Skills, AGENTS.md, OpenAI Apps SDK
 
 > MCP는 "어떤 툴이 존재하는가"를 말한다. 스킬(skill)은 "태스크를 어떻게 하는가"를 말한다. 2026년 스택은 둘 다 계층화한다. Anthropic의 Agent Skills(오픈 표준, 2025년 12월)는 점진적 공개(progressive disclosure)를 갖춘 SKILL.md로 배포된다. OpenAI의 Apps SDK는 MCP에 위젯 메타데이터를 더한 것이다. AGENTS.md(현재 60,000개 이상의 레포에 있음)는 프로젝트 수준 에이전트 컨텍스트로 레포 루트에 자리한다. 이 레슨은 각각이 무엇을 다루는지 짚고, 여러 에이전트를 가로질러 이동하는 최소 SKILL.md + AGENTS.md 번들을 구축한다.
 
@@ -154,7 +154,7 @@ SkillKit 같은 도구와 유사한 크로스 에이전트 배포 계층은 단�
 
 3. 팀의 내부 문서에서 다단계 워크플로를 SKILL.md로 이식하라. Claude Code에서 로드되는지 검증하라.
 
-4. 스킬을 Cursor와 Codex의 네이티브 규칙 형식으로 손으로 번역하라. 형식 간 차이를 세어라 — 이것이 SkillKit이 자동화하는 번역 표면이다.
+4. 스킬을 Cursor와 Codex의 네이티브 규칙 형식으로 손으로 번역하라. 형식 간 차이를 세어라. 이것이 SkillKit이 자동화하는 번역 표면이다.
 
 5. Anthropic Agent Skills 블로그 글을 읽어라. 이 레슨의 로더가 다루지 않는 Claude Agent SDK 기능 하나를 식별하라. (힌트: 에이전트 하위 호출.)
 
@@ -175,8 +175,8 @@ SkillKit 같은 도구와 유사한 크로스 에이전트 배포 계층은 단�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Agent Skills announcement](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) — 2025년 12월 출범
-- [Anthropic — Agent Skills docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) — SKILL.md 형식 레퍼런스
-- [OpenAI — Apps SDK](https://developers.openai.com/apps-sdk) — ChatGPT를 위한 MCP 기반 개발자 플랫폼
-- [agents.md](https://agents.md/) — AGENTS.md 형식과 채택 목록
-- [Anthropic — anthropics/skills GitHub](https://github.com/anthropics/skills) — 공식 스킬 예제
+- [Anthropic(Agent Skills announcement](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)) 2025년 12월 출범
+- [Anthropic(Agent Skills docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)) SKILL.md 형식 레퍼런스
+- [OpenAI(Apps SDK](https://developers.openai.com/apps-sdk)) ChatGPT를 위한 MCP 기반 개발자 플랫폼
+- [agents.md](https://agents.md/): AGENTS.md 형식과 채택 목록
+- [Anthropic(anthropics/skills GitHub](https://github.com/anthropics/skills)) 공식 스킬 예제

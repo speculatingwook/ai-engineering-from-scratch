@@ -393,7 +393,7 @@ print(f"Q is orthogonal: {np.allclose(Q @ Q.T, np.eye(3))}")
 print(f"R is upper triangular: {np.allclose(R, np.triu(R))}")
 ```
 
-### PyTorch — 텐서는 자동 미분이 달린 벡터다
+### PyTorch: 텐서는 자동 미분이 달린 벡터다
 
 ```python
 import torch
@@ -417,7 +417,7 @@ x에 대한 내적의 그래디언트(gradient)는 그냥 y다. PyTorch가 이�
 ## 산출물 (Ship It)
 
 이 레슨이 만들어내는 것:
-- `outputs/prompt-linear-algebra-tutor.md` — 기하학적 직관을 통해 선형대수를 가르치는 AI 어시스턴트용 프롬프트(prompt)
+- `outputs/prompt-linear-algebra-tutor.md`: 기하학적 직관을 통해 선형대수를 가르치는 AI 어시스턴트용 프롬프트(prompt)
 
 ## 연결 (Connections)
 
@@ -450,7 +450,7 @@ LoRA는 특별히 언급할 가치가 있다. 가중치 갱신을 저랭크 행�
 |------|----------------|----------------------|
 | 벡터 (Vector) | "화살표" | n차원 공간에서 점이나 방향을 나타내는 숫자의 목록 |
 | 행렬 (Matrix) | "숫자의 표" | 벡터를 한 공간에서 다른 공간으로 매핑하는 변환 |
-| 내적 (Dot product) | "곱하고 더한다" | 두 벡터가 얼마나 정렬되어 있는지를 재는 척도 — 유사도 검색의 핵심 |
+| 내적 (Dot product) | "곱하고 더한다" | 두 벡터가 얼마나 정렬되어 있는지를 재는 척도: 유사도 검색의 핵심 |
 | 임베딩 (Embedding) | "어떤 AI 마법" | 무언가(단어, 이미지, 사용자)의 의미를 나타내는 벡터 |
 | 선형 독립 (Linear independence) | "서로 겹치지 않는다" | 집합 안의 어떤 벡터도 나머지의 조합으로 쓸 수 없다 |
 | 랭크 (Rank) | "차원이 몇 개인가" | 행렬에서 선형 독립인 열(또는 행)의 개수 |

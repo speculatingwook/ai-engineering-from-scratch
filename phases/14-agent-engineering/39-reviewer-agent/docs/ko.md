@@ -124,14 +124,14 @@ python3 code/main.py
 
 - [OpenAI Agents SDK handoffs](https://platform.openai.com/docs/guides/agents-sdk/handoffs)
 - [Anthropic Claude Code subagents](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/sub-agents)
-- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/) — 7-전문가 + 코디네이터 아키텍처, 30일간 131k 실행
-- [Agent-as-a-Judge: Evaluating Agents with Agents (OpenReview / ICLR)](https://openreview.net/forum?id=DeVm3YUnpj) — DevAI 벤치마크, 366개의 계층적 솔루션 요구사항
-- [Adnan Masood, Rubric-Based Evaluations and LLM-as-a-Judge: Methodologies, Biases, Empirical Validation](https://medium.com/@adnanmasood/rubric-based-evals-llm-as-a-judge-methodologies-and-empirical-validation-in-domain-context-71936b989e80) — 네 가지 편향과 완화책
-- [MLflow, LLM-as-a-Judge Evaluation](https://mlflow.org/llm-as-a-judge) — 분리된 빌더/평가자를 위한 프로덕션 도구
-- [LangChain, How to Calibrate LLM-as-a-Judge with Human Corrections](https://www.langchain.com/articles/llm-as-a-judge) — 보정 집합 워크플로
+- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/): 7-전문가 + 코디네이터 아키텍처, 30일간 131k 실행
+- [Agent-as-a-Judge: Evaluating Agents with Agents (OpenReview / ICLR)](https://openreview.net/forum?id=DeVm3YUnpj): DevAI 벤치마크, 366개의 계층적 솔루션 요구사항
+- [Adnan Masood, Rubric-Based Evaluations and LLM-as-a-Judge: Methodologies, Biases, Empirical Validation](https://medium.com/@adnanmasood/rubric-based-evals-llm-as-a-judge-methodologies-and-empirical-validation-in-domain-context-71936b989e80): 네 가지 편향과 완화책
+- [MLflow, LLM-as-a-Judge Evaluation](https://mlflow.org/llm-as-a-judge): 분리된 빌더/평가자를 위한 프로덕션 도구
+- [LangChain, How to Calibrate LLM-as-a-Judge with Human Corrections](https://www.langchain.com/articles/llm-as-a-judge): 보정 집합 워크플로
 - [Evidently AI, LLM-as-a-judge: a complete guide](https://www.evidentlyai.com/llm-guide/llm-as-a-judge)
 - [Arize, LLM as a Judge — Primer and Pre-Built Evaluators](https://arize.com/llm-as-a-judge/)
-- Phase 14 · 05 — Self-Refine와 CRITIC(단일 에이전트 자기 검토 베이스라인)
-- Phase 14 · 30 — 평가 주도 에이전트 개발(보정 집합 생성기)
-- Phase 14 · 38 — 리뷰어가 읽는 검증 게이트
-- Phase 14 · 40 — 리뷰어 보고서가 공급하는 핸드오프 패킷
+- Phase 14 · 05: Self-Refine와 CRITIC(단일 에이전트 자기 검토 베이스라인)
+- Phase 14 · 30: 평가 주도 에이전트 개발(보정 집합 생성기)
+- Phase 14 · 38: 리뷰어가 읽는 검증 게이트
+- Phase 14 · 40: 리뷰어 보고서가 공급하는 핸드오프 패킷

@@ -127,7 +127,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Jimenez et al., SWE-bench (arXiv:2310.06770)](https://arxiv.org/abs/2310.06770) — 원본 벤치마크
-- [OpenAI, SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/) — 선별된 부분집합
-- [Mialon et al., GAIA (arXiv:2311.12983)](https://arxiv.org/abs/2311.12983) — 범용 벤치마크
-- [Liu et al., AgentBench (arXiv:2308.03688)](https://arxiv.org/abs/2308.03688) — 다중 환경 스위트
+- [Jimenez et al., SWE-bench (arXiv:2310.06770)](https://arxiv.org/abs/2310.06770): 원본 벤치마크
+- [OpenAI, SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/): 선별된 부분집합
+- [Mialon et al., GAIA (arXiv:2311.12983)](https://arxiv.org/abs/2311.12983): 범용 벤치마크
+- [Liu et al., AgentBench (arXiv:2308.03688)](https://arxiv.org/abs/2308.03688): 다중 환경 스위트

@@ -1,4 +1,4 @@
-# MCP 샘플링 — 서버가 요청하는 LLM 완성과 에이전트 루프
+# MCP 샘플링: 서버가 요청하는 LLM 완성과 에이전트 루프
 
 > 대부분의 MCP 서버는 멍청한 실행기다. 인자를 받고, 코드를 실행하고, 콘텐츠를 반환한다. 샘플링(sampling)은 서버가 방향을 뒤집게 한다. 서버가 클라이언트의 LLM에게 결정을 내려달라고 요청하는 것이다. 그래서 서버는 어떤 모델 자격 증명(credential)도 갖지 않고도 서버 호스팅 에이전트 루프(agent loop)를 굴린다. 2025-11-25에 병합된 SEP-1577은 샘플링 요청 안에 도구를 추가해 루프가 더 깊은 추론까지 담도록 했다. 드리프트(drift) 위험 참고: SEP-1577의 샘플링-내-도구 형태는 2026년 1분기까지 실험적이었으며 여전히 SDK API에서 자리를 잡아가는 중이다.
 
@@ -77,9 +77,9 @@
 
 세 가지 값:
 
-- `"none"` — 서버가 제공한 메시지만. 기본값.
-- `"thisServer"` — 이 서버 세션의 이전 메시지를 포함.
-- `"allServers"` — 모든 세션 컨텍스트를 포함.
+- `"none"`: 서버가 제공한 메시지만. 기본값.
+- `"thisServer"`: 이 서버 세션의 이전 메시지를 포함.
+- `"allServers"`: 모든 세션 컨텍스트를 포함.
 
 `includeContext`는 교차 서버 컨텍스트를 누설하기 때문에 2025-11-25 기준으로 약하게 사용 중단(soft-deprecated)되었으며, 이는 보안 우려다. `"none"`을 선호하고 명시적 컨텍스트를 메시지에 담아 전달하라.
 
@@ -171,8 +171,8 @@
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Concepts: Sampling](https://modelcontextprotocol.io/docs/concepts/sampling) — 샘플링의 고수준 개요
-- [MCP — Client sampling spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/client/sampling) — 표준 `sampling/createMessage` 형태
-- [MCP — GitHub SEP-1577](https://github.com/modelcontextprotocol/modelcontextprotocol) — 샘플링 내 도구를 위한 사양 진화 제안(실험적)
-- [Unit 42 — MCP attack vectors](https://unit42.paloaltonetworks.com/model-context-protocol-attack-vectors/) — 은밀한 샘플링과 리소스 절도 패턴
-- [Speakeasy — MCP sampling core concept](https://www.speakeasy.com/mcp/core-concepts/sampling) — 클라이언트 측 코드 예제를 동반한 설명
+- [MCP(Concepts: Sampling](https://modelcontextprotocol.io/docs/concepts/sampling)) 샘플링의 고수준 개요
+- [MCP(Client sampling spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/client/sampling)) 표준 `sampling/createMessage` 형태
+- [MCP(GitHub SEP-1577](https://github.com/modelcontextprotocol/modelcontextprotocol)) 샘플링 내 도구를 위한 사양 진화 제안(실험적)
+- [Unit 42(MCP attack vectors](https://unit42.paloaltonetworks.com/model-context-protocol-attack-vectors/)) 은밀한 샘플링과 리소스 절도 패턴
+- [Speakeasy(MCP sampling core concept](https://www.speakeasy.com/mcp/core-concepts/sampling)) 클라이언트 측 코드 예제를 동반한 설명

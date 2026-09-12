@@ -11,7 +11,7 @@
 
 프런티어 연구소(frontier lab)들은 부분적으로는 기술 문서, 부분적으로는 거버넌스 문서, 부분적으로는 규제 당국을 향한 신호인 스케일링 정책을 발표한다. RSP v3.0은 현재의 Anthropic 문서다. 이를 면밀히 읽는 것이 중요한 이유는 그 준수가 구속력이 있어서가 아니라(그렇지 않다), 그 프레이밍이 연구소가 파국적 위험(catastrophic risk)을 어떻게 개념화하고 트레이드오프(trade-off)를 대중에게 어떻게 전달하는지를 형성하기 때문이다.
 
-v3.0 대 v2.0의 차이가 유용한 단위다. 추가된 것: Frontier Safety Roadmap, Risk Report, AI R&D-4 임계값. 제거된 것: 2023년 일시 중지 약속. 재프레이밍된 것: Anthropic 일방적인 것과 업계 권고 사이로 나뉜 2단계 완화 일정. 외부 검토 — SaferAI — 가 점수를 2.2(v2)에서 1.9(v3.0)로 강등했다. 이렇게 스케일링 정책은 더 다듬어 보이면서도 덜 엄격해질 수 있다.
+v3.0 대 v2.0의 차이가 유용한 단위다. 추가된 것: Frontier Safety Roadmap, Risk Report, AI R&D-4 임계값. 제거된 것: 2023년 일시 중지 약속. 재프레이밍된 것: Anthropic 일방적인 것과 업계 권고 사이로 나뉜 2단계 완화 일정. 외부 검토(SaferAI)가 점수를 2.2(v2)에서 1.9(v3.0)로 강등했다. 이렇게 스케일링 정책은 더 다듬어 보이면서도 덜 엄격해질 수 있다.
 
 ## 개념 (The Concept)
 
@@ -94,8 +94,8 @@ SaferAI에 따른 강등 요인:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — 전체 32쪽 정책.
-- [Anthropic — RSP v3.0 announcement](https://www.anthropic.com/news/responsible-scaling-policy-v3) — v2로부터의 변경 사항 요약.
-- [Anthropic — Frontier Safety Roadmap](https://www.anthropic.com/research/frontier-safety) — RSP v3.0에서 연결된 상설 문서.
-- [Anthropic — Risk Report: Claude Opus 4.6](https://www.anthropic.com/research/risk-report-claude-opus-4-6) — 현재 프런티어 모델에 대한 회고.
-- [Anthropic — Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — AI R&D-4를 측정된 자율성과 연결한다.
+- [Anthropic(Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) 전체 32쪽 정책.
+- [Anthropic(RSP v3.0 announcement](https://www.anthropic.com/news/responsible-scaling-policy-v3)) v2로부터의 변경 사항 요약.
+- [Anthropic(Frontier Safety Roadmap](https://www.anthropic.com/research/frontier-safety)) RSP v3.0에서 연결된 상설 문서.
+- [Anthropic(Risk Report: Claude Opus 4.6](https://www.anthropic.com/research/risk-report-claude-opus-4-6)) 현재 프런티어 모델에 대한 회고.
+- [Anthropic(Measuring agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) AI R&D-4를 측정된 자율성과 연결한다.

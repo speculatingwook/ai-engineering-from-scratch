@@ -1,4 +1,4 @@
-# Capstone 86 — 헌장 규칙 엔진 (Constitutional Rules Engine)
+# Capstone 86: 헌장 규칙 엔진 (Constitutional Rules Engine)
 
 > 규칙은 이름과 술어와 설명으로 이루어진다. 이 셋 가운데 하나라도 없으면 그것은 규칙이 아니라 느낌이다.
 

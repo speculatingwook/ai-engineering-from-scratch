@@ -18,7 +18,7 @@
 
 Lesson 10은 U-Net 디노이저(denoiser)로 DDPM을 만들었다. 그 레시피는 2020-2023년을 지배했다. U-Net + 베타 스케줄(beta schedule) + 노이즈 예측 손실(noise-prediction loss). 이 레시피가 Stable Diffusion 1.5와 2.1, 그리고 DALL-E 2를 만들었다.
 
-2026년의 모든 최첨단(state-of-the-art) 텍스트-투-이미지 모델은 그것을 지나쳤다. Stable Diffusion 3, FLUX, SD4, Z-Image, Qwen-Image, Hunyuan-Image — 어느 것도 U-Net을 쓰지 않는다. 모두 디퓨전 트랜스포머(DiT)를 쓴다. SD3와 FLUX는 또한 DDPM 노이즈 스케줄을 정류 흐름으로 교체하는데, 이는 노이즈에서 데이터로 가는 경로를 곧게 펴고 일관성(consistency) 또는 증류(distilled) 변형으로 1-4 스텝 추론(inference)을 가능하게 한다.
+2026년의 모든 최첨단(state-of-the-art) 텍스트-투-이미지 모델은 그것을 지나쳤다. Stable Diffusion 3, FLUX, SD4, Z-Image, Qwen-Image, Hunyuan-Image: 어느 것도 U-Net을 쓰지 않는다. 모두 디퓨전 트랜스포머(DiT)를 쓴다. SD3와 FLUX는 또한 DDPM 노이즈 스케줄을 정류 흐름으로 교체하는데, 이는 노이즈에서 데이터로 가는 경로를 곧게 펴고 일관성(consistency) 또는 증류(distilled) 변형으로 1-4 스텝 추론(inference)을 가능하게 한다.
 
 이 전환이 중요한 까닭은, 바로 이 전환 덕분에 디퓨전 기반 이미지 생성이 제어 가능해지고 프롬프트(prompt)에 정확해지고(SD3/SD4가 텍스트 렌더링을 해결했다) 프로덕션(production)에서 빨라졌기 때문이다. DiT + 정류 흐름을 이해하는 것이 2026년 생성 이미지 스택을 이해하는 것이다.
 
@@ -48,10 +48,10 @@ flowchart LR
     style FLUX fill:#dcfce7,stroke:#16a34a
 ```
 
-- **DiT** (Peebles & Xie, 2023) — U-Net을 잠재(latent) 패치(patch)에 대한 ViT 같은 트랜스포머로 대체. 적응적 층 정규화(adaptive layer norm, AdaLN)를 통한 조건화(conditioning).
-- **MMDiT** (SD3, Esser et al., 2024) — 텍스트와 이미지 토큰(token)에 대해 별도 가중치(weight)를 가진 두 스트림이 결합 어텐션(joint attention)을 공유.
-- **FLUX** (Black Forest Labs, 2024) — 처음 N개 블록은 SD3처럼 이중 스트림(double-stream), 이후 블록은 더 높은 깊이에서의 효율을 위해 연결(concatenate)하고 가중치를 공유(단일 스트림, single-stream).
-- **Z-Image** (2025) — "무슨 수를 써서라도 규모 확장"에 도전하는 60억 파라미터의 효율적인 단일 스트림 DiT.
+- **DiT** (Peebles & Xie, 2023): U-Net을 잠재(latent) 패치(patch)에 대한 ViT 같은 트랜스포머로 대체. 적응적 층 정규화(adaptive layer norm, AdaLN)를 통한 조건화(conditioning).
+- **MMDiT** (SD3, Esser et al., 2024): 텍스트와 이미지 토큰(token)에 대해 별도 가중치(weight)를 가진 두 스트림이 결합 어텐션(joint attention)을 공유.
+- **FLUX** (Black Forest Labs, 2024): 처음 N개 블록은 SD3처럼 이중 스트림(double-stream), 이후 블록은 더 높은 깊이에서의 효율을 위해 연결(concatenate)하고 가중치를 공유(단일 스트림, single-stream).
+- **Z-Image** (2025): "무슨 수를 써서라도 규모 확장"에 도전하는 60억 파라미터의 효율적인 단일 스트림 DiT.
 
 ### 정류 흐름 한 문단 요약
 
@@ -63,7 +63,7 @@ DDPM은 순방향 과정을 `x_t`가 점점 더 손상되는 노이즈 SDE로 �
 x_t = (1 - t) * x_0 + t * epsilon,     t in [0, 1]
 ```
 
-신경망(network)이 속도(velocity) `v_theta(x_t, t) = epsilon - x_0`를 예측하도록 학습한다 — 깨끗한 데이터에서 노이즈로 가는 직선 경로를 따르는 순방향 방향(`dx_t/dt`)이다. 샘플링하는 동안 이 속도를 거꾸로 적분하여 노이즈에서 데이터 쪽으로 스텝을 밟는다. 그 결과인 ODE는 직선에 훨씬 가까우므로, 샘플링에 필요한 적분 스텝이 훨씬 적다.
+신경망(network)이 속도(velocity) `v_theta(x_t, t) = epsilon - x_0`를 예측하도록 학습한다. 깨끗한 데이터에서 노이즈로 가는 직선 경로를 따르는 순방향 방향(`dx_t/dt`)이다. 샘플링하는 동안 이 속도를 거꾸로 적분하여 노이즈에서 데이터 쪽으로 스텝을 밟는다. 그 결과인 ODE는 직선에 훨씬 가까우므로, 샘플링에 필요한 적분 스텝이 훨씬 적다.
 
 SD3는 이것을 **정류 흐름 매칭(Rectified Flow Matching)** 이라 부른다. FLUX, Z-Image, 그리고 대부분의 2026년 모델이 같은 목적 함수를 쓴다. 전형적 추론: 옛 DDPM 체제의 50+ DDIM 스텝 대비 20-30 오일러(Euler) 스텝(결정론적). 증류 / 터보(turbo) / schnell / LCM 변형은 이를 1-4 스텝으로 낮춘다.
 
@@ -86,15 +86,15 @@ norm(x) * (1 + scale) + shift, then residual add * gate
 
 ### 분류기 없는 가이던스는 여전히 유효하다
 
-정류 흐름은 샘플러를 바꾸지, 조건화를 바꾸지 않는다. 분류기 없는 가이던스(classifier-free guidance, 학습 중 10% 확률로 텍스트를 떨어뜨리고, 추론 시 조건부 예측과 비조건부 예측을 혼합)는 정류 흐름에서도 동일하게 동작한다. 대부분의 2026년 모델은 가이던스 스케일 3.5-5를 쓴다 — SD1.5의 7.5보다 낮은데, 정류 흐름 모델이 기본적으로 프롬프트를 더 빡빡하게 따르기 때문이다.
+정류 흐름은 샘플러를 바꾸지, 조건화를 바꾸지 않는다. 분류기 없는 가이던스(classifier-free guidance, 학습 중 10% 확률로 텍스트를 떨어뜨리고, 추론 시 조건부 예측과 비조건부 예측을 혼합)는 정류 흐름에서도 동일하게 동작한다. 대부분의 2026년 모델은 가이던스 스케일 3.5-5를 쓴다. SD1.5의 7.5보다 낮은데, 정류 흐름 모델이 기본적으로 프롬프트를 더 빡빡하게 따르기 때문이다.
 
 ### Consistency, Turbo, Schnell, LCM
 
 같은 아이디어에 대한 네 가지 이름: 느린 다단계(many-step) 모델을 빠른 소단계(few-step) 모델로 증류한다.
 
-- **LCM (Latent Consistency Model)** — 임의의 중간 `x_t`에서 최종 `x_0`를 한 스텝에 예측하는 학생(student)을 학습.
-- **SDXL Turbo / FLUX schnell** — 적대적 디퓨전 증류(adversarial diffusion distillation)로 학습한 1-4 스텝 모델.
-- **SD Turbo** — 잠재 디퓨전에 맞춘 OpenAI 스타일 Consistency Models.
+- **LCM (Latent Consistency Model)**: 임의의 중간 `x_t`에서 최종 `x_0`를 한 스텝에 예측하는 학생(student)을 학습.
+- **SDXL Turbo / FLUX schnell**: 적대적 디퓨전 증류(adversarial diffusion distillation)로 학습한 1-4 스텝 모델.
+- **SD Turbo**: 잠재 디퓨전에 맞춘 OpenAI 스타일 Consistency Models.
 
 새 모델의 프로덕션 서빙은 "풀 퀄리티(full quality)" 체크포인트와 "터보 / schnell" 변형을 둘 다 제공한다. Schnell(독일어로 "빠른", Black Forest Labs의 관례)은 1-4 스텝으로 실행되며 실시간 파이프라인에 맞는다.
 
@@ -106,7 +106,7 @@ norm(x) * (1 + scale) + shift, then residual add * gate
 | Stable Diffusion 3.5 Large | 8B | MMDiT | SAI Community |
 | FLUX.1-dev | 12B | Double + Single Stream DiT | 비상업용(non-commercial) |
 | FLUX.1-schnell | 12B | 동일, 증류됨 | Apache 2.0 |
-| FLUX.2 | — | FLUX.1 반복 개선 | 혼합 |
+| FLUX.2 |: | FLUX.1 반복 개선 | 혼합 |
 | Z-Image | 6B | S3-DiT (Scalable Single-Stream) | 관대함(permissive) |
 | Qwen-Image | ~20B | DiT + Qwen text tower | Apache 2.0 |
 | Hunyuan-Image-3.0 | ~80B | DiT | 연구용(research) |
@@ -318,8 +318,8 @@ out = pipe(prompt, guidance_scale=3.5, num_inference_steps=28).images[0]
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-dit-model-picker.md` — 품질, 지연 시간(latency), 라이선스 제약에 따라 SD3, FLUX.1-dev, FLUX.1-schnell, Z-Image, SD4 Turbo 중에서 고른다.
-- `outputs/skill-rectified-flow-trainer.md` — AdaLN DiT와 오일러 샘플링을 갖춘 정류 흐름의 완전한 학습 루프를 작성한다.
+- `outputs/prompt-dit-model-picker.md`: 품질, 지연 시간(latency), 라이선스 제약에 따라 SD3, FLUX.1-dev, FLUX.1-schnell, Z-Image, SD4 Turbo 중에서 고른다.
+- `outputs/skill-rectified-flow-trainer.md`: AdaLN DiT와 오일러 샘플링을 갖춘 정류 흐름의 완전한 학습 루프를 작성한다.
 
 ## 연습 문제 (Exercises)
 
@@ -342,9 +342,9 @@ out = pipe(prompt, guidance_scale=3.5, num_inference_steps=28).images[0]
 
 ## 더 읽을거리 (Further Reading)
 
-- [Scalable Diffusion Models with Transformers (Peebles & Xie, 2023)](https://arxiv.org/abs/2212.09748) — DiT 논문
-- [Scaling Rectified Flow Transformers (Esser et al., SD3 paper)](https://arxiv.org/abs/2403.03206) — 대규모 MMDiT와 정류 흐름
-- [FLUX.1 model card and technical report (Black Forest Labs)](https://huggingface.co/black-forest-labs/FLUX.1-dev) — 이중 + 단일 스트림 세부사항
-- [Z-Image: Efficient Image Generation Foundation Model (2025)](https://arxiv.org/html/2511.22699v1) — 60억 단일 스트림 DiT
-- [Elucidating the Design Space of Diffusion (Karras et al., 2022)](https://arxiv.org/abs/2206.00364) — 모든 디퓨전 설계 트레이드오프(trade-off)의 레퍼런스
-- [Latent Consistency Models (Luo et al., 2023)](https://arxiv.org/abs/2310.04378) — LCM-LoRA가 4-스텝 추론을 주는 방식
+- [Scalable Diffusion Models with Transformers (Peebles & Xie, 2023)](https://arxiv.org/abs/2212.09748): DiT 논문
+- [Scaling Rectified Flow Transformers (Esser et al., SD3 paper)](https://arxiv.org/abs/2403.03206): 대규모 MMDiT와 정류 흐름
+- [FLUX.1 model card and technical report (Black Forest Labs)](https://huggingface.co/black-forest-labs/FLUX.1-dev): 이중 + 단일 스트림 세부사항
+- [Z-Image: Efficient Image Generation Foundation Model (2025)](https://arxiv.org/html/2511.22699v1): 60억 단일 스트림 DiT
+- [Elucidating the Design Space of Diffusion (Karras et al., 2022)](https://arxiv.org/abs/2206.00364): 모든 디퓨전 설계 트레이드오프(trade-off)의 레퍼런스
+- [Latent Consistency Models (Luo et al., 2023)](https://arxiv.org/abs/2310.04378): LCM-LoRA가 4-스텝 추론을 주는 방식

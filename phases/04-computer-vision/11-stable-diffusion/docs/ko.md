@@ -1,4 +1,4 @@
-# Stable Diffusion — 아키텍처와 파인튜닝
+# Stable Diffusion: 아키텍처와 파인튜닝
 
 > Stable Diffusion은 사전 학습된 VAE의 잠재 공간(latent space)에서 동작하는 DDPM으로, 교차 어텐션(cross-attention)을 통해 텍스트로 조건화되고, 빠른 결정론적 ODE 솔버로 샘플링되며, 분류기 없는 가이던스(classifier-free guidance)로 조향된다.
 
@@ -9,7 +9,7 @@
 
 ## 학습 목표 (Learning Objectives)
 
-- Stable Diffusion 파이프라인(pipeline)의 다섯 부품을 추적하기: VAE, 텍스트 인코더(text encoder), U-Net, 스케줄러(scheduler), 안전성 검사기(safety checker) — 그리고 각각이 실제로 무엇을 하는지
+- Stable Diffusion 파이프라인(pipeline)의 다섯 부품을 추적하기: VAE, 텍스트 인코더(text encoder), U-Net, 스케줄러(scheduler), 안전성 검사기(safety checker): 그리고 각각이 실제로 무엇을 하는지
 - 잠재 확산(latent diffusion)을 설명하고, 왜 (3x512x512 이미지 대신) 4x64x64 잠재 공간에서 학습하면 품질 손실 없이 연산량이 48배 줄어드는지 설명하기
 - `diffusers`를 사용해 이미지를 생성하고, 이미지-투-이미지(image-to-image), 인페인팅(inpainting), ControlNet 기반 생성을 실행하기
 - 작은 커스텀 데이터셋(dataset)에 LoRA로 Stable Diffusion을 파인튜닝(fine-tuning)하고, 추론(inference) 시점에 LoRA 어댑터를 로드하기
@@ -45,11 +45,11 @@ flowchart LR
     style IMG fill:#dcfce7,stroke:#16a34a
 ```
 
-- **VAE** — 동결된(frozen) 오토인코더. 인코더(encoder)는 이미지를 잠재값(latents)으로 바꾼다(img2img와 학습에 사용). 디코더(decoder)는 잠재값을 다시 이미지로 바꾼다.
-- **텍스트 인코더(Text encoder)** — CLIP 텍스트 인코더(SD 1.x/2.x), CLIP-L + CLIP-G(SDXL), 또는 T5-XXL(SD3/FLUX). 토큰 임베딩(token embedding)의 시퀀스를 생성한다.
-- **U-Net** — 디노이저. 모든 해상도 레벨에서 잠재값으로부터 텍스트 임베딩으로 어텐션하는 교차 어텐션(cross-attention) 층을 가진다.
-- **스케줄러(Scheduler)** — 샘플링 알고리즘(DDIM, Euler, DPM-Solver++). 시그마(sigma)를 고르고, 예측된 노이즈를 잠재값에 다시 섞어 넣는다.
-- **안전성 검사기(Safety checker)** — 출력 이미지에 대한 선택적 NSFW / 불법 콘텐츠 필터.
+- **VAE**: 동결된(frozen) 오토인코더. 인코더(encoder)는 이미지를 잠재값(latents)으로 바꾼다(img2img와 학습에 사용). 디코더(decoder)는 잠재값을 다시 이미지로 바꾼다.
+- **텍스트 인코더(Text encoder)**: CLIP 텍스트 인코더(SD 1.x/2.x), CLIP-L + CLIP-G(SDXL), 또는 T5-XXL(SD3/FLUX). 토큰 임베딩(token embedding)의 시퀀스를 생성한다.
+- **U-Net**: 디노이저. 모든 해상도 레벨에서 잠재값으로부터 텍스트 임베딩으로 어텐션하는 교차 어텐션(cross-attention) 층을 가진다.
+- **스케줄러(Scheduler)**: 샘플링 알고리즘(DDIM, Euler, DPM-Solver++). 시그마(sigma)를 고르고, 예측된 노이즈를 잠재값에 다시 섞어 넣는다.
+- **안전성 검사기(Safety checker)**: 출력 이미지에 대한 선택적 NSFW / 불법 콘텐츠 필터.
 
 ### 분류기 없는 가이던스 (Classifier-free guidance, CFG)
 
@@ -76,7 +76,7 @@ VAE의 4채널 잠재값은 단지 압축된 이미지가 아니다. 이 잠재�
 
 SD U-Net은 Lesson 10의 TinyUNet을 크게 키운 버전으로, 세 가지가 추가된다:
 
-- 모든 공간 해상도에서의 **트랜스포머 블록(Transformer block)** — 셀프 어텐션(self-attention) + 텍스트 임베딩으로의 교차 어텐션을 포함한다.
+- 모든 공간 해상도에서의 **트랜스포머 블록(Transformer block)**: 셀프 어텐션(self-attention) + 텍스트 임베딩으로의 교차 어텐션을 포함한다.
 - 사인파(sinusoidal) 인코딩에 MLP를 적용한 **시간 임베딩(Time embedding)**.
 - 일치하는 해상도에서 인코더와 디코더를 잇는 **스킵 연결(Skip connection)**.
 
@@ -97,10 +97,10 @@ LoRA는 거의 모든 커뮤니티 파인튜닝이 배포되는 방식이다. Ci
 
 ### 만나게 될 스케줄러들
 
-- **DDIM** — 결정론적, 약 50스텝, 단순함.
-- **Euler ancestral** — 확률적(stochastic), 30~50스텝, 약간 더 창의적인 샘플.
-- **DPM-Solver++ 2M Karras** — 결정론적, 20~30스텝, 프로덕션 기본값.
-- **LCM / TCD / Turbo** — 일관성 모델(consistency model)과 증류된(distilled) 변형들. 약간의 품질을 희생하는 대신 1~4스텝.
+- **DDIM**: 결정론적, 약 50스텝, 단순함.
+- **Euler ancestral**: 확률적(stochastic), 30~50스텝, 약간 더 창의적인 샘플.
+- **DPM-Solver++ 2M Karras**: 결정론적, 20~30스텝, 프로덕션 기본값.
+- **LCM / TCD / Turbo**: 일관성 모델(consistency model)과 증류된(distilled) 변형들. 약간의 품질을 희생하는 대신 1~4스텝.
 
 스케줄러를 교체하는 것은 `diffusers`에서 한 줄짜리 변경이며, 때로는 재학습 없이 샘플 문제를 고쳐준다.
 
@@ -237,8 +237,8 @@ LoRA 행렬만 그래디언트(gradient)를 받는다. 베이스 U-Net, VAE, 텍
 
 이 레슨이 만들어내는 것:
 
-- `outputs/prompt-sd-pipeline-planner.md` — 지연 시간 예산, 충실도 목표, 라이선스 제약이 주어졌을 때 SD 1.5 / SDXL / SD3 / FLUX와 스케줄러, 정밀도를 골라주는 프롬프트.
-- `outputs/skill-lora-training-setup.md` — 캡션, 랭크(rank), 배치 크기, 학습률(learning rate)을 포함해 커스텀 데이터셋을 위한 전체 LoRA 학습 설정을 작성하는 스킬.
+- `outputs/prompt-sd-pipeline-planner.md`: 지연 시간 예산, 충실도 목표, 라이선스 제약이 주어졌을 때 SD 1.5 / SDXL / SD3 / FLUX와 스케줄러, 정밀도를 골라주는 프롬프트.
+- `outputs/skill-lora-training-setup.md`: 캡션, 랭크(rank), 배치 크기, 학습률(learning rate)을 포함해 커스텀 데이터셋을 위한 전체 LoRA 학습 설정을 작성하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -261,7 +261,7 @@ LoRA 행렬만 그래디언트(gradient)를 받는다. 베이스 U-Net, VAE, 텍
 
 ## 더 읽을거리 (Further Reading)
 
-- [High-Resolution Image Synthesis with Latent Diffusion (Rombach et al., 2022)](https://arxiv.org/abs/2112.10752) — Stable Diffusion 논문. 설계를 정당화하는 모든 절제 실험(ablation)을 포함한다
-- [Classifier-Free Diffusion Guidance (Ho & Salimans, 2022)](https://arxiv.org/abs/2207.12598) — CFG 논문
-- [LoRA: Low-Rank Adaptation of Large Language Models (Hu et al., 2021)](https://arxiv.org/abs/2106.09685) — LoRA는 NLP에서 먼저 나왔다. 거의 변경 없이 SD로 옮겨졌다
-- [diffusers documentation](https://huggingface.co/docs/diffusers) — 모든 SD / SDXL / SD3 / FLUX 파이프라인의 레퍼런스
+- [High-Resolution Image Synthesis with Latent Diffusion (Rombach et al., 2022)](https://arxiv.org/abs/2112.10752): Stable Diffusion 논문. 설계를 정당화하는 모든 절제 실험(ablation)을 포함한다
+- [Classifier-Free Diffusion Guidance (Ho & Salimans, 2022)](https://arxiv.org/abs/2207.12598): CFG 논문
+- [LoRA: Low-Rank Adaptation of Large Language Models (Hu et al., 2021)](https://arxiv.org/abs/2106.09685): LoRA는 NLP에서 먼저 나왔다. 거의 변경 없이 SD로 옮겨졌다
+- [diffusers documentation](https://huggingface.co/docs/diffusers): 모든 SD / SDXL / SD3 / FLUX 파이프라인의 레퍼런스

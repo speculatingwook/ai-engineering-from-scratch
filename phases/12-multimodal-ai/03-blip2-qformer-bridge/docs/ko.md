@@ -1,6 +1,6 @@
-# CLIP에서 BLIP-2로 — 모달리티 다리로서의 Q-Former(From CLIP to BLIP-2 — Q-Former as Modality Bridge)
+# CLIP에서 BLIP-2로(모달리티 다리로서의 Q-Former(From CLIP to BLIP-2) Q-Former as Modality Bridge)
 
-> CLIP은 이미지와 텍스트를 정렬하지만, 캡션을 생성하거나, 질문에 답하거나, 대화를 이어갈 수는 없다. BLIP-2(Salesforce, 2023)는 작은 학습 가능한 다리로 이것을 풀었다. 32개의 학습 가능한 쿼리(query) 벡터가 교차 어텐션(cross-attention)을 통해 동결된 ViT의 특성에 주목한 다음, 동결된 LLM의 입력 스트림에 곧장 끼워진다. 1억 8800만 개의 다리 파라미터(parameter)가 110억 개짜리 LLM을 ViT-g/14에 연결했다. 2026년까지의 모든 어댑터(adapter) 기반 VLM — MiniGPT-4, InstructBLIP, LLaVA의 사촌들 — 은 그 후손이다. 이 레슨은 Q-Former의 아키텍처를 읽고, 그 2단계 학습을 설명하며, 시각 토큰(visual token)을 동결된 텍스트 디코더(decoder)에 먹이는 장난감 버전을 만든다.
+> CLIP은 이미지와 텍스트를 정렬하지만, 캡션을 생성하거나, 질문에 답하거나, 대화를 이어갈 수는 없다. BLIP-2(Salesforce, 2023)는 작은 학습 가능한 다리로 이것을 풀었다. 32개의 학습 가능한 쿼리(query) 벡터가 교차 어텐션(cross-attention)을 통해 동결된 ViT의 특성에 주목한 다음, 동결된 LLM의 입력 스트림에 곧장 끼워진다. 1억 8800만 개의 다리 파라미터(parameter)가 110억 개짜리 LLM을 ViT-g/14에 연결했다. 2026년까지의 모든 어댑터(adapter) 기반 VLM(MiniGPT-4, InstructBLIP, LLaVA의 사촌들)은 그 후손이다. 이 레슨은 Q-Former의 아키텍처를 읽고, 그 2단계 학습을 설명하며, 시각 토큰(visual token)을 동결된 텍스트 디코더(decoder)에 먹이는 장난감 버전을 만든다.
 
 **Type:** Build
 **Languages:** Python (stdlib, cross-attention + learnable-query demo)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-이미지당 차원 1408의 패치 토큰(patch token) 256개를 만드는 동결된 ViT가 있다고 하자. 차원 4096의 토큰 임베딩(embedding)을 기대하는 동결된 7B LLM도 있다. 명백한 다리 — 1408에서 4096으로 가는 선형 층 — 은 동작하지만, 256개 패치 토큰 전부를 LLM의 컨텍스트(context)에 넣으면 이미지당 256개의 추가 토큰이 든다. 32장의 이미지 배치(batch)라면 시각 모달리티(modality)만으로 8192개의 토큰을 쓰는 셈이다.
+이미지당 차원 1408의 패치 토큰(patch token) 256개를 만드는 동결된 ViT가 있다고 하자. 차원 4096의 토큰 임베딩(embedding)을 기대하는 동결된 7B LLM도 있다. 명백한 다리(1408에서 4096으로 가는 선형 층)은 동작하지만, 256개 패치 토큰 전부를 LLM의 컨텍스트(context)에 넣으면 이미지당 256개의 추가 토큰이 든다. 32장의 이미지 배치(batch)라면 시각 모달리티(modality)만으로 8192개의 토큰을 쓰는 셈이다.
 
 BLIP-2의 질문: 256토큰 이미지 표현을, LLM이 이미지를 캡션하고, 질문에 답하고, 추론할 만큼의 정보를 보존하면서 훨씬 더 적은 토큰(가령 32개)으로 압축할 수 있는가? 그리고 동결된 백본(backbone)을 건드리지 않고 이 다리를 학습시켜, 학습 비용을 다리의 파라미터만으로 유지할 수 있는가?
 
@@ -28,7 +28,7 @@ BLIP-2의 질문: 256토큰 이미지 표현을, LLM이 이미지를 캡션하�
 
 Q-Former의 핵심 비결: LLM의 텍스트 토큰이 이미지 패치에 주목하게 하는 대신, 32개의 학습 가능한 쿼리 벡터 `Q`라는 새 집합을 도입하고 *그것들이* 이미지 패치에 주목하게 한다. 쿼리는 모델의 파라미터다. 학습 중에 학습되며, 모든 이미지에 동일한 32개 쿼리가 쓰인다.
 
-교차 어텐션 이후, 각 쿼리는 이미지의 압축된 요약을 담는다 — "주요 객체를 묘사하라", "배경을 묘사하라", "객체를 세어라" 등. 쿼리가 문자 그대로 의미 레이블(label)에 특화되는 것은 아니다. 다운스트림 손실(loss)을 떨어뜨리는 인코딩이라면 무엇이든 학습한다.
+교차 어텐션 이후, 각 쿼리는 이미지의 압축된 요약을 담는다. "주요 객체를 묘사하라", "배경을 묘사하라", "객체를 세어라" 등. 쿼리가 문자 그대로 의미 레이블(label)에 특화되는 것은 아니다. 다운스트림 손실(loss)을 떨어뜨리는 인코딩이라면 무엇이든 학습한다.
 
 ### 아키텍처 (Architecture)
 
@@ -45,7 +45,7 @@ BLIP-2는 두 단계로 사전 학습한다:
 
 1단계: 표현 학습(LLM 없음). 세 가지 손실:
 - ITC(image-text contrastive): 풀링된 쿼리 토큰과 텍스트 CLS 토큰 사이의 CLIP 스타일 대조.
-- ITM(image-text matching): 이진 분류기 — 이 이미지-텍스트 쌍은 매칭되는가? 어려운 음성(hard-negative)이 마이닝된다.
+- ITM(image-text matching): 이진 분류기: 이 이미지-텍스트 쌍은 매칭되는가? 어려운 음성(hard-negative)이 마이닝된다.
 - ITG(image-grounded text generation): 쿼리에 조건화된, 텍스트에 대한 인과(causal) LM 헤드. 쿼리가 텍스트로 생성 가능한 내용을 인코딩하도록 강제한다.
 
 Q-Former만 학습한다. ViT는 동결된다. LLM은 관여하지 않는다.
@@ -70,7 +70,7 @@ MiniGPT-4는 Q-Former는 유지하되 나머지 전부를 동결하고 출력 �
 
 ### LLaVA가 더 단순해진 이유 (Why LLaVA went simpler)
 
-LLaVA(2023, Lesson 12.05)는 Q-Former를 모든 ViT 패치 토큰을 LLM 공간으로 투영하는 평범한 2층 MLP로 대체했다 — 24x24 격자에 대해 이미지당 576개 토큰, 전부 LLM에 먹인다. 압축은 더 나쁘지만 LLM이 원시 패치에 주목할 수 있게 한다. 당시 이것은 논란거리였지만, 2023년 말에는 시각 명령어 데이터(LLaVA-Instruct-150k)가 MLP를 충분한 신호를 보존하도록 학습시킬 수 있음을 증명하면서 지배적이 되었다. 트레이드오프(trade-off): LLaVA의 컨텍스트는 더 빨리 차지만, 멀티 이미지와 비디오로 자연스럽게 스케일링된다.
+LLaVA(2023, Lesson 12.05)는 Q-Former를 모든 ViT 패치 토큰을 LLM 공간으로 투영하는 평범한 2층 MLP로 대체했다. 24x24 격자에 대해 이미지당 576개 토큰, 전부 LLM에 먹인다. 압축은 더 나쁘지만 LLM이 원시 패치에 주목할 수 있게 한다. 당시 이것은 논란거리였지만, 2023년 말에는 시각 명령어 데이터(LLaVA-Instruct-150k)가 MLP를 충분한 신호를 보존하도록 학습시킬 수 있음을 증명하면서 지배적이 되었다. 트레이드오프(trade-off): LLaVA의 컨텍스트는 더 빨리 차지만, 멀티 이미지와 비디오로 자연스럽게 스케일링된다.
 
 2026년 무렵 분야는 갈렸다. Q-Former는 토큰 예산(token budget)이 중요한 곳(긴 비디오, 많은 이미지)에서 살아남고, MLP 투영기는 토큰당 원시 품질이 우선인 곳에서 지배한다.
 
@@ -132,9 +132,9 @@ Flamingo(Lesson 12.04)는 BLIP-2보다 앞섰고 같은 교차 어텐션 아이�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Li et al. — BLIP-2 (arXiv:2301.12597)](https://arxiv.org/abs/2301.12597) — 핵심 논문.
-- [Li et al. — BLIP (arXiv:2201.12086)](https://arxiv.org/abs/2201.12086) — ITC/ITM/ITG 삼총사를 가진 선행 연구.
-- [Li et al. — ALBEF (arXiv:2107.07651)](https://arxiv.org/abs/2107.07651) — "align before fuse" — 1단계 학습의 개념적 조상.
-- [Dai et al. — InstructBLIP (arXiv:2305.06500)](https://arxiv.org/abs/2305.06500) — 명령어 인식 Q-Former.
-- [Zhu et al. — MiniGPT-4 (arXiv:2304.10592)](https://arxiv.org/abs/2304.10592) — 투영기만 쓰는 접근법.
-- [Jaegle et al. — Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795) — 학습 가능 쿼리 교차 어텐션을 위한 일반 아키텍처.
+- [Li et al.(BLIP-2 (arXiv:2301.12597)](https://arxiv.org/abs/2301.12597)) 핵심 논문.
+- [Li et al.(BLIP (arXiv:2201.12086)](https://arxiv.org/abs/2201.12086)) ITC/ITM/ITG 삼총사를 가진 선행 연구.
+- [Li et al.: ALBEF (arXiv:2107.07651)](https://arxiv.org/abs/2107.07651): "align before fuse": 1단계 학습의 개념적 조상.
+- [Dai et al.(InstructBLIP (arXiv:2305.06500)](https://arxiv.org/abs/2305.06500)) 명령어 인식 Q-Former.
+- [Zhu et al.(MiniGPT-4 (arXiv:2304.10592)](https://arxiv.org/abs/2304.10592)) 투영기만 쓰는 접근법.
+- [Jaegle et al.(Perceiver IO (arXiv:2107.14795)](https://arxiv.org/abs/2107.14795)) 학습 가능 쿼리 교차 어텐션을 위한 일반 아키텍처.

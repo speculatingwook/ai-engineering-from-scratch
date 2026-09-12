@@ -1,6 +1,6 @@
-# AlphaEvolve — 진화적 코딩 에이전트
+# AlphaEvolve: 진화적 코딩 에이전트
 
-> 프런티어 코딩 모델을 진화 루프(evolutionary loop) 및 기계 검증 가능한 평가기(evaluator)와 짝지어라. 루프를 충분히 오래 돌려라. 그러면 48번의 스칼라 곱셈을 사용하는 4x4 복소 행렬 곱셈 절차를 발견한다 — 56년 만의 Strassen 대비 첫 개선이다. 또한 프로덕션(production)에서 클러스터 컴퓨트의 약 0.7%를 회수하는 Google 전사적 Borg 스케줄링 휴리스틱(heuristic)도 찾아낸다. 아키텍처는 의도적으로 따분하다. 성과는 평가기의 엄격함에서 나온다.
+> 프런티어 코딩 모델을 진화 루프(evolutionary loop) 및 기계 검증 가능한 평가기(evaluator)와 짝지어라. 루프를 충분히 오래 돌려라. 그러면 48번의 스칼라 곱셈을 사용하는 4x4 복소 행렬 곱셈 절차를 발견한다. 56년 만의 Strassen 대비 첫 개선이다. 또한 프로덕션(production)에서 클러스터 컴퓨트의 약 0.7%를 회수하는 Google 전사적 Borg 스케줄링 휴리스틱(heuristic)도 찾아낸다. 아키텍처는 의도적으로 따분하다. 성과는 평가기의 엄격함에서 나온다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, evolutionary-loop toy)
@@ -29,7 +29,7 @@ AlphaEvolve(Novikov et al., DeepMind, arXiv:2506.13131, 2025년 6월)는 둘을 
 6. 점수와 특성 벡터(feature vector)를 키로 하여 데이터베이스에 삽입한다.
 7. 반복한다.
 
-두 가지 세부 사항이 중요하다. 첫째, LLM은 부모 프로그램만이 아니라 그 이상으로 프롬프트된다 — 일반적으로 데이터베이스의 상위 변형 여럿, 평가기 시그니처(signature), 그리고 짧은 작업 설명까지 함께. 모델의 임무는 점수를 개선할 수도 있는 표적화된 변경을 제안하는 것이다. 둘째, 데이터베이스는 구조화되어 있어(MAP-elites 그리드, 섬 기반) 루프가 현재 선두만이 아니라 다양성을 탐색한다.
+두 가지 세부 사항이 중요하다. 첫째, LLM은 부모 프로그램만이 아니라 그 이상으로 프롬프트된다. 일반적으로 데이터베이스의 상위 변형 여럿, 평가기 시그니처(signature), 그리고 짧은 작업 설명까지 함께. 모델의 임무는 점수를 개선할 수도 있는 표적화된 변경을 제안하는 것이다. 둘째, 데이터베이스는 구조화되어 있어(MAP-elites 그리드, 섬 기반) 루프가 현재 선두만이 아니라 다양성을 탐색한다.
 
 ### 무엇이 평가기를 타협 불가능하게 만드는가
 
@@ -104,15 +104,15 @@ LLM은 컴파일 가능하고 의미적으로 그럴듯한 수정을 만들 수 
 | AlphaEvolve | "DeepMind의 진화적 코딩 에이전트" | Gemini + 프로그램 데이터베이스 + 기계 검증 가능한 평가기 |
 | MAP-elites | "다양성 보존 아카이브" | 특성 벡터를 키로 하는 그리드. 각 셀은 그 기술자를 가진 최고 변형을 담는다 |
 | 섬 모델 (Island model) | "병렬 진화 하위 개체군" | 주기적으로 이주(migrate)하는 독립 개체군. 조기 수렴을 막는다 |
-| 기계 검증 가능한 평가기 (Machine-checkable evaluator) | "결정적 오라클" | LLM이 속일 수 없는 단위 테스트, 시뮬레이터, 벤치마크 — 이 루프의 전제 조건 |
+| 기계 검증 가능한 평가기 (Machine-checkable evaluator) | "결정적 오라클" | LLM이 속일 수 없는 단위 테스트, 시뮬레이터, 벤치마크: 이 루프의 전제 조건 |
 | 보상 해킹 (Reward hacking) | "목표가 아니라 척도를 최적화" | 루프가 의도된 작업을 하지 않고 점수를 극대화하는 방법을 찾는 것 |
 | 시드 프로그램 (Seed program) | "출발점" | 루프가 진화시키는, 정확하지만 최적이 아닌 초기 프로그램 |
 | 별도 보관된 평가기 (Held-out evaluator) | "LLM이 결코 본 적 없는 평가 데이터" | 암기를 막기 위해 평가 시점에 생성된 입력 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Novikov et al. (2025). AlphaEvolve: A coding agent for scientific and algorithmic discovery](https://arxiv.org/abs/2506.13131) — 전체 논문.
-- [DeepMind blog on AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/) — 결과가 담긴 벤더 작성 글.
-- [AlphaEvolve results repository](https://github.com/google-deepmind/alphaevolve_results) — 48-곱셈 4x4 matmul을 포함해 발견된 알고리즘들.
-- [Romera-Paredes et al. (2023). Mathematical discoveries from program search with LLMs (FunSearch)](https://www.nature.com/articles/s41586-023-06924-6) — 선행 시스템.
-- [Anthropic — Responsible Scaling Policy v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — 평가기에 묶인 자율성을 핵심 연구 방향으로 규정한다.
+- [Novikov et al. (2025). AlphaEvolve: A coding agent for scientific and algorithmic discovery](https://arxiv.org/abs/2506.13131): 전체 논문.
+- [DeepMind blog on AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/): 결과가 담긴 벤더 작성 글.
+- [AlphaEvolve results repository](https://github.com/google-deepmind/alphaevolve_results): 48-곱셈 4x4 matmul을 포함해 발견된 알고리즘들.
+- [Romera-Paredes et al. (2023). Mathematical discoveries from program search with LLMs (FunSearch)](https://www.nature.com/articles/s41586-023-06924-6): 선행 시스템.
+- [Anthropic(Responsible Scaling Policy v3.0 (Feb 2026)](https://anthropic.com/responsible-scaling-policy/rsp-v3-0)) 평가기에 묶인 자율성을 핵심 연구 방향으로 규정한다.

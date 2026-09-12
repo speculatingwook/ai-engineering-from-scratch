@@ -64,7 +64,7 @@ LLM -> final text answer
 
 ### 호출을 동시에 실행하기
 
-호스트는 각 호출의 실행기를 자신의 스레드, 코루틴(coroutine), 또는 원격 워커(worker)에서 돌린다. 가장 간단한 하니스(harness)는 스레드 풀(thread pool)을 쓰고, 프로덕션은 `asyncio.gather`나 구조화된 동시성(structured concurrency)을 가진 asyncio를 쓴다. 완료 순서는 예측 불가능하다 — id가 식별자다.
+호스트는 각 호출의 실행기를 자신의 스레드, 코루틴(coroutine), 또는 원격 워커(worker)에서 돌린다. 가장 간단한 하니스(harness)는 스레드 풀(thread pool)을 쓰고, 프로덕션은 `asyncio.gather`나 구조화된 동시성(structured concurrency)을 가진 asyncio를 쓴다. 완료 순서는 예측 불가능하다. id가 식별자다.
 
 흔한 버그가 하나 있다. 완료 순서가 아니라 호출 목록 순서로 결과를 답하는 것이다. 모델은 `tool_call_id`만 신경 쓰므로 보통은 동작하지만, 결과가 누락되거나 중복되면 순서가 뒤바뀐 제출이 디버깅을 더 어렵게 만든다. 명시적인 id와 함께 완료 순서로 답하기를 권한다.
 
@@ -112,7 +112,7 @@ call_C: median API, returns third
 
 ## 라이브러리로 써보기 (Use It)
 
-`code/main.py`는 두 절반을 가진다. 첫 번째는 `concurrent.futures.ThreadPoolExecutor`를 써서 세 시뮬레이션된 날씨 호출을 직렬과 병렬로 돌리고 벽시계 시간을 출력한다. 두 번째 절반은 가짜 스트리밍 응답 — 한 스트림에 인터리브된 세 병렬 호출의 `arguments` 청크 — 을 재생하고 `StreamAccumulator`로 id별로 재조립한다. LLM 없음, 네트워크 없음, 오직 재조립 로직만.
+`code/main.py`는 두 절반을 가진다. 첫 번째는 `concurrent.futures.ThreadPoolExecutor`를 써서 세 시뮬레이션된 날씨 호출을 직렬과 병렬로 돌리고 벽시계 시간을 출력한다. 두 번째 절반은 가짜 스트리밍 응답(한 스트림에 인터리브된 세 병렬 호출의 `arguments` 청크)을 재생하고 `StreamAccumulator`로 id별로 재조립한다. LLM 없음, 네트워크 없음, 오직 재조립 로직만.
 
 볼 것:
 
@@ -153,8 +153,8 @@ call_C: median API, returns third
 
 ## 더 읽을거리 (Further Reading)
 
-- [OpenAI — Parallel function calling](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling) — 기본 동작과 옵트아웃 플래그
-- [Anthropic — Tool use: implementing tool use](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implementing-tool-use) — `disable_parallel_tool_use`와 결과 배치(batching)
-- [Google — Gemini function calling parallel section](https://ai.google.dev/gemini-api/docs/function-calling) — Gemini 3부터의 id 상관 병렬 호출
-- [OpenAI — Streaming responses with tools](https://platform.openai.com/docs/api-reference/responses-streaming) — OpenAI 스트림을 위한 청크 인자 재조립
-- [Anthropic — Streaming messages](https://docs.anthropic.com/en/api/messages-streaming) — `input_json_delta`를 가진 `content_block_delta`
+- [OpenAI(Parallel function calling](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling)) 기본 동작과 옵트아웃 플래그
+- [Anthropic(Tool use: implementing tool use](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implementing-tool-use)) `disable_parallel_tool_use`와 결과 배치(batching)
+- [Google(Gemini function calling parallel section](https://ai.google.dev/gemini-api/docs/function-calling)) Gemini 3부터의 id 상관 병렬 호출
+- [OpenAI(Streaming responses with tools](https://platform.openai.com/docs/api-reference/responses-streaming)) OpenAI 스트림을 위한 청크 인자 재조립
+- [Anthropic(Streaming messages](https://docs.anthropic.com/en/api/messages-streaming)) `input_json_delta`를 가진 `content_block_delta`

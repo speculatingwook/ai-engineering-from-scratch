@@ -1,6 +1,6 @@
 # 직접 선호 최적화 계열(The Direct Preference Optimization Family)
 
-> Rafailov et al. (2023)은 RLHF의 최적해가 선호 데이터에 관한 닫힌 형태(closed form)를 가짐을 보였고, 따라서 명시적 보상 모델(reward model)을 건너뛰고 정책(policy)을 직접 최적화할 수 있다. 그 통찰은 하나의 계열을 낳았다 — IPO, KTO, SimPO, ORPO, BPO — 각각 DPO의 실패 모드를 하나씩 고친다. 2026년에는 직접 정렬 알고리즘(direct alignment algorithm)이 PPO보다 더 많은 프론티어 사후 학습(post-training) 실행을 출시한다. 하지만 레슨 2의 과최적화 곡선은 여전히 적용된다: DAA는 굿하트(Goodhart)를 벗어나지 못하며, 단지 물어뜯는 자리를 옮길 뿐이다.
+> Rafailov et al. (2023)은 RLHF의 최적해가 선호 데이터에 관한 닫힌 형태(closed form)를 가짐을 보였고, 따라서 명시적 보상 모델(reward model)을 건너뛰고 정책(policy)을 직접 최적화할 수 있다. 그 통찰은 하나의 계열을 낳았다. IPO, KTO, SimPO, ORPO, BPO: 각각 DPO의 실패 모드를 하나씩 고친다. 2026년에는 직접 정렬 알고리즘(direct alignment algorithm)이 PPO보다 더 많은 프론티어 사후 학습(post-training) 실행을 출시한다. 하지만 레슨 2의 과최적화 곡선은 여전히 적용된다: DAA는 굿하트(Goodhart)를 벗어나지 못하며, 단지 물어뜯는 자리를 옮길 뿐이다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, six-variant preference-loss comparator)
@@ -34,7 +34,7 @@ pi*(y|x) = (1/Z(x)) * pi_ref(y|x) * exp(r(x, y) / beta)
 r(x, y) = beta * log(pi*(y|x) / pi_ref(y|x)) + beta * log Z(x)
 ```
 
-이것을 브래들리-테리(Bradley-Terry) 선호 가능도에 대입하면, 분배 함수(partition function) `Z(x)`는 오직 `x`에만 의존하므로 소거된다. 남는 것은 정책 파라미터(parameter)만으로 이뤄진 손실(loss)이다 — 보상 모델이 필요 없다. 그것이 DPO다.
+이것을 브래들리-테리(Bradley-Terry) 선호 가능도에 대입하면, 분배 함수(partition function) `Z(x)`는 오직 `x`에만 의존하므로 소거된다. 남는 것은 정책 파라미터(parameter)만으로 이뤄진 손실(loss)이다. 보상 모델이 필요 없다. 그것이 DPO다.
 
 함정: 그 유도는 최적해가 도달 가능하고, 선호 데이터가 분포 내(in-distribution)이며, 참조 정책이 참된 모드 앵커임을 가정한다. 이 중 어느 것도 정확히 성립하지 않는다. 각 계열 구성원은 위반된 가정을 서로 다르게 고친다.
 
@@ -98,7 +98,7 @@ L_ORPO = L_NLL(y_w) + lambda * L_OR
 L_OR = -log sigmoid(log(odds(y_w) / odds(y_l)))
 ```
 
-참조 정책 없음 — SFT 항이 정규화 항이다. 베이스 모델에서 정렬된 모델까지 단일 단계로 학습한다. 별도의 SFT 체크포인트가 없다.
+참조 정책 없음: SFT 항이 정규화 항이다. 베이스 모델에서 정렬된 모델까지 단일 단계로 학습한다. 별도의 SFT 체크포인트가 없다.
 
 ### BPO (ICLR 2026 제출, OpenReview id=b97EwMUWu7)
 
@@ -108,7 +108,7 @@ L_OR = -log sigmoid(log(odds(y_w) / odds(y_l)))
 
 Rafailov et al. "Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms" (NeurIPS 2024)은 여러 데이터셋과 여러 KL 예산 전반에서 DPO, IPO, SLiC로 정책을 학습했다. 골드 보상 대 KL 곡선은 Gao et al.과 동일한 정점-후-붕괴 형태를 가진다. 암묵적 보상은 학습 중 분포 밖 표본을 질의하며, KL 정규화는 이를 안정화하지 못한다.
 
-DAA는 굿하트를 벗어나지 못한다. 물어뜯는 표면을 "보상 모델이 과최적화됨"에서 "참조 정책 비율이 과최적화됨"으로 바꿀 뿐이다. 보편적 해법 — 더 나은 데이터, 앙상블, 조기 종료 — 은 둘 다에 적용된다.
+DAA는 굿하트를 벗어나지 못한다. 물어뜯는 표면을 "보상 모델이 과최적화됨"에서 "참조 정책 비율이 과최적화됨"으로 바꿀 뿐이다. 보편적 해법(더 나은 데이터, 앙상블, 조기 종료)은 둘 다에 적용된다.
 
 ### 그것들 중 선택하기 (2026)
 
@@ -130,7 +130,7 @@ DAA는 굿하트를 벗어나지 못한다. 물어뜯는 표면을 "보상 모�
 
 ## 연습 문제 (Exercises)
 
-1. `code/main.py`를 실행하라. DPO와 BPO에 대해 최종 선택된 로그 확률 하락을 보고하라. BPO는 더 높은 선택된 절대 확률을 유지해야 한다 — 이를 검증하라.
+1. `code/main.py`를 실행하라. DPO와 BPO에 대해 최종 선택된 로그 확률 하락을 보고하라. BPO는 더 높은 선택된 절대 확률을 유지해야 한다. 이를 검증하라.
 
 2. 모든 쌍이 동일한 강도를 갖도록 선호 데이터를 수정하라. 여섯 방법 중 어느 것이 가장 견고한가? 어느 것이 저하되는가? 여기서 IPO의 이점을 설명하라.
 
@@ -145,7 +145,7 @@ DAA는 굿하트를 벗어나지 못한다. 물어뜯는 표면을 "보상 모�
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|-----------------|------------------------|
 | DPO | "보상 모델 없는 RLHF" | 닫힌 형태 RLHF 최적해에서 유도된 손실; 정책 파라미터만 |
-| 암묵적 보상(Implicit reward) | "로그 비율" | `beta * log(pi(y\|x) / pi_ref(y\|x))` — DPO가 암시하는 보상 |
+| 암묵적 보상(Implicit reward) | "로그 비율" | `beta * log(pi(y\|x) / pi_ref(y\|x))`: DPO가 암시하는 보상 |
 | IPO | "유계 DPO" | log-sigmoid를 항등 사상으로 대체; 암묵적 보상 간극이 `1/(2 beta)`로 상한 |
 | KTO | "비쌍별 DPO" | 손실 회피를 둔 단일 레이블에 대한 전망 이론 효용 |
 | SimPO | "참조 없는 DPO" | 길이 정규화된 로그 가능도 + 마진; 참조 정책 없음 |

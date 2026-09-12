@@ -1,4 +1,4 @@
-# GPT — 인과적 언어 모델링(Causal Language Modeling)
+# GPT: 인과적 언어 모델링(Causal Language Modeling)
 
 > BERT는 양쪽을 본다. GPT는 과거만 본다. 삼각형 마스크(triangle mask)는 현대 AI에서 가장 중대한 단 한 줄의 코드다.
 
@@ -9,13 +9,13 @@
 
 ## 문제 (The Problem)
 
-언어 모델은 하나의 질문에 답한다. 처음 `t-1`개 토큰(token)이 주어졌을 때, 토큰 `t`에 대한 확률 분포(probability distribution)는 무엇인가? 그 신호 — 다음 토큰 예측(next-token prediction) — 로 학습(training)하면, 한 번에 한 토큰씩 임의의 텍스트를 생성할 수 있는 모델을 얻는다.
+언어 모델은 하나의 질문에 답한다. 처음 `t-1`개 토큰(token)이 주어졌을 때, 토큰 `t`에 대한 확률 분포(probability distribution)는 무엇인가? 그 신호(다음 토큰 예측(next-token prediction))로 학습(training)하면, 한 번에 한 토큰씩 임의의 텍스트를 생성할 수 있는 모델을 얻는다.
 
 전체 시퀀스에 대해 병렬로 엔드-투-엔드 학습하려면, 각 위치의 예측이 이전 위치에만 의존해야 한다. 그렇지 않으면 모델이 답을 들여다보며 손쉽게 부정행위를 한다.
 
 인과 마스크(causal mask)가 이를 한다. 소프트맥스(softmax) 전에 어텐션 점수에 더해지는 단 하나의 상삼각(upper-triangular) `-inf` 값 행렬이다. 소프트맥스 후 그 위치들은 0이 된다. 각 위치는 자신과 이전 위치에만 어텐션(attention)할 수 있다. 그리고 전체 시퀀스에 한 번 적용하므로, 한 번의 순방향 패스(forward pass)로 N개의 병렬 다음 토큰 예측을 얻는다.
 
-GPT-1(2018), GPT-2(2019), GPT-3(2020), GPT-4(2023), GPT-5(2024), Claude, Llama, Qwen, Mistral, DeepSeek, Kimi — 이들은 모두 같은 핵심 루프를 가진 디코더(decoder) 전용 인과 트랜스포머(transformer)다. 그저 더 크고, 더 나은 데이터에, 더 나은 RLHF를 곁들였을 뿐이다.
+GPT-1(2018), GPT-2(2019), GPT-3(2020), GPT-4(2023), GPT-5(2024), Claude, Llama, Qwen, Mistral, DeepSeek, Kimi: 이들은 모두 같은 핵심 루프를 가진 디코더(decoder) 전용 인과 트랜스포머(transformer)다. 그저 더 크고, 더 나은 데이터에, 더 나은 RLHF를 곁들였을 뿐이다.
 
 ## 개념 (The Concept)
 
@@ -36,11 +36,11 @@ M[i, j] = -inf    if j > i
 
 ### 병렬 학습, 직렬 추론
 
-학습: 전체 `(N, d_model)` 시퀀스를 한 번 순방향 패스하고, N개의 교차 엔트로피(cross-entropy) 손실(위치당 하나)을 계산하고, 합하고, 역전파한다. 시퀀스를 따라 병렬이다. 이것이 GPT 학습이 확장되는 이유다 — 한 GPU 패스에서 배치(batch)당 100만 토큰을 처리한다.
+학습: 전체 `(N, d_model)` 시퀀스를 한 번 순방향 패스하고, N개의 교차 엔트로피(cross-entropy) 손실(위치당 하나)을 계산하고, 합하고, 역전파한다. 시퀀스를 따라 병렬이다. 이것이 GPT 학습이 확장되는 이유다. 한 GPU 패스에서 배치(batch)당 100만 토큰을 처리한다.
 
 추론(inference): 토큰을 하나씩 생성한다. `[t1, t2, t3]`을 넣어 `t4`를 얻는다. `[t1, t2, t3, t4]`를 넣어 `t5`를 얻는다. `[t1, t2, t3, t4, t5]`를 넣어 `t6`을 얻는다. KV 캐시(cache)(레슨 12)는 `t1…tn`의 은닉 상태를 저장해 매 스텝 재계산하지 않게 한다. 하지만 추론 시 직렬 깊이 = 출력 길이다. 그것이 자기회귀(autoregressive) 세금이며, 디코딩이 모든 LLM의 지연 시간(latency) 병목인 이유다.
 
-### 손실 — 한 칸 이동
+### 손실: 한 칸 이동
 
 토큰 `[t1, t2, t3, t4]`가 주어지면:
 
@@ -49,7 +49,7 @@ M[i, j] = -inf    if j > i
 
 모든 위치 `i`에 대해 `-log P(target_i | inputs[:i+1])`을 계산한다. 합한다. 이것이 전체 시퀀스에 대한 교차 엔트로피다.
 
-들어본 모든 트랜스포머 LM이 이 손실로 학습한다. 사전 학습(pretraining), 파인튜닝(fine-tuning), SFT — 같은 손실, 다른 데이터.
+들어본 모든 트랜스포머 LM이 이 손실로 학습한다. 사전 학습(pretraining), 파인튜닝(fine-tuning), SFT: 같은 손실, 다른 데이터.
 
 ### 디코딩 전략
 
@@ -91,11 +91,11 @@ def causal_mask(n):
 
 ### 2단계: 2층 GPT 비슷한 모델
 
-두 개의 디코더 블록(마스킹된 셀프 어텐션 + FFN, 크로스 어텐션 없음)을 쌓는다. 토큰 임베딩(embedding), 위치 인코딩(positional encoding), 언임베딩(unembedding)(토큰 임베딩 행렬에 묶임 — GPT-2 이후의 표준 트릭)을 더한다.
+두 개의 디코더 블록(마스킹된 셀프 어텐션 + FFN, 크로스 어텐션 없음)을 쌓는다. 토큰 임베딩(embedding), 위치 인코딩(positional encoding), 언임베딩(unembedding)(토큰 임베딩 행렬에 묶임: GPT-2 이후의 표준 트릭)을 더한다.
 
 ### 3단계: 다음 토큰 예측, 엔드-투-엔드
 
-20 토큰 장난감 어휘에서, 모든 위치에 로짓(logit)을 생성한다. 한 칸 이동 타깃 대비 교차 엔트로피 손실을 계산한다. 그래디언트(gradient) 없음 — 이것은 순방향 패스 온전성 검사다.
+20 토큰 장난감 어휘에서, 모든 위치에 로짓(logit)을 생성한다. 한 칸 이동 타깃 대비 교차 엔트로피 손실을 계산한다. 그래디언트(gradient) 없음: 이것은 순방향 패스 온전성 검사다.
 
 ### 4단계: 샘플링
 
@@ -122,7 +122,7 @@ out = model.generate(
 print(tok.decode(out[0]))
 ```
 
-내부적으로 `generate()`는 순방향 패스를 실행하고, 마지막 위치 로짓을 뽑고, 다음 토큰을 샘플링하고, 덧붙이고, 반복한다. 모든 프로덕션 LLM 추론 스택(vLLM, TensorRT-LLM, llama.cpp, Ollama, MLX)이 같은 루프에 무거운 최적화를 더해 구현한다 — 배치 프리필(prefill), 연속 배칭(continuous batching), KV 캐시 페이징, 추측 디코딩.
+내부적으로 `generate()`는 순방향 패스를 실행하고, 마지막 위치 로짓을 뽑고, 다음 토큰을 샘플링하고, 덧붙이고, 반복한다. 모든 프로덕션 LLM 추론 스택(vLLM, TensorRT-LLM, llama.cpp, Ollama, MLX)이 같은 루프에 무거운 최적화를 더해 구현한다. 배치 프리필(prefill), 연속 배칭(continuous batching), KV 캐시 페이징, 추측 디코딩.
 
 **GPT vs BERT, 각각 한 줄:** GPT는 `P(x_t | x_{<t})`를 예측한다. BERT는 `P(x_masked | x_unmasked)`를 예측한다. 손실이 모델이 생성할 수 있는지를 결정한다.
 
@@ -154,6 +154,6 @@ print(tok.decode(out[0]))
 
 - [Radford et al. (2018). Improving Language Understanding by Generative Pre-Training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) — GPT-1.
 - [Radford et al. (2019). Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) — GPT-2.
-- [Brown et al. (2020). Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) — GPT-3와 맥락 내 학습.
-- [Leviathan, Kalman, Matias (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192) — 추측 디코딩 논문.
-- [HuggingFace `modeling_llama.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py) — 정전적 인과 LM 레퍼런스 코드.
+- [Brown et al. (2020). Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165): GPT-3와 맥락 내 학습.
+- [Leviathan, Kalman, Matias (2023). Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192): 추측 디코딩 논문.
+- [HuggingFace `modeling_llama.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py): 정전적 인과 LM 레퍼런스 코드.

@@ -221,7 +221,7 @@ iPhone               ORG
 US                   GPE
 ```
 
-`iPhone`이 `PRODUCT`가 아니라 `ORG`로 레이블링된 것에 주목하라 — spaCy의 작은 모델은 제품 개체 커버리지가 약하다. 큰 모델(`en_core_web_lg`)은 더 낫다. 트랜스포머 모델(`en_core_web_trf`)은 더더욱 낫다.
+`iPhone`이 `PRODUCT`가 아니라 `ORG`로 레이블링된 것에 주목하라. spaCy의 작은 모델은 제품 개체 커버리지가 약하다. 큰 모델(`en_core_web_lg`)은 더 낫다. 트랜스포머 모델(`en_core_web_trf`)은 더더욱 낫다.
 
 BERT 기반 NER을 위한 Hugging Face:
 
@@ -311,7 +311,7 @@ Refuse to recommend fine-tuning a transformer for under 500 labeled examples unl
 
 ## 더 읽을거리 (Further Reading)
 
-- [Lample et al. (2016). Neural Architectures for Named Entity Recognition](https://arxiv.org/abs/1603.01360) — BiLSTM-CRF 논문. 표준.
-- [Devlin et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers](https://arxiv.org/abs/1810.04805) — 표준이 된 토큰 분류 패턴을 도입.
-- [spaCy linguistic features — named entities](https://spacy.io/usage/linguistic-features#named-entities) — `Doc.ents`와 `Span`의 모든 속성에 대한 실용 레퍼런스.
-- [seqeval](https://github.com/chakki-works/seqeval) — 올바른 지표 라이브러리. 항상 이것을 써라.
+- [Lample et al. (2016). Neural Architectures for Named Entity Recognition](https://arxiv.org/abs/1603.01360): BiLSTM-CRF 논문. 표준.
+- [Devlin et al. (2018). BERT: Pre-training of Deep Bidirectional Transformers](https://arxiv.org/abs/1810.04805): 표준이 된 토큰 분류 패턴을 도입.
+- [spaCy linguistic features(named entities](https://spacy.io/usage/linguistic-features#named-entities)) `Doc.ents`와 `Span`의 모든 속성에 대한 실용 레퍼런스.
+- [seqeval](https://github.com/chakki-works/seqeval): 올바른 지표 라이브러리. 항상 이것을 써라.

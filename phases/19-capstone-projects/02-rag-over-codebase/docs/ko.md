@@ -1,6 +1,6 @@
-# Capstone 02 — 코드베이스에 대한 RAG (Cross-Repo Semantic Search)
+# Capstone 02: 코드베이스에 대한 RAG (Cross-Repo Semantic Search)
 
-> 2026년에 진지한 모든 엔지니어링 조직은 단순한 문자열이 아니라 의미를 이해하는 내부 코드 검색을 운영한다. Sourcegraph Amp, Cursor의 코드베이스 답변, Augment의 엔터프라이즈 그래프, Aider의 repomap, Pinterest의 내부 MCP — 모두 같은 형태다. 여러 저장소를 수집하고, tree-sitter로 파싱하고, 함수 및 클래스 수준의 청크(chunk)를 임베딩(embedding)하고, 하이브리드 검색(hybrid-search)하고, 재순위(re-rank)를 매기고, 인용(citation)과 함께 답한다. 이 캡스톤(capstone)에서는 10개 저장소에 걸친 200만 줄의 코드를 처리하고 매 git push마다 증분 재색인(incremental re-indexing)을 견디는 시스템을 만든다.
+> 2026년에 진지한 모든 엔지니어링 조직은 단순한 문자열이 아니라 의미를 이해하는 내부 코드 검색을 운영한다. Sourcegraph Amp, Cursor의 코드베이스 답변, Augment의 엔터프라이즈 그래프, Aider의 repomap, Pinterest의 내부 MCP: 모두 같은 형태다. 여러 저장소를 수집하고, tree-sitter로 파싱하고, 함수 및 클래스 수준의 청크(chunk)를 임베딩(embedding)하고, 하이브리드 검색(hybrid-search)하고, 재순위(re-rank)를 매기고, 인용(citation)과 함께 답한다. 이 캡스톤(capstone)에서는 10개 저장소에 걸친 200만 줄의 코드를 처리하고 매 git push마다 증분 재색인(incremental re-indexing)을 견디는 시스템을 만든다.
 
 **Type:** Capstone
 **Languages:** Python (ingestion), TypeScript (API + UI)
@@ -136,11 +136,11 @@ answer:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sourcegraph Amp](https://ampcode.com) — 프로덕션 저장소 간 코드 인텔리전스
-- [Sourcegraph Cody RAG architecture](https://sourcegraph.com/blog/how-cody-understands-your-codebase) — 이 캡스톤의 레퍼런스 심층 분석
-- [Aider repo-map](https://aider.chat/docs/repomap.html) — tree-sitter 순위 저장소 뷰
-- [Augment Code enterprise graph](https://www.augmentcode.com) — 상용 심볼 그래프 RAG
-- [Qdrant hybrid search docs](https://qdrant.tech/documentation/concepts/hybrid-queries/) — 레퍼런스 구현
-- [Voyage AI code embeddings](https://docs.voyageai.com/docs/embeddings) — Voyage-code-3 세부사항
-- [Cohere rerank-3](https://docs.cohere.com/reference/rerank) — 크로스 인코더 레퍼런스
-- [Pinterest MCP internal search](https://medium.com/pinterest-engineering) — 내부 플랫폼 레퍼런스
+- [Sourcegraph Amp](https://ampcode.com): 프로덕션 저장소 간 코드 인텔리전스
+- [Sourcegraph Cody RAG architecture](https://sourcegraph.com/blog/how-cody-understands-your-codebase): 이 캡스톤의 레퍼런스 심층 분석
+- [Aider repo-map](https://aider.chat/docs/repomap.html): tree-sitter 순위 저장소 뷰
+- [Augment Code enterprise graph](https://www.augmentcode.com): 상용 심볼 그래프 RAG
+- [Qdrant hybrid search docs](https://qdrant.tech/documentation/concepts/hybrid-queries/): 레퍼런스 구현
+- [Voyage AI code embeddings](https://docs.voyageai.com/docs/embeddings): Voyage-code-3 세부사항
+- [Cohere rerank-3](https://docs.cohere.com/reference/rerank): 크로스 인코더 레퍼런스
+- [Pinterest MCP internal search](https://medium.com/pinterest-engineering): 내부 플랫폼 레퍼런스

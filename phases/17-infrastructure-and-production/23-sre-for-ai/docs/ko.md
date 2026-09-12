@@ -1,6 +1,6 @@
-# AI를 위한 SRE — 멀티 에이전트 인시던트 대응, 런북, 예측적 탐지
+# AI를 위한 SRE: 멀티 에이전트 인시던트 대응, 런북, 예측적 탐지
 
-> AI SRE는 RAG로 인프라 데이터(로그, 런북(runbook), 서비스 토폴로지(topology))에 근거(ground)한 LLM을 써서 조사, 문서화, 조율 단계를 자동화한다. 2026년 아키텍처 패턴은 멀티 에이전트 오케스트레이션(multi-agent orchestration)이다 — 슈퍼바이저(supervisor)가 조율하는 특화 에이전트(agent)(로그, 메트릭, 런북)들. AI는 가설과 쿼리를 제안하고, 판단이 필요한 결정은 사람이 승인한다. Datadog Bits AI와 Azure SRE Agent가 이것을 매니지드 제품으로 출시한다. 런북은 진화하고 있다: NeuBird Hawkeye는 적대적 평가(adversarial evaluation)를 사용한다(두 모델이 같은 인시던트를 분석한다. 일치 = 확신, 불일치 = 불확실성). 운영 메모리(operational memory)는 팀 변동을 넘어 지속된다. 자동 교정(auto-remediation)은 신중함을 유지한다: AI가 제안하고, 사람이 승인한다. 완전 자율 행동은 좁다(파드(pod) 재시작, 특정 배포(deploy) 롤백(rollback)) — 빡빡한 가드레일(guardrail)과 함께. "설정하고 잊으세요(set it and forget it)"를 파는 사람은 누구든 과장하고 있다. 떠오르는 프런티어: 인시던트 전 예측. MIT 연구는 과거 로그 + GPU 온도 + API 오류 패턴으로 학습한 LLM이 정전(outage)의 89%를 10~15분 일찍 예측했다고 보고한다. 전망: 2026년 말까지 엔터프라이즈 LLM의 95%가 자동 페일오버(failover)를 갖춘다.
+> AI SRE는 RAG로 인프라 데이터(로그, 런북(runbook), 서비스 토폴로지(topology))에 근거(ground)한 LLM을 써서 조사, 문서화, 조율 단계를 자동화한다. 2026년 아키텍처 패턴은 멀티 에이전트 오케스트레이션(multi-agent orchestration)이다. 슈퍼바이저(supervisor)가 조율하는 특화 에이전트(agent)(로그, 메트릭, 런북)들. AI는 가설과 쿼리를 제안하고, 판단이 필요한 결정은 사람이 승인한다. Datadog Bits AI와 Azure SRE Agent가 이것을 매니지드 제품으로 출시한다. 런북은 진화하고 있다: NeuBird Hawkeye는 적대적 평가(adversarial evaluation)를 사용한다(두 모델이 같은 인시던트를 분석한다. 일치 = 확신, 불일치 = 불확실성). 운영 메모리(operational memory)는 팀 변동을 넘어 지속된다. 자동 교정(auto-remediation)은 신중함을 유지한다: AI가 제안하고, 사람이 승인한다. 완전 자율 행동은 좁다(파드(pod) 재시작, 특정 배포(deploy) 롤백(rollback)): 빡빡한 가드레일(guardrail)과 함께. "설정하고 잊으세요(set it and forget it)"를 파는 사람은 누구든 과장하고 있다. 떠오르는 프런티어: 인시던트 전 예측. MIT 연구는 과거 로그 + GPU 온도 + API 오류 패턴으로 학습한 LLM이 정전(outage)의 89%를 10~15분 일찍 예측했다고 보고한다. 전망: 2026년 말까지 엔터프라이즈 LLM의 95%가 자동 페일오버(failover)를 갖춘다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy multi-agent incident triage simulator)
@@ -18,7 +18,7 @@
 
 온콜(on-call) 엔지니어가 새벽 3시에 호출(page)을 받는다. "체크아웃에서 높은 오류율." 그는 Datadog, Loki, 런북 셋, 배포 로그를 확인한다. 30분 후 근본 원인이 KV 캐시 급증으로 인한 vLLM OOM임을 깨닫는다. 파드를 재시작하니 오류가 사라진다.
 
-2026년에는 그 조사의 첫 20분이 자동화 가능하다. 로그를 서비스별로 그룹화하고, 최근 배포와 상관시키고, 런북에 대조하는 것 — 모두 RAG + 도구 사용(tool-use)이다. 감독되는(supervised) 에이전트가 1차 트리아지(triage)를 수행해, 사람이 Datadog을 열기 전에 가설을 제시한다.
+2026년에는 그 조사의 첫 20분이 자동화 가능하다. 로그를 서비스별로 그룹화하고, 최근 배포와 상관시키고, 런북에 대조하는 것: 모두 RAG + 도구 사용(tool-use)이다. 감독되는(supervised) 에이전트가 1차 트리아지(triage)를 수행해, 사람이 Datadog을 열기 전에 가설을 제시한다.
 
 완전 자율 교정은 다른 문제다. 파드 재시작: 안전. GPU 풀 확장: 정책이 허용하면 안전. 서비스 재설계: 절대 안 됨. 규율(discipline)이란 그 좁은 선을 긋는 것이다.
 
@@ -63,7 +63,7 @@
 
 ### 운영 메모리 (Operational memory)
 
-팀 이직은 전통적 SRE의 조용한 살인자다 — 부족 지식(tribal knowledge)이 떠난다. AI SRE는 런북 + 포스트모템(post-mortem)을 벡터 DB에 저장한다. 에이전트는 모든 새 인시던트마다 검색한다. 새 엔지니어가 합류해도 AI는 전체 이력을 가지고 있다.
+팀 이직은 전통적 SRE의 조용한 살인자다. 부족 지식(tribal knowledge)이 떠난다. AI SRE는 런북 + 포스트모템(post-mortem)을 벡터 DB에 저장한다. 에이전트는 모든 새 인시던트마다 검색한다. 새 엔지니어가 합류해도 AI는 전체 이력을 가지고 있다.
 
 ### 인시던트 전 예측
 
@@ -73,11 +73,11 @@ MIT 2025 연구: 과거 로그, GPU 온도, API 오류 패턴으로 학습한 LL
 
 ### 2026년의 제품들
 
-- **Datadog Bits AI** — Datadog 안의 매니지드 SRE 코파일럿(copilot).
-- **Azure SRE Agent** — Azure 네이티브.
-- **NeuBird Hawkeye** — 적대적 평가 + 운영 메모리.
-- **PagerDuty AIOps** — 트리아지 + 중복 제거(deduplication).
-- **Incident.io Autopilot** — 인시던트 커맨더(incident commander) + 조율.
+- **Datadog Bits AI**: Datadog 안의 매니지드 SRE 코파일럿(copilot).
+- **Azure SRE Agent**: Azure 네이티브.
+- **NeuBird Hawkeye**: 적대적 평가 + 운영 메모리.
+- **PagerDuty AIOps**: 트리아지 + 중복 제거(deduplication).
+- **Incident.io Autopilot**: 인시던트 커맨더(incident commander) + 조율.
 
 ### 코드로서의 런북 (Runbooks as code)
 
@@ -103,7 +103,7 @@ MIT 2025 연구: 과거 로그, GPU 온도, API 오류 패턴으로 학습한 LL
 1. `code/main.py`를 실행하라. 로그 에이전트와 메트릭 에이전트가 불일치하면 어떻게 되는가? 슈퍼바이저는 어떻게 해결하는가?
 2. 자기 서비스에 맞는 세 가지 "안전한" 자동 교정 조치를 정의하라. 각각을 정당화하라.
 3. 구조화된 런북 템플릿을 작성하라: 섹션, 필수 필드, 검증 명령어.
-4. 예측적 탐지가 12분 선행으로 발동한다. 정책을 어떻게 세울 것인가 — 호출, 선제적 드레인, 아니면 둘 다?
+4. 예측적 탐지가 12분 선행으로 발동한다. 정책을 어떻게 세울 것인가: 호출, 선제적 드레인, 아니면 둘 다?
 5. 3인 팀이 2026년에 AI SRE를 도입해야 하는지 기다려야 하는지 논증하라. 성숙도, 양, 위험을 고려하라.
 
 ## 핵심 용어 (Key Terms)

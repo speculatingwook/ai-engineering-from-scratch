@@ -36,13 +36,13 @@ AutoGen v0.4의 답: 액터 모델. 각 에이전트는 사설 받은편지함(p
 
 1. **Core.** 저수준 액터 프레임워크. `AgentRuntime`, `Agent`, `Message`, `Topic`. 비동기 메시지 교환, 이벤트 기반.
 2. **AgentChat.** 작업 주도(task-driven) 고수준 API(v0.2의 ConversableAgent를 대체). `AssistantAgent`, `UserProxyAgent`, `RoundRobinGroupChat`, `SelectorGroupChat`.
-3. **Extensions.** 통합 — OpenAI, Anthropic, Azure, 도구, 메모리.
+3. **Extensions.** 통합: OpenAI, Anthropic, Azure, 도구, 메모리.
 
 ### 분리가 왜 중요한가
 
 v0.2 모델에서 `agent_a.chat(agent_b)`를 호출하면 agent_b가 반환할 때까지 agent_a를 동기적으로 블로킹(block)한다. v0.4에서 `send(agent_b, msg)`는 메시지를 agent_b의 받은편지함에 넣고 반환한다. 런타임이 나중에 전달한다. 그래서 세 가지 결과가 나온다.
 
-- **결함 격리.** Agent B의 크래시(crash)가 Agent A를 무너뜨리지 않는다 — 런타임이 B의 핸들러에서 실패를 잡고 무엇을 할지(로깅, 재시도, 데드레터(dead-letter)) 결정한다.
+- **결함 격리.** Agent B의 크래시(crash)가 Agent A를 무너뜨리지 않는다. 런타임이 B의 핸들러에서 실패를 잡고 무엇을 할지(로깅, 재시도, 데드레터(dead-letter)) 결정한다.
 - **자연스러운 동시성.** 한 번에 여러 메시지가 진행 중이다. 액터들이 자신의 받은편지함을 동시에 처리한다.
 - **분산 준비 완료.** 받은편지함 + 전송은 액터가 프로세스 내에 있든 다른 호스트에 있든 동일한 추상화다.
 
@@ -64,9 +64,9 @@ OpenTelemetry 지원이 내장되어 있다. 모든 메시지가 스팬(span)을
 
 `code/main.py`는 stdlib 액터 런타임을 구현한다.
 
-- `Message` — `sender`, `recipient`, `topic`, `body`를 가진 타입 페이로드(payload).
-- `Actor` — `receive(message, runtime)`을 가진 추상(abstract) 클래스.
-- `Runtime` — 공유 큐, 전달, 실패 격리를 갖춘 이벤트 루프.
+- `Message`: `sender`, `recipient`, `topic`, `body`를 가진 타입 페이로드(payload).
+- `Actor`: `receive(message, runtime)`을 가진 추상(abstract) 클래스.
+- `Runtime`: 공유 큐, 전달, 실패 격리를 갖춘 이벤트 루프.
 - 두 액터 데모: `ReviewerAgent`가 코드를 리뷰하고, `ChecklistAgent`가 체크리스트를 실행한다. 합의(consensus)에 이를 때까지 메시지를 교환한다.
 
 실행:
@@ -79,10 +79,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **AutoGen v0.4/v0.7**(유지보수) — 연구, 프로토타이핑, 멀티 에이전트 패턴에 안정적.
-- **Microsoft Agent Framework**(퍼블릭 프리뷰) — 나아갈 길; 새로워진 API에 담긴 동일한 액터 모델 아이디어.
-- **LangGraph 스웜 토폴로지**(Lesson 13) — 공유 도구 핸드오프를 통한 유사 패턴.
-- **커스텀 액터 런타임** — 특정 전송(NATS, RabbitMQ, gRPC)이 필요할 때.
+- **AutoGen v0.4/v0.7**(유지보수): 연구, 프로토타이핑, 멀티 에이전트 패턴에 안정적.
+- **Microsoft Agent Framework**(퍼블릭 프리뷰): 나아갈 길; 새로워진 API에 담긴 동일한 액터 모델 아이디어.
+- **LangGraph 스웜 토폴로지**(Lesson 13): 공유 도구 핸드오프를 통한 유사 패턴.
+- **커스텀 액터 런타임**: 특정 전송(NATS, RabbitMQ, gRPC)이 필요할 때.
 
 ## 산출물 (Ship It)
 
@@ -112,6 +112,6 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [AutoGen v0.4, Microsoft Research](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/) — 재설계 글
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 그래프 형태의 대안
-- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — AutoGen이 기본으로 방출하는 스팬
+- [AutoGen v0.4, Microsoft Research](https://www.microsoft.com/en-us/research/articles/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/): 재설계 글
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 그래프 형태의 대안
+- [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/): AutoGen이 기본으로 방출하는 스팬

@@ -1,6 +1,6 @@
 # 데이터 출처와 학습 데이터 거버넌스
 
-> EU AI Act은 2025년 8월까지 GPAI를 위한 기계 판독 가능(machine-readable) 옵트아웃(opt-out) 표준을 요구한다(EU 저작권 지침 TDM 예외를 통해). California AB 2013(2024년 서명) — 생성형 AI 학습 데이터 투명성은 개발자가 12개의 의무 필드(field)를 갖춘 데이터셋 요약을 게시할 것을 요구한다. 적법한 이익(legitimate interest)에 대한 2025년 DPA 정렬(alignment): 아일랜드 DPC(2025년 5월 21일)는 EDPB 의견 이후 안전장치를 갖춘, Meta의 1자(first-party) 공개 EU/EEA 성인 콘텐츠에 대한 LLM 학습을 수용한다. 쾰른 고등지방법원(2025년 5월 23일)은 가처분을 기각한다. 함부르크 DPA는 긴급성 절차를 철회한다. 영국 ICO(2025년 9월 23일)는 LinkedIn의 AI 학습 안전장치(투명성, 간소화된 옵트아웃, 연장된 이의제기 기간)에 대해 긍정적인 규제 응답을 내리고 모니터링을 계속한다 — 공식 승인(clearance)은 아니다. 브라질 ANPD(2024년 7월 2일)는 정보 투명성 불충분을 이유로 Meta의 처리를 중단시켰다. 예방 조치는 Meta가 준수 계획을 제출한 후 2024년 8월 30일에 해제되었다. 핵심 비가역성(irreversibility) 문제: 쿠키 동의 프레임워크는 실시간이고 가역적인 추적을 위해 설계되었다. 일단 데이터가 모델 가중치(model weights)에 들어가면 외과적 삭제는 불가능하다 — 학습된 신경망(neural network)에 대한 실용적인 GDPR 삭제권(right-to-erasure)은 없다. 준수 창은 수집 시점에 있다. 데이터 출처 이니셔티브(Data Provenance Initiative)(dataprovenance.org, Longpre, Mahari, Lee et al., "Consent in Crisis", 2024년 7월): 대규모 감사가 출판사들이 robots.txt 제한을 추가함에 따라 AI 데이터 공유지(data commons)가 급속히 쇠퇴함을 보인다.
+> EU AI Act은 2025년 8월까지 GPAI를 위한 기계 판독 가능(machine-readable) 옵트아웃(opt-out) 표준을 요구한다(EU 저작권 지침 TDM 예외를 통해). California AB 2013(2024년 서명): 생성형 AI 학습 데이터 투명성은 개발자가 12개의 의무 필드(field)를 갖춘 데이터셋 요약을 게시할 것을 요구한다. 적법한 이익(legitimate interest)에 대한 2025년 DPA 정렬(alignment): 아일랜드 DPC(2025년 5월 21일)는 EDPB 의견 이후 안전장치를 갖춘, Meta의 1자(first-party) 공개 EU/EEA 성인 콘텐츠에 대한 LLM 학습을 수용한다. 쾰른 고등지방법원(2025년 5월 23일)은 가처분을 기각한다. 함부르크 DPA는 긴급성 절차를 철회한다. 영국 ICO(2025년 9월 23일)는 LinkedIn의 AI 학습 안전장치(투명성, 간소화된 옵트아웃, 연장된 이의제기 기간)에 대해 긍정적인 규제 응답을 내리고 모니터링을 계속한다. 공식 승인(clearance)은 아니다. 브라질 ANPD(2024년 7월 2일)는 정보 투명성 불충분을 이유로 Meta의 처리를 중단시켰다. 예방 조치는 Meta가 준수 계획을 제출한 후 2024년 8월 30일에 해제되었다. 핵심 비가역성(irreversibility) 문제: 쿠키 동의 프레임워크는 실시간이고 가역적인 추적을 위해 설계되었다. 일단 데이터가 모델 가중치(model weights)에 들어가면 외과적 삭제는 불가능하다. 학습된 신경망(neural network)에 대한 실용적인 GDPR 삭제권(right-to-erasure)은 없다. 준수 창은 수집 시점에 있다. 데이터 출처 이니셔티브(Data Provenance Initiative)(dataprovenance.org, Longpre, Mahari, Lee et al., "Consent in Crisis", 2024년 7월): 대규모 감사가 출판사들이 robots.txt 제한을 추가함에 따라 AI 데이터 공유지(data commons)가 급속히 쇠퇴함을 보인다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, 12-field California AB 2013 scaffolding generator)
@@ -44,13 +44,13 @@ EU 저작권 지침의 텍스트·데이터 마이닝(text-and-data-mining) 예�
 
 ### 적법한 이익에 대한 2025년 DPA 수렴
 
-아일랜드 DPC(2025년 5월 21일): EDPB 의견 이후 안전장치를 갖춰, 1자 공개 EU/EEA 성인 사용자 콘텐츠에 대한 학습이라는 Meta의 계획이 수용됨. 쾰른 고등지방법원(2025년 5월 23일)은 Meta에 대한 가처분을 기각한다: 옵트아웃으로 충분하다. 함부르크 DPA는 EU 전역의 일관성을 위해 긴급성 절차를 철회한다. 영국 ICO(2025년 9월 23일)는 유사한 안전장치와 지속적인 모니터링을 동반한 LinkedIn의 AI 학습 재개에 대해 긍정적인 규제 응답을 내렸다 — 공식 승인은 아니다.
+아일랜드 DPC(2025년 5월 21일): EDPB 의견 이후 안전장치를 갖춰, 1자 공개 EU/EEA 성인 사용자 콘텐츠에 대한 학습이라는 Meta의 계획이 수용됨. 쾰른 고등지방법원(2025년 5월 23일)은 Meta에 대한 가처분을 기각한다: 옵트아웃으로 충분하다. 함부르크 DPA는 EU 전역의 일관성을 위해 긴급성 절차를 철회한다. 영국 ICO(2025년 9월 23일)는 유사한 안전장치와 지속적인 모니터링을 동반한 LinkedIn의 AI 학습 재개에 대해 긍정적인 규제 응답을 내렸다. 공식 승인은 아니다.
 
 수렴하는 원칙: 적법한 이익은 옵트아웃을 갖춘 공개적으로 이용 가능한 1자 콘텐츠에 대한 학습을 정당화할 수 있다. 동의(consent)는 필요하지 않다.
 
 ### 브라질 ANPD(2024년 6월)
 
-정보 투명성 불충분을 이유로 AI 학습을 위한 브라질 사용자 데이터에 대한 Meta의 처리를 중단시켰다. EU DPA와 다른 결과 — ANPD는 적법한 이익 허용성보다 투명성을 우선시했다.
+정보 투명성 불충분을 이유로 AI 학습을 위한 브라질 사용자 데이터에 대한 Meta의 처리를 중단시켰다. EU DPA와 다른 결과: ANPD는 적법한 이익 허용성보다 투명성을 우선시했다.
 
 ### 비가역성 문제
 
@@ -105,7 +105,7 @@ dataprovenance.org. Longpre, Mahari, Lee et al. "Consent in Crisis"(2024년 7월
 
 ## 더 읽을거리 (Further Reading)
 
-- [California AB 2013](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB2013) — 생성형 AI 학습 데이터 투명성 법
-- [EU AI Act + GPAI Code of Practice (Lesson 24)](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai) — 저작권 장
-- [Longpre, Mahari, Lee et al. — Consent in Crisis (dataprovenance.org, July 2024)](https://www.dataprovenance.org/consent-in-crisis-paper) — DPI 감사
-- [IAPP — EU Digital Omnibus GDPR amendments (2025)](https://iapp.org/news/a/eu-digital-omnibus-amendments-to-gdpr-to-facilitate-ai-training-miss-the-mark) — 규제 맥락
+- [California AB 2013](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB2013): 생성형 AI 학습 데이터 투명성 법
+- [EU AI Act + GPAI Code of Practice (Lesson 24)](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai): 저작권 장
+- [Longpre, Mahari, Lee et al.(Consent in Crisis (dataprovenance.org, July 2024)](https://www.dataprovenance.org/consent-in-crisis-paper)) DPI 감사
+- [IAPP(EU Digital Omnibus GDPR amendments (2025)](https://iapp.org/news/a/eu-digital-omnibus-amendments-to-gdpr-to-facilitate-ai-training-miss-the-mark)) 규제 맥락

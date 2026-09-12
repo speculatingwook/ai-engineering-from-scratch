@@ -1,6 +1,6 @@
-# 몬테카를로 방법 — 완전한 에피소드로부터 학습하기 (Monte Carlo Methods — Learning from Complete Episodes)
+# 몬테카를로 방법(완전한 에피소드로부터 학습하기 (Monte Carlo Methods) Learning from Complete Episodes)
 
-> 동적 계획법(dynamic programming)은 모델이 필요하다. 몬테카를로(Monte Carlo)는 에피소드 외에는 아무것도 필요하지 않다. 정책을 돌리고, 리턴을 지켜보고, 평균을 낸다. 강화 학습(reinforcement learning)에서 가장 단순한 아이디어이자 — 그 아래의 모든 것을 여는 아이디어다.
+> 동적 계획법(dynamic programming)은 모델이 필요하다. 몬테카를로(Monte Carlo)는 에피소드 외에는 아무것도 필요하지 않다. 정책을 돌리고, 리턴을 지켜보고, 평균을 낸다. 강화 학습(reinforcement learning)에서 가장 단순한 아이디어이자. 그 아래의 모든 것을 여는 아이디어다.
 
 **Type:** Build
 **Languages:** Python
@@ -13,7 +13,7 @@
 
 필요한 것은 환경으로부터 *샘플링*하는 능력만 요구하는 방법이다. 정책을 돌린다. 궤적(trajectory) `s_0, a_0, r_1, s_1, a_1, r_2, …, s_T`를 얻는다. 이것으로 가치를 추정한다. 이것이 몬테카를로다.
 
-DP에서 MC로의 전환은 철학적으로 중요하다: *알려진 모델 + 정확한 백업*에서 *샘플링된 롤아웃(rollout) + 평균 리턴*으로 옮겨간다. 분산은 치솟지만 적용 가능성은 폭발한다. 이 레슨 이후의 모든 강화 학습 알고리즘 — TD, Q-러닝, REINFORCE, PPO, GRPO — 은 본질적으로 몬테카를로 추정기이며, 때때로 그 위에 부트스트래핑(bootstrapping)이 얹혀 있다.
+DP에서 MC로의 전환은 철학적으로 중요하다: *알려진 모델 + 정확한 백업*에서 *샘플링된 롤아웃(rollout) + 평균 리턴*으로 옮겨간다. 분산은 치솟지만 적용 가능성은 폭발한다. 이 레슨 이후의 모든 강화 학습 알고리즘(TD, Q-러닝, REINFORCE, PPO, GRPO)은 본질적으로 몬테카를로 추정기이며, 때때로 그 위에 부트스트래핑(bootstrapping)이 얹혀 있다.
 
 ## 개념 (The Concept)
 
@@ -130,8 +130,8 @@ def mc_control(env, episodes, gamma=0.99, epsilon=0.1):
 
 ## 함정 (Pitfalls)
 
-- **무한 에피소드.** MC는 에피소드가 *종료*되어야 한다. 정책이 영원히 루프를 돌 수 있다면, `max_steps`로 한계를 두고 그 한계를 암묵적 실패로 취급하라. 무작위 정책의 GridWorld는 일상적으로 타임아웃이 난다 — 정상이니 제대로 세고 있는지만 확인하라.
-- **분산.** MC는 전체 리턴을 사용한다. 긴 에피소드에서는 분산이 거대하다 — 끝에서 운 나쁜 보상 하나가 `V(s_0)`를 같은 양만큼 이동시킨다. TD 방법(Lesson 04)은 부트스트래핑으로 이를 줄인다.
+- **무한 에피소드.** MC는 에피소드가 *종료*되어야 한다. 정책이 영원히 루프를 돌 수 있다면, `max_steps`로 한계를 두고 그 한계를 암묵적 실패로 취급하라. 무작위 정책의 GridWorld는 일상적으로 타임아웃이 난다. 정상이니 제대로 세고 있는지만 확인하라.
+- **분산.** MC는 전체 리턴을 사용한다. 긴 에피소드에서는 분산이 거대하다. 끝에서 운 나쁜 보상 하나가 `V(s_0)`를 같은 양만큼 이동시킨다. TD 방법(Lesson 04)은 부트스트래핑으로 이를 줄인다.
 - **상태 커버리지.** 동점이 있는 신선한 Q에 대한 탐욕 MC는 오직 한 행동만 시도할 것이다. 반드시 탐험해야 한다(ε-탐욕, 탐험적 시작, UCB).
 - **비정상 정책.** `π`가 바뀌면(MC 제어에서처럼), 이전 리턴은 다른 정책에서 나온 것이다. 상수-α MC는 이를 처리하지만, 표본 평균 MC는 그렇지 못하다.
 - **오프-폴리시 중요도 샘플링.** 가중치 `π(a|s)/μ(a|s)`는 궤적 전체에 걸쳐 곱해진다. 지평이 길어지면 분산이 폭발한다. 결정별 가중 IS로 한계를 두거나 TD로 전환하라.
@@ -147,7 +147,7 @@ def mc_control(env, episodes, gamma=0.99, epsilon=0.1):
 | 몬테카를로 트리 탐색 (AlphaZero) | 트리 잎(leaf)에서의 MC 롤아웃이 선택을 안내한다. |
 | LLM 강화 학습 평가 | 주어진 정책에 대해 샘플링된 완성에 대한 평균 보상 계산. |
 | PPO에서의 베이스라인 추정 | 어드밴티지 타깃 `A_t = G_t - V(s_t)`가 MC `G_t`를 사용한다. |
-| 강화 학습 교육 | 실제로 작동하는 가장 단순한 알고리즘 — 부트스트래핑을 떼어내 핵심을 본다. |
+| 강화 학습 교육 | 실제로 작동하는 가장 단순한 알고리즘: 부트스트래핑을 떼어내 핵심을 본다. |
 
 현대 심층 강화 학습 알고리즘(PPO, SAC)은 `n`-스텝 리턴이나 GAE로 순수 MC(전체 리턴)와 순수 TD(한-스텝 부트스트랩) 사이를 보간한다. 두 극단 모두 같은 추정기의 사례다.
 
@@ -197,8 +197,8 @@ Refuse to run MC on non-episodic tasks without a finite horizon cap. Refuse to r
 
 ## 더 읽을거리 (Further Reading)
 
-- [Sutton & Barto (2018). Ch. 5 — Monte Carlo Methods](http://incompleteideas.net/book/RLbook2020.pdf) — 정전적 다룸.
-- [Singh & Sutton (1996). Reinforcement Learning with Replacing Eligibility Traces](https://link.springer.com/article/10.1007/BF00114726) — 첫-방문 대 모든-방문 분석.
-- [Precup, Sutton, Singh (2000). Eligibility Traces for Off-Policy Policy Evaluation](http://incompleteideas.net/papers/PSS-00.pdf) — 오프-폴리시 MC와 분산 제어.
-- [Mahmood et al. (2014). Weighted Importance Sampling for Off-Policy Learning](https://arxiv.org/abs/1404.6362) — 현대의 저분산 IS 추정기.
-- [Tesauro (1995). TD-Gammon, A Self-Teaching Backgammon Program](https://dl.acm.org/doi/10.1145/203330.203343) — MC/TD 자기 대국(self-play)이 초인적 플레이로 수렴함을 처음으로 대규모로 실증한 사례; 이 단계 후반부 모든 레슨의 개념적 선구자.
+- [Sutton & Barto (2018). Ch. 5(Monte Carlo Methods](http://incompleteideas.net/book/RLbook2020.pdf)) 정전적 다룸.
+- [Singh & Sutton (1996). Reinforcement Learning with Replacing Eligibility Traces](https://link.springer.com/article/10.1007/BF00114726): 첫-방문 대 모든-방문 분석.
+- [Precup, Sutton, Singh (2000). Eligibility Traces for Off-Policy Policy Evaluation](http://incompleteideas.net/papers/PSS-00.pdf): 오프-폴리시 MC와 분산 제어.
+- [Mahmood et al. (2014). Weighted Importance Sampling for Off-Policy Learning](https://arxiv.org/abs/1404.6362): 현대의 저분산 IS 추정기.
+- [Tesauro (1995). TD-Gammon, A Self-Teaching Backgammon Program](https://dl.acm.org/doi/10.1145/203330.203343): MC/TD 자기 대국(self-play)이 초인적 플레이로 수렴함을 처음으로 대규모로 실증한 사례; 이 단계 후반부 모든 레슨의 개념적 선구자.

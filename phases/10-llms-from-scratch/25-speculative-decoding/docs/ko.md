@@ -197,10 +197,10 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## 더 읽을거리 (Further Reading)
 
-- [Leviathan, Kalai, Matias, 2023 — "Fast Inference from Transformers via Speculative Decoding"](https://arxiv.org/abs/2211.17192) — 정확한 거부 규칙과 이론적 속도 향상 분석
-- [Chen, Borgeaud, Irving et al., 2023 — "Accelerating Large Language Model Decoding with Speculative Sampling"](https://arxiv.org/abs/2302.01318) — DeepMind의 동시기 추측 샘플링 논문
-- [Cai, Li, Geng, Wang, Wang, Zhu, Dao, 2024 — "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"](https://arxiv.org/abs/2401.10774) — 드래프트 모델의 병렬 헤드 대안
-- [Li, Wei, Zhang, Zhang, 2024 — "EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty"](https://arxiv.org/abs/2401.15077) — 특성 재사용과 트리 드래프팅
-- [Li et al., 2024 — "EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees"](https://arxiv.org/abs/2406.16858) — 동적 트리 토폴로지
-- [Li et al., 2025 — "EAGLE-3: Scaling up Inference Acceleration of Large Language Models via Training-Time Test"](https://arxiv.org/abs/2503.01840) — 학습 시점의 테스트 타임 일치
-- [Fu, Haotian, Peng et al., 2024 — "Break the Sequential Dependency of LLM Inference Using Lookahead Decoding"](https://arxiv.org/abs/2402.02057) — Jacobi/lookahead 디코딩, 추측기 없는 대안
+- [Leviathan, Kalai, Matias, 2023("Fast Inference from Transformers via Speculative Decoding"](https://arxiv.org/abs/2211.17192)) 정확한 거부 규칙과 이론적 속도 향상 분석
+- [Chen, Borgeaud, Irving et al., 2023("Accelerating Large Language Model Decoding with Speculative Sampling"](https://arxiv.org/abs/2302.01318)) DeepMind의 동시기 추측 샘플링 논문
+- [Cai, Li, Geng, Wang, Wang, Zhu, Dao, 2024("Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"](https://arxiv.org/abs/2401.10774)) 드래프트 모델의 병렬 헤드 대안
+- [Li, Wei, Zhang, Zhang, 2024("EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty"](https://arxiv.org/abs/2401.15077)) 특성 재사용과 트리 드래프팅
+- [Li et al., 2024("EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees"](https://arxiv.org/abs/2406.16858)) 동적 트리 토폴로지
+- [Li et al., 2025("EAGLE-3: Scaling up Inference Acceleration of Large Language Models via Training-Time Test"](https://arxiv.org/abs/2503.01840)) 학습 시점의 테스트 타임 일치
+- [Fu, Haotian, Peng et al., 2024("Break the Sequential Dependency of LLM Inference Using Lookahead Decoding"](https://arxiv.org/abs/2402.02057)) Jacobi/lookahead 디코딩, 추측기 없는 대안

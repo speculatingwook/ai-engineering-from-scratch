@@ -1,4 +1,4 @@
-# Capstone 10 — 멀티 에이전트 소프트웨어 엔지니어링 팀
+# Capstone 10: 멀티 에이전트 소프트웨어 엔지니어링 팀
 
 > SWE-AF의 팩토리(factory) 아키텍처, MetaGPT의 역할 기반 프롬프팅, AutoGen 0.4의 타입 지정 액터 그래프, Cognition의 Devin, Factory의 Droids는 모두 같은 2026년 형태로 수렴했다. 아키텍트(architect)가 계획하고, N명의 코더(coder)가 병렬 worktree에서 작업하고, 리뷰어(reviewer)가 게이팅하고, 테스터(tester)가 검증한다. 병렬 worktree는 벽시계 시간을 처리량(throughput)으로 바꾼다. 공유 상태와 핸드오프(handoff) 프로토콜이 실패 표면이 된다. 캡스톤(capstone)은 그 팀을 만들고, SWE-bench Pro에서 평가하고, 어떤 핸드오프가 얼마나 자주 깨지는지 보고하는 것이다.
 
@@ -141,11 +141,11 @@ $ team run --issue https://github.com/acme/widget/issues/842
 
 ## 더 읽을거리 (Further Reading)
 
-- [SWE-AF factory architecture](https://github.com/Agent-Field/SWE-AF) — 레퍼런스 2026 멀티 에이전트 팩토리
-- [MetaGPT](https://github.com/FoundationAgents/MetaGPT) — 역할 기반 멀티 에이전트 프레임워크
-- [AutoGen v0.4](https://github.com/microsoft/autogen) — Microsoft의 타입 지정 액터 프레임워크
-- [Cognition AI (Devin)](https://cognition.ai) — 레퍼런스 제품
-- [Factory Droids](https://www.factory.ai) — 대안 레퍼런스 제품
-- [Google A2A protocol](https://developers.google.com/agent-to-agent) — 에이전트 간 메시징 스펙
-- [git worktree documentation](https://git-scm.com/docs/git-worktree) — 격리 기반
-- [SWE-bench Pro](https://www.swebench.com) — 평가 대상
+- [SWE-AF factory architecture](https://github.com/Agent-Field/SWE-AF): 레퍼런스 2026 멀티 에이전트 팩토리
+- [MetaGPT](https://github.com/FoundationAgents/MetaGPT): 역할 기반 멀티 에이전트 프레임워크
+- [AutoGen v0.4](https://github.com/microsoft/autogen): Microsoft의 타입 지정 액터 프레임워크
+- [Cognition AI (Devin)](https://cognition.ai): 레퍼런스 제품
+- [Factory Droids](https://www.factory.ai): 대안 레퍼런스 제품
+- [Google A2A protocol](https://developers.google.com/agent-to-agent): 에이전트 간 메시징 스펙
+- [git worktree documentation](https://git-scm.com/docs/git-worktree): 격리 기반
+- [SWE-bench Pro](https://www.swebench.com): 평가 대상

@@ -1,4 +1,4 @@
-# MCP 보안 II — OAuth 2.1, 리소스 표시자, 점진적 스코프
+# MCP 보안 II: OAuth 2.1, 리소스 표시자, 점진적 스코프
 
 > 원격 MCP 서버는 인증(authentication)만이 아니라 인가(authorization)가 필요하다. 2025-11-25 사양은 OAuth 2.1 + PKCE + 리소스 표시자(resource indicator, RFC 8707) + 보호된 리소스 메타데이터(protected-resource metadata, RFC 9728)와 정렬된다. SEP-835는 403 WWW-Authenticate에 대한 단계 상승 인가(step-up authorization)와 함께 점진적 스코프 동의를 추가한다. 이 레슨은 단계 상승 플로(flow)를 상태 기계(state machine)로 구현해 모든 홉(hop)을 볼 수 있게 한다.
 
@@ -158,8 +158,8 @@ Phase 13 · 17은 엔터프라이즈 게이트웨이가 OAuth를 어떻게 처�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Authorization spec](https://modelcontextprotocol.io/specification/draft/basic/authorization) — 표준 MCP OAuth 프로파일
-- [den.dev — MCP November authorization spec](https://den.dev/blog/mcp-november-authorization-spec/) — 2025-11-25 변경 사항 설명
-- [RFC 8707 — Resource indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707) — 대상 고정 RFC
-- [RFC 9728 — OAuth 2.0 protected resource metadata](https://datatracker.ietf.org/doc/html/rfc9728) — 발견 문서 RFC
-- [Aembit — MCP OAuth 2.1, PKCE and the future of AI authorization](https://aembit.io/blog/mcp-oauth-2-1-pkce-and-the-future-of-ai-authorization/) — 실용적 단계 상승 플로 설명
+- [MCP(Authorization spec](https://modelcontextprotocol.io/specification/draft/basic/authorization)) 표준 MCP OAuth 프로파일
+- [den.dev(MCP November authorization spec](https://den.dev/blog/mcp-november-authorization-spec/)) 2025-11-25 변경 사항 설명
+- [RFC 8707(Resource indicators for OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc8707)) 대상 고정 RFC
+- [RFC 9728(OAuth 2.0 protected resource metadata](https://datatracker.ietf.org/doc/html/rfc9728)) 발견 문서 RFC
+- [Aembit(MCP OAuth 2.1, PKCE and the future of AI authorization](https://aembit.io/blog/mcp-oauth-2-1-pkce-and-the-future-of-ai-authorization/)) 실용적 단계 상승 플로 설명

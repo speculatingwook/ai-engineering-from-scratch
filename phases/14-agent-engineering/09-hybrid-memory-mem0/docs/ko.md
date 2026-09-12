@@ -1,6 +1,6 @@
 # 하이브리드 메모리: 벡터 + 그래프 + KV (Mem0)
 
-> Mem0(Chhikara et al., 2025)는 메모리를 세 개의 병렬 저장소로 다룬다 — 의미적 유사성을 위한 벡터(vector), 빠른 사실 조회를 위한 KV, 개체-관계 추론을 위한 그래프(graph). 채점 계층이 검색 시 셋을 융합한다. 이것이 외부 메모리의 2026년 프로덕션(production) 표준이다.
+> Mem0(Chhikara et al., 2025)는 메모리를 세 개의 병렬 저장소로 다룬다. 의미적 유사성을 위한 벡터(vector), 빠른 사실 조회를 위한 KV, 개체-관계 추론을 위한 그래프(graph). 채점 계층이 검색 시 셋을 융합한다. 이것이 외부 메모리의 2026년 프로덕션(production) 표준이다.
 
 **Type:** Build
 **Languages:** Python (stdlib)
@@ -11,16 +11,16 @@
 
 - 단일 저장소(벡터만, 그래프만, KV만)가 에이전트 메모리에 왜 불충분한지 설명하기.
 - Mem0의 세 병렬 저장소와 각각이 무엇을 최적화하는지 명명하기.
-- Mem0의 융합 채점 — 관련성(relevance), 중요도(importance), 최신성(recency) — 을 서술하고, 왜 위계가 아니라 가중합인지 설명하기.
+- Mem0의 융합 채점(관련성(relevance), 중요도(importance), 최신성(recency))을 서술하고, 왜 위계가 아니라 가중합인지 설명하기.
 - 셋 모두에 쓰는 `add()`와 결과를 융합하는 `search()`를 갖춘 장난감 3저장소 메모리를 stdlib로 구현하기.
 
 ## 문제 (The Problem)
 
 하나의 저장소는 세 가지 질의 부류 중 하나에 잘못 맞는다:
 
-- **의미적 유사성** — "지난주에 에이전트 표류에 관해 무슨 얘기를 했지?" 벡터가 이긴다; KV와 그래프는 놓친다.
-- **사실 조회** — "사용자의 전화번호가 뭐지?" KV가 이긴다; 벡터는 낭비고, 그래프는 과하다.
-- **관계 추론** — "어떤 고객들이 같은 청구 개체를 공유하지?" 그래프가 이긴다; 벡터와 KV는 답할 수 없다.
+- **의미적 유사성**: "지난주에 에이전트 표류에 관해 무슨 얘기를 했지?" 벡터가 이긴다; KV와 그래프는 놓친다.
+- **사실 조회**: "사용자의 전화번호가 뭐지?" KV가 이긴다; 벡터는 낭비고, 그래프는 과하다.
+- **관계 추론**: "어떤 고객들이 같은 청구 개체를 공유하지?" 그래프가 이긴다; 벡터와 KV는 답할 수 없다.
 
 프로덕션 에이전트는 한 세션에서 셋 모두를 발행한다. 단일 저장소 메모리는 그중 둘에 항상 잘못 맞는다. Mem0의 기여는 셋을 단일 `add`/`search` 표면 뒤에 연결하고, 셋 모두를 융합하는 채점 함수를 두는 것이다.
 
@@ -50,9 +50,9 @@ score = w_relevance * relevance(q, record)
       + w_recency * recency(record)
 ```
 
-- **관련성(Relevance)** — 벡터 코사인, KV 정확 일치, 그래프 경로 가중치.
-- **중요도(Importance)** — 쓰기 시점에 태깅되거나 학습됨(어떤 사실은 더 중요하다: 이름, ID, 정책).
-- **최신성(Recency)** — 마지막 쓰기 또는 읽기 이후 시간에 대한 지수 감쇠.
+- **관련성(Relevance)**: 벡터 코사인, KV 정확 일치, 그래프 경로 가중치.
+- **중요도(Importance)**: 쓰기 시점에 태깅되거나 학습됨(어떤 사실은 더 중요하다: 이름, ID, 정책).
+- **최신성(Recency)**: 마지막 쓰기 또는 읽기 이후 시간에 대한 지수 감쇠.
 
 가중치는 제품별로 조정된다. 채팅 에이전트에는 더 높은 `w_recency`; 규정 준수(compliance) 에이전트에는 더 높은 `w_importance`; 검색 에이전트에는 더 높은 `w_relevance`.
 
@@ -76,9 +76,9 @@ Mem0 논문은 다음을 보고한다(2025):
 
 Mem0는 메모리를 범위(scope)로 나눈다:
 
-- **사용자 메모리(User memory)** — 세션 전반에 걸쳐 지속, `user_id`로 키가 매겨짐.
-- **세션 메모리(Session memory)** — 하나의 스레드 안에서 지속.
-- **에이전트 메모리(Agent memory)** — 에이전트 인스턴스별 상태.
+- **사용자 메모리(User memory)**: 세션 전반에 걸쳐 지속, `user_id`로 키가 매겨짐.
+- **세션 메모리(Session memory)**: 하나의 스레드 안에서 지속.
+- **에이전트 메모리(Agent memory)**: 에이전트 인스턴스별 상태.
 
 모든 쓰기는 하나의 범위를 고른다. 검색은 범위별 가중치로 범위에 걸쳐 질의할 수 있다. 범위를 생각 없이 섞으면 "어시스턴트가 Alice에게 Bob의 프로젝트를 알려줬다" 같은 사고가 난다.
 
@@ -92,10 +92,10 @@ Mem0는 메모리를 범위(scope)로 나눈다:
 
 `code/main.py`는 3저장소 패턴을 stdlib로 구현한다:
 
-- `VectorStore` — 임베딩 대용으로서의 단순 토큰 중첩 유사성.
-- `KVStore` — `(user_id, fact_type, entity)`로 키가 매겨진 딕셔너리.
-- `GraphStore` — 타입이 있는 간선(subject, relation, object, valid).
-- `Mem0` — `add()`, `search()`, 융합 채점, 범위 인식 검색을 가진 최상위 파사드.
+- `VectorStore`: 임베딩 대용으로서의 단순 토큰 중첩 유사성.
+- `KVStore`: `(user_id, fact_type, entity)`로 키가 매겨진 딕셔너리.
+- `GraphStore`: 타입이 있는 간선(subject, relation, object, valid).
+- `Mem0`: `add()`, `search()`, 융합 채점, 범위 인식 검색을 가진 최상위 파사드.
 - 다중 사용자, 다중 세션 대화에 대한 작동 트레이스.
 
 실행:
@@ -108,10 +108,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **Mem0 (Apache 2.0)** — 프로덕션 준비됨. Postgres + Qdrant + Neo4j로 셀프 호스팅하거나 관리형 클라우드 사용.
-- **Letta** — 3계층 core/recall/archival; 자신의 벡터와 그래프 백엔드를 가져옴.
-- **Zep** — 시간적 KG와 사실 추출을 가진 상업적 대안.
-- **커스텀 빌드** — 추출기(규정 준수)나 융합 가중치(최신성이 지배하는 음성 에이전트)에 대한 정확한 통제가 필요할 때.
+- **Mem0 (Apache 2.0)**: 프로덕션 준비됨. Postgres + Qdrant + Neo4j로 셀프 호스팅하거나 관리형 클라우드 사용.
+- **Letta**: 3계층 core/recall/archival; 자신의 벡터와 그래프 백엔드를 가져옴.
+- **Zep**: 시간적 KG와 사실 추출을 가진 상업적 대안.
+- **커스텀 빌드**: 추출기(규정 준수)나 융합 가중치(최신성이 지배하는 음성 에이전트)에 대한 정확한 통제가 필요할 때.
 
 ## 산출물 (Ship It)
 
@@ -132,14 +132,14 @@ python3 code/main.py
 | 하이브리드 메모리(Hybrid memory) | "벡터 더하기 그래프 더하기 KV" | 병렬로 쓰이고 검색 시 융합되는 세 저장소 |
 | 사실 추출(Fact extraction) | "메모리 흡수" | 텍스트를 (개체, 관계, 사실) 튜플로 분해하는 LLM 단계 |
 | 융합 채점(Fusion scoring) | "관련성 순위" | 관련성, 중요도, 최신성의 가중합 |
-| 범위(Scope) | "메모리 네임스페이스" | user / session / agent — 누가 무엇을 보는지 결정 |
+| 범위(Scope) | "메모리 네임스페이스" | user / session / agent: 누가 무엇을 보는지 결정 |
 | Mem0g | "메모리 그래프" | 관계 질의를 위한 시간적 유효성을 가진 타입 있는 간선 |
 | 시간적 무효화(Temporal invalidation) | "소프트 삭제" | 모순된 간선을 무효로 표시; 절대 삭제하지 않음 |
 | 임베딩 표류(Embedding drift) | "검색 부패" | 말뭉치가 커지면서 벡터 품질이 저하; 주기적으로 재임베딩 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Chhikara et al., Mem0 (arXiv:2504.19413)](https://arxiv.org/abs/2504.19413) — 원논문
-- [Mem0 docs](https://docs.mem0.ai/platform/overview) — 프로덕션 API, SDK, 관리형 클라우드
-- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560) — 가상 컨텍스트 선조
-- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks) — 3계층 형제 설계
+- [Chhikara et al., Mem0 (arXiv:2504.19413)](https://arxiv.org/abs/2504.19413): 원논문
+- [Mem0 docs](https://docs.mem0.ai/platform/overview): 프로덕션 API, SDK, 관리형 클라우드
+- [Packer et al., MemGPT (arXiv:2310.08560)](https://arxiv.org/abs/2310.08560): 가상 컨텍스트 선조
+- [Letta, Memory Blocks blog](https://www.letta.com/blog/memory-blocks): 3계층 형제 설계

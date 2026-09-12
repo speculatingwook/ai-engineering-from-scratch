@@ -18,7 +18,7 @@
 
 에이전트가 거의 맞는 답을 생성한다. 어쩌면 코드 한 줄에 구문 오류가 있을 수 있다. 어쩌면 요약이 너무 길 수 있다. 어쩌면 계획이 경계 사례(edge case)를 놓칠 수 있다. 원하는 결과는 분명하다. 에이전트가 자신의 출력을 비평한 다음 고치는 것이다.
 
-Self-Refine은 이것이 단일 모델로, 학습 데이터 없이, 강화 학습 없이 작동함을 보여준다. 하지만 함정이 있다: LLM은 어려운 사실에 대한 자기 검증에 서투르다. CRITIC은 해결책을 명명한다 — 검증 단계를 외부 도구(검색, 코드 인터프리터, 계산기, 테스트 러너)로 라우팅하라.
+Self-Refine은 이것이 단일 모델로, 학습 데이터 없이, 강화 학습 없이 작동함을 보여준다. 하지만 함정이 있다: LLM은 어려운 사실에 대한 자기 검증에 서투르다. CRITIC은 해결책을 명명한다. 검증 단계를 외부 도구(검색, 코드 인터프리터, 계산기, 테스트 러너)로 라우팅하라.
 
 이 두 논문은 함께 반복적 개선을 위한 2026년 기본값을 정의한다: 생성하고, (가능하면 외부적으로) 검증하고, 정제하고, 검증기가 통과하면 멈춘다.
 
@@ -38,7 +38,7 @@ refine(task, output_1, critique_1, history) -> output_2
 stop when feedback says "no issues" or budget exhausted.
 ```
 
-핵심 세부: `refine`은 전체 이력 — 모든 이전 출력과 비평 — 을 보므로 실수를 반복하지 않는다. 논문은 이를 절제(ablation)한다: 이력을 빼면 품질이 급격히 떨어진다.
+핵심 세부: `refine`은 전체 이력(모든 이전 출력과 비평)을 보므로 실수를 반복하지 않는다. 논문은 이를 절제(ablation)한다: 이력을 빼면 품질이 급격히 떨어진다.
 
 표제: GPT-4를 포함한 7개 작업(수학, 코드, 약어, 대화)에 걸쳐 평균 절대치 +20 개선. 학습 없음, 외부 도구 없음, 단일 모델.
 
@@ -89,11 +89,11 @@ OpenAI Agents SDK는 이 패턴을 "출력 가드레일(output guardrails)"로 �
 
 구성 요소:
 
-- `generate` — 스크립트된 생성기.
-- `feedback` — LLM 스타일 자기 비평.
-- `verify_external` — CRITIC 스타일 근거 검증기.
-- `refine` — 이력이 주어지면 출력을 재작성.
-- 정지 조건 — 검증기 통과 또는 최대 4회 반복.
+- `generate`: 스크립트된 생성기.
+- `feedback`: LLM 스타일 자기 비평.
+- `verify_external`: CRITIC 스타일 근거 검증기.
+- `refine`: 이력이 주어지면 출력을 재작성.
+- 정지 조건: 검증기 통과 또는 최대 4회 반복.
 
 실행:
 
@@ -125,7 +125,7 @@ Anthropic의 평가자-최적화기는 Claude 친화적 언어로 표현한 이 
 |------|----------------|------------------------|
 | Self-Refine | "자기 자신을 고치는 LLM" | 한 모델에서 생성 -> 피드백 -> 정제 루프, 이력 포함 |
 | CRITIC | "도구 근거 검증" | 피드백을 외부 검증기(검색, 코드, 계산, 테스트)로 대체 |
-| 평가자-최적화기(Evaluator-Optimizer) | "Anthropic 워크플로 패턴" | 두 역할 — 평가자가 채점, 최적화기가 수정 — 을 수렴까지 루프 |
+| 평가자-최적화기(Evaluator-Optimizer) | "Anthropic 워크플로 패턴" | 두 역할(평가자가 채점, 최적화기가 수정)을 수렴까지 루프 |
 | 출력 가드레일(Output guardrail) | "사후 확인" | 에이전트가 출력을 생성한 후 돌아가는 OpenAI Agents SDK 검증기 |
 | 검증 단계(Verify step) | "비평 국면" | 핵심을 떠받치는 결정: 근거를 가지거나 자기 평가 |
 | 정제 이력(Refine history) | "모델이 이미 시도한 것" | 이전 출력 + 비평이 정제 프롬프트 앞에 붙음; 빼면 품질이 무너짐 |
@@ -134,7 +134,7 @@ Anthropic의 평가자-최적화기는 Claude 친화적 언어로 표현한 이 
 
 ## 더 읽을거리 (Further Reading)
 
-- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651) — 표준 논문
-- [Gou et al., CRITIC (arXiv:2305.11738)](https://arxiv.org/abs/2305.11738) — 도구 근거 검증
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 평가자-최적화기 워크플로 패턴
-- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/) — CRITIC 형태 검증기로서의 출력 가드레일
+- [Madaan et al., Self-Refine (arXiv:2303.17651)](https://arxiv.org/abs/2303.17651): 표준 논문
+- [Gou et al., CRITIC (arXiv:2305.11738)](https://arxiv.org/abs/2305.11738): 도구 근거 검증
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 평가자-최적화기 워크플로 패턴
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): CRITIC 형태 검증기로서의 출력 가드레일

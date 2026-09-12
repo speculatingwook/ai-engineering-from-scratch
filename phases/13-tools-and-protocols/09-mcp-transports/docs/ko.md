@@ -1,4 +1,4 @@
-# MCP 트랜스포트 — stdio vs Streamable HTTP vs SSE 마이그레이션
+# MCP 트랜스포트: stdio vs Streamable HTTP vs SSE 마이그레이션
 
 > stdio는 로컬에서만 동작하고 다른 곳에서는 동작하지 않는다. Streamable HTTP(2025-03-26)는 원격 표준이다. 기존 HTTP+SSE 트랜스포트는 더 이상 쓰이지 않으며 2026년 중반에 제거된다. 잘못된 트랜스포트를 고르면 마이그레이션 비용을 치르게 되고, 올바른 것을 고르면 세션 연속성(session continuity)과 DNS 리바인딩(DNS-rebinding) 방어를 갖춘 원격 호스팅 가능한 MCP 서버를 얻는다.
 
@@ -137,8 +137,8 @@ Phase 13 · 13은 태스크(Task)를 다루며, 이를 통해 장기 실행 작�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MCP — Basic transports spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports) — stdio와 Streamable HTTP의 표준 레퍼런스
-- [MCP — Basic transports spec 2025-03-26](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports) — Streamable HTTP를 도입한 개정판
-- [Cloudflare — MCP transport](https://developers.cloudflare.com/agents/model-context-protocol/transport/) — Workers 호스팅 Streamable HTTP 패턴
-- [AWS — MCP transport mechanisms](https://builder.aws.com/content/35A0IphCeLvYzly9Sw40G1dVNzc/mcp-transport-mechanisms-stdio-vs-streamable-http) — 배포 형태별 비교
-- [Atlassian — HTTP+SSE deprecation notice](https://community.atlassian.com/forums/Atlassian-Remote-MCP-Server/HTTP-SSE-Deprecation-Notice/ba-p/3205484) — 구체적인 마이그레이션 마감 사례
+- [MCP(Basic transports spec 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports)) stdio와 Streamable HTTP의 표준 레퍼런스
+- [MCP(Basic transports spec 2025-03-26](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports)) Streamable HTTP를 도입한 개정판
+- [Cloudflare(MCP transport](https://developers.cloudflare.com/agents/model-context-protocol/transport/)) Workers 호스팅 Streamable HTTP 패턴
+- [AWS(MCP transport mechanisms](https://builder.aws.com/content/35A0IphCeLvYzly9Sw40G1dVNzc/mcp-transport-mechanisms-stdio-vs-streamable-http)) 배포 형태별 비교
+- [Atlassian(HTTP+SSE deprecation notice](https://community.atlassian.com/forums/Atlassian-Remote-MCP-Server/HTTP-SSE-Deprecation-Notice/ba-p/3205484)) 구체적인 마이그레이션 마감 사례

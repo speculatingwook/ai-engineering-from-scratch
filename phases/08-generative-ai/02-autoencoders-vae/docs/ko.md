@@ -1,6 +1,6 @@
 # 오토인코더와 변분 오토인코더 (Autoencoders & Variational Autoencoders, VAE)
 
-> 평범한 오토인코더(autoencoder)는 압축한 다음 재구성한다. 그것은 암기한다. 생성하지는 않는다. 한 가지 트릭 — 코드(code)가 가우시안처럼 보이도록 강제하는 것 — 을 더하면 샘플러(sampler)를 얻는다. `z = μ + σ·ε`의 재매개변수화(reparameterization)라는 그 단 하나의 트릭이, 2026년에 쓰이는 모든 잠재 확산(latent-diffusion)과 흐름 매칭(flow-matching) 이미지 모델이 입력단에 VAE를 두는 이유다.
+> 평범한 오토인코더(autoencoder)는 압축한 다음 재구성한다. 그것은 암기한다. 생성하지는 않는다. 한 가지 트릭(코드(code)가 가우시안처럼 보이도록 강제하는 것)을 더하면 샘플러(sampler)를 얻는다. `z = μ + σ·ε`의 재매개변수화(reparameterization)라는 그 단 하나의 트릭이, 2026년에 쓰이는 모든 잠재 확산(latent-diffusion)과 흐름 매칭(flow-matching) 이미지 모델이 입력단에 VAE를 두는 이유다.
 
 **Type:** Build
 **Languages:** Python
@@ -11,11 +11,11 @@
 
 784픽셀의 MNIST 숫자를 16개의 숫자로 된 코드로 압축한 다음 재구성하라. 평범한 오토인코더는 재구성 MSE에서는 만점을 받겠지만, 코드 공간은 울퉁불퉁한 엉망이다. 코드 공간에서 임의의 점을 골라 디코딩하면 잡음이 나온다. 샘플러가 없다. 차려입은 압축 모델일 뿐이다.
 
-실제로 원하는 것은 이렇다. (a) 코드 공간이 샘플링할 수 있는 깨끗하고 매끄러운 분포 — 이를테면 등방성 가우시안(isotropic Gaussian) `N(0, I)` — 이고, (b) 어떤 샘플을 디코딩해도 그럴듯한 숫자가 나오며, (c) 인코더(encoder)와 디코더(decoder)가 여전히 잘 압축한다. 세 가지 목표, 하나의 아키텍처, 하나의 손실(loss)이다.
+실제로 원하는 것은 이렇다. (a) 코드 공간이 샘플링할 수 있는 깨끗하고 매끄러운 분포(이를테면 등방성 가우시안(isotropic Gaussian) `N(0, I)`) 이고, (b) 어떤 샘플을 디코딩해도 그럴듯한 숫자가 나오며, (c) 인코더(encoder)와 디코더(decoder)가 여전히 잘 압축한다. 세 가지 목표, 하나의 아키텍처, 하나의 손실(loss)이다.
 
 Kingma의 2013년 VAE는 이를 다음과 같이 해결한다. 인코더가 *분포* `q(z|x) = N(μ(x), σ(x)²)`를 출력하도록 학습시키고, KL 페널티로 그 분포를 사전 분포(prior) `N(0, I)` 쪽으로 끌어당기며, 디코딩하기 전에 `q(z|x)`에서 `z`를 샘플링한다. 추론(inference) 시에는 인코더를 버리고, `z ~ N(0, I)`를 샘플링한 뒤 디코딩한다. 코드 공간이 구조를 갖도록 강제하는 것이 바로 KL 페널티다.
 
-2026년에 VAE는 단독으로 출시되는 경우가 드물다 — 원본 이미지 품질에서는 확산(diffusion)에 압도당했다 — 하지만 모든 잠재 확산 모델(SD 1/2/XL/3, Flux, AudioCraft)에서 선택받는 인코더다. VAE를 배우면 흔히 쓰는 모든 이미지 파이프라인의 보이지 않는 첫 번째 층(layer)을 배우는 셈이다.
+2026년에 VAE는 단독으로 출시되는 경우가 드물다. 원본 이미지 품질에서는 확산(diffusion)에 압도당했다. 하지만 모든 잠재 확산 모델(SD 1/2/XL/3, Flux, AudioCraft)에서 선택받는 인코더다. VAE를 배우면 흔히 쓰는 모든 이미지 파이프라인의 보이지 않는 첫 번째 층(layer)을 배우는 셈이다.
 
 ## 개념 (The Concept)
 
@@ -25,7 +25,7 @@ Kingma의 2013년 VAE는 이를 다음과 같이 해결한다. 인코더가 *분
 
 **VAE 인코더.** 두 개의 벡터를 출력한다: `μ(x)`와 `log σ²(x)`. 이들이 `q(z|x) = N(μ, diag(σ²))`를 정의한다.
 
-**재매개변수화 트릭(Reparameterization trick).** `q(z|x)`에서 샘플링하는 것은 미분 불가능하다. 샘플을 `z = μ + σ·ε`로 다시 쓰는데, 여기서 `ε ~ N(0, I)`이다. 이제 `z`는 `(μ, σ)`의 결정론적 함수에 비파라미터 잡음을 더한 것이다 — 그래디언트(gradient)가 `μ`와 `σ`를 통해 흐른다.
+**재매개변수화 트릭(Reparameterization trick).** `q(z|x)`에서 샘플링하는 것은 미분 불가능하다. 샘플을 `z = μ + σ·ε`로 다시 쓰는데, 여기서 `ε ~ N(0, I)`이다. 이제 `z`는 `(μ, σ)`의 결정론적 함수에 비파라미터 잡음을 더한 것이다. 그래디언트(gradient)가 `μ`와 `σ`를 통해 흐른다.
 
 **손실.** 증거 하한(Evidence Lower BOund, ELBO), 두 항이다.
 
@@ -36,7 +36,7 @@ loss = reconstruction + β · KL[q(z|x) || N(0, I)]
 
 재구성 항은 `x̂`를 `x` 쪽으로 민다. KL 항은 `q(z|x)`를 사전 분포 쪽으로 민다. 이 둘은 트레이드오프(trade-off) 관계다. 작은 β (<1) = 더 선명한 샘플, 덜 가우시안적인 코드 공간. 큰 β (>1) = 더 깨끗한 코드 공간, 더 흐릿한 샘플. β-VAE (Higgins 2017)는 이 조절 손잡이를 유명하게 만들었고 풀림(disentanglement) 연구의 물꼬를 텄다.
 
-**샘플링.** 추론 시: `z ~ N(0, I)`를 그려 디코더를 통해 순방향한다. 순방향 패스(forward pass) 한 번 — 확산처럼 반복적인 샘플링이 없다.
+**샘플링.** 추론 시: `z ~ N(0, I)`를 그려 디코더를 통해 순방향한다. 순방향 패스(forward pass) 한 번: 확산처럼 반복적인 샘플링이 없다.
 
 ## 직접 만들기 (Build It)
 
@@ -52,7 +52,7 @@ def encode(x, enc):
     return mu, log_sigma2
 ```
 
-네트워크 출력을 제약 없이 두기 위해 `σ` 대신 `log σ²`를 쓴다(σ의 softplus는 함정이다 — σ ≈ 0에서 그래디언트가 죽는다).
+네트워크 출력을 제약 없이 두기 위해 `σ` 대신 `log σ²`를 쓴다(σ의 softplus는 함정이다. σ ≈ 0에서 그래디언트가 죽는다).
 
 ### 2단계: 재매개변수화와 디코딩
 
@@ -76,7 +76,7 @@ def elbo(x, x_hat, mu, log_sigma2, beta=1.0):
     return recon + beta * kl, recon, kl
 ```
 
-두 분포가 모두 가우시안이므로 정확한 닫힌 형태의 KL이다. 수치적으로 적분하지 마라. 사람들은 2026년에도 여전히 몬테카를로(monte-carlo) KL 추정값을 쓰는 코드를 출시한다 — 아무 이유도 없이 3배 느리다.
+두 분포가 모두 가우시안이므로 정확한 닫힌 형태의 KL이다. 수치적으로 적분하지 마라. 사람들은 2026년에도 여전히 몬테카를로(monte-carlo) KL 추정값을 쓰는 코드를 출시한다. 아무 이유도 없이 3배 느리다.
 
 ### 4단계: 생성
 
@@ -91,7 +91,7 @@ def sample(dec, z_dim, rng):
 ## 함정 (Pitfalls)
 
 - **사후 분포 붕괴(Posterior collapse).** KL 항이 `q(z|x) → N(0, I)`를 너무 공격적으로 몰아붙여 `z`가 `x`에 대한 정보를 전혀 담지 못한다. 해결책: β-어닐링(β=0에서 시작해 1까지 점진적으로 올림), 자유 비트(free bits), 또는 비활성 차원에서 KL 생략.
-- **흐릿한 샘플.** 가우시안 디코더 가능도(likelihood)는 MSE 재구성을 함의하는데, 이는 L2에 대해 베이즈 최적(평균)이다 — 그럴듯한 숫자들의 집합의 평균은 흐릿한 숫자다. 해결책: 이산 디코더(VQ-VAE, NVAE), 또는 VAE를 인코더로만 쓰고 잠재(latent) 위에 확산을 쌓기(이것이 Stable Diffusion이 하는 것이다).
+- **흐릿한 샘플.** 가우시안 디코더 가능도(likelihood)는 MSE 재구성을 함의하는데, 이는 L2에 대해 베이즈 최적(평균)이다. 그럴듯한 숫자들의 집합의 평균은 흐릿한 숫자다. 해결책: 이산 디코더(VQ-VAE, NVAE), 또는 VAE를 인코더로만 쓰고 잠재(latent) 위에 확산을 쌓기(이것이 Stable Diffusion이 하는 것이다).
 - **β가 너무 크고, 너무 이름.** 사후 분포 붕괴를 보라. β≈0.01에서 시작해 점진적으로 올려라.
 - **잠재 차원이 너무 작음.** 16차원은 MNIST에 적합하고, 256차원은 ImageNet 256², 2048차원은 ImageNet 1024²에 적합하다. Stable Diffusion의 VAE는 512×512×3 → 64×64×4로 압축한다(공간 면적에서 32배, 채널에서 32배 다운샘플 인자).
 
@@ -137,16 +137,16 @@ def sample(dec, z_dim, rng):
 
 ## 프로덕션 노트: VAE는 확산 서버에서 가장 뜨거운 경로다 (Production note: the VAE is the hottest path in a diffusion server)
 
-Stable Diffusion / Flux / SD3 파이프라인에서 VAE는 요청당 두 번 호출된다 — 한 번은 인코딩(img2img / 인페인팅(inpainting)을 한다면), 한 번은 디코딩이다. 1024²에서 디코더 패스는 종종 파이프라인 전체에서 단일 최대 활성값 메모리 정점인데, `128×128×16` 잠재를 다시 `1024×1024×3`으로 업샘플(upsample)하기 때문이다. 두 가지 실용적 결과가 따른다.
+Stable Diffusion / Flux / SD3 파이프라인에서 VAE는 요청당 두 번 호출된다. 한 번은 인코딩(img2img / 인페인팅(inpainting)을 한다면), 한 번은 디코딩이다. 1024²에서 디코더 패스는 종종 파이프라인 전체에서 단일 최대 활성값 메모리 정점인데, `128×128×16` 잠재를 다시 `1024×1024×3`으로 업샘플(upsample)하기 때문이다. 두 가지 실용적 결과가 따른다.
 
 - **디코드를 슬라이스하거나 타일링하라.** `diffusers`는 `pipe.vae.enable_slicing()`과 `pipe.vae.enable_tiling()`을 노출한다. 타일링은 작은 이음새 아티팩트를 `O(H·W)` 대신 `O(tile²)` 메모리와 맞바꾼다. 소비자용 GPU에서 1024² 이상에 필수적이다.
-- **bf16 디코더, 최종 리사이즈는 fp32 수치 연산.** SD 1.x VAE는 fp32로 출시되었고 1024² 이상에서 fp16으로 캐스팅하면 *조용히 NaN을 만든다*. SDXL은 `madebyollin/sdxl-vae-fp16-fix`를 함께 제공한다 — 항상 fp16-fix 변형을 선호하거나 bf16을 써라.
+- **bf16 디코더, 최종 리사이즈는 fp32 수치 연산.** SD 1.x VAE는 fp32로 출시되었고 1024² 이상에서 fp16으로 캐스팅하면 *조용히 NaN을 만든다*. SDXL은 `madebyollin/sdxl-vae-fp16-fix`를 함께 제공한다. 항상 fp16-fix 변형을 선호하거나 bf16을 써라.
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kingma & Welling (2013). Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114) — VAE 논문.
-- [Higgins et al. (2017). β-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework](https://openreview.net/forum?id=Sy2fzU9gl) — 풀린 β-VAE.
+- [Kingma & Welling (2013). Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114): VAE 논문.
+- [Higgins et al. (2017). β-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework](https://openreview.net/forum?id=Sy2fzU9gl): 풀린 β-VAE.
 - [van den Oord et al. (2017). Neural Discrete Representation Learning](https://arxiv.org/abs/1711.00937) — VQ-VAE.
-- [Vahdat & Kautz (2021). NVAE: A Deep Hierarchical Variational Autoencoder](https://arxiv.org/abs/2007.03898) — 최첨단 이미지 VAE.
-- [Rombach et al. (2022). High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752) — Stable Diffusion; 인코더로서의 VAE.
-- [Défossez et al. (2022). High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438) — Encodec, 오디오 VAE 표준.
+- [Vahdat & Kautz (2021). NVAE: A Deep Hierarchical Variational Autoencoder](https://arxiv.org/abs/2007.03898): 최첨단 이미지 VAE.
+- [Rombach et al. (2022). High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752): Stable Diffusion; 인코더로서의 VAE.
+- [Défossez et al. (2022). High Fidelity Neural Audio Compression](https://arxiv.org/abs/2210.13438): Encodec, 오디오 VAE 표준.

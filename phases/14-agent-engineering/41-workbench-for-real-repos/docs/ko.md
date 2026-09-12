@@ -99,7 +99,7 @@ python3 code/main.py
 
 **긴 컨텍스트 붕괴(long-context collapse).** WebAgent 베이스라인 40-50% 성공률이 긴 컨텍스트 조건에서 10% 미만으로 떨어지는데, 대부분 무한 루프와 목표 상실(goal loss)에서 비롯된다. Ralph 루프(Ralph Loop)와 핸드오프 패킷은 그것을 흡수하기 위해 존재한다.
 
-**거짓 음성(false negative)도 여전히 존재한다.** 단일 단계 사실 작업, 한 줄짜리 린트, 포매터(formatter) 실행, 모델이 글자 그대로 외운 모든 것 — 이런 것들은 프롬프트 전용에서 더 빠르게 실행된다. 벤치마크는 이것들을 정직하게 열거하여 워크벤치가 과잉(overkill)으로 프레이밍되지 않도록 해야 한다.
+**거짓 음성(false negative)도 여전히 존재한다.** 단일 단계 사실 작업, 한 줄짜리 린트, 포매터(formatter) 실행, 모델이 글자 그대로 외운 모든 것: 이런 것들은 프롬프트 전용에서 더 빠르게 실행된다. 벤치마크는 이것들을 정직하게 열거하여 워크벤치가 과잉(overkill)으로 프레이밍되지 않도록 해야 한다.
 
 요점은 "하니스가 영원히 이긴다"가 아니다. 모델은 시간이 지나면서 하니스 요령을 실제로 흡수한다. 요점은 오늘날 엔지니어링 부하가 일곱 가지 표면에 있고, 숫자가 그것을 증명한다는 것이다.
 
@@ -137,12 +137,12 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [LangChain, The Anatomy of an Agent Harness](https://blog.langchain.com/the-anatomy-of-an-agent-harness/) — Terminal Bench Top-30에서 Top-5로의 증거
-- [MongoDB, The Agent Harness: Why the LLM Is the Smallest Part of Your Agent System](https://www.mongodb.com/company/blog/technical/agent-harness-why-llm-is-smallest-part-of-your-agent-system) — Vercel + Harvey 숫자
-- [preprints.org, Harness Engineering for Language Agents](https://www.preprints.org/manuscript/202603.1756) — 88% 기업 실패율, 런타임 근본 원인
-- [HN: Improving 15 LLMs at Coding in One Afternoon. Only the Harness Changed](https://news.ycombinator.com/item?id=46988596) — 15개 모델에 걸쳐 재현됨
-- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/) — 프로덕션에서 30일간 131k 리뷰 실행
+- [LangChain, The Anatomy of an Agent Harness](https://blog.langchain.com/the-anatomy-of-an-agent-harness/): Terminal Bench Top-30에서 Top-5로의 증거
+- [MongoDB, The Agent Harness: Why the LLM Is the Smallest Part of Your Agent System](https://www.mongodb.com/company/blog/technical/agent-harness-why-llm-is-smallest-part-of-your-agent-system): Vercel + Harvey 숫자
+- [preprints.org, Harness Engineering for Language Agents](https://www.preprints.org/manuscript/202603.1756): 88% 기업 실패율, 런타임 근본 원인
+- [HN: Improving 15 LLMs at Coding in One Afternoon. Only the Harness Changed](https://news.ycombinator.com/item?id=46988596): 15개 모델에 걸쳐 재현됨
+- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/): 프로덕션에서 30일간 131k 리뷰 실행
 - [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
-- Phases 14 · 32 to 14 · 40 — 이 레슨이 종단간(end-to-end)으로 작동시키는 표면들
-- Phase 14 · 19 — 이 레슨이 보완하는 거시 벤치마크로서의 SWE-bench, GAIA, AgentBench
-- Phase 14 · 30 — 같은 하니스가 꽂히는 평가 주도 에이전트 개발
+- Phases 14 · 32 to 14 · 40: 이 레슨이 종단간(end-to-end)으로 작동시키는 표면들
+- Phase 14 · 19: 이 레슨이 보완하는 거시 벤치마크로서의 SWE-bench, GAIA, AgentBench
+- Phase 14 · 30: 같은 하니스가 꽂히는 평가 주도 에이전트 개발

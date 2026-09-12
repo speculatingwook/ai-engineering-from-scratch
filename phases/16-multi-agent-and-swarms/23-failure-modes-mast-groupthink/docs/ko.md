@@ -1,6 +1,6 @@
-# 실패 모드 — MAST, 집단사고, 단일 문화, 연쇄 오류 (Failure Modes — MAST, Groupthink, Monoculture, Cascading Errors)
+# 실패 모드(MAST, 집단사고, 단일 문화, 연쇄 오류 (Failure Modes) MAST, Groupthink, Monoculture, Cascading Errors)
 
-> 2026년의 참조 분류 체계는 **MAST** (Cemri et al., NeurIPS 2025, arXiv:2503.13657)이며, **41–86.7% 실패율**을 보이는 7개의 최첨단 오픈소스 MAS에 걸친 1642개의 실행 추적에서 도출되었다. 세 가지 근본 범주: **명세 문제(Specification Problems)**(41.77%) — 역할 모호성, 불명확한 과제 정의; **협응 실패(Coordination Failures)**(36.94%) — 통신 붕괴, 상태 비동기화; **검증 격차(Verification Gaps)**(21.30%) — 누락된 검증, 부재한 품질 검사. **집단사고(Groupthink)** 계열(arXiv:2508.05687)은 여기에 다음을 더한다: 단일 문화 붕괴(같은 기반 모델 → 상관된 실패), 동조 편향(에이전트(agent)들이 서로의 오류를 강화), 결함 있는 마음 이론, 혼합 동기 동역학, 연쇄 신뢰성 실패. 연쇄 예시: 지불 실패가 주문 재시도를 유발하고, 주문 재시도가 재고 재시도를 유발하며, 재고 재시도가 재고 서비스를 압도하는 재시도 폭풍(retry storm)(초 단위로 10배 부하 — 회로 차단기(circuit breaker)가 필요). 메모리 오염(memory poisoning): 한 에이전트의 환각(hallucination)이 공유 메모리에 들어가고, 하류 에이전트들이 그것을 사실로 취급한다. 정확도가 점진적으로 감쇠하여 근본 원인 진단을 고통스럽게 만든다. **STRATUS** (NeurIPS 2025)는 특화된 탐지 / 진단 / 검증 에이전트로 완화 성공이 1.5배 개선됨을 보고한다. 이 레슨은 실패 모드를 일급 엔지니어링 대상으로 다룬다.
+> 2026년의 참조 분류 체계는 **MAST** (Cemri et al., NeurIPS 2025, arXiv:2503.13657)이며, **41–86.7% 실패율**을 보이는 7개의 최첨단 오픈소스 MAS에 걸친 1642개의 실행 추적에서 도출되었다. 세 가지 근본 범주: **명세 문제(Specification Problems)**(41.77%): 역할 모호성, 불명확한 과제 정의; **협응 실패(Coordination Failures)**(36.94%): 통신 붕괴, 상태 비동기화; **검증 격차(Verification Gaps)**(21.30%): 누락된 검증, 부재한 품질 검사. **집단사고(Groupthink)** 계열(arXiv:2508.05687)은 여기에 다음을 더한다: 단일 문화 붕괴(같은 기반 모델 → 상관된 실패), 동조 편향(에이전트(agent)들이 서로의 오류를 강화), 결함 있는 마음 이론, 혼합 동기 동역학, 연쇄 신뢰성 실패. 연쇄 예시: 지불 실패가 주문 재시도를 유발하고, 주문 재시도가 재고 재시도를 유발하며, 재고 재시도가 재고 서비스를 압도하는 재시도 폭풍(retry storm)(초 단위로 10배 부하: 회로 차단기(circuit breaker)가 필요). 메모리 오염(memory poisoning): 한 에이전트의 환각(hallucination)이 공유 메모리에 들어가고, 하류 에이전트들이 그것을 사실로 취급한다. 정확도가 점진적으로 감쇠하여 근본 원인 진단을 고통스럽게 만든다. **STRATUS** (NeurIPS 2025)는 특화된 탐지 / 진단 / 검증 에이전트로 완화 성공이 1.5배 개선됨을 보고한다. 이 레슨은 실패 모드를 일급 엔지니어링 대상으로 다룬다.
 
 **Type:** Learn
 **Languages:** Python (stdlib)
@@ -66,7 +66,7 @@
 
 **연쇄 신뢰성 실패.** 한 구성요소의 오류 패턴이 의존 구성요소에서 오류 패턴을 유발한다.
 
-### 연쇄 예시 — 재시도 폭풍
+### 연쇄 예시: 재시도 폭풍
 
 전형적인 2026년 사고 패턴:
 
@@ -100,7 +100,7 @@ cluster goes down
 
 완화책: 추가 전용 로그, 출처(provenance), 쓸 수 없는 검증자. 이미 레슨 13에서 다뤘다.
 
-### STRATUS — 실패 탐지를 위한 특화 에이전트
+### STRATUS: 실패 탐지를 위한 특화 에이전트
 
 STRATUS (NeurIPS 2025)는 다음을 배포할 때 완화 성공이 1.5배 개선됨을 보고한다.
 
@@ -141,10 +141,10 @@ STRATUS (NeurIPS 2025)는 다음을 배포할 때 완화 성공이 1.5배 개선
 
 `code/main.py`는 다음을 구현한다.
 
-- `FailureTaxonomy` — 시뮬레이션된 사고를 MAST + 집단사고 범주로 분류한다.
-- `CircuitBreaker` — 고전적 패턴. 오류율이 임계값을 초과하면 열린다.
-- `RetryStormSimulator` — 연쇄 실패를 보여준다. 회로 차단기를 켜고/끈다.
-- `DetectionAgent` — 스크립트화된 STRATUS 스타일 증상 매처.
+- `FailureTaxonomy`: 시뮬레이션된 사고를 MAST + 집단사고 범주로 분류한다.
+- `CircuitBreaker`: 고전적 패턴. 오류율이 임계값을 초과하면 열린다.
+- `RetryStormSimulator`: 연쇄 실패를 보여준다. 회로 차단기를 켜고/끈다.
+- `DetectionAgent`: 스크립트화된 STRATUS 스타일 증상 매처.
 
 실행:
 
@@ -196,8 +196,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Cemri et al. — Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657) — MAST 분류 체계, NeurIPS 2025
-- [Groupthink failures in multi-agent LLMs](https://arxiv.org/abs/2508.05687) — 단일 문화, 동조, 그리고 다섯 계열 분류 체계
-- [STRATUS — specialized agents for MAS incident response](https://neurips.cc/) — NeurIPS 2025 프로시딩 항목(탐지 + 진단 + 검증)
-- [Release It! — stability patterns (Nygard)](https://pragprog.com/titles/mnee2/release-it-second-edition/) — 정석 회로 차단기 참조
-- [Anthropic — Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) — 프로덕션 실패 모드 노트
+- [Cemri et al.(Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)) MAST 분류 체계, NeurIPS 2025
+- [Groupthink failures in multi-agent LLMs](https://arxiv.org/abs/2508.05687): 단일 문화, 동조, 그리고 다섯 계열 분류 체계
+- [STRATUS(specialized agents for MAS incident response](https://neurips.cc/)) NeurIPS 2025 프로시딩 항목(탐지 + 진단 + 검증)
+- [Release It!(stability patterns (Nygard)](https://pragprog.com/titles/mnee2/release-it-second-edition/)) 정석 회로 차단기 참조
+- [Anthropic(Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)) 프로덕션 실패 모드 노트

@@ -1,4 +1,4 @@
-# 임베딩 모델(Embedding Models) — 2026년 심층 분석
+# 임베딩 모델(Embedding Models): 2026년 심층 분석
 
 > Word2Vec은 단어당 하나의 벡터(vector)를 주었다. 현대 임베딩 모델은 단락당 하나의 벡터를 준다. 교차 언어(cross-lingual)이고, 희소(sparse)·밀집(dense)·다중 벡터(multi-vector) 관점을 제공하며, 인덱스에 맞는 크기로 조절된다. 잘못 고르면 RAG가 엉뚱한 것을 검색한다.
 
@@ -15,7 +15,7 @@ RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인
 
 1. **밀집 vs 희소 vs 다중 벡터.** 단락당 하나의 벡터, 또는 토큰(token)당 하나, 또는 희소하게 가중된 단어 가방(bag of words).
 2. **언어 커버리지.** 영어 전용 과제에서는 여전히 단일 언어 영어 모델이 이긴다. 코퍼스가 섞여 있을 때는 다국어 모델이 이긴다.
-3. **컨텍스트 길이.** 512 토큰 vs 8,192 vs 32,768 — 그리고 실제 유효 용량은 광고된 최댓값의 60~70%인 경우가 많다.
+3. **컨텍스트 길이.** 512 토큰 vs 8,192 vs 32,768: 그리고 실제 유효 용량은 광고된 최댓값의 60~70%인 경우가 많다.
 4. **차원 예산.** 전체 정밀도(full precision)의 3,072개 부동소수 = 벡터당 12 KB. 1억 개 벡터면 저장 비용이 월 $1,300이다. 마트료시카(Matryoshka) 절단으로 이를 4배 줄인다.
 5. **오픈 vs 호스팅.** 오픈 웨이트(open-weight)는 스택과 데이터를 직접 통제한다는 뜻이다. 호스팅은 통제권을 항상 최신 상태와 맞바꾼다는 뜻이다.
 
@@ -37,7 +37,7 @@ RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인
 
 ### MTEB 리더보드는 이야기의 일부만 들려준다
 
-대규모 텍스트 임베딩 벤치마크(Massive Text Embedding Benchmark) — 출시 당시(2022) 8개 과제 유형에 걸친 56개 과제, MTEB v2에서 100개 이상으로 확장. 2026년 초 기준, Gemini Embedding 2가 검색(retrieval)에서 1위(67.71 MTEB-R)다. Cohere embed-v4가 범용(general)에서 선두(65.2 MTEB)다. BGE-M3가 오픈 웨이트 다국어에서 선두(63.0)다. 리더보드는 필요하지만 충분하지는 않다 — 항상 자신의 도메인에서 벤치마크(benchmark)하라.
+대규모 텍스트 임베딩 벤치마크(Massive Text Embedding Benchmark)(출시 당시(2022) 8개 과제 유형에 걸친 56개 과제, MTEB v2에서 100개 이상으로 확장. 2026년 초 기준, Gemini Embedding 2가 검색(retrieval)에서 1위(67.71 MTEB-R)다. Cohere embed-v4가 범용(general)에서 선두(65.2 MTEB)다. BGE-M3가 오픈 웨이트 다국어에서 선두(63.0)다. 리더보드는 필요하지만 충분하지는 않다) 항상 자신의 도메인에서 벤치마크(benchmark)하라.
 
 ### 3계층 패턴
 
@@ -51,7 +51,7 @@ RAG 시스템은 40%의 경우 엉뚱한 단락(passage)을 검색한다. 범인
 
 ## 직접 만들기 (Build It)
 
-### Step 1: 베이스라인 — Sentence-BERT 밀집 임베딩
+### Step 1: 베이스라인: Sentence-BERT 밀집 임베딩
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -125,7 +125,7 @@ evaluation = MTEB(tasks=tasks)
 results = evaluation.run(encoder, output_folder="./mteb-results")
 ```
 
-후보 모델을 *대표적인* 부분집합에서 실행하라. 리더보드 순위만 믿지 마라 — 자신의 도메인이 중요하다.
+후보 모델을 *대표적인* 부분집합에서 실행하라. 리더보드 순위만 믿지 마라. 자신의 도메인이 중요하다.
 
 ### Step 5: 밑바닥부터 만든 코사인
 
@@ -133,7 +133,7 @@ results = evaluation.run(encoder, output_folder="./mteb-results")
 
 ## 함정 (Pitfalls)
 
-- **쿼리와 문서에 같은 모델.** 일부 모델(Voyage, Jina-ColBERT)은 비대칭 인코딩(asymmetric encoding)을 사용한다 — 쿼리와 문서가 서로 다른 경로를 통과한다. 항상 모델 카드를 확인하라.
+- **쿼리와 문서에 같은 모델.** 일부 모델(Voyage, Jina-ColBERT)은 비대칭 인코딩(asymmetric encoding)을 사용한다. 쿼리와 문서가 서로 다른 경로를 통과한다. 항상 모델 카드를 확인하라.
 - **접두사 누락.** `bge-*` 모델은 쿼리 앞에 `"Represent this sentence for searching relevant passages: "`를 붙여야 한다. 잊으면 재현율이 3~5점 벌어진다.
 - **마트료시카 과도한 절단.** 1,536 → 256은 보통 안전하다. 1,536 → 64는 아니다. 자신의 평가 세트에서 검증하라.
 - **컨텍스트 절단.** 대부분의 모델은 최대 길이를 초과하는 입력을 조용히 잘라낸다. 긴 문서는 청킹(chunking)이 필요하다(레슨 23 참고).
@@ -194,7 +194,7 @@ Refuse recommendations that truncate Matryoshka to <64 dims without domain valid
 | 희소 임베딩(Sparse embedding) | 학습된 BM25 | 어휘 토큰당 하나의 가중치. 대부분 0. 종단 간(end-to-end) 학습됨. |
 | 다중 벡터(Multi-vector) | ColBERT 스타일 | 토큰당 하나의 벡터. MaxSim 채점. 더 큰 인덱스, 더 나은 재현율. |
 | 마트료시카(Matryoshka) | 러시아 인형 트릭 | 처음 N개 차원이 그 자체로 유효한 더 작은 임베딩이다. |
-| MTEB | 그 벤치마크 | 대규모 텍스트 임베딩 벤치마크 — 출시 당시 56개 과제, v2에서 100개 이상. |
+| MTEB | 그 벤치마크 | 대규모 텍스트 임베딩 벤치마크: 출시 당시 56개 과제, v2에서 100개 이상. |
 | BEIR | 그 검색 벤치마크 | 18개의 제로샷(zero-shot) 검색 과제. 교차 도메인 강건성에 자주 인용됨. |
 | 비대칭 인코딩(Asymmetric encoding) | 쿼리 ≠ 문서 경로 | 모델이 쿼리와 문서에 서로 다른 투영(projection)을 사용한다. |
 

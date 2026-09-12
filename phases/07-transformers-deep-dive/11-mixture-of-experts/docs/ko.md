@@ -76,7 +76,7 @@ DeepSeek-V3는 **토큰당 더 적은 활성 FLOPs**를 쓰면서도 거의 모�
 
 ### 함정: 메모리
 
-어떤 전문가가 작동하든 모든 전문가는 GPU에 상주한다. 671B 모델은 fp16 가중치(weight)에 ~1.3 TB의 VRAM이 필요하다. 프런티어 MoE 배포(deployment)에는 전문가 병렬화(expert parallelism)가 필요하다 — 전문가를 GPU에 걸쳐 샤딩(shard)하고 토큰을 네트워크에 걸쳐 라우팅한다. 지연 시간은 행렬곱(matmul)이 아니라 all-to-all 통신이 지배한다.
+어떤 전문가가 작동하든 모든 전문가는 GPU에 상주한다. 671B 모델은 fp16 가중치(weight)에 ~1.3 TB의 VRAM이 필요하다. 프런티어 MoE 배포(deployment)에는 전문가 병렬화(expert parallelism)가 필요하다. 전문가를 GPU에 걸쳐 샤딩(shard)하고 토큰을 네트워크에 걸쳐 라우팅한다. 지연 시간은 행렬곱(matmul)이 아니라 all-to-all 통신이 지배한다.
 
 ## 직접 만들기 (Build It)
 
@@ -103,7 +103,7 @@ def route(hidden, W_router, top_k, bias):
     return top_idx, gates
 ```
 
-편향은 선택에는 영향을 주지만 게이트 가중치에는 영향을 주지 않는다. 이것이 DeepSeek-V3의 트릭이다 — 편향은 모델의 예측을 조종하지 않으면서 부하 불균형을 교정한다.
+편향은 선택에는 영향을 주지만 게이트 가중치에는 영향을 주지 않는다. 이것이 DeepSeek-V3의 트릭이다. 편향은 모델의 예측을 조종하지 않으면서 부하 불균형을 교정한다.
 
 ### 2단계: 라우터에 100개 토큰 통과시키기
 
@@ -130,9 +130,9 @@ model = AutoModelForCausalLM.from_pretrained("mistralai/Mixtral-8x22B-v0.1")
 - 워크로드가 컨텍스트가 무거운(긴 문서) 것이 아니라 토큰이 무거운(채팅, 코드) 것이다.
 
 **MoE를 선택하지 말아야 할 때:**
-- 엣지 배포 — 어떤 활성 FLOP에 대해서든 전체 저장 비용을 치른다.
-- 지연 시간이 중요한 단일 사용자 서빙(serving) — 전문가 라우팅이 오버헤드를 더한다.
-- 작은 모델(<7B) — MoE의 품질 이점은 연산 임계값(활성 파라미터 ~6B) 위에서만 나타난다.
+- 엣지 배포: 어떤 활성 FLOP에 대해서든 전체 저장 비용을 치른다.
+- 지연 시간이 중요한 단일 사용자 서빙(serving): 전문가 라우팅이 오버헤드를 더한다.
+- 작은 모델(<7B): MoE의 품질 이점은 연산 임계값(활성 파라미터 ~6B) 위에서만 나타난다.
 
 ## 산출물 (Ship It)
 
@@ -159,10 +159,10 @@ model = AutoModelForCausalLM.from_pretrained("mistralai/Mixtral-8x22B-v0.1")
 
 ## 더 읽을거리 (Further Reading)
 
-- [Shazeer et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538) — 그 아이디어.
-- [Fedus, Zoph, Shazeer (2022). Switch Transformer: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/abs/2101.03961) — Switch, 고전적 MoE.
+- [Shazeer et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538): 그 아이디어.
+- [Fedus, Zoph, Shazeer (2022). Switch Transformer: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/abs/2101.03961): Switch, 고전적 MoE.
 - [Jiang et al. (2024). Mixtral of Experts](https://arxiv.org/abs/2401.04088) — Mixtral 8×7B.
-- [DeepSeek-AI (2024). DeepSeek-V3 Technical Report](https://arxiv.org/abs/2412.19437) — MLA + 보조 손실 없는 MoE + MTP.
-- [Wang et al. (2024). Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts](https://arxiv.org/abs/2408.15664) — 편향 기반 분산 논문.
-- [Dai et al. (2024). DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](https://arxiv.org/abs/2401.06066) — 이 레슨의 라우터가 사용하는 세분화 + 공유 전문가 분할.
-- [Kim et al. (2022). DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training](https://arxiv.org/abs/2201.05596) — 원조 공유 전문가 논문.
+- [DeepSeek-AI (2024). DeepSeek-V3 Technical Report](https://arxiv.org/abs/2412.19437): MLA + 보조 손실 없는 MoE + MTP.
+- [Wang et al. (2024). Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts](https://arxiv.org/abs/2408.15664): 편향 기반 분산 논문.
+- [Dai et al. (2024). DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](https://arxiv.org/abs/2401.06066): 이 레슨의 라우터가 사용하는 세분화 + 공유 전문가 분할.
+- [Kim et al. (2022). DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training](https://arxiv.org/abs/2201.05596): 원조 공유 전문가 논문.

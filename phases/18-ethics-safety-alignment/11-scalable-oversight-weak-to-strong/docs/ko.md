@@ -59,11 +59,11 @@ Burns 외가 지적한 한계:
 확장 가능한 감독은 감독자의 유효 신호 품질을 높인다.
 W2SG는 감독자가 제공할 수 있는 불완전한 신호가 무엇이든 그로부터 격차를 메운다.
 
-Lang 외 — Debate Helps Weak-to-Strong Generalization(arXiv:2501.13124)는 이 둘을 결합한다: 토론 프로토콜이 더 나은 약한 레이블을 제공하고, 강한 모델은 그 레이블로 학습된다. NLP 작업에서 PGR 향상을 보고했다.
+Lang 외: Debate Helps Weak-to-Strong Generalization(arXiv:2501.13124)는 이 둘을 결합한다: 토론 프로토콜이 더 나은 약한 레이블을 제공하고, 강한 모델은 그 레이블로 학습된다. NLP 작업에서 PGR 향상을 보고했다.
 
 ### 조직적 드라마
 
-OpenAI의 Superalignment 팀은 Jan Leike가 Anthropic으로 떠난 후 2024년 5월에 해체되었다. 그 의제(확장 가능한 감독, W2SG, 자동화된 정렬 연구)는 Anthropic과 학술 연구소들 — MATS(Lesson 28), Redwood(Lesson 10), Apollo(Lesson 8), METR(Lesson 28) — 에서 계속되었다. 조직 구조는 바뀌었지만, 연구 질문은 바뀌지 않았다.
+OpenAI의 Superalignment 팀은 Jan Leike가 Anthropic으로 떠난 후 2024년 5월에 해체되었다. 그 의제(확장 가능한 감독, W2SG, 자동화된 정렬 연구)는 Anthropic과 학술 연구소들(MATS(Lesson 28), Redwood(Lesson 10), Apollo(Lesson 8), METR(Lesson 28))에서 계속되었다. 조직 구조는 바뀌었지만, 연구 질문은 바뀌지 않았다.
 
 ### Phase 18에서의 위치
 
@@ -103,8 +103,8 @@ Lesson 6-10은 U가 신뢰할 수 없다는 가정 하에 위협과 방어적 �
 
 ## 더 읽을거리 (Further Reading)
 
-- [Burns et al. — Weak-to-Strong Generalization (OpenAI 2023)](https://openai.com/index/weak-to-strong-generalization/) — W2SG 논문
-- [Irving, Christiano, Amodei — AI safety via debate (arXiv:1805.00899)](https://arxiv.org/abs/1805.00899) — 토론 메커니즘
-- [Leike et al. — Scalable agent alignment via reward modeling (arXiv:1811.07871)](https://arxiv.org/abs/1811.07871) — 재귀적 보상 모델링
-- [Khan et al. — Debating with More Persuasive LLMs Leads to More Truthful Answers (arXiv:2402.06782)](https://arxiv.org/abs/2402.06782) — 더 강한 토론자를 사용한 토론에 대한 2024년 경험적 연구
-- [Lang et al. — Debate Helps Weak-to-Strong Generalization (arXiv:2501.13124)](https://arxiv.org/abs/2501.13124) — 토론 + W2SG의 2025년 결합
+- [Burns et al.(Weak-to-Strong Generalization (OpenAI 2023)](https://openai.com/index/weak-to-strong-generalization/)) W2SG 논문
+- [Irving, Christiano, Amodei(AI safety via debate (arXiv:1805.00899)](https://arxiv.org/abs/1805.00899)) 토론 메커니즘
+- [Leike et al.(Scalable agent alignment via reward modeling (arXiv:1811.07871)](https://arxiv.org/abs/1811.07871)) 재귀적 보상 모델링
+- [Khan et al.(Debating with More Persuasive LLMs Leads to More Truthful Answers (arXiv:2402.06782)](https://arxiv.org/abs/2402.06782)) 더 강한 토론자를 사용한 토론에 대한 2024년 경험적 연구
+- [Lang et al.(Debate Helps Weak-to-Strong Generalization (arXiv:2501.13124)](https://arxiv.org/abs/2501.13124)) 토론 + W2SG의 2025년 결합

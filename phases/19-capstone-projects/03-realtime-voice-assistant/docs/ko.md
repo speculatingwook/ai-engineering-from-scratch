@@ -1,4 +1,4 @@
-# Capstone 03 — 실시간 음성 어시스턴트 (ASR to LLM to TTS)
+# Capstone 03: 실시간 음성 어시스턴트 (ASR to LLM to TTS)
 
 > 제대로 느껴지는 음성 에이전트(voice agent)는 종단 간(end-to-end) 지연 시간(latency)이 800ms 미만이고, 사용자가 말을 멈춘 순간을 알고, 끼어들기(barge-in)를 처리하고, 멈칫하지 않고 도구를 호출한다. Retell, Vapi, LiveKit Agents, Pipecat는 모두 2026년에 이 기준을 충족하며, 그 방식도 같다. 스트리밍 ASR, 턴 감지기(turn-detector), 스트리밍 LLM, 스트리밍 TTS를 매 홉(hop)마다 공격적인 지연 시간 예산을 두고 WebRTC로 연결한다. 하나 만들어서 WER과 MOS와 거짓 끊김 비율(false-cutoff rate)을 측정하고, 패킷 손실(packet loss) 하에서 실행하라.
 
@@ -141,11 +141,11 @@ turn latency: 1040ms user-stop -> audio-out
 
 ## 더 읽을거리 (Further Reading)
 
-- [LiveKit Agents 1.0](https://github.com/livekit/agents) — 레퍼런스 WebRTC 에이전트 프레임워크
-- [Pipecat](https://github.com/pipecat-ai/pipecat) — 대안 Python 우선 스트리밍 에이전트 프레임워크
-- [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) — 통합 음성 모델 레퍼런스
-- [Deepgram Nova-3 documentation](https://developers.deepgram.com/docs) — 스트리밍 ASR 레퍼런스
-- [Silero VAD v5](https://github.com/snakers4/silero-vad) — VAD 레퍼런스 모델
-- [Cartesia Sonic-2](https://docs.cartesia.ai) — 저지연 TTS 레퍼런스
-- [Retell AI architecture](https://docs.retellai.com) — 프로덕션 음성 에이전트 아키텍처
-- [Vapi.ai production stack](https://docs.vapi.ai) — 대안 프로덕션 레퍼런스
+- [LiveKit Agents 1.0](https://github.com/livekit/agents): 레퍼런스 WebRTC 에이전트 프레임워크
+- [Pipecat](https://github.com/pipecat-ai/pipecat): 대안 Python 우선 스트리밍 에이전트 프레임워크
+- [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime): 통합 음성 모델 레퍼런스
+- [Deepgram Nova-3 documentation](https://developers.deepgram.com/docs): 스트리밍 ASR 레퍼런스
+- [Silero VAD v5](https://github.com/snakers4/silero-vad): VAD 레퍼런스 모델
+- [Cartesia Sonic-2](https://docs.cartesia.ai): 저지연 TTS 레퍼런스
+- [Retell AI architecture](https://docs.retellai.com): 프로덕션 음성 에이전트 아키텍처
+- [Vapi.ai production stack](https://docs.vapi.ai): 대안 프로덕션 레퍼런스

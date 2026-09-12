@@ -1,6 +1,6 @@
 # LLM을 위한 군집 최적화 (Swarm Optimization for LLMs, PSO, ACO)
 
-> 생물 영감 최적화(bio-inspired optimization)가 LLM 영역에서 부활하고 있다. **LMPSO** (arXiv:2504.09247)는 각 입자(particle)의 속도가 프롬프트(prompt)이고 LLM이 다음 후보를 생성하는 PSO를 사용한다. 구조화된 시퀀스 출력(수식, 프로그램)에서 잘 작동한다. **Model Swarms** (arXiv:2410.11163)는 각 LLM 전문가를 모델 가중치 다양체(model-weight manifold) 위의 PSO 입자로 다루며, 단 200개의 인스턴스로 9개 데이터셋(dataset)에서 12개 베이스라인(baseline) 대비 **평균 13.3% 이득**을 보고한다. **SwarmPrompt** (ICAART 2025)는 프롬프트 최적화를 위해 PSO와 회색 늑대(Grey Wolf)를 혼합한다. **AMRO-S** (arXiv:2603.12933)는 다중 에이전트(multi-agent) LLM 라우팅(routing)을 위한 ACO 영감 페로몬(pheromone) 전문가다 — **4.7배 속도 향상**, 해석 가능한 라우팅 근거, 추론(inference)을 학습에서 분리하는 품질 게이트(quality-gated) 비동기 갱신을 제공한다. 이 레슨은 프롬프트 파라미터 공간에 PSO를, 에이전트 라우팅에 ACO를 구현하고, 이 고전 알고리즘들이 LLM 시대에 들어맞는 이유와 들어맞지 않는 경우를 측정한다.
+> 생물 영감 최적화(bio-inspired optimization)가 LLM 영역에서 부활하고 있다. **LMPSO** (arXiv:2504.09247)는 각 입자(particle)의 속도가 프롬프트(prompt)이고 LLM이 다음 후보를 생성하는 PSO를 사용한다. 구조화된 시퀀스 출력(수식, 프로그램)에서 잘 작동한다. **Model Swarms** (arXiv:2410.11163)는 각 LLM 전문가를 모델 가중치 다양체(model-weight manifold) 위의 PSO 입자로 다루며, 단 200개의 인스턴스로 9개 데이터셋(dataset)에서 12개 베이스라인(baseline) 대비 **평균 13.3% 이득**을 보고한다. **SwarmPrompt** (ICAART 2025)는 프롬프트 최적화를 위해 PSO와 회색 늑대(Grey Wolf)를 혼합한다. **AMRO-S** (arXiv:2603.12933)는 다중 에이전트(multi-agent) LLM 라우팅(routing)을 위한 ACO 영감 페로몬(pheromone) 전문가다. **4.7배 속도 향상**, 해석 가능한 라우팅 근거, 추론(inference)을 학습에서 분리하는 품질 게이트(quality-gated) 비동기 갱신을 제공한다. 이 레슨은 프롬프트 파라미터 공간에 PSO를, 에이전트 라우팅에 ACO를 구현하고, 이 고전 알고리즘들이 LLM 시대에 들어맞는 이유와 들어맞지 않는 경우를 측정한다.
 
 **Type:** Learn + Build
 **Languages:** Python (stdlib)
@@ -9,9 +9,9 @@
 
 ## 문제 (Problem)
 
-과제 평가에서 62%를 받는 프롬프트가 있고, 이것을 개선하고 싶다고 하자. 가장 단순한 방법은 그래디언트(gradient)를 쓰지 않는 수동 조정인데, 확장성이 나쁘다. 강화 학습(reinforcement learning)은 보상 신호와 학습할 충분한 롤아웃(rollout)이 필요하다. 프롬프트를 통한 역전파(backprop)는 사실상 불가능하다 — 프롬프트는 미분 가능한 파라미터(parameter)가 아니라 이산적 문자열이다.
+과제 평가에서 62%를 받는 프롬프트가 있고, 이것을 개선하고 싶다고 하자. 가장 단순한 방법은 그래디언트(gradient)를 쓰지 않는 수동 조정인데, 확장성이 나쁘다. 강화 학습(reinforcement learning)은 보상 신호와 학습할 충분한 롤아웃(rollout)이 필요하다. 프롬프트를 통한 역전파(backprop)는 사실상 불가능하다. 프롬프트는 미분 가능한 파라미터(parameter)가 아니라 이산적 문자열이다.
 
-고전적 생물 영감 최적화 — 연속 탐색 공간을 위한 PSO, 경로 선택을 위한 ACO — 는 바로 이 영역을 위해 설계되었다. 그래디언트 없음, 집단 기반, 평가당 비용이 저렴함. 이것들을 그래디언트 없는 탐색 단계에 LLM과 짝지으면, 놀랍도록 실용적인 옵티마이저(optimizer)가 된다.
+고전적 생물 영감 최적화(연속 탐색 공간을 위한 PSO, 경로 선택을 위한 ACO)는 바로 이 영역을 위해 설계되었다. 그래디언트 없음, 집단 기반, 평가당 비용이 저렴함. 이것들을 그래디언트 없는 탐색 단계에 LLM과 짝지으면, 놀랍도록 실용적인 옵티마이저(optimizer)가 된다.
 
 같은 패턴이 다중 에이전트 시스템의 에이전트 *라우팅*에도 적용된다. ACO 스타일 페로몬 흔적은 어떤 에이전트가 어떤 과제 유형에서 가장 잘 작동했는지 기록하고, 라우터(router)가 그 흔적을 활용하게 하며, 페로몬을 감쇠시켜 경로가 재발견될 수 있게 한다.
 
@@ -31,16 +31,16 @@ update g_best if global best
 
 여기서 `p_best`는 입자 자신의 최선, `g_best`는 군집의 최선, `w, c1, c2`는 관성 + 인지 + 사회적 가중치(weight), `r1, r2`는 무작위 인자다.
 
-### LLM 출력에 적용하는 PSO — LMPSO
+### LLM 출력에 적용하는 PSO: LMPSO
 
 arXiv:2504.09247은 LLM이 생성한 구조화된 출력(수식, 프로그램)을 위해 PSO를 적응시킨다. 각 입자는 후보 출력이다. 속도는 현재 출력을 개인/전역 최선 쪽으로 어떻게 수정할지 기술하는 *프롬프트*다. LLM은 속도 프롬프트로부터 새 출력을 생성한다. 속도의 "관성"은 "작고 점진적인 변화를 만들어라" 같은 프롬프트다.
 
 이것이 잘 작동하는 경우:
 - 출력이 구조화되어 있다(파싱 가능, 평가 가능).
 - 적합도(fitness)가 자동이다(테스트 실행, 산술 평가).
-- 집단이 작다(약 10-30 입자) — 전체 LLM 호출이 감당 가능하게 유지된다.
+- 집단이 작다(약 10-30 입자). 전체 LLM 호출이 감당 가능하게 유지된다.
 
-적합도가 사람의 검토를 필요로 할 때는 잘 작동하지 않는다 — 반복당 비용이 감당 불가능해진다.
+적합도가 사람의 검토를 필요로 할 때는 잘 작동하지 않는다. 반복당 비용이 감당 불가능해진다.
 
 ### Model Swarms
 
@@ -52,7 +52,7 @@ arXiv:2410.11163은 PSO를 출력 계층에서 떼어내 *모델* 계층으로 �
 
 개미 군집 최적화(Ant Colony Optimization): 개미들이 그래프를 순회한다. 각 경로에는 페로몬 흔적이 있다. 개미의 이동 확률은 페로몬 강도로 가중된다. 과제를 완료한 개미는 해의 품질에 비례하여 페로몬을 남긴다. 페로몬은 시간이 지나며 감쇠한다.
 
-### AMRO-S — 에이전트 라우팅을 위한 ACO
+### AMRO-S: 에이전트 라우팅을 위한 ACO
 
 arXiv:2603.12933은 다중 에이전트 라우팅에 ACO를 사용한다. 각 과제 유형은 "목적지"이고, 각 에이전트는 가능한 경로다. 페로몬은 좋은 출력을 만드는 경로를 강화한다. 핵심 기여:
 
@@ -95,8 +95,8 @@ PSO와 ACO는 *평가자* 함수만 필요하다. 후보 출력이나 라우팅 
 
 `code/main.py`는 다음을 구현한다.
 
-- `LMPSO` — 수치 프롬프트 파라미터(temperature, top_k 가중치)에 대한 PSO. 각 입자의 "LLM 생성"은 스크립트로 작성된 적합도 함수로 시뮬레이션된다. 알고리즘을 30회 반복 실행하고 g_best 수렴을 보여준다.
-- `AMRO_S` — ACO 스타일 라우팅. 3개 에이전트, 4개 과제 유형, 페로몬 행렬(matrix), 100개의 라우팅된 과제. 흔적 형성을 보여주기 위해 시간에 따른 (task_type → agent choices) 분포를 출력한다.
+- `LMPSO`: 수치 프롬프트 파라미터(temperature, top_k 가중치)에 대한 PSO. 각 입자의 "LLM 생성"은 스크립트로 작성된 적합도 함수로 시뮬레이션된다. 알고리즘을 30회 반복 실행하고 g_best 수렴을 보여준다.
+- `AMRO_S`: ACO 스타일 라우팅. 3개 에이전트, 4개 과제 유형, 페로몬 행렬(matrix), 100개의 라우팅된 과제. 흔적 형성을 보여주기 위해 시간에 따른 (task_type → agent choices) 분포를 출력한다.
 - 비교: 같은 과제 스트림에서 무작위 라우팅 대 ACO 라우팅. 품질과 지연 시간을 측정한다.
 
 실행:
@@ -145,8 +145,8 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kennedy & Eberhart — Particle Swarm Optimization](https://ieeexplore.ieee.org/document/488968) — 1995년 PSO 논문
-- [Dorigo — Ant Colony Optimization](https://www.aco-metaheuristic.org/about.html) — 1992년 ACO 기초
-- [LMPSO — Language Model Particle Swarm Optimization](https://arxiv.org/abs/2504.09247) — 구조화된 LLM 출력을 위한 PSO
-- [Model Swarms — gradient-free LLM expert optimization](https://arxiv.org/abs/2410.11163) — 모델 가중치 부분 공간에 대한 PSO
-- [AMRO-S — ant-colony multi-agent routing](https://arxiv.org/abs/2603.12933) — 품질 게이트를 갖춘 페로몬 기반 라우팅
+- [Kennedy & Eberhart(Particle Swarm Optimization](https://ieeexplore.ieee.org/document/488968)) 1995년 PSO 논문
+- [Dorigo(Ant Colony Optimization](https://www.aco-metaheuristic.org/about.html)) 1992년 ACO 기초
+- [LMPSO(Language Model Particle Swarm Optimization](https://arxiv.org/abs/2504.09247)) 구조화된 LLM 출력을 위한 PSO
+- [Model Swarms(gradient-free LLM expert optimization](https://arxiv.org/abs/2410.11163)) 모델 가중치 부분 공간에 대한 PSO
+- [AMRO-S(ant-colony multi-agent routing](https://arxiv.org/abs/2603.12933)) 품질 게이트를 갖춘 페로몬 기반 라우팅

@@ -1,6 +1,6 @@
 # 챗봇에서 장기 지평 에이전트로의 전환
 
-> 2023년의 챗봇은 한 번의 턴(turn)으로 질문에 답했다. 2026년의 프런티어 모델(frontier model)은 하나의 작업에 일상적으로 수 분에서 수 시간을 쓴다. METR의 Time Horizon 1.1 벤치마크(benchmark)(2026년 1월)는 Claude Opus 4.6을 50% 신뢰도에서 14시간 이상의 전문가 작업으로 평가한다. 이 지평(horizon)은 GPT-2 이후 대략 7개월마다 두 배로 늘어나 왔다. 단일 턴 채팅을 중심으로 우리가 세운 모든 가정 — 컨텍스트, 신뢰, 실패 양상, 비용, 관측 가능성 — 은 실행 시간이 점심시간보다 길어지는 순간 무너진다.
+> 2023년의 챗봇은 한 번의 턴(turn)으로 질문에 답했다. 2026년의 프런티어 모델(frontier model)은 하나의 작업에 일상적으로 수 분에서 수 시간을 쓴다. METR의 Time Horizon 1.1 벤치마크(benchmark)(2026년 1월)는 Claude Opus 4.6을 50% 신뢰도에서 14시간 이상의 전문가 작업으로 평가한다. 이 지평(horizon)은 GPT-2 이후 대략 7개월마다 두 배로 늘어나 왔다. 단일 턴 채팅을 중심으로 우리가 세운 모든 가정(컨텍스트, 신뢰, 실패 양상, 비용, 관측 가능성)은 실행 시간이 점심시간보다 길어지는 순간 무너진다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, horizon-curve simulator)
@@ -11,7 +11,7 @@
 
 챗봇(chatbot)은 상태 없는(stateless) 함수다. 프롬프트(prompt)를 받아 답변을 반환하고, 잊어버린다. 2024년까지 만들어진, RAG를 갖춘 시스템조차 이렇게 동작한다. 단일 컨텍스트 윈도우(context window) 안에서 계획하고, 한 번 행동하고, 결과를 내놓는다.
 
-자율 에이전트(autonomous agent)는 종류 자체가 다르다. 루프(loop)를 돈다. 언제 멈출지 스스로 결정한다. 실행 도중에 돈을 쓴다 — 실제 토큰(token), 실제 GPU 시간, 실제 하류(downstream) 부작용. 장기 지평 에이전트(long-horizon agent)는 이 모든 측면을 증폭한다. 비용이 커지고, 스텝당 오류 확률이 커지며, 우리가 평가할 수 있는 것과 실제로 배포되는 것 사이의 간극이 벌어진다.
+자율 에이전트(autonomous agent)는 종류 자체가 다르다. 루프(loop)를 돈다. 언제 멈출지 스스로 결정한다. 실행 도중에 돈을 쓴다. 실제 토큰(token), 실제 GPU 시간, 실제 하류(downstream) 부작용. 장기 지평 에이전트(long-horizon agent)는 이 모든 측면을 증폭한다. 비용이 커지고, 스텝당 오류 확률이 커지며, 우리가 평가할 수 있는 것과 실제로 배포되는 것 사이의 간극이 벌어진다.
 
 METR의 수치가 이를 구체화한다. GPT-2와 Claude Opus 4.6 사이에서, 시간 지평(모델이 50% 신뢰도로 완수하는 인간 작업의 길이)은 수 초에서 반나절 작업으로 늘었다. 두 배가 되는 시간은 7개월 근처에 자리한다. 이 추세가 한 해 더 이어진다면, 50% 지평은 며칠짜리 작업에 도달한다. 이는 챗봇 시대가 설계했던 그 무엇과도 질적으로 다르다.
 
@@ -100,8 +100,8 @@ METR(전 ARC Evals)은 로지스틱 곡선(logistic curve)을, 작업 성공 확
 
 ## 더 읽을거리 (Further Reading)
 
-- [METR — Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) — 최초의 지평 논문과 방법론.
-- [METR Time Horizons benchmark (Epoch AI)](https://epoch.ai/benchmarks/metr-time-horizons) — 2026년까지 갱신된 현재 수치.
-- [Anthropic — Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy) — 지평, 정렬 위장, 배포 격차에 대한 내부 관점.
-- [METR — Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/) — HCAST, RE-Bench, SWAA 스위트 명세.
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — 장기 지평 Claude 행동을 지배하는 우선순위 위계.
+- [METR(Measuring AI Ability to Complete Long Tasks](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) 최초의 지평 논문과 방법론.
+- [METR Time Horizons benchmark (Epoch AI)](https://epoch.ai/benchmarks/metr-time-horizons): 2026년까지 갱신된 현재 수치.
+- [Anthropic(Measuring AI agent autonomy in practice](https://www.anthropic.com/research/measuring-agent-autonomy)) 지평, 정렬 위장, 배포 격차에 대한 내부 관점.
+- [METR(Resources for Measuring Autonomous AI Capabilities](https://metr.org/measuring-autonomous-ai-capabilities/)) HCAST, RE-Bench, SWAA 스위트 명세.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 장기 지평 Claude 행동을 지배하는 우선순위 위계.

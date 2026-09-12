@@ -251,7 +251,7 @@ Refuse to recommend training a custom tokenizer when the user is fine-tuning a p
 
 ## 더 읽을거리 (Further Reading)
 
-- [Pennington, Socher, Manning (2014). GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/pubs/glove.pdf) — GloVe 논문, 일곱 쪽, 여전히 손실에 대한 최고의 유도.
+- [Pennington, Socher, Manning (2014). GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/pubs/glove.pdf): GloVe 논문, 일곱 쪽, 여전히 손실에 대한 최고의 유도.
 - [Bojanowski et al. (2017). Enriching Word Vectors with Subword Information](https://arxiv.org/abs/1607.04606) — FastText.
-- [Sennrich, Haddow, Birch (2016). Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909) — 현대 NLP에 BPE를 도입한 논문.
-- [Hugging Face tokenizer summary](https://huggingface.co/docs/transformers/tokenizer_summary) — BPE, WordPiece, SentencePiece가 실제로 어떻게 다른지.
+- [Sennrich, Haddow, Birch (2016). Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909): 현대 NLP에 BPE를 도입한 논문.
+- [Hugging Face tokenizer summary](https://huggingface.co/docs/transformers/tokenizer_summary): BPE, WordPiece, SentencePiece가 실제로 어떻게 다른지.

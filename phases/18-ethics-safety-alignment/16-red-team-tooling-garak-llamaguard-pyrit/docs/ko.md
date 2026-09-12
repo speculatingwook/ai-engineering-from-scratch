@@ -1,6 +1,6 @@
-# 레드팀 도구 — Garak, Llama Guard, PyRIT (Red-Team Tooling — Garak, Llama Guard, PyRIT)
+# 레드팀 도구(Garak, Llama Guard, PyRIT (Red-Team Tooling) Garak, Llama Guard, PyRIT)
 
-> 세 가지 프로덕션 도구가 2026년 레드팀 스택을 구성한다. Llama Guard(Meta) — 14개 MLCommons 위험 범주를 파인튜닝(fine-tuning)한 Llama-3.1-8B 분류기; 2025년 Llama Guard 4는 Llama 4 Scout를 가지치기(pruning)한 12B 네이티브 멀티모달 분류기다. Garak(NVIDIA) — 환각(hallucination), 데이터 유출, 프롬프트 주입, 유해성(toxicity), 탈옥(jailbreak)에 정적·동적·적응형 프로브(probe)를 갖춘 오픈소스 LLM 취약점 스캐너. PyRIT(Microsoft) — Crescendo, TAP, 깊은 익스플로잇을 위한 커스텀 변환기 체인을 갖춘 다중 턴(multi-turn) 레드팀 캠페인. Llama Guard 3은 Meta의 "Llama 3 Herd of Models"(arXiv:2407.21783)에 문서화돼 있고, Llama Guard 3-1B-INT4는 arXiv:2411.17713에, Garak의 프로브 아키텍처는 github.com/NVIDIA/garak에 있다. 이 도구들은 레드팀 연구(Lesson 12-15)와 배포(Lesson 17+) 사이의 2026년 프로덕션 인터페이스다.
+> 세 가지 프로덕션 도구가 2026년 레드팀 스택을 구성한다. Llama Guard(Meta): 14개 MLCommons 위험 범주를 파인튜닝(fine-tuning)한 Llama-3.1-8B 분류기; 2025년 Llama Guard 4는 Llama 4 Scout를 가지치기(pruning)한 12B 네이티브 멀티모달 분류기다. Garak(NVIDIA): 환각(hallucination), 데이터 유출, 프롬프트 주입, 유해성(toxicity), 탈옥(jailbreak)에 정적·동적·적응형 프로브(probe)를 갖춘 오픈소스 LLM 취약점 스캐너. PyRIT(Microsoft): Crescendo, TAP, 깊은 익스플로잇을 위한 커스텀 변환기 체인을 갖춘 다중 턴(multi-turn) 레드팀 캠페인. Llama Guard 3은 Meta의 "Llama 3 Herd of Models"(arXiv:2407.21783)에 문서화돼 있고, Llama Guard 3-1B-INT4는 arXiv:2411.17713에, Garak의 프로브 아키텍처는 github.com/NVIDIA/garak에 있다. 이 도구들은 레드팀 연구(Lesson 12-15)와 배포(Lesson 17+) 사이의 2026년 프로덕션 인터페이스다.
 
 **Type:** Build
 **Languages:** Python (stdlib, tool-architecture simulator and Llama Guard-style classifier mock)
@@ -27,7 +27,7 @@ Llama Guard 3은 MLCommons AILuminate 14개 범주에 대한 입력/출력 분�
 - Specialized advice, privacy, IP, indiscriminate weapons, hate
 - Suicide/self-harm, sexual content, elections, code-interpreter abuse
 
-8개 언어를 지원한다. 사용법: LLM 앞에 두거나(입력 조정), LLM 뒤에 두거나(출력 조정), 둘 다. 두 용법은 서로 다른 학습 분포를 만든다 — Llama Guard 3은 둘 다 처리하는 단일 모델로 출시된다.
+8개 언어를 지원한다. 사용법: LLM 앞에 두거나(입력 조정), LLM 뒤에 두거나(출력 조정), 둘 다. 두 용법은 서로 다른 학습 분포를 만든다. Llama Guard 3은 둘 다 처리하는 단일 모델로 출시된다.
 
 Llama Guard 3-1B-INT4(arXiv:2411.17713, 440MB, 모바일 CPU에서 초당 약 30 토큰)는 양자화된 엣지(edge) 변형이다.
 
@@ -37,15 +37,15 @@ Llama Guard 4(2025년 4월)는 12B이며 네이티브 멀티모달이고, Llama 
 
 오픈소스 취약점 스캐너. 아키텍처:
 - **프로브(Probes).** 환각, 데이터 유출, 프롬프트 주입, 유해성, 탈옥에 대한 공격 생성기. 정적(고정 프롬프트), 동적(생성된 프롬프트), 적응형(대상 출력에 반응).
-- **디텍터(Detectors).** 예상된 실패 모드 — 유해함, 유출됨, 탈옥됨 — 에 대해 출력에 점수를 매긴다.
+- **디텍터(Detectors).** 예상된 실패 모드(유해함, 유출됨, 탈옥됨)에 대해 출력에 점수를 매긴다.
 - **하니스(Harnesses).** 프로브-디텍터 쌍을 관리하고, 캠페인을 실행하고, 보고서를 생성한다.
 
-TrustyAI는 Garak를 Llama-Stack 실드(Prompt-Guard-86M 입력 분류기, Llama-Guard-3-8B 출력 분류기)와 통합하여 종단 간(end-to-end) 실드된 대상 평가를 수행한다. 티어 기반 점수(TBSA)는 이진 합격/불합격을 대체한다 — 한 모델이 같은 프로브에서 심각도 티어 3은 통과하고 심각도 티어 5는 실패할 수 있다.
+TrustyAI는 Garak를 Llama-Stack 실드(Prompt-Guard-86M 입력 분류기, Llama-Guard-3-8B 출력 분류기)와 통합하여 종단 간(end-to-end) 실드된 대상 평가를 수행한다. 티어 기반 점수(TBSA)는 이진 합격/불합격을 대체한다. 한 모델이 같은 프로브에서 심각도 티어 3은 통과하고 심각도 티어 5는 실패할 수 있다.
 
 ### PyRIT (Microsoft)
 
 Python Risk Identification Toolkit. 다중 턴 레드팀 캠페인. 다음을 중심으로 구축됨:
-- **변환기(Converters).** 시드(seed) 프롬프트를 변형한다 — 패러프레이즈, 인코딩, 번역, 역할극.
+- **변환기(Converters).** 시드(seed) 프롬프트를 변형한다. 패러프레이즈, 인코딩, 번역, 역할극.
 - **오케스트레이터(Orchestrators).** 캠페인을 실행한다: Crescendo(점증), TAP(분기), RedTeaming(커스텀 루프).
 - **점수(Scoring).** LLM-as-judge 또는 classifier-as-judge.
 
@@ -99,7 +99,7 @@ Lesson 12-15는 공격 계열이다. Lesson 16은 프로덕션 도구다. Lesson
 
 ## 더 읽을거리 (Further Reading)
 
-- [Meta — Llama Guard 3 (in Llama 3 Herd paper, arXiv:2407.21783)](https://arxiv.org/abs/2407.21783) — 8B 분류기
-- [Meta — Llama Guard 3-1B-INT4 (arXiv:2411.17713)](https://arxiv.org/abs/2411.17713) — 양자화 모바일 분류기
-- [NVIDIA Garak — GitHub](https://github.com/NVIDIA/garak) — 스캐너 저장소와 문서
-- [Microsoft PyRIT — GitHub](https://github.com/Azure/PyRIT) — 캠페인 툴킷
+- [Meta(Llama Guard 3 (in Llama 3 Herd paper, arXiv:2407.21783)](https://arxiv.org/abs/2407.21783)) 8B 분류기
+- [Meta(Llama Guard 3-1B-INT4 (arXiv:2411.17713)](https://arxiv.org/abs/2411.17713)) 양자화 모바일 분류기
+- [NVIDIA Garak(GitHub](https://github.com/NVIDIA/garak)) 스캐너 저장소와 문서
+- [Microsoft PyRIT(GitHub](https://github.com/Azure/PyRIT)) 캠페인 툴킷

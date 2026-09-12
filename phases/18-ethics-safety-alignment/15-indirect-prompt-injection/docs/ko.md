@@ -1,6 +1,6 @@
-# 간접 프롬프트 주입 — 프로덕션 공격 표면 (Indirect Prompt Injection — Production Attack Surface)
+# 간접 프롬프트 주입(프로덕션 공격 표면 (Indirect Prompt Injection) Production Attack Surface)
 
-> 간접 프롬프트 주입(indirect prompt injection, IPI)은 명시적 사용자 행동 없이 에이전트형(agentic) 시스템이 소비하는 외부 콘텐츠 — 웹 페이지, 이메일, 공유 문서, 지원 티켓 — 안에 명령을 심는다. IPI는 2026년의 지배적인 프로덕션 위협이다: 공격자가 사용자를 결코 건드리지 않기 때문에 사용자 입력 필터를 우회하고, 에이전트가 더 많은 외부 콘텐츠를 처리함에 따라 조용히 확장되며, 아무도 프롬프트를 읽지 않는 자동화 워크플로를 노린다. MDPI Information 17(1):54(2026년 1월)은 2023-2025년 연구를 종합한다. NDSS 2026의 IPI 방어 논문은 핵심 과제를 이렇게 설정한다: 주입된 명령은 의미적으로 양성("please print Yes")일 수 있어, 탐지에는 키워드 필터링 이상이 필요하다. "The Attacker Moves Second"(Nasr 외, OpenAI/Anthropic/DeepMind 공동, 2025년 10월): 적응형 공격(그래디언트, RL, 무작위 탐색, 인간 레드팀)이 원래 거의 0에 가까운 공격 성공률을 보고했던 12개 발표 방어 중 90% 이상을 깨뜨렸다.
+> 간접 프롬프트 주입(indirect prompt injection, IPI)은 명시적 사용자 행동 없이 에이전트형(agentic) 시스템이 소비하는 외부 콘텐츠(웹 페이지, 이메일, 공유 문서, 지원 티켓) 안에 명령을 심는다. IPI는 2026년의 지배적인 프로덕션 위협이다: 공격자가 사용자를 결코 건드리지 않기 때문에 사용자 입력 필터를 우회하고, 에이전트가 더 많은 외부 콘텐츠를 처리함에 따라 조용히 확장되며, 아무도 프롬프트를 읽지 않는 자동화 워크플로를 노린다. MDPI Information 17(1):54(2026년 1월)은 2023-2025년 연구를 종합한다. NDSS 2026의 IPI 방어 논문은 핵심 과제를 이렇게 설정한다: 주입된 명령은 의미적으로 양성("please print Yes")일 수 있어, 탐지에는 키워드 필터링 이상이 필요하다. "The Attacker Moves Second"(Nasr 외, OpenAI/Anthropic/DeepMind 공동, 2025년 10월): 적응형 공격(그래디언트, RL, 무작위 탐색, 인간 레드팀)이 원래 거의 0에 가까운 공격 성공률을 보고했던 12개 발표 방어 중 90% 이상을 깨뜨렸다.
 
 **Type:** Build
 **Languages:** Python (stdlib, IPI attack + defense harness)
@@ -16,7 +16,7 @@
 
 ## 문제 (The Problem)
 
-직접 프롬프트 주입은 공격자가 사용자 또는 그 프롬프트에 도달할 것을 요구한다. IPI는 둘 다 요구하지 않는다: 공격자는 에이전트가 읽을 수 있는 어떤 콘텐츠 — 웹 페이지, 받은편지함의 이메일, GitHub 이슈, 제품 리뷰 — 에든 페이로드(payload)를 놓는다. 에이전트는 정상 작동 중에 이를 집어 들고 명령을 실행한다. 사용자는 의도가 아니라 전달자다.
+직접 프롬프트 주입은 공격자가 사용자 또는 그 프롬프트에 도달할 것을 요구한다. IPI는 둘 다 요구하지 않는다: 공격자는 에이전트가 읽을 수 있는 어떤 콘텐츠(웹 페이지, 받은편지함의 이메일, GitHub 이슈, 제품 리뷰) 에든 페이로드(payload)를 놓는다. 에이전트는 정상 작동 중에 이를 집어 들고 명령을 실행한다. 사용자는 의도가 아니라 전달자다.
 
 ## 개념 (The Concept)
 
@@ -30,7 +30,7 @@
 
 ### 사용자 입력 필터가 놓치는 이유
 
-IPI 페이로드는 사용자의 입력에 나타나지 않는다. 검색된 콘텐츠에 나타난다. 필터가 사용자 입력에 걸려 있으면 페이로드가 그 필터를 우회한다. 필터가 모델에 도달하는 모든 콘텐츠에 걸려 있으면, 임의의 검색된 텍스트에 적용되어야 하는데 — 이는 비용이 크고 우연히 명령형 어조 언어를 담은 정당한 콘텐츠에 대해 거짓 양성을 만든다.
+IPI 페이로드는 사용자의 입력에 나타나지 않는다. 검색된 콘텐츠에 나타난다. 필터가 사용자 입력에 걸려 있으면 페이로드가 그 필터를 우회한다. 필터가 모델에 도달하는 모든 콘텐츠에 걸려 있으면, 임의의 검색된 텍스트에 적용되어야 하는데. 이는 비용이 크고 우연히 명령형 어조 언어를 담은 정당한 콘텐츠에 대해 거짓 양성을 만든다.
 
 ### AI를 위한 정보 흐름 제어 (Information Flow Control, IFC)
 
@@ -46,7 +46,7 @@ Nasr 외(2025년 10월)는 적응형 공격(그래디언트 탐색, RL 정책, �
 
 ### 실제 사건
 
-Lesson 25는 EchoLeak(CVE-2025-32711, CVSS 9.3) — Microsoft 365 Copilot에서 최초로 공개 문서화된 제로클릭(zero-click) IPI — 를 다룬다. GitHub Copilot Chat의 CamoLeak(CVSS 9.6). GitHub Copilot의 CVE-2025-53773. IPI는 벤치마크만이 아니라 실제 현장에서 프로덕션 배포를 침해하고 있다.
+Lesson 25는 EchoLeak(CVE-2025-32711, CVSS 9.3)(Microsoft 365 Copilot에서 최초로 공개 문서화된 제로클릭(zero-click) IPI)를 다룬다. GitHub Copilot Chat의 CamoLeak(CVSS 9.6). GitHub Copilot의 CVE-2025-53773. IPI는 벤치마크만이 아니라 실제 현장에서 프로덕션 배포를 침해하고 있다.
 
 ### OWASP와 NIST 프레이밍
 
@@ -90,7 +90,7 @@ Lesson 12-14는 모델 중심 탈옥(jailbreak)이다. Lesson 15는 2026년 프�
 
 ## 더 읽을거리 (Further Reading)
 
-- [MDPI Information 17(1):54 — Indirect Prompt Injection Survey (January 2026)](https://www.mdpi.com/2078-2489/17/1/54) — 2023-2025 종합
-- [Nasr et al. — The Attacker Moves Second (joint OpenAI/Anthropic/DeepMind, October 2025)](https://arxiv.org/abs/2510.18108) — 적응형 공격 평가
-- [Greshake et al. — Not what you've signed up for (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173) — 최초의 IPI 논문
-- [OWASP — LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/) — 프롬프트 주입을 LLM01로 순위 매김
+- [MDPI Information 17(1):54(Indirect Prompt Injection Survey (January 2026)](https://www.mdpi.com/2078-2489/17/1/54)) 2023-2025 종합
+- [Nasr et al.(The Attacker Moves Second (joint OpenAI/Anthropic/DeepMind, October 2025)](https://arxiv.org/abs/2510.18108)) 적응형 공격 평가
+- [Greshake et al.(Not what you've signed up for (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173)) 최초의 IPI 논문
+- [OWASP(LLM Top 10 (2025)](https://genai.owasp.org/llm-top-10/)) 프롬프트 주입을 LLM01로 순위 매김

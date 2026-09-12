@@ -102,7 +102,7 @@ Kolmogorov 복잡도와 Lob의 정리(Lob's theorem)는 시스템이 자기 자�
 |---|---|---|
 | 불변량 (Invariant) | "항상 참인 속성" | 모든 편집 전후에 외부 코드가 검사하는 속성 |
 | 정렬 닻 (Alignment anchor) | "고정된 목표" | 루프의 편집 표면 바깥에 있는 불변 핵심 목표 표현 |
-| 다중 목표 제약 (Multi-objective constraint) | "모든 축이 유지되어야 함" | 성능, 안전, 공정성, 견고성 — 모두 요구됨 |
+| 다중 목표 제약 (Multi-objective constraint) | "모든 축이 유지되어야 함" | 성능, 안전, 공정성, 견고성: 모두 요구됨 |
 | 회귀 탐지 (Regression detection) | "하락 시 일시 정지" | 과거 지표 델타가 능력 손실을 시사할 때 루프를 일시 정지 |
 | Kolmogorov 경계 (Kolmogorov bound) | "정보 이론적 한계" | 시스템이 자기 후계자에 대해 증명할 수 있는 것을 제한 |
 | Lob의 정리 (Lob's theorem) | "자기 참조 함정" | 시스템이 "해야 한다"를 증명하지 않고도 "해야 한다"에 따라 행동할 수 있음 |
@@ -111,8 +111,8 @@ Kolmogorov 복잡도와 Lob의 정리(Lob's theorem)는 시스템이 자기 자�
 
 ## 더 읽을거리 (Further Reading)
 
-- [ICLR 2026 RSI Workshop summary (OpenReview)](https://openreview.net/pdf?id=OsPQ6zTQXV) — 네 원시 요소로의 수렴.
-- [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — 다중 목표 능력 임계값.
-- [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) — 불변량 원시 요소로서의 기만적 정렬 모니터링.
-- [Schmidhuber (2003). Godel Machines](https://people.idsia.ch/~juergen/goedelmachine.html) — 이 원시 요소들의 형식 증명 조상.
-- [Anthropic — Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution) — 이유 기반 정렬 닻.
+- [ICLR 2026 RSI Workshop summary (OpenReview)](https://openreview.net/pdf?id=OsPQ6zTQXV): 네 원시 요소로의 수렴.
+- [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): 다중 목표 능력 임계값.
+- [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/): 불변량 원시 요소로서의 기만적 정렬 모니터링.
+- [Schmidhuber (2003). Godel Machines](https://people.idsia.ch/~juergen/goedelmachine.html): 이 원시 요소들의 형식 증명 조상.
+- [Anthropic(Claude's Constitution (January 2026)](https://www.anthropic.com/news/claudes-constitution)) 이유 기반 정렬 닻.

@@ -1,4 +1,4 @@
-# 프런티어 안전 프레임워크 — RSP, PF, FSF (Frontier Safety Frameworks — RSP, PF, FSF)
+# 프런티어 안전 프레임워크(RSP, PF, FSF (Frontier Safety Frameworks) RSP, PF, FSF)
 
 > 세 개의 주요 연구소 프레임워크가 프런티어(frontier) 역량에 대한 2026년 산업 거버넌스를 정의한다. Anthropic Responsible Scaling Policy v3.0(2026년 2월)은 생물안전 등급을 본떠 만든 계층화된 AI 안전 등급(AI Safety Level, ASL-1부터 ASL-5+까지)을 도입하며, CBRN 관련 모델에 대해 2025년 5월 ASL-3을 발동했다. OpenAI Preparedness Framework v2(2025년 4월)는 추적 역량에 대한 다섯 가지 기준을 정의하고 역량 보고서(Capabilities Reports)와 안전장치 보고서(Safeguards Reports)를 분리한다. DeepMind Frontier Safety Framework v3.0(2025년 9월)은 새로운 유해 조작(Harmful Manipulation) CCL을 포함한 핵심 역량 수준(Critical Capability Levels)을 도입한다. 이제 세 프레임워크 모두 동료 연구소가 비교 가능한 안전장치 없이 출시할 경우 연기를 허용하는 경쟁자 조정 조항(competitor-adjustment clauses)을 포함한다. 연구소 간 정렬은 용어가 아니라 구조적으로 유지된다: "Capability Thresholds", "High Capability thresholds", "Critical Capability Levels"는 유사한 구성물을 가리킨다.
 
@@ -131,7 +131,7 @@ Lesson 17-18은 기만 및 레드팀 분석 위에 놓인 측정-및-거버넌�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy) — ASL 티어, 로드맵, AI R&D 분리
-- [OpenAI — Updating the Preparedness Framework (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/) — 다섯 기준, 조정 조항
-- [DeepMind — Strengthening our Frontier Safety Framework (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) — CCL v3.0, 유해 조작
-- [METR — Common Elements of Frontier AI Safety Policies (2025)](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/) — 연구소 간 비교
+- [Anthropic(Responsible Scaling Policy v3.0 (February 2026)](https://www.anthropic.com/responsible-scaling-policy)) ASL 티어, 로드맵, AI R&D 분리
+- [OpenAI(Updating the Preparedness Framework (April 15, 2025)](https://openai.com/index/updating-our-preparedness-framework/)) 다섯 기준, 조정 조항
+- [DeepMind(Strengthening our Frontier Safety Framework (September 2025)](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/)) CCL v3.0, 유해 조작
+- [METR(Common Elements of Frontier AI Safety Policies (2025)](https://metr.org/blog/2025-03-26-common-elements-of-frontier-ai-safety-policies/)) 연구소 간 비교

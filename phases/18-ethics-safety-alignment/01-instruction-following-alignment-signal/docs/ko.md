@@ -106,14 +106,14 @@ PPO-ptx는 표준이 되었다. Anthropic, DeepMind, Meta 모두 어떤 변형�
 | SFT | "지시 튜닝" | 1단계: 프롬프트-응답 쌍에 대한 교차 엔트로피 파인튜닝 |
 | 보상 모델(Reward model) | "the RM" | 쌍별 레이블에 대해 브래들리-테리로 학습된 (프롬프트, 응답)에 대한 스칼라 회귀자 |
 | 브래들리-테리(Bradley-Terry) | "쌍별 선호 손실" | -log sigmoid(r_w - r_l); 쌍별 순위 매기기를 이진 분류로 환원한다 |
-| KL 페널티 | "정규화 항" | `beta * KL(pi \|\| pi_SFT)` — RL 정책을 SFT 앵커 근처에 유지한다 |
+| KL 페널티 | "정규화 항" | `beta * KL(pi \|\| pi_SFT)`: RL 정책을 SFT 앵커 근처에 유지한다 |
 | PPO-ptx | "사전 학습 혼합을 둔 PPO" | 정렬 세금을 상쇄하기 위해 사전 학습 로그 가능도의 일부를 PPO 목적함수에 더한다 |
 | 정렬 세금(Alignment tax) | "RLHF 퇴보" | RLHF가 목표로 삼지 않은 표준 벤치마크에서 RLHF 이후 발생하는 하락 |
 | 레이블러 선호(Labeler preference) | "정답(ground truth)" | 인간 순위의 표본; RM은 "인간 가치"가 아니라 이것에 대한 통계적 프록시다 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Ouyang et al. — Training language models to follow instructions with human feedback (arXiv:2203.02155)](https://arxiv.org/abs/2203.02155) — InstructGPT 논문, 이후 모든 RLHF 파이프라인의 토대
-- [Stiennon et al. — Learning to summarize from human feedback (arXiv:2009.01325)](https://arxiv.org/abs/2009.01325) — 요약을 위한 RLHF의 선행 연구
-- [Christiano et al. — Deep reinforcement learning from human preferences (arXiv:1706.03741)](https://arxiv.org/abs/1706.03741) — 원조 선호 기반 RL 정식화
-- [Bai et al. — Training a Helpful and Harmless Assistant with RLHF (arXiv:2204.05862)](https://arxiv.org/abs/2204.05862) — Anthropic의 InstructGPT 파이프라인 HH 확장
+- [Ouyang et al.(Training language models to follow instructions with human feedback (arXiv:2203.02155)](https://arxiv.org/abs/2203.02155)) InstructGPT 논문, 이후 모든 RLHF 파이프라인의 토대
+- [Stiennon et al.(Learning to summarize from human feedback (arXiv:2009.01325)](https://arxiv.org/abs/2009.01325)) 요약을 위한 RLHF의 선행 연구
+- [Christiano et al.(Deep reinforcement learning from human preferences (arXiv:1706.03741)](https://arxiv.org/abs/1706.03741)) 원조 선호 기반 RL 정식화
+- [Bai et al.(Training a Helpful and Harmless Assistant with RLHF (arXiv:2204.05862)](https://arxiv.org/abs/2204.05862)) Anthropic의 InstructGPT 파이프라인 HH 확장

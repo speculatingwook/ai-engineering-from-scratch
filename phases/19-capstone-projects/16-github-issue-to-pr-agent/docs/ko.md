@@ -1,4 +1,4 @@
-# Capstone 16 — GitHub 이슈-투-PR 자율 에이전트 (GitHub Issue-to-PR Autonomous Agent)
+# Capstone 16: GitHub 이슈-투-PR 자율 에이전트 (GitHub Issue-to-PR Autonomous Agent)
 
 > AWS Remote SWE Agents, Cursor Background Agents, OpenAI Codex cloud, 그리고 Google Jules는 모두 동일한 2026 제품 형태를 출하한다: 이슈에 레이블을 붙이면 PR을 받는다. 클라우드 샌드박스(sandbox)에서 에이전트(agent)를 실행하고, 테스트가 통과하는지 검증하며, 근거(rationale)와 함께 리뷰 준비가 된 PR을 게시한다. 어려운 부분은 레포의 빌드 환경을 자동으로 재현하기, 자격 증명(credential) 유출 방지, 레포별 예산(budget) 시행, 그리고 에이전트가 force-push할 수 없게 하기다. 이 캡스톤(capstone)은 셀프 호스팅(self-hosted) 버전을 만들고 비용과 통과율(pass rate)에서 호스팅형 대안과 비교한다.
 
@@ -20,7 +20,7 @@
 
 검증은 게이팅 단계다. PR이 열리기 전에 샌드박스에서 전체 CI가 통과해야 한다. 커버리지(coverage) 차이가 계산된다. 임계값을 넘어 음수이면, PR은 열리지만 `needs-review` 레이블이 붙는다. 에이전트는 근거를 PR 설명으로 게시하고 리뷰어가 후속 작업을 위해 핑(ping)할 수 있는 `@agent` 스레드를 추가한다.
 
-안전성은 서로 다른 두 GitHub 표면에서 스코핑된다: App은 `workflows: read`와 좁은 레포 컨텐츠/PR 스코프를 갖는 단수명(short-lived) 설치 토큰을 제공한다. 브랜치 보호(앱 권한이 아님)가 "`main`에 직접 쓰기 금지"와 "force-push 금지"를 시행한다 — 앱은 결코 우회(bypass) 목록에 추가되지 않는다. `.github/workflows`로 경로를 좁힌 읽기 전용 접근은 실제 GitHub App 원시 기능이 아니므로, 파일 편집을 제한하는 에이전트의 허용 목록(allow-list)이 워커에서 이를 시행해야 한다. 레포당 일당 예산 상한은 디스패처에서 시행된다(예: 레포당 일당 최대 5 PR, PR당 $20).
+안전성은 서로 다른 두 GitHub 표면에서 스코핑된다: App은 `workflows: read`와 좁은 레포 컨텐츠/PR 스코프를 갖는 단수명(short-lived) 설치 토큰을 제공한다. 브랜치 보호(앱 권한이 아님)가 "`main`에 직접 쓰기 금지"와 "force-push 금지"를 시행한다. 앱은 결코 우회(bypass) 목록에 추가되지 않는다. `.github/workflows`로 경로를 좁힌 읽기 전용 접근은 실제 GitHub App 원시 기능이 아니므로, 파일 편집을 제한하는 에이전트의 허용 목록(allow-list)이 워커에서 이를 시행해야 한다. 레포당 일당 예산 상한은 디스패처에서 시행된다(예: 레포당 일당 최대 5 PR, PR당 $20).
 
 ## 아키텍처 (Architecture)
 
@@ -138,11 +138,11 @@ GitHub issue labeled `@agent fix` or PR comment
 
 ## 더 읽을거리 (Further Reading)
 
-- [AWS Remote SWE Agents](https://github.com/aws-samples/remote-swe-agents) — 표준적인 비동기 클라우드 에이전트 레퍼런스
-- [SWE-agent](https://github.com/SWE-agent/SWE-agent) — CLI 레퍼런스
-- [Cursor Background Agents](https://docs.cursor.com/background-agent) — 상용 대안
-- [OpenAI Codex (cloud)](https://openai.com/codex) — 호스팅형 경쟁자
-- [Google Jules](https://jules.google) — Google의 호스팅형 버전
-- [Factory Droids](https://www.factory.ai) — 대안 상용 레퍼런스
-- [GitHub App documentation](https://docs.github.com/en/apps) — 스코핑된 봇 아이덴티티
-- [Daytona cloud sandboxes](https://daytona.io) — 레퍼런스 샌드박스
+- [AWS Remote SWE Agents](https://github.com/aws-samples/remote-swe-agents): 표준적인 비동기 클라우드 에이전트 레퍼런스
+- [SWE-agent](https://github.com/SWE-agent/SWE-agent): CLI 레퍼런스
+- [Cursor Background Agents](https://docs.cursor.com/background-agent): 상용 대안
+- [OpenAI Codex (cloud)](https://openai.com/codex): 호스팅형 경쟁자
+- [Google Jules](https://jules.google): Google의 호스팅형 버전
+- [Factory Droids](https://www.factory.ai): 대안 상용 레퍼런스
+- [GitHub App documentation](https://docs.github.com/en/apps): 스코핑된 봇 아이덴티티
+- [Daytona cloud sandboxes](https://daytona.io): 레퍼런스 샌드박스

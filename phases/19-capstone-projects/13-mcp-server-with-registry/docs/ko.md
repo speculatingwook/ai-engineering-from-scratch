@@ -1,4 +1,4 @@
-# Capstone 13 — 레지스트리와 거버넌스를 갖춘 MCP 서버 (MCP Server with Registry and Governance)
+# Capstone 13: 레지스트리와 거버넌스를 갖춘 MCP 서버 (MCP Server with Registry and Governance)
 
 > Model Context Protocol은 더 이상 미래가 아니라 2026년의 기본 도구 사용(tool-use) 명세가 되었다. Anthropic, OpenAI, Google을 비롯한 모든 주요 IDE가 MCP 클라이언트를 탑재한다. Pinterest는 자사 내부 MCP 서버 생태계를 공개했다. AAIF 레지스트리(Registry)는 `.well-known`에서 역량(capability) 메타데이터를 공식화했다. AWS ECS는 레퍼런스 무상태(stateless) 배포를 발표했다. Block의 goose-agent는 동일한 프로토콜을 호스팅형 어시스턴트 안에 넣었다. 2026 프로덕션(production)의 형태는 이렇다: StreamableHTTP 전송, OAuth 2.1 스코프(scope), OPA 정책 게이팅(gating), 그리고 플랫폼 팀이 서버를 발견·검증·활성화할 수 있게 하는 레지스트리. 이것을 끝에서 끝까지 만든다.
 
@@ -18,7 +18,7 @@ MCP는 도구 사용의 링구아 프랑카(lingua franca)가 되었다. Claude 
 
 MCP 2026 개정판은 StreamableHTTP를 기본 전송으로 의무화한다. 이전의 stdio-and-SSE 형태와 달리, StreamableHTTP는 기본적으로 무상태다: 단일 HTTP 엔드포인트가 JSON-RPC 요청을 받고, 응답을 스트리밍하며, 알림(notification)을 위한 장수명 연결을 지원한다. 무상태라는 것은 로드 밸런서(load balancer) 뒤에서 수평 확장이 가능하다는 뜻이다.
 
-인가(authorization)는 도구별 스코프를 갖는 OAuth 2.1이다. 토큰은 `jira:read`, `s3:list`, `postgres:query:readonly` 같은 스코프를 담는다. MCP 서버는 세션 시작 시점만이 아니라 도구 호출 시점에 스코프를 확인한다. 고위험 도구의 경우, 서버는 최근 N분 이내에 `approved:by:human`으로 승격되지 않은 스코프의 호출을 모두 거부한다 — 그 승격은 Slack 검토 카드에서 나온다.
+인가(authorization)는 도구별 스코프를 갖는 OAuth 2.1이다. 토큰은 `jira:read`, `s3:list`, `postgres:query:readonly` 같은 스코프를 담는다. MCP 서버는 세션 시작 시점만이 아니라 도구 호출 시점에 스코프를 확인한다. 고위험 도구의 경우, 서버는 최근 N분 이내에 `approved:by:human`으로 승격되지 않은 스코프의 호출을 모두 거부한다. 그 승격은 Slack 검토 카드에서 나온다.
 
 레지스트리는 별도 서비스다. 모든 MCP 서버는 도구 매니페스트(manifest), 전송 URL, 인증 요구사항을 담은 `.well-known/mcp-capabilities` 문서를 노출한다. 레지스트리는 폴링하고, 검증하고, 인덱싱한다. 플랫폼 팀은 레지스트리 UI를 사용해 어떤 도구가 가용한지, 어떤 스코프가 필요한지, 어느 팀이 소유하는지를 본다.
 
@@ -138,11 +138,11 @@ response:    { "result": { "rows": [[1]] } }
 
 ## 더 읽을거리 (Further Reading)
 
-- [Model Context Protocol 2026 Roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/) — StreamableHTTP, 역량 메타데이터, 레지스트리
-- [AAIF MCP Registry spec](https://github.com/modelcontextprotocol/registry) — 2026 레지스트리 명세
-- [AWS ECS reference deployment](https://aws.amazon.com/blogs/containers/deploying-model-context-protocol-mcp-servers-on-amazon-ecs/) — 레퍼런스 프로덕션 배포
-- [Pinterest internal MCP ecosystem](https://www.infoq.com/news/2026/04/pinterest-mcp-ecosystem/) — 레퍼런스 내부 배포
-- [Block `goose` MCP usage](https://block.github.io/goose/) — 레퍼런스 에이전트 소비 패턴
-- [FastMCP](https://github.com/jlowin/fastmcp) — Python 서버 프레임워크
-- [Open Policy Agent](https://www.openpolicyagent.org/) — 정책 엔진 레퍼런스
-- [SPIFFE / SPIRE](https://spiffe.io) — 워크로드 아이덴티티 레퍼런스
+- [Model Context Protocol 2026 Roadmap](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/): StreamableHTTP, 역량 메타데이터, 레지스트리
+- [AAIF MCP Registry spec](https://github.com/modelcontextprotocol/registry): 2026 레지스트리 명세
+- [AWS ECS reference deployment](https://aws.amazon.com/blogs/containers/deploying-model-context-protocol-mcp-servers-on-amazon-ecs/): 레퍼런스 프로덕션 배포
+- [Pinterest internal MCP ecosystem](https://www.infoq.com/news/2026/04/pinterest-mcp-ecosystem/): 레퍼런스 내부 배포
+- [Block `goose` MCP usage](https://block.github.io/goose/): 레퍼런스 에이전트 소비 패턴
+- [FastMCP](https://github.com/jlowin/fastmcp): Python 서버 프레임워크
+- [Open Policy Agent](https://www.openpolicyagent.org/): 정책 엔진 레퍼런스
+- [SPIFFE / SPIRE](https://spiffe.io): 워크로드 아이덴티티 레퍼런스

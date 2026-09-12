@@ -12,7 +12,7 @@
 - Greshake et al.의 간접 프롬프트 인젝션 위협 모델을 진술하기.
 - 시연된 다섯 가지 익스플로잇(exploit) 부류(데이터 절취, 웜화, 지속적 메모리 오염, 생태계 오염, 임의 도구 사용)를 거명하기.
 - 2026년 방어 교리를 기술하기: 신뢰할 수 없는 내용, 허용 목록(allowlist) 내비게이션, 스텝마다 안전, 가드레일(guardrail), 인간 개입(human-in-the-loop), 외부 포착.
-- PVE(Prompt-Validator-Executor) 패턴을 구현하기 — 비싼 메인 모델이 도구 호출에 전념하기 전에 동작하는 저렴하고 빠른 검증자(validator).
+- PVE(Prompt-Validator-Executor) 패턴을 구현하기: 비싼 메인 모델이 도구 호출에 전념하기 전에 동작하는 저렴하고 빠른 검증자(validator).
 
 ## 문제 (The Problem)
 
@@ -29,11 +29,11 @@ LLM은 사용자에게서 온 지시와 검색된 내용에서 온 지시를 안
 - 공격자가 에이전트가 검색할 내용(웹 페이지, PDF, 이메일, 메모리 노트, 검색 결과)을 통제한다.
 - 수집되면, 그 내용 안의 지시가 개발자 프롬프트를 덮어쓴다.
 - Bing Chat, GPT-4 코드 완성, 합성 에이전트에 대해 시연된 익스플로잇:
-  - **데이터 절취(Data theft)** — 에이전트가 대화 이력을 공격자가 통제하는 URL로 유출한다.
-  - **웜화(Worming)** — 주입된 내용이 에이전트에게 다음 출력에 익스플로잇을 심으라고 지시한다.
-  - **지속적 메모리 오염(Persistent memory poisoning)** — 에이전트가 공격자의 지시를 저장하고, 다음 세션에서 자신을 재오염시킨다.
-  - **정보 생태계 오염(Information ecosystem contamination)** — 주입된 사실이 공유 메모리를 통해 다른 에이전트로 퍼진다.
-  - **임의 도구 사용(Arbitrary tool use)** — 레지스트리의 모든 도구가 공격자가 도달 가능해진다.
+  - **데이터 절취(Data theft)**: 에이전트가 대화 이력을 공격자가 통제하는 URL로 유출한다.
+  - **웜화(Worming)**: 주입된 내용이 에이전트에게 다음 출력에 익스플로잇을 심으라고 지시한다.
+  - **지속적 메모리 오염(Persistent memory poisoning)**: 에이전트가 공격자의 지시를 저장하고, 다음 세션에서 자신을 재오염시킨다.
+  - **정보 생태계 오염(Information ecosystem contamination)**: 주입된 사실이 공유 메모리를 통해 다른 에이전트로 퍼진다.
+  - **임의 도구 사용(Arbitrary tool use)**: 레지스트리의 모든 도구가 공격자가 도달 가능해진다.
 
 핵심 주장: 검색된 프롬프트를 처리하는 것은 에이전트의 도구 사용 표면에서의 임의 코드 실행과 동등하다.
 
@@ -43,10 +43,10 @@ LLM은 사용자에게서 온 지시와 검색된 내용에서 온 지시를 안
 
 1. **검색된 모든 내용을 신뢰할 수 없는 것으로 취급한다.** OpenAI CUA 문서: "오직 사용자의 직접 지시만이 허가로 간주된다."
 2. **허용 목록 / 차단 목록 내비게이션.** 에이전트가 건드릴 수 있는 URL, 도메인, 파일의 집합을 좁혀라.
-3. **스텝마다 안전 평가.** Gemini 2.5 Computer Use 패턴 — 각 동작을 실행 전에 평가한다.
+3. **스텝마다 안전 평가.** Gemini 2.5 Computer Use 패턴: 각 동작을 실행 전에 평가한다.
 4. **도구 입력과 출력에 대한 가드레일.** Lesson 16(OpenAI Agents SDK); Lesson 06(인자 검증).
-5. **인간 개입 확인.** 로그인, 구매, CAPTCHA, 메시지 전송 — 인간이 결정한다.
-6. **외부 저장소를 통한 내용 포착.** Lesson 23 — 검색된 내용을 외부에 저장하라. 그러면 스팬(span)은 산문이 아니라 참조를 운반하고, 사고는 감사 가능해진다.
+5. **인간 개입 확인.** 로그인, 구매, CAPTCHA, 메시지 전송: 인간이 결정한다.
+6. **외부 저장소를 통한 내용 포착.** Lesson 23: 검색된 내용을 외부에 저장하라. 그러면 스팬(span)은 산문이 아니라 참조를 운반하고, 사고는 감사 가능해진다.
 
 ### PVE: Prompt-Validator-Executor
 
@@ -83,10 +83,10 @@ python3 code/main.py
 
 ## 라이브러리로 써보기 (Use It)
 
-- **OpenAI Agents SDK 가드레일**(Lesson 16) — 내장된 PVE 형태 패턴.
-- **Gemini 2.5 Computer Use 안전 서비스** — 스텝마다 벤더 관리.
-- **Anthropic 도구 사용 모범 사례** — 검색된 내용을 신뢰할 수 없는 것으로 취급한다. Claude의 시스템 프롬프트가 이를 명시적으로 다룬다.
-- **맞춤 PVE** — 도메인 특화 인젝션 패턴을 위한 자체 검증자 모델.
+- **OpenAI Agents SDK 가드레일**(Lesson 16): 내장된 PVE 형태 패턴.
+- **Gemini 2.5 Computer Use 안전 서비스**: 스텝마다 벤더 관리.
+- **Anthropic 도구 사용 모범 사례**: 검색된 내용을 신뢰할 수 없는 것으로 취급한다. Claude의 시스템 프롬프트가 이를 명시적으로 다룬다.
+- **맞춤 PVE**: 도메인 특화 인젝션 패턴을 위한 자체 검증자 모델.
 
 ## 산출물 (Ship It)
 
@@ -114,7 +114,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Greshake et al., Indirect Prompt Injection (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173) — 정규 공격 논문
-- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/) — "오직 사용자의 직접 지시만이 허가로 간주된다"
-- [Google, Gemini 2.5 Computer Use](https://blog.google/technology/google-deepmind/gemini-computer-use-model/) — 스텝마다 안전 서비스
-- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/) — PVE로서의 가드레일
+- [Greshake et al., Indirect Prompt Injection (arXiv:2302.12173)](https://arxiv.org/abs/2302.12173): 정규 공격 논문
+- [OpenAI, Computer-Using Agent](https://openai.com/index/computer-using-agent/): "오직 사용자의 직접 지시만이 허가로 간주된다"
+- [Google, Gemini 2.5 Computer Use](https://blog.google/technology/google-deepmind/gemini-computer-use-model/): 스텝마다 안전 서비스
+- [OpenAI Agents SDK docs](https://openai.github.io/openai-agents-python/): PVE로서의 가드레일

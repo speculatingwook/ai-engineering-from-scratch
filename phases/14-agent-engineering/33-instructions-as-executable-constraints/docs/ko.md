@@ -119,11 +119,11 @@ python3 code/main.py
 - [OpenAI Agents SDK guardrails](https://platform.openai.com/docs/guides/agents-sdk/guardrails)
 - [LangGraph interrupts](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/breakpoints/)
 - [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
-- [Rick Hightower, Agent RuleZ: A Deterministic Policy Engine](https://medium.com/@richardhightower/agent-rulez-a-deterministic-policy-engine-for-ai-coding-agents-9489e0561edf) — 프로덕션에서의 block/warn/info 심각도
-- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/) — 13.1만 회 리뷰 실행, 규칙 구성 교훈
-- [microservices.io, GenAI development platform — part 1: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html) — 규칙과 CI 사이의 심층 방어(defense in depth)
-- [Type-Checked Compliance: Deterministic Guardrails (arXiv 2604.01483)](https://arxiv.org/pdf/2604.01483) — 규칙-확인의 상한선으로서의 Lean 4
-- [logi-cmd/agent-guardrails](https://github.com/logi-cmd/agent-guardrails) — 병합 게이트(merge-gate) 구현: 범위, 변이 테스트(mutation testing), 위반 예산
-- Phase 14 · 32 — 이 규칙 집합이 들어가는 최소 워크벤치
-- Phase 14 · 38 — 규칙 리포트를 소비하는 검증 게이트
-- Phase 14 · 39 — 규칙 준수를 채점하는 리뷰어 에이전트
+- [Rick Hightower, Agent RuleZ: A Deterministic Policy Engine](https://medium.com/@richardhightower/agent-rulez-a-deterministic-policy-engine-for-ai-coding-agents-9489e0561edf): 프로덕션에서의 block/warn/info 심각도
+- [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/): 13.1만 회 리뷰 실행, 규칙 구성 교훈
+- [microservices.io, GenAI development platform(part 1: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html)) 규칙과 CI 사이의 심층 방어(defense in depth)
+- [Type-Checked Compliance: Deterministic Guardrails (arXiv 2604.01483)](https://arxiv.org/pdf/2604.01483): 규칙-확인의 상한선으로서의 Lean 4
+- [logi-cmd/agent-guardrails](https://github.com/logi-cmd/agent-guardrails): 병합 게이트(merge-gate) 구현: 범위, 변이 테스트(mutation testing), 위반 예산
+- Phase 14 · 32: 이 규칙 집합이 들어가는 최소 워크벤치
+- Phase 14 · 38: 규칙 리포트를 소비하는 검증 게이트
+- Phase 14 · 39: 규칙 준수를 채점하는 리뷰어 에이전트

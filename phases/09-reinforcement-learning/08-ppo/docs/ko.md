@@ -33,8 +33,8 @@ PPO(Schulman et al. 2017)는 단단한 신뢰 영역 제약을 단순한 클리�
 
 두 항:
 
-- 어드밴티지(advantage) `A_t > 0`이고 비율이 `1 + ε`를 넘어 커지려 하면, 클립이 그래디언트를 평평하게 만든다 — 좋은 행동을 옛 확률보다 `+ε` 이상으로 밀지 마라.
-- 어드밴티지 `A_t < 0`이고 비율이 `1 - ε`를 넘어 커지려 하면(즉, 나쁜 행동을 그 클리핑된 감소 대비 더 가능성 있게 만들려 하면), 클립이 그래디언트를 제한한다 — 나쁜 행동을 `-ε` 아래로 밀지 마라.
+- 어드밴티지(advantage) `A_t > 0`이고 비율이 `1 + ε`를 넘어 커지려 하면, 클립이 그래디언트를 평평하게 만든다. 좋은 행동을 옛 확률보다 `+ε` 이상으로 밀지 마라.
+- 어드밴티지 `A_t < 0`이고 비율이 `1 - ε`를 넘어 커지려 하면(즉, 나쁜 행동을 그 클리핑된 감소 대비 더 가능성 있게 만들려 하면), 클립이 그래디언트를 제한한다. 나쁜 행동을 `-ε` 아래로 밀지 마라.
 
 `min`은 다른 방향을 처리한다: 비율이 *유익한* 방향으로 움직였다면 여전히 그래디언트를 얻는다(해가 될 쪽에만 클리핑이 없다).
 
@@ -121,7 +121,7 @@ A2C와 동일하게, 크리틱 타깃에 표준 MSE를, 액터에 엔트로피 �
 매 갱신마다 지켜볼 세 가지:
 
 - **평균 KL** `E[log π_old - log π_θ]`. `[0, 0.02]`에 머물러야 한다. `0.1`을 넘어 폭발하면 `K_EPOCHS`나 `LR`을 줄여라.
-- **클립 비율(clip fraction)** — 비율이 `[1-ε, 1+ε]` 밖에 있는 샘플의 비율. `~0.1-0.3`이어야 한다. `~0`이면 클립이 결코 발동하지 않는 것이니 `LR`이나 `K_EPOCHS`를 올려라. `~0.5+`이면 롤아웃에 과적합(overfitting)하는 것이니 둘 다 낮춰라.
+- **클립 비율(clip fraction)**: 비율이 `[1-ε, 1+ε]` 밖에 있는 샘플의 비율. `~0.1-0.3`이어야 한다. `~0`이면 클립이 결코 발동하지 않는 것이니 `LR`이나 `K_EPOCHS`를 올려라. `~0.5+`이면 롤아웃에 과적합(overfitting)하는 것이니 둘 다 낮춰라.
 - **설명된 분산(explained variance)** `1 - Var(V_target - V_pred) / Var(V_target)`. 크리틱 품질 지표. 크리틱이 학습하면서 1을 향해 올라가야 한다.
 
 ## 함정 (Pitfalls)
@@ -144,10 +144,10 @@ PPO는 놀라울 정도로 많은 도메인에서 2026년의 기본 강화 학�
 | Atari / 이산 게임 | 범주형 정책, 롤링 128-스텝 롤아웃을 가진 PPO |
 | LLM용 RLHF | 참조 모델에 대한 KL 페널티, 응답 끝의 RM 보상을 가진 PPO |
 | 대규모 게임 에이전트 | IMPALA + PPO (AlphaStar, OpenAI Five) |
-| 추론 LLM | GRPO (Lesson 12) — 크리틱 없는 PPO 변형 |
-| 선호도만 있는 데이터 | DPO — PPO+KL의 닫힌 형식 압축, 온라인 샘플링 없음 |
+| 추론 LLM | GRPO (Lesson 12): 크리틱 없는 PPO 변형 |
+| 선호도만 있는 데이터 | DPO: PPO+KL의 닫힌 형식 압축, 온라인 샘플링 없음 |
 
-PPO *손실 형태* — 클리핑된 대리 목적함수 + 가치 + 엔트로피 — 는 DPO, GRPO, 나아가 거의 모든 RLHF 파이프라인(pipeline)의 골격이다.
+PPO *손실 형태*(클리핑된 대리 목적함수 + 가치 + 엔트로피)는 DPO, GRPO, 나아가 거의 모든 RLHF 파이프라인(pipeline)의 골격이다.
 
 ## 산출물 (Ship It)
 
@@ -188,18 +188,18 @@ Refuse `K > 30` or `ε > 0.3` (unsafe trust region). Refuse any PPO run without 
 | 클리핑된 대리 목적함수 | "PPO의 주요 트릭" | `min(r·A, clip(r, 1-ε, 1+ε)·A)`; 유익한 쪽에서 클립을 넘으면 평평한 그래디언트. |
 | 신뢰 영역 | "TRPO / PPO 의도" | 단조 개선을 보장하기 위해 각 갱신의 KL을 제한. |
 | KL 페널티 | "소프트 신뢰 영역" | 대안 PPO: `L - β · KL(π_θ \|\| π_old)`. 적응적 `β`. |
-| 클립 비율 | "클리핑이 얼마나 자주 발동하는지" | 진단 — 0.1-0.3이어야 함; 벗어나면 오조정. |
+| 클립 비율 | "클리핑이 얼마나 자주 발동하는지" | 진단: 0.1-0.3이어야 함; 벗어나면 오조정. |
 | 다중 에폭 학습 | "데이터 재사용" | 각 롤아웃에 K 에폭; 표본 효율을 위해 분산 비용을 거래. |
 | 거의-온-폴리시 | "대체로 온-폴리시" | PPO는 명목상 온-폴리시지만 K>1 에폭은 약간 오프-폴리시인 데이터를 안전하게 사용. |
 | PPO-KL | "다른 PPO" | KL-페널티 변형; KL-대-참조가 이미 제약인 RLHF에서 사용. |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Schulman et al. (2017). Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347) — 그 논문.
-- [Schulman et al. (2015). Trust Region Policy Optimization](https://arxiv.org/abs/1502.05477) — TRPO, PPO의 선구자.
-- [Andrychowicz et al. (2021). What Matters In On-Policy RL? A Large-Scale Empirical Study](https://arxiv.org/abs/2006.05990) — 모든 PPO 하이퍼파라미터를 절제(ablation)함.
-- [Ouyang et al. (2022). Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) — InstructGPT; RLHF에서의 PPO 레시피.
-- [OpenAI Spinning Up — PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html) — PyTorch를 곁들인 명료한 현대적 설명.
-- [CleanRL PPO implementation](https://github.com/vwxyzjn/cleanrl) — 많은 논문이 사용하는 참조 단일 파일 PPO.
-- [Hugging Face TRL — PPOTrainer](https://huggingface.co/docs/trl/main/en/ppo_trainer) — 언어 모델에서 PPO의 프로덕션 레시피; Lesson 09 (RLHF)와 함께 읽어라.
-- [Engstrom et al. (2020). Implementation Matters in Deep Policy Gradients](https://arxiv.org/abs/2005.12729) — "37가지 코드 수준 최적화" 논문; 어떤 PPO 트릭이 하중을 견디고 어떤 것이 민간 전승인지.
+- [Schulman et al. (2017). Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347): 그 논문.
+- [Schulman et al. (2015). Trust Region Policy Optimization](https://arxiv.org/abs/1502.05477): TRPO, PPO의 선구자.
+- [Andrychowicz et al. (2021). What Matters In On-Policy RL? A Large-Scale Empirical Study](https://arxiv.org/abs/2006.05990): 모든 PPO 하이퍼파라미터를 절제(ablation)함.
+- [Ouyang et al. (2022). Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155): InstructGPT; RLHF에서의 PPO 레시피.
+- [OpenAI Spinning Up(PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html)) PyTorch를 곁들인 명료한 현대적 설명.
+- [CleanRL PPO implementation](https://github.com/vwxyzjn/cleanrl): 많은 논문이 사용하는 참조 단일 파일 PPO.
+- [Hugging Face TRL(PPOTrainer](https://huggingface.co/docs/trl/main/en/ppo_trainer)) 언어 모델에서 PPO의 프로덕션 레시피; Lesson 09 (RLHF)와 함께 읽어라.
+- [Engstrom et al. (2020). Implementation Matters in Deep Policy Gradients](https://arxiv.org/abs/2005.12729): "37가지 코드 수준 최적화" 논문; 어떤 PPO 트릭이 하중을 견디고 어떤 것이 민간 전승인지.

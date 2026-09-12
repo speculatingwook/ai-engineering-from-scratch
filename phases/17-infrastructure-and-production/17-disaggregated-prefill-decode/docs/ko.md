@@ -1,6 +1,6 @@
-# 분리형 프리필/디코드(Disaggregated Prefill/Decode) — NVIDIA Dynamo와 llm-d
+# 분리형 프리필/디코드(Disaggregated Prefill/Decode): NVIDIA Dynamo와 llm-d
 
-> 프리필(prefill)은 연산 바운드(compute-bound)이고, 디코드(decode)는 메모리 바운드(memory-bound)다. 둘 다 같은 GPU에서 돌리면 한 자원을 낭비한다. 분리(disaggregation)는 이들을 별도 풀로 쪼개고 그 사이에서 KV 캐시를 NIXL(RDMA/InfiniBand 또는 TCP 폴백)로 전송한다. NVIDIA Dynamo(GTC 2025 발표, 1.0 GA)는 vLLM/SGLang/TRT-LLM 위에 위치한다 — 그 Planner Profiler + SLA Planner가 SLO를 충족하도록 prefill:decode 비율을 자동으로 율 매칭(rate-match)한다. NVIDIA는 이 정도 범위의 처리량 이득을 공개한다 — developer.nvidia.com(2025-06)은 중간 지연 영역(medium-latency regime)에서 GB200 NVL72 + Dynamo의 DeepSeek-R1 MoE에 대해 ~6배 개선을 보여주고, Dynamo 제품 페이지(developer.nvidia.com, 날짜 미상)는 GB300 NVL72 + Dynamo에서 Hopper 대비 최대 50배 MoE 처리량을 광고한다. "30배" 수치는 풀스택 Blackwell + Dynamo + DeepSeek-R1 보고들 전반의 커뮤니티 집계다. 정확히 30배라고 명시한 단일 1차 출처를 찾지 못했으므로, 방향성 주장으로 취급하라. llm-d(Red Hat + AWS)는 쿠버네티스 네이티브다: prefill / decode / router를 역할별 HPA를 가진 독립 Service로 둔다. llm-d 0.5는 계층적 KV 오프로딩, 캐시 인식 LoRA 라우팅, UCCL 네트워킹, 스케일 투 제로(scale-to-zero)를 추가한다. 경제성: 여러 고객 공개의 내부 합산은 일정 SLA에서 코로케이션(colocated) 서빙에서 Dynamo 분리형으로 전환할 때 $2M급 추론 지출에서 30–40% 절감(즉 연간 $600-800K)을 시사한다. 구체적인 $2M→$600-800K 수치는 내부 합성치이지 단일 발표 사례 연구가 아니다 — 참조 인용이 아니라 자릿수 앵커로 사용하라. 짧은 프롬프트(<512 토큰, 짧은 출력)는 전송 비용을 정당화하지 못한다.
+> 프리필(prefill)은 연산 바운드(compute-bound)이고, 디코드(decode)는 메모리 바운드(memory-bound)다. 둘 다 같은 GPU에서 돌리면 한 자원을 낭비한다. 분리(disaggregation)는 이들을 별도 풀로 쪼개고 그 사이에서 KV 캐시를 NIXL(RDMA/InfiniBand 또는 TCP 폴백)로 전송한다. NVIDIA Dynamo(GTC 2025 발표, 1.0 GA)는 vLLM/SGLang/TRT-LLM 위에 위치한다. 그 Planner Profiler + SLA Planner가 SLO를 충족하도록 prefill:decode 비율을 자동으로 율 매칭(rate-match)한다. NVIDIA는 이 정도 범위의 처리량 이득을 공개한다. developer.nvidia.com(2025-06)은 중간 지연 영역(medium-latency regime)에서 GB200 NVL72 + Dynamo의 DeepSeek-R1 MoE에 대해 ~6배 개선을 보여주고, Dynamo 제품 페이지(developer.nvidia.com, 날짜 미상)는 GB300 NVL72 + Dynamo에서 Hopper 대비 최대 50배 MoE 처리량을 광고한다. "30배" 수치는 풀스택 Blackwell + Dynamo + DeepSeek-R1 보고들 전반의 커뮤니티 집계다. 정확히 30배라고 명시한 단일 1차 출처를 찾지 못했으므로, 방향성 주장으로 취급하라. llm-d(Red Hat + AWS)는 쿠버네티스 네이티브다: prefill / decode / router를 역할별 HPA를 가진 독립 Service로 둔다. llm-d 0.5는 계층적 KV 오프로딩, 캐시 인식 LoRA 라우팅, UCCL 네트워킹, 스케일 투 제로(scale-to-zero)를 추가한다. 경제성: 여러 고객 공개의 내부 합산은 일정 SLA에서 코로케이션(colocated) 서빙에서 Dynamo 분리형으로 전환할 때 $2M급 추론 지출에서 30–40% 절감(즉 연간 $600-800K)을 시사한다. 구체적인 $2M→$600-800K 수치는 내부 합성치이지 단일 발표 사례 연구가 아니다. 참조 인용이 아니라 자릿수 앵커로 사용하라. 짧은 프롬프트(<512 토큰, 짧은 출력)는 전송 비용을 정당화하지 못한다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy disaggregated-vs-colocated simulator)
@@ -26,9 +26,9 @@ Llama 3.3 70B를 8개의 H100에서 돌린다고 하자. 혼합 워크로드(긴
 
 ### 왜 병목이 다른가
 
-**프리필(Prefill)** — 전체 입력 프롬프트에 대해 트랜스포머를 한 번의 순방향으로 실행한다. 행렬 곱셈이 지배한다. 연산 바운드. H100 FP8은 유용 처리량 ~2000 TFLOPS를 준다. 배치 효율이 좋다 — 한 번의 순방향이 많은 토큰을 처리한다.
+**프리필(Prefill)**(전체 입력 프롬프트에 대해 트랜스포머를 한 번의 순방향으로 실행한다. 행렬 곱셈이 지배한다. 연산 바운드. H100 FP8은 유용 처리량 ~2000 TFLOPS를 준다. 배치 효율이 좋다) 한 번의 순방향이 많은 토큰을 처리한다.
 
-**디코드(Decode)** — 한 번에 한 토큰을 생성하며, 매 반복마다 전체 가중치를 읽는다. 메모리 대역폭 바운드. HBM3는 ~3 TB/s를 준다. 배치 효율은 높은 동시성에서만 좋다 — 가중치 읽기가 배치 전반에 분할 상환된다.
+**디코드(Decode)**(한 번에 한 토큰을 생성하며, 매 반복마다 전체 가중치를 읽는다. 메모리 대역폭 바운드. HBM3는 ~3 TB/s를 준다. 배치 효율은 높은 동시성에서만 좋다) 가중치 읽기가 배치 전반에 분할 상환된다.
 
 이들을 코로케이션하면: 둘 다에 최적화된 GPU를 산다. H100은 둘 다 잘하지만 어느 쪽이든 같은 비용이 든다. 규모가 커지면 프리필 풀은 H100 / 연산 중심에, 디코드 풀은 H200 / 메모리 중심에, 또는 공격적 양자화와 함께 두는 편이 낫다.
 
@@ -49,7 +49,7 @@ Llama 3.3 70B를 8개의 H100에서 돌린다고 하자. 혼합 워크로드(긴
                                                  Client
 ```
 
-NIXL은 NVIDIA의 노드 간 전송이다. 가능할 때 RDMA/InfiniBand를 쓰고, 아니면 TCP 폴백을 쓴다. 전송 지연 시간은 실재한다 — 보통 70B FP8에서 4K 토큰 프롬프트의 KV 캐시에 대해 20-80ms. 짧은 프롬프트가 분리를 정당화하지 못하는 이유가 여기에 있다. 전송 세금이 절감을 초과하기 때문이다.
+NIXL은 NVIDIA의 노드 간 전송이다. 가능할 때 RDMA/InfiniBand를 쓰고, 아니면 TCP 폴백을 쓴다. 전송 지연 시간은 실재한다. 보통 70B FP8에서 4K 토큰 프롬프트의 KV 캐시에 대해 20-80ms. 짧은 프롬프트가 분리를 정당화하지 못하는 이유가 여기에 있다. 전송 세금이 절감을 초과하기 때문이다.
 
 ### Dynamo 대 llm-d
 
@@ -70,7 +70,7 @@ NIXL은 NVIDIA의 노드 간 전송이다. 가능할 때 RDMA/InfiniBand를 쓰�
 
 ### 경제성
 
-내부 합성치(단일 발표 사례 연구가 아님 — 자릿수 앵커):
+내부 합성치(단일 발표 사례 연구가 아님: 자릿수 앵커):
 
 - 코로케이션 서빙에 연간 $2M 추론 지출.
 - Dynamo 분리형으로 전환.
@@ -89,7 +89,7 @@ NIXL은 NVIDIA의 노드 간 전송이다. 가능할 때 RDMA/InfiniBand를 쓰�
 
 ### 라우터는 Phase 17 · 11과 통합된다
 
-분리형 라우터는 KV 캐시 인식(Phase 17 · 11)이다. 요청이 자신의 프리픽스를 보유한 디코드 풀에 도착한다 — 일치가 없으면 프리필 → 디코드로 흐른다. 적중률과 분리는 복합적이다 — 캐시 인식 라우터가 새 프리필이 애초에 필요한지를 결정한다.
+분리형 라우터는 KV 캐시 인식(Phase 17 · 11)이다. 요청이 자신의 프리픽스를 보유한 디코드 풀에 도착한다. 일치가 없으면 프리필 → 디코드로 흐른다. 적중률과 분리는 복합적이다. 캐시 인식 라우터가 새 프리필이 애초에 필요한지를 결정한다.
 
 ### Blackwell의 MoE가 진짜 숫자가 있는 곳이다
 
@@ -97,7 +97,7 @@ GB300 NVL72 + Dynamo는 Hopper 베이스라인 대비 50배 MoE 처리량을 보
 
 ### 기억해야 할 숫자들
 
-벤치마크 숫자는 바뀐다 — NVIDIA와 추론 스택은 매 분기 갱신된 결과를 게시한다. 인용 전에 다시 확인하라.
+벤치마크 숫자는 바뀐다. NVIDIA와 추론 스택은 매 분기 갱신된 결과를 게시한다. 인용 전에 다시 확인하라.
 
 - GB200 NVL72 + Dynamo의 DeepSeek-R1: 중간 지연 영역에서 베이스라인 대비 ~6배 처리량(developer.nvidia.com, 2025-06). 풀 Blackwell + Dynamo 스택의 "최대 30배" 커뮤니티 주장은 단일 1차 출처가 없는 방향성 집계다.
 - GB300 NVL72 + Dynamo: Hopper 대비 최대 50배 MoE 처리량(developer.nvidia.com, 날짜 미상).

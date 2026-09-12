@@ -22,7 +22,7 @@
 - **병렬 에이전트.** 여러 Claude Opus 4.6 인스턴스가 각각 독립적인 샌드박스에서 AAR로 실행된다. 샌드박스는 파일 시스템, 네트워크, 프로세스 표면을 제한한다.
 - **공유 포럼.** 발견은, 저장 백엔드가 모든 샌드박스 바깥에 자리한 공유 포럼에 게시된다. 에이전트는 포럼을 읽을 수 있지만, 자기 자신의 샌드박스 안에서 포럼 기록을 삭제하거나 편집할 수 없다.
 - **작업 할당.** 인간이 설계한 작업 큐(task queue)가 연구 문제를 AAR에 배정한다. AAR은 분해(decomposition)를 제안하고, 실험을 실행하고, 발견을 작성한다.
-- **약-대-강 학습 초점.** 공개된 연구는 약-대-강 학습을 다루었다 — 더 약한 감독자(supervisor) 모델을 사용해 더 강한 학생(student) 모델을 학습시키는 것. AAR은 이 작업에서 인간 연구자를 능가했다.
+- **약-대-강 학습 초점.** 공개된 연구는 약-대-강 학습을 다루었다. 더 약한 감독자(supervisor) 모델을 사용해 더 강한 학생(student) 모델을 학습시키는 것. AAR은 이 작업에서 인간 연구자를 능가했다.
 
 ### 샌드박스 바깥 로그가 중요한 이유
 
@@ -32,7 +32,7 @@
 
 ### 규정된 워크플로 트레이드오프
 
-Anthropic의 보고서는 규정된 워크플로가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다고 언급한다. 다시 말해, 인간 설계자가 연구 계획을 단계별로 작성하면, AAR은 고수준 목표와 분해의 자유를 받았을 때보다 성능이 떨어진다. 이는 에이전트형 연구 전반의 결과(LangGraph, Microsoft의 Agent Framework)와 일관된다 — 과도하게 명세된 스캐폴드는 유능한 에이전트를 해친다.
+Anthropic의 보고서는 규정된 워크플로가 종종 AAR의 유연성을 제약하고 성능을 떨어뜨린다고 언급한다. 다시 말해, 인간 설계자가 연구 계획을 단계별로 작성하면, AAR은 고수준 목표와 분해의 자유를 받았을 때보다 성능이 떨어진다. 이는 에이전트형 연구 전반의 결과(LangGraph, Microsoft의 Agent Framework)와 일관된다. 과도하게 명세된 스캐폴드는 유능한 에이전트를 해친다.
 
 안전 함의는 미묘하다. AAR 성능을 향상시키는 그 유연성이, 또한 승인되지 않은 분해, 새로운 도구 사용, 목표 드리프트(goal-drift)를 허용하는 유연성이기도 하다. 이 트레이드오프는 설계 공간의 결정이다. 얼마만큼의 유연성이, 에이전트에게 목표를 분포 밖(off-distribution)으로 일반화할 여지를 주지 않으면서, 인간을 이길 만큼 충분한 능력을 사 오는가?
 
@@ -91,8 +91,8 @@ AAR은 그 임계값에서 한 걸음 모자라다. 파이프라인의 일부(�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Anthropic — Automated Weak-to-Strong Researcher](https://alignment.anthropic.com/2026/automated-w2s-researcher/) — 1차 자료.
-- [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0) — AI R&D 임계값 규정.
-- [Anthropic — Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) — 더 넓은 에이전트 자율성 규정.
-- [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/) — RSP와 병행하는 ML R&D 자율성 수준.
-- [Burns et al. (2023). Weak-to-Strong Generalization (OpenAI)](https://openai.com/index/weak-to-strong-generalization/) — AAR이 공략한 근본 문제.
+- [Anthropic(Automated Weak-to-Strong Researcher](https://alignment.anthropic.com/2026/automated-w2s-researcher/)) 1차 자료.
+- [Anthropic Responsible Scaling Policy v3.0](https://anthropic.com/responsible-scaling-policy/rsp-v3-0): AI R&D 임계값 규정.
+- [Anthropic(Measuring AI agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)) 더 넓은 에이전트 자율성 규정.
+- [DeepMind Frontier Safety Framework v3](https://deepmind.google/blog/strengthening-our-frontier-safety-framework/): RSP와 병행하는 ML R&D 자율성 수준.
+- [Burns et al. (2023). Weak-to-Strong Generalization (OpenAI)](https://openai.com/index/weak-to-strong-generalization/): AAR이 공략한 근본 문제.

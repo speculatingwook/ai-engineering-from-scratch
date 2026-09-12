@@ -1,6 +1,6 @@
 # 멀티 리전 LLM 서빙과 KV 캐시 지역성(Multi-Region LLM Serving and KV Cache Locality)
 
-> 라운드 로빈(round-robin) 부하 분산은 캐시된 LLM 추론(inference)에 적극적으로 해롭다. 자신의 프리픽스(prefix)를 보유한 노드에 도착하지 못한 요청은 전체 프리필(prefill) 비용을 치른다 — 긴 프롬프트에서 P50 기준 대략 800ms인데, 캐시 적중 시에는 약 80ms다. 2026년의 프로덕션(production) 패턴은 KV 캐시 이벤트를 소비하고 프리픽스 해시(prefix-hash) 일치 기준으로 라우팅하는 캐시 인식 라우터(cache-aware router)다(Rust로 작성된 vLLM Router, llm-d router). 최근 연구(GORGO)는 리전 간(cross-region) 네트워크 지연 시간(latency)을 라우팅 목적 함수의 명시적 항으로 만든다. 상용 "리전 간 추론(cross-region inference)" 제품(Bedrock cross-region inference, GKE 멀티 클러스터 게이트웨이)은 추론을 불투명하게 취급한다 — 이들은 가용성을 다루지 TTFT를 다루지 않는다. JPMorgan과 Mayo Clinic은 2024년 11월 us-east-1 페일오버(failover)를 약 22분에 수행했다. DR(재해 복구) 현실: LLM DR 실패의 32%는 팀이 가중치(weight)는 백업했지만 토크나이저(tokenizer) 파일이나 양자화(quantization) 설정을 빠뜨렸기 때문이다.
+> 라운드 로빈(round-robin) 부하 분산은 캐시된 LLM 추론(inference)에 적극적으로 해롭다. 자신의 프리픽스(prefix)를 보유한 노드에 도착하지 못한 요청은 전체 프리필(prefill) 비용을 치른다. 긴 프롬프트에서 P50 기준 대략 800ms인데, 캐시 적중 시에는 약 80ms다. 2026년의 프로덕션(production) 패턴은 KV 캐시 이벤트를 소비하고 프리픽스 해시(prefix-hash) 일치 기준으로 라우팅하는 캐시 인식 라우터(cache-aware router)다(Rust로 작성된 vLLM Router, llm-d router). 최근 연구(GORGO)는 리전 간(cross-region) 네트워크 지연 시간(latency)을 라우팅 목적 함수의 명시적 항으로 만든다. 상용 "리전 간 추론(cross-region inference)" 제품(Bedrock cross-region inference, GKE 멀티 클러스터 게이트웨이)은 추론을 불투명하게 취급한다. 이들은 가용성을 다루지 TTFT를 다루지 않는다. JPMorgan과 Mayo Clinic은 2024년 11월 us-east-1 페일오버(failover)를 약 22분에 수행했다. DR(재해 복구) 현실: LLM DR 실패의 32%는 팀이 가중치(weight)는 백업했지만 토크나이저(tokenizer) 파일이나 양자화(quantization) 설정을 빠뜨렸기 때문이다.
 
 **Type:** Learn
 **Languages:** Python (stdlib, toy prefix-cache-aware router simulator)
@@ -44,7 +44,7 @@
 
 10배 차이. 라우터가 레플리카 전반에서 프리픽스 캐시를 60-80% 적중하면, N개 레플리카 용량에서 단일 레플리카 성능에 근접한다. 10%를 적중하면 순진한(naive) 스케일링에 근접한다.
 
-### 리전 간에는 새로운 제약이 있다 — 네트워크 지연 시간
+### 리전 간에는 새로운 제약이 있다. 네트워크 지연 시간
 
 리전 간 RTT:
 - us-east-1 ↔ us-west-2: ~65ms.
@@ -59,7 +59,7 @@ AWS Bedrock 리전 간 추론은 용량 압박 시 요청을 다른 리전으로
 
 이것들을 쓸 때조차 앱 계층의 캐시 인식 라우터가 여전히 필요하다. 이들은 "us-east-1이 불타고 있다" 경우를 다룬다. 캐시 인식 라우팅은 TTFT 경우를 다룬다.
 
-### DR 위생 — 32% 파일 누락 문제
+### DR 위생: 32% 파일 누락 문제
 
 널리 인용되는 2026년 통계: LLM DR 실패의 32%는 팀이 가중치는 백업했지만 다음을 빠뜨려서 발생한다:
 
@@ -112,7 +112,7 @@ EU 고객의 PHI는 EU를 떠날 수 없다. 캐시 인식 라우터가 파리�
 | 프리픽스 해시 (Prefix hash) | "캐시 키" | 라우터 조회에 쓰이는 처음 N 토큰의 해시 |
 | GORGO | "리전 간 라우팅 연구" | arXiv 2602.11688; 네트워크 지연 시간을 명시적 항으로 |
 | 리전 간 추론 (Cross-region inference) | "Bedrock CRI" | AWS 제품; 가용성 페일오버이며 TTFT 인식 아님 |
-| DR 매니페스트 (DR manifest) | "백업 목록" | 복원에 필요한 모든 파일 — 가중치만이 아니다 |
+| DR 매니페스트 (DR manifest) | "백업 목록" | 복원에 필요한 모든 파일: 가중치만이 아니다 |
 | 데이터 거주성 (Data residency) | "GDPR 경계" | 어느 리전이 사용자 데이터를 보는지에 대한 법적 제약 |
 | RTT | "왕복 시간" | 네트워크 지연 시간; 미국-유럽 75ms, 미국-APAC 220ms |
 | LLM 인식 LB (LLM-aware LB) | "캐시 적중 LB" | 제품 범주로서의 캐시 인식 라우터 |
@@ -120,7 +120,7 @@ EU 고객의 PHI는 EU를 떠날 수 없다. 캐시 인식 라우터가 파리�
 ## 더 읽을거리 (Further Reading)
 
 - [BentoML — Multi-cloud and cross-region inference](https://bentoml.com/llm/infrastructure-and-operations/multi-cloud-and-cross-region-inference)
-- [arXiv — GORGO (2602.11688)](https://arxiv.org/html/2602.11688v1) — 네트워크 지연 시간 항을 포함한 리전 간 KV 캐시 재사용.
+- [arXiv(GORGO (2602.11688)](https://arxiv.org/html/2602.11688v1)) 네트워크 지연 시간 항을 포함한 리전 간 KV 캐시 재사용.
 - [TianPan — Multi-Region LLM Serving Cache Locality](https://tianpan.co/blog/2026-04-17-multi-region-llm-serving-data-residency-routing)
-- [AWS Bedrock Cross-Region Inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) — 가용성 페일오버 문서.
-- [vLLM Production Stack Router](https://github.com/vllm-project/production-stack) — 캐시 인식 라우터 소스.
+- [AWS Bedrock Cross-Region Inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html): 가용성 페일오버 문서.
+- [vLLM Production Stack Router](https://github.com/vllm-project/production-stack): 캐시 인식 라우터 소스.

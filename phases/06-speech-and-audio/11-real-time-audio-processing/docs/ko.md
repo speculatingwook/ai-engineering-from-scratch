@@ -163,8 +163,8 @@ class Dialog:
 
 ## 더 읽을거리 (Further Reading)
 
-- [Macháček et al. (2023). Whisper-Streaming](https://arxiv.org/abs/2307.14743) — 청크 기반 준스트리밍 Whisper.
-- [Kyutai (2024). Moshi](https://kyutai.org/Moshi.pdf) — 풀 듀플렉스 200ms 지연 시간.
-- [LiveKit Agents framework (2024)](https://docs.livekit.io/agents/) — 프로덕션 오디오 에이전트 오케스트레이션.
-- [Silero VAD repo](https://github.com/snakers4/silero-vad) — 1ms 미만 VAD, Apache 2.0.
-- [WebRTC AEC3 paper](https://webrtc.googlesource.com/src/+/main/modules/audio_processing/aec3/) — 오픈소스 에코 제거.
+- [Macháček et al. (2023). Whisper-Streaming](https://arxiv.org/abs/2307.14743): 청크 기반 준스트리밍 Whisper.
+- [Kyutai (2024). Moshi](https://kyutai.org/Moshi.pdf): 풀 듀플렉스 200ms 지연 시간.
+- [LiveKit Agents framework (2024)](https://docs.livekit.io/agents/): 프로덕션 오디오 에이전트 오케스트레이션.
+- [Silero VAD repo](https://github.com/snakers4/silero-vad): 1ms 미만 VAD, Apache 2.0.
+- [WebRTC AEC3 paper](https://webrtc.googlesource.com/src/+/main/modules/audio_processing/aec3/): 오픈소스 에코 제거.

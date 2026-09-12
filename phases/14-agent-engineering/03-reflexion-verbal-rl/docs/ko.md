@@ -42,9 +42,9 @@ Episodic memory: list of prior reflections, prepended to the next trial's prompt
 
 ### 세 가지 평가자 유형
 
-1. **스칼라(Scalar)** — 외부 이진 신호. ALFWorld는 성공하거나 실패한다. HumanEval 테스트는 통과하거나 실패한다. 가장 단순하고, 신호가 가장 강하다.
-2. **휴리스틱(Heuristic)** — 미리 정의된 실패 시그니처. "에이전트가 같은 행동을 연속 두 번 했으면 막힘으로 표시." "트래젝토리가 50단계를 넘으면 비효율로 표시."
-3. **자기 평가(Self-evaluated)** — LLM이 자신의 트래젝토리를 채점한다. 정답(ground truth)이 없을 때 필요하다. 신호가 약하다. 도구에 근거한 검증(Lesson 05 — CRITIC)과 잘 짝지어진다.
+1. **스칼라(Scalar)**: 외부 이진 신호. ALFWorld는 성공하거나 실패한다. HumanEval 테스트는 통과하거나 실패한다. 가장 단순하고, 신호가 가장 강하다.
+2. **휴리스틱(Heuristic)**: 미리 정의된 실패 시그니처. "에이전트가 같은 행동을 연속 두 번 했으면 막힘으로 표시." "트래젝토리가 50단계를 넘으면 비효율로 표시."
+3. **자기 평가(Self-evaluated)**(LLM이 자신의 트래젝토리를 채점한다. 정답(ground truth)이 없을 때 필요하다. 신호가 약하다. 도구에 근거한 검증(Lesson 05) CRITIC)과 잘 짝지어진다.
 
 2026년 기본값은 혼합이다: 가능하면 스칼라, 없으면 자기 평가, 안전 레일로서 휴리스틱.
 
@@ -70,8 +70,8 @@ Reflexion이 작동할 때:
 Reflexion이 도움이 안 될 때:
 
 - 에이전트가 이미 첫 시도에 성공할 때.
-- 실패가 외부적일 때(네트워크 다운, 도구 고장) — "네트워크가 다운됐다"에 대한 성찰은 미래 실행에 도움이 안 된다.
-- 성찰이 미신으로 변할 때 — 일회성의 불안정한 실행에 대한 서사를 저장하는 것.
+- 실패가 외부적일 때(네트워크 다운, 도구 고장): "네트워크가 다운됐다"에 대한 성찰은 미래 실행에 도움이 안 된다.
+- 성찰이 미신으로 변할 때: 일회성의 불안정한 실행에 대한 서사를 저장하는 것.
 
 2026년 함정: 메모리 부패(memory rot). 성찰이 쌓이고 일부는 낡거나 틀렸으며 일화적 버퍼가 커지면서 재실행이 느려진다. 완화책: 주기적 압축(compaction)(Lesson 06), 성찰에 대한 TTL, 또는 별도의 수면 시간 정리 에이전트(Letta).
 
@@ -81,10 +81,10 @@ Reflexion이 도움이 안 될 때:
 
 구성 요소:
 
-- `Actor` — 성찰을 보면 개선되는 스크립트된 정책.
-- `Evaluator.binary()` — 목표 합에 대한 통과/실패.
-- `SelfReflector` — 실패에 대한 한 줄 진단을 생성.
-- `EpisodicMemory` — TTL 의미론을 가진 한도가 있는 리스트.
+- `Actor`: 성찰을 보면 개선되는 스크립트된 정책.
+- `Evaluator.binary()`: 목표 합에 대한 통과/실패.
+- `SelfReflector`: 실패에 대한 한 줄 진단을 생성.
+- `EpisodicMemory`: TTL 의미론을 가진 한도가 있는 리스트.
 
 실행:
 
@@ -92,7 +92,7 @@ Reflexion이 도움이 안 될 때:
 python3 code/main.py
 ```
 
-트레이스는 세 번의 시행을 보여준다. 시행 1은 실패하고, 성찰이 저장되며, 시행 2는 성찰을 보고 개선되지만 여전히 실패하고, 시행 3은 성공한다. 베이스라인 실행(성찰 없음)과 비교하라 — 그것은 시행 1의 답에 막혀 머무른다.
+트레이스는 세 번의 시행을 보여준다. 시행 1은 실패하고, 성찰이 저장되며, 시행 2는 성찰을 보고 개선되지만 여전히 실패하고, 시행 3은 성공한다. 베이스라인 실행(성찰 없음)과 비교하라. 그것은 시행 1의 답에 막혀 머무른다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -114,18 +114,18 @@ LangGraph는 성찰을 노드 패턴으로 제공한다. Claude Code의 `/memory
 
 | 용어 | 사람들이 말하는 것 | 실제 의미 |
 |------|----------------|------------------------|
-| Reflexion | "자기 교정" | Shinn et al. 2023 — 행위자, 평가자, 자기 성찰자와 일화적 메모리 |
+| Reflexion | "자기 교정" | Shinn et al. 2023: 행위자, 평가자, 자기 성찰자와 일화적 메모리 |
 | 언어적 강화(Verbal reinforcement) | "그래디언트 없는 학습" | 다음 시행의 프롬프트 앞에 붙는 자연어 성찰 |
 | 일화적 메모리(Episodic memory) | "작업별 성찰" | 한 작업 종류에 대한 이전 성찰의 한도 있는 버퍼 |
 | 스칼라 평가자(Scalar evaluator) | "이진 성공 신호" | 정답에서 나온 통과/실패 또는 수치 점수 |
 | 휴리스틱 평가자(Heuristic evaluator) | "패턴 기반 탐지기" | 미리 정의된 실패 시그니처(예: 막힘 루프, 너무 많은 단계) |
-| 자기 평가자(Self-evaluator) | "자신의 트레이스에 대한 LLM 심판" | 정답이 없을 때의 신호 약한 대체책 — 도구 근거 검증과 짝지을 것 |
+| 자기 평가자(Self-evaluator) | "자신의 트레이스에 대한 LLM 심판" | 정답이 없을 때의 신호 약한 대체책: 도구 근거 검증과 짝지을 것 |
 | 메모리 부패(Memory rot) | "낡은 성찰" | 일화적 버퍼가 낡은 항목으로 가득 참; 압축/TTL로 해결 |
 | 수면 시간 성찰(Sleep-time reflection) | "비동기 자기 성찰" | 주 에이전트가 빠르게 유지되도록 핫 패스 밖에서 자기 성찰자 실행 |
 
 ## 더 읽을거리 (Further Reading)
 
-- [Shinn et al., Reflexion: Language Agents with Verbal Reinforcement Learning (arXiv:2303.11366)](https://arxiv.org/abs/2303.11366) — 표준 논문
-- [Letta, Sleep-time Compute](https://www.letta.com/blog/sleep-time-compute) — 프로덕션에서의 비동기 성찰
-- [Anthropic, Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — 일화적 버퍼를 컨텍스트의 일부로 관리하기
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 성찰 노드 패턴
+- [Shinn et al., Reflexion: Language Agents with Verbal Reinforcement Learning (arXiv:2303.11366)](https://arxiv.org/abs/2303.11366): 표준 논문
+- [Letta, Sleep-time Compute](https://www.letta.com/blog/sleep-time-compute): 프로덕션에서의 비동기 성찰
+- [Anthropic, Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): 일화적 버퍼를 컨텍스트의 일부로 관리하기
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview): 성찰 노드 패턴

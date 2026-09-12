@@ -1,6 +1,6 @@
 # 스케일링 법칙(Scaling Laws)
 
-> 2020년 Kaplan 논문은 말했다: 더 큰 모델, 더 낮은 손실(loss). 2022년 Hoffmann 논문은 말했다: 학습(training)을 덜 시키고 있었다. 연산은 두 양동이로 들어간다 — 파라미터(parameter)와 토큰(token) — 그리고 그 분배는 자명하지 않다.
+> 2020년 Kaplan 논문은 말했다: 더 큰 모델, 더 낮은 손실(loss). 2022년 Hoffmann 논문은 말했다: 학습(training)을 덜 시키고 있었다. 연산은 두 양동이로 들어간다. 파라미터(parameter)와 토큰(token): 그리고 그 분배는 자명하지 않다.
 
 **Type:** Learn
 **Languages:** Python
@@ -20,7 +20,7 @@ FLOPs는 대략 `6 × N × D`로 스케일한다. N을 올리고 D를 내릴 수
 
 Hoffmann et al. (2022)는 Chinchilla라 불리는 작은 모델군을 학습하면서 다른 것을 발견했다: 최적 비율은 **파라미터당 20 토큰**에 가깝다. GPT-3은 10배 학습이 부족했다. Chinchilla(70B 파라미터, 1.4T 토큰)는 추론(inference) 비용 2.5배 절감과 함께 모든 벤치마크(benchmark)에서 GPT-3(175B, 300B 토큰)을 이겼다.
 
-2026년은 Chinchilla의 세계다 — 단, 한 가지 중요한 반전이 있다. Llama 3 8B는 15조 토큰으로 학습되었는데, 파라미터당 1,875 토큰의 비율이다. Chinchilla-최적의 94배를 넘어선다. 대규모로 사용될 모델의 경우 추론 비용이 학습 비용보다 더 중요하므로, 더 작은 배포 가능 풋프린트(footprint)를 위한 과학습(over-training, Chinchilla 너머)이 2026년의 기본값이다.
+2026년은 Chinchilla의 세계다. 단, 한 가지 중요한 반전이 있다. Llama 3 8B는 15조 토큰으로 학습되었는데, 파라미터당 1,875 토큰의 비율이다. Chinchilla-최적의 94배를 넘어선다. 대규모로 사용될 모델의 경우 추론 비용이 학습 비용보다 더 중요하므로, 더 작은 배포 가능 풋프린트(footprint)를 위한 과학습(over-training, Chinchilla 너머)이 2026년의 기본값이다.
 
 ## 개념 (The Concept)
 
@@ -120,7 +120,7 @@ GPT-3, Chinchilla, Llama 3 8B, DeepSeek-V3(활성 파라미터)에 대해 알려
 **2026년 연구 궤적:**
 
 - **데이터 제약 영역.** 웹에는 유한한 수의 고품질 토큰(필터링 후 영어 ~5~10조)만 있다. 프런티어 사전 학습은 이 상한에 접근하고 있다. 합성 데이터, 다국어, 멀티모달, RLHF로 스케일된 파인튜닝이 다음 손잡이다.
-- **연산 배수(compute-multiplier) 트릭.** Muon 옵티마이저, MoE, 더 나은 데이터 큐레이션 — 각각 절대 상수를 이동시킬 뿐 점근선(asymptote)을 바꾸지는 않는다.
+- **연산 배수(compute-multiplier) 트릭.** Muon 옵티마이저, MoE, 더 나은 데이터 큐레이션: 각각 절대 상수를 이동시킬 뿐 점근선(asymptote)을 바꾸지는 않는다.
 - **RL을 위한 스케일링 법칙.** 미해결 문제. 초기 증거는 RL 샘플에서 거듭제곱 법칙(power-law)을 시사하지만, 사전 학습과는 매우 다른 지수(exponent)를 보인다.
 
 ## 산출물 (Ship It)
@@ -148,8 +148,8 @@ GPT-3, Chinchilla, Llama 3 8B, DeepSeek-V3(활성 파라미터)에 대해 알려
 
 ## 더 읽을거리 (Further Reading)
 
-- [Kaplan et al. (2020). Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) — 최초의 스케일링 법칙 논문; 학습 부족.
+- [Kaplan et al. (2020). Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361): 최초의 스케일링 법칙 논문; 학습 부족.
 - [Hoffmann et al. (2022). Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) — Chinchilla.
-- [Schaeffer et al. (2023). Are Emergent Abilities of Large Language Models a Mirage?](https://arxiv.org/abs/2304.15004) — 측정 인공물로서의 출현.
-- [Sardana, Frankle (2024). Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws](https://arxiv.org/abs/2401.00448) — Llama의 과학습이 그 워크로드에 옳은 이유.
-- [Jordan et al. (2024). Muon: An optimizer for hidden layers in neural networks](https://kellerjordan.github.io/posts/muon/) — 2배 연산 배수.
+- [Schaeffer et al. (2023). Are Emergent Abilities of Large Language Models a Mirage?](https://arxiv.org/abs/2304.15004): 측정 인공물로서의 출현.
+- [Sardana, Frankle (2024). Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws](https://arxiv.org/abs/2401.00448): Llama의 과학습이 그 워크로드에 옳은 이유.
+- [Jordan et al. (2024). Muon: An optimizer for hidden layers in neural networks](https://kellerjordan.github.io/posts/muon/): 2배 연산 배수.

@@ -34,9 +34,9 @@ loss_D = -log D(x, y) - log (1 - D(x, G(x)))
 
 L1 항은 학습을 안정화하고 G를 알려진 목표 쪽으로 민다. L1은 L2보다 가장자리를 더 선명하게 만든다(평균이 아니라 중앙값). `λ = 100`이 Pix2Pix의 기본값이었다.
 
-## CycleGAN — 짝이 없을 때 (CycleGAN — when you don't have pairs)
+## CycleGAN(짝이 없을 때 (CycleGAN) when you don't have pairs)
 
-Pix2Pix는 짝지어진 `(x, y)` 데이터가 필요하다. CycleGAN(Zhu et al., 2017)은 추가 손실 — *순환 일관성(cycle consistency)* 손실 — 의 대가로 이 요구사항을 없앤다. 두 생성기 `G: X → Y`와 `F: Y → X`. `F(G(x)) ≈ x`와 `G(F(y)) ≈ y`가 되도록 학습시킨다. 이로써 짝지어진 예제 없이 말을 얼룩말로, 여름을 겨울로 변환할 수 있다.
+Pix2Pix는 짝지어진 `(x, y)` 데이터가 필요하다. CycleGAN(Zhu et al., 2017)은 추가 손실(*순환 일관성(cycle consistency)* 손실)의 대가로 이 요구사항을 없앤다. 두 생성기 `G: X → Y`와 `F: Y → X`. `F(G(x)) ≈ x`와 `G(F(y)) ≈ y`가 되도록 학습시킨다. 이로써 짝지어진 예제 없이 말을 얼룩말로, 여름을 겨울로 변환할 수 있다.
 
 2026년에 짝 없는 이미지-이미지 변환은 대부분 CycleGAN이 아니라 확산(diffusion)(ControlNet, IP-Adapter)으로 이루어지지만, 순환 일관성 아이디어는 거의 모든 짝 없는 도메인 적응 논문에 살아남아 있다.
 
@@ -139,9 +139,9 @@ Pix2Pix는 정적 배치에서 처리량(throughput)으로 이긴다(모든 요�
 
 ## 더 읽을거리 (Further Reading)
 
-- [Mirza & Osindero (2014). Conditional Generative Adversarial Nets](https://arxiv.org/abs/1411.1784) — cGAN 논문.
+- [Mirza & Osindero (2014). Conditional Generative Adversarial Nets](https://arxiv.org/abs/1411.1784): cGAN 논문.
 - [Isola et al. (2017). Image-to-Image Translation with Conditional Adversarial Networks](https://arxiv.org/abs/1611.07004) — Pix2Pix.
 - [Zhu et al. (2017). Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/abs/1703.10593) — CycleGAN.
 - [Wang et al. (2018). High-Resolution Image Synthesis with Conditional GANs](https://arxiv.org/abs/1711.11585) — Pix2PixHD.
 - [Park et al. (2019). Semantic Image Synthesis with Spatially-Adaptive Normalization](https://arxiv.org/abs/1903.07291) — SPADE / GauGAN.
-- [Miyato & Koyama (2018). cGANs with Projection Discriminator](https://arxiv.org/abs/1802.05637) — 투영 D.
+- [Miyato & Koyama (2018). cGANs with Projection Discriminator](https://arxiv.org/abs/1802.05637): 투영 D.

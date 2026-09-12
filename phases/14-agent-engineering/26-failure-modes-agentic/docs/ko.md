@@ -22,7 +22,7 @@
 
 ### MASFT (Berkeley, arXiv:2503.13657)
 
-멀티 에이전트 시스템 실패 분류 체계(Multi-Agent System Failure Taxonomy). 14가지 실패 양상이 3개 범주로 군집화된다. 평가자 간 코헨의 카파(Cohen's Kappa) 0.88 — 범주는 안정적으로 구별 가능하다.
+멀티 에이전트 시스템 실패 분류 체계(Multi-Agent System Failure Taxonomy). 14가지 실패 양상이 3개 범주로 군집화된다. 평가자 간 코헨의 카파(Cohen's Kappa) 0.88: 범주는 안정적으로 구별 가능하다.
 
 핵심 주장: 실패는 더 나은 기반 모델(base model)로 고칠 LLM의 한계가 아니라, 멀티 에이전트 시스템의 근본적인 설계 결함이다.
 
@@ -41,8 +41,8 @@
 
 두 가지 주된 발현:
 
-1. **지시 따르기 이탈(Instruction-following Deviation)** — 에이전트가 시스템 프롬프트(prompt)를 따르지 않는다.
-2. **장거리 컨텍스트 오용(Long-range Contextual Misuse)** — 에이전트가 앞선 턴의 컨텍스트를 잊거나 잘못 적용한다.
+1. **지시 따르기 이탈(Instruction-following Deviation)**: 에이전트가 시스템 프롬프트(prompt)를 따르지 않는다.
+2. **장거리 컨텍스트 오용(Long-range Contextual Misuse)**: 에이전트가 앞선 턴의 컨텍스트를 잊거나 잘못 적용한다.
 
 하위 의도 오류(sub-intention error): 누락(Omission, 빠진 단계), 중복(Redundancy, 반복된 단계), 무질서(Disorder, 순서 어긋난 단계).
 
@@ -52,7 +52,7 @@ Arize, Galileo, NimbleBrain의 2024-2026 현장 분석은 다음으로 수렴한
 
 1. **환각된 동작.** 에이전트가 존재하지 않는 도구를 호출하거나 인자를 날조한다.
 2. **범위 확장.** 에이전트가 사용자의 요청을 넘어 과제를 확장한다(추가 PR을 만들고, 추가 이메일을 보낸다).
-3. **연쇄 오류.** 한 번의 잘못된 호출이 하류 효과를 촉발한다. 유령 SKU 환각이 네 번의 API 호출을 촉발한다 — 다중 시스템 사고.
+3. **연쇄 오류.** 한 번의 잘못된 호출이 하류 효과를 촉발한다. 유령 SKU 환각이 네 번의 API 호출을 촉발한다. 다중 시스템 사고.
 4. **컨텍스트 손실.** 장기(long-horizon) 과제가 초기 턴의 제약을 잊는다.
 5. **도구 오용.** 올바른 도구를 잘못된 인자로 호출하거나, 완전히 잘못된 도구를 호출한다.
 
@@ -122,7 +122,7 @@ python3 code/main.py
 
 ## 더 읽을거리 (Further Reading)
 
-- [Cemri et al., MASFT (arXiv:2503.13657)](https://arxiv.org/abs/2503.13657) — 14가지 실패 양상, 3개 범주
-- [Microsoft, Taxonomy of Failure Mode in Agentic AI Systems](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Taxonomy-of-Failure-Mode-in-Agentic-AI-Systems-Whitepaper.pdf) — 리스크 레지스터
-- [Arize Phoenix](https://docs.arize.com/phoenix) — 실무에서의 드리프트 클러스터링
-- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — 더 단순한 패턴이 양상을 아예 피하는 경우
+- [Cemri et al., MASFT (arXiv:2503.13657)](https://arxiv.org/abs/2503.13657): 14가지 실패 양상, 3개 범주
+- [Microsoft, Taxonomy of Failure Mode in Agentic AI Systems](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Taxonomy-of-Failure-Mode-in-Agentic-AI-Systems-Whitepaper.pdf): 리스크 레지스터
+- [Arize Phoenix](https://docs.arize.com/phoenix): 실무에서의 드리프트 클러스터링
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents): 더 단순한 패턴이 양상을 아예 피하는 경우

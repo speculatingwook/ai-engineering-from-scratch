@@ -1,6 +1,6 @@
-# 위치 인코딩(Positional Encoding) — Sinusoidal, RoPE, ALiBi
+# 위치 인코딩(Positional Encoding): Sinusoidal, RoPE, ALiBi
 
-> 어텐션(attention)은 순열 불변(permutation-invariant)이다. 위치 신호가 없으면 "The cat sat on the mat"와 "mat the on sat cat the"가 같은 출력을 낸다. 세 알고리즘이 이를 고친다 — 각각 "위치"가 무엇을 뜻하는지에 대해 다른 베팅을 한다.
+> 어텐션(attention)은 순열 불변(permutation-invariant)이다. 위치 신호가 없으면 "The cat sat on the mat"와 "mat the on sat cat the"가 같은 출력을 낸다. 세 알고리즘이 이를 고친다. 각각 "위치"가 무엇을 뜻하는지에 대해 다른 베팅을 한다.
 
 **Type:** Build
 **Languages:** Python
@@ -11,13 +11,13 @@
 
 스케일드 닷-프로덕트 어텐션(scaled dot-product attention)은 순서를 보지 못한다. 어텐션 행렬(matrix) `softmax(Q K^T / √d) V`는 쌍별 유사도에서 계산된다. `X`의 행을 섞으면, 출력의 행이 똑같이 섞여 나온다. 어텐션 내부의 그 무엇도 위치에 관심을 두지 않는다.
 
-이는 단어 가방(bag-of-words) 모델에서는 버그가 아니다. 언어, 코드, 오디오, 비디오 — 순서가 의미를 담는 모든 것 — 에서는 치명적이다.
+이는 단어 가방(bag-of-words) 모델에서는 버그가 아니다. 언어, 코드, 오디오, 비디오. 순서가 의미를 담는 모든 것: 에서는 치명적이다.
 
 해법은 어떻게든 위치를 임베딩(embedding)에 주입하는 데 있다. 답의 세 시대:
 
 1. **절대 사인파(Absolute sinusoidal)** (Vaswani 2017). 위치의 `sin/cos`를 임베딩에 더한다. 단순하고, 학습이 필요 없고, 학습된 길이를 넘어서면 외삽이 형편없다.
-2. **RoPE — Rotary Position Embeddings** (Su 2021). Q와 K 벡터(vector)를 위치에 비례하는 각도로 회전한다. *상대적* 위치를 내적(dot product)에 직접 인코딩한다. 2026년에 지배적이다.
-3. **ALiBi — Attention with Linear Biases** (Press 2022). 임베딩을 완전히 건너뛴다. 거리에 기반한 헤드별 선형 패널티를 어텐션 점수에 더한다. 길이 외삽이 탁월하다.
+2. **RoPE: Rotary Position Embeddings** (Su 2021). Q와 K 벡터(vector)를 위치에 비례하는 각도로 회전한다. *상대적* 위치를 내적(dot product)에 직접 인코딩한다. 2026년에 지배적이다.
+3. **ALiBi: Attention with Linear Biases** (Press 2022). 임베딩을 완전히 건너뛴다. 거리에 기반한 헤드별 선형 패널티를 어텐션 점수에 더한다. 길이 외삽이 탁월하다.
 
 2026년 기준 사실상 모든 프런티어 오픈 모델이 RoPE를 쓴다. Llama 2/3/4, Qwen 2/3, Mistral, Mixtral, DeepSeek-V3, Kimi. 소수의 장기 컨텍스트 모델은 ALiBi나 그 현대적 변형을 쓴다. 절대 사인파는 이제 역사 속 방식이다.
 
@@ -128,7 +128,7 @@ def alibi_bias(n_heads, seq_len):
 
 ### 4단계: RoPE의 상대 거리 속성 검증하기
 
-무작위 벡터 `a, b` 두 개를 고른다. `(pos_a, pos_b)`로 회전한다. 그다음 `(pos_a + k, pos_b + k)`로 회전한다. 두 내적은 부동소수점 오차 이내에서 일치해야 한다. 그 속성이 RoPE의 핵심이다 — 절대 오프셋에 불변이고, 상대 간격만 중요하다.
+무작위 벡터 `a, b` 두 개를 고른다. `(pos_a, pos_b)`로 회전한다. 그다음 `(pos_a + k, pos_b + k)`로 회전한다. 두 내적은 부동소수점 오차 이내에서 일치해야 한다. 그 속성이 RoPE의 핵심이다. 절대 오프셋에 불변이고, 상대 간격만 중요하다.
 
 ## 라이브러리로 써보기 (Use It)
 
@@ -172,10 +172,10 @@ model = AutoModel.from_pretrained("meta-llama/Llama-3.2-3B")
 
 ## 더 읽을거리 (Further Reading)
 
-- [Vaswani et al. (2017). Attention Is All You Need §3.5](https://arxiv.org/abs/1706.03762) — 원조 사인파.
-- [Su et al. (2021). RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864) — RoPE 논문.
+- [Vaswani et al. (2017). Attention Is All You Need §3.5](https://arxiv.org/abs/1706.03762): 원조 사인파.
+- [Su et al. (2021). RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864): RoPE 논문.
 - [Press, Smith, Lewis (2021). Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation](https://arxiv.org/abs/2108.12409) — ALiBi.
-- [Peng et al. (2023). YaRN: Efficient Context Window Extension of Large Language Models](https://arxiv.org/abs/2309.00071) — 최신 RoPE 스케일링.
-- [Chen et al. (2023). Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595) — Meta의 Llama 2 장기 컨텍스트 논문.
-- [Ding et al. (2024). LongRoPE: Extending LLM Context Window Beyond 2 Million Tokens](https://arxiv.org/abs/2402.13753) — Phi-3-Long이 쓰고 Use It 섹션에서 인용한 Microsoft 방법.
-- [HuggingFace Transformers — `modeling_rope_utils.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/modeling_rope_utils.py) — 모든 RoPE 스케일링 방식(default, linear, dynamic, YaRN, LongRoPE, Llama-3)의 프로덕션급 구현.
+- [Peng et al. (2023). YaRN: Efficient Context Window Extension of Large Language Models](https://arxiv.org/abs/2309.00071): 최신 RoPE 스케일링.
+- [Chen et al. (2023). Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595): Meta의 Llama 2 장기 컨텍스트 논문.
+- [Ding et al. (2024). LongRoPE: Extending LLM Context Window Beyond 2 Million Tokens](https://arxiv.org/abs/2402.13753): Phi-3-Long이 쓰고 Use It 섹션에서 인용한 Microsoft 방법.
+- [HuggingFace Transformers(`modeling_rope_utils.py`](https://github.com/huggingface/transformers/blob/main/src/transformers/modeling_rope_utils.py)) 모든 RoPE 스케일링 방식(default, linear, dynamic, YaRN, LongRoPE, Llama-3)의 프로덕션급 구현.

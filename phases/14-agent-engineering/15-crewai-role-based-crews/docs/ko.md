@@ -161,13 +161,13 @@ Crew 트레이스는 유동적이다. 매니저가 원칙적으로 재정렬할 
 
 ## 라이브러리로 써보기 (Use It)
 
-- **CrewAI Flow** — 프로덕션용. Flow가 `Crew.kickoff()`를 호출하는 한 단계일지라도. Flow가 감사 경계(audit boundary)를 준다.
-- **CrewAI Crew (Sequential)** — 명확한 순서의 협업 작업, 특히 초안과 리뷰 루프용.
-- **CrewAI Crew (Hierarchical)** — 라우팅이 출력에 의존하고 네 명 이상의 전문가가 있을 때.
-- **LangGraph**(Lesson 13) — 명시적 상태 기계, 내구성 있는 재개, 엄격한 순서용.
-- **AutoGen v0.4**(Lesson 14) — 액터 모델 동시성과 결함 격리용.
-- **OpenAI Agents SDK**(Lesson 16) — 핸드오프와 가드레일(guardrail)을 갖춘 OpenAI 우선 제품용.
-- **Claude Agent SDK**(Lesson 17) — 서브에이전트와 세션 저장소를 갖춘 Claude 우선 제품용.
+- **CrewAI Flow**: 프로덕션용. Flow가 `Crew.kickoff()`를 호출하는 한 단계일지라도. Flow가 감사 경계(audit boundary)를 준다.
+- **CrewAI Crew (Sequential)**: 명확한 순서의 협업 작업, 특히 초안과 리뷰 루프용.
+- **CrewAI Crew (Hierarchical)**: 라우팅이 출력에 의존하고 네 명 이상의 전문가가 있을 때.
+- **LangGraph**(Lesson 13): 명시적 상태 기계, 내구성 있는 재개, 엄격한 순서용.
+- **AutoGen v0.4**(Lesson 14): 액터 모델 동시성과 결함 격리용.
+- **OpenAI Agents SDK**(Lesson 16): 핸드오프와 가드레일(guardrail)을 갖춘 OpenAI 우선 제품용.
+- **Claude Agent SDK**(Lesson 17): 서브에이전트와 세션 저장소를 갖춘 Claude 우선 제품용.
 
 ## 산출물 (Ship It)
 

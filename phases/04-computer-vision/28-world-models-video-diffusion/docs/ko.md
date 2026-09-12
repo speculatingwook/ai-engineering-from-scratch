@@ -46,7 +46,7 @@ flowchart LR
 ```
 
 - **Sora 2**는 프롬프트(prompt)에 조건화된 순수 비디오 생성이다. 동작 인터페이스가 없다. 롤아웃(rollout) 도중에 "조종"할 수 없다.
-- **Genie 3**, **GWM-1 Worlds**, **Mirage / Magica**는 동작 조건부 월드 모델이다. 관측된 비디오에서 잠재 동작(latent action)을 추론한 다음, 미래 프레임 예측을 동작에 조건화한다. 상호작용적이다 — 키를 누르거나 카메라를 움직이면 장면이 반응한다.
+- **Genie 3**, **GWM-1 Worlds**, **Mirage / Magica**는 동작 조건부 월드 모델이다. 관측된 비디오에서 잠재 동작(latent action)을 추론한 다음, 미래 프레임 예측을 동작에 조건화한다. 상호작용적이다. 키를 누르거나 카메라를 움직이면 장면이 반응한다.
 - **DreamerV3**와 고전적 강화 학습(RL) 월드 모델 계열은 명시적 동작 조건화로 잠재(latent) 공간에서 예측하며, 보상(reward) 신호로 학습된다. 덜 시각적이지만 표본 효율적(sample-efficient) RL에는 더 유용하다.
 
 ### 비디오 DiT 아키텍처
@@ -60,9 +60,9 @@ Resulting tokens:      (T / P_t) * (H / P_h) * (W / P_w) tokens
 
 위치 인코딩은 3D다. (t, h, w) 좌표마다 회전(rotary) 또는 학습된 임베딩(embedding)을 둔다. 어텐션(attention)은 다음 중 하나일 수 있다:
 
-- **완전 결합(Full joint)** — 모든 토큰이 모든 토큰에 어텐션한다. N개 토큰에 대해 O(N^2). 긴 비디오에는 감당하기 어렵다.
-- **분할(Divided)** — 시간 어텐션(같은 공간 위치, 시간 전반: `(H*W) * T^2`)과 공간 어텐션(같은 타임스텝, 공간 전반: `T * (H*W)^2`)을 번갈아 한다. TimeSformer와 대부분의 비디오 DiT가 쓴다.
-- **윈도우(Window)** — (t, h, w)의 지역 윈도우. Video Swin이 쓴다.
+- **완전 결합(Full joint)**: 모든 토큰이 모든 토큰에 어텐션한다. N개 토큰에 대해 O(N^2). 긴 비디오에는 감당하기 어렵다.
+- **분할(Divided)**: 시간 어텐션(같은 공간 위치, 시간 전반: `(H*W) * T^2`)과 공간 어텐션(같은 타임스텝, 공간 전반: `T * (H*W)^2`)을 번갈아 한다. TimeSformer와 대부분의 비디오 DiT가 쓴다.
+- **윈도우(Window)**: (t, h, w)의 지역 윈도우. Video Swin이 쓴다.
 
 2026년 비디오 디퓨전(diffusion) 모델은 모두 이 세 패턴 중 하나에 더해 AdaLN 조건화(Lesson 23)와 정류 흐름(rectified flow)을 쓴다.
 
@@ -82,42 +82,42 @@ Sora 2의 2026년 출시는 **물리적 그럴듯함(physical plausibility)** �
 
 운전 월드 모델은 궤적, 경계 상자(bounding box), 또는 내비게이션 지도에 조건화된 사실적 도로 장면을 생성한다. 용도는 이렇다:
 
-- **Cosmos-Drive-Dreams** (NVIDIA) — RL 학습용 몇 분 길이 운전 비디오를 생성.
-- **Gaia-2** (Wayve) — 정책 평가용 궤적 조건부 장면 합성.
-- **DrivingWorld** (Tesla) — 다양한 날씨, 시간대, 교통 조건을 시뮬레이션.
-- **Vista** (ByteDance) — 반응적 운전 장면 합성.
+- **Cosmos-Drive-Dreams** (NVIDIA): RL 학습용 몇 분 길이 운전 비디오를 생성.
+- **Gaia-2** (Wayve): 정책 평가용 궤적 조건부 장면 합성.
+- **DrivingWorld** (Tesla): 다양한 날씨, 시간대, 교통 조건을 시뮬레이션.
+- **Vista** (ByteDance): 반응적 운전 장면 합성.
 
-이것들은 코너 케이스(corner case) — 야간 무단횡단 보행자, 빙판 교차로, 특이한 차량 유형 — 에 대한 값비싼 실세계 데이터 수집을 대체한다. 그러지 않으면 수백만 마일을 직접 달려야 한다.
+이것들은 코너 케이스(corner case)(야간 무단횡단 보행자, 빙판 교차로, 특이한 차량 유형)에 대한 값비싼 실세계 데이터 수집을 대체한다. 그러지 않으면 수백만 마일을 직접 달려야 한다.
 
 ### 로봇공학 스택: VLM + 비디오 모델 + 역동역학
 
 떠오르는 세 구성요소 로봇공학 루프:
 
 1. **VLM**이 목표("빨간 컵을 집어라")를 파싱하고, 고수준 동작 시퀀스를 계획한다.
-2. **비디오 생성 모델**이 각 동작을 실행하면 어떻게 보일지를 시뮬레이션한다 — N 프레임 앞의 관측을 예측한다.
+2. **비디오 생성 모델**이 각 동작을 실행하면 어떻게 보일지를 시뮬레이션한다. N 프레임 앞의 관측을 예측한다.
 3. **역동역학 모델(inverse dynamics model)** 이 그 관측을 만들어낼 구체적인 모터 명령을 추출한다.
 
 이것은 보상 설계(reward shaping)와 표본을 많이 쓰는 RL을 대체한다. 월드 모델이 상상을 하고, 역동역학이 구동(actuation)에서 루프를 닫는다. Genie Envisioner가 그 한 구현이며, 많은 연구 그룹이 이 구조로 수렴하고 있다.
 
 ### 평가
 
-- **시각 품질** — FVD(Fréchet Video Distance), 사용자 연구.
-- **프롬프트 정렬** — 프레임별 CLIPScore, VQA 스타일 평가.
-- **물리적 그럴듯함** — 벤치마크(benchmark) 스위트에서 손으로 매김(Sora 2의 내부 벤치마크, VBench).
-- **제어 가능성(Controllability)** (상호작용 월드 모델의 경우) — 동작 → 관측 일관성; 이전 상태로 되돌아갈 수 있는가?
+- **시각 품질**: FVD(Fréchet Video Distance), 사용자 연구.
+- **프롬프트 정렬**: 프레임별 CLIPScore, VQA 스타일 평가.
+- **물리적 그럴듯함**: 벤치마크(benchmark) 스위트에서 손으로 매김(Sora 2의 내부 벤치마크, VBench).
+- **제어 가능성(Controllability)** (상호작용 월드 모델의 경우): 동작 → 관측 일관성; 이전 상태로 되돌아갈 수 있는가?
 
 ### 2026년 모델 지형
 
 | 모델 | 용도 | 파라미터 | 출력 | 라이선스 |
 |-------|-----|------------|--------|---------|
-| Sora 2 | 텍스트-투-비디오, 오디오 | — | 1분 1080p + 오디오 | API 전용 |
-| Runway Gen-5 | 텍스트/이미지-투-비디오 | — | 10초 클립 | API |
-| Runway GWM-1 Worlds | 상호작용 월드 | — | 무한 3D 롤아웃 | API |
+| Sora 2 | 텍스트-투-비디오, 오디오 |: | 1분 1080p + 오디오 | API 전용 |
+| Runway Gen-5 | 텍스트/이미지-투-비디오 |: | 10초 클립 | API |
+| Runway GWM-1 Worlds | 상호작용 월드 |: | 무한 3D 롤아웃 | API |
 | Genie 3 | 이미지로부터 상호작용 월드 | 11B+ | 플레이 가능 프레임 | 연구 프리뷰 |
 | Wan-Video 2.1 | 오픈 텍스트-투-비디오 | 14B | 고품질 클립 | 비상업용(non-commercial) |
 | HunyuanVideo | 오픈 텍스트-투-비디오 | 13B | 10초 클립 | 관대함(permissive) |
 | Cosmos / Cosmos-Drive | 자율주행 시뮬레이션 | 7-14B | 운전 장면 | NVIDIA 오픈 |
-| Magica / Mirage 2 | AI 네이티브 게임 엔진 | — | 수정 가능 월드 | 제품 |
+| Magica / Mirage 2 | AI 네이티브 게임 엔진 |: | 수정 가능 월드 | 제품 |
 
 ## 직접 만들기 (Build It)
 
@@ -247,11 +247,11 @@ print(f"output {tuple(out.shape)}")
 
 2026년 프로덕션 접근 패턴:
 
-- **Sora 2 API** (OpenAI) — 텍스트-투-비디오, 동기화된 오디오. 프리미엄 가격.
-- **Runway Gen-5 / GWM-1** (Runway) — 이미지-투-비디오, 상호작용 월드.
-- **Wan-Video 2.1 / HunyuanVideo** — 오픈소스 자체 호스팅.
-- **Cosmos / Cosmos-Drive** (NVIDIA) — 운전 시뮬레이션 오픈 가중치(weight).
-- **Genie 3** — 연구 프리뷰, 접근 요청.
+- **Sora 2 API** (OpenAI): 텍스트-투-비디오, 동기화된 오디오. 프리미엄 가격.
+- **Runway Gen-5 / GWM-1** (Runway): 이미지-투-비디오, 상호작용 월드.
+- **Wan-Video 2.1 / HunyuanVideo**: 오픈소스 자체 호스팅.
+- **Cosmos / Cosmos-Drive** (NVIDIA): 운전 시뮬레이션 오픈 가중치(weight).
+- **Genie 3**: 연구 프리뷰, 접근 요청.
 
 상호작용 월드 모델 데모를 만들려면 품질을 위해 Wan-Video로 시작하고, 상호작용성을 위해 잠재 동작 어댑터를 얹는다. 자율주행 시뮬레이션이라면 Cosmos-Drive가 2026년 오픈 레퍼런스다.
 
@@ -266,8 +266,8 @@ print(f"output {tuple(out.shape)}")
 
 이 레슨은 다음을 만든다:
 
-- `outputs/prompt-video-model-picker.md` — 과제, 라이선스, 지연 시간(latency)에 따라 Sora 2 / Runway / Wan / HunyuanVideo / Cosmos 중에서 고른다.
-- `outputs/skill-physical-plausibility-checks.md` — 산출 전에 임의의 생성 비디오에 실행할 자동 검사(객체 영속성, 중력, 연속성)를 정의하는 스킬.
+- `outputs/prompt-video-model-picker.md`: 과제, 라이선스, 지연 시간(latency)에 따라 Sora 2 / Runway / Wan / HunyuanVideo / Cosmos 중에서 고른다.
+- `outputs/skill-physical-plausibility-checks.md`: 산출 전에 임의의 생성 비디오에 실행할 자동 검사(객체 영속성, 중력, 연속성)를 정의하는 스킬.
 
 ## 연습 문제 (Exercises)
 
@@ -282,7 +282,7 @@ print(f"output {tuple(out.shape)}")
 | 월드 모델(World model) | "학습된 시뮬레이터" | 상태와 동작이 주어지면 미래 관측을 예측하는 모델 |
 | 비디오 DiT(Video DiT) | "시공간 트랜스포머" | 3D 패치화와 분할 어텐션을 가진 디퓨전 트랜스포머 |
 | 잠재 동작(Latent action) | "추론된 제어" | 프레임 쌍에서 추론된 이산 또는 연속 동작 잠재; 다음 프레임 생성을 조건화하는 데 사용 |
-| 분할 어텐션(Divided attention) | "시간 다음 공간" | O(N^2)을 감당 가능하게 유지하기 위한 블록당 두 어텐션 연산 — 시간 전반 다음 공간 전반 |
+| 분할 어텐션(Divided attention) | "시간 다음 공간" | O(N^2)을 감당 가능하게 유지하기 위한 블록당 두 어텐션 연산: 시간 전반 다음 공간 전반 |
 | 객체 영속성(Object permanence) | "사물은 실재로 남는다" | 비디오 모델이 학습해야 하는 장면 속성; 음식, 유리 제품에서 고전적 실패 양상 |
 | FVD | "Fréchet Video Distance" | FID의 비디오 등가물; 주요 시각 품질 메트릭 |
 | 역동역학 모델(Inverse dynamics model) | "관측에서 동작으로" | (상태, 다음 상태)가 주어지면, 그것들을 잇는 동작을 출력; 로봇공학 루프를 닫음 |
@@ -291,9 +291,9 @@ print(f"output {tuple(out.shape)}")
 ## 더 읽을거리 (Further Reading)
 
 - [Sora technical report (OpenAI)](https://openai.com/index/video-generation-models-as-world-simulators/)
-- [Genie: Generative Interactive Environments (Bruce et al., 2024)](https://arxiv.org/abs/2402.15391) — 잠재 동작 월드 모델
-- [TimeSformer (Bertasius et al., 2021)](https://arxiv.org/abs/2102.05095) — 비디오 트랜스포머를 위한 분할 어텐션
-- [DreamerV3 (Hafner et al., 2023)](https://arxiv.org/abs/2301.04104) — RL을 위한 월드 모델
-- [Cosmos-Drive-Dreams (NVIDIA, 2025)](https://research.nvidia.com/labs/toronto-ai/cosmos-drive-dreams/) — 운전 월드 모델
+- [Genie: Generative Interactive Environments (Bruce et al., 2024)](https://arxiv.org/abs/2402.15391): 잠재 동작 월드 모델
+- [TimeSformer (Bertasius et al., 2021)](https://arxiv.org/abs/2102.05095): 비디오 트랜스포머를 위한 분할 어텐션
+- [DreamerV3 (Hafner et al., 2023)](https://arxiv.org/abs/2301.04104): RL을 위한 월드 모델
+- [Cosmos-Drive-Dreams (NVIDIA, 2025)](https://research.nvidia.com/labs/toronto-ai/cosmos-drive-dreams/): 운전 월드 모델
 - [Top 10 Video Generation Models 2026 (DataCamp)](https://www.datacamp.com/blog/top-video-generation-models)
 - [From Video Generation to World Model — survey repo](https://github.com/ziqihuangg/Awesome-From-Video-Generation-to-World-Model/)
